@@ -1,0 +1,3 @@
+# Multivariate hypothesis testing {#sec-25}
+
+Anything is permuted.

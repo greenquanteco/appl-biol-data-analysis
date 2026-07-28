@@ -1,0 +1,1872 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; Introduction to R – Applied Biological Data Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./ch03.html" rel="next">
+<link href="./part_02.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./part_02.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./ch02.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to R</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Applied Biological Data Analysis</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/greenquanteco/appl-biol-data-analysis" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./part_01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Statistics in Modern Biology</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Statistics in biology</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./part_02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction to R</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch02.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R data types and objects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data import and export</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data manipulation with R</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./part_03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exploratory data analysis with R</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Basic descriptive statistics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Summarizing biological data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Visualizing biological data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Probability distributions for biologists</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Common problems in biological data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Planning your data analysis</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./part_04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introductory statistics with R</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Introductory statistics with R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Tests comparing groups</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Tests for continous patterns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests for contingency</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./part_05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Generalized linear models (GLM)</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduction to generalized linear models (GLM)</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">GLM for continuous response data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GLM for count data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">GLM for binary and proportional responses</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./part_06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Extensions of GLMs: nonlinear and mixed models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Nonlinear models for biology</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch21.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Random effects and mixed models</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./part_07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Multivariate data analysis</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch22.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Introduction to multivariate data and data analysis</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch23.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Clustering for biologists</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch24.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Ordination</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch25.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Multivariate hypothesis testing</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./part_08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Alternatives to *p*-values: information-theoretic and Bayesian methods</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch26.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Information theoretic model-based inference</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch27.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Introduction to Bayesian inference for biologists</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./part_09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bonus material</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch28.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Advanced R graphics</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch29.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Source and preparation of NEON data</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-02-start" id="toc-sec-02-start" class="nav-link active" data-scroll-target="#sec-02-start"><span class="header-section-number">2.1</span> Getting started with R</a>
+  <ul class="collapse">
+  <li><a href="#sec-02-start-install" id="toc-sec-02-start-install" class="nav-link" data-scroll-target="#sec-02-start-install"><span class="header-section-number">2.1.1</span> Download and install R (and RStudio)</a></li>
+  <li><a href="#sec-02-start-using" id="toc-sec-02-start-using" class="nav-link" data-scroll-target="#sec-02-start-using"><span class="header-section-number">2.1.2</span> Using R</a></li>
+  </ul></li>
+  <li><a href="#sec-02-comm" id="toc-sec-02-comm" class="nav-link" data-scroll-target="#sec-02-comm"><span class="header-section-number">2.2</span> Commands, objects, and output</a>
+  <ul class="collapse">
+  <li><a href="#sec-02-comm-basic" id="toc-sec-02-comm-basic" class="nav-link" data-scroll-target="#sec-02-comm-basic"><span class="header-section-number">2.2.1</span> R commands–basics</a></li>
+  <li><a href="#sec-02-comm-functions" id="toc-sec-02-comm-functions" class="nav-link" data-scroll-target="#sec-02-comm-functions"><span class="header-section-number">2.2.2</span> Using R functions</a></li>
+  <li><a href="#sec-02-comm-workspace" id="toc-sec-02-comm-workspace" class="nav-link" data-scroll-target="#sec-02-comm-workspace"><span class="header-section-number">2.2.3</span> The R workspace</a></li>
+  </ul></li>
+  <li><a href="#sec-02-syn" id="toc-sec-02-syn" class="nav-link" data-scroll-target="#sec-02-syn"><span class="header-section-number">2.3</span> R syntax</a>
+  <ul class="collapse">
+  <li><a href="#sec-02-syn-oss" id="toc-sec-02-syn-oss" class="nav-link" data-scroll-target="#sec-02-syn-oss"><span class="header-section-number">2.3.1</span> Object size and structure</a></li>
+  <li><a href="#sec-02-syn-ops" id="toc-sec-02-syn-ops" class="nav-link" data-scroll-target="#sec-02-syn-ops"><span class="header-section-number">2.3.2</span> Operators</a></li>
+  </ul></li>
+  <li><a href="#sec-02-pack" id="toc-sec-02-pack" class="nav-link" data-scroll-target="#sec-02-pack"><span class="header-section-number">2.4</span> R packages</a>
+  <ul class="collapse">
+  <li><a href="#sec-02-pack-lib" id="toc-sec-02-pack-lib" class="nav-link" data-scroll-target="#sec-02-pack-lib"><span class="header-section-number">2.4.1</span> Your R library</a></li>
+  <li><a href="#sec-02-pack-install" id="toc-sec-02-pack-install" class="nav-link" data-scroll-target="#sec-02-pack-install"><span class="header-section-number">2.4.2</span> Installing R packages</a></li>
+  <li><a href="#sec-02-pack-work" id="toc-sec-02-pack-work" class="nav-link" data-scroll-target="#sec-02-pack-work"><span class="header-section-number">2.4.3</span> Working with packages in R</a></li>
+  </ul></li>
+  <li><a href="#sec-02-faq" id="toc-sec-02-faq" class="nav-link" data-scroll-target="#sec-02-faq"><span class="header-section-number">2.5</span> Frequently asked questions about R</a>
+  <ul class="collapse">
+  <li><a href="#sec-02-faq-what" id="toc-sec-02-faq-what" class="nav-link" data-scroll-target="#sec-02-faq-what"><span class="header-section-number">2.5.1</span> What is R</a></li>
+  <li><a href="#sec-02-faq-code" id="toc-sec-02-faq-code" class="nav-link" data-scroll-target="#sec-02-faq-code"><span class="header-section-number">2.5.2</span> Why do we have to write code?</a></li>
+  <li><a href="#sec-02-faq-advdis" id="toc-sec-02-faq-advdis" class="nav-link" data-scroll-target="#sec-02-faq-advdis"><span class="header-section-number">2.5.3</span> Advantages and disadvantages</a></li>
+  <li><a href="#sec-02-faq-tidy" id="toc-sec-02-faq-tidy" class="nav-link" data-scroll-target="#sec-02-faq-tidy"><span class="header-section-number">2.5.4</span> Base R vs.&nbsp;tidyverse</a></li>
+  <li><a href="#sec-02-faq-help" id="toc-sec-02-faq-help" class="nav-link" data-scroll-target="#sec-02-faq-help"><span class="header-section-number">2.5.5</span> Where can I get R help?</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/ch02.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./part_02.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./ch02.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to R</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-02" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to R</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This module is an introduction to the R program and language. We will begin with downloading and installing R, then explore the basics of running R commands and storing data, and finally answer some frequently asked questions (FAQ). Some of the topics in this module are covered in greater detail in <a href="ch03.html" class="quarto-xref"><span>Chapter 3</span></a>, <a href="ch04.html" class="quarto-xref"><span>Chapter 4</span></a>, and <a href="ch05.html" class="quarto-xref"><span>Chapter 5</span></a>. The current module is meant to get you up and running before moving on to more advanced material.</p>
+<p>By the end of this module you should be able to:</p>
+<ul>
+<li>Explain what R is and what it is used for</li>
+<li>Explain the object-oriented programming paradigm used by R</li>
+<li>Download and install R and RStudio</li>
+<li>Write and execute commands in the R console</li>
+<li>Describe basic R data types and structures</li>
+<li>Manage R code as scripts (.r files)</li>
+<li>Manage and use R packages</li>
+<li>Identify sources of help for R programming</li>
+</ul>
+<section id="sec-02-start" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="sec-02-start"><span class="header-section-number">2.1</span> Getting started with R</h2>
+<section id="sec-02-start-install" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="sec-02-start-install"><span class="header-section-number">2.1.1</span> Download and install R (and RStudio)</h3>
+<p>If you are on a university campus, many on-campus computers may already have R installed on them. This is the bare minimum you need to work with R. Many people also prefer to use another program for writing R code. The most popular is probably <a href="https://posit.co/downloads">RStudio</a>, which is a more user-friendly interface for R. If you are on a PC or Mac, you will need to download and install both R and RStudio. If you are using a Linux machine, you may already have R because it is included in some distros. You can still install RStudio to make your life easier.</p>
+<p>First, install the latest version of R from the <a href="https://cran.r-project.org/mirrors.html">R-project website</a> (accessed 2021-12-20). Select a mirror (download server) from the list. Once you select a mirror, you will be taken to a page where you will select the version of R that corresponds to your operating system. Click on the appropriate link for your operating system and follow the instructions from there to install R. Like many programs you download from the internet, R will come with an installer that will largely take care of everything automatically. Just let the installer run and accept the default options.</p>
+<p>Next, install any code editing or IDE you want.</p>
+<ul>
+<li><p>RStudio can be installed from <a href="https://posit.co/downloads/">here</a> (accessed 2025-08-06). Select the version that corresponds to your operating system. As you did when you installed R, just let the installer run and accept the default options.</p></li>
+<li><p>My personal favorite is Notepad++, which isn’t an IDE but instead a very feature-rich code editor.</p></li>
+<li><p>Other popular choices include <a href="https://code.visualstudio.com/download">Visual Studio Code</a> and <a href="https://www.gnu.org/software/emacs/">emacs</a>.</p></li>
+</ul>
+</section>
+<section id="sec-02-start-using" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="sec-02-start-using"><span class="header-section-number">2.1.2</span> Using R</h3>
+<section id="base-r-gui" class="level4" data-number="2.1.2.1">
+<h4 data-number="2.1.2.1" class="anchored" data-anchor-id="base-r-gui"><span class="header-section-number">2.1.2.1</span> Base R GUI</h4>
+<p>R has a very basic front end, or <strong>graphical user interface (GUI)</strong>. Most users find it easier to write their R code in another program. Some of these programs, such as RStudio, are <strong>integrated development environments (IDE)</strong>. Others are text editors with programming capabilities. We’ll explore the default R GUI first and then meet some editor options. The basic R GUI is shown below. Your screen may look different than mine because I set some graphics options.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02_01.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>The main window with R is the <strong>R console</strong>. This is the command line interface to R. Some important features of the console are:</p>
+<ol type="1">
+<li><p>Command prompt: The <code>&gt;</code> symbol signifies the beginning of a command. You can enter commands here.</p></li>
+<li><p>Continue prompt: <code>+</code> signifies the continuation of a previous command. If you have a <code>+</code> at the beginning of your line, you can get back to a new line using ESCAPE. Note that this will delete the currently incomplete line or command.</p></li>
+<li><p>The ENTER key executes the current command. This could mean the current line, or multiple lines going back to the most recent <code>&gt;</code>.</p></li>
+<li><p><code>[1]</code> at the beginning of results: because your result is an object (with length <span class="math inline">\(\ge\)</span> 1). The very first value (“element”) in the result is element 1.</p></li>
+<li><p>Up arrow key: cycles through previously entered commands. You can see many previous commands at once by using the command <code>history()</code>.</p></li>
+</ol>
+<p>Other important features of the R GUI are found in the menu bar:</p>
+<ul>
+<li><strong>File</strong>
+<ul>
+<li><strong>New script</strong>: opens a new script window within the GUI.</li>
+<li>Ability to open saved scripts or load previous workspaces</li>
+</ul></li>
+<li><strong>Edit</strong>
+<ul>
+<li><strong>Copy, paste, etc.</strong>: very useful!</li>
+<li><strong>Data editor</strong>: opens a rudimentary spreadsheet-like viewer for datasets that can be used to make edits. Not recommended for routine use.</li>
+<li><strong>GUI preferences</strong>: options to change colors, fonts, font sizes, etc., in the GUI. To make changes permanent you will need to save a new <code>.RConsole</code> file in your home directory.</li>
+</ul></li>
+<li><strong>View</strong></li>
+<li><strong>Misc</strong>
+<ul>
+<li><strong>List objects</strong>: lists all objects in workspace. Equivalent to command <code>ls()</code>.</li>
+<li><strong>Remove all objects</strong>: removes all objects form workspace. Equivalent to command <code>rm(list=ls(all=TRUE))</code>.</li>
+<li><strong>List search path</strong>: lists currently attached packages. Equivalent to command <code>search()</code>.</li>
+</ul></li>
+<li><strong>Packages</strong>: functions to download and install packages.</li>
+<li><strong>Windows</strong>: options to change how windows are displayed within GUI.</li>
+<li><strong>Help</strong>: options and resources for getting help, including several free R manuals in PDF format.</li>
+</ul>
+</section>
+<section id="using-r-in-rstudio" class="level4" data-number="2.1.2.2">
+<h4 data-number="2.1.2.2" class="anchored" data-anchor-id="using-r-in-rstudio"><span class="header-section-number">2.1.2.2</span> Using R in RStudio</h4>
+<p>Although you can type R code directly into the console, or type in script windows within the base R GUI, it is usually easiest to use a separate program for writing code. The two best, in my experience, are RStudio and Notepad++ (see above). <strong>RStudio</strong> is an IDE designed to manage R projects, and has many useful features. Unlike some other options, RStudio has R built in so you can write code and execute it within the same program. RStudio can be used on Windows, Mac, and Linux operating systems. RStudio also has built-in support for utilities like RMarkdown and Quarto (which was used to build this website).</p>
+<p>Once you have RStudio installed, open it and you will see a screen like this:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02_02.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>Your RStudio might look different at first. You can change the color scheme by going to Tools - Global Options - Appearance and selecting a theme. Here I’m using the “Classic” theme with size 12 Courier New font and 110% zoom.</p>
+<p>RStudio has an entire environment for working with R in one window. Each of the panels performs different functions. Starting at the bottom left and going clockwise, the panels are:</p>
+<ul>
+<li><strong>Console</strong>: command line interface for R. You can type commands here and execute them by pressing ENTER.</li>
+<li><strong>Script</strong>: a space where you can type code and later execute it by either clicking “Run” or pressing CRTL-ENTER (CMD-ENTER on a Mac). Usually people write code in the script window rather than typing it directly into the console.</li>
+<li><strong>Environment</strong>: this window lists all of the data objects that you have loaded.</li>
+<li><strong>Files</strong>: this window lists all of the files available in your R home directory. You can also navigate to other folders on your machine and select files to open.</li>
+</ul>
+<p>The bottom right panel also has a tab called “<strong>Plots</strong>”. This is where plots that you make can be seen. Sometimes you will need to resize this panel to see the plots clearly. All of the panels can be resized by clicking and dragging the borders between them.</p>
+</section>
+</section>
+</section>
+<section id="sec-02-comm" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="sec-02-comm"><span class="header-section-number">2.2</span> Commands, objects, and output</h2>
+<p>The key to understanding R is to understand <a href="https://en.wikipedia.org/wiki/Object-oriented_programming">object orientation</a>. This means that R code is built around manipulating objects. In programming, an <strong>object</strong> is a construct or thing with well-defined attributes and behaviors. For example, a graphics program might have object classes like “polygon” and “circle”. Rather than redefine “polygon” every time the user needs to draw a polygon, the program creates a polygon object with attributes like “number of sides” and “side length”. The new object is an <strong>instance</strong> of the polygon class. The <strong>class</strong> of an object defines what attributes it has and how it interacts with other objects.</p>
+<section id="sec-02-comm-basic" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="sec-02-comm-basic"><span class="header-section-number">2.2.1</span> R commands–basics</h3>
+<p>In R, <strong><em>everything</em></strong> is an object. We will learn more about some of the most important R object types in the examples in <a href="ch03.html" class="quarto-xref"><span>Chapter 3</span></a>. Objects are created in R by many functions.</p>
+<p>Objects are stored to memory by <strong>assignment</strong>, using the left arrow <code>&lt;-</code> (a “less than” followed by a hyphen). If an object already exists, then assignment is used to either modify the object, or replace it entirely. Here is an example:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This creates an object called <code>a</code>, which contains the value <code>3</code>. You can then recall the value by typing <code>a</code> in the console and pressing Enter. You can also use the value stored in <code>a</code> in calculations or functions.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>a</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>a <span class="sc">*</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span>a</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3</code></pre>
+</div>
+</div>
+<p>Assigning a different value to <code>a</code> will overwrite it.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>a</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">6</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>a</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>a<span class="sc">^</span><span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 36</code></pre>
+</div>
+</div>
+<p>Notice that there is no “Undo” button. If you make a mistake, you need to rerun the code before your mistake to get back to where you were. Objects can be deleted by “removing them” with command <code>rm()</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Besides assigning and working with values, R code contains comments: text that is for human readers, and is not interpreted by R. Comments are very important because they tell other people—or future you—what your code is doing and how it works. Some comments are just place markers (e.g., <code># Analysis begins here</code>) to help you find important sections. Other comments might be more lengthy, holding explanations of why you chose to code a task the way that you did (e.g., <code># condense with sapply() (maintains order of subunits)</code>). The latter kind of comment can be very useful to your future self.</p>
+<p>In R, comments are made with the # symbol. Anything on a line after # is not read by R.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># here is a comment</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="co"># here is another comment</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You can write your code directly in the console, or in a script window. If you use the script panel in RStudio (as you should), you can send commands to the console by pressing Crtl-Enter (or Cmd-Enter on Mac). This will send and execute the entire command that the cursor is on. In the base R GUI script window, the equivalent is Crtl-R (or Cmd-R on Mac), but this runs only the line where the cursor rests (not the entire command).</p>
+<p>The R console can seem daunting to new users. The <code>&gt;</code> symbol at the start of a line is the <strong>command prompt</strong>. Commands must begin here. If there is a <code>+</code> at the beginning of a line, then this means that there is an incomplete command. Press Escape to exit the incomplete command and get back to <code>&gt;</code>.</p>
+<p>When you type a command like <code>2+2</code>, the output will print to the console with a <code>[1]</code> at the start of the line. The <code>[1]</code> signifies that that line starts with the first element of the output. This is to help read outputs with lots of elements. Try the command <code>rnorm(100)</code> to see why.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">+</span><span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1]  0.460112009  0.713271327 -0.271488533  0.170090307  1.439857812
+  [6]  1.759171557  0.761150887  0.672884558  1.183759445  0.607485823
+ [11] -0.908526587  1.370076296  0.264583834  0.511964965 -0.673980328
+ [16]  1.315395372 -1.734481397 -0.795882856 -0.171082235  0.432461117
+ [21] -0.908076006  0.009752593 -0.643840515  0.494902855  1.046186440
+ [26]  0.147424191  0.161755733 -2.411532663  0.525871086  0.755110176
+ [31]  1.407646435 -1.065077133 -0.199532354  0.265506669  2.001236896
+ [36] -0.023334533  0.423993688  0.798941667  1.008638012  0.814660957
+ [41] -0.238703832 -0.134699937  0.824657880  1.204923695 -2.169924781
+ [46]  0.712488508  0.292684033 -1.125136355 -0.366336497  0.532551889
+ [51] -1.190427884 -1.583466505  0.204784021 -0.056403142  0.891603090
+ [56]  0.805078490 -0.194699384  1.246213560 -0.400831618 -0.008228499
+ [61] -0.447056702 -0.385985737 -0.898081758 -1.580580280  0.922579761
+ [66] -1.717495869 -0.169906384  0.389271496 -0.174897190 -0.160201701
+ [71]  0.148480209 -0.419939317  1.058457650 -0.715021148 -0.336133617
+ [76]  0.769683997 -1.207621591 -0.903387434 -1.254881264 -0.905299806
+ [81]  1.576263878  1.167226762 -0.292342017  0.884710289  0.187117459
+ [86] -1.516689417 -1.274869271  0.022056366  0.884682062  0.523965262
+ [91]  1.225810679  1.020234600  0.190817274  0.205131167 -0.366999284
+ [96]  1.266630194 -0.794331017  0.506589124  0.358144091 -1.125258146</code></pre>
+</div>
+</div>
+<p>Commands can be split over multiple lines. When that happens, a <code>+</code> will be seen at the left side of the window instead of a <code>&gt;</code>. A split command will be executed once a complete expression is input.</p>
+<p>If you accidentally start a command and aren’t sure how to finish it, you can exit and cancel the command with the ESCAPE key. R executes commands, not lines. You can have more than one command on a line separated by a semi-colon ;, but this generally frowned upon.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># command split across lines:</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2 commands on a line (don't do this)</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span>; <span class="dv">3</span> <span class="sc">+</span> <span class="dv">3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+</div>
+<p>Below is an example where the a command is broken across lines, with each line getting an explanatory comment. This is possible because R ignores whitespace (spaces, tabs, returns, etc.). Very complex functions or loops might benefit from this kind of commenting. Some programmers do not like this kind of comment–but you comment code the way that works for you.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10</span>,  <span class="co"># sample size</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10</span>,  <span class="co"># mean</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span>    <span class="co"># sd</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>       <span class="co"># note no comma after last argument!</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>)<span class="co">#rnorm</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 13.603452 10.327637 10.444085 10.158743 12.742892 10.737577
+ [7] 10.886821 12.034019  7.588446 12.110607</code></pre>
+</div>
+</div>
+<p>Notice in the above example that the closing parenthesis for <code>rnorm()</code> is marked with a comment. This is a good practice if the open and close parentheses are separated by many lines of code. Most IDEs will highlight matching parentheses, but marking them yourself can potentially save some headache.</p>
+<p>When writing comments or writing multi-line commands you should keep in mind that most code editors don’t do line breaks very well. Or, they will wrap text displayed in the editor, but this might not display the same on every device. As a rule I try to keep lines of code to ≤ 80 characters, so I don’t have to scroll over to see the end of a command. You can do this too, by breaking up commands and long comments into multiple lines. It also helps to indent additional lines by a set amount–most people prefer either 2 or 4 spaces rather than a tab stop.</p>
+</section>
+<section id="sec-02-comm-functions" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="sec-02-comm-functions"><span class="header-section-number">2.2.2</span> Using R functions</h3>
+<p>R <strong>functions</strong> are objects that do things to other objects, or create objects, or modify objects… basically, functions <strong><em>do</em></strong> stuff while most other objects <strong><em>store</em></strong> stuff. Functions are called by name, and they have options or <strong>arguments</strong> contained within parentheses. It’s good practice to have the parentheses touching the function name.</p>
+<p>Argument values are set using single equals sign <code>=</code>. Argument values must be of the correct <strong>type</strong> (numeric, character, logical, etc.), must take on valid values (or be one of the available options), must be spelled and capitalized correctly, and may be named or not at the user’s discretion. Most functions will print their results to the console upon completion. If you want to store the results of a function, you need to assign the results to an object using <code>&lt;-</code>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02_04.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>See below for some examples of function use using <code>rnorm()</code>, which draws random numbers from a normal distribution<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Your numbers may be different than those below, because the function is <em>random</em>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># arguments named</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="do">## draw 20 values with mean 10 and sd 2</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">20</span>, <span class="at">mean=</span><span class="dv">10</span>, <span class="at">sd=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 13.643674  8.120594  8.362842  8.903461  9.477068 11.339061
+ [7]  9.048325 10.674509  8.051178 11.110316  9.629146 12.883704
+[13]  7.090123  7.609484 10.437222 10.345240 12.641862 10.743309
+[19] 14.099698  7.328128</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="do">## equivalent with unnamed arguments</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="dv">20</span>, <span class="dv">10</span>, <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  8.103748  7.168833 11.331901  9.296540  8.115451  7.364296
+ [7] 11.774743 13.126787  8.967994 10.936330 13.821061  9.129345
+[13] 11.525573 12.421921 11.892618 11.892016  5.870189  8.252738
+[19] 10.616877 11.395839</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="do">## very different: 2 values from a normal</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="do">## distribution with mean=20 and sd=10</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="dv">2</span>, <span class="dv">20</span>, <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 17.633418 -4.939791</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="do">## when in doubt, name your arguments!</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="at">sd=</span><span class="dv">2</span>, <span class="at">n=</span><span class="dv">20</span>, <span class="at">mean=</span><span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 14.505315  7.728862  8.535228  9.886187  8.127360 12.064680
+ [7]  8.808907  8.111859  8.707759  9.348466  7.088544 11.266037
+[13] 11.657548 10.447689  6.015027  8.289744 10.742410  6.145726
+[19]  9.643859  7.317006</code></pre>
+</div>
+</div>
+<p>You can use the R help pages to see what the arguments are, the order in which R expects them, and their default values (if any). For <code>rnorm()</code>, the mean and sd have defaults 0 and 1, respectively.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>?rnorm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>To recap, argument <strong>order</strong> is important when using functions. You can supply arguments to a function without naming them if you put them in the proper order. See the help files to see what the order is. <em>When in doubt, name your arguments</em>.</p>
+<p>Functions expect arguments in a particular format. If a function is not working, you might have an argument formatted incorrectly. Sometimes it’s helpful to look at each argument separately in the R console, outside of the function. To do this, copy/paste each argument to the R console separately and execute by hitting ENTER.</p>
+<p>Some function arguments have default values, so you don’t have to supply them. For example, <code>runif()</code>, which draws random numbers from the uniform distribution, defaults to the interval between 0 and 1. So, the two <code>runif()</code> commands below are equivalent because 0 and 1 are the defaults for the limits of the interval. The <code>set.seed()</code> command before each <code>runif()</code> command is to set the random number seed, ensuring that the results are identical. If you run the <code>runif()</code> commands without resetting the random number seed, the commands will return different results because of the random nature of the function.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">10</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="do">##  [1] 0.2875775 0.7883051 0.4089769 0.8830174 0.9404673 0.0455565</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="do">##  [7] 0.5281055 0.8924190 0.5514350 0.4566147</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="do">##  [1] 0.2875775 0.7883051 0.4089769 0.8830174 0.9404673 0.0455565</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="do">##  [7] 0.5281055 0.8924190 0.5514350 0.4566147</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="sec-02-comm-workspace" class="level3" data-number="2.2.3">
+<h3 data-number="2.2.3" class="anchored" data-anchor-id="sec-02-comm-workspace"><span class="header-section-number">2.2.3</span> The R workspace</h3>
+<p>When you use R, all objects and data that you use exist in the R <strong>workspace</strong>. Objects in the workspace can be called from the console. You can think of the workspace like a kind of sandbox or workbench.</p>
+<p>Most of the time, when you start R this creates a new workspace with no objects. If you open a previously saved workspace, you will see the message <code>[Previously saved workspace restored]</code>. If you saved your R workspace without a unique name, it can be hard to figure out what workspace you are in. You can use the <code>ls()</code> command to see what is in the workspace, which might help you figure out what workspace has been loaded. If there are no objects in the workspace, the result of <code>ls()</code> will be <code>character(0)</code>. This output means that the <code>ls()</code> command returned a vector of text values (<code>character</code>) with 0 elements. In other words, the workspace contains no objects.</p>
+<p>As you work, your workspace will fill up with objects. This isn’t a big deal until you start to either have too many names to keep track of, or start to use too much memory. The first problem can be dealt with by commenting your code. The second problem can be solved by deleting unneeded objects to save space. You can check to see how much memory your R objects are using with the following command:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not run, but try on your machine</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(<span class="fu">sapply</span>(<span class="fu">mget</span>(<span class="fu">ls</span>()),object.size), <span class="at">decreasing=</span><span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This command will print the sizes of objects in memory in the current workspace, in descending order. The default units are bytes. If you want the results in Mb, divide the output by 1.024e6.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not run, but try on your machine</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">sapply</span>(<span class="fu">mget</span>(<span class="fu">ls</span>()),object.size), <span class="at">decreasing=</span><span class="cn">TRUE</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>a<span class="sc">/</span><span class="fl">1.024e6</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>R objects can be deleted or removed from the workspace with the <code>rm()</code> function. You can remove objects one at a time or by supplying a set of names. Note that the set of names is supplied to an argument called <code>list</code>, which is confusing because <code>list</code> is also the name of a special type of object in R.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not run, but try on your machine</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="co"># shows x, y, and z in workspace</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>() </span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a><span class="co"># remove x</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(x)</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>() <span class="co"># x is gone</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a><span class="co"># remove y and z</span></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list=</span><span class="fu">c</span>(<span class="st">"y"</span>, <span class="st">"z"</span>))</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>() <span class="co"># x, y, and z are all gone</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="sec-02-syn" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="sec-02-syn"><span class="header-section-number">2.3</span> R syntax</h2>
+<section id="sec-02-syn-oss" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="sec-02-syn-oss"><span class="header-section-number">2.3.1</span> Object size and structure</h3>
+<p>As you’ve already seen, the most important R function is <strong>assignment</strong>. When you assign a value to a variable, you can then use that variable in place of the value. Assigning a value to variable name will automatically create a new object in the workspace with that name. If an object with that name already exists, assigning a new value to that name will overwrite the old object.</p>
+<p><strong><em>You should always use the left arrow <code>&lt;-</code> as the assignment operator.</em></strong> The equals sign <code>=</code> can be used for assignment, but you should not do so because <code>=</code> is easily confused with the equality test operator <code>==</code>. Also, <code>=</code> is a mathematical symbol, but <code>&lt;-</code> is unambiguously an R operation. You can also use <code>-&gt;</code> to assign to the right, but doing so usually makes your code harder to read rather than easier. Always use <code>&lt;-</code> to assign to the left.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>aa <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>bb <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Don’t do this:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>cc <span class="ot">=</span> <span class="dv">5</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Don’t do this either.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span> <span class="ot">-&gt;</span> cc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>And definitely don’t do this:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="ot">-&gt;</span> b</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You can chain multiple assignments together in a single command. This is useful if you need to quickly create several objects with the same structure:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>list3 <span class="ot">&lt;-</span> list2 <span class="ot">&lt;-</span> list1 <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"list"</span>, <span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Assignment can also be used to <strong>change or overwrite</strong> parts of pre-existing objects. Usually this involves the bracket notation, which we will explore more in <a href="ch05.html" class="quarto-xref"><span>Chapter 5</span></a>. In the example below, the third element of object <code>a</code>, <code>a[3]</code>, is replaced with the number 42.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>a</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 1 2 3 4 5</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">42</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>a</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="do">## [1]  1  2 42  4  5</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>One little-known feature of R assignment is that it can <strong>resize</strong> objects. For example, if you assign a value to the n-th element of a vector that has fewer than n elements, R will increase the length of the object to the size needed. It should be noted that this can be done accidentally as well as intentionally, so you need to be very careful if you resize objects using assignment. Personally, I don’t do this because it is often clearer to change the size of objects in a separate command.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># resize by assignment (not recommended)</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>a</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="do">## [1]  1  2  3 NA  5</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a><span class="co"># resize in separate command (preferred)</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(a) <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>a</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a><span class="do">## [1]  1  2  3 NA NA</span></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a><span class="co"># resize by concatenation (preferred)</span></span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span></span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">c</span>(a, <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>)</span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>a</span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 1 2 3 4 5</span></span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a><span class="co"># alternatively:</span></span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span></span>
+<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">c</span>(a, b)</span>
+<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a>a</span>
+<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 1 2 3 4 5</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="sec-02-syn-ops" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="sec-02-syn-ops"><span class="header-section-number">2.3.2</span> Operators</h3>
+<p>Most math operators in R are similar to those in other languages or programs. For math expressions, the standard order of operations (PEMDAS) applies, but you can use parentheses if you want to be sure. The integer sequence operator <code>:</code> comes first, and comparison tests (<code>==</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, and <code>&gt;=</code>) come last. The examples below show how many common R operators function, taking advantage of the fact that you can use an object’s name in place of its value in most situations.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make some values to work with</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>aa <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>bb <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="co"># multiply</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>aa<span class="sc">*</span><span class="dv">3</span>            </span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 15</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a><span class="co"># add</span></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>bb<span class="sc">+</span><span class="dv">3</span>            </span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 11</span></span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a><span class="co"># square root</span></span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(aa)        </span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2.236068</span></span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a><span class="co"># natural logarithm (base e)</span></span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(aa)         </span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 1.609438</span></span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a><span class="co"># logarithm (arbitrary base)</span></span>
+<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(aa, <span class="at">base=</span><span class="dv">3</span>) </span>
+<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 1.464974</span></span>
+<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(aa, pi)     </span>
+<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 1.405954</span></span>
+<span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-28"><a href="#cb47-28" aria-hidden="true" tabindex="-1"></a><span class="co"># common logarithm (base 10)</span></span>
+<span id="cb47-29"><a href="#cb47-29" aria-hidden="true" tabindex="-1"></a><span class="fu">log10</span>(aa)       </span>
+<span id="cb47-30"><a href="#cb47-30" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.69897</span></span>
+<span id="cb47-31"><a href="#cb47-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-32"><a href="#cb47-32" aria-hidden="true" tabindex="-1"></a><span class="co"># exponentiation with base e (antilog)</span></span>
+<span id="cb47-33"><a href="#cb47-33" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(aa)         </span>
+<span id="cb47-34"><a href="#cb47-34" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 148.4132</span></span>
+<span id="cb47-35"><a href="#cb47-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-36"><a href="#cb47-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Vectorized (element-wise) multiplication</span></span>
+<span id="cb47-37"><a href="#cb47-37" aria-hidden="true" tabindex="-1"></a>bb<span class="sc">*</span><span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>          </span>
+<span id="cb47-38"><a href="#cb47-38" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 16 24 32 40</span></span>
+<span id="cb47-39"><a href="#cb47-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-40"><a href="#cb47-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Exponentiation</span></span>
+<span id="cb47-41"><a href="#cb47-41" aria-hidden="true" tabindex="-1"></a>bb<span class="sc">^</span><span class="dv">2</span>            </span>
+<span id="cb47-42"><a href="#cb47-42" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 64</span></span>
+<span id="cb47-43"><a href="#cb47-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-44"><a href="#cb47-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternate symbol for exponentiation (rare)</span></span>
+<span id="cb47-45"><a href="#cb47-45" aria-hidden="true" tabindex="-1"></a>bb<span class="sc">**</span><span class="dv">2</span>           </span>
+<span id="cb47-46"><a href="#cb47-46" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 64</span></span>
+<span id="cb47-47"><a href="#cb47-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-48"><a href="#cb47-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Remainder (modulus)</span></span>
+<span id="cb47-49"><a href="#cb47-49" aria-hidden="true" tabindex="-1"></a><span class="do">## 13 / 5 == 2 remainder 3</span></span>
+<span id="cb47-50"><a href="#cb47-50" aria-hidden="true" tabindex="-1"></a><span class="dv">13</span> <span class="sc">%%</span> <span class="dv">5</span>         </span>
+<span id="cb47-51"><a href="#cb47-51" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 3</span></span>
+<span id="cb47-52"><a href="#cb47-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-53"><a href="#cb47-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Quotient without remainder</span></span>
+<span id="cb47-54"><a href="#cb47-54" aria-hidden="true" tabindex="-1"></a><span class="dv">13</span> <span class="sc">%/%</span> <span class="dv">5</span>        </span>
+<span id="cb47-55"><a href="#cb47-55" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2</span></span>
+<span id="cb47-56"><a href="#cb47-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-57"><a href="#cb47-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Order of operations</span></span>
+<span id="cb47-58"><a href="#cb47-58" aria-hidden="true" tabindex="-1"></a>aa<span class="sc">+</span><span class="dv">2</span><span class="sc">*</span><span class="dv">3</span>          </span>
+<span id="cb47-59"><a href="#cb47-59" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 11</span></span>
+<span id="cb47-60"><a href="#cb47-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-61"><a href="#cb47-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Order of operations</span></span>
+<span id="cb47-62"><a href="#cb47-62" aria-hidden="true" tabindex="-1"></a>aa<span class="sc">+</span>(<span class="dv">2</span><span class="sc">*</span><span class="dv">3</span>)        </span>
+<span id="cb47-63"><a href="#cb47-63" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 11</span></span>
+<span id="cb47-64"><a href="#cb47-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-65"><a href="#cb47-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Order of operations</span></span>
+<span id="cb47-66"><a href="#cb47-66" aria-hidden="true" tabindex="-1"></a>(aa<span class="sc">+</span><span class="dv">2</span>)<span class="sc">*</span><span class="dv">3</span>        </span>
+<span id="cb47-67"><a href="#cb47-67" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 21</span></span>
+<span id="cb47-68"><a href="#cb47-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-69"><a href="#cb47-69" aria-hidden="true" tabindex="-1"></a><span class="co"># Sequence of integers</span></span>
+<span id="cb47-70"><a href="#cb47-70" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>            </span>
+<span id="cb47-71"><a href="#cb47-71" aria-hidden="true" tabindex="-1"></a><span class="do">##  [1]  1  2  3  4  5  6  7  8  9 10</span></span>
+<span id="cb47-72"><a href="#cb47-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-73"><a href="#cb47-73" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that ":" comes first!</span></span>
+<span id="cb47-74"><a href="#cb47-74" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span><span class="sc">*</span><span class="dv">10</span>         </span>
+<span id="cb47-75"><a href="#cb47-75" aria-hidden="true" tabindex="-1"></a><span class="do">##  [1]  10  20  30  40  50  60  70  80  90 100</span></span>
+<span id="cb47-76"><a href="#cb47-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-77"><a href="#cb47-77" aria-hidden="true" tabindex="-1"></a><span class="co"># Comparisons are last</span></span>
+<span id="cb47-78"><a href="#cb47-78" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">*</span><span class="dv">2</span> <span class="sc">&gt;</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span><span class="sc">*</span><span class="dv">2</span>     </span>
+<span id="cb47-79"><a href="#cb47-79" aria-hidden="true" tabindex="-1"></a><span class="do">## [1]  TRUE FALSE FALSE FALSE FALSE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Some of these examples illustrate a key concept in R programming: <strong>vectorization</strong>. Many R functions can operate on sets of numbers, or <strong>vectors</strong>, just as well as on single values or <strong>scalars</strong>. The function will operate on every element of the vector in order. Most R functions are vectorized to some extent. This is very handy because many operations in statistics deal with vectors of values.</p>
+<p>Vectorization can cause headaches if the vectors are not of the same length. If the length of one vector is a multiple of the length of the other, then the shorter vector gets recycled. This is sometimes called the “recycling rule”. The recycling rule can be very convenient if you know what you’re doing and are paying attention. If you don’t pay attention, or aren’t aware that recycling is happening, it can create a headache because values are recycled without telling you.</p>
+<p>If the length of the longer vector is not a multiple of the length of the shorter vector, the shorter one will be recycled a non-integer number of times and R will return a warning (longer object length is not a multiple of shorter object length).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lengths compatible:</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">6</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>x<span class="sc">+</span>y</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 4 6 6 8</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="co"># lengths not compatible:</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>a <span class="sc">+</span> b</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 5 7 7</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="sec-02-pack" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="sec-02-pack"><span class="header-section-number">2.4</span> R packages</h2>
+<p><strong>Packages</strong> are modules that can be added to R to extend its capabilities. Most packages are written by R users and researchers who need functions that are not provided with the base R installation. These add-ons are one of the greatest strengths of R compared to other software packages. Commercial and proprietary statistics programs (like SAS) are upgraded only by a single group of developers, if at all. In contrast, new functions and capabilities are added to R by the user community every day.</p>
+<p>Some packages are widely used and cited, others less so. Do your homework before depending on a package. Is the package included or recommended with the base R installation? Is the package associated with any peer-reviewed publications? Does the package author appear to have the credentials that would qualify them to produce a package? Do other packages depend on this package? All of these are good signs that a package is reliable.</p>
+<p>Most packages are stored on The Comprehensive R Archive Network, or CRAN. Other repositories include R-Forge, BioConductor, and GitHub. Packages can also be downloaded and installed from local storage.</p>
+<p>R-Forge and BioConductor can usually be accessed from the R command line just like CRAN. Installing packages from GitHub may require a different procedure. Most R packages are written in the R language itself, so even if you can’t find a way to install a package you can usually just copy and run its source code.</p>
+<section id="sec-02-pack-lib" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="sec-02-pack-lib"><span class="header-section-number">2.4.1</span> Your R library</h3>
+<p>When you install R packages, the files are downloaded and stored on your machine for R to access when needed. R will probably create a folder in your R home directory for this purpose. The first time you install a package in R you will be asked if R can create a personal library in which to store the package. Package installations are specific to the version of R that you used for the installation, and specific to your operating system login. This means that if someone else logs in to your machine and wants to use a package, they will have to install the package for themselves. This also means that if you update your R installation to a new version, you may need to install packages again because some packages are version-specific.</p>
+</section>
+<section id="sec-02-pack-install" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="sec-02-pack-install"><span class="header-section-number">2.4.2</span> Installing R packages</h3>
+<section id="installing-r-packages-using-the-gui" class="level4" data-number="2.4.2.1">
+<h4 data-number="2.4.2.1" class="anchored" data-anchor-id="installing-r-packages-using-the-gui"><span class="header-section-number">2.4.2.1</span> Installing R packages using the GUI</h4>
+<p>In the R GUI, go to Packages – Install package(s)…. You will be prompted to select a CRAN mirror (i.e., server from which to download). Pick any mirror you like. Then, scroll to and select your package. If the install fails, try a different mirror by going to Packages – Set CRAN mirror…, and then retrying the installation.</p>
+</section>
+<section id="installing-packages-in-rstudio" class="level4" data-number="2.4.2.2">
+<h4 data-number="2.4.2.2" class="anchored" data-anchor-id="installing-packages-in-rstudio"><span class="header-section-number">2.4.2.2</span> Installing packages in RStudio</h4>
+<p>You can install a package in RStudio by going to Tools–Install Packages… and searching for the name of the package you want.</p>
+</section>
+<section id="installing-packages-using-r-code" class="level4" data-number="2.4.2.3">
+<h4 data-number="2.4.2.3" class="anchored" data-anchor-id="installing-packages-using-r-code"><span class="header-section-number">2.4.2.3</span> Installing packages using R code</h4>
+<p>In the R console, you can install packages using function install.packages() as shown below. You will still be asked to select your CRAN mirror (most packages are hosted on CRAN).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"vegan"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="sec-02-pack-work" class="level3" data-number="2.4.3">
+<h3 data-number="2.4.3" class="anchored" data-anchor-id="sec-02-pack-work"><span class="header-section-number">2.4.3</span> Working with packages in R</h3>
+<p>You can access the packages you have installed by loading them. In most situations you must load a package before you use it. The usual way is to use the <code>library()</code> function. Once a package is loaded, you can use its functions and datasets. The function require() does the same thing as <code>library()</code>, but it is designed for use inside other functions. Most of the time you should use <code>library()</code>. The command below will load the package <code>vegan</code> so its functions and datasets become available:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Notice that the package name does not have to be in quotation marks within the <code>library()</code> function.</p>
+<p>You can see what packages are currently attached with <code>search()</code> or <code>sessionInfo()</code>. Packages can be unloaded detaching them from the workspace: <code>detach(package:x)</code>, where <code>x</code> is the name of the package you want to detach. In the example below, the first command loads the <code>MASS</code> package. Then, we can see that is loaded in the workspace with <code>search()</code>. The next command unloads <code>MASS</code>, then verifies that <code>MASS</code> was unloaded from the workspace with another <code>search()</code> command.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">search</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] ".GlobalEnv"        "package:vegan"     "package:permute"  
+ [4] "package:stats"     "package:graphics"  "package:grDevices"
+ [7] "package:utils"     "package:datasets"  "package:methods"  
+[10] "Autoloads"         "package:base"     </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">search</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] ".GlobalEnv"        "package:MASS"      "package:vegan"    
+ [4] "package:permute"   "package:stats"     "package:graphics" 
+ [7] "package:grDevices" "package:utils"     "package:datasets" 
+[10] "package:methods"   "Autoloads"         "package:base"     </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(package<span class="sc">:</span>MASS)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">search</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] ".GlobalEnv"        "package:vegan"     "package:permute"  
+ [4] "package:stats"     "package:graphics"  "package:grDevices"
+ [7] "package:utils"     "package:datasets"  "package:methods"  
+[10] "Autoloads"         "package:base"     </code></pre>
+</div>
+</div>
+<p>There is rarely any need to unload a package from the workspace unless there are naming conflicts. The most common situation is when two attached packages have functions with the same name. In this situation, R will use the <em>most recently loaded</em> package’s function. This phenomenon is called masking. When there is a name conflict, you can use the double colon operator <code>::</code> to specify which package’s function you want to use.</p>
+<p>Using <code>::</code> can also access a function without loading the entire package into the workspace. If both packages are already loaded into your workspace, then <code>::</code> will simply select which package’s function to use. Note that a package must be <em>installed</em> on your machine before you can use its functions.</p>
+<p>The example below shows how <code>::</code> can be used to access the <code>fitdistr()</code> function from packages <code>MASS</code> without loading the package</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># simple example</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">log</span>(<span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.302585</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(<span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.302585</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use a function without loading its package</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>MASS<span class="sc">::</span><span class="fu">fitdistr</span>(<span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">50</span>, <span class="dv">10</span>), <span class="st">"normal"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      mean          sd    
+  50.6073364    9.0431206 
+ ( 0.9043121) ( 0.6394452)</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># verify that MASS is not attached:</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="fu">search</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] ".GlobalEnv"        "package:vegan"     "package:permute"  
+ [4] "package:stats"     "package:graphics"  "package:grDevices"
+ [7] "package:utils"     "package:datasets"  "package:methods"  
+[10] "Autoloads"         "package:base"     </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.4.3 (2025-02-28 ucrt)
+Platform: x86_64-w64-mingw32/x64
+Running under: Windows 11 x64 (build 26200)
+
+Matrix products: default
+
+
+locale:
+[1] LC_COLLATE=English_United States.utf8 
+[2] LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+time zone: America/New_York
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+
+other attached packages:
+[1] vegan_2.7-1   permute_0.9-8
+
+loaded via a namespace (and not attached):
+ [1] digest_0.6.37     fastmap_1.2.0     Matrix_1.7-2     
+ [4] mgcv_1.9-1        xfun_0.53         lattice_0.22-6   
+ [7] splines_4.4.3     parallel_4.4.3    knitr_1.50       
+[10] htmltools_0.5.8.1 rmarkdown_2.29    cli_3.6.3        
+[13] grid_4.4.3        compiler_4.4.3    rstudioapi_0.17.1
+[16] tools_4.4.3       cluster_2.1.8     nlme_3.1-167     
+[19] evaluate_1.0.5    yaml_2.3.10       rlang_1.1.7      
+[22] jsonlite_2.0.0    htmlwidgets_1.6.4 MASS_7.3-64      </code></pre>
+</div>
+</div>
+<section id="sec-02-pack-work-dep" class="level4" data-number="2.4.3.1">
+<h4 data-number="2.4.3.1" class="anchored" data-anchor-id="sec-02-pack-work-dep"><span class="header-section-number">2.4.3.1</span> Package dependencies</h4>
+<p>Many R packages are built taking advantage of other R packages. The packages that a package depends on are called its dependencies or depends. Some packages have no dependencies (other than R itself), while others have many. Something to think about when deciding whether to use a package are the number and nature of its dependencies. If you use a package that depends on many other packages, then you are relying on the authors of those packages to maintain and update their code to work with new versions of R and new versions of packages. And, relying upon the authors of all of those packages’ dependencies. And so on.</p>
+<p>You can see the dependencies of a package by checking out its page on CRAN. For example, the drc package <span class="citation" data-cites="ritz2015">(<a href="#ref-ritz2015" role="doc-biblioref">Ritz <em>et al.</em> 2015</a>)</span> is <a href="https://cran.r-project.org/web/packages/drc/index.html">here</a>. You can see the current version, what packages it depends on (“Depends”), and what packages depend on it (“Reverse depends”).</p>
+<p>The point here is that you don’t want your code to break because one of the packages you use hasn’t been updated. This can get very frustrating if, for example, several packages you use all depend on each other, or even different versions of each other! Most R package authors and/or maintainers are pretty good about keeping their packages up to date, but some are not. If you really need a function from a package that is no longer maintained, or incompatible with your current version of R, you have three options:</p>
+<ol type="1">
+<li><p>Download and use the older version of R that is compatible with the package. This is not recommended because you will lose the benefit of recent bug fixes and modifications to R. This option is also not recommended because by rolling back to an older version of R, you will likely need to roll back to older versions of other packages.</p></li>
+<li><p>Find another, current package that does what you need to do. This can be a quite a headache if you have a large codebase or a very specialized function.</p></li>
+<li><p>Access the source code to the package you need, and “borrow” the functions or code you need.</p></li>
+<li><p>Sometimes, if you only need 1 or 2 functions from a package, or you need to modify a function from a package to suit your needs. In these cases, you can “borrow” directly from the package source code. For most packages, the CRAN page will have a link to an online code repository (usually Github) and/or the package source as a “tarball” (“.tar.gz” file). A tarball is a compressed version of the package source code that may or may not need to be compiled using special functions in R.</p></li>
+</ol>
+<p>Because most R packages are written in R itself, you can usually find and adapt the code you need. This is almost always permitted by the license of the package because most packages are released under some version of the GNU Public License (GPL). If you do borrow code from a package, it is considered good form to attribute the package authors in some way (e.g., “we adapted code from the package”foo” version 1.0 (Nobody 2001)“).</p>
+</section>
+<section id="sec-02-pack-work-cite" class="level4" data-number="2.4.3.2">
+<h4 data-number="2.4.3.2" class="anchored" data-anchor-id="sec-02-pack-work-cite"><span class="header-section-number">2.4.3.2</span> Citing packages</h4>
+<p>Just like any software, you need to cite a package if you use it. This is both to give appropriate credit to the package authors, and to allow others to understand what you did. The appropriate citation for a package can be accessed from the console with the <code>citation()</code> command.</p>
+<p>Citation for R itself:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">citation</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>To cite R in publications use:
+
+  R Core Team (2025). _R: A Language and Environment for
+  Statistical Computing_. R Foundation for Statistical
+  Computing, Vienna, Austria. &lt;https://www.R-project.org/&gt;.
+
+A BibTeX entry for LaTeX users is
+
+  @Manual{,
+    title = {R: A Language and Environment for Statistical Computing},
+    author = {{R Core Team}},
+    organization = {R Foundation for Statistical Computing},
+    address = {Vienna, Austria},
+    year = {2025},
+    url = {https://www.R-project.org/},
+  }
+
+We have invested a lot of time and effort in creating R,
+please cite it when using it for data analysis. See also
+'citation("pkgname")' for citing R packages.</code></pre>
+</div>
+</div>
+<p>Citation for a package (note the quotation marks):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">citation</span>(<span class="st">"MASS"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>To cite the MASS package in publications use:
+
+  Venables, W. N. &amp; Ripley, B. D. (2002) Modern Applied
+  Statistics with S. Fourth Edition. Springer, New York. ISBN
+  0-387-95457-0
+
+A BibTeX entry for LaTeX users is
+
+  @Book{,
+    title = {Modern Applied Statistics with S},
+    author = {W. N. Venables and B. D. Ripley},
+    publisher = {Springer},
+    edition = {Fourth},
+    address = {New York},
+    year = {2002},
+    note = {ISBN 0-387-95457-0},
+    url = {https://www.stats.ox.ac.uk/pub/MASS4/},
+  }</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="sec-02-faq" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="sec-02-faq"><span class="header-section-number">2.5</span> Frequently asked questions about R</h2>
+<section id="sec-02-faq-what" class="level3" data-number="2.5.1">
+<h3 data-number="2.5.1" class="anchored" data-anchor-id="sec-02-faq-what"><span class="header-section-number">2.5.1</span> What is R</h3>
+<p><strong>R</strong> is both a computer program that does statistics, and the programming language for using that program. It was developed in the late 1990s and became popular among biologists by the mid-2000s. R offers several key advantages over other statistical programs:</p>
+<ol type="1">
+<li><p>It is completely free to use. All you need is a computer with the minimum hardware requirements, and a way to download it.</p></li>
+<li><p>It is open source. Unlike commercial software like SAS or JMP, anyone can inspect the <a href="https://github.com/wch/r-source">source code of R</a> and see exactly how it does what it does. One can also modify R to suit their purposes, although there are better ways to add functionality.</p></li>
+<li><p>R has an enormous user base, including many academic and professional statisticians and data scientists. This means that (a) new statistical methods are often implemented in R before in any other program; and (b) there are many community-driven sources of help online, such as <a href="https://stackoverflow.com/questions/tagged/R">Stack Overflow</a>.</p></li>
+<li><p>R is designed explicitly for statistical analysis and data manipulation, so the learning curve is usually gentle for common use cases. In terms of difficulty, R is similar to Microsoft Excel formulas and to <a href="https://scipy.org/">SciPy</a> or <a href="https://pandas.pydata.org/">pandas</a> (which are extensions of Python, an open source language often recommended for beginners).</p></li>
+<li><p>New methods and functions are constantly being added as add-on packages for R that can be downloaded for free and integrate (mostly) seamlessly with other packages. See the <a href="https://cran.r-project.org/web/views/">CRAN task views</a> for a list of package collections by application area.</p></li>
+</ol>
+</section>
+<section id="sec-02-faq-code" class="level3" data-number="2.5.2">
+<h3 data-number="2.5.2" class="anchored" data-anchor-id="sec-02-faq-code"><span class="header-section-number">2.5.2</span> Why do we have to write code?</h3>
+<p>Why don’t we use a point and click program? Why do we have to write code? There are 3 main reasons:</p>
+<ol type="1">
+<li><p>Code is just a way to express instructions <em>clearly and unambiguously</em> to the computer. Human language is often imprecise. Computers do exactly what you tell them to do, so you must tell them exactly what you want them to do. A programming language is a structured and orderly way of doing that.</p></li>
+<li><p>Code, once written, can be <em>easily repeated</em> by running it again. Repeating a series of “point and click” instructions can be tedious, time-consuming, and highly error prone.</p></li>
+<li><p>Writing the code to execute an analysis has the side effect of <em>documenting exactly what was done</em>. This can be extremely useful if there is ever a question about whether an analysis was done correctly, or how the data were handled. In R, we save our code in files called scripts that have a .R file extension.</p></li>
+</ol>
+<p>As you learn, it’s better to think of R as a language, rather than as a code. Don’t think, “How do I <em>do</em> X in R?” Instead, think, “How do I <em>say</em> X in R?” With this perspective, it becomes clear that “writing code” is really an exercise in “expressing instructions clearly and efficiently”.</p>
+</section>
+<section id="sec-02-faq-advdis" class="level3" data-number="2.5.3">
+<h3 data-number="2.5.3" class="anchored" data-anchor-id="sec-02-faq-advdis"><span class="header-section-number">2.5.3</span> Advantages and disadvantages</h3>
+<p>For all of its advantages, R has some drawbacks. Chief among them:</p>
+<ul>
+<li><p>R is free. Unlike some paid and proprietary software, there is no official help line to call if you have issues.</p></li>
+<li><p>Along the same lines, R is distributed with absolutely no warranty (it says so every time you open R). The accuracy of your analysis depends on the competence of the (unpaid) contributors and the user.</p></li>
+<li><p>R often requires more coding than SAS or other tools to get a similar amount of output or perform a similar amount of work. The <code>tidyverse</code> ecosystem of packages addresses some of these issues, but not without some costs (see <a href="#sec-02-faq-tidy" class="quarto-xref"><span>Section 2.5.4</span></a>).</p></li>
+<li><p>R is slower than SAS and other tools at handling large datasets because it holds all data and objects in memory (RAM) at once. This limits the performance of your machine if you are doing other tasks.</p></li>
+<li><p>R is single-threaded by default. This means that R does not handle parallel computation very easily, which could potentially speed up many tasks.</p></li>
+<li><p>R has a difficult learning curve because it is so programming-focused.</p></li>
+<li><p>Error messages that R gives are often vague and infuriating.</p></li>
+</ul>
+</section>
+<section id="sec-02-faq-tidy" class="level3" data-number="2.5.4">
+<h3 data-number="2.5.4" class="anchored" data-anchor-id="sec-02-faq-tidy"><span class="header-section-number">2.5.4</span> Base R vs.&nbsp;tidyverse</h3>
+<p>A colleague of mine who moved from using mostly SAS to using mostly R says that the tidyverse makes R feel more like SAS. The difference he was referring to is the way that SAS functions (“PROCs”, or procedures) tend to automate or abstract away a lot of the low-level functionality and options associated with their methods. Those functions and options are there, but they can be inconvenient to access. The equivalent base R functions, on the other hand, require the user to specify options and manipulate output to a far greater extent. Or, depending on your perspective, they <em>allow</em> the user to specify options and manipulate output. Some people like that, and some people don’t. The amount of interaction and coding in R require to get outputs that other programs like SAS produce automatically is, in my experience, one of the biggest stumbling blocks for new R users.</p>
+<p>Because of the amount of work required to get base R to do anything, the degree of automation and abstraction available in the tidyverse packages <span class="citation" data-cites="wickham2019">(<a href="#ref-wickham2019" role="doc-biblioref">Wickham <em>et al.</em> 2019</a>)</span> is very attractive to many R users: they can focus on high-level decisions without having to get into every picayune detail of routine workflows and standard analyses. Tidyverse packages allow for very streamlined and (once you learn it) easy to understand code. These advantages come at a cost: because the functions abstract the finer details away, those details are harder to see. This can be problematic if you need to work more directly with function inputs and outputs, or manipulate options or data in non-standard ways. For example, if a journal editor is adamant about some minute detail of formatting on a figure, it might be much easier to made the changes in base graphics rather than Tidyverse graphics. The abstraction of the low-level workings of an analysis or program can save a lot of time and headache, but can also make it harder to track down or even to notice errors (although to be fair, systematic approaches to data manipulation such as in package <code>dplyr</code> can also prevent many errors as well).</p>
+<p>Recently Norm Matloff of the University of California, Davis posted an <a href="https://github.com/matloff/TidyverseSkeptic">essay about the advantages of base R compared to the tidyverse</a>. It argues very well some ideas that I’ve thought for years, but could never quite articulate. Matloff is the author of several books on R, former editor of the R journal, and a longtime teacher of statistics and computer science. He argues that new R users should focus on learning base R rather than tidyverse. His main points can be summarized as follows:</p>
+<ul>
+<li><p>Tidyverse packages and code tend to utilize functional programming, rather than object-oriented programming. Functional programming is more abstract than object-oriented programming, which makes it harder to new users with little to no programming background.</p></li>
+<li><p>Tidyverse functions eschew use of the <code>$</code> operator, square brackets <code>[]</code>, and base R data structures in general<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. This means that people who learn only tidyverse are not equipped to take advantage of some of the most fundamental and powerful features of R–including many statistical functions!</p></li>
+<li><p>Tidyverse code avoids loops, a fundamental programming construct. Loops are, for beginning programmers, easy to “step through” and debug. In tidyverse, operations that would be in loops in base R are “hidden” inside functions. This makes it very hard to track down errors. There are base R functions that can be used to avoid loops as well (e.g., <code>lapply()</code> and its cousins), and they are equally hard for beginners to use.</p></li>
+<li><p>Tidyverse is intentionally designed to equip users with a small set of R tools. This means that tidyverse-only users are less equipped to deal with new situations.</p></li>
+</ul>
+<p>In my own workflow, and in this course, I tend to use base R methods instead of tidyverse for reasons above, as well as a few other resaons that are entirely personal and subjective:</p>
+<ul>
+<li><p>I learned R before tidyverse became a thing. This isn’t an advantage or disadvantage to either paradigm; it just is. For me, the time and effort costs of switching to tidyverse would likely outweigh the benefits.</p></li>
+<li><p>I prefer the syntax of base R to the “grammar” of tidyverse. In particular, tidyverse makes extensive use of the pipe operator <code>%&gt;%</code>, which tends to make for obfuscated (to me) code. In base R, multi-step operations are laid out on multiple lines, with intermediate objects being available in the workspace. This is not the case in tidyverse.</p></li>
+<li><p>I prefer to write code with as few dependencies as possible. This makes it less likely that some random update will break my code.</p></li>
+</ul>
+<p>The other two reasons are more functional and less subjective:</p>
+<ul>
+<li><p>Debugging and error correction is easier in base R because of the lack of abstraction. If every step is coded manually and out in the open, errors are easier to find, isolate, and fix.</p></li>
+<li><p>Debugging and fixing tidyverse code often requires knowing base R, but the reverse is never true.</p></li>
+</ul>
+<p>The takehome message is that while both base R and tidyverse offer powerful tools for working with and analyzing data, they represent two overlapping but different programming paradigms. Which framework you use depends on what level of abstraction vs.&nbsp;explicitness you are comfortable with in your own code. Base R makes it easier to work flexibly with the different kinds of inputs and outputs, but usually at the cost of a steeper learning curve. tidyverse makes routine tasks more streamlined with a unified syntax and grammar for data manipulation, but at the cost of flexibility. My advice is to learn base R first, then move on to tidyverse if and only if it has a specific tool you need that is not available in base R.</p>
+</section>
+<section id="sec-02-faq-help" class="level3" data-number="2.5.5">
+<h3 data-number="2.5.5" class="anchored" data-anchor-id="sec-02-faq-help"><span class="header-section-number">2.5.5</span> Where can I get R help?</h3>
+<p>The most important message of this course is simple: <strong><em>Don’t panic!</em></strong> Lots of people have trouble with R. The learning curve is steep, and the error messages are inscrutable. But, there are a lot of resources available to help you.</p>
+<section id="sec-02-faq-help-doc" class="level4" data-number="2.5.5.1">
+<h4 data-number="2.5.5.1" class="anchored" data-anchor-id="sec-02-faq-help-doc"><span class="header-section-number">2.5.5.1</span> R documentation (help) files</h4>
+<p>Documentation for each function, or help files, come included with the base R installation. You can access them from within R by using the <code>?</code> command. <code>?functionname</code> will open the documentation file for function <code>functionname</code>. <code>?</code> will search all currently attached packages. The command below opens the page for the <code>mean</code> function. Notice that this file is stored on your local machine, so no internet access is required.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>?mean</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02_05.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>Some functions belong to a family of related functions that share a common documentation page. For example, all of the functions related to the normal distribution share a common page:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>?dnorm</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>?pnorm</span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>?qnorm</span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>?rnorm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02_06.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>You can also search for help on functions in packages that are not attached. Or, you might want to know about a function but don’t know what package it belongs to. Either way, <code>??functionname</code> is a more general search option that will search any package in your library. Compare what happens if search for function <code>fitdistr()</code> using <code>?</code> and <code>??</code> (this function is in package <code>MASS</code>, and so not loaded by default). With <code>??</code>, R searches all installed packages and returns a browser window with every result that might match your search term.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>?fitdistr</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>??fitdistr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02_07.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>The R documentation pages all tend to follow the same format:</p>
+<p><strong>Description</strong>: brief description of what the function does.</p>
+<p><strong>Usage</strong>: presentation of the function with its arguments in their typical format and expected order.</p>
+<p><strong>Arguments</strong>: list of the arguments to the function in order, their required type/format, and allowed values. This section is very important. When my code isn’t working, the answer to why is usually in the arguments section.</p>
+<p><strong>Details</strong>: additional information necessary to use the function.</p>
+<p><strong>Value</strong>: description of the function’s outputs.</p>
+<p><strong>Source</strong>: description of where the original algorithm or method came from.</p>
+<p><strong>References</strong>: citations for the methods used.</p>
+<p><strong>See also</strong>: list of similar or related R functions.</p>
+<p><strong>Examples</strong>: illustration of how to use the function. This section is <strong><em>very</em></strong> important. If your code is not working, compare how you are using the function to the examples. Are you inputs in the right format? Did you name your arguments or put unnamed arguments in the wrong order? Careful examination and running of the examples will usually reveal why your code is not working.</p>
+<p>R documentation pages tend to be very terse and include very little in the way of background or explanation. They are generally meant to refresh the memory of people already familiar with R and with statistics, not to educate new R users or inexperienced statisticians. If you fall into one of the latter categories, or if you are trying to learn a new function, read on.</p>
+</section>
+<section id="sec-02-faq-help-vig" class="level4" data-number="2.5.5.2">
+<h4 data-number="2.5.5.2" class="anchored" data-anchor-id="sec-02-faq-help-vig"><span class="header-section-number">2.5.5.2</span> R vignettes</h4>
+<p>A <strong>vignette</strong> is a document demonstrating the use of an R package or its functions, with more details and explanation than in the help files. Not all packages offer vignettes. You can see what vignettes are available with the command <code>vignette()</code>. Specific vignettes are accessed by name and package. The examples below show how to get a list of available vignettes, available vignettes by package, and open specific vignettes.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="co"># list vignettes in all installed packages</span></span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vignette</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02_08.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vignette</span>(<span class="at">package=</span><span class="st">"vegan"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02_09.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co"># open vignette "intro-vegan" in local PDF reader</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vignette</span>(<span class="st">"intro-vegan"</span>, <span class="at">package=</span><span class="st">"vegan"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02_10.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="sec-02-faq-help-off" class="level4" data-number="2.5.5.3">
+<h4 data-number="2.5.5.3" class="anchored" data-anchor-id="sec-02-faq-help-off"><span class="header-section-number">2.5.5.3</span> Official resources</h4>
+<p>The R project maintains an <a href="https://www.r-project.org/help.html">official help page</a> with lists of places to get help. They also maintain a <a href="https://cran.r-project.org/manuals.html">list of manuals and documentation</a>. If you want a handy desk reference, you could do worse than the <a href="https://cran.r-project.org/doc/contrib/Short-refcard.pdf">R reference card</a> (accessed 2021-12-21).</p>
+<p>The <a href="https://www.jstatsoft.org/index">Journal of Statistical Software</a> publishes papers about new statistical algorithms and software packages. Many of its papers are about new R packages and applications. The papers about new R packages and methods often include extensive code examples.</p>
+</section>
+<section id="r-task-views" class="level4" data-number="2.5.5.4">
+<h4 data-number="2.5.5.4" class="anchored" data-anchor-id="r-task-views"><span class="header-section-number">2.5.5.4</span> R task views</h4>
+<p>The <a href="https://cran.r-project.org/web/views/">Task Views</a> on CRAN contain frequently updated lists of packages that are useful for specific domains. For example, ecologists might check the <a href="https://cran.r-project.org/web/views/Environmetrics.html">Environmetrics</a>, <a href="https://cran.r-project.org/web/views/Hydrology.html">Hydrology</a> or <a href="https://cran.r-project.org/web/views/Spatial.html">Spatial</a> task views. Paleontologists might be more interested in <a href="https://cran.r-project.org/web/views/Paleontology.html">Paleontology</a> or <a href="https://cran.r-project.org/web/views/Phylogenetics.html">Phylogenetics</a>. Physiologists and biochemists might be interested in <a href="https://cran.r-project.org/web/views/Pharmacokinetics.html">Pharmacokinetics</a>, <a href="https://cran.r-project.org/web/views/ClinicalTrials.html">Clinical Trials</a>, or <a href="https://cran.r-project.org/web/views/Survival.html">Survival</a>. I’ve spent a lot of time in the <a href="https://cran.r-project.org/web/views/Bayesian.html">Bayesian</a>, <a href="https://cran.r-project.org/web/views/NumericalMathematics.html">Numerical Mathematics</a>, and <a href="https://cran.r-project.org/web/views/MachineLearning.html">Machine Learning</a> task views. There’s something for everyone…even a <a href="https://cran.r-project.org/web/views/TeachingStatistics.html">Teaching Statistics</a> task view with resources to help you learn R and stats at the same time.</p>
+<p>(All links accessed 2025-08-06).</p>
+</section>
+<section id="sec-02-faq-help-mail" class="level4" data-number="2.5.5.5">
+<h4 data-number="2.5.5.5" class="anchored" data-anchor-id="sec-02-faq-help-mail"><span class="header-section-number">2.5.5.5</span> R mailing lists</h4>
+<p>If your question has been asked before—and this is very likely—there may be an answer waiting for you on the <a href="https://www.r-project.org/mail.html">R Help mailing list</a>. Results from the R help mailing list will usually show up in Google results. You can submit a question to the R mailing list, but be very cautious about doing so. You will need to provide a short, clear, reproducible example in your question so that other people can see the issue you are having<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. You also need to be sure that your question hasn’t been asked before. Some members of the mailing list will respond with great hostility and condescension if you fail to follow those rules.</p>
+<p>There are several <a href="https://stat.ethz.ch/mailman/listinfo">special interest groups (SIG)</a>, e-mail mailing lists for R users who work in specific fields. For example, <a href="https://stat.ethz.ch/mailman/listinfo/r-sig-ecology">R-sig-ecology</a> is an e-mail list for ecologists who use R. Other SIG of interest to biologists include <a href="https://stat.ethz.ch/mailman/listinfo/r-sig-genetics">R-sig-genetics</a> for genetics, <a href="https://stat.ethz.ch/mailman/listinfo/r-sig-mixed-models">R-sig-mixed-models</a> for mixed models, <a href="https://stat.ethz.ch/mailman/listinfo/r-sig-phylo">R-sig-phylo</a> for phylogenetics and related methods, and <a href="https://stat.ethz.ch/mailman/listinfo/r-sig-geo">R-sig-Geo</a> for GIS and spatial analysis.</p>
+</section>
+<section id="sec-02-faq-help-unoff" class="level4" data-number="2.5.5.6">
+<h4 data-number="2.5.5.6" class="anchored" data-anchor-id="sec-02-faq-help-unoff"><span class="header-section-number">2.5.5.6</span> Unofficial online resources</h4>
+<p>Unofficial resources are becoming more and more abundant and useful. One of the most important sources for R help is <a href="https://stackoverflow.com">StackOverflow</a>. StackOverflow is a hugely popular forum site where programmers ask and answer questions, and has an active <a href="https://stackoverflow.com/questions/tagged/r">R section</a>. When (not if) you find a solution on StackOverflow, include a link to the answer in your code as a comment. This can save you some headache down the line when you need to remember how you solved a problem. Other useful resources include <a href="https://rseek.org/">RSeek.org</a>, a search engine for R resources; and <a href="https://www.r-bloggers.com/">R-Bloggers</a>, which aggregates many blogs about R and statistics.</p>
+<p>Many R users maintain blogs or websites that may or may not be aggregated on R-Bloggers. You can usually find these via a Google search. I have used the pages on <a href="https://www.statmethods.net/">Quick-R</a> many times. The UCLA Statistical Consulting Group has an <a href="https://stats.oarc.ucla.edu/r/">excellent collection of tutorials</a>.</p>
+</section>
+<section id="sec-02-faq-help-books" class="level4" data-number="2.5.5.7">
+<h4 data-number="2.5.5.7" class="anchored" data-anchor-id="sec-02-faq-help-books"><span class="header-section-number">2.5.5.7</span> R books</h4>
+<p>The last few years have seen an explosion of books published specifically about the R language and its uses. Some of these books are general introductions to R and statistics; others are very domain specific. Inclusion of a book here does not constitute specific endorsement. I own some of these, but others are included because they are common R-related references that you might find helpful.</p>
+<ul>
+<li>The <a href="https://www.springer.com/series/6991">Use R! series</a> contains many high-quality general and domain-specific books, although some of the older titles are a bit dated. For example:
+<ul>
+<li>A Beginner’s Guide to R by Alain Zuur et al.</li>
+<li>Data Manipulation with R by Phil Spector</li>
+<li>Introductory time series with R by P.S.P. Cowperthwaite and A.V. Metcalfe.</li>
+<li>Bayesian computation with R by Jim Albert</li>
+<li>Introductory Statistics with R by Peter Dalgaard</li>
+<li>Morphometrics with R by Julien Claude</li>
+</ul></li>
+<li>The R Book by Michael Crawley</li>
+<li>Advanced R by Hadley Wickham</li>
+<li>R for Dummies by Andrie DeVries</li>
+</ul>
+<p>When I was first starting out with R I found several books invaluable. Having code examples printed where I could highlight, annotate, etc., was really helpful. Over time I’ve found myself relying less on textbooks and more on online sources (especially StackOverflow). Still, a there are a few books that I use frequently, for their statistical exposition more than their code examples. At least one of <span class="citation" data-cites="bolker2008ecological">Bolker (<a href="#ref-bolker2008ecological" role="doc-biblioref">2008</a>)</span>, <span class="citation" data-cites="kery2010">Kéry (<a href="#ref-kery2010" role="doc-biblioref">2010</a>)</span>, <span class="citation" data-cites="legendre2012numerical">Legendre and Legendre (<a href="#ref-legendre2012numerical" role="doc-biblioref">2012</a>)</span>, <span class="citation" data-cites="zuur2007analysing">Zuur <em>et al.</em> (<a href="#ref-zuur2007analysing" role="doc-biblioref">2007</a>)</span>, and <span class="citation" data-cites="zuur2009mixed">Zuur <em>et al.</em> (<a href="#ref-zuur2009mixed" role="doc-biblioref">2009</a>)</span> is usually on my desk at any given time.</p>
+</section>
+<section id="sec-02-faq-help-two" class="level4" data-number="2.5.5.8">
+<h4 data-number="2.5.5.8" class="anchored" data-anchor-id="sec-02-faq-help-two"><span class="header-section-number">2.5.5.8</span> Two reminders</h4>
+<p>I said it at the beginning of this section, and it bears repeating: <strong><em>Don’t panic!</em></strong> R has a steep learning curve, but the pay-off is worth it. There are plenty of resources and people out there who can help you.</p>
+<p>Finally, be sure to <strong><em>read the manual</em></strong> when you are stuck. The R help pages and code examples usually have a solution. Make sure your inputs are in the right format. Check for syntax and spelling error–including capitalization! As a funny meme on I saw on Reddit said, <em>6 hours of debugging can save you 5 minutes of reading documentation</em>.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-bolker2008ecological" class="csl-entry" role="listitem">
+Bolker BM. 2008. Ecological models and data in <span>R</span>. Princeton, New Jersey, USA: Princeton University Press.
+</div>
+<div id="ref-kery2010" class="csl-entry" role="listitem">
+Kéry M. 2010. Introduction to <span>W</span>in<span>BUGS</span> for ecologists: <span>B</span>ayesian approach to regression, <span>ANOVA</span>, mixed models and related analyses. Academic Press.
+</div>
+<div id="ref-legendre2012numerical" class="csl-entry" role="listitem">
+Legendre P, Legendre L. 2012. Numerical ecology. Amsterdam: Elsevier.
+</div>
+<div id="ref-ritz2015" class="csl-entry" role="listitem">
+Ritz C, Baty F, Streibig JC, Gerhard D. 2015. Dose-response analysis using <span>R</span>. PLoS ONE 10(12):e0146021. <a href="https://doi.org/10.1371/journal.pone.0146021">https://doi.org/10.1371/journal.pone.0146021</a>
+</div>
+<div id="ref-wickham2019" class="csl-entry" role="listitem">
+Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R, Grolemund G, Hayes A, Henry L, Hester J <em>et al.</em> 2019. Welcome to the <span class="nocase">tidyverse</span>. Journal of Open Source Software 4(43):1686. <a href="https://doi.org/10.21105/joss.01686">https://doi.org/10.21105/joss.01686</a>
+</div>
+<div id="ref-zuur2007analysing" class="csl-entry" role="listitem">
+Zuur AF, Ieno EN, Smith GM. 2007. Analysing ecological data. New York: Springer Science+Business Media.
+</div>
+<div id="ref-zuur2009mixed" class="csl-entry" role="listitem">
+Zuur AF, Ieno EN, Walker NJ, Saveliev AA, Smith GM <em>et al.</em> 2009. Mixed effects models and extensions in ecology with <span>R</span>. Vol. 574. New York: Springer.
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>The normal distribution comes up a lot in statistics. It is sometimes called the “bell curve”, but this is inappropriate because many distributions can be bell-shaped. It is also called the “Gaussian” distribution, but Gauss did not discover it. The normal distribution is defined by its mean <span class="math inline">\(\mu\)</span> and its standard deviation (SD) <span class="math inline">\(\sigma\)</span>. In other words, its central tendency and spread, respectively.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>In my humble opinion, this aspect of tidyverse is just insane.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>This means a <em>very</em> minimal code example that people can use to get the same problem that you are having. Don’t post your entire dataset or include many lines of pre-processing steps or other code that led up to your problem. Use base R functions or built-in datasets to create a small dataset or set of values that will immediately provoke the same error code. Often the process of doing this will help you solve your own problem!<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/greenquanteco\.github\.io\/appl-biol-data-analysis\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./part_02.html" class="pagination-link" aria-label="Introduction to R">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Introduction to R</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./ch03.html" class="pagination-link" aria-label="R data types and objects">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R data types and objects</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/ch02.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

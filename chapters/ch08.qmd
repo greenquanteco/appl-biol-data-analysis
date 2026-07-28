@@ -1,0 +1,23 @@
+# Visualizing biological data {#sec-08}
+
+## Visualizing single variables {#sec-08-sing}
+
+### Histograms {#sec-08-sing-hist}
+
+### Barplots {#sec-08-sing-bar}
+
+### Boxplots {#sec-08-sing-box}
+
+### ECDF plots {#sec-08-sing-cdf}
+
+### Kernel density plots {#sec-08-sing-kern}
+
+## Visualizing 2 variables {#sec-08-two}
+
+### Scatterplots {#sec-08-two-scatter}
+
+## Visualizing many variables {#sec-08-many}
+
+### Scatterplots {#sec-08-many-pair}
+
+### Ordinations {#sec-08-many-ord}

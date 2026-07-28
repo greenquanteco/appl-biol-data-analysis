@@ -1,0 +1,3 @@
+# Tests for continous patterns {#sec-14}
+
+Lines lines lines.

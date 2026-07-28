@@ -1,0 +1,3 @@
+# Information theoretic model-based inference {#sec-26}
+
+Ain't AIC grand?

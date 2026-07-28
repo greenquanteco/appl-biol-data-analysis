@@ -1,0 +1,5 @@
+---
+title: "Alternatives to *p*-values: information-theoretic and Bayesian methods"
+---
+
+Blah blah test test test.

@@ -1,0 +1,3 @@
+# Summarizing biological data {#sec-07}
+
+How many Gs are in aggregate?

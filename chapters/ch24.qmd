@@ -1,0 +1,3 @@
+# Ordination {#sec-24}
+
+We're all just points on a graph.

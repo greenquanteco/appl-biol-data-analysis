@@ -1,0 +1,6 @@
+# GLM for binary and proportional responses {#sec-19}
+
+
+Even our curves have curves.
+
+It's what's under the curve that counts.

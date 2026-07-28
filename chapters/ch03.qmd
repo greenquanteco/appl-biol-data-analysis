@@ -1,0 +1,721 @@
+# R data types and objects {#sec-03}
+
+## R data types {#sec-03-type}
+
+In R, data are stored in **objects** with a well-defined structure. The structures of these objects can facilitate manipulating and retrieving your data. The structure of an R object is determined by its **class**. The format of data (i.e., the kinds of values contained in an object) is referred to as the data **type**. Most R users only encounter types when trying to understand error messages. This is because many R functions will return errors if their inputs are not of the correct type.
+
+### Character type
+
+**Character** data are text strings. They are input and printed using quotation marks (`""`). Note that straight quotes are used. No other kind of quotation mark is valid in R code. If you paste in text from another program that has "curly quotes" (e.g., from Word), you will get an error.
+
+```{r}
+a <- c("aardvark", "bunny", "caterpillar")
+a
+```
+
+Notice that in the command above the values in `a` are defined in quotation marks. Without quotation marks, R would interpret those words as the names of objects. For example:
+
+```{r}
+caterpillar <- "lion"
+c("aardvark", "bunny", caterpillar)
+```
+
+There are some special character vectors pre-built into R that can be useful in programming: `letters` returns the lower case letters a-z, while `LETTERS` returns the upper-case letters A-Z.
+
+```{r}
+#| collapse: true
+
+letters
+LETTERS
+letters[11:20]
+```
+
+Similarly, `month.name` and `month.abb` contain the names of the 12 months and their 3 letter abbreviations, respectively. The latter is very useful for making figure axes.
+
+```{r}
+plot(1:12, runif(12), xaxt="n", xlab= "Month")
+axis(side=1, at=1:12, labels=month.abb)
+```
+
+As an aside, the function `substr()` extracts parts of character strings ("substring"). One application is getting one letter abbreviations of the months for a figure axis. The example below selects from the month names starting and ending at character 1. The argument `xaxt="n"` in `plot()` suppresses the *x*-axis, so we can add our own with `axis()`.
+
+```{r}
+use.months <- substr(month.name, 1, 1)
+plot(1:12, runif(12), xaxt="n", xlab= "Month")
+axis(side=1, at=1:12, labels=use.months)
+```
+
+### Numeric type
+
+Most data are stored as the **numeric** type. This includes **floating point numbers** (e.g., `3.14159` or `3.14e0`). Floating point numbers are referred to as type "double" in R (short for "[double-precision floating point](*https://en.wikipedia.org/wiki/Double-precision_floating-point_format)").
+
+```{r}
+typeof(2)
+typeof(pi)
+```
+
+### Integer type
+
+**Integers** are numbers with no fractional components. Some numbers are stored as integers, but integers are not always interchangeable with floating point numbers. For example, some probability distribution functions return integer values rather than floating point values (e.g., binomial or Poisson). This can be problematic if very large numbers are expected because the maximum integer value in R is much smaller than the maximum floating-point value. Note that having the type `integer` in R and *being an integer* from a mathematical standpoint are not synonymous.
+
+```{r}
+#| collapse: true
+
+# numbers are double by default:
+typeof(7)
+
+# convert to integer with as.integer():
+typeof(as.integer(7))
+
+# test whether input is integer type:
+is.integer(7)
+
+# test whether input is numeric type:
+is.numeric(7)
+
+# some functions return integer type as output:
+typeof(rbinom(1, 10, 0.7))
+
+# 7 is mathematically an integer (7 mod 1 == 0),
+# but is not of integer type in R
+7 %% 1
+```
+
+Integers are used as indices for subsetting and accessing other objects. A sequence of integers can be made using the colon operator as follows:
+
+```{r}
+#| collapse: true
+a <- 1:10
+a
+typeof(a)
+```
+
+An important consequence of using integers as index values is that object dimensions are limited to the **R integer limit**. This is probably not a major concern for most users. Your machine will likely run out of memory before you could make such an object anyway. You can check the integer limit on your machine with this line:
+
+```{r}
+.Machine$integer.max
+```
+
+On my machine, this is about 2.14 × 10^9^. If you need data objects with dimensions larger than this, you may need to either use a specialized R package that can handle huge objects, or you may need rethink what you are doing.
+
+### Logical type
+
+The **logical** data type stores `TRUE` and `FALSE` values. Note that `TRUE` and `FALSE` are always written in capital letters, without quotation marks. Logical values are produced by logical tests, such as the test for equality using `==`:
+
+```{r}
+#| collapse: true
+
+1+1 == 2			
+typeof(1+1 == 2)	
+typeof(1+1 == 3)	
+```
+
+Another useful test you can do is to test whether elements of one set are in another:
+
+```{r}
+#| collapse: true
+
+5 %in% 1:10
+5 %in% 6:10
+1:10 %in% 5:15
+```
+
+You can test with inequalities:
+
+```{r}
+#| collapse: true
+
+2 >= 1
+3 < 2
+```
+
+Sometimes it can be useful to store logical values as 1 or 0. You can do this by multiplying a logical by 1 or using function `as.numeric`.
+
+```{r}
+#| collapse: true
+
+1*(1+1 == 2)
+1*(1+1 == 3)
+typeof(1+1 == 2)
+typeof(1*(1+1 == 2))
+typeof(as.numeric(1+1 == 1:5))
+```
+
+The `!` symbol **negates** or **reverses** logical values. It does not negate logical values stored as numbers.
+
+```{r}
+#| collapse: true
+
+2+2 == 4
+! 2+2 == 4
+1:10 %in% 5:15
+!1:10 %in% 5:15
+```
+
+The `any()` and `all()` functions test to see if any values in a set of logical values is true (`any()`) or if all of them are true (`all()`).
+
+```{r}
+#| collapse: true
+
+1:5 < 3
+any(1:5 < 3)
+all(1:5 < 3)
+```
+
+`TRUE` and `FALSE` can also be abbreviated as uppercase `T` or `F`, but not lowercase `t` or `f`. This means that you should ***not*** create objects with names `T`, `F`, `TRUE`, etc. (don't name an object `t` either, because that is the name of the transpose function). The code block below illustrates the mischief that can be created by naming an object `T` and masking the built-in value for true.
+
+```{r}
+#| collapse: true
+
+# (1+1==2) is true.
+T == (1+1==2)
+
+# make a new object T with value 3
+T <- 3
+
+# (1+1==2) is now not true, unless it is
+T == (1+1==2)
+TRUE == (1+1==2)
+
+# remove the troublesome T
+rm(T)
+
+# things are back to normal
+T == (1+1==2)
+```
+
+### Special values {#sec-03-type-spec}
+
+#### Missing values `NA` {#sec-03-type-spec-na}
+
+Missing data in R are labeled as `NA`, or "Not Available". This is R-speak for a blank or missing value. Some functions can ignore `NA`, some cannot. Some functions produce `NA` when you supply them with improper inputs. Note that this is a feature, not a bug. R is set up to produce `NA` by default in many cases to help you track down where the missing values are coming from. Function `is.na()` tests to see if a value is missing.
+
+```{r}
+#| collapse: true
+
+aa <- c(1:8,NA)
+
+aa + 2
+
+# returns NA
+mean(aa)
+
+# option to ignore NA values
+mean(aa,na.rm=TRUE)      
+
+# test for NA
+is.na(aa)				
+
+# which elements are NA?
+which(is.na(aa))		
+
+# remove NA elements
+aa[-which(is.na(aa))]	
+
+# another way to remove NA elements
+aa[which(!is.na(aa))]	
+
+# returns NA: Poisson distribution supported only on [0,+Inf]
+rpois(10,-2) 
+```
+
+#### Infinities {#sec-03-type-spec-inf}
+
+Positive and negative infinity ($+\infty$ and $-\infty$) are labeled in R as `Inf` and `–Inf`. Dividing a non-zero number by 0 produces `Inf`. Taking the log of 0 produces `–Inf`. Trying to generate a value greater than R's maximal value can produce `Inf`.
+
+```{r}
+#| collapse: true
+
+5/0
+log(0)
+10^10^10
+```
+
+#### Undefined values {#sec-03-type-spec-nan}
+
+Some values that are undefined are labeled `NaN` (not a number). This means that a value is undefined, not that it is missing (which would be `NA`) or infinite (which would be `Inf` or `-Inf`). Dividing 0 by 0, or taking the log of a negative number, produces `NaN`. The function `is.nan()` tests to see if a value is `NaN`.
+
+```{r}
+#| collapse: true
+
+0/0
+log(-1)
+```
+
+#### Special values are useful {#sec-03-type-spec-why}
+
+Why are there so many special values? Often they are meant to help track down where erroneous values are coming from. If every undefined value returned the same symbol (or word, etc.), then it would be harder to know why a program was returning undefined values. Instead, the different results help point the way:
+
+-   `Inf`: Positive non-zero number divided by 0
+-   `-Inf`: Negative non-zero number divided by 0 *or* `log(0)`.
+-   `NaN`: `0/0` or logarithm of a negative number
+
+## Basic R data structures {#sec-03-struct}
+
+In R, data are stored in **objects** with a well-defined structure. The structures of these objects can facilitate manipulating and retrieving your data. The structure of an R object is determined by its class. The format of data (i.e., the kinds of values contained in an object) is referred to as the data type.
+
+For a solid introduction to R classes and data types, refer to [An introduction to R](https://cran.r-project.org/doc/manuals/r-release/R-intro.html), one of the official R help manuals. The book *Data manipulation with R* [@spector2008] is also good. If you want to explore the odder and less benign aspects of R data structures, I recommend the truly excellent [*The R Inferno*](https://www.burns-stat.com/pages/Tutor/R_inferno.pdf) (accessed 2025-08-06).
+
+### Vectors {#sec-03-struct-vect}
+
+In R, as in mathematics, a **vector** is an ordered set of values. Vectors are a key concept in statistics and linear algebra. For example, the set $[1,2,3,4,5]$ is a vector. This vector is different than the set (and vector) $[2,3,1,5,4]$. These sets are different vectors because even though they contain the same values, those values are in different orders. In R we could call either of those sets a "vector". Note that we don't call them "lists" because a list is a special kind of object in R that is not synonymous with vector.
+
+As a language designed primarily for statistics, R has a strong emphasis on vectors and their manipulation. Vectors are probably the simplest type of data object in R. Understanding them is the key to understanding other data objects in R.
+
+Another way to think of vectors is as an **array** with one dimension, length. In computing, an "array" is a systematic arrangement of similar elements. An array with 1 dimension is a vector. A two-dimensional array is a **matrix**, and an array with $\ge$ 3 dimensions is just called an array. Vectors, matrices, and arrays in R can be a convenient way to store structured data that are all of the same type (numeric, logical, character, etc.).
+
+Vectors can be created by the function `vector()` as well as by functions specific to the type of value to be stored. The most common types are **numeric**, **logical**, and **character**. These hold numbers, logical values, and text, respectively. Each type has a default value (`0`, `FALSE`, and `""` (blank), respectively). Notice that in each command below R prints the results to the console because the resulting vectors are not assigned to an object.
+
+```{r}
+#| collapse: true
+
+vector("numeric", 5)
+vector("logical", 5)
+vector("character",5)
+
+# equivalent to above commands:
+numeric(5)
+logical(5)
+character(5)
+```
+
+Creating vectors this way is cumbersome, but useful when programming complex tasks. It is usually more efficient, from a memory usage standpoint, to create an object and fill it later than to create it and repeatedly change its size.
+
+You can also create vectors by defining their contents. When you do this, R will guess at the type of vector based on the values you give it. These guesses are usually okay.
+
+```{r}
+#| collapse: true
+
+# numeric:
+class(runif(10))
+
+# integer, which is stored in numeric vectors
+# despite being a different type:
+class(1:5)
+is.numeric(1:5)
+```
+
+Vectors can also be made by putting values together using the function `c()` (short for "combine" or "concatenate"). Note that if you try to combine values of different types, R will convert all values to character strings.
+
+```{r}
+#| collapse: true
+
+# create a vector of numbers
+my.vec <- c(1,2,4:8,10)
+my.vec
+
+# create a vector of character strings
+my.vec2 <- c("zebra","hippo","lion","rhino","rhino")
+my.vec2
+
+# create a vector with 1 numeric, 1 character,
+# and 1 logical value...all are converted to
+# character strings.
+my.vec3 <- c(1,"hippo",1+1==3)
+my.vec3
+```
+
+Each value within a vector is called an **element**. Elements of a vector are accessed by the bracket notation.
+
+```{r}
+#| collapse: true
+
+# get some random numbers
+a <- runif(5)
+
+# print to console
+a          
+
+# 3rd element
+a[3]       
+
+# elements 2-4
+a[2:4]     
+
+# elements other than 1
+a[-1]      
+
+# elements other than 1 and 2
+a[-c(1:2)] 
+```
+
+You can inspect a vector (or any object) by printing it to the console. Do this by typing the object's name into the console at the command prompt `>` and pressing ENTER.
+
+```{r}
+my.vec
+```
+
+The `[1]` at the start of the line with your results indicates that that line starts with the first element of the object. If an object runs over to multiple lines, each line will begin with the index of the first value printed on that line. Make your console window narrower and try this command:
+
+```{r}
+runif(20)
+```
+
+Each element of a vector can have a name, set or accessed using the function `names()`. Element names can even be used to access elements of a vector.
+
+```{r}
+#| collapse: true
+
+a <- runif(3)
+names(a) <- c("value1", "value2", "value3")
+names(a)
+a
+a["value3"]
+```
+
+Vectors can be extended using `c()` or by changing their length. Changing the length of a vector can also shorten it. If a vector is made longer than the number of values it has, the extra elements will be filled in with `NA`, which is the label R uses for blanks.
+
+```{r}
+#| collapse: true
+
+# make a numeric vector of length 8
+b <- 1:8
+
+# combine it with another value to 
+# increase length to 9
+b <- c(b, 10)
+b
+
+# remake our vector with length 8
+b <- 1:8
+
+# set its length to 10
+length(b) <- 10
+# gaps filled with NA
+b
+
+# remake our vector with length 8
+b <- 1:8
+# change length to 6 (shorter)
+length(b) <- 6
+# vector truncated
+b
+```
+
+As mentioned elsewhere, many R functions take vectors as input and use them one element at a time. This is very handy when working with data, because you will often need to perform the same operation on every observation. Like any R data object, you can use a vector in a function simply by using the name in place of the values:
+
+```{r}
+#| collapse: true
+
+my.vec <- 1:8
+my.vec*2
+mean(my.vec)
+dpois(my.vec, lambda=5)
+```
+
+#### Atomic vectors {#sec-03-struct-vect-atom}
+
+A final note about vectors: some R functions, help pages, and error messages refer to "atomic vectors". These are any object type whose elements cannot be split (i.e., "atomic" in the way Democritus meant the word). For example, the scalar `2` is considered atomic, being a numeric vector of length 1 whose sole element cannot be split up into something smaller. Likewise, the vector `2:3` is also atomic, because neither of its elements (`2` and `3`) can be split up into small elements. This definition extends to arrays with $\geq3$ dimensions.
+
+```{r}
+#| collapse: true
+
+a <- 4
+a
+is.atomic(a)
+```
+
+```{r}
+#| collapse: true
+
+a <- runif(10)
+a
+is.atomic(a)
+```
+
+```{r}
+#| collapse: true
+
+a <- matrix(1:6, ncol=3)
+a
+is.atomic(a)
+```
+
+```{r}
+#| collapse: true
+
+a <- array(1:12, dim=c(3,2,2))
+a
+is.atomic(a)
+```
+
+On the other hand, a **list** is not atomic but rather **recursive**. This means that any of its elements can be another list. Consider the following:
+
+```{r}
+#| collapse: true
+
+a <- list(x=1:12, y="a", z=list(m=t.test(rnorm(20)), n="a"))
+a
+```
+
+```{r}
+#| collapse: true
+
+is.atomic(a)
+is.recursive(a)
+```
+
+The list `a` is recursive because any of its elements could be another list. However, consider the list `b`:
+
+```{r}
+#| collapse: true
+
+b <- list(x=1, y=2, z=3)
+b
+```
+
+```{r}
+#| collapse: true
+
+is.atomic(b)
+is.recursive(b)
+```
+
+Note that while every element of `b` is atomic in and of itself (satisfying the definition of an atomic object above), `b` is in fact recursive. This is because any element of `b`, ***could*** be a list like `b`. This is a bit paradoxical, but not enough to cause any trouble.
+
+Why do I bring this up? Because it is very easy to provoke the dreaded, `operator invalid for atomic vectors` error. This usually means you are trying to treat a non-list as a list.
+
+```{r, error=TRUE}
+# make a simple matrix
+a <- matrix(1:4, nrow=2)
+colnames(a) <- c("a", "b")
+a
+```
+
+```{r}
+#| eval: false
+
+# not run, but try on your machine
+
+# incorrect: using $ to extract from an atomic vector
+# (in this case a matrix)
+a$a
+```
+
+```{r}
+# correct: using column names and []
+a[,"a"]
+```
+
+Atomic vectors can contain 1 and only one type of data: logical, integer, double, character, complex, and raw.
+
+### Data frames {#sec-03-struct-df}
+
+Most of the time when you work with data in R, you will work with objects of the **data frame** class. A data frame looks and acts a lot like a spreadsheet. One key aspect of data frames is that data frames can store data of more than one type, while vectors, matrices, and arrays cannot. The examples below use the built-in data frame `iris`.
+
+Each **row** of a data frame usually corresponds to one **observation**. Each **column** contains the values of one **variable**. You can access data frame columns by name with the `$` operator:
+
+```{r}
+iris$Sepal.Length
+```
+
+You can also access data frame columns by number or name with bracket notation:
+
+```{r}
+#| collapse: true
+
+iris[,1]
+iris[,"Petal.Width"]
+```
+
+Rows of a data frame are accessed by number with bracket notation. As seen above, you can also select using logical tests.
+
+```{r}
+#| collapse: true
+
+iris[1,]
+```
+
+```{r}
+#| eval: false
+
+
+# not run because output very long; try it on your machine!
+iris[which(iris$Species == "setosa"),]
+```
+
+Unlike matrices, rows and columns of data frames are something different. This is because under the surface, a data frame is really a list, and what looks like a column of a data frame is really an element of the list. So, a row of a data frame is really a new data frame with one row. When you work with data frames in R, the data frame class and its associated methods offer a convenient way to interact with the underlying list structure.
+
+```{r}
+#| collapse: true
+
+class(iris[1,])
+class(iris[,1])
+```
+
+Practically, this means that if you select a column from a data frame you get a vector, and if you select a row (or rows) you get another data frame. So, if you want to operate on values within a row, you might need to use an `apply()` function.
+
+```{r}
+#| collapse: true
+
+mean(iris[1,1:4])           # apply function needed
+apply(iris[1,1:4], 1, mean) # works!
+sum(iris[1,1:4])            # works!
+```
+
+Columns can be added to data frames by assigning them a value:
+
+```{r}
+iris2 <- iris	# Make a spare copy
+iris2$petal.area <- iris2$Petal.Length*iris2$Petal.Width
+```
+
+You can view the first few rows of a data frame with the command `head()`, and the last few rows with the command `tail()`. These are incredibly useful!
+
+```{r}
+#| collapse: true
+
+head(iris2)
+tail(iris2)
+```
+
+Columns can be removed from a data frame by assigning them a value of `NULL`.
+
+```{r}
+iris2$petal.area <- NULL
+head(iris2)
+```
+
+We'll explore more aspects of data frames in @sec-05.
+
+### Matrices and arrays {#sec-03-struct-mat}
+
+Sometimes you have a structured set of values that does not need to be stored as a data frame, or should not be stored as a data frame for ease of access. These situations call for matrices and arrays.
+
+An **array** with two dimensions is a **matrix**. The dimensions of a matrix are its **rows** and **columns**. Matrices look a little like data frames, but internally they are very different. Unlike a data frame and like all arrays, a matrix can contain values of *only one type*. Matrices are necessary for any matrix operations (e.g., Leslie matrices) and for some function inputs. For most routine data analyses, data frames are easier to work with.
+
+Matrices are created with the `matrix()` function. The matrix function must be provided with the values, the dimensions of the matrix, and the method for filling (by rows or by columns). If you don't know the values yet, you can just use `NA` or 0.
+
+```{r}
+#| collapse: true
+
+my.mat1 <- matrix(1:12,nrow=3,ncol=4)
+my.mat1
+
+my.mat2 <- matrix(1:12,nrow=3,ncol=4,byrow=TRUE)
+my.mat2
+
+my.mat3 <- matrix(NA,nrow=3,ncol=4)
+my.mat3
+```
+
+Just as with other objects, the values in a matrix can be extracted using bracket notation. Because matrices have two dimensions, you must specify indices for both dimensions. This is done using a comma `,` to separate the row indices and column indices within the brackets. Just as with data frames, row indices are before the comma; column indices are after the comma. Leaving the row index or the column index blank will select all rows or columns, respectively.
+
+```{r}
+#| collapse: true
+
+my.mat1[2,1]# row 2, column 1
+my.mat1[3,3]# row 3, column 3
+```
+
+Entire rows or columns of a matrix can be extracted by leaving the other dimension blank. You must still include the comma within the brackets. Notice that both the rows and columns of a matrix are vectors, not a matrix. If you want to get a row or column as a 1 row or 1 column matrix, you must specifically request this.
+
+```{r}
+#| collapse: true
+
+# first row
+my.mat1[1,]
+is.matrix(my.mat1[1,])
+
+# third column
+my.mat1[,3]
+
+# convert extracted part to matrix
+my.mat3 <- matrix(my.mat1[1,], nrow=1)
+is.matrix(my.mat3)
+```
+
+An array in R is usually only called an array if it has $\ge$ 3 dimensions. Data stored this way can make programming easier, if there is a clear relationship between the dimensions. Arrays are not often encountered by the average user. The example below has 3 "layers", each of which has 4 rows and 2 columns.
+
+```{r}
+my.array <- array(1:24,dim=c(4,2,3))
+my.array
+```
+
+One very nifty (and potentially confusing) ability of arrays is the ability to be sliced into differently shaped pieces[^ch03-1]. Consider the examples below and see if you can work out why the results are what they are.
+
+[^ch03-1]: My personal record is a 7-dimensional array, which I used in a community simulation model. The model included many species-, age-, and sex-specific demographic parameters that had to be extracted and summarized, and because of the size of the model an array-based solution was more computationally-efficient than a list- or data frame-based solution. I don't recommend building arrays that complex...it was a nightmare to work with.
+
+```{r}
+#| collapse: true
+
+my.array[,,1]
+my.array[,1,]
+my.array[1,,]
+my.array[1,2,]
+my.array[,2,1:2]
+```
+
+### Lists {#sec-03-struct-list}
+
+One of the most important kinds of R object is the **list**. A list can be thought of like a *series of containers or buckets*. Each bucket can contain completely unrelated things, or even other series of buckets. Because of this flexibility, lists are extremely versatile and useful in R programming. Many function outputs are really lists (e.g., the outputs of `lm()` or `t.test()`). Data frames are also lists.
+
+Lists can created using the function `vector()` and then filled later. The following example creates an empty list with 4 elements (i.e., buckets), then fills each element with something different.
+
+```{r}
+#| collapse: true
+
+my.list <- vector("list",length=4)
+my.list[[1]] <- 1:10
+my.list[[2]] <- c("a","b","c")
+my.list[[3]] <- t.test(iris$Sepal.Length)
+my.list[[4]] <- iris
+my.list
+```
+
+Another way to make a list is to make its elements first and combine them into a list, with function `list()`.
+
+```{r}
+x <- runif(10)
+y <- "zebra"
+z <- matrix(1:12, nrow=3)
+a <- list(x, y, z)
+a
+```
+
+Optionally, you can name each element as you make the list.
+
+```{r}
+b <- list(x=x, y=y, z=z)
+b
+```
+
+Much like vectors, lists can be extended by using concatenation:
+
+```{r}
+a2 <- c(a,b)
+a2
+```
+
+Single elements of a list can be accessed with **double brackets** `[[]]`. As with other objects, elements can be selected by name or by index. If selecting by name, the `$` symbol can be used instead of double brackets.
+
+```{r}
+#| collapse: true
+
+a[[1]]
+b[[2]]
+b[["z"]]
+b$z
+```
+
+Using **single brackets** to access a list will return a *list* of the requested elements, not the requested elements themselves. This can be a little confusing. Compare the following two commands and notice that the first returns a vector containing the numbers 1 through 10 (the first element of `my.list`), while the second returns a list with 1 element, and that element is a vector with the numbers 1 through 10.
+
+```{r}
+#| collapse: true
+
+my.list[[1]]
+my.list[1]
+```
+
+The reason for this confusion is that the single brackets notation allows you to extract multiple elements of the list at once to make a new list.
+
+```{r}
+a2 <- a[1:2]
+a2
+```
+
+### S3, S4, and other paradigms {#sec-03-struct-other}
+
+We've seen so far that R is object-oriented. What is little appreciated is that R has at least three object-oriented paradigms: **S3**, **S4**, and **R5**. Most objects in R are S3 objects: data frames, matrices, vectors, etc. The R5 objects are more formally called "Reference Classes" and are still being developed. The S4 objects are only occasionally encountered by the average user, although some R developers believe that S4 objects should replace S3 in general use. Their reasons are esoteric and we won't get into them here. In a nutshell, S4 classes are structured more formally than S3 classes and are better for validation and code testing.
+
+One key difference in practice between S4 and S3 objects is that S4 objects contain **slots** or **attributes**, which are accessed using `@` instead of `$`. Within each slot, an S4 object can contain all sorts of data, often in list form.

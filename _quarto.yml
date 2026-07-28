@@ -1,0 +1,126 @@
+project:
+  type: book
+  output-dir: docs
+  
+book:
+  site-url: "https://greenquanteco.github.io/appl-biol-data-analysis/"
+  repo-url: "https://github.com/greenquanteco/appl-biol-data-analysis"
+  repo-actions: [edit, issue]
+  cover-image: images/lab_logo_02.jpg
+  title: "Applied Biological Data Analysis"
+  date: "July 28, 2026"
+  author:
+  - name: Nick Green
+    degrees:
+    - Ph.D.
+    orcid: 0000-0002-8538-4191
+    email: ngreen62@kennesaw.edu
+    affiliation:
+      - name: Kennesaw State University
+        department: "Department of Ecology, Evolution, and Organismal Biology"
+        city: Kennesaw
+        state: Georgia
+        country: USA
+        url: https://facultyweb.kennesaw.edu/ngreen62/index.php
+  chapters:
+    - index.qmd
+    - part: part_01.qmd
+      chapters:
+        - ch01.qmd
+    - part: part_02.qmd
+      chapters:
+        - ch02.qmd
+        - ch03.qmd
+        - ch04.qmd
+        - ch05.qmd
+    - part: part_03.qmd
+      chapters:
+        - ch06.qmd
+        - ch07.qmd
+        - ch08.qmd
+        - ch09.qmd
+        - ch10.qmd
+        - ch11.qmd
+    - part: part_04.qmd
+      chapters:
+        - ch12.qmd
+        - ch13.qmd
+        - ch14.qmd
+        - ch15.qmd
+    - part: part_05.qmd
+      chapters:
+        - ch16.qmd
+        - ch17.qmd
+        - ch18.qmd
+        - ch19.qmd
+    - part: part_06.qmd
+      chapters:
+        - ch20.qmd
+        - ch21.qmd
+    - part: part_07.qmd
+      chapters:
+        - ch22.qmd
+        - ch23.qmd
+        - ch24.qmd
+        - ch25.qmd
+    - part: part_08.qmd
+      chapters:
+        - ch26.qmd
+        - ch27.qmd
+    - part: part_09.qmd
+      chapters:
+        - ch28.qmd
+  appendices:
+    - ch29.qmd
+
+license: "CC BY-SA"
+copyright:
+  holder: Nick Green
+  year: 2026
+
+bibliography: stat_refs.bib
+
+csl: journal-of-mammalogy.csl
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+    toc: true
+    number-sections: true
+    number-depth: 4
+    fig-cap-location: top
+    toc-depth: 3
+    smooth-scroll: true
+      
+  pdf:
+    mainfont: "Arial"
+    monofont: "Courier New"
+    documentclass: report
+    toc: true
+    number-sections: true
+    number-depth: 4
+    fig-cap-location: top
+    keep-tex: true
+    fontsize: "13"
+    linestretch: 1.3
+    geometry: 
+     - margin=1in
+    include-in-header: preamble.tex
+    pdf-engine: xelatex
+    fig-width: 6
+    fig-height: 4
+    
+
+editor: visual
+crossref:
+  fig-title: "Figure"
+  tbl-title: "Table"
+  
+execute:
+  freeze: auto
+  echo: true
+  warning: false
+  message: false
+  error: false

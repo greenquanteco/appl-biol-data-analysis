@@ -1,0 +1,3 @@
+# GLM for continuous response data {#sec-17}
+
+Still kind of linear.
