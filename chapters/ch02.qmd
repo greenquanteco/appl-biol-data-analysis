@@ -40,7 +40,7 @@ Next, install any code editing or IDE you want.
 
 R has a very basic front end, or **graphical user interface (GUI)**. Most users find it easier to write their R code in another program. Some of these programs, such as RStudio, are **integrated development environments (IDE)**. Others are text editors with programming capabilities. We'll explore the default R GUI first and then meet some editor options. The basic R GUI is shown below. Your screen may look different than mine because I set some graphics options.
 
-![](02_01.jpg){fig-align="center"}
+![The base R GUI. Some like it (I do) but it's not for everyone.](../images/02_01.jpg){fig-align="center"}
 
 The main window with R is the **R console**. This is the command line interface to R. Some important features of the console are:
 
@@ -78,7 +78,7 @@ Although you can type R code directly into the console, or type in script window
 
 Once you have RStudio installed, open it and you will see a screen like this:
 
-![](02_02.jpg){fig-align="center"}
+![The default RStudio set up, with some graphics options set for dark mode.](../images/02_02.jpg){fig-align="center"}
 
 Your RStudio might look different at first. You can change the color scheme by going to Tools - Global Options - Appearance and selecting a theme. Here I'm using the "Classic" theme with size 12 Courier New font and 110% zoom.
 
@@ -196,7 +196,7 @@ R **functions** are objects that do things to other objects, or create objects, 
 
 Argument values are set using single equals sign `=`. Argument values must be of the correct **type** (numeric, character, logical, etc.), must take on valid values (or be one of the available options), must be spelled and capitalized correctly, and may be named or not at the user’s discretion. Most functions will print their results to the console upon completion. If you want to store the results of a function, you need to assign the results to an object using `<-`.
 
-![](02_04.jpg){fig-align="center"}
+![Basic structure of an R command and its arguments.](../images/02_04.jpg){fig-align="center"}
 
 See below for some examples of function use using `rnorm()`, which draws random numbers from a normal distribution[^ch02-1]. Your numbers may be different than those below, because the function is *random*.
 
@@ -666,7 +666,7 @@ Documentation for each function, or help files, come included with the base R in
 ?mean
 ```
 
-![](02_05.jpg){fig-align="center"}
+![Example R documentation page for a common function.](../images/02_05.jpg){fig-align="center"}
 
 Some functions belong to a family of related functions that share a common documentation page. For example, all of the functions related to the normal distribution share a common page:
 
@@ -678,7 +678,7 @@ Some functions belong to a family of related functions that share a common docum
 ?rnorm
 ```
 
-![](02_06.jpg){fig-align="center"}
+![Example R documentation page for a family of related functions.](../images/02_06.jpg){fig-align="center"}
 
 You can also search for help on functions in packages that are not attached. Or, you might want to know about a function but don’t know what package it belongs to. Either way, `??functionname` is a more general search option that will search any package in your library. Compare what happens if search for function `fitdistr()` using `?` and `??` (this function is in package `MASS`, and so not loaded by default). With `??`, R searches all installed packages and returns a browser window with every result that might match your search term.
 
@@ -689,7 +689,7 @@ You can also search for help on functions in packages that are not attached. Or,
 ??fitdistr
 ```
 
-![](02_07.jpg){fig-align="center"}
+![Example result of using `??` to search for an R function across many packages.](../images/02_07.jpg){fig-align="center"}
 
 The R documentation pages all tend to follow the same format:
 
@@ -724,14 +724,14 @@ A **vignette** is a document demonstrating the use of an R package or its functi
 vignette()
 ```
 
-![](02_08.jpg){fig-align="center"}
+![List of vignettes returned by function `vignette()`.](../images/02_08.jpg){fig-align="center"}
 
 ```{r}
 #| eval: false
 vignette(package="vegan")
 ```
 
-![](02_09.jpg){fig-align="center"}
+![List of vignettes in a single package, `vegan`.](../images/02_09.jpg){fig-align="center"}
 
 ```{r}
 #| eval: false
@@ -740,7 +740,7 @@ vignette(package="vegan")
 vignette("intro-vegan", package="vegan")
 ```
 
-![](02_10.jpg){fig-align="center"}
+![A vignette from package `vegan` in PDF format.](../images/02_10.jpg){fig-align="center"}
 
 #### Official resources {#sec-02-faq-help-off}
 

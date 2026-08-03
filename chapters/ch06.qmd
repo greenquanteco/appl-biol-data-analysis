@@ -14,7 +14,9 @@ In biology, we never have all of the possible values which could be observed. Fo
 
 In science, we usually want to *estimate* population parameters, but these are unobservable. Instead, we use sample statistics to estimate the parameters of the underlying population.
 
-![](06_01.jpg) In the figure above, the *population mean* of all squirrels is 151.7 g. However, finding all squirrels in an area (much less the world) is not practical. So, researchers took 4 samples of a few squirrels each, and obtained *sample means* of 140, 150, 157.5, and 170 g. Notice that the mean of these sample means, 154.38 g, is pretty close to the population mean. In fact, the more squirrels you include in your sample, the less uncertain your estimate of the mean will be. In the figure below, notice that as the size of the sample increases, the range of estimates of the mean shrinks.
+![Illustration of how sampling bias can affect estimates of population parameters like the sample mean $\bar{x}$ and sample standard deviation $s$.](../images/06_01.jpg)
+
+In the figure above, the *population mean* of all squirrels is 151.7 g. However, finding all squirrels in an area (much less the world) is not practical. So, researchers took 4 samples of a few squirrels each, and obtained *sample means* of 140, 150, 157.5, and 170 g. Notice that the mean of these sample means, 154.38 g, is pretty close to the population mean. In fact, the more squirrels you include in your sample, the less uncertain your estimate of the mean will be. In the figure below, notice that as the size of the sample increases, the range of estimates of the mean shrinks.
 
 ```{r}
 #| collapse: true
@@ -51,7 +53,7 @@ The **central tendency** of a variable is a value that represents a "typical" va
 
 For many datasets, the mean and median will be approximately the same. Data that are **skewed** will have a median different from their mean.
 
-![](06_02.jpg)
+![Illustration of *skew*. The solid black line shows an unskewed distribution that is roughly symmetrical about its mean, with its mean and median almost identical. The dashed red line shows a right-skewed distribution that has mostly small values and very few large values. Its median is very different from its mean.](../images/06_02.jpg)
 
 Biologists typically summarize data using the mean, but median can be appropriate in some situations--especially when data are not normally distributed.
 
@@ -256,9 +258,9 @@ Mode2(a)
 
 The function we made, `Mode2()`, works well enough if there is only one mode.
 
-But, many real life distributions have \>1 mode. Such distributions are called **bimodal** if they have 2 modes, or **multimodal** if they have 3 or more. A classic example of bimodality is grades in college courses: it is very common to have many Bs, and many Ds, but not many Fs, Cs, or As.
+But, many real life distributions have $>1$ mode. Such distributions are called **bimodal** if they have 2 modes, or **multimodal** if they have 3 or more. A classic example of bimodality is grades in college courses: it is very common to have many Bs, and many Ds, but not many Fs, Cs, or As.
 
-If your data appear to have \>1 mode, you can estimate them by finding points where the slope of the density plot changes sign. The code below is inelegant but it works.
+If your data appear to have $>1$ mode, you can estimate them by finding points where the slope of the density plot changes sign. The code below is inelegant but it works.
 
 ```{r}
 set.seed(123)
@@ -395,7 +397,7 @@ sd(x)
 
 ### Quantiles and ranges {#sec-06-var-qu}
 
-A **quantile** is a value in a distribution or sample such that some specified proportion of observations are less than or equal to that value. For example, the 0.5 quantile is the value such that half of values are less than or equal to that value. Quantiles are usually expressed either as proportions in \[0, 1\] or as percentiles in \[0, 100\]. R uses proportions, but you can always multiply by 100 to get percentiles.
+A **quantile** is a value in a distribution or sample such that some specified proportion of observations are less than or equal to that value. For example, the 0.5 quantile is the value such that half of values are less than or equal to that value. Quantiles are usually expressed either as proportions in $\left[0,1\right]$ or as percentiles in $\left[1,100\right]$. R uses proportions to express quantiles, but you can always multiply by 100 to get percentiles.
 
 Some ways of dividing up a distribution have special names:
 
@@ -507,6 +509,7 @@ range(a)
 # returns range of non-NA values
 range(a, na.rm=TRUE)
 ```
+
 ## Covariance and correlation {#sec-06-co}
 
 If anyone knows anything about statistics, or thinks they do, they know the phrase "Correlation does not equal causation". And that statement is true, both literally and philosophically. **Correlation** means that two sets of values tend to change together: larger values of one variable are associated with larger values of the other variable. Or, large values of one variable are associated with smaller values of the other variable. All this means is that the values seem to reliably change together. Actually demonstrating that one variable is causing another takes careful observation, experiments, and a different kind of analysis than correlation.
@@ -515,8 +518,7 @@ Despite the fact that correlation does not necessarily imply causation, a correl
 
 Because bigger animals have bigger parts...just because they are bigger! Both tibia length and hippocampus mass probably correlate well with body length, or body mass, measures of *overall* size. Here noticing a correlation didn't get us anywhere. We had to use biological reasoning to interpret the numerical result.
 
-Correlation usually comes in one of two flavors. The first, linear correlation, 
-
+Correlation comes in two flavors. The first, **linear correlation**, assumes that a relationship between two variables is linear--that is, a plot of one variable against another approximates a straight line. The second flavor, **nonlinear correlation**, assumes only that two variables change together and does not assume any particular shape to that relationship.
 
 ### Linear correlation {#sec-06-co-lin}
 

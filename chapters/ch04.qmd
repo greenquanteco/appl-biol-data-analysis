@@ -26,7 +26,7 @@ R uses front-slashes. So, Windows addresses need to have their **\\**  changed 
 
 Many programs, including R, will designate a folder as the **working directory**: a folder which contains the data the program can access, and which will contain any files created by the program. The default R working directory is the **Documents** folder on Windows, or the **Home** folder on a Mac. You should choose a different folder to be your working directory, however. One common practice is to create a single folder for each project which contains all the data needed for that project, and which will receive all the output from R for the project.
 
-![](04_01.jpg)
+![Example of hierarchical structure of folders relative to the file system's root. Depending on context, the root can be the system root or the root for a project.](../images/04_01.jpg)
 
 You can, and should, have a separate working directory for every project. This way files stay together, and the acts of importing and exporting files are easier.
 
@@ -50,9 +50,9 @@ These commands are usually run first in a script, to facilitate data import.
 In RStudio, you can set your working directory in the Files tab by first navigating to a folder, then clicking **More - Set as working directory**.
 
 ::: {layout-ncol="2"}
-![](04_02.jpg)
+![To set your working directory, first click on the ... button on the right side of the Files tab.](../images/04_02.jpg)
 
-![](04_03.jpg)
+![Then, select your folder and click More...Set as working directory.](../images/04_03.jpg)
 :::
 
 What is the advantage of setting your working directory? R will look in the working directory **first** for any files, and put outputs there by default.
@@ -259,7 +259,7 @@ Entering data should also include some measure of **quality assurance and qualit
 
 Data formatting requires thinking about what kinds of data are being entered. For numbers, this means entering the correct values and an appropriate number of significant digits. For text values, this may mean spell-checking or settling on a standard set of possible values. The figure below shows some problems that a QA/QC step might fix:
 
-![](04_04.jpg)
+![Examples of bad data management that some simple QA/QC might fix.](../images/04_04.jpg)
 
 ## Data import {#sec-04-import}
 
@@ -269,9 +269,15 @@ Data formatting requires thinking about what kinds of data are being entered. Fo
 
 Data for R should be stored in plain-text files. Two of the most popular options are tab-delimited files (**.txt**) and comma-delimited files (**.csv**). The "delimited" part means that some special character (like tab or comma) is used to separate values on a row of the file. Text files can be produced from Excel spreadsheets by going to **Save as**, selecting a folder, and then selecting "Text (Tab delimited)(\*.txt)" or "CSV (Comma delimited)(\*.csv)" from the dropdown menu for file type. Do ***not*** select "CSV UTF-8 (Comma delimited)(\*.csv)" as this will cause issues in R.
 
-Download the files [neon_taxa_2025-08-03.txt](%5Bhttps://greenquanteco.github.io/book/neon_taxa_2025-08-03.txt) and \[[neon_taxa_2025-08-03.csv](https://greenquanteco.github.io/book/neon_taxa_2025-08-03.csv), put them in some folder, and make that folder your R working directory.
+Download the files neon_taxa_2025-08-03.txt and neon_taxa_2025-08-03.csv. Create a new folder for this exercise, save both files there, and set that folder as your R working directory before continuing.
 
 Use `read.table()` to import a tab-delimited file, and save it to an object called `dx`. Notice that the filename must be spelled and capitalized correctly. Notice also that because the file is in your working directory, no folder path is needed. The argument `header=TRUE` tells R that the first row of the file contains column names, not data.
+
+```{r}
+#| include: false
+old_root <- knitr::opts_knit$get("root.dir")
+knitr::opts_knit$set(root.dir = "../datasets")
+```
 
 ```{r}
 dx <- read.table("neon_taxa_2025-08-03.txt", header=TRUE)
@@ -285,7 +291,11 @@ dx <- read.csv("neon_taxa_2025-08-03.csv", header=TRUE)
 
 While `read.table()` imports tab-delimited files by default, it can also import other types of files by setting the `sep` argument. Below is an example of using `read.table()` to import a CSV file.
 
-`{r}: dat <- read.table("neon_taxa_2025-08-03.csv",                    header=TRUE, sep=",")`
+```{r}
+#| eval: FALSE
+dat <- read.table("neon_taxa_2025-08-03.csv",
+    header=TRUE, sep=",")
+```
 
 #### Importing from another folder
 
@@ -368,9 +378,9 @@ dat
 
 ##### `skip`
 
-Some data files will contain rows of text or other information before the tabular data starts. The argument `skip` allows you to skip these lines. Without `skip`, R will try to read those rows of text as if they were data and fail to import. For example, 5 rows of preliminary text could be skipped with the argument \`skip=5'.
+Some data files will contain rows of text or other information before the tabular data starts. The argument `skip` allows you to skip these lines. Without `skip`, R will try to read those rows of text as if they were data and fail to import. For example, 5 rows of preliminary text could be skipped with the argument `skip=5`.
 
-If your data file has non-tabular header rows, the error message that `skip` will prevent can be frustrating if you don't understand how R parses text files. What is happening is that R uses the number of elements in the first row to calculate the dimensions of the data frame that it makes upon import. For example, if a text file contains the line "These are data from Nobody (2020)" on the first line, followed by the tabluar data, R would assume that the table contained 6 columns headed by "These", "are", "data", and so on. But, if the table contained another number of columns, R would return an error.
+If your data file has non-tabular header rows, the error message that `skip` will prevent can be frustrating if you don't understand how R parses text files. What is happening is that R uses the number of elements in the first row to calculate the dimensions of the data frame that it makes upon import. For example, if a text file contains the line "These are data from Nobody (2020)" on the first line, followed by the tabular data, R would assume that the table contained 6 columns headed by "These", "are", "data", and so on. But, if the table contained another number of columns, R would return an error.
 
 Why does this issue vex so many new R users (and experienced R users)? Often we will have incomplete records in a data set, where a row is missing values in one or more columns. Sometimes blank values are not read correctly.
 
@@ -445,15 +455,11 @@ load("example.RData")
 
 When loading a workspace, it is sometimes more useful to import it into a new **environment**. An environment is like a container within your workspace that contain objects that arent' visible to the outer workspace. In other words, you can import objects from that workspace without putting all of its objects into your current workspace. I use this method a lot for working with large sets of model outputs. The typical workflow is:
 
-1.  Run an analysis or set of simulations in multiple R instances and save the results of each in its own R workspace.
-
-2.  After simulations are complete, import the results of each simulation from its individual workspace into a new environment.
-
-3.  Copy the objects from the environment containing the loaded workspace to the main workspace.
-
-4.  Delete the environment containing the loaded workspace.
-
-5.  Repeat until all results are imported.
+1. Run an analysis or set of simulations in multiple R instances and save the results of each in its own R workspace.
+1. After simulations are complete, import the results of each simulation from its individual workspace into a new environment.
+1. Copy the objects from the environment containing the loaded workspace to the main workspace.
+1. Delete the environment containing the loaded workspace.
+1. Repeat until all results are imported.
 
 Here is an example of importing individual objects from a workspace into a new environment, then copying that object into the current workspace:
 
@@ -489,13 +495,10 @@ a
 
 Sometimes it can be convenient to copy and paste data directly from a spreadsheet into R. This is fine for quick or one-off data imports, but not recommended for routine use because it is tedious to reproduce and error-prone. The procedure is as follows:
 
-1.  In the R console, type this command but do NOT run it: `a <- read.table("clipboard", header=TRUE, sep="\t")`
-
-2.  In Excel, highlight your data and copy it to the clipboard using Ctrl-C (or Cmd-C on a Mac).
-
-3.  Click in the R console to move your focus there. In R, hit the ENTER key.
-
-4.  The command you typed--but did not execute--in step 1 will read the table from the clipboard.
+1. In the R console, type this command but do NOT run it: `a <- read.table("clipboard", header=TRUE, sep="\t")`
+1. In Excel, highlight your data and copy it to the clipboard using Ctrl-C (or Cmd-C on a Mac).
+1. Click in the R console to move your focus there. In R, hit the ENTER key.
+1. The command you typed--but did not execute--in step 1 will read the table from the clipboard.
 
 Note that if you try to copy/paste the `read.table("clipboard",...)` command into the R console, you will then have that command in your clipboard and not your data.
 
@@ -545,7 +548,7 @@ Like `scan()`, data can be entered directly into the console using `c()`. Also l
 
 ### Exporting text files {#sec-04-export-text}
 
-Everything you do in R takes place within the “workspace”. You can save entire workspaces, but in most situations it is more useful to write out data or results as delimited text files. I’ve found that comma-delimited files are slightly less likely to have issues because they use a character (,) rather than whitespace to separate values. So, for the rest of this course we'll use CSV files.
+Everything you do in R takes place within the “workspace”. You can save entire workspaces, but in most situations it is more useful to write out data or results as delimited text files. I’ve found that comma-delimited files are slightly less likely to have issues because they use a character (`,`) rather than whitespace to separate values. So, for the rest of this course we'll use CSV files.
 
 Tab-delimited files are written out using `write.table()`. In the example below, the first argument `dat` is the object from the R workspace that you want to write out. The argument `sep` works the same way as in `read.table()`. The example below will save a file called `mydata.txt` in working directory. Option `sep="\\t"` can be provided to ensure that the file is written as a tab-delimited file and not a space-delimited file.
 
@@ -710,11 +713,9 @@ Finally, at some point you will need to export R graphics. In the base R GUI, yo
 
 R can write images in a variety of formats, including .jpeg, .png, .tiff, and so on. The basic process is:
 
-1.  Start a new graphics device using \`jpeg()' or whichever function is appropriate. This function will include the target path as an argument.
-
-2.  Run the code to make your plot.
-
-3.  Use `dev.off()` to tell R that your plot is done, and to go ahead and render and save it.
+1. Start a new graphics device using `jpeg()` or `.png` or whichever function is appropriate. This function will include the target path as an argument.
+1. Run the code to make your plot.
+1. Use `dev.off()` to tell R that your plot is done, and to go ahead and render and save it.
 
 Here is an example:
 
@@ -729,4 +730,10 @@ jpeg("example_fig.jpg",             # file name
      res=300)                       # resolution
 hist(rnorm(100))                    # make plot
 dev.off()                           # finish figure
+```
+
+```{r}
+#| include: false
+
+knitr::opts_knit$set(root.dir = old_root)
 ```

@@ -12,7 +12,7 @@ Biology, like all sciences, depends on the **scientific method**. This means tes
 
 Many biologists traditionally think of "biology" and "data analysis" as two completely separate enterprises, with statistics being like a special wrench that a mechanic pulls out of the toolbox so infrequently that its use is unfamiliar. I think this is a mistake. As the figure below shows, every part of the scientific method can benefit from some knowledge of statistics. This includes experimental design, data collection, and interpreting the findings.
 
-![](01_01.jpg){fig-align="center"}
+![Statistics and thinking about data is part of the entire scientific process, not just a single stage.](../images/01_01.jpg){fig-align="center"}
 
 So why do we, as biologists, need statistics? Some common answers might include:
 
@@ -99,11 +99,11 @@ The *p*-value allows us to make binary distinctions, in a systematic way, betwee
 
 These outcomes can be summarized as shown below. Statisticians are particularly concerned with the probabilities of false positives ($\alpha$) and false negatives ($\beta$). The false positive probability $\alpha$ is the standard against which experimental *p*-values are compared. This is largely because we humans are inordinately prone to finding patterns even when no patterns are present--i.e., committing type I errors.
 
-![](01_02.jpg){fig-align="center"}
+![Relationship between the null hypothesis and our decision about experimental results. Type I and II errors result when we reject a true null hypothesis and when we fail to reject a false null. The false discovery rate, or Type I error rate, defined by $\alpha$ is a very important value in our approach to science.](../images/01_02.jpg){fig-align="center"}
 
 Why have we evolved this way? Finding patterns in noisy data has helped us discover virtually everything we know. So, pattern recognition must be a powerful cognitive tool. But there is another interpretation, that in our ancestral lifestyle life false positives were far less costly than false negatives. Imagine you are an Australopithecine or an early *Homo erectus* (or *H. sapiens*, for that matter), wandering through the savanna of what will someday be modern Ethiopia, looking for food. You hear a rustle in the tall grass a few meters ahead. Is that rustle just the wind? Or is it a dangerous animal that will kill and possibly eat you? Here are your choices and their consequences:
 
-![](01_03.jpg){fig-align="center"}
+![Illustration of the consequences of Type I and Type II errors, and why human minds may be so prone to Type I errors.](../images/01_03.jpg){fig-align="center"}
 
 Notice that of your choices, only the type II error has immediate evolutionary consequences. In terms of fitness, the difference between a type II error and a true positive (death vs. survival) is much greater than the difference between a true negative and a false positive (a bit more food vs. a mild inconvenience).
 
@@ -182,9 +182,9 @@ plot(x, y, type="l", lwd=3,
 
 If there was no difference between the means of `x1` and `x2`, then *t* statistics of randomly generated datasets should cluster around 0 with more extreme values being much less likely. Test statistics $\ge$ 4 or $\le$ -4 almost never happen.
 
-What about our *t* statistic, -1.796? The figure below shows how the total possible space of *t* statistics (given 17.872 d.f.) is partitioned. The total area under this curve, called a "probability density plot", is equals 1. If you think about it, *t* must take on a value...so the sum of probabilities for all t is 1. The red area shows the probability of a *t* occurring randomly that is \< -1.796. That is, more extreme than the observed *t*. But "more extreme" can work the other way too: *t* could randomly be \> 1.796 as well. This probability of this possibility is shown by the blue area. The total of the red and blue areas is the total probability of a *t* value more extreme than the observed *t*.
+What about our *t* statistic, -1.796? The figure below shows how the total possible space of *t* statistics (given 17.872 d.f.) is partitioned. The total area under this curve, called a "probability density plot", is equals 1. If you think about it, *t* must take on a value...so the sum of probabilities for all t is 1. The red area shows the probability of a *t* occurring randomly that is $< -1.796$. That is, more extreme than the observed *t*. But "more extreme" can work the other way too: *t* could randomly be $> 1.796$ as well. This probability of this possibility is shown by the blue area. The total of the red and blue areas is the total probability of a *t* value more extreme than the observed *t*.
 
-![](01_04.jpg){fig-align="center"}
+![The areas under the *t* distribution probability density curve outside the critical values of *t* define the two-tailed *p*-value for the test.](../images/01_04.jpg){fig-align="center"}
 
 But as we shall see, increasing the sample size can make the same difference appear significant:
 
@@ -218,17 +218,17 @@ The table below summarizes the results of the three simulations we just ran:
 
 | True difference (${\bar{x}}_1-{\bar{x}}_2$) | Residual SD | Sample size | *p*-value | Significant? |
 |---------------|--------------:|--------------:|--------------:|:-------------:|
-| -2 | 3 | 20 | 0.0894 | No |
-| -2 | 3 | 2000 | \<0.0001 | Yes |
-| -2 | 0.001 | 20 | \<0.0001 | Yes |
+| -2 | 3 | 20 | 0.089 | No |
+| -2 | 3 | 2000 | $<0.001$ | Yes |
+| -2 | 0.001 | 20 | $<0.001$ | Yes |
 
 ### What *p*-values mean and do not mean
 
 In the simulations above, we know that the true difference was -2 because that is how we generated the numbers. But the conclusion of the experiments depended on experimental parameters other than the one of interest! For each of the three scenarios above, consider these questions:
 
--   Should the researchers reject the null hypothesis, and conclude that there is a difference between `x1` and `x2`?
--   Should the researchers accept the null hypothesis, and conclude that there is no difference between `x1` and `x2`?
--   Should the researchers accept the alternative hypothesis, and conclude that there is a difference between `x1` and `x2`?
+- Should the researchers reject the null hypothesis, and conclude that there is a difference between `x1` and `x2`?
+- Should the researchers accept the null hypothesis, and conclude that there is no difference between `x1` and `x2`?
+- Should the researchers accept the alternative hypothesis, and conclude that there is a difference between `x1` and `x2`?
 
 The researchers should reject the null hypothesis only in scenarios 2 and 3. In scenario 1, they should not "accept" the null hypothesis. The correct action is **fail to reject** the null. Accepting the null hypothesis would imply some certainty that the difference was 0. But that is not what the *t*-test actually says. What the *t*-test really says is that a difference (measured as *t*) between -1.796 and 1.796 is likely to occur about 91% (i.e., 1-*P*) of the time even if the true difference is 0. In other words, if we repeated the experiment, we would get a $|t|>1.796$ over 9 times out of 10!
 
@@ -236,21 +236,21 @@ One of the most common misconceptions about *p*-values is that they represent th
 
 Remember:
 
--   The *p*-value is only a statistical summary, and says nothing about whether or not a hypothesis is true.
--   The *p*-value is only a statement about how unlikely the result would be if there was no real effect.
--   A *p*-value is a purely statistical calculation and says nothing about biological importance or the truth of your hypothesis.
--   Interpreting *p*-values and other statistical outputs is the job of the scientist, not the computer.
+- The *p*-value is only a statistical summary, and says nothing about whether or not a hypothesis is true.
+- The *p*-value is only a statement about how unlikely the result would be if there was no real effect.
+- A *p*-value is a purely statistical calculation and says nothing about biological importance or the truth of your hypothesis.
+- Interpreting *p*-values and other statistical outputs is the job of the scientist, not the computer.
 
-If it feels like I'm belaboring this point, it's because I am. The *p*-value and NHST in general are merely a set of heuristics to help researchers make binary distinctions like:
+If it feels like I'm belaboring these points, it's because I am. The *p*-value and NHST in general are merely a set of heuristics to help researchers make binary distinctions like:
 
--   Reject ***or*** fail to reject the null hypothesis.
--   True difference is 0 ***or*** not 0.
--   Difference is $\ge3$ ***or*** not \<3.
--   And so on.
+- Reject ***or*** fail to reject the null hypothesis.
+- True difference is 0 ***or*** not 0.
+- Difference is $\ge3$ ***or*** not $<3$.
+- And so on.
 
 These distinctions are binary because each condition is the logical negation of the other. But, *rejecting* one side of each dichotomy is *not the same as accepting* the other. By analogy, juries in criminal trials in the USA make one of two determinations: guilty or not guilty. A verdict of not guilty includes innocent as a possibility, but does not necessarily mean that the jury thinks the defendant is innocent. It simply means that the jury does not feel that the defendant has been *proven* guilty.
 
-Likewise, the *p*-value might help distinguish "difference in means is different from 0 (*p* \< 0.05)" vs. "difference in means is not different from 0 (*p* $\ge$ 0.05)". The latter choice includes a difference in means of 0 as a possibility, but does not actually demonstrate that the value is 0.
+Likewise, the *p*-value might help distinguish "difference in means is different from 0 ($p<0.05$)" vs. "difference in means is not different from 0 ($p\ge0.05$)". The latter choice includes a difference in means of 0 as a possibility, but does not actually demonstrate that the value is 0.
 
 ### Do you need a *p*-value?
 

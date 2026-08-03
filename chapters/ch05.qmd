@@ -6,15 +6,11 @@ In @sec-02 we introduced the basics of the R language and program environment. I
 
 The typical analysis workflow in R involves importing data from text files or other sources. Sometimes, however, it is necessary to make values within R. This can be for a variety of reasons:
 
-1.  Producing test data sets with desired distributions
-
-2.  Making sets of indices or look-up values to use in other functions
-
-3.  Modifying existing datasets
-
-4.  Running simulations
-
-5.  And many more...
+1. Producing test data sets with desired distributions
+1. Making sets of indices or look-up values to use in other functions
+1. Modifying existing datasets
+1. Running simulations
+1. And many more...
 
 This section demonstrates some methods for producing values--i.e., data--within R.
 
@@ -303,17 +299,17 @@ Brackets can also be used to exclude certain elements by using the negative sign
 
 The most direct way to work with most R objects is the **bracket notation**. Square brackets `[]` allow you to access parts of objects with a simple syntax to specify position within the object.
 
-![](05_01.jpg){fig.align="center"}
+![Illustration of how bracket notation accesses elements of vector-like objects in R.](../images/05_01.jpg){fig.align="center"}
 
-Positions within an object are accessed using bracket notation. For example, a\[3\] denotes the third element of vector a. For vectors with \>1 dimension, commas are used to separate dimensions. The first dimension is rows, the second dimension is columns, and the third dimension is layers (maybe?). The general term for the dimensions of an object rows, columns, etc., is **margins**. So, the rows are the first margin, the columns are the second margin, and so on.
+Positions within an object are accessed using bracket notation. For example, `a[3]` denotes the third element of vector a. For vectors with $>1$ dimension, commas are used to separate dimensions. The first dimension is rows, the second dimension is columns, and the third dimension is layers (maybe?). The general term for the dimensions of an object rows, columns, etc., is **margins**. So, the rows are the first margin, the columns are the second margin, and so on.
 
 The values inside the brackets that specify rows or columns or whatever are called **indices**. In R, *indices start at 1* (this is unlike some other languages, like Python). The trickiest part of bracket notation is that you must specify indices for each margin. If you don't, you will either get an error (bad) or something unexpected (worse). Indices can be a single value, a vector of values, or left blank to request all values.
 
-![](05_02.jpg){fig.align="center"}
+![In R bracket notation, the comma separates margins and allows you to select an entire margin worth of values.](../images/05_02.jpg){fig.align="center"}
 
 #### Selecting from a vector {#sec-05-select-bas-vec}
 
-Vectors have 1 dimension, so you must specify a single vector of indices. Notice that the brackets can be empty, in which case all elements can be returned. If the vector supplied is of length 0, then no elements will be returned. When a vector of indices with \> 0 elements is specified, R will return the elements of the vector in the order requested. For example, `a[c(1,3,5)]` and `a[c(3,5,1)]` will return the same values but in different order.
+Vectors have 1 dimension, so you must specify a single vector of indices. Notice that the brackets can be empty, in which case all elements can be returned. If the vector supplied is of length 0, then no elements will be returned. When a vector of indices with $>0$ elements is specified, R will return the elements of the vector in the order requested. For example, `a[c(1,3,5)]` and `a[c(3,5,1)]` will return the same values but in different order.
 
 ```{r}
 #| collapse: true
@@ -403,7 +399,7 @@ a[-c(1,2),,drop=FALSE]
 
 Selecting from an array is a lot like selecting from a matrix, only with one more dimension. Consider an array with 3 dimensions: rows, columns, and "layers"[^ch05-1].
 
-[^ch05-1]: I don't know if there is an actual name for this, but I like to call them layers
+[^ch05-1]: I don't know if there is an actual name for this, but I like to call them layers.
 
 ```{r}
 Ar <- array(1:24, dim=c(4,2,3))
@@ -420,15 +416,15 @@ Ar[,,3]
 
 The images below show what happened. For `Ar[1,,]`, the values in the first row (dimension 1), all columns (dimension 2), and all layers (dimension 3) were selected. Dimension 2 in the input `Ar` became dimension 1 in the output, and dimension 3 in `Ar` became dimension 2 in the output.
 
-![](05_03.jpg){fig.align="center"}
+![R bracket notation carries across dimensions within an array, but the result may not be what you expect. Notice how rows are converted to columns.](../images/05_03.jpg){fig.align="center"}
 
 For `Ar[,2,]`, the values in the second column (dimension 2), all rows (dimension 1), and all layers (dimension 3) were selected. Dimension 2 in the input `Ar` became dimension 1 in the output, and dimension 3 in `Ar` became dimension 2 in the output.
 
-![](05_04.jpg){fig.align="center"}
+![Another example of R bracket notation behavior across layers of an array.](../images/05_04.jpg){fig.align="center"}
 
 For `Ar[,,3]`, the values in the all rows (dimension 1), all columns (dimension 2), and layer 3 (dimension 3) were selected. Dimension 2 in the input `Ar` became dimension 1 in the output, and dimension 3 in `Ar` became dimension 2 in the output.
 
-![](05_05.jpg){fig.align="center"}
+![Selecting an entire "layer" of a 3-dimensional array.](../images/05_05.jpg){fig.align="center"}
 
 Selecting by $\ge$ 1 dimension can be tricky. Consider this example:
 
@@ -438,7 +434,7 @@ Ar[1,,1:2]
 
 Here we selected the first row (dimension 1), all columns (dimension 2), and layers 1 and 2 (dimension 3).
 
-![](05_06.jpg){fig.align="center"}
+![Illustration of selecting the first 2 rows of teh first 2 elements of a 4 by 2 by 3 array.](../images/05_06.jpg){fig.align="center"}
 
 And if you want a headache, consider this example:
 
@@ -446,7 +442,7 @@ And if you want a headache, consider this example:
 Ar[1:2,,2:1]
 ```
 
-![](05_07.jpg){fig.align="center"}
+![Sometimes, R bracket notation defies common sense.](../images/05_07.jpg){fig.align="center"}
 
 I can't think of a reason why you would need to do something like the last example, but it's nice to know that you could.
 
@@ -454,7 +450,7 @@ I can't think of a reason why you would need to do something like the last examp
 
 Selecting from a data frame using brackets is largely the same as selecting from a matrix. Just keep in mind that the result might come back as a vector (if you select rows in a single column) or a data frame (any other situation).
 
-![](05_08.jpg){fig.align="center"}
+![Illustration of how bracket notation works on data frames, which are not matrices despite their appearance.](../images/05_08.jpg){fig.align="center"}
 
 ```{r}
 #| collapse: true
@@ -1075,9 +1071,8 @@ which(x > "jaguar")
 
 **Regular expressions**, or **regex**, are a [syntax for searching text strings](https://en.wikipedia.org/wiki/Regular_expression). Learning how to use regular expressions is easily a semester-long course on its own. Here we'll just explore a few common use cases. The R functions that deal with regular expressions are `grep()` and its cousins. The most commonly used versions are `grep()` and `grepl()`.
 
--   `grep()` returns the indices in the input vector that match the pattern. The length of the output will be the number of matches.
-
--   `grepl()` returns a logical value (`TRUE` or `FALSE`) telling whether each element in the input vector matches the pattern. The length of the output will be same as the length of the input.
+- `grep()` returns the indices in the input vector that match the pattern. The length of the output will be the number of matches.
+- `grepl()` returns a logical value (`TRUE` or `FALSE`) telling whether each element in the input vector matches the pattern. The length of the output will be same as the length of the input.
 
 This means that `grepl()` is analogous to using `==` to test for equality, while `grep()` is analogous to using `which()`. Compare the results of the two commands on the simple vector `x` below. It's not hard to imagine how powerful these functions can be.
 
@@ -1270,7 +1265,7 @@ This section demonstrates some of the most common data frame operations.
 
 Data frames and matrices look very similar, but their internal structures are very different. This has huge implications for how you work with and manipulate data frames and matrices. The figure below shows some of the most important differences.
 
-![](05_08.jpg)
+![Illustration of the differences between an R data frame (left) and an R matrix (right).](../images/05_08.jpg)
 
 When using [bracket notation](@sec-05-select-bas), accessing parts of a data frame is the same as for a matrix. There are a couple of differences though:
 
@@ -1611,7 +1606,14 @@ rbind(y2,x)
 
 Data sets for a complex project might reside in several tables, related by **key variables**. These are variables that are shared by more than one table, and define which records in each table are related to records in another table. This is exactly what **relational databases** do, but most biologists have small enough datasets that proper databases aren't really necessary.
 
-Data frames can be combined by manually matching records between tables, using the function `match()`. The example below uses three interrelated tables from a stream dataset I work with. You need the datasets [neon_grids_2025-08-03.csv](https://greenquanteco.github.io/neon_grids_2025-08-03.csv) and [neon_measures_2025-08-03.csv](https://greenquanteco.github.io/neon_measures_2025-08-03.csv). Download them, put them in a folder, and make that folder your R working directory.
+Data frames can be combined by manually matching records between tables, using the function `match()`. The example below uses three interrelated tables from a stream dataset I work with. You need the datasets [neon_grids_2025-08-03.csv](../datasets/neon_grids_2025-08-03.csv), [neon_measures_2025-08-03.csv](../datasets/neon_measures_2025-08-03.csv), and [neon_measures_2025-08-03.csv](../datasets/neon_measures_2025-08-03.csv). Download them, put them in a folder, and make that folder your R working directory.
+
+```{r}
+#| include: false
+
+old_root <- knitr::opts_knit$get("root.dir")
+knitr::opts_knit$set(root.dir = "../datasets")
+```
 
 ```{r}
 
@@ -1643,13 +1645,13 @@ intersect(names(mes), names(tax))
 
 Data frames `grd` (trapping grid characteristics) and `mes` (animal measurements) share variable "grid". Each animal in `mes` was captured on one trapping grid (`mes$grid`), and the characteristics (location, region, etc.) are stored in `grd`.
 
-Data frames `mes` and `tax` are related by variable "abb". Each animal measured in `mes` is identified by a four-letter abbreviation of its scientific name (`mes$abb`), usually the first 2 letters of its generic eptithet and the first 2 letters of its specific epithet[^ch05-5]. Characteristics of that species are held in data frame `tax`.
+Data frames `mes` and `tax` are related by variable `abb`. Each animal measured in `mes` is identified by a four-letter abbreviation of its scientific name (`mes$abb`), usually the first 2 letters of its generic eptithet and the first 2 letters of its specific epithet[^ch05-5]. Characteristics of that species are held in data frame `tax`.
 
-[^ch05-5]:  (except where abbreviating this way would have created duplicate abbreviations
+[^ch05-5]: (except where abbreviating this way would have created duplicate abbreviations).
 
 So, if you wanted to tally up the mean body mass (`mes$mass`) for each species in each habitat in which it occurs, you would have to somehow get the habitat of each grid (`grd$nlcd`) from `grd` into `mes`. You could build the necessary data frame by merging `grd` and `mes`, using their common variable `grid` to make sure that data from one data frame are associated with the correct rows of the other.
 
-A trickier problem would be tallying up how many animals in each taxonomic family (`tax$family`) were measured in each habitat (`grd$nlcd`)--because `tax` and `grd` have no variables in common! You would need to daisy chain the data frames together: first, join `grd` to `mes` by "grid", then join the result to `tax` by "abb".
+A trickier problem would be tallying up how many animals in each taxonomic family (`tax$family`) were measured in each habitat (`grd$nlcd`)--because `tax` and `grd` have no variables in common! You would need to daisy chain the data frames together: first, join `grd` to `mes` by "grid", then join the result to `tax` by `abb`.
 
 There are two methods to accomplish these joins in base R: `match()` and `merge()`. I use a mix of both in my workflows:
 
@@ -1722,7 +1724,7 @@ Some of the tidyverse packages offer alternative solutions for merging datasets 
 
 In your career you are likely to encounter datasets organized in a variety of formats. Most of these formats fall into one of two categories: **wide** and **long**.
 
-![](05_09.jpg)
+![Illustration of long format (left) and wide format (right) storage of the same values.](../images/05_09.jpg)
 
 In a **long-format dataset**, every *value* is stored in a separate *row*. The variable (aka: feature or attribute) that each value represents is kept in a separate *column*. Many public or online data sources serve datasets in long format. This is usually because the data are pulled from a database, and it left to the user to reshape the data to fit their needs. Storing data in this manner can sometimes be more efficient from a computational standpoint, but it is usually not convenient for analysis. The reason that long format is inconvenient for analysis is because all of the information about individual samples (i.e, observations) are on different rows of the dataset.
 
@@ -1790,4 +1792,10 @@ head(tmx)
 
 # if needed:
 tdx.df <- data.frame(tdx)
+```
+
+```{r}
+#| include: false
+
+knitr::opts_knit$set(root.dir = old_root)
 ```

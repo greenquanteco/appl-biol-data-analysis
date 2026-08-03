@@ -1,6 +1,8 @@
 project:
   type: book
   output-dir: docs
+  resources: 
+    - datasets/**
   
 book:
   site-url: "https://greenquanteco.github.io/appl-biol-data-analysis/"
@@ -24,54 +26,54 @@ book:
         url: https://facultyweb.kennesaw.edu/ngreen62/index.php
   chapters:
     - index.qmd
-    - part: part_01.qmd
+    - part: chapters/part_01.qmd
       chapters:
-        - ch01.qmd
-    - part: part_02.qmd
+        - chapters/ch01.qmd
+    - part: chapters/part_02.qmd
       chapters:
-        - ch02.qmd
-        - ch03.qmd
-        - ch04.qmd
-        - ch05.qmd
-    - part: part_03.qmd
+        - chapters/ch02.qmd
+        - chapters/ch03.qmd
+        - chapters/ch04.qmd
+        - chapters/ch05.qmd
+    - part: chapters/part_03.qmd
       chapters:
-        - ch06.qmd
-        - ch07.qmd
-        - ch08.qmd
-        - ch09.qmd
-        - ch10.qmd
-        - ch11.qmd
-    - part: part_04.qmd
+        - chapters/ch06.qmd
+        - chapters/ch07.qmd
+        - chapters/ch08.qmd
+        - chapters/ch09.qmd
+        - chapters/ch10.qmd
+        - chapters/ch11.qmd
+    - part: chapters/part_04.qmd
       chapters:
-        - ch12.qmd
-        - ch13.qmd
-        - ch14.qmd
-        - ch15.qmd
-    - part: part_05.qmd
+        - chapters/ch12.qmd
+        - chapters/ch13.qmd
+        - chapters/ch14.qmd
+        - chapters/ch15.qmd
+    - part: chapters/part_05.qmd
       chapters:
-        - ch16.qmd
-        - ch17.qmd
-        - ch18.qmd
-        - ch19.qmd
-    - part: part_06.qmd
+        - chapters/ch16.qmd
+        - chapters/ch17.qmd
+        - chapters/ch18.qmd
+        - chapters/ch19.qmd
+    - part: chapters/part_06.qmd
       chapters:
-        - ch20.qmd
-        - ch21.qmd
-    - part: part_07.qmd
+        - chapters/ch20.qmd
+        - chapters/ch21.qmd
+    - part: chapters/part_07.qmd
       chapters:
-        - ch22.qmd
-        - ch23.qmd
-        - ch24.qmd
-        - ch25.qmd
-    - part: part_08.qmd
+        - chapters/ch22.qmd
+        - chapters/ch23.qmd
+        - chapters/ch24.qmd
+        - chapters/ch25.qmd
+    - part: chapters/part_08.qmd
       chapters:
-        - ch26.qmd
-        - ch27.qmd
-    - part: part_09.qmd
+        - chapters/ch26.qmd
+        - chapters/ch27.qmd
+    - part: chapters/part_09.qmd
       chapters:
-        - ch28.qmd
+        - chapters/ch28.qmd
   appendices:
-    - ch29.qmd
+    - chapters/ch29.qmd
 
 license: "CC BY-SA"
 copyright:
@@ -113,7 +115,7 @@ format:
     fig-height: 4
     
 
-editor: visual
+editor: source
 crossref:
   fig-title: "Figure"
   tbl-title: "Table"

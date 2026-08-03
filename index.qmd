@@ -157,13 +157,13 @@ This work is roughly organized into 9 parts. The links below will take you strai
 
 [Module 26](chapters/ch26.qmd#sec-26) introduces information-theoretic model selection, an alternative to null hypothesis significance testing (NHST) that evaluates entire models rather than individual parameters and their *p*-values.
 
-[Module 27](ch27.qmd#sec-27) introduces Bayesian inference using the program JAGS, another alternative to NHST.
+[Module 27](chapters/ch27.qmd#sec-27) introduces Bayesian inference using the program JAGS, another alternative to NHST.
 
 **Part 9** is "bonus material"; i.e., additional modules that didn't quite fit in anywhere else. New modules will be added here until the next major update.
 
 [Module 28](chapters/ch28.qmd#sec-28) takes a deep dive into building quality graphics using base R.
 
-Finally, [Appendix A](ch29.qmd#sec-29) describes the NEON dataset that I used to build most of this course, and the steps taken to process the raw data download to the files provided here.
+Finally, [Appendix A](chapters/ch29.qmd#sec-29) describes the NEON dataset that I used to build most of this course, and the steps taken to process the raw data download to the files provided here.
 
 ## About the author {.unnumbered}
 
