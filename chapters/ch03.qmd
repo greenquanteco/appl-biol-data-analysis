@@ -632,9 +632,9 @@ my.array <- array(1:24,dim=c(4,2,3))
 my.array
 ```
 
-One very nifty (and potentially confusing) ability of arrays is the ability to be sliced into differently shaped pieces[^ch03-1]. Consider the examples below and see if you can work out why the results are what they are.
+One very nifty (and potentially confusing) ability of arrays is the ability to be sliced into differently shaped pieces[^arraydims]. Consider the examples below and see if you can work out why the results are what they are.
 
-[^ch03-1]: My personal record is a 7-dimensional array, which I used in a community simulation model. The model included many species-, age-, and sex-specific demographic parameters that had to be extracted and summarized, and because of the size of the model an array-based solution was more computationally-efficient than a list- or data frame-based solution. I don't recommend building arrays that complex...it was a nightmare to work with.
+[^arraydims]: My personal record is a 7-dimensional array, which I used in a community simulation model. The model included many species-, age-, and sex-specific demographic parameters that had to be extracted and summarized, and because of the size of the model an array-based solution was more computationally-efficient than a list- or data frame-based solution. I don't recommend building arrays that complex...it was a nightmare to work with.
 
 ```{r}
 #| collapse: true

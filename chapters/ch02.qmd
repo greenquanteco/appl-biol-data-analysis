@@ -198,9 +198,9 @@ Argument values are set using single equals sign `=`. Argument values must be of
 
 ![Basic structure of an R command and its arguments.](../images/02_04.jpg){fig-align="center"}
 
-See below for some examples of function use using `rnorm()`, which draws random numbers from a normal distribution[^ch02-1]. Your numbers may be different than those below, because the function is *random*.
+See below for some examples of function use using `rnorm()`, which draws random numbers from a normal distribution[^rnorm]. Your numbers may be different than those below, because the function is *random*.
 
-[^ch02-1]: The normal distribution comes up a lot in statistics. It is sometimes called the “bell curve”, but this is inappropriate because many distributions can be bell-shaped. It is also called the “Gaussian” distribution, but Gauss did not discover it. The normal distribution is defined by its mean $\mu$ and its standard deviation (SD) $\sigma$. In other words, its central tendency and spread, respectively.
+[^rnorm]: The normal distribution comes up a lot in statistics. It is sometimes called the “bell curve”, but this is inappropriate because many distributions can be bell-shaped. It is also called the “Gaussian” distribution, but Gauss did not discover it. The normal distribution is defined by its mean $\mu$ and its standard deviation (SD) $\sigma$. In other words, its central tendency and spread, respectively.
 
 ```{r}
 # arguments named
@@ -629,13 +629,13 @@ Recently Norm Matloff of the University of California, Davis posted an [essay ab
 
 -   Tidyverse packages and code tend to utilize functional programming, rather than object-oriented programming. Functional programming is more abstract than object-oriented programming, which makes it harder to new users with little to no programming background.
 
--   Tidyverse functions eschew use of the `$` operator, square brackets `[]`, and base R data structures in general[^ch02-2]. This means that people who learn only tidyverse are not equipped to take advantage of some of the most fundamental and powerful features of R--including many statistical functions!
+-   Tidyverse functions eschew use of the `$` operator, square brackets `[]`, and base R data structures in general[^tidy]. This means that people who learn only tidyverse are not equipped to take advantage of some of the most fundamental and powerful features of R--including many statistical functions!
 
 -   Tidyverse code avoids loops, a fundamental programming construct. Loops are, for beginning programmers, easy to “step through” and debug. In tidyverse, operations that would be in loops in base R are “hidden” inside functions. This makes it very hard to track down errors. There are base R functions that can be used to avoid loops as well (e.g., `lapply()` and its cousins), and they are equally hard for beginners to use.
 
 -   Tidyverse is intentionally designed to equip users with a small set of R tools. This means that tidyverse-only users are less equipped to deal with new situations.
 
-[^ch02-2]: In my humble opinion, this aspect of tidyverse is just insane.
+[^tidy]: In my humble opinion, this aspect of tidyverse is just insane.
 
 In my own workflow, and in this course, I tend to use base R methods instead of tidyverse for reasons above, as well as a few other resaons that are entirely personal and subjective:
 
@@ -756,9 +756,9 @@ The [Task Views](https://cran.r-project.org/web/views/) on CRAN contain frequent
 
 #### R mailing lists {#sec-02-faq-help-mail}
 
-If your question has been asked before---and this is very likely---there may be an answer waiting for you on the [R Help mailing list](https://www.r-project.org/mail.html). Results from the R help mailing list will usually show up in Google results. You can submit a question to the R mailing list, but be very cautious about doing so. You will need to provide a short, clear, reproducible example in your question so that other people can see the issue you are having[^ch02-3]. You also need to be sure that your question hasn't been asked before. Some members of the mailing list will respond with great hostility and condescension if you fail to follow those rules.
+If your question has been asked before---and this is very likely---there may be an answer waiting for you on the [R Help mailing list](https://www.r-project.org/mail.html). Results from the R help mailing list will usually show up in Google results. You can submit a question to the R mailing list, but be very cautious about doing so. You will need to provide a short, clear, reproducible example in your question so that other people can see the issue you are having[^mailing]. You also need to be sure that your question hasn't been asked before. Some members of the mailing list will respond with great hostility and condescension if you fail to follow those rules.
 
-[^ch02-3]: This means a *very* minimal code example that people can use to get the same problem that you are having. Don't post your entire dataset or include many lines of pre-processing steps or other code that led up to your problem. Use base R functions or built-in datasets to create a small dataset or set of values that will immediately provoke the same error code. Often the process of doing this will help you solve your own problem!
+[^mailing]: This means a *very* minimal code example that people can use to get the same problem that you are having. Don't post your entire dataset or include many lines of pre-processing steps or other code that led up to your problem. Use base R functions or built-in datasets to create a small dataset or set of values that will immediately provoke the same error code. Often the process of doing this will help you solve your own problem!
 
 There are several [special interest groups (SIG)](https://stat.ethz.ch/mailman/listinfo), e-mail mailing lists for R users who work in specific fields. For example, [R-sig-ecology](https://stat.ethz.ch/mailman/listinfo/r-sig-ecology) is an e-mail list for ecologists who use R. Other SIG of interest to biologists include [R-sig-genetics](https://stat.ethz.ch/mailman/listinfo/r-sig-genetics) for genetics, [R-sig-mixed-models](https://stat.ethz.ch/mailman/listinfo/r-sig-mixed-models) for mixed models, [R-sig-phylo](https://stat.ethz.ch/mailman/listinfo/r-sig-phylo) for phylogenetics and related methods, and [R-sig-Geo](https://stat.ethz.ch/mailman/listinfo/r-sig-geo) for GIS and spatial analysis.
 

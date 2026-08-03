@@ -495,7 +495,6 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#sec-06-co-lin" id="toc-sec-06-co-lin" class="nav-link" data-scroll-target="#sec-06-co-lin"><span class="header-section-number">6.4.1</span> Linear correlation</a></li>
   <li><a href="#sec-06-co-non" id="toc-sec-06-co-non" class="nav-link" data-scroll-target="#sec-06-co-non"><span class="header-section-number">6.4.2</span> Nonlinear correlation</a></li>
-  <li><a href="#sec-06-co-spl" id="toc-sec-06-co-spl" class="nav-link" data-scroll-target="#sec-06-co-spl"><span class="header-section-number">6.4.3</span> Splines</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch06.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -534,7 +533,7 @@ window.Quarto = {
 <p>In science, we usually want to <em>estimate</em> population parameters, but these are unobservable. Instead, we use sample statistics to estimate the parameters of the underlying population.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<figcaption>Illustration of how sampling bias can affect estimates of population parameters like the sample mean <span class="math inline">\(\barx\)</span> and sample standard deviation <span class="math inline">\(s\)</span>.</figcaption>
+<figcaption>Illustration of how sampling bias can affect estimates of population parameters like the sample mean <span class="math inline">\(\bar{x}\)</span> and sample standard deviation <span class="math inline">\(s\)</span>.</figcaption>
 <p><img src="../images/06_01.jpg" class="img-fluid figure-img"></p>
 </figure>
 </div>
@@ -601,7 +600,7 @@ window.Quarto = {
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">5</span>, <span class="dv">1</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 5.079023</code></pre>
+<pre><code>[1] 5.128365</code></pre>
 </div>
 </div>
 <p>Like many summarization functions in R, <code>mean()</code> does not automatically handle missing values (<code>NA</code>). If your dataset contains missing values, you need to set the argument <code>na.rm=TRUE</code>. This can seem like an annoying bug, but it’s actually a feature. By returning <code>NA</code> when the data contain missing values, R is helping you track down where missing values are coming from (and thus, why your code may not be working at some later point).</p>
@@ -634,12 +633,12 @@ window.Quarto = {
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># test it out:</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">geomean</span>(x)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 8.308722</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 6.334302</span></span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># another way:</span></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>geomean2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x){<span class="fu">prod</span>(x)<span class="sc">^</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">length</span>(x))}</span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">geomean2</span>(x)</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 8.308722</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 6.334302</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="sec-06-cen-mean-hm" class="level4" data-number="6.2.1.3">
@@ -659,11 +658,11 @@ window.Quarto = {
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># compare mean, geometric mean, and harmonic mean:</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(a)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 82.60037</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 50.06946</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">geomean</span>(a)</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 33.50092</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 24.90406</span></span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">har.mean</span>(a)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 19.33895</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 8.657637</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Interestingly, for any set of positive values with at least 2 unique values, the following inequality will always be true:</p>
 <p><span class="math display">\[AM\left(x\right)&gt;GM\left(x\right)&gt;HM\left(x\right)\]</span></p>
@@ -700,10 +699,10 @@ window.Quarto = {
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(x)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] -0.1288158</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.04350785</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(x, <span class="fl">0.5</span>)</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="do">##        50% </span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="do">## -0.1288158</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="do">## 0.04350785</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="sec-06-cen-mode" class="level3" data-number="6.2.3">
@@ -761,8 +760,8 @@ window.Quarto = {
 </div>
 </div>
 <p>The function we made, <code>Mode2()</code>, works well enough if there is only one mode.</p>
-<p>But, many real life distributions have &gt;1 mode. Such distributions are called <strong>bimodal</strong> if they have 2 modes, or <strong>multimodal</strong> if they have 3 or more. A classic example of bimodality is grades in college courses: it is very common to have many Bs, and many Ds, but not many Fs, Cs, or As.</p>
-<p>If your data appear to have &gt;1 mode, you can estimate them by finding points where the slope of the density plot changes sign. The code below is inelegant but it works.</p>
+<p>But, many real life distributions have <span class="math inline">\(&gt;1\)</span> mode. Such distributions are called <strong>bimodal</strong> if they have 2 modes, or <strong>multimodal</strong> if they have 3 or more. A classic example of bimodality is grades in college courses: it is very common to have many Bs, and many Ds, but not many Fs, Cs, or As.</p>
+<p>If your data appear to have <span class="math inline">\(&gt;1\)</span> mode, you can estimate them by finding points where the slope of the density plot changes sign. The code below is inelegant but it works.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>a1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fl">1e2</span>, <span class="dv">12</span>, <span class="dv">2</span>)</span>
@@ -893,7 +892,7 @@ window.Quarto = {
 </section>
 <section id="sec-06-var-qu" class="level3" data-number="6.3.3">
 <h3 data-number="6.3.3" class="anchored" data-anchor-id="sec-06-var-qu"><span class="header-section-number">6.3.3</span> Quantiles and ranges</h3>
-<p>A <strong>quantile</strong> is a value in a distribution or sample such that some specified proportion of observations are less than or equal to that value. For example, the 0.5 quantile is the value such that half of values are less than or equal to that value. Quantiles are usually expressed either as proportions in [0, 1] or as percentiles in [0, 100]. R uses proportions, but you can always multiply by 100 to get percentiles.</p>
+<p>A <strong>quantile</strong> is a value in a distribution or sample such that some specified proportion of observations are less than or equal to that value. For example, the 0.5 quantile is the value such that half of values are less than or equal to that value. Quantiles are usually expressed either as proportions in <span class="math inline">\(\left[0,1\right]\)</span> or as percentiles in <span class="math inline">\(\left[1,100\right]\)</span>. R uses proportions to express quantiles, but you can always multiply by 100 to get percentiles.</p>
 <p>Some ways of dividing up a distribution have special names:</p>
 <ul>
 <li><p><strong>Quartiles</strong> divide a distribution into quarters.</p></li>
@@ -998,15 +997,175 @@ window.Quarto = {
 <p>If anyone knows anything about statistics, or thinks they do, they know the phrase “Correlation does not equal causation”. And that statement is true, both literally and philosophically. <strong>Correlation</strong> means that two sets of values tend to change together: larger values of one variable are associated with larger values of the other variable. Or, large values of one variable are associated with smaller values of the other variable. All this means is that the values seem to reliably change together. Actually demonstrating that one variable is causing another takes careful observation, experiments, and a different kind of analysis than correlation.</p>
 <p>Despite the fact that correlation does not necessarily imply causation, a correlation can indicate that something interesting is going on. Maybe one variable really is causing the other. Maybe both variables are secretly correlated with a third variable, which explains them both. For example, in animals the length of the tibia may be correlated with the mass of the hippocampus. What do these have to do with each other? Probably nothing. So why are they correlated?</p>
 <p>Because bigger animals have bigger parts…just because they are bigger! Both tibia length and hippocampus mass probably correlate well with body length, or body mass, measures of <em>overall</em> size. Here noticing a correlation didn’t get us anywhere. We had to use biological reasoning to interpret the numerical result.</p>
-<p>Correlation usually comes in one of two flavors. The first, linear correlation,</p>
+<p>Correlation comes in two flavors. The first, <strong>linear correlation</strong>, assumes that a relationship between two variables is linear–that is, a plot of one variable against another approximates a straight line. The second flavor, <strong>nonlinear correlation</strong>, assumes only that two variables change together and does not assume any particular shape to that relationship.</p>
+<p><strong>Correlation</strong> is a statistical relationship where changes in one variable are reliably associated with changes in another variable. This relationship need not be causal, hence the famous mantra, “correlation does not equal causation”. As such, correlation is usually a <strong>descriptive technique</strong>, which lets researchers characterize patterns, rather than an <strong>inferential technique</strong>, which lets researchers make estimates about unknown parameters (i.e., infer unobserved quantities).</p>
+<p>Correlations are typically expressed as a <strong>correlation coefficient</strong>, a value that indicates the strength of the correlation by its magnitude and the direction of the correlation by its sign.</p>
+<ul>
+<li><p><strong>Positive correlation:</strong> as one variable gets larger, the other variable does too. Correlation coefficient approaches <span class="math inline">\(+1\)</span>.</p></li>
+<li><p><strong>Negative correlation:</strong> as one variable gets larger, the other variable gets smaller. Correlation coefficient approaches <span class="math inline">\(-1\)</span>.</p></li>
+</ul>
+<p>When a correlation coefficient is near 0, this indicates no correlation.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-correlations" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Illustration of possible positive and negative relationships between pairs of variables, with different levels of consistency (r).">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-correlations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.1: Illustration of possible positive and negative relationships between pairs of variables, with different levels of consistency (<em>r</em>).
+</figcaption>
+<div aria-describedby="fig-correlations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch06_files/figure-html/fig-correlations-1.png" class="img-fluid figure-img" alt="Illustration of possible positive and negative relationships between pairs of variables, with different levels of consistency (r)." width="864">
+</div>
+</figure>
+</div>
+</div>
+</div>
 <section id="sec-06-co-lin" class="level3" data-number="6.4.1">
 <h3 data-number="6.4.1" class="anchored" data-anchor-id="sec-06-co-lin"><span class="header-section-number">6.4.1</span> Linear correlation</h3>
+<p>When we suspect that two variables are correlated, and that the shape of that relationship is a straight line, we can use <strong>Pearson’s product moment correlation</strong>, also called <strong>Pearson’s <em>r</em></strong>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate linear correlation coefficient</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(iris<span class="sc">$</span>Petal.Length, iris<span class="sc">$</span>Petal.Width)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9628654</code></pre>
+</div>
+</div>
+<p>You can also request a significance test on the coefficient, although some might consider this unnecessary because correlation is inherently a descriptive technique. If you are using correlation as a hypothesis test, however, you do need a <em>p</em>-value.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(iris<span class="sc">$</span>Petal.Length, iris<span class="sc">$</span>Petal.Width)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's product-moment correlation
+
+data:  iris$Petal.Length and iris$Petal.Width
+t = 43.387, df = 148, p-value &lt; 2.2e-16
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.9490525 0.9729853
+sample estimates:
+      cor 
+0.9628654 </code></pre>
+</div>
+</div>
+<p>One of the neat features of <code>cor()</code> is that you can get a correlation matrix showing the correlation coefficients between many pairs of variable at once.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># correlation matrix between the numerical variables in iris</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(iris[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             Sepal.Length Sepal.Width Petal.Length Petal.Width
+Sepal.Length    1.0000000  -0.1175698    0.8717538   0.8179411
+Sepal.Width    -0.1175698   1.0000000   -0.4284401  -0.3661259
+Petal.Length    0.8717538  -0.4284401    1.0000000   0.9628654
+Petal.Width     0.8179411  -0.3661259    0.9628654   1.0000000</code></pre>
+</div>
+</div>
+<p>Here we see that each variable is perfectly correlated with itself (the 1s on the diagonal). Sepal length and sepal width are negatively correlated (<code>-0.1175698</code>) while petal length and petal width are strongly positively correlated (<code>0.8717538</code>). You only need to report correlation coefficients to 2 or 3 decimal places.</p>
+<p>There isn’t a built-in way to check for significant correlations between many pairs of variables at once. This is because <code>cor.test()</code> only works with one pair at a time. Fortunately, it’s not hard to do in a loop:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># data frame with just the numeric variables</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> iris[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># set up data frame to hold results</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="co"># combn(..., 2) returns matrix of all unique pairs of names</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="co"># t(ranspose) this and turn into a data frame.</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>cor.df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">t</span>(<span class="fu">combn</span>(<span class="fu">names</span>(dx), <span class="dv">2</span>)))</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>cor.df<span class="sc">$</span>r <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>cor.df<span class="sc">$</span>p <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="co"># find the r and p values in a loop</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(cor.df)){</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># test once per iteration  </span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>  curr <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(dx[,cor.df<span class="sc">$</span>V1[i]], dx[,cor.df<span class="sc">$</span>V2[i]])</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># pull out values we need from correlation test result</span></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># and round to 3 decimal places</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>  cor.df<span class="sc">$</span>r[i] <span class="ot">&lt;-</span> <span class="fu">round</span>(curr<span class="sc">$</span>estimate,<span class="dv">3</span>)</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>  cor.df<span class="sc">$</span>p[i] <span class="ot">&lt;-</span> <span class="fu">round</span>(curr<span class="sc">$</span>p.value, <span class="dv">3</span>)</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>}<span class="co">#close i loop</span></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a><span class="co"># print result</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>cor.df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            V1           V2      r     p
+1 Sepal.Length  Sepal.Width -0.118 0.152
+2 Sepal.Length Petal.Length  0.872 0.000
+3 Sepal.Length  Petal.Width  0.818 0.000
+4  Sepal.Width Petal.Length -0.428 0.000
+5  Sepal.Width  Petal.Width -0.366 0.000
+6 Petal.Length  Petal.Width  0.963 0.000</code></pre>
+</div>
+</div>
+<p>If you want to visualize many potential correlations at once, you can construct a <strong>scatterplot matrix</strong> using function <code>pairs()</code>. This will plot every pair of variables in a data frame. We are going borrow a function called <code>panel.cor()</code> from the <code>pairs()</code> help page so that we get both the scatterplots <em>and</em> the linear correlation coefficients.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># from ?pairs</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="co"># just paste this in once to define the function</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># try changing some arguments to change the behavior!</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>panel.cor <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y, <span class="at">digits =</span> <span class="dv">2</span>, <span class="at">prefix =</span> <span class="st">""</span>, cex.cor, ...)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">par</span>(<span class="at">usr =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    r <span class="ot">&lt;-</span> <span class="fu">abs</span>(<span class="fu">cor</span>(x, y))</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    txt <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">c</span>(r, <span class="fl">0.123456789</span>), <span class="at">digits =</span> digits)[<span class="dv">1</span>]</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    txt <span class="ot">&lt;-</span> <span class="fu">paste0</span>(prefix, txt)</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">missing</span>(cex.cor)) cex.cor <span class="ot">&lt;-</span> <span class="fl">0.8</span><span class="sc">/</span><span class="fu">strwidth</span>(txt)</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">text</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, txt, <span class="at">cex =</span> cex.cor <span class="sc">*</span> r)</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="co"># make the scatterplot matrix</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(iris[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], <span class="at">lower.panel=</span>panel.smooth, <span class="at">upper.panel=</span>panel.cor, <span class="at">gap=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-scatterplotmatrix" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Scatterplot matrix showing possible correlations between the numeric variables in the `iris` data frame.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-scatterplotmatrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.2: Scatterplot matrix showing possible correlations between the numeric variables in the <code>iris</code> data frame.
+</figcaption>
+<div aria-describedby="fig-scatterplotmatrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch06_files/figure-html/fig-scatterplotmatrix-1.png" class="img-fluid figure-img" alt="Scatterplot matrix showing possible correlations between the numeric variables in the `iris` data frame." width="672">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>In this figure, scatterplots in the lower triangle correspond to the variables in the diagonal whom they intersect. For example, the far left and far bottom scatterplot has Sepal.Length for its horizontal axis, and Petal.Width for its vertical axis. Go one panel to the right, and the horizontal axis is now Sepal.Width. The correlation coefficients in the upper triangle are identified the same way. For example, the large 0.96 on the far right, 3rd panel down, is the correlation coefficient between Petal.Length and Petal.Width.</p>
 </section>
 <section id="sec-06-co-non" class="level3" data-number="6.4.2">
 <h3 data-number="6.4.2" class="anchored" data-anchor-id="sec-06-co-non"><span class="header-section-number">6.4.2</span> Nonlinear correlation</h3>
-</section>
-<section id="sec-06-co-spl" class="level3" data-number="6.4.3">
-<h3 data-number="6.4.3" class="anchored" data-anchor-id="sec-06-co-spl"><span class="header-section-number">6.4.3</span> Splines</h3>
+<p>Many processes and relationships in biology are not linear, and sometimes we want to calculate correlation coefficients for those relationships. Consider the figure below. The left panel clearly shows some relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, but it is not linear and using a linear correlation coefficient might miss something.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-nonlinear" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Left: illustration of a nonlinear correlation. Right: When values are rank-transformed, the nonlinear trend becomes linear.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-nonlinear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.3: Left: illustration of a nonlinear correlation. Right: When values are rank-transformed, the nonlinear trend becomes linear.
+</figcaption>
+<div aria-describedby="fig-nonlinear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch06_files/figure-html/fig-nonlinear-1.png" class="img-fluid figure-img" alt="Left: illustration of a nonlinear correlation. Right: When values are rank-transformed, the nonlinear trend becomes linear." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>However, if you <strong>rank-transform</strong> the data, the relationship often turns into something more linear. A “rank-transform” assigns the smallest value value 0, the second smallest value to 1, and so on. Rank-transforming these data lets us calculate a nonparametric, nonlinear correlation. The nonparametric equivalent of Pearson’s <em>r</em> is <strong>Spearman’s <span class="math inline">\(\rho\)</span></strong> (“rho”). It can be obtained using code similar to that for linear correlation.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># just the correlation</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(iris<span class="sc">$</span>Petal.Length, iris<span class="sc">$</span>Sepal.Width, <span class="at">method=</span><span class="st">"spearman"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.3096351</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># significance test</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(iris<span class="sc">$</span>Petal.Length, iris<span class="sc">$</span>Sepal.Width, <span class="at">method=</span><span class="st">"spearman"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Spearman's rank correlation rho
+
+data:  iris$Petal.Length and iris$Sepal.Width
+S = 736637, p-value = 0.0001154
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.3096351 </code></pre>
+</div>
+</div>
+<p>When you run a nonlinear correlation test, you will often get the warning <code>Warning in cor.test.default ... : Cannot compute exact p-value with ties</code>. All this means is that some of the rankings are tied. This warning can be safely ignored.</p>
 
 
 </section>

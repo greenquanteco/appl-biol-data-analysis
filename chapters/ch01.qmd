@@ -70,9 +70,9 @@ In (slightly) more concrete terms, if researchers want to test the hypothesis th
 
 -   **Alternative hypothesis:** Factor *X* does affect *Y*
 
-Notice that in NHST the alternative hypothesis is the **logical negation** of the null hypothesis, ***not*** a statement about another variable (e.g., "Factor *Z* affects *Y*"). This is an easy mistake to make and one of the weaknesses of NHST: the word "hypothesis" in the phrase "null hypothesis" is not being used in the sense that scientists usually use it. This unfortunate choice of vocabulary is responsible for generations of confusion among researchers[^ch01-1].
+Notice that in NHST the alternative hypothesis is the **logical negation** of the null hypothesis, ***not*** a statement about another variable (e.g., "Factor *Z* affects *Y*"). This is an easy mistake to make and one of the weaknesses of NHST: the word "hypothesis" in the phrase "null hypothesis" is not being used in the sense that scientists usually use it. This unfortunate choice of vocabulary is responsible for generations of confusion among researchers[^nullh].
 
-[^ch01-1]: Not to mention among generations of students taking statistics courses, myself included.
+[^nullh]: Not to mention among generations of students taking statistics courses, myself included.
 
 In order to test an "alternative hypothesis", what need is to *estimate* how likely the data would be if the null hypothesis were true. If a pattern seen in the data is highly unlikely, this is taken as evidence that the null hypothesis should be rejected in favor of the alternative hypothesis. This is not the same as "accepting" or "proving" the alternative hypothesis.
 

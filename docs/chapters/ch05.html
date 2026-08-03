@@ -764,18 +764,18 @@ window.Quarto = {
 <span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>my.df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    x x3 x4        x2
-1   1  1  1 0.3002520
-2   2  2  2 0.4771396
-3   3  3  3 0.3002520
-4   4  1  4 0.4771396
-5   5  2  1 0.3002520
-6   6  3  2 0.4771396
-7   7  1  3 0.3002520
-8   8  2  4 0.4771396
-9   9  3  1 0.3002520
-10 10  1  2 0.4771396
-11 11  2  3 0.3002520
-12 12  3  4 0.4771396</code></pre>
+1   1  1  1 0.4876010
+2   2  2  2 0.1369582
+3   3  3  3 0.4876010
+4   4  1  4 0.1369582
+5   5  2  1 0.4876010
+6   6  3  2 0.1369582
+7   7  1  3 0.4876010
+8   8  2  4 0.1369582
+9   9  3  1 0.4876010
+10 10  1  2 0.1369582
+11 11  2  3 0.4876010
+12 12  3  4 0.1369582</code></pre>
 </div>
 </div>
 <p>Trying to add a variable to <code>my.df</code> with a number of values that is not a factor of 12–like 5, 7, 8, 9, 10, or 11–will usually return an error.</p>
@@ -795,11 +795,11 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="co"># different results each time:</span></span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">3</span>)</span>
-<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.05634609 0.21484820 0.07865712</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.4645386 0.9145093 0.9254468</span></span>
 <span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">3</span>)</span>
-<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.1938812 0.5233578 0.0436604</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.7937920 0.3312109 0.3878908</span></span>
 <span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">3</span>)</span>
-<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.80017218 0.37269520 0.04951494</span></span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.3848774 0.7213804 0.4205435</span></span>
 <span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a><span class="co"># same results each time:</span></span>
 <span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
@@ -1502,11 +1502,11 @@ $e2
 <span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a><span class="co"># time with seconds</span></span>
 <span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a><span class="fu">strptime</span>(a, <span class="at">format=</span><span class="st">"%H:%M:%S"</span>)</span>
-<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-08-02 01:15:03 EDT" "2026-08-02 14:28:21 EDT"</span></span>
+<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-08-03 01:15:03 EDT" "2026-08-03 14:28:21 EDT"</span></span>
 <span id="cb97-8"><a href="#cb97-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb97-9"><a href="#cb97-9" aria-hidden="true" tabindex="-1"></a><span class="co"># time with seconds dropped</span></span>
 <span id="cb97-10"><a href="#cb97-10" aria-hidden="true" tabindex="-1"></a><span class="fu">strptime</span>(a, <span class="at">format=</span><span class="st">"%H:%M"</span>)    <span class="co"># seconds dropped</span></span>
-<span id="cb97-11"><a href="#cb97-11" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-08-02 01:15:00 EDT" "2026-08-02 14:28:00 EDT"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb97-11"><a href="#cb97-11" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-08-03 01:15:00 EDT" "2026-08-03 14:28:00 EDT"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Notice that the current date was included in the result of <code>strptime()</code> (at least, the date when I rendered the document).</p>
 <p>Time zones should be specified when working with data that contain dates and times. Remember that R will assume the time is in the current user’s time zone. This almost always means the time zone used by the operating system in which R is running. If you did something silly like record data in one time zone and analyze it in another, you have to be careful. For example, I once ran a field study in Indiana where data were recorded in Eastern time. But, the office where I analyzed the data was in Missouri (Central time). R kept converting the time-stamped data to Central time, which interfered with the analysis until I learned how to work with time zones in R. To make things worse, data were recorded in the summer (Eastern daylight time) but analyzed in both early fall (Central daylight time) and late fall (Central standard time).</p>
@@ -1522,7 +1522,7 @@ $e2
 <span id="cb98-9"><a href="#cb98-9" aria-hidden="true" tabindex="-1"></a>a2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"13:21"</span>, <span class="st">"09:15"</span>)</span>
 <span id="cb98-10"><a href="#cb98-10" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">strptime</span>(a2, <span class="st">"%H:%M"</span>)</span>
 <span id="cb98-11"><a href="#cb98-11" aria-hidden="true" tabindex="-1"></a>x2</span>
-<span id="cb98-12"><a href="#cb98-12" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-08-02 13:21:00 EDT" "2026-08-02 09:15:00 EDT"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb98-12"><a href="#cb98-12" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-08-03 13:21:00 EDT" "2026-08-03 09:15:00 EDT"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Time zone names are not always portable across systems. R has a list of built-in time zones that it can handle, and these should work, but be careful and <strong><em>always</em></strong> validate any code that depends on time zones. The list of time zones R can use can be printed to the console with the command <code>OlsonNames()</code>.</p>
 <div class="cell">
@@ -1599,13 +1599,13 @@ $e2
 <span id="cb104-13"><a href="#cb104-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb104-14"><a href="#cb104-14" aria-hidden="true" tabindex="-1"></a><span class="do">## calculate time in different units:</span></span>
 <span id="cb104-15"><a href="#cb104-15" aria-hidden="true" tabindex="-1"></a><span class="fu">difftime</span>(y,x, <span class="at">units=</span><span class="st">"days"</span>)</span>
-<span id="cb104-16"><a href="#cb104-16" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 8003.012 days</span></span>
+<span id="cb104-16"><a href="#cb104-16" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 8002.375 days</span></span>
 <span id="cb104-17"><a href="#cb104-17" aria-hidden="true" tabindex="-1"></a><span class="fu">difftime</span>(y,x, <span class="at">units=</span><span class="st">"hours"</span>)</span>
-<span id="cb104-18"><a href="#cb104-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 192072.3 hours</span></span>
+<span id="cb104-18"><a href="#cb104-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 192057 hours</span></span>
 <span id="cb104-19"><a href="#cb104-19" aria-hidden="true" tabindex="-1"></a><span class="fu">difftime</span>(y,x, <span class="at">units=</span><span class="st">"mins"</span>)</span>
-<span id="cb104-20"><a href="#cb104-20" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 11524338 mins</span></span>
+<span id="cb104-20"><a href="#cb104-20" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 11523420 mins</span></span>
 <span id="cb104-21"><a href="#cb104-21" aria-hidden="true" tabindex="-1"></a>y<span class="sc">-</span>x</span>
-<span id="cb104-22"><a href="#cb104-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 8003.012 days</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb104-22"><a href="#cb104-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 8002.375 days</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Another application: what is the time difference between Chicago and Honolulu?</p>
 <div class="cell">

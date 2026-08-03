@@ -878,23 +878,23 @@ window.Quarto = {
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># print to console</span></span>
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>a          </span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.8403993 0.7777897 0.6811929 0.6555584 0.3604875</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.4225946 0.4273200 0.6980133 0.7493878 0.3909880</span></span>
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 3rd element</span></span>
 <span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">3</span>]       </span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.6811929</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.6980133</span></span>
 <span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="co"># elements 2-4</span></span>
 <span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>]     </span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.7777897 0.6811929 0.6555584</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.4273200 0.6980133 0.7493878</span></span>
 <span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="co"># elements other than 1</span></span>
 <span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>a[<span class="sc">-</span><span class="dv">1</span>]      </span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.7777897 0.6811929 0.6555584 0.3604875</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.4273200 0.6980133 0.7493878 0.3909880</span></span>
 <span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="co"># elements other than 1 and 2</span></span>
 <span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>a[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)] </span>
-<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.6811929 0.6555584 0.3604875</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.6980133 0.7493878 0.3909880</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You can inspect a vector (or any object) by printing it to the console. Do this by typing the object’s name into the console at the command prompt <code>&gt;</code> and pressing ENTER.</p>
 <div class="cell">
@@ -907,10 +907,9 @@ window.Quarto = {
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] 0.66250809 0.71119324 0.78452904 0.22882617 0.45836093 0.02144950
- [7] 0.70479888 0.20059223 0.51571190 0.50565330 0.18321696 0.88526391
-[13] 0.57870320 0.07696296 0.41857462 0.24546002 0.97926650 0.29979449
-[19] 0.86434421 0.45354041</code></pre>
+<pre><code> [1] 0.9644274 0.8511006 0.9895011 0.7160127 0.1957198 0.7670751 0.4925316
+ [8] 0.4955673 0.5171900 0.9543227 0.1688985 0.3357372 0.8523162 0.2212228
+[15] 0.2548527 0.1388119 0.6838656 0.5356243 0.8549563 0.4098636</code></pre>
 </div>
 </div>
 <p>Each element of a vector can have a name, set or accessed using the function <code>names()</code>. Element names can even be used to access elements of a vector.</p>
@@ -921,10 +920,10 @@ window.Quarto = {
 <span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "value1" "value2" "value3"</span></span>
 <span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>a</span>
 <span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="do">##    value1    value2    value3 </span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="do">## 0.9824800 0.5662993 0.6666598</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="do">## 0.4607700 0.6086813 0.6623285</span></span>
 <span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>a[<span class="st">"value3"</span>]</span>
 <span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="do">##    value3 </span></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="do">## 0.6666598</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="do">## 0.6623285</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Vectors can be extended using <code>c()</code> or by changing their length. Changing the length of a vector can also shorten it. If a vector is made longer than the number of values it has, the extra elements will be filled in with <code>NA</code>, which is the label R uses for blanks.</p>
 <div class="cell">
@@ -978,8 +977,8 @@ window.Quarto = {
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">10</span>)</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>a</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="do">##  [1] 0.614215310 0.003022557 0.716010888 0.518072749 0.785887077 0.708931999</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="do">##  [7] 0.856103154 0.014534186 0.217788894 0.755453392</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="do">##  [1] 0.25647812 0.84368977 0.97534988 0.65817838 0.39059280 0.95288864</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="do">##  [7] 0.02810212 0.58745817 0.27662509 0.82801144</span></span>
 <span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">is.atomic</span>(a)</span>
 <span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -1027,13 +1026,13 @@ window.Quarto = {
 <span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a><span class="do">##  One Sample t-test</span></span>
 <span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
 <span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a><span class="do">## data:  rnorm(20)</span></span>
-<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a><span class="do">## t = 0.18751, df = 19, p-value = 0.8532</span></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a><span class="do">## t = 0.14488, df = 19, p-value = 0.8863</span></span>
 <span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a><span class="do">## alternative hypothesis: true mean is not equal to 0</span></span>
 <span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a><span class="do">## 95 percent confidence interval:</span></span>
-<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a><span class="do">##  -0.3605395  0.4314976</span></span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a><span class="do">##  -0.3708162  0.4259706</span></span>
 <span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a><span class="do">## sample estimates:</span></span>
 <span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a><span class="do">##  mean of x </span></span>
-<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a><span class="do">## 0.03547906 </span></span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a><span class="do">## 0.02757718 </span></span>
 <span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
 <span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
 <span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a><span class="do">## $z$n</span></span>
@@ -1504,8 +1503,8 @@ window.Quarto = {
 <span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>a</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
- [1] 0.90624262 0.24923854 0.99463522 0.09305748 0.88794830 0.44029307
- [7] 0.06021117 0.66406903 0.29519170 0.14540123
+ [1] 0.25550474 0.10484434 0.85952151 0.64185505 0.82613864 0.74385157
+ [7] 0.59454234 0.54509080 0.05981513 0.84553795
 
 [[2]]
 [1] "zebra"
@@ -1523,8 +1522,8 @@ window.Quarto = {
 <span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>b</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$x
- [1] 0.90624262 0.24923854 0.99463522 0.09305748 0.88794830 0.44029307
- [7] 0.06021117 0.66406903 0.29519170 0.14540123
+ [1] 0.25550474 0.10484434 0.85952151 0.64185505 0.82613864 0.74385157
+ [7] 0.59454234 0.54509080 0.05981513 0.84553795
 
 $y
 [1] "zebra"
@@ -1542,8 +1541,8 @@ $z
 <span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>a2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
- [1] 0.90624262 0.24923854 0.99463522 0.09305748 0.88794830 0.44029307
- [7] 0.06021117 0.66406903 0.29519170 0.14540123
+ [1] 0.25550474 0.10484434 0.85952151 0.64185505 0.82613864 0.74385157
+ [7] 0.59454234 0.54509080 0.05981513 0.84553795
 
 [[2]]
 [1] "zebra"
@@ -1555,8 +1554,8 @@ $z
 [3,]    3    6    9   12
 
 $x
- [1] 0.90624262 0.24923854 0.99463522 0.09305748 0.88794830 0.44029307
- [7] 0.06021117 0.66406903 0.29519170 0.14540123
+ [1] 0.25550474 0.10484434 0.85952151 0.64185505 0.82613864 0.74385157
+ [7] 0.59454234 0.54509080 0.05981513 0.84553795
 
 $y
 [1] "zebra"
@@ -1571,8 +1570,8 @@ $z
 <p>Single elements of a list can be accessed with <strong>double brackets</strong> <code>[[]]</code>. As with other objects, elements can be selected by name or by index. If selecting by name, the <code>$</code> symbol can be used instead of double brackets.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>a[[<span class="dv">1</span>]]</span>
-<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="do">##  [1] 0.90624262 0.24923854 0.99463522 0.09305748 0.88794830 0.44029307</span></span>
-<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="do">##  [7] 0.06021117 0.66406903 0.29519170 0.14540123</span></span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="do">##  [1] 0.25550474 0.10484434 0.85952151 0.64185505 0.82613864 0.74385157</span></span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="do">##  [7] 0.59454234 0.54509080 0.05981513 0.84553795</span></span>
 <span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>b[[<span class="dv">2</span>]]</span>
 <span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "zebra"</span></span>
 <span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a>b[[<span class="st">"z"</span>]]</span>
@@ -1600,8 +1599,8 @@ $z
 <span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>a2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
- [1] 0.90624262 0.24923854 0.99463522 0.09305748 0.88794830 0.44029307
- [7] 0.06021117 0.66406903 0.29519170 0.14540123
+ [1] 0.25550474 0.10484434 0.85952151 0.64185505 0.82613864 0.74385157
+ [7] 0.59454234 0.54509080 0.05981513 0.84553795
 
 [[2]]
 [1] "zebra"</code></pre>

@@ -117,7 +117,7 @@ This work is roughly organized into 9 parts. The links below will take you strai
 
 [Module 11](chapters/ch11.qmd#sec-11) is a guide to selecting statistics for your research. This module contains dichotomous keys to help you decide what statistical methods are most appropriate for the question you are trying to analyze.
 
-**Part 4** is a review of introductory statistics--basically everything you probably learned in your undergraduate statistics course, but could use refresher on.
+**Part 4** is a review of introductory statistics--basically everything you learned in your undergraduate statistics course, but could probably use a refresher on.
 
 [Module 12](chapters/ch12.qmd#sec-12) reviews the structure of biological datasets, null hypothesis significance testing, and the 4 classes of statistical tests used by biologists.
 
@@ -167,11 +167,11 @@ Finally, [Appendix A](chapters/ch29.qmd#sec-29) describes the NEON dataset that 
 
 ## About the author {.unnumbered}
 
-![](squirrel_pic.jpg){fig-align="center"}
+![](images/squirrel_pic.jpg){fig-align="center"}
 
-I'm a [quantitative ecologist at Kennesaw State University](https://facultyweb.kennesaw.edu/ngreen62/index.php) who studies human impacts on animal populations. Since earning my PhD at Baylor University in 2012, I've been fortunate to have worked in a variety of government and industry roles. Those experiences have shaped my perspective on biology and education. In my courses and advising I do my best to impress upon students the variety of biological experiences and perspectives that different domains bring to the table...and the value that they all bring. Most of my [current research](https://facultyweb.kennesaw.edu/ngreen62/research.php) focuses on understanding human impacts on animal communities and how animal populations adapt to rapidly changing environments.
+I'm a [quantitative ecologist at Kennesaw State University](https://facultyweb.kennesaw.edu/ngreen62/index.php) who studies human impacts on animal populations. Since earning my PhD at Baylor University in 2012, I've been fortunate to have worked in a variety of government and industry roles. Those experiences have shaped my perspective on biology and education. In my courses and advising I do my best to impress upon students the variety of biological experiences and perspectives that different domains bring to the table...and the value that they all bring. Most of my [current research](https://greenquanteco.github.io/research) focuses on understanding human impacts on animal communities and how animal populations adapt to rapidly changing environments.
 
-![](lab_logo_02.jpg){fig-align="center"}
+![](images/lab_logo_02.jpg){fig-align="center"}
 
 Why am I making this guide? I have been using R since about 2008, when I was a graduate student trying to make a multi-panel plot for a manuscript. I had seen R mentioned in publications and thought that using R would be more effective than kludging something together with Excel and Powerpoint. Needless to say, jumping straight to making plots with the `lattice` package was not the easiest way to learn R. The final result was a little clunky [@kirchner2011] but I am still really proud of it. Eventually I took some courses and did a lot of self-teaching, and am finally (March 2025) pretty decent at R. I have used R in my work pretty much continuously since 2008 for everything from Bayesian data analysis [e.g., @green2020] to simulation modeling [e.g., @green2019].
 

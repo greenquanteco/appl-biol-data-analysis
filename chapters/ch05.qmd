@@ -397,9 +397,9 @@ a[-c(1,2),,drop=FALSE]
 
 #### Selecting from an array {#sec-05-select-bas-arr}
 
-Selecting from an array is a lot like selecting from a matrix, only with one more dimension. Consider an array with 3 dimensions: rows, columns, and "layers"[^ch05-1].
+Selecting from an array is a lot like selecting from a matrix, only with one more dimension. Consider an array with 3 dimensions: rows, columns, and "layers"[^arraylayers].
 
-[^ch05-1]: I don't know if there is an actual name for this, but I like to call them layers.
+[^arraylayers]: I don't know if there is an actual name for this, but I like to call them layers.
 
 ```{r}
 Ar <- array(1:24, dim=c(4,2,3))
