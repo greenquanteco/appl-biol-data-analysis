@@ -858,11 +858,19 @@ The methods above are a way to examine single variables, or single pairs of vari
 - **Cluster identification:** observations that are closer to each other in the ordination space are more similar to each other
 - **Dimension reduction:** the axes of an ordination are estimates of synthetic variables that combine information about many variables at once
 
+Biologists use many different ordination techniques to analyze patterns in many variables at once. Regardless of the specific technique, the basic interpretation is usually the same:
+
+1. Points that are closer together are more similar to each other.
+1. Variables get bigger in the direction of their arrow.
+
+These two rules will work for almost any ordination you are likely to encounter in biology: PCA, redundancy analysis, canonical correspondence analysis, nonmetric multidimensional scaling (my favorite), linear discriminant analysis, and the list goes on.
+
 #### Principal components analysis (PCA)
 
 **Principal components analysis (PCA)** is a method for extracting synthetic gradients from a multivariate dataset that capture most of the variation in that dataset. These gradients are calculated by finding linear combinations of the variables that minimize sums of squared deviations from the gradient. In other words, PCA translates the variation between observations in terms of the original, many variables, into variation along a few artificial variables called **principal components**. 
 
-If you've never heard of PCA or ordination, it might be worth watching a video that explains and shows the basic ideas. Here is [**one that only takes 5 minutes and has a nice theme song**](https://www.youtube.com/watch?v=HMOI_lkzW08) (accessed 2021-08-10). For a more in-depth introduction to PCA, see [Module 24](#mod-24-pca). You can probably follow the rest of this section without that much deepth though.
+The basic problem is this: you can see a pattern in one variable with a histogram (@sec-08-sing-hist). You can see a pattern in 2 or 3 variables (i.e., dimensions) with a scatterplot (@sec-08-two-scatter). But what if you have 4 variables? 10 variables?
+If you've never heard of PCA or ordination, it might be worth watching a video that explains and shows the basic ideas. Here is [**one that only takes 5 minutes and has a nice theme song**](https://www.youtube.com/watch?v=HMOI_lkzW08) (accessed 2021-08-10). For a more in-depth introduction to PCA, see [Module 24](#mod-24-pca). For now, let's just go with "PCA helps us visualize patterns involving many variables at once".
 
 PCA is available in base R using the functions `prcomp()` and `princomp()`. Both of these functions produce similar outputs, but there are some subtle differences between them. For this course we are going to use the PCA function in package `vegan`. Although designed for community ecology, `vegan` is widely used for ordination and multivariate analysis in many fields. Importantly, `vegan` is actively maintained and updated with new techniques as they are developed. Also importantly, `vegan` offers a common interface for many kinds of ordination.
 
@@ -894,50 +902,58 @@ The `summary()` command will print a lot of information about the ordination. It
 summary(p1)
 ```
 
-The "Importance of components" part tells us that the first principal component (PC1) explains about 55% of the variation in the dataset. PC2 explains an additional 26%. The rule of thumb is to present enough PCs to account for $\ge{80\%}$ of the variation. In this case, PC1 and PC2 are sufficient. If it takes many PCs to reach 80% of variation, that may be a sign that the PCs are not capturing much meaningful structure in your dataset (or, there simply isn't much structure to capture).
+The "Importance of components" part tells us that the first principal component (PC1) explains about 27.8% of the variation in the dataset. PC2 explains an additional 19.4%. One rule of thumb people use is to present enough PCs to account for $\ge{80\%}$ of the variation. If it takes many PCs to reach 80% of variation, that may be a sign that the PCs are not capturing much meaningful structure in your dataset (or, there simply isn't much structure to capture).
 
-Finally, we can see the variable "loadings", which tell us how much each variable is correlated with each principal component[^loadings]. These values are interpreted the same way as linear correlation coefficients (@sec-06-co-lin). In the example below the loadings for PCs 1-4 are requested using argument choices = 1:4.
+Finally, we can see the variable **loadings**, which describe the contribution of each original variable to each principal component[^loadings]. Loadings with larger absolute values indicate variables that contribute more strongly to an axis, while the sign indicates the direction of that relationship. In the example below, unscaled loadings for PCs 1-4 are requested using `choices=1:4` and `scaling=0`.
 
-[^loadings]: In the base R PCA functions, these values are obtained from the `rotation` part of the output in `prcomp()` or from the `loadings` component in `princomp()`.
+[^loadings]: Different software packages define loadings slightly differently. Some report the coefficients (eigenvectors) used to calculate the principal components, while others report the correlations between the original variables and the principal components. The two are closely related and usually lead to the same qualitative interpretation. We'll discuss this more in @mod-28.
 
 ```{r}
 scores(p1, choices = 1:4, display = "species", scaling = 0)
 ```
 
-The loadings tell us that PC1 is strongly influenced by species `Cladstel` and less so by `Pleuschr`. Compare this to the orientation and lengths of the arrows for these species in the biplot and see if you can find a connection.
-
-
+The loadings indicate that PC1 is strongly associated with species `Cladrang` and, to a lesser extent, `Pleuschr`. The signs of the loadings indicate whether the species vary in the positive or negative direction along PC1. Compare this to the orientation and length of the corresponding arrow in the biplot. Variables with larger absolute loadings generally have longer arrows and exert a stronger influence on the principal component.
 
 #### Plotting ordinations
 
-Extracting the scores from an ordination object can let you plot points with all of the `base` graphics formatting tricks we learned above, such as using color or shape to indicate group membership. In my experience this is more flexible than using the built-in graphics capabilities in `vegan`[^06-explore3-5], but your mileage may vary.
+Extracting the scores from an ordination object can let you plot points with all of the `base` graphics formatting methods we learned above (@sec-08-two), such as using color or shape to indicate group membership. In my experience this is more flexible than using the built-in graphics capabilities in `vegan`[^veganfigs], but your mileage may vary.
 
-[^06-explore3-5]: An introduction by the package's lead author can be found here: <https://cran.r-project.org/web/packages/vegan/vignettes/intro-vegan.pdf> (accessed 2021-09-17)
+[^veganfigs]: An introduction by the package's lead author can be found by running this command:`vignette(topic="intro-vegan", package="vegan")`.
 
 ```{r, fig.width=10, fig.height=5, fig.align="center"}
+# load some data
+data(crabs, package="MASS")
+
+# make a spare copy
 x <- crabs
-p1 <- rda(x[,4:8])
-n1 <- metaMDS(x[,4:8])
 
-p1s <- scores(p1)$sites
-p1p <- scores(p1)$species
+# fit the PCA on the numerical variables
+p1 <- pca(x[,4:8], scale=TRUE)
 
-n1s <- scores(n1, "sites")
-n1p <- scores(n1, "species")
+# extract the "scores": coordinates on PC axes
+site.scores <- scores(p1, choices=1:2,
+                      display="sites", scaling="sites")
 
-cols1 <- ifelse(x$sex == "F", "red", "blue")
-pch1 <- ifelse(x$sp == "B", 2, 1)
+# define some colors for sex
+use.colors <- c("red", "blue")
+names(use.colors) <- sort(unique(x$sex))
+x$color <- use.colors[x$sex]
 
-par(mfrow=c(1,2))
-plot(p1s, col=cols1, pch=pch1, main="PCA fit")
+# define some shapes for species
+use.pch <- c(2,1)
+names(use.pch) <- sort(unique(x$sp))
+x$pch <- use.pch[x$sp]
+
+# build the plot
+par(mfrow=c(1,1))
+plot(site.scores, col=x$color, pch=x$pch,
+     xlab="PC1 (95.8%)", ylab="PC2 (3.0%)")
 legend("topleft",
        legend=c("B female", "B male", "O female", "O male"),
        pch=c(2, 2, 1, 1),
        col=c("red", "blue", "red", "blue"))
-plot(n1s, col=cols1, pch=pch1, main="NMDS fit")
 ```
 
 #### Ordination wrap-up (for now)
 
 Ordination is a collection of methods for reducing the dimensionality of data. Biological datasets often have many variables, but most variation in those datasets can often be captured using only a few of them (or few combinations of the variables). The positions of the samples in the ordination space can thus reveal patterns that are too complicated to see in the full data space. Interpreting ordination axes in biological terms can be very fruitful. When an axis captures important information about the samples, it can be used as a variable in another method (e.g., as a predictor variable in a linear model). Analysis of clustering or positional differences between groups in ordination space (especially NMDS space) can allow for researchers to test for differences in many variables at once.
-
