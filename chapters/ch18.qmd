@@ -4,3 +4,4 @@
  
  2! Hah ha ha
  
+## Poisson GLM for counts {#sec-18-poisson}

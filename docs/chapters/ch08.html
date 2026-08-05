@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>8&nbsp; Visualizing biological data – Applied Biological Data Analysis</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -20,7 +23,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -34,15 +91,14 @@ ul.task-list li input[type="checkbox"] {
 <link href="../chapters/ch07.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -72,6 +128,35 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -97,9 +182,7 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -414,7 +497,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-08-sing" id="toc-sec-08-sing" class="nav-link active" data-scroll-target="#sec-08-sing"><span class="header-section-number">8.1</span> Visualizing single variables</a>
+  <li><a href="#sec-08-single" id="toc-sec-08-single" class="nav-link active" data-scroll-target="#sec-08-single"><span class="header-section-number">8.1</span> Visualizing single variables</a>
   <ul class="collapse">
   <li><a href="#sec-08-sing-hist" id="toc-sec-08-sing-hist" class="nav-link" data-scroll-target="#sec-08-sing-hist"><span class="header-section-number">8.1.1</span> Histograms</a></li>
   <li><a href="#sec-08-sing-bar" id="toc-sec-08-sing-bar" class="nav-link" data-scroll-target="#sec-08-sing-bar"><span class="header-section-number">8.1.2</span> Barplots</a></li>
@@ -424,12 +507,12 @@ ul.task-list li input[type="checkbox"] {
   </ul></li>
   <li><a href="#sec-08-two" id="toc-sec-08-two" class="nav-link" data-scroll-target="#sec-08-two"><span class="header-section-number">8.2</span> Visualizing 2 variables</a>
   <ul class="collapse">
-  <li><a href="#sec-08-two-scatter" id="toc-sec-08-two-scatter" class="nav-link" data-scroll-target="#sec-08-two-scatter"><span class="header-section-number">8.2.1</span> Scatterplots</a></li>
+  <li><a href="#sec-08-two-scatter" id="toc-sec-08-two-scatter" class="nav-link" data-scroll-target="#sec-08-two-scatter"><span class="header-section-number">8.2.1</span> Scatterplots for 2 continuous variables</a></li>
   </ul></li>
   <li><a href="#sec-08-many" id="toc-sec-08-many" class="nav-link" data-scroll-target="#sec-08-many"><span class="header-section-number">8.3</span> Visualizing many variables</a>
   <ul class="collapse">
-  <li><a href="#sec-08-many-pair" id="toc-sec-08-many-pair" class="nav-link" data-scroll-target="#sec-08-many-pair"><span class="header-section-number">8.3.1</span> Scatterplots</a></li>
-  <li><a href="#sec-08-many-ord" id="toc-sec-08-many-ord" class="nav-link" data-scroll-target="#sec-08-many-ord"><span class="header-section-number">8.3.2</span> Ordinations</a></li>
+  <li><a href="#sec-08-many-pair" id="toc-sec-08-many-pair" class="nav-link" data-scroll-target="#sec-08-many-pair"><span class="header-section-number">8.3.1</span> Scatterplot matrices for many variables</a></li>
+  <li><a href="#sec-08-many-ord" id="toc-sec-08-many-ord" class="nav-link" data-scroll-target="#sec-08-many-ord"><span class="header-section-number">8.3.2</span> Ordination (brief introduction)</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch08.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -456,40 +539,1105 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="sec-08-sing" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="sec-08-sing"><span class="header-section-number">8.1</span> Visualizing single variables</h2>
+<section id="sec-08-single" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="sec-08-single"><span class="header-section-number">8.1</span> Visualizing single variables</h2>
+<p>In statistics, we think of values within a variable coming from a probability distribution. <strong>Probability distributions</strong>, or <strong>distributions</strong> for short, are mathematical functions that describe the way that values vary randomly. Distributions are a key idea in statistics and data analysis and we’ll cover them in detail in the <a href="@sec-09">next module</a>. We usually consider data to be essentially random, but with the values forming predictable patterns over many observations. The nature of those patterns is what probability distributions attempt to model. A probability distribution does not tell us the value of any particular observation, but it does let us estimate the likelihood of observing any particular value. The figure below demonstrates some common probability distributions: the heights of the bars reflect the likelihood of the values on the <em>x</em>-axes occurring under those distributions.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Successful data analysis requires paying attention to and thinking carefully about the way that your data are distributed. Different kinds of biological processes, like counts, waiting times, measurements, etc., have randomness that is described by different probability distributions. The assumption that values follow certain distributions is baked into most statistical methods. Trying to use a method that assumes an inappropriate distribution will probably lead to invalid results.</p>
+<p>For example, if you try to analyze count data as if they came from a continuous, unbounded distribution, your statistical model could predict nonsensical outcomes such as negative or non-integer counts. The figure below shows this: the red shaded area are predictions of negative counts!</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Sometimes it is not always obvious what distribution your data should follow. Some cases are relatively straight forward: counts should usually follow a Poisson or negative binomial distribution. Other cases are less straightforward: should gene expression data be considered normally, log-normally, or some other-ly distributed? Usually there is a clear <em>a priori</em> answer to this question that can be obtained by thinking about what kind of process gave rise to the numbers.</p>
+<p>A related question to “what distribution does my data follow?” is “do my data follow this distribution?” Even if you have some expectation of how your data should be distributed, that is no guarantee that your study system cooperated. You should always check to see if your data follow the distribution you assumed, and the distribution assumed by your statistical test.</p>
+<p>Deciding what distribution your data follow is always somewhat subjective, and real datasets often contain some departure from expectations. In this section we will explore some graphical techniques and heuristics for determining how data are distributed.</p>
+<p>Knowing about <a href="@sec-09">data distributions</a> is a one thing, but is quite another. Like much of the data analysis workflow, picking a distribution can be as much an art as it is a science. This is because distributions of real data are often messy, or do not conform exactly to any one distribution, or may conform partly to several! Sometimes the answer to “what distribution should I use to analyze this data?” is not clear-cut.</p>
+<p>The figure below gives a (very) rough guide to starting to identify a response distribution. Note that this is only a guide for where to look first, and not a definitive guide to selecting a response distribution. Even if your choices lead you to, say, the normal distribution, you must still verify that your data conform (at least roughly) to that distribution. Note also that this diagram does not include every distribution out there, but rather a select set of commonly encountered distributions in biology.</p>
+<p><img src="../images/08-01.jpg" class="img-fluid" alt="Flowchart for picking a probability distribution for your data">{#fig-alt=“Decision tree for selecting a probability distribution based on the response variable. First determine whether the response is continuous or discrete. Continuous variables that are unbounded are modeled with a normal distribution. Bounded continuous variables are modeled with a beta distribution if bounded on both sides. If bounded only on the left, use a truncated normal distribution when the variance is not much larger than the mean, or a log-normal, gamma, exponential, or inverse Gaussian distribution when the variance greatly exceeds the mean. For discrete variables, first determine whether the response is binary. Binary responses use a binomial distribution. Nonbinary discrete responses are divided into counts and waiting times. Waiting times use a geometric distribution or, when overdispersed, a negative binomial distribution. Count data are next classified as simple counts or counts out of a fixed denominator (proportions). Counts out of a denominator are treated as binomial data. For simple counts, use a Poisson distribution when the variance is approximately equal to the mean and a negative binomial distribution when the variance greatly exceeds the mean.”}</p>
 <section id="sec-08-sing-hist" class="level3" data-number="8.1.1">
 <h3 data-number="8.1.1" class="anchored" data-anchor-id="sec-08-sing-hist"><span class="header-section-number">8.1.1</span> Histograms</h3>
+<p><strong>Histograms</strong> show how values of a distribution are spread across different intervals. These intervals are sometimes called <strong>cells</strong> or <strong>bins</strong>. A good histogram will show, approximately, the shape of a <strong>probability density function (PDF)</strong> of a <a href="@sec-09-cont">continuous distribution</a> or the <strong>probability mass function (PMF)</strong> of a <a href="@sec-09-disc">discrete distribution</a>. A histogram with bin widths of 0 should look like a <a href="@sec-08-sing-kern">kernel density plot</a>.</p>
+<p>The base function <code>hist()</code> will automatically select intervals that look nice, but you can specify the intervals with argument <code>breaks</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1 row, 2 column plot layout</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x, <span class="at">sub=</span><span class="st">"Default breaks"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x, <span class="at">breaks=</span><span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="at">by=</span><span class="dv">2</span>), <span class="at">sub=</span><span class="st">"Different breaks"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># reset plot layout to 1 x 1</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The <em>area</em> of each bar is also proportional to the number of values in each interval.</p>
+<p>R histograms can be presented as counts (<code>freq=TRUE</code>, the default), or as probability density (<code>freq=FALSE</code>). We’ll talk more about probability density later in the <a href="@sec-05-dists1">next section</a>.</p>
+<p>Compare these results:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x, <span class="at">freq=</span><span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># reset</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Because the second histogram shows probability densities, the areas under the bars sum to 1 (this is part of the definition of a PDF) (see <a href="#sec-09-cont" class="quarto-xref"><span class="quarto-unresolved-ref">sec-09-cont</span></a>).</p>
+<p>A histogram can provide a visual first clue as to the shape of a distribution’s PDF or PMF. For example, the histograms of <code>x1</code> and <code>x2</code> below suggest very different distributions:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1000</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(<span class="dv">1000</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x1)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># reset</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Notice that <code>x1</code> appears roughly normal. It is symmetric, has a bell-shape, and is concentrated near its center. Contrast this with <code>x2</code>. Distribution <code>x2</code> is strongly right-skewed (i.e., lots of small values with a long positive tail), with most values near 0. It also has no negative values (<code>range(x2)</code>). Because of these properties we might suspect that <code>x2</code> is really a log-normal distribution. We can check this by making a histogram of the log of <code>x2</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">log</span>(x2))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Other distributions might be tricky. Consider the histograms below:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1000</span>, <span class="dv">5</span>, <span class="dv">2</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1000</span>, <span class="dv">15</span>, <span class="dv">3</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>x3 <span class="ot">&lt;-</span> <span class="fu">c</span>(x1, x2)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1000</span>, <span class="dv">5</span>, <span class="dv">2</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1000</span>, <span class="dv">3</span>, <span class="dv">20</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>x4 <span class="ot">&lt;-</span> <span class="fu">c</span>(x1, x2)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x3)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x4)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># reset</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>What a mess!</p>
+<ul>
+<li>Histogram <code>x3</code> shows what is commonly referred to as a <strong>bimodal</strong> distribution. This is a distribution with two <strong>modes</strong>, or most common values, with a gap between them. Bimodal distributions often arise from a <strong>mixture</strong> of two distributions (in this case, two normals). Or, they can indicate that something in the data generating process leads to diverging outcomes. For example, in many college courses the grade distribution can be bimodal, with most students making either a B or D.</li>
+<li>Histogram <code>x4</code> shows a distribution with some right skew, but not the long, tapering tail characteristic of the lognormal distribution (see <code>x2</code>, above). The fact that the mean is near 5 and not 0 is another point against a lognormal. But the clincher is that there are negative values, which a lognormal distribution cannot take (think about why this is).</li>
+</ul>
+<p>Think for a few minutes about what distribution <code>x4</code> might be, then click the footnote to find out<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 </section>
 <section id="sec-08-sing-bar" class="level3" data-number="8.1.2">
 <h3 data-number="8.1.2" class="anchored" data-anchor-id="sec-08-sing-bar"><span class="header-section-number">8.1.2</span> Barplots</h3>
+<p>Barplots are usually used to show the <em>mean</em> within each group. But, that’s all they show. Barplots might be more appropriate than barplots if you have so many groups that a boxplot is too cluttered to read, or if the distributions within each group are known to be symmetrical and about the same width (and thus, showing them is not necessary).</p>
+<p>Unlike <code>boxplot()</code>, <code>barplot()</code> does not calculate its own values. The values supplied to <code>barplot()</code> will be used as the bar heights. This means you need to calculate the means (or medians or whatever) ahead of time using a function like <code>aggregate()</code>. In the example, below, SD is also calculated so the plot will include some measure of variability. This is one of the disadvantages of barplots in R compared to boxplots: <code>boxplot()</code> automatically computes and displays variability about the mean, but <code>barplot()</code> does not.</p>
+<p>Another difference is that unlike <code>boxplot()</code>, the <em>x</em> coordinates in a barplot are calculated by the <code>barplot()</code> function. What this means is that you often need to run it twice: once to get the <em>x</em> coordinates, and again to make the plot. Those <em>x</em> coordinates are needed to place the line segments that show the SD.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get means and SD of a y variable by species in iris</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>agg <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(Petal.Length<span class="sc">~</span>Species, <span class="at">data=</span>iris, mean)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>agg<span class="sc">$</span>sd <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(Petal.Length<span class="sc">~</span>Species,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data=</span>iris, sd)<span class="sc">$</span>Petal.Length</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># get x axis values</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>bar <span class="ot">&lt;-</span> <span class="fu">barplot</span>(Petal.Length<span class="sc">~</span>Species, <span class="at">data=</span>agg)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make plot with second call</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(Petal.Length<span class="sc">~</span>Species, <span class="at">data=</span>agg, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">7</span>))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(bar[,<span class="dv">1</span>], agg<span class="sc">$</span>Petal.Length, bar[,<span class="dv">1</span>], agg<span class="sc">$</span>Petal.Length<span class="sc">+</span>agg<span class="sc">$</span>sd)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The above plot is called a “dynamite plot” because the bar and error bar look like an old stick of dynamite. Because they show less than a boxplot, and are harder to make than a boxplot, I almost never make dynamite plots. Instead, I suggest you use boxplots or something like the “point-and-whisker” plots below (<a href="#sec-08-sing-box" class="quarto-xref"><span class="quarto-unresolved-ref">sec-08-sing-box</span></a>).</p>
 </section>
 <section id="sec-08-sing-box" class="level3" data-number="8.1.3">
 <h3 data-number="8.1.3" class="anchored" data-anchor-id="sec-08-sing-box"><span class="header-section-number">8.1.3</span> Boxplots</h3>
+<p><strong>Boxplots</strong>, or <strong>box-and-whisker plots</strong>, summarize the distribution of continuous variables. They are often used to summarize data by a factor, making it easier to see how the distribution of a variable differs between groups. The boxplot shows the median, the first and third quartiles, and extreme values (whiskers and points)<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>Boxplot of a single variable:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(iris<span class="sc">$</span>Petal.Width)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Boxplot with some options for a nicer plot:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(iris<span class="sc">$</span>Petal.Width,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab=</span><span class="st">"Petal width (cm)"</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Boxplot across levels of a factor (note formula interface):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(iris<span class="sc">$</span>Petal.Width<span class="sc">~</span>iris<span class="sc">$</span>Species,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab=</span><span class="st">"Species"</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab=</span><span class="st">"Petal.Width (cm)"</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A highly asymmetric box-and-whisker plot can indicate that data are skewed or non-normal.</p>
+<p>The base <code>boxplot()</code> function can produce summaries across multiple variables. Essentially it treats each combination of grouping variables as a separate set of values. There are better ways to plot group differences (e.g., for publication), but the base <code>boxplot()</code> does just fine for data exploration.</p>
+<p>Boxplots can be constructed using several grouping variables. The order of grouping variables in the formula will determine the order of boxes in the plot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> iris</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>x<span class="sc">$</span>color <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"white"</span>) <span class="co">#made up variable</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># group by species and color:</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Petal.Width<span class="sc">~</span>Species<span class="sc">+</span>color, <span class="at">data=</span>x,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab=</span><span class="st">"Petal width (cm)"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Notice the difference in order of grouping:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># difference in order of grouping:</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Petal.Width<span class="sc">~</span>color<span class="sc">+</span>Species, <span class="at">data=</span>x,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab=</span><span class="st">"Petal width (cm)"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>When constructing complicated boxplots, you may need to manually fix the x-axis labels, because they are not all rendered. Fortunately, the x-axis tick marks are simply numbered from left to right. So if, say, the 6<sup>th</sup> label was missing, you can draw it manually like this:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Petal.Width<span class="sc">~</span>Species<span class="sc">+</span>color, <span class="at">data=</span>x,</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab=</span><span class="st">"Petal width (cm)"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">3</span>))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># add missing tick mark with axis()</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="at">side=</span><span class="dv">1</span>, <span class="at">at=</span><span class="dv">6</span>, <span class="at">labels=</span><span class="st">"virginica.white"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>If you want to construct a totally custom box and whisker plot, you can do so using base graphics functions like <code>rect()</code>, <code>arrows()</code>, <code>segments()</code>, and so on. All you need is to get the values for the different parts of the boxplot by saving a boxplot to an object.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not run</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>myboxplot <span class="ot">&lt;-</span> <span class="fu">boxplot</span>(Petal.Width<span class="sc">~</span>Species<span class="sc">+</span>color, <span class="at">data=</span>x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The <code>stats</code> part of the resulting list will contain most of what you need. See <code>?boxplot.stats</code> for a guide.</p>
 </section>
 <section id="sec-08-sing-cdf" class="level3" data-number="8.1.4">
 <h3 data-number="8.1.4" class="anchored" data-anchor-id="sec-08-sing-cdf"><span class="header-section-number">8.1.4</span> ECDF plots</h3>
+<p>The <strong>cumulative distribution function (CDF)</strong> is the probability that a random variable will take on a value less than or equal to some value. Formally, we say that a continuous distribution <span class="math inline">\(x\)</span> will take on value <span class="math inline">\(\le{x}\)</span> with probability <span class="math inline">\(F\left(x\right)\)</span>, where <span class="math inline">\(F\left(x\right)\)</span> is the CDF.</p>
+<p>The figure below shows what this means.</p>
+<p><img src="../images/08-03.jpg" class="img-fluid" alt="Relationship between the cumulative distribution function (CDF, quantiles, and values of a variable x. The CDF, F(x), gives the probability that a random variable is less than or equal to a specified value. In this example, F(−0.253)=0.4, meaning that 40% of observations are expected to be less than or equal to −0.253. The CDF approaches 0 as x \rightarrow -\infty and 1 as x \rightarrow +\infty.">{alt-text: “Plot of the cumulative distribution function (CDF) of a normal distribution. The CDF is an S-shaped curve that increases smoothly from 0 to 1 as the value of the variable increases. Dashed red lines highlight the point where the CDF equals 0.4, showing that 40% of observations are less than or equal to x=−0.253. Additional annotations indicate that the CDF approaches 0 for very small values of x and approaches 1 for very large values of x. The figure illustrates that the CDF gives the cumulative probability up to a specified value of the variable.”}</p>
+<p>The figure shows the CDF of a normal distribution with mean = 0 and SD = 1 (i.e., the standard normal distribution. Like all CDFs, <span class="math inline">\(F\left(x\right)\)</span> increases monotonically (slope never changing sign) from 0 to 1 as <span class="math inline">\(x\)</span> increases from the lower bound to the upper bound of the distribution.</p>
+<p>In the case of the normal distribution, the bounds of <span class="math inline">\(x\)</span> are <span class="math inline">\(\left[-\infty,+\infty\right]\)</span>. The CDF approaches 0 as <span class="math inline">\(x\)</span> decreases, and approaches 1 as <span class="math inline">\(x\)</span> increases.</p>
+<p>The red dashed lines show how to interpret the relationship between the axes. For any value on the <em>x</em>-axis, the <em>y</em>-axis shows what proportion of values are <span class="math inline">\(\le{x}\)</span>. For any value on the <em>y</em>-axis, the <em>x</em>-axis shows the value at the <em>y</em>-th quantile of the distribution.</p>
+<p><strong>The CDF is in a very real sense the <em>definition</em> of a probability distribution.</strong></p>
+<p>Every probability distribution can be identified by a unique CDF. It doesn’t matter whether a distribution is continuous, discrete, or a mixture of both. The figure below shows what the CDFs of a discrete or mixed distribution look like compared to that of a continuous distribution<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<p><img src="../images/08-04.jpg" class="img-fluid" alt="Examples of cumulative distribution functions for different types of random variables. Discrete variables have stepwise CDFs because probability accumulates only at specific values. Continuous variables have smooth CDFs because probability accumulates continuously over an interval. Mixed distributions combine both features, with smooth segments interrupted by jumps corresponding to point masses.">{Three schematic cumulative distribution functions (CDFs) illustrating different types of distributions. The top panel, labeled “Discrete,” shows a step function with horizontal segments and jumps; open circles indicate the CDF immediately before each jump and filled circles indicate the value after the jump. The middle panel, labeled “Continuous,” shows a smooth S-shaped curve with no jumps, indicating that the CDF changes continuously. The bottom panel, labeled “Mixed,” shows a smooth curve containing a single jump, illustrating a distribution with both continuous probability and discrete point masses. The figure emphasizes that CDFs are step functions for discrete variables, smooth for continuous variables, and a combination of both for mixed distributions.}</p>
+<p>The examples below calculate and plot ECDF plots for a uniform (left) and a normal distribution (right).</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fl">1e3</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="dv">3</span>, <span class="dv">8</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">7</span>, <span class="dv">4</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">ecdf</span>(x1))</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">ecdf</span>(x2))</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co"># add lines at 20th percentile:</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="fl">0.2</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">quantile</span>(x2, <span class="fl">0.2</span>), <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The <em>y</em>-axis of an ECDF plot shows the calculated quantile of the distribution (e.g., 0.4 quantile = 40th percentile–40% of <em>x</em> are <span class="math inline">\(\le F(x)\)</span>). The <em>x</em>-axis shows the values of the distribution. In the <strong>left</strong> plot, we see that the slope of the ECDF plot is roughly constant. This suggests a uniform distribution. The plot on the <strong>right</strong> shows the S-shaped ECDF typical of a bell-shaped curve, so we might suspect a normal distribution. The red lines on the right plot illustrate that about 20% of values are <span class="math inline">\(\le{3.6}\)</span>.</p>
+<p>ECDF plots can be calculated for discrete distributions as well—they just look like step functions. Step-like ECDF plots can also appear when a continuous distribution has many more observations than unique values.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fl">1e3</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, <span class="dv">3</span>)   <span class="co"># Poisson </span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">rgeom</span>(n, <span class="fl">0.3</span>) <span class="co"># geometric </span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">ecdf</span>(x1))</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">ecdf</span>(x2))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Recall that every result in R is an object. The output of the function <code>ecdf()</code> is actually another function that calculates the estimated CDF for a new value. This can be very handy if you want to interpolate the ECDF to make a smoother curve.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(<span class="fu">ecdf</span>(<span class="fu">rnorm</span>(<span class="dv">100</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "ecdf"     "stepfun"  "function"</code></pre>
+</div>
+</div>
+<p>Here is how to use it. The example below can be useful if you need to calculate the ECDF for values that are not in the original dataset, but within its domain. In the example below, the ECDF is estimated for x = 30, which is not in the original data <code>x</code>. Notice what happens for values in <code>x1</code> that are greater than <code>max(x)</code> and less than <code>min(x)</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fl">1e2</span>, <span class="dv">20</span>, <span class="dv">5</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>e1 <span class="ot">&lt;-</span> <span class="fu">ecdf</span>(x) <span class="co"># define function for CDF(x)</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">100</span>  <span class="co"># define new x values at which to calculate CDF</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>y1 <span class="ot">&lt;-</span> <span class="fu">e1</span>(x1) <span class="co"># calculate CDF at each new x</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x1, y1, <span class="at">type=</span><span class="st">"s"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"blue2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Obviously, the more data points you have, the better and smoother the estimate of the ECDF will be. Consider the simulated example below that estimates the ECDF using different numbers of points.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fl">1e4</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>sig <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>x4 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, mu, sig)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> x4[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">10</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)]</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> x4[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">100</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)]</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>x3 <span class="ot">&lt;-</span> x4[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1000</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)]</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>xseq <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">40</span>, <span class="at">length=</span><span class="dv">100</span>)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>y1 <span class="ot">&lt;-</span> <span class="fu">ecdf</span>(x1)(xseq)</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>y2 <span class="ot">&lt;-</span> <span class="fu">ecdf</span>(x2)(xseq)</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>y3 <span class="ot">&lt;-</span> <span class="fu">ecdf</span>(x3)(xseq)</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>yt <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(xseq, mu, sig)</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xseq, yt, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">6</span>, <span class="at">xlab=</span><span class="st">"x"</span>,</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"(E)CDF = F(x)"</span>)</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(xseq, y1, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(xseq, y2, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"blue2"</span>)</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(xseq, y3, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"green"</span>)</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, </span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend=</span><span class="fu">c</span>(<span class="fu">expression</span>(n<span class="sc">==</span><span class="dv">10</span>), <span class="fu">expression</span>(n<span class="sc">==</span><span class="dv">100</span>), </span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>             <span class="fu">expression</span>(n<span class="sc">==</span><span class="dv">1000</span>), <span class="st">"True CDF"</span>),</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">6</span>),</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue2"</span>, <span class="st">"green"</span>, <span class="st">"black"</span>),</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">cex=</span><span class="fl">1.2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The estimate with 10 points (red) is a very rough fit, but serviceable. The estimates using 100 or 1000 points are much closer to the truth (black line).</p>
 </section>
 <section id="sec-08-sing-kern" class="level3" data-number="8.1.5">
 <h3 data-number="8.1.5" class="anchored" data-anchor-id="sec-08-sing-kern"><span class="header-section-number">8.1.5</span> Kernel density plots</h3>
+<p>Kernel density plots are a way to empirically estimate and visualize the <strong>probability distribution function (PDF)</strong> of a distribution (<a href="#sec-09-cont" class="quarto-xref"><span class="quarto-unresolved-ref">sec-09-cont</span></a>). A plot of the estimated PDF is essentially a histogram where the bin width approaches 0. The PDF tells us two things. Practically speaking, the PDF of a distribution at a given value is related to how likely that value is to occur relative to other values. However, that is NOT the same as the probability of that value occurring.</p>
+<p>What the PDF really expresses is the <em>rate of change in cumulative density at a value</em>.</p>
+<ul>
+<li>The <strong>cumulative density</strong> of a distribution at some value <em>x</em> is the probability of a value <span class="math inline">\(\le\)</span> <em>x</em>.</li>
+<li>The <strong>cumulative density function (CDF)</strong> gives the cumulative density at <em>x</em>.</li>
+</ul>
+<p>The PDF is defined as is the <em>slope or first derivative of the CDF</em>. Conversely, the CDF is the integral of the PDF. The PDF is the rate at which the probability of observing a value <span class="math inline">\(\le{x}\)</span> increases at each <span class="math inline">\(x\)</span>. Again, this is related to but not the same as the probability of that value occurring.</p>
+<p><img src="../images/08-02.jpg" class="img-fluid" alt="Relationship between the probability density function (PDF) (left) and cumulative distribution function (CDF) (right) of a distribution. The PDF at some x value is the slope of the CDF at that x value. The CDF at some x value is the integral of the PDF up to that x value.">{fig-alt:“Relationship between the probability density function (PDF) and cumulative distribution function (CDF) of a normal distribution. The left panel shows the PDF, f(x), as a bell-shaped curve. The right panel shows the corresponding CDF, F(x), as an S-shaped curve increasing from 0 to 1. Red annotations connect corresponding values of x on the two graphs, illustrating that the probability density f(x) at a given value equals the rate of change (slope) of the cumulative distribution function F(x) at that same value. Larger PDF values correspond to steeper slopes of the CDF, while smaller PDF values correspond to flatter portions of the CDF.”}</p>
+<p>The kernel density plot estimated by R is to the PDF what the empirical cumulative distribution function (ECDF; see <a href="#sec-08-sing-cdf" class="quarto-xref"><span class="quarto-unresolved-ref">sec-08-sing-cdf</span></a>) is to the CDF. Just like an ECDF plot presents an estimate of the true CDF, the kernel density plot presents an estimate of the true PDF. This means that presenting a kernel density plot or an ECDF plot is largely a matter of preference because they convey the same information in different ways.</p>
+<p>Note that a kernel density plot makes more sense for a <a href="@sec-09-cont">continuous distribution</a> than for a <a href="@sec-09-disc">discrete distribution</a>. The equivalent plot for a discrete distribution is the <strong>probability mass function (PMF)</strong> plot, which looks like a barplot because the PMF is only non-zero for integer values.</p>
+<p>The example below shows kernel density plots for four distributions: <span class="math inline">\(Normal\left(\mu=5,\sigma=2\right)\)</span>, <span class="math inline">\(Gamma\left(k=3,\theta=2\right)\)</span>, <span class="math inline">\(Uniform\left(min=0,max=1\right)\)</span>, and <span class="math inline">\(Poisson\left(\lambda=4\right)\)</span>. The first 3 are continuous distributions and the last is a discrete distribution.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fl">1e3</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(<span class="fu">rnorm</span>(n,<span class="dv">5</span>,<span class="dv">2</span>)), <span class="at">main=</span><span class="st">"Normal(5, 2)"</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(<span class="fu">rgamma</span>(n, <span class="dv">3</span>, <span class="dv">2</span>)), <span class="at">main=</span><span class="st">"Gamma(3, 2)"</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(<span class="fu">runif</span>(n)), <span class="at">main=</span><span class="st">"Uniform(0, 1)"</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(<span class="fu">rpois</span>(n,<span class="dv">4</span>)), <span class="at">main=</span><span class="st">"Poisson(4)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The estimated density functions aren’t too far off from the real functions. But, notice that the plots for the gamma, uniform, and Poisson variables extend outside of the domains of the underlying distributions. For example, the density for the Poisson variable extends below 0–because the Poisson distribution models counts, it is only supported for non-negative integers (think about why…you can’t count -3 or 2.5 fish). You can truncate the plot using arguments <code>from</code> or <code>to</code> for density. This is a good idea if you are exploring data that you suspect have a natural domain.</p>
+<p>For example, lengths and times must be non-negative, so you should include <code>from=0</code> in the <code>density()</code> command.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(<span class="fu">rnorm</span>(n,<span class="dv">5</span>,<span class="dv">2</span>)), <span class="at">main=</span><span class="st">"Normal(5, 2)"</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(<span class="fu">rgamma</span>(n, <span class="dv">3</span>, <span class="dv">2</span>), <span class="at">from=</span><span class="dv">0</span>), <span class="at">main=</span><span class="st">"Gamma(3, 2)"</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(<span class="fu">runif</span>(n), <span class="at">from=</span><span class="dv">0</span>, <span class="at">to=</span><span class="dv">1</span>), <span class="at">main=</span><span class="st">"Uniform(0, 1)"</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(<span class="fu">rpois</span>(n,<span class="dv">4</span>), <span class="at">from=</span><span class="dv">0</span>), <span class="at">main=</span><span class="st">"Poisson(4)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The estimated density functions are now in their supported intervals, which is nice. There’s one more issue with the estimates for the Poisson distribution. Notice that the bottom right plot shows non-zero probability density for non-integer values. This doesn’t make sense for a Poisson distribution, which can only take non-negative integer values. What’s going on here is that the <code>density()</code> function does not know whether a distribution is supposed to be discrete or continuous. As far as the function is concerned, the distribution is continuous and just happens to have no non-integer values.</p>
+<p>If you have data that you have good reason to suspect are discrete, there is a better way than <code>density()</code> to visualize the relative likelihood of different values: the <strong>probability mass function (PMF, not PDF)</strong>. The PMF of a discrete distribution can be calculated rather than estimated.</p>
+<p>In the example below we use the <code>table()</code> function, which tallies up the number of times each value occurs in a vector. We could convert the cell counts to PMF estimates by dividing by the number of observations (e.g., <code>plot(table(x1)/n))</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make some data</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fl">1e3</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, <span class="dv">4</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">20</span>, <span class="fl">0.4</span>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>x3 <span class="ot">&lt;-</span> <span class="fu">rgeom</span>(n, <span class="fl">0.3</span>)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>x4 <span class="ot">&lt;-</span> <span class="fu">rnbinom</span>(n, <span class="dv">10</span>, <span class="fl">0.1</span>)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co"># plot cell counts:</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">table</span>(x1))</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">table</span>(x2))</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">table</span>(x3))</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">table</span>(x4))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Dividing the cell counts by the number of total observations (n) estimates the empirical PMF:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">table</span>(x1)<span class="sc">/</span>n, <span class="at">ylab=</span><span class="st">"Empirical PMF"</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">table</span>(x2)<span class="sc">/</span>n, <span class="at">ylab=</span><span class="st">"Empirical PMF"</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">table</span>(x3)<span class="sc">/</span>n, <span class="at">ylab=</span><span class="st">"Empirical PMF"</span>)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">table</span>(x4)<span class="sc">/</span>n, <span class="at">ylab=</span><span class="st">"Empirical PMF"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can verify that the empirical PMFs that we calculated match the actual PMFs:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compare to true PMF:</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="fu">max</span>(x1)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>v2 <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="fu">max</span>(x2)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>v3 <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="fu">max</span>(x3)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>v4 <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="fu">max</span>(x4)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>y1 <span class="ot">&lt;-</span> <span class="fu">dpois</span>(v1, <span class="dv">4</span>)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>y2 <span class="ot">&lt;-</span> <span class="fu">dbinom</span>(v2, <span class="dv">20</span>, <span class="fl">0.4</span>)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>y3 <span class="ot">&lt;-</span> <span class="fu">dgeom</span>(v3, <span class="fl">0.3</span>)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>y4 <span class="ot">&lt;-</span> <span class="fu">dnbinom</span>(v4, <span class="dv">10</span>, <span class="fl">0.1</span>)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">table</span>(x1)<span class="sc">/</span>n)</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(v1, y1, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">table</span>(x2)<span class="sc">/</span>n)</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(v2, y2, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">table</span>(x3)<span class="sc">/</span>n)</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(v3, y3, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">table</span>(x4)<span class="sc">/</span>n)</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(v4, y4, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="sec-08-two" class="level2" data-number="8.2">
 <h2 data-number="8.2" class="anchored" data-anchor-id="sec-08-two"><span class="header-section-number">8.2</span> Visualizing 2 variables</h2>
+<p>So far in this course we have explored ways to <a href="@#sec-09-single">explore distributions of single variables</a>: histograms, ECDF plots, probability density plots, and so on. In this section we will explore ways to explore relationships <em>between</em> variables. This is a vital preliminary step in studying how two or more variables might be correlated with each other, or how one might cause the other. The focus on this page is on exploratory, correlative methods. Actual inference about relationships between two variables is better handled by <a href="@sec-14-lin">linear models (LM)</a>, <a href="@sec-16">generalized linear models (GLM)</a>, or <a href="@sec-20">other kinds of models</a>.</p>
 <section id="sec-08-two-scatter" class="level3" data-number="8.2.1">
-<h3 data-number="8.2.1" class="anchored" data-anchor-id="sec-08-two-scatter"><span class="header-section-number">8.2.1</span> Scatterplots</h3>
+<h3 data-number="8.2.1" class="anchored" data-anchor-id="sec-08-two-scatter"><span class="header-section-number">8.2.1</span> Scatterplots for 2 continuous variables</h3>
+<p>The <strong>scatterplot</strong> is one of the most important tools in the biologist’s data toolbox. It is probably the simplest type of figure in routine use: simply plot the values in one variable on one axis, and the values of another variable on another (perpendicular) axis. The role of the scatterplot in exploratory data analysis is to help visualize the form of the relationship between two variables <span class="citation" data-cites="bolker2008ecological">(<a href="#ref-bolker2008ecological" role="doc-biblioref">Bolker 2008</a>)</span>. The figure below shows just 6 of the possible curve types that you might discover.</p>
+<div class="cell" data-layout-align="center" height="7">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="r-plotting-basics" class="level4" data-number="8.2.1.1">
+<h4 data-number="8.2.1.1" class="anchored" data-anchor-id="r-plotting-basics"><span class="header-section-number">8.2.1.1</span> R plotting basics</h4>
+<p>We have already made some scatterplots, but it’s worth taking a closer look at the R methods for scatterplots. The basic function for scatterplots is <code>plot()</code>. The first argument is taken to be the x coordinates, and the second argument to be the y coordinates. You can also use the formula interface <code>plot(y ~ x)</code>, but the coordinates method <code>plot(x, y)</code> usually makes for cleaner code.</p>
+<p>Calling <code>plot()</code> does two things: first, it <em>creates a new plot</em>; second, it <em>plots the data</em> on the new plot area. Other components can be added to the plot with subsequent commands:</p>
+<ul>
+<li><code>points()</code> for points</li>
+<li><code>text()</code> for text</li>
+<li><code>lines()</code> for lines</li>
+<li><code>polygon()</code> for polygons</li>
+<li><code>segments()</code> for line segments</li>
+</ul>
+<p>and so on. These functions will <strong><em>add</em></strong> to an existing plot, but will not create a new plot area. So, call <code>plot()</code> first, then <code>points()</code> or one of the others if needed. Calling <code>points()</code> or one of the “adding” functions if there is not already an active plot area will return an error.</p>
+<p>Here is a basic scatterplot:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(iris<span class="sc">$</span>Petal.Width,iris<span class="sc">$</span>Petal.Length)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The default scatterplot is rather unattractive, but works just fine for exploring data. Fortunately, almost every aspect of a plot can be customized using different plot arguments and graphical parameters. Here are some commonly used plot options:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(iris<span class="sc">$</span>Petal.Width,iris<span class="sc">$</span>Petal.Length,</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">xlab=</span><span class="st">"Petal width (cm)"</span>,             <span class="co"># x label</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">ylab=</span><span class="st">"Petal Length (cm)"</span>,            <span class="co"># y label</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">3</span>),                         <span class="co"># x axis limits</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">8</span>),                         <span class="co"># y axis limits</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">main=</span><span class="st">"Petal length vs. petal width"</span>  <span class="co"># plot title</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>)<span class="co">#plot</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Sometimes it helps to change the color or style of points to show categories in the data. This can be done using some arguments to <code>plot()</code>:</p>
+<ul>
+<li><code>pch</code> changes the symbol used for points. Think “<strong>p</strong>oint <strong>ch</strong>aracter”. See <code>?points</code> for a list of available symbols.</li>
+<li><code>cex</code> changes the size of symbols. Think “<strong>c</strong>haracter <strong>ex</strong>pansion”. The default <code>cex</code> is 1; other values scale the points relative to this. E.g., <code>cex=2</code> makes points twice as large.</li>
+<li><code>col</code> changes the color. Think “<strong>col</strong>or”. R can produce many colors; run the command <code>colors()</code> to see a named list<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</li>
+</ul>
+<p>Each these arguments can take vector of values, so you can assign colors or shape to each point. The values will be used in the same order as the observations used to draw the points (e.g., rows of a data frame). I find it convenient to put colors, shapes, and other point-specific graphical parameters into the dataframe that contains the coordinates. That way, if I ever subset the data frame, or sort the data frame, the symbology information stays with each point.</p>
+<p>The examples below illustrate several ways of assigning symbology to observations within a data frame. In the first, <code>ifelse()</code> is used to make vectors of colors (<code>use.col</code>) defined by the variable <code>species</code>. Notice that a legend is provided to tell the reader which symbols mean what. This method works fine if you only have a few groups to define symbols for.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># method 1: ifelse()</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>iris<span class="sc">$</span>color <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(iris<span class="sc">$</span>Species <span class="sc">==</span> <span class="st">"setosa"</span>, <span class="st">"black"</span>, </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ifelse</span>(iris<span class="sc">$</span>Species <span class="sc">==</span> <span class="st">"versicolor"</span>, <span class="st">"red"</span>, <span class="st">"blue"</span>))</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(iris<span class="sc">$</span>Petal.Width,iris<span class="sc">$</span>Petal.Length,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">col=</span>iris<span class="sc">$</span>color, <span class="co"># color by species</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">pch=</span><span class="dv">16</span>       <span class="co"># solid dots   </span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, </span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"Setosa"</span>, <span class="st">"Versicolor"</span>, <span class="st">"Virginica"</span>),</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">pch=</span><span class="dv">16</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"red"</span>, <span class="st">"blue"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A better way is to first set up a vector of colors, then name the elements of the vector, and finally use those names to assign colors to rows of the data frame. <strong><em>This is the method I use in my code, and recommend you do too.</em></strong> When getting a vector of colors, I often use <a href="https://colorbrewer2.org/">colorbrewer2</a> (date accessed 2026-08-05). Notice in the <code>legend()</code> code below that we don’t have to retype the species names or colors because they are already in the object <code>spps</code> and <code>cols</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># method 2: match()</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="do">####  recommended method ####</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="do">## get the species names</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>spps <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(iris<span class="sc">$</span>Species))</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="do">## vector of colors</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="do">## can also use rainbow() or colorbrewer2.</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"yellow"</span>, <span class="st">"purple"</span>)</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="do">## assign names to colors</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(cols) <span class="ot">&lt;-</span> spps</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="do">## assign to data frame</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>iris<span class="sc">$</span>color <span class="ot">&lt;-</span> cols[iris<span class="sc">$</span>Species]</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="do">## use the new colors in a plot:</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(iris<span class="sc">$</span>Petal.Width,iris<span class="sc">$</span>Petal.Length,</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">col=</span>iris<span class="sc">$</span>color, <span class="co"># color by species</span></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">pch=</span><span class="dv">16</span>      <span class="co"># solid dots    </span></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">legend=</span>spps, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">col=</span>cols)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Below is an example of using shapes (<code>use.pch</code>) to define groups. See the help page for <code>points()</code> (<code>?points</code>) to see the available plot symbols. In my plots I usually use both shape and color to define groups.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># method 3: names()</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>spps <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(iris<span class="sc">$</span>Species))</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>shps <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">16</span>, <span class="dv">17</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(shps) <span class="ot">&lt;-</span> spps</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>iris<span class="sc">$</span>pch <span class="ot">&lt;-</span> shps[iris<span class="sc">$</span>Species]</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(iris<span class="sc">$</span>Petal.Width,iris<span class="sc">$</span>Petal.Length,</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span>iris<span class="sc">$</span>pch, <span class="at">col=</span>iris<span class="sc">$</span>color)</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">legend=</span>spps, <span class="at">pch=</span>shps, <span class="at">col=</span>cols)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>You can think of the plot generated by <code>plot()</code> like a canvas. Once the canvas is in place, things can be “painted” on, but like paint cannot be removed. If you want to remove something, you’ll need to remake the plot without it. You can also just comment out the command you don’t want.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(iris<span class="sc">$</span>Petal.Width,iris<span class="sc">$</span>Petal.Length,</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span>iris<span class="sc">$</span>pch, <span class="at">col=</span>iris<span class="sc">$</span>color)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">legend=</span>spps, <span class="at">pch=</span>shps, <span class="at">col=</span>cols)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fl">1.5</span>, <span class="dv">5</span>, <span class="st">"Flowers!"</span>, <span class="at">cex=</span><span class="dv">4</span>, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>There’s no way to remove the offending text: R doesn’t have an “Undo” button! Our only option is just to remake the plot without the text.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remake without the offending text:</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(iris<span class="sc">$</span>Petal.Width,iris<span class="sc">$</span>Petal.Length,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span>iris<span class="sc">$</span>pch, <span class="at">col=</span>iris<span class="sc">$</span>color)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">legend=</span>spps, <span class="at">pch=</span>shps, <span class="at">col=</span>cols)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Sometimes I’ll just comment out the plot component that needs deleting; this way it is easier to add back in later. I do this a lot when I’m trying to iteratively build a figure with lots of components.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not run:</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co"># remake without the offending text (commented out):</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(iris<span class="sc">$</span>Petal.Width,iris<span class="sc">$</span>Petal.Length,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">col=</span>use.col, <span class="at">pch=</span><span class="dv">16</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="co">#text(1.5, 5, "Flowers!", cex=4, col="red")</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">legend=</span>spps, <span class="at">col=</span>cols, <span class="at">pch=</span><span class="dv">16</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="advanced-r-plotting-with-par" class="level4" data-number="8.2.1.2">
+<h4 data-number="8.2.1.2" class="anchored" data-anchor-id="advanced-r-plotting-with-par"><span class="header-section-number">8.2.1.2</span> Advanced R plotting with <code>par()</code></h4>
+<section id="plot-formatting" class="level5">
+<h5 class="anchored" data-anchor-id="plot-formatting">Plot formatting</h5>
+<p>Many options that affect plots can only be set using the <code>par()</code> function. Or, are best set using <code>par()</code>. Take a look at the <code>par()</code> help page to get a sense of the variety of options available (<code>?par</code>). It is important to keep in mind is that once <code>par()</code> options are set in an R session, they will stay that way until you change them using <code>par()</code> again. So, if you are making multiple figures within the same R workspace or work session you will need to pay attention to what you have done. You can always see all current settings by running the command <code>par()</code>.</p>
+<p>Below is an illustration of using <code>par()</code> to change graphics options:</p>
+<p>Without <code>par()</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(iris<span class="sc">$</span>Petal.Length<span class="sc">~</span>iris<span class="sc">$</span>Sepal.Length,</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">xlab=</span><span class="st">"Sepal length (cm)"</span>,</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">ylab=</span><span class="st">"Petal length (cm)"</span>,</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">8</span>),<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">8</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>With <code>par()</code>, we can do the following:</p>
+<ul>
+<li>Narrow the margins (<code>mar</code>) so the plot takes up more of the figure space</li>
+<li>Remove the box (<code>bty</code>) because it is unnecessary</li>
+<li>Turn <em>y</em>-axis numbers to horizontal (<code>las</code>) so they are easy to read</li>
+<li>Bring axis labels in closer (<code>mgp</code>) to save space</li>
+<li>Set size of axis text (<code>cex.axis</code>) and labels (<code>cex.lab</code>) for legibility</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">4.1</span>, <span class="fl">4.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>),  <span class="co"># margin sizes</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">bty=</span><span class="st">"n"</span>,                    <span class="co"># no box around plot</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">las=</span><span class="dv">1</span>,                      <span class="co"># axis labels in reading</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>                                <span class="co"># direction</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mgp=</span><span class="fu">c</span>(<span class="fl">2.25</span>, <span class="dv">1</span>,<span class="dv">0</span>),           <span class="co"># position of axis components</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex.axis=</span><span class="fl">1.2</span>,               <span class="co"># size of axis numbers</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex.lab=</span><span class="fl">1.2</span>)                <span class="co"># size of axis titles</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(iris<span class="sc">$</span>Petal.Length<span class="sc">~</span>iris<span class="sc">$</span>Sepal.Length,</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">xlab=</span><span class="st">"Sepal length (cm)"</span>,</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">ylab=</span><span class="st">"Petal length (cm)"</span>,</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">8</span>),<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">8</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We will use <code>par()</code> often in this course to clean up figures and make them more attractive. Most of the time when you are exploring data you won’t need to mess with <code>par()</code> (except for making multi-panel figures). But, you should definitely use <code>par()</code> when preparing figures for presentations or publications. Proper use of <code>par()</code> is the key to making clean, informative, and professional-looking figures.</p>
+</section>
+<section id="multi-panel-figures-with-par" class="level5">
+<h5 class="anchored" data-anchor-id="multi-panel-figures-with-par">Multi-panel figures with <code>par()</code></h5>
+<p>One of the most common ways to use <code>par()</code> is to make multi-panel figures. The panels are specified in terms of the number of rows and columns in the figure. The arguments <code>mfrow</code> and <code>mfcol</code> define the panel layout.</p>
+<ul>
+<li><code>mfrow</code>: you supply the number of rows and number of columns, in that order.</li>
+<li><code>mfcol</code>: works the same way, but in reverse: supply the number of columns and number of rows, in that order.</li>
+</ul>
+<p>Once you set <code>mfrow</code> or <code>mfcol</code> (but never both), a new plot area within the graphics window will be produced each time you call <code>plot()</code>. The graphics window will be divided evenly according to the number of panels you requested (e.g., <code>mfrow=c(2,3)</code> will yield 6 panels). Panels are drawn by row and then by column (with <code>mfrow</code>) or by column and then by row (with <code>mfcol</code>).</p>
+<p>If you produce more plots than you have “slots” specified by <code>mfrow</code> or <code>mfcol</code>, the graphics device will be cleared and the plot panels will be filled again, in the same order as before. So, if you set <code>mfrow=c(2,2)</code>, and then make 5 plots, you will end up with a graphics window that has 1 plot (the fifth) in the upper left corner.</p>
+<p>The example below shows the use of <code>par()$mfrow</code> to make a 2 <span class="math inline">\(\times\)</span> 2 figure.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>),           <span class="co"># layout</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">mar=</span><span class="fu">c</span>(<span class="fl">4.1</span>,<span class="fl">4.1</span>,<span class="fl">1.1</span>,<span class="fl">1.1</span>), <span class="co"># margin sizes</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">bty=</span><span class="st">"n"</span>,                <span class="co"># no box around plot</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">las=</span><span class="dv">1</span>,                  <span class="co"># rotate axis text</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex.axis=</span><span class="fl">1.2</span>,           <span class="co"># axis text size</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex.lab=</span><span class="fl">1.2</span>)            <span class="co"># label text size</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(iris<span class="sc">$</span>Petal.Length, <span class="at">main=</span><span class="st">"Plot 1"</span>)</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(iris<span class="sc">$</span>Petal.Width, <span class="at">main=</span><span class="st">"Plot 2"</span>)</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(iris<span class="sc">$</span>Sepal.Length, <span class="at">main=</span><span class="st">"Plot 3"</span>)</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(iris<span class="sc">$</span>Sepal.Width, <span class="at">main=</span><span class="st">"Plot 4"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>When making multi-panel plots, it helps to line up axes that correspond to each other. The commands below show two separate figures with aligned axes. This can be helpful when showing different responses to the same explanatory variable (the 2 row by 1 column figure):</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>),           <span class="co"># layout</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">mar=</span><span class="fu">c</span>(<span class="fl">4.1</span>,<span class="fl">4.1</span>,<span class="fl">1.1</span>,<span class="fl">1.1</span>), <span class="co"># margin sizes</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">bty=</span><span class="st">"n"</span>,                <span class="co"># no box around plot</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">las=</span><span class="dv">1</span>,                  <span class="co"># rotate axis text</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex.axis=</span><span class="fl">1.2</span>,           <span class="co"># axis text size</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex.lab=</span><span class="fl">1.2</span>)            <span class="co"># label text size</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(iris<span class="sc">$</span>Petal.Length, iris<span class="sc">$</span>Sepal.Length)</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(iris<span class="sc">$</span>Petal.Length, iris<span class="sc">$</span>Sepal.Width)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The figure below is a 1 row by 2 column figure that shows how a single response variable relates to two different predictors.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),           <span class="co"># layout</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">mar=</span><span class="fu">c</span>(<span class="fl">4.1</span>,<span class="fl">4.1</span>,<span class="fl">1.1</span>,<span class="fl">1.1</span>), <span class="co"># margin sizes</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">bty=</span><span class="st">"n"</span>,                <span class="co"># no box around plot</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">las=</span><span class="dv">1</span>,                  <span class="co"># rotate axis text</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex.axis=</span><span class="dv">1</span>,           <span class="co"># axis text size</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex.lab=</span><span class="dv">1</span>)            <span class="co"># label text size</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(iris<span class="sc">$</span>Petal.Width, iris<span class="sc">$</span>Petal.Length)</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(iris<span class="sc">$</span>Petal.Length<span class="sc">~</span>iris<span class="sc">$</span>Species)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Sometimes you may need to manually set axis limits to make sure that the panels line up exactly.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># example with X and Y axes not aligned:</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> iris[<span class="fu">which</span>(iris<span class="sc">$</span>Species <span class="sc">==</span> <span class="st">"setosa"</span>),]</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> iris[<span class="fu">which</span>(iris<span class="sc">$</span>Species <span class="sc">==</span> <span class="st">"versicolor"</span>),]</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(d1<span class="sc">$</span>Petal.Length, d1<span class="sc">$</span>Sepal.Length)</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(d2<span class="sc">$</span>Petal.Length, d2<span class="sc">$</span>Sepal.Length)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Here’s the same plot, but with the axes lined up by setting the axis limits with <code>xlim</code> and <code>ylim</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># same plot but with axes lined up:</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(d1<span class="sc">$</span>Petal.Length, d1<span class="sc">$</span>Sepal.Length, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">6</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">8</span>))</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(d2<span class="sc">$</span>Petal.Length, d2<span class="sc">$</span>Sepal.Length, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">6</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">8</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-43-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The argument <code>mfcol</code> to <code>par()</code> works similarly to <code>mfrow</code>, but on columns instead of rows. For <code>mfcol</code> you supply the number of columns, then the number of rows. Likewise, panels are filled by column first instead of row first. The panel layout <code>mfrow=c(2,3)</code> is the same as <code>mfcol=c(3,2)</code>, but the panels will be filled in a different order:</p>
+<p><img src="../images/08-05.jpg" class="img-fluid" alt="Illustration of how par()$mfrow and par()$mfcol draw and fill figure panels. mfrow fills by rows, while mfcol fills by columns.">{fig-alt: “Illustration of how par options mfrow and mfcol draw and fill figure panels. mfrow fills by rows, while mfcol fills by columns.”}</p>
+<p>Whether to use <code>mfrow</code> or <code>mfcol</code> is usually a matter of preference. Clever use of one or the other can allow you to automatically make multi-panel plots in a preferred layout in a <code>for()</code> loop from data stored in a list or indexed by a vector.</p>
+<p>One last point about multi-panel plots: the <code>plot()</code> function both creates new panels and creates plots within each panel. Part of this process is defining the coordinate system for a panel. When you make a plot, subsequent commands that add elements to plots such as <code>points()</code>, <code>abline()</code>, <code>legend()</code>, etc., will use the coordinate system of the most recent panel. Think about this when designing complicated figures. The example below demonstrates how a legend is placed according to the coordinate system of the most recently-created plot.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fl">1e3</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co"># legend in first panel:</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">rnorm</span>(n))</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend=</span><span class="st">"Data"</span>, <span class="at">fill=</span><span class="st">"lightgrey"</span>)</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">rnorm</span>(n))</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">rnorm</span>(n))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-44-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="864"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Here is a different figure, with the legend in a different panel:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># legend in second panel (note where legend() is):</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">rnorm</span>(n))</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">rnorm</span>(n))</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend=</span><span class="st">"Data"</span>, <span class="at">fill=</span><span class="st">"lightgrey"</span>)</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">rnorm</span>(n))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="864"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>For more advanced plotting, refer to <a href="#sec-28" class="quarto-xref"><span class="quarto-unresolved-ref">sec-28</span></a>. There we’ll explore special symbols and equations with <code>plotmath()</code>, fun with axes, adding images to figures, and <code>lattice</code> graphics.</p>
+</section>
+</section>
 </section>
 </section>
 <section id="sec-08-many" class="level2" data-number="8.3">
 <h2 data-number="8.3" class="anchored" data-anchor-id="sec-08-many"><span class="header-section-number">8.3</span> Visualizing many variables</h2>
 <section id="sec-08-many-pair" class="level3" data-number="8.3.1">
-<h3 data-number="8.3.1" class="anchored" data-anchor-id="sec-08-many-pair"><span class="header-section-number">8.3.1</span> Scatterplots</h3>
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="sec-08-many-pair"><span class="header-section-number">8.3.1</span> Scatterplot matrices for many variables</h3>
+<section id="basic-pairs-plots" class="level4" data-number="8.3.1.1">
+<h4 data-number="8.3.1.1" class="anchored" data-anchor-id="basic-pairs-plots"><span class="header-section-number">8.3.1.1</span> Basic <code>pairs()</code> plots</h4>
+<p>A scatterplot plots one variable against another, and is probably the best way to see the relationship (if any) between two variables. But what if you have many variables? Making dozens of scatterplots can be tedious and time consuming. A scatterplot matrix makes many scatterplots at once, allowing relationships between many variables to be visualized at once. The base function to do this is <code>pairs()</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load some data</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(crabs, <span class="at">package=</span><span class="st">"MASS"</span>)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co"># make a spare copy</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> crabs</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="co"># define columns for scatterplot matrix</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>dat.cols <span class="ot">&lt;-</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">8</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="co"># make scatterplot matrix</span></span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(x[,dat.cols])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-46-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the scatterplot matrix, every variable is plotted against every other variable. Variables are labeled on the diagonal. E.g., the plots in the first row have “FL” as their <em>y</em>-axis, and “RW”, “CL”, “CW”, and “BD” as their <em>x</em>-axes. Likewise, plots in the first column have “FL” as their <em>x</em>-axis, and “RW”, “CL”, “CW”, and “BD” as their <em>y</em>-axes.</p>
+<p><img src="../images/08-06.jpg" class="img-fluid" alt="How to read a scatterplot matrix produced by pairs(). Each panel plots the variable in its row against the variable in its column.">{Illustration of how to read a scatterplot matrix produced by <code>pairs()</code>. Each panel plots the variable in its row against the variable in its column.}</p>
+</section>
+<section id="improved-pairs-plots" class="level4" data-number="8.3.1.2">
+<h4 data-number="8.3.1.2" class="anchored" data-anchor-id="improved-pairs-plots"><span class="header-section-number">8.3.1.2</span> Improved <code>pairs()</code> plots</h4>
+<p>One common modification to the default <code>pairs()</code> plot is to replace scatterplots above the diagonal with correlation coefficients. Another modification is to add linear regression or LOESS<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> lines to the lower plots to help highlight the relationships. The function below is adapted from the help page for <code>pairs()</code>. Notice that the size of the text for each coefficient is scaled to the magnitude of the coefficient. Can you figure out what piece of the code is doing that?</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define a function to add correlation coefficients</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="co"># borrowed from ?pairs</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>panel.cor <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y, <span class="at">digits =</span> <span class="dv">2</span>, <span class="at">prefix =</span> <span class="st">""</span>, cex.cor, ...)</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">#usr &lt;- par("usr"); on.exit(par(usr))</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">par</span>(<span class="at">usr =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>    r <span class="ot">&lt;-</span> <span class="fu">cor</span>(x, y)</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>    txt <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">c</span>(r, <span class="fl">0.123456789</span>), <span class="at">digits =</span> digits)[<span class="dv">1</span>]</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>    txt <span class="ot">&lt;-</span> <span class="fu">paste0</span>(prefix, txt)</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">missing</span>(cex.cor)) cex.cor <span class="ot">&lt;-</span> <span class="fl">0.8</span><span class="sc">/</span><span class="fu">strwidth</span>(txt)</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">text</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, txt, <span class="at">cex =</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">abs</span>(r))</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a><span class="co"># example of use:</span></span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(x[,dat.cols], </span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">lower.panel=</span>panel.smooth,</span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">upper.panel=</span>panel.cor, <span class="at">gap=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-47-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Sometimes the Spearman rank correlation coefficient <span class="math inline">\(\rho\)</span> is more informative than the Pearson linear correlation coefficient <em>r</em> (<a href="#sec-06-co" class="quarto-xref"><span class="quarto-unresolved-ref">sec-06-co</span></a>). The function <code>panel.cor()</code> can be modified to use <span class="math inline">\(\rho\)</span> instead of <em>r</em>:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>panel.cor2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y, <span class="at">digits =</span> <span class="dv">2</span>, <span class="at">prefix =</span> <span class="st">""</span>, cex.cor, ...)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">par</span>(<span class="at">usr =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>    r <span class="ot">&lt;-</span> <span class="fu">cor</span>(x, y, <span class="at">method=</span><span class="st">"spearman"</span>)<span class="do">## changed here!</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>    txt <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">c</span>(r, <span class="fl">0.123456789</span>), <span class="at">digits =</span> digits)[<span class="dv">1</span>]</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>    txt <span class="ot">&lt;-</span> <span class="fu">paste0</span>(prefix, txt)</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">missing</span>(cex.cor)) cex.cor <span class="ot">&lt;-</span> <span class="fl">0.8</span><span class="sc">/</span><span class="fu">strwidth</span>(txt)</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">text</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, txt, <span class="at">cex =</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">abs</span>(r))</span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a><span class="co"># example of use:</span></span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a><span class="co"># (might return warnings but these are ok)</span></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(x[,dat.cols], </span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">lower.panel=</span>panel.smooth,</span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">upper.panel=</span>panel.cor2, <span class="at">gap=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-48-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 </section>
 <section id="sec-08-many-ord" class="level3" data-number="8.3.2">
-<h3 data-number="8.3.2" class="anchored" data-anchor-id="sec-08-many-ord"><span class="header-section-number">8.3.2</span> Ordinations</h3>
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="sec-08-many-ord"><span class="header-section-number">8.3.2</span> Ordination (brief introduction)</h3>
+<p>The methods above are a way to examine single variables, or single pairs of variables. But what about many variables at once? In other words, how can we examine variation between samples by taking into account multiple variables at once? This is the realm of <strong>multivariate statistics</strong>.</p>
+<p><strong>Ordination</strong> is literally plotting or ordering observations along two or more axes. How that ordering is done varies wildly among techniques. We will get deeper into ordination later in the course (<a href="#sec-24" class="quarto-xref"><span class="quarto-unresolved-ref">sec-24</span></a>), but for now let’s look at one of the most common techniques, <strong>principal components analysis (PCA)</strong>, with a focus on interpretation rather than calculation. Some of the goals of all ordination techniques are:</p>
+<ul>
+<li><strong>Cluster identification:</strong> observations that are closer to each other in the ordination space are more similar to each other</li>
+<li><strong>Dimension reduction:</strong> the axes of an ordination are estimates of synthetic variables that combine information about many variables at once</li>
+</ul>
+<p>Biologists use many different ordination techniques to analyze patterns in many variables at once. Regardless of the specific technique, the basic interpretation is usually the same:</p>
+<ol type="1">
+<li>Points that are closer together are more similar to each other.</li>
+<li>Variables get bigger in the direction of their arrow.</li>
+</ol>
+<p>These two rules will work for almost any ordination you are likely to encounter in biology: PCA, redundancy analysis, canonical correspondence analysis, nonmetric multidimensional scaling (my favorite), linear discriminant analysis, and the list goes on.</p>
+<section id="principal-components-analysis-pca" class="level4" data-number="8.3.2.1">
+<h4 data-number="8.3.2.1" class="anchored" data-anchor-id="principal-components-analysis-pca"><span class="header-section-number">8.3.2.1</span> Principal components analysis (PCA)</h4>
+<p><strong>Principal components analysis (PCA)</strong> is a method for extracting synthetic gradients from a multivariate dataset that capture most of the variation in that dataset. These gradients are calculated by finding linear combinations of the variables that minimize sums of squared deviations from the gradient. In other words, PCA translates the variation between observations in terms of the original, many variables, into variation along a few artificial variables called <strong>principal components</strong>.</p>
+<p>The basic problem is this: you can see a pattern in one variable with a histogram (<a href="#sec-08-sing-hist" class="quarto-xref"><span class="quarto-unresolved-ref">sec-08-sing-hist</span></a>). You can see a pattern in 2 or 3 variables (i.e., dimensions) with a scatterplot (<a href="#sec-08-two-scatter" class="quarto-xref"><span class="quarto-unresolved-ref">sec-08-two-scatter</span></a>). But what if you have 4 variables? 10 variables? If you’ve never heard of PCA or ordination, it might be worth watching a video that explains and shows the basic ideas. Here is <a href="https://www.youtube.com/watch?v=HMOI_lkzW08"><strong>one that only takes 5 minutes and has a nice theme song</strong></a> (accessed 2021-08-10). For a more in-depth introduction to PCA, see <a href="@sec-24-pca">Module 24</a>. For now, let’s just go with “PCA helps us visualize patterns involving many variables at once”.</p>
+<p>PCA is available in base R using the functions <code>prcomp()</code> and <code>princomp()</code>. Both of these functions produce similar outputs, but there are some subtle differences between them. For this course we are going to use the PCA function in package <code>vegan</code>. Although designed for community ecology, <code>vegan</code> is widely used for ordination and multivariate analysis in many fields. Importantly, <code>vegan</code> is actively maintained and updated with new techniques as they are developed. Also importantly, <code>vegan</code> offers a common interface for many kinds of ordination.</p>
+<p>The example below uses the <code>varespec</code> dataset from <code>vegan</code>. Each column contains % cover by different species of plants in lichen pastures in northern Finland and Scandinavia. For the sake of making a simple example, we will ordinate only the 15 species with the most variance (many species in the dataset are rare or sparse, so including them makes the plot harder to interpret…in “real life”, don’t remove variables from your analysis without good reason!).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get data and make a spare copy</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(varespec)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> varespec</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="co"># identify the variables with most variance</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>vx <span class="ot">&lt;-</span> <span class="fu">rev</span>(<span class="fu">sort</span>(<span class="fu">apply</span>(x, <span class="dv">2</span>, var)))</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> x[,<span class="fu">names</span>(vx)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]]</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate PCA and plot it</span></span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">pca</span>(x, <span class="at">scale=</span><span class="cn">TRUE</span>)</span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a><span class="fu">biplot</span>(p1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The figure above is called a <strong>PCA biplot</strong>. Each point is a sample (site) where vegetation was sampled. By default, the samples are identified by their row number. The red arrows show sites where different species were more abundant (or, more generally, where the variables are increasing). For example, sites towards the top right had greater cover by species “Cladstel”. Sites towards the lower left had less cover by Cladstel. Sites towards the top left had more cover by “Pleuschr”.</p>
+<p>The <code>summary()</code> command will print a lot of information about the ordination. It prints the eigenvalues of each PC, then scales them as “Proportion explained”. I.e., the proportion of variation explained by each PC is the same as its eigenvalue divided by the sum of all eigenvalues.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(p1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+pca(X = x, scale = TRUE) 
 
+Partitioning of correlations:
+              Inertia Proportion
+Total              10          1
+Unconstrained      10          1
 
+Eigenvalues, and their contribution to the correlations 
+
+Importance of components:
+                         PC1    PC2    PC3    PC4     PC5    PC6     PC7
+Eigenvalue            2.7808 1.9382 1.3148 1.0987 0.83622 0.7150 0.69134
+Proportion Explained  0.2781 0.1938 0.1315 0.1099 0.08362 0.0715 0.06913
+Cumulative Proportion 0.2781 0.4719 0.6034 0.7132 0.79687 0.8684 0.93750
+                          PC8     PC9    PC10
+Eigenvalue            0.33428 0.17151 0.11919
+Proportion Explained  0.03343 0.01715 0.01192
+Cumulative Proportion 0.97093 0.98808 1.00000</code></pre>
+</div>
+</div>
+<p>The “Importance of components” part tells us that the first principal component (PC1) explains about 27.8% of the variation in the dataset. PC2 explains an additional 19.4%. One rule of thumb people use is to present enough PCs to account for <span class="math inline">\(\ge{80\%}\)</span> of the variation. If it takes many PCs to reach 80% of variation, that may be a sign that the PCs are not capturing much meaningful structure in your dataset (or, there simply isn’t much structure to capture).</p>
+<p>Finally, we can see the variable <strong>loadings</strong>, which describe the contribution of each original variable to each principal component<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. Loadings with larger absolute values indicate variables that contribute more strongly to an axis, while the sign indicates the direction of that relationship. In the example below, unscaled loadings for PCs 1-4 are requested using <code>choices=1:4</code> and <code>scaling=0</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scores</span>(p1, <span class="at">choices =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">display =</span> <span class="st">"species"</span>, <span class="at">scaling =</span> <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                PC1           PC2         PC3        PC4
+Cladstel  0.1118986  0.5621722123 -0.14606363  0.4467186
+Pleuschr -0.4612677 -0.2115389675  0.17670529 -0.2214946
+Cladrang  0.5037497  0.0279351716  0.18537465 -0.3339431
+Cladarbu  0.4490762 -0.2918262462  0.08645467 -0.3032787
+Dicrfusc -0.1655069 -0.4091013432  0.12191016  0.4270946
+Vaccviti -0.2801468  0.3347151730 -0.09280300 -0.1347303
+Dicrsp   -0.1879928 -0.1693471498 -0.57673161 -0.2878989
+Callvulg  0.1685866 -0.3191415425  0.21724150  0.4741263
+Cladunci -0.0123003 -0.3786062372 -0.50705444  0.1445745
+Vaccmyrt -0.3866379  0.0003420561  0.49518742 -0.1368990
+attr(,"const")
+[1] 3.894323</code></pre>
+</div>
+</div>
+<p>The loadings indicate that PC1 is strongly associated with species <code>Cladrang</code> and, to a lesser extent, <code>Pleuschr</code>. The signs of the loadings indicate whether the species vary in the positive or negative direction along PC1. Compare this to the orientation and length of the corresponding arrow in the biplot. Variables with larger absolute loadings generally have longer arrows and exert a stronger influence on the principal component.</p>
 </section>
+<section id="plotting-ordinations" class="level4" data-number="8.3.2.2">
+<h4 data-number="8.3.2.2" class="anchored" data-anchor-id="plotting-ordinations"><span class="header-section-number">8.3.2.2</span> Plotting ordinations</h4>
+<p>Extracting the scores from an ordination object can let you plot points with all of the <code>base</code> graphics formatting methods we learned above (<a href="#sec-08-two" class="quarto-xref"><span class="quarto-unresolved-ref">sec-08-two</span></a>), such as using color or shape to indicate group membership. In my experience this is more flexible than using the built-in graphics capabilities in <code>vegan</code><a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>, but your mileage may vary.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load some data</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(crabs, <span class="at">package=</span><span class="st">"MASS"</span>)</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="co"># make a spare copy</span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> crabs</span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a><span class="co"># fit the PCA on the numerical variables</span></span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">pca</span>(x[,<span class="dv">4</span><span class="sc">:</span><span class="dv">8</span>], <span class="at">scale=</span><span class="cn">TRUE</span>)</span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the "scores": coordinates on PC axes</span></span>
+<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>site.scores <span class="ot">&lt;-</span> <span class="fu">scores</span>(p1, <span class="at">choices=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,</span>
+<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a>                      <span class="at">display=</span><span class="st">"sites"</span>, <span class="at">scaling=</span><span class="st">"sites"</span>)</span>
+<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a><span class="co"># define some colors for sex</span></span>
+<span id="cb56-15"><a href="#cb56-15" aria-hidden="true" tabindex="-1"></a>use.colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>)</span>
+<span id="cb56-16"><a href="#cb56-16" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(use.colors) <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(x<span class="sc">$</span>sex))</span>
+<span id="cb56-17"><a href="#cb56-17" aria-hidden="true" tabindex="-1"></a>x<span class="sc">$</span>color <span class="ot">&lt;-</span> use.colors[x<span class="sc">$</span>sex]</span>
+<span id="cb56-18"><a href="#cb56-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-19"><a href="#cb56-19" aria-hidden="true" tabindex="-1"></a><span class="co"># define some shapes for species</span></span>
+<span id="cb56-20"><a href="#cb56-20" aria-hidden="true" tabindex="-1"></a>use.pch <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>)</span>
+<span id="cb56-21"><a href="#cb56-21" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(use.pch) <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(x<span class="sc">$</span>sp))</span>
+<span id="cb56-22"><a href="#cb56-22" aria-hidden="true" tabindex="-1"></a>x<span class="sc">$</span>pch <span class="ot">&lt;-</span> use.pch[x<span class="sc">$</span>sp]</span>
+<span id="cb56-23"><a href="#cb56-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-24"><a href="#cb56-24" aria-hidden="true" tabindex="-1"></a><span class="co"># build the plot</span></span>
+<span id="cb56-25"><a href="#cb56-25" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb56-26"><a href="#cb56-26" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(site.scores, <span class="at">col=</span>x<span class="sc">$</span>color, <span class="at">pch=</span>x<span class="sc">$</span>pch,</span>
+<span id="cb56-27"><a href="#cb56-27" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (95.8%)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (3.0%)"</span>)</span>
+<span id="cb56-28"><a href="#cb56-28" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>,</span>
+<span id="cb56-29"><a href="#cb56-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"B female"</span>, <span class="st">"B male"</span>, <span class="st">"O female"</span>, <span class="st">"O male"</span>),</span>
+<span id="cb56-30"><a href="#cb56-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span><span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb56-31"><a href="#cb56-31" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>, <span class="st">"red"</span>, <span class="st">"blue"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch08_files/figure-html/unnamed-chunk-53-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Some interpretations of this plot:</p>
+<ol type="1">
+<li>Almost all of the variance is on PC1. Because the underlying data are measurements, and measurements are often correlated with overall size, PC1 is probably a gradient of overall body size. If we wanted to use PCA to capture shape variation, we would need to factor out overall size first somehow. Or, not interpret PC1.</li>
+<li>The species B and O (triangles and circles) do not appear to be well distinguished by either PC1 or PC2.</li>
+<li>The sexes (red and blue) are well separated by PC2, with females having smaller values and males having greater values.</li>
+</ol>
+</section>
+<section id="ordination-wrap-up-for-now" class="level4" data-number="8.3.2.3">
+<h4 data-number="8.3.2.3" class="anchored" data-anchor-id="ordination-wrap-up-for-now"><span class="header-section-number">8.3.2.3</span> Ordination wrap-up (for now)</h4>
+<p>Ordination is a collection of methods for reducing the dimensionality of data. Biological datasets often have many variables, but most variation in those datasets can often be captured using only a few of them (or few combinations of the variables). The positions of the samples in the ordination space can thus reveal patterns that are too complicated to see in the full data space. Interpreting ordination axes in biological terms can be very fruitful. When an axis captures important information about the samples, it can be used as a variable in another method (e.g., as a predictor variable in a linear model). Analysis of clustering or positional differences between groups in ordination space (especially NMDS space) can allow for researchers to test for differences in many variables at once.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-bolker2008ecological" class="csl-entry" role="listitem">
+Bolker BM. 2008. Ecological models and data in <span>R</span>. Princeton, New Jersey, USA: Princeton University Press.
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Distribution <code>x4</code> is a mixture of a normal with mean = 5 and SD = 2 with a uniform in [3, 20].<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Or close enough. The actual, slightly different values, are in the documentation. See <code>?boxplot.stats</code>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>adapted from <a href="https://commons.wikimedia.org/wiki/File:Discrete_probability_distribution_illustration.svg" class="uri">https://commons.wikimedia.org/wiki/File:Discrete_probability_distribution_illustration.svg</a> (public domain).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>You can also specify colors by their RGB or hex codes. Just google “R color chart” to get some examples. The <a href="https://colorbrewer2.org/">ColorBrewer</a> website (accessed 2026-08-05) and R package can help picking appropriate color schemes.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Locally estimated sums of squares, a common smoothing curve algorithm.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Different software packages define loadings slightly differently. Some report the coefficients (eigenvectors) used to calculate the principal components, while others report the correlations between the original variables and the principal components. The two are closely related and usually lead to the same qualitative interpretation. We’ll discuss this more in <a href="#sec-28" class="quarto-xref"><span class="quarto-unresolved-ref">sec-28</span></a>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>An introduction by the package’s lead author can be found by running this command:<code>vignette(topic="intro-vegan", package="vegan")</code>.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

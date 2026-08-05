@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>2&nbsp; Introduction to R – Applied Biological Data Analysis</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -88,15 +91,14 @@ div.csl-indent {
 <link href="../chapters/part_02.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -127,7 +129,7 @@ div.csl-indent {
 <style>html{ scroll-behavior: smooth; }</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -180,9 +182,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -552,7 +552,7 @@ window.Quarto = {
 </header>
 
 
-<p>This module is an introduction to the R program and language. We will begin with downloading and installing R, then explore the basics of running R commands and storing data, and finally answer some frequently asked questions (FAQ). Some of the topics in this module are covered in greater detail in <a href="ch03.html" class="quarto-xref"><span>Chapter 3</span></a>, <a href="ch04.html" class="quarto-xref"><span>Chapter 4</span></a>, and <a href="ch05.html" class="quarto-xref"><span>Chapter 5</span></a>. The current module is meant to get you up and running before moving on to more advanced material.</p>
+<p>This module is an introduction to the R program and language. We will begin with downloading and installing R, then explore the basics of running R commands and storing data, and finally answer some frequently asked questions (FAQ). Some of the topics in this module are covered in greater detail in <a href="#sec-03" class="quarto-xref"><span class="quarto-unresolved-ref">sec-03</span></a>, <a href="#sec-04" class="quarto-xref"><span class="quarto-unresolved-ref">sec-04</span></a>, and <a href="#sec-05" class="quarto-xref"><span class="quarto-unresolved-ref">sec-05</span></a>. The current module is meant to get you up and running before moving on to more advanced material.</p>
 <p>By the end of this module you should be able to:</p>
 <ul>
 <li>Explain what R is and what it is used for</li>
@@ -648,7 +648,7 @@ window.Quarto = {
 <p>The key to understanding R is to understand <a href="https://en.wikipedia.org/wiki/Object-oriented_programming">object orientation</a>. This means that R code is built around manipulating objects. In programming, an <strong>object</strong> is a construct or thing with well-defined attributes and behaviors. For example, a graphics program might have object classes like “polygon” and “circle”. Rather than redefine “polygon” every time the user needs to draw a polygon, the program creates a polygon object with attributes like “number of sides” and “side length”. The new object is an <strong>instance</strong> of the polygon class. The <strong>class</strong> of an object defines what attributes it has and how it interacts with other objects.</p>
 <section id="sec-02-comm-basic" class="level3" data-number="2.2.1">
 <h3 data-number="2.2.1" class="anchored" data-anchor-id="sec-02-comm-basic"><span class="header-section-number">2.2.1</span> R commands–basics</h3>
-<p>In R, <strong><em>everything</em></strong> is an object. We will learn more about some of the most important R object types in the examples in <a href="ch03.html" class="quarto-xref"><span>Chapter 3</span></a>. Objects are created in R by many functions.</p>
+<p>In R, <strong><em>everything</em></strong> is an object. We will learn more about some of the most important R object types in the examples in <a href="#sec-03" class="quarto-xref"><span class="quarto-unresolved-ref">sec-03</span></a>. Objects are created in R by many functions.</p>
 <p>Objects are stored to memory by <strong>assignment</strong>, using the left arrow <code>&lt;-</code> (a “less than” followed by a hyphen). If an object already exists, then assignment is used to either modify the object, or replace it entirely. Here is an example:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -900,7 +900,7 @@ window.Quarto = {
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>list3 <span class="ot">&lt;-</span> list2 <span class="ot">&lt;-</span> list1 <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"list"</span>, <span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Assignment can also be used to <strong>change or overwrite</strong> parts of pre-existing objects. Usually this involves the bracket notation, which we will explore more in <a href="ch05.html" class="quarto-xref"><span>Chapter 5</span></a>. In the example below, the third element of object <code>a</code>, <code>a[3]</code>, is replaced with the number 42.</p>
+<p>Assignment can also be used to <strong>change or overwrite</strong> parts of pre-existing objects. Usually this involves the bracket notation, which we will explore more in <a href="#sec-05" class="quarto-xref"><span class="quarto-unresolved-ref">sec-05</span></a>. In the example below, the third element of object <code>a</code>, <code>a[3]</code>, is replaced with the number 42.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>a</span>
@@ -1178,7 +1178,7 @@ loaded via a namespace (and not attached):
 <li><p>Access the source code to the package you need, and “borrow” the functions or code you need.</p></li>
 <li><p>Sometimes, if you only need 1 or 2 functions from a package, or you need to modify a function from a package to suit your needs. In these cases, you can “borrow” directly from the package source code. For most packages, the CRAN page will have a link to an online code repository (usually Github) and/or the package source as a “tarball” (“.tar.gz” file). A tarball is a compressed version of the package source code that may or may not need to be compiled using special functions in R.</p></li>
 </ol>
-<p>Because most R packages are written in R itself, you can usually find and adapt the code you need. This is almost always permitted by the license of the package because most packages are released under some version of the GNU Public License (GPL). If you do borrow code from a package, it is considered good form to attribute the package authors in some way (e.g., “we adapted code from the package”foo” version 1.0 (Nobody 2001)“).</p>
+<p>Because most R packages are written in R itself, you can usually find and adapt the code you need. This is almost always permitted by the license of the package because most packages are released under some version of the GNU Public License (GPL). If you do borrow code from a package, it is considered good form to attribute the package authors in some way (e.g., “we adapted code from the package ”foo” version 1.0 (Nobody 2001)“).</p>
 </section>
 <section id="sec-02-pack-work-cite" class="level4" data-number="2.4.3.2">
 <h4 data-number="2.4.3.2" class="anchored" data-anchor-id="sec-02-pack-work-cite"><span class="header-section-number">2.4.3.2</span> Citing packages</h4>
@@ -1265,7 +1265,7 @@ A BibTeX entry for LaTeX users is
 <ul>
 <li><p>R is free. Unlike some paid and proprietary software, there is no official help line to call if you have issues.</p></li>
 <li><p>Along the same lines, R is distributed with absolutely no warranty (it says so every time you open R). The accuracy of your analysis depends on the competence of the (unpaid) contributors and the user.</p></li>
-<li><p>R often requires more coding than SAS or other tools to get a similar amount of output or perform a similar amount of work. The <code>tidyverse</code> ecosystem of packages addresses some of these issues, but not without some costs (see <a href="#sec-02-faq-tidy" class="quarto-xref"><span>Section 2.5.4</span></a>).</p></li>
+<li><p>R often requires more coding than SAS or other tools to get a similar amount of output or perform a similar amount of work. The <code>tidyverse</code> ecosystem of packages addresses some of these issues, but not without some costs (see <a href="#sec-02-faq-tidy" class="quarto-xref"><span class="quarto-unresolved-ref">sec-02-faq-tidy</span></a>).</p></li>
 <li><p>R is slower than SAS and other tools at handling large datasets because it holds all data and objects in memory (RAM) at once. This limits the performance of your machine if you are doing other tasks.</p></li>
 <li><p>R is single-threaded by default. This means that R does not handle parallel computation very easily, which could potentially speed up many tasks.</p></li>
 <li><p>R has a difficult learning curve because it is so programming-focused.</p></li>
@@ -1417,7 +1417,7 @@ A BibTeX entry for LaTeX users is
 <li>Advanced R by Hadley Wickham</li>
 <li>R for Dummies by Andrie DeVries</li>
 </ul>
-<p>When I was first starting out with R I found several books invaluable. Having code examples printed where I could highlight, annotate, etc., was really helpful. Over time I’ve found myself relying less on textbooks and more on online sources (especially StackOverflow). Still, a there are a few books that I use frequently, for their statistical exposition more than their code examples. At least one of <span class="citation" data-cites="bolker2008ecological">Bolker (<a href="#ref-bolker2008ecological" role="doc-biblioref">2008</a>)</span>, <span class="citation" data-cites="kery2010">Kéry (<a href="#ref-kery2010" role="doc-biblioref">2010</a>)</span>, <span class="citation" data-cites="legendre2012numerical">Legendre and Legendre (<a href="#ref-legendre2012numerical" role="doc-biblioref">2012</a>)</span>, <span class="citation" data-cites="zuur2007analysing">Zuur <em>et al.</em> (<a href="#ref-zuur2007analysing" role="doc-biblioref">2007</a>)</span>, and <span class="citation" data-cites="zuur2009mixed">Zuur <em>et al.</em> (<a href="#ref-zuur2009mixed" role="doc-biblioref">2009</a>)</span> is usually on my desk at any given time.</p>
+<p>When I was first starting out with R I found several books invaluable. Having code examples printed where I could highlight, annotate, etc., was really helpful. Over time I’ve found myself relying less on textbooks and more on online sources (especially StackOverflow). Still, a there are a few books that I use frequently, for their statistical exposition more than their code examples. At least one of <span class="citation" data-cites="bolker2008ecological">Bolker (<a href="#ref-bolker2008ecological" role="doc-biblioref">2008</a>)</span>, <span class="citation" data-cites="kery2010">Kéry (<a href="#ref-kery2010" role="doc-biblioref">2010</a>)</span>, <span class="citation" data-cites="legendre2012numerical">Legendre and Legendre (<a href="#ref-legendre2012numerical" role="doc-biblioref">2012</a>)</span>, <span class="citation" data-cites="zuur2007analysing">Zuur <em>et al.</em> (<a href="#ref-zuur2007analysing" role="doc-biblioref">2007</a>)</span>, and <span class="citation" data-cites="zuur2009mixed"><span class="nocase">Zuur <em>et al.</em></span> (<a href="#ref-zuur2009mixed" role="doc-biblioref">2009</a>)</span> is usually on my desk at any given time.</p>
 </section>
 <section id="sec-02-faq-help-two" class="level4" data-number="2.5.5.8">
 <h4 data-number="2.5.5.8" class="anchored" data-anchor-id="sec-02-faq-help-two"><span class="header-section-number">2.5.5.8</span> Two reminders</h4>
@@ -1445,7 +1445,7 @@ Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R, Grolemund G, Ha
 Zuur AF, Ieno EN, Smith GM. 2007. Analysing ecological data. New York: Springer Science+Business Media.
 </div>
 <div id="ref-zuur2009mixed" class="csl-entry" role="listitem">
-Zuur AF, Ieno EN, Walker NJ, Saveliev AA, Smith GM <em>et al.</em> 2009. Mixed effects models and extensions in ecology with <span>R</span>. Vol. 574. New York: Springer.
+<span class="nocase">Zuur AF, Ieno EN, Walker NJ, Saveliev AA, Smith GM <em>et al.</em></span> 2009. Mixed effects models and extensions in ecology with <span>R</span>. Vol. 574. New York: Springer.
 </div>
 </div>
 </section>

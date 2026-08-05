@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>4&nbsp; Data import and export – Applied Biological Data Analysis</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -88,15 +91,14 @@ div.csl-indent {
 <link href="../chapters/ch03.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -151,9 +153,7 @@ div.csl-indent {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -727,7 +727,7 @@ div.csl-indent {
 </section>
 <section id="sec-04-format-set-vars-values" class="level4" data-number="4.2.2.2">
 <h4 data-number="4.2.2.2" class="anchored" data-anchor-id="sec-04-format-set-vars-values"><span class="header-section-number">4.2.2.2</span> Data values</h4>
-<p>All data in R have a type: numeric, logical, character, etc., as we learned in <a href="ch03.html#sec-03-type" class="quarto-xref"><span>Section 3.1</span></a>. Within a vector, matrix, or array, all values must have the same type or they will be converted to character strings. Each variable in a data frame (the most common R data structure) is essentially a vector. This means that in your input file you should try to have one and only one type of data in each column. Otherwise, R will coerce the values into character strings, which may or may not be a problem. Putting only one type of value into each column will also help get your data into “wide” or “tidy” format <span class="citation" data-cites="wickham2014">(<a href="#ref-wickham2014" role="doc-biblioref">Wickham 2014</a>)</span>.</p>
+<p>All data in R have a type: numeric, logical, character, etc., as we learned in <a href="#sec-03-type" class="quarto-xref"><span class="quarto-unresolved-ref">sec-03-type</span></a>. Within a vector, matrix, or array, all values must have the same type or they will be converted to character strings. Each variable in a data frame (the most common R data structure) is essentially a vector. This means that in your input file you should try to have one and only one type of data in each column. Otherwise, R will coerce the values into character strings, which may or may not be a problem. Putting only one type of value into each column will also help get your data into “wide” or “tidy” format <span class="citation" data-cites="wickham2014">(<a href="#ref-wickham2014" role="doc-biblioref">Wickham 2014</a>)</span>.</p>
 <p>Entering data should also include some measure of <strong>quality assurance and quality control (QA/QC)</strong>. This basically means making sure that your data are entered correctly, and are formatted correctly. Correct entry can be accomplished by direct comparison to original datasheets or lab notebooks. Cross-checking is a valuable tool here: have two people enter the data and compare their files.</p>
 <p>Data formatting requires thinking about what kinds of data are being entered. For numbers, this means entering the correct values and an appropriate number of significant digits. For text values, this may mean spell-checking or settling on a standard set of possible values. The figure below shows some problems that a QA/QC step might fix:</p>
 <div class="quarto-figure quarto-figure-center">
@@ -809,7 +809,7 @@ div.csl-indent {
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># space-delimited (sep=" "): </span></span>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.table</span>(in.name, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">" "</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The <code>sep</code> argument is usually necessary when using the “clipboard trick” (see <a href="#sec-04-import-special" class="quarto-xref"><span>Section 4.3.4</span></a>)</p>
+<p>The <code>sep</code> argument is usually necessary when using the “clipboard trick” (see <a href="#sec-04-import-special" class="quarto-xref"><span class="quarto-unresolved-ref">sec-04-import-special</span></a>)</p>
 </section>
 <section id="row.names" class="level5">
 <h5 class="anchored" data-anchor-id="row.names"><code>row.names</code></h5>
@@ -897,7 +897,7 @@ Coefficients:
 </section>
 <section id="sec-04-import-rdata" class="level3" data-number="4.3.3">
 <h3 data-number="4.3.3" class="anchored" data-anchor-id="sec-04-import-rdata"><span class="header-section-number">4.3.3</span> Importing from saved workspaces</h3>
-<p>Everything you do in R takes place within the <strong>workspace</strong>. This can be thought of as a sandbox where all of your data and functions reside. If you want to save this entire environment and continue working later you can do this by saving the workspace with <code>save.image()</code> (see <a href="#sec-04-export-rdata" class="quarto-xref"><span>Section 4.4.3</span></a>).</p>
+<p>Everything you do in R takes place within the <strong>workspace</strong>. This can be thought of as a sandbox where all of your data and functions reside. If you want to save this entire environment and continue working later you can do this by saving the workspace with <code>save.image()</code> (see <a href="#sec-04-export-rdata" class="quarto-xref"><span class="quarto-unresolved-ref">sec-04-export-rdata</span></a>).</p>
 <p>Workspaces can be loaded using function <code>load()</code>. The example below loads workspace <code>example.RData</code> from your home directory. Notice that this command will load every object from the saved workspace into your current workspace. This might cause problems if the saved workspace and current workspace have objects with the same names.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not run:</span></span>
@@ -1093,7 +1093,7 @@ Coefficients:
 </section>
 <section id="sec-04-export-sink" class="level3" data-number="4.4.4">
 <h3 data-number="4.4.4" class="anchored" data-anchor-id="sec-04-export-sink"><span class="header-section-number">4.4.4</span> Write text to a file (special cases)</h3>
-<p>Sometimes you need to write out data that do not fit easily into tables. An example might be the results of a single <em>t</em>-test or ANOVA. This is also sometimes necessary when working with programs outside of R. For example, the program JAGS requires a text file that defines the model to be fit (see <a href="ch27.html" class="quarto-xref"><span>Chapter 27</span></a>). This text file can be generated by R, which makes your workflow simpler because you don’t need to use a separate program to store the outputs.</p>
+<p>Sometimes you need to write out data that do not fit easily into tables. An example might be the results of a single <em>t</em>-test or ANOVA. This is also sometimes necessary when working with programs outside of R. For example, the program JAGS requires a text file that defines the model to be fit (see <a href="#sec-27" class="quarto-xref"><span class="quarto-unresolved-ref">sec-27</span></a>). This text file can be generated by R, which makes your workflow simpler because you don’t need to use a separate program to store the outputs.</p>
 <p>The function to write text files with arbitrary content (i.e., not tables) is <code>sink()</code>. Functions <code>print()</code> and <code>cat()</code> are also useful in conjunction with <code>sink()</code>.</p>
 <ul>
 <li><p><code>sink()</code> works in pairs. The first command defines a file to put text into. The second command finishes the file and writes it.</p></li>

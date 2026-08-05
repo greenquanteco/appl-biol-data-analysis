@@ -111,7 +111,7 @@ This work is roughly organized into 9 parts. The links below will take you strai
 
 [Module 8](chapters/ch08.qmd#sec-08) introduces basic data visualizations like histograms, probability density plots, boxplots, and scatterplots.
 
-[Module 9](chapters/ch09.qmd#sec-09) introduces probability distributions and how to use them to describe your data.
+[Module 9](chapters/ch09.qmd#mod-09) introduces probability distributions and how to use them to describe your data.
 
 [Module 10](chapters/ch10.qmd#sec-10) covers common statistical problems in biology, including lack of replication, autocorrelation, collinearity, and missing data.
 
@@ -149,7 +149,7 @@ This work is roughly organized into 9 parts. The links below will take you strai
 
 [Module 23](chapters/ch23.qmd#sec-23) explores **cluster analysis**, a class of techniques for identifying groups within multivariate data.
 
-[Module 24](chapters/ch24.qmd#sec-24) explores **ordination**, a class of techniques for visualizing patterns in multivariate data. Ordination also includes **dimension reduction**, or the consolidation of information from many dimensions into few.
+[Module 24](chapters/ch24.qmd#mod-24) explores **ordination**, a class of techniques for visualizing patterns in multivariate data. Ordination also includes **dimension reduction**, or the consolidation of information from many dimensions into few.
 
 [Module 25](chapters/ch25.qmd#sec-25) describes some multivariate hypothesis tests, many of which are extensions of univariate techniques.
 
@@ -161,7 +161,7 @@ This work is roughly organized into 9 parts. The links below will take you strai
 
 **Part 9** is "bonus material"; i.e., additional modules that didn't quite fit in anywhere else. New modules will be added here until the next major update.
 
-[Module 28](chapters/ch28.qmd#sec-28) takes a deep dive into building quality graphics using base R.
+[Module 28](chapters/ch28.qmd#mod-28) takes a deep dive into building quality graphics using base R.
 
 Finally, [Appendix A](chapters/ch29.qmd#sec-29) describes the NEON dataset that I used to build most of this course, and the steps taken to process the raw data download to the files provided here.
 

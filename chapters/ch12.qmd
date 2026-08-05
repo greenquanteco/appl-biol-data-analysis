@@ -3,4 +3,4 @@
 Everything you should have learned in Biostats.
 
 
-## Linear models {#mod-12-lin}
+## Linear models {#sec-12-lin}

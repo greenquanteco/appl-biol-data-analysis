@@ -1,5 +1,5 @@
-# Ordination {#mod-24}
+# Ordination {#sec-24}
 
 We're all just points on a graph.
 
-## Principal components analysis {#mod-24-pca}
+## Principal components analysis {#sec-24-pca}

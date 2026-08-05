@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,6 +11,9 @@
 
 <title>Applied Biological Data Analysis</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -54,15 +57,14 @@ div.csl-indent {
 <link href="./chapters/part_01.html" rel="next">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -93,7 +95,7 @@ div.csl-indent {
 <style>html{ scroll-behavior: smooth; }</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -146,9 +148,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -592,7 +592,7 @@ window.Quarto = {
 </ul>
 <p>Parts of the course also lean heavily on some more specialized textbooks:</p>
 <ul>
-<li><p><em>Analysing ecological data</em> <span class="citation" data-cites="zuur2007analysing">(<a href="#ref-zuur2007analysing" role="doc-biblioref">Zuur <em>et al.</em> 2007</a>)</span> and <em>Mixed effects models and extensions in ecology with R</em> <span class="citation" data-cites="zuur2009mixed">(<a href="#ref-zuur2009mixed" role="doc-biblioref">Zuur <em>et al.</em> 2009a</a>)</span> by Alain Zuur and others. These are advanced textbooks aimed at ecologists which introduce GLMs, mixed models, and other topics we will explore in this course.</p></li>
+<li><p><em>Analysing ecological data</em> <span class="citation" data-cites="zuur2007analysing">(<a href="#ref-zuur2007analysing" role="doc-biblioref">Zuur <em>et al.</em> 2007</a>)</span> and <em>Mixed effects models and extensions in ecology with R</em> <span class="citation" data-cites="zuur2009mixed">(<a href="#ref-zuur2009mixed" role="doc-biblioref"><span class="nocase">Zuur <em>et al.</em></span> 2009a</a>)</span> by Alain Zuur and others. These are advanced textbooks aimed at ecologists which introduce GLMs, mixed models, and other topics we will explore in this course.</p></li>
 <li><p><em>Analysis of ecological communities</em> by Bruce McCune and James Grace <span class="citation" data-cites="mccune2002analysis">(<a href="#ref-mccune2002analysis" role="doc-biblioref">McCune <em>et al.</em> 2002</a>)</span> and <em>Numerical ecology</em> by Pierre and Louis Legendre <span class="citation" data-cites="legendre2012numerical">(<a href="#ref-legendre2012numerical" role="doc-biblioref">Legendre and Legendre 2012</a>)</span> are introductions to ordination and other multivariate methods. <span class="citation" data-cites="mccune2002analysis">McCune <em>et al.</em> (<a href="#ref-mccune2002analysis" role="doc-biblioref">2002</a>)</span> is a gentler introduction but depends on <a href="https://www.wildblueberrymedia.net/pcord">proprietary software</a>. <span class="citation" data-cites="legendre2012numerical">Legendre and Legendre (<a href="#ref-legendre2012numerical" role="doc-biblioref">2012</a>)</span> is a little more technical (but still relatively easy to understand) and uses R throughout.</p></li>
 <li><p><em>An introduction to WinBUGS for ecologists</em> by Marc Kéry <span class="citation" data-cites="kery2010">(<a href="#ref-kery2010" role="doc-biblioref">Kéry 2010</a>)</span>. This book introduces Bayesian inference using the free programs WinBUGS or JAGS, which can be accessed from R.</p></li>
 </ul>
@@ -612,10 +612,10 @@ window.Quarto = {
 <p><a href="./chapters/ch06.html#sec-06">Module 6</a> describes <strong>descriptive statistics</strong>, or summaries, of single variables.</p>
 <p><a href="./chapters/ch07.html#sec-07">Module 7</a> describes how to summarize and aggregate data by groups.</p>
 <p><a href="./chapters/ch08.html#sec-08">Module 8</a> introduces basic data visualizations like histograms, probability density plots, boxplots, and scatterplots.</p>
-<p><a href="./chapters/ch09.html#sec-09">Module 9</a> introduces probability distributions and how to use them to describe your data.</p>
+<p><a href="./chapters/ch09.html#mod-09">Module 9</a> introduces probability distributions and how to use them to describe your data.</p>
 <p><a href="./chapters/ch10.html#sec-10">Module 10</a> covers common statistical problems in biology, including lack of replication, autocorrelation, collinearity, and missing data.</p>
 <p><a href="./chapters/ch11.html#sec-11">Module 11</a> is a guide to selecting statistics for your research. This module contains dichotomous keys to help you decide what statistical methods are most appropriate for the question you are trying to analyze.</p>
-<p><strong>Part 4</strong> is a review of introductory statistics–basically everything you probably learned in your undergraduate statistics course, but could use refresher on.</p>
+<p><strong>Part 4</strong> is a review of introductory statistics–basically everything you learned in your undergraduate statistics course, but could probably use a refresher on.</p>
 <p><a href="./chapters/ch12.html#sec-12">Module 12</a> reviews the structure of biological datasets, null hypothesis significance testing, and the 4 classes of statistical tests used by biologists.</p>
 <p><a href="./chapters/ch13.html#sec-13">Module 13</a> reviews tests for comparing the means or locations of groups of observations: <em>t</em>-tests, analysis of variance (ANOVA), and their nonparametric alternatives.</p>
 <p><a href="./chapters/ch14.html#sec-14">Module 14</a> reviews procedures for testing continuous patterns: correlation, linear regression, and analysis of covariance (ANCOVA). This module also takes a deep dive into <strong>linear models</strong> and their fundamental importance for understanding more advanced methods.</p>
@@ -631,26 +631,26 @@ window.Quarto = {
 <p><strong>Part 7</strong> covers multivariate statistics, methods which can consider many variables at a time.</p>
 <p><a href="./chapters/ch22.html#sec-22">Module 22</a> introduces <strong>multivariate</strong> statistics, which explore patterns in 2 or more variables at once. This module covers the structure of multivariate datasets and distance measures.</p>
 <p><a href="./chapters/ch23.html#sec-23">Module 23</a> explores <strong>cluster analysis</strong>, a class of techniques for identifying groups within multivariate data.</p>
-<p><a href="./chapters/ch24.html#sec-24">Module 24</a> explores <strong>ordination</strong>, a class of techniques for visualizing patterns in multivariate data. Ordination also includes <strong>dimension reduction</strong>, or the consolidation of information from many dimensions into few.</p>
+<p><a href="./chapters/ch24.html#mod-24">Module 24</a> explores <strong>ordination</strong>, a class of techniques for visualizing patterns in multivariate data. Ordination also includes <strong>dimension reduction</strong>, or the consolidation of information from many dimensions into few.</p>
 <p><a href="./chapters/ch25.html#sec-25">Module 25</a> describes some multivariate hypothesis tests, many of which are extensions of univariate techniques.</p>
 <p><strong>Part 8</strong> introduces two statistical frameworks that can be an alternative to <em>p</em>-values and null hypothesis significance testing.</p>
 <p><a href="./chapters/ch26.html#sec-26">Module 26</a> introduces information-theoretic model selection, an alternative to null hypothesis significance testing (NHST) that evaluates entire models rather than individual parameters and their <em>p</em>-values.</p>
 <p><a href="./chapters/ch27.html#sec-27">Module 27</a> introduces Bayesian inference using the program JAGS, another alternative to NHST.</p>
 <p><strong>Part 9</strong> is “bonus material”; i.e., additional modules that didn’t quite fit in anywhere else. New modules will be added here until the next major update.</p>
-<p><a href="./chapters/ch28.html#sec-28">Module 28</a> takes a deep dive into building quality graphics using base R.</p>
+<p><a href="./chapters/ch28.html#mod-28">Module 28</a> takes a deep dive into building quality graphics using base R.</p>
 <p>Finally, <a href="./chapters/ch29.html#sec-29">Appendix A</a> describes the NEON dataset that I used to build most of this course, and the steps taken to process the raw data download to the files provided here.</p>
 </section>
 <section id="about-the-author" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="about-the-author">About the author</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="squirrel_pic.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+<p><img src="images/squirrel_pic.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
-<p>I’m a <a href="https://facultyweb.kennesaw.edu/ngreen62/index.php">quantitative ecologist at Kennesaw State University</a> who studies human impacts on animal populations. Since earning my PhD at Baylor University in 2012, I’ve been fortunate to have worked in a variety of government and industry roles. Those experiences have shaped my perspective on biology and education. In my courses and advising I do my best to impress upon students the variety of biological experiences and perspectives that different domains bring to the table…and the value that they all bring. Most of my <a href="https://facultyweb.kennesaw.edu/ngreen62/research.php">current research</a> focuses on understanding human impacts on animal communities and how animal populations adapt to rapidly changing environments.</p>
+<p>I’m a <a href="https://facultyweb.kennesaw.edu/ngreen62/index.php">quantitative ecologist at Kennesaw State University</a> who studies human impacts on animal populations. Since earning my PhD at Baylor University in 2012, I’ve been fortunate to have worked in a variety of government and industry roles. Those experiences have shaped my perspective on biology and education. In my courses and advising I do my best to impress upon students the variety of biological experiences and perspectives that different domains bring to the table…and the value that they all bring. Most of my <a href="https://greenquanteco.github.io/research">current research</a> focuses on understanding human impacts on animal communities and how animal populations adapt to rapidly changing environments.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="lab_logo_02.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+<p><img src="images/lab_logo_02.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 <p>Why am I making this guide? I have been using R since about 2008, when I was a graduate student trying to make a multi-panel plot for a manuscript. I had seen R mentioned in publications and thought that using R would be more effective than kludging something together with Excel and Powerpoint. Needless to say, jumping straight to making plots with the <code>lattice</code> package was not the easiest way to learn R. The final result was a little clunky <span class="citation" data-cites="kirchner2011">(<a href="#ref-kirchner2011" role="doc-biblioref">Kirchner <em>et al.</em> 2011</a>)</span> but I am still really proud of it. Eventually I took some courses and did a lot of self-teaching, and am finally (March 2025) pretty decent at R. I have used R in my work pretty much continuously since 2008 for everything from Bayesian data analysis <span class="citation" data-cites="green2020">(e.g., <a href="#ref-green2020" role="doc-biblioref">Green <em>et al.</em> 2020</a>)</span> to simulation modeling <span class="citation" data-cites="green2019">(e.g., <a href="#ref-green2019" role="doc-biblioref">Green <em>et al.</em> 2019</a>)</span>.</p>
@@ -692,7 +692,7 @@ National Ecological Observatory Network (NEON). 2025. Small mammal box trapping 
 Zuur AF, Ieno EN, Smith GM. 2007. Analysing ecological data. New York: Springer Science+Business Media.
 </div>
 <div id="ref-zuur2009mixed" class="csl-entry" role="listitem">
-Zuur AF, Ieno EN, Walker NJ, Saveliev AA, Smith GM <em>et al.</em> 2009a. Mixed effects models and extensions in ecology with <span>R</span>. Vol. 574. New York: Springer.
+<span class="nocase">Zuur AF, Ieno EN, Walker NJ, Saveliev AA, Smith GM <em>et al.</em></span> 2009a. Mixed effects models and extensions in ecology with <span>R</span>. Vol. 574. New York: Springer.
 </div>
 <div id="ref-zuur2009" class="csl-entry" role="listitem">
 Zuur A, Ieno EN, Meesters E. 2009b. A beginner’s guide to <span>R</span>. New York: Springer Science+Business Media.

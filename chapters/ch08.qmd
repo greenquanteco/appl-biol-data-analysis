@@ -1,7 +1,7 @@
 # Visualizing biological data {#sec-08}
 
-## Visualizing single variables {#sec-09-single}
-In statistics, we think of values within a variable coming from a probability distribution. **Probability distributions**, or **distributions** for short, are mathematical functions that describe the way that values vary randomly. Distributions are a key idea in statistics and data analysis and we'll cover them in detail in the [next module](@mod-09). We usually consider data to be essentially random, but with the values forming predictable patterns over many observations. The nature of those patterns is what probability distributions attempt to model. A probability distribution does not tell us the value of any particular observation, but it does let us estimate the likelihood of observing any particular value. The figure below demonstrates some common probability distributions: the heights of the bars reflect the likelihood of the values on the *x*-axes occurring under those distributions.
+## Visualizing single variables {#sec-08-single}
+In statistics, we think of values within a variable coming from a probability distribution. **Probability distributions**, or **distributions** for short, are mathematical functions that describe the way that values vary randomly. Distributions are a key idea in statistics and data analysis and we'll cover them in detail in the [next module](@sec-09). We usually consider data to be essentially random, but with the values forming predictable patterns over many observations. The nature of those patterns is what probability distributions attempt to model. A probability distribution does not tell us the value of any particular observation, but it does let us estimate the likelihood of observing any particular value. The figure below demonstrates some common probability distributions: the heights of the bars reflect the likelihood of the values on the *x*-axes occurring under those distributions.
 
 ```{r}
 #| echo: FALSE
@@ -60,7 +60,7 @@ A related question to "what distribution does my data follow?" is "do my data fo
 
 Deciding what distribution your data follow is always somewhat subjective, and real datasets often contain some departure from expectations. In this section we will explore some graphical techniques and heuristics for determining how data are distributed.
 
-Knowing about [data distributions](@mod-09) is a one thing, but is quite another.
+Knowing about [data distributions](@sec-09) is a one thing, but is quite another.
 Like much of the data analysis workflow, picking a distribution can be as much an art as it is a science. This is because distributions of real data are often messy, or do not conform exactly to any one distribution, or may conform partly to several!
 Sometimes the answer to "what distribution should I use to analyze this data?" is not clear-cut.
 
@@ -70,7 +70,7 @@ The figure below gives a (very) rough guide to starting to identify a response d
 
 ### Histograms {#sec-08-sing-hist}
 
-**Histograms** show how values of a distribution are spread across different intervals. These intervals are sometimes called **cells** or **bins**. A good histogram will show, approximately, the shape of a **probability density function (PDF)** of a [continuous distribution](@mod-09-cont) or the **probability mass function (PMF)** of a [discrete distribution](@mod-09-disc). A histogram with bin widths of 0 should look like a [kernel density plot](@sec-08-sing-kern).
+**Histograms** show how values of a distribution are spread across different intervals. These intervals are sometimes called **cells** or **bins**. A good histogram will show, approximately, the shape of a **probability density function (PDF)** of a [continuous distribution](@sec-09-cont) or the **probability mass function (PMF)** of a [discrete distribution](@sec-09-disc). A histogram with bin widths of 0 should look like a [kernel density plot](@sec-08-sing-kern).
 
 The base function `hist()` will automatically select intervals that look nice, but you can specify the intervals with argument `breaks`.
 
@@ -90,7 +90,7 @@ par(mfrow=c(1,1))
 
 The *area* of each bar is also proportional to the number of values in each interval.
 
-R histograms can be presented as counts (`freq=TRUE`, the default), or as probability density (`freq=FALSE`). We'll talk more about probability density later in the [next section](@mod-05-dists1).
+R histograms can be presented as counts (`freq=TRUE`, the default), or as probability density (`freq=FALSE`). We'll talk more about probability density later in the [next section](@sec-05-dists1).
 
 Compare these results:
 
@@ -104,7 +104,7 @@ hist(x, freq=FALSE)
 par(mfrow=c(1,1))
 ```
 
-Because the second histogram shows probability densities, the areas under the bars sum to 1 (this is part of the definition of a PDF) (see @sec-05-cont).
+Because the second histogram shows probability densities, the areas under the bars sum to 1 (this is part of the definition of a PDF) (see @sec-09-cont).
 
 A histogram can provide a visual first clue as to the shape of a distribution's PDF or PMF. For example, the histograms of `x1` and `x2` below suggest very different distributions:
 
@@ -184,7 +184,7 @@ The above plot is called a "dynamite plot" because the bar and error bar look li
 
 ### Boxplots {#sec-08-sing-box}
 
-**Boxplots**, or **box-and-whisker plots**, summarize the distribution of continuous variables. They are often used to summarize data by a factor, making it easier to see how the distribution of a variable differs between groups. The boxplot shows the median, the first and third quartiles, and extreme values (whiskers and points)^[boxplot].
+**Boxplots**, or **box-and-whisker plots**, summarize the distribution of continuous variables. They are often used to summarize data by a factor, making it easier to see how the distribution of a variable differs between groups. The boxplot shows the median, the first and third quartiles, and extreme values (whiskers and points)[^boxplot].
 
 [^boxplot]: Or close enough. The actual, slightly different values, are in the documentation. See `?boxplot.stats`.
 
@@ -213,8 +213,7 @@ boxplot(iris$Petal.Width~iris$Species,
 
 A highly asymmetric box-and-whisker plot can indicate that data are skewed or non-normal.
 
-The base `boxplot()` function can produce summaries across multiple variables.
-Essentially it treats each combination of grouping variables as a separate set of values. There are better ways to plot group differences (e.g., for publication), but the base `boxplot()` does just fine for data exploration.
+The base `boxplot()` function can produce summaries across multiple variables. Essentially it treats each combination of grouping variables as a separate set of values. There are better ways to plot group differences (e.g., for publication), but the base `boxplot()` does just fine for data exploration.
 
 Boxplots can be constructed using several grouping variables. The order of grouping variables in the formula will determine the order of boxes in the plot.
 
@@ -360,7 +359,7 @@ The estimate with 10 points (red) is a very rough fit, but serviceable. The esti
 
 ### Kernel density plots {#sec-08-sing-kern}
 
-Kernel density plots are a way to empirically estimate and visualize the **probability distribution function (PDF)** of a distribution (@sec-05-cont). A plot of the estimated PDF is essentially a histogram where the bin width approaches 0. The PDF tells us two things. Practically speaking, the PDF of a distribution at a given value is related to how likely that value is to occur relative to other values.
+Kernel density plots are a way to empirically estimate and visualize the **probability distribution function (PDF)** of a distribution (@sec-09-cont). A plot of the estimated PDF is essentially a histogram where the bin width approaches 0. The PDF tells us two things. Practically speaking, the PDF of a distribution at a given value is related to how likely that value is to occur relative to other values.
 However, that is NOT the same as the probability of that value occurring.
 
 What the PDF really expresses is the *rate of change in cumulative density at a value*.
@@ -374,7 +373,7 @@ The PDF is defined as is the *slope or first derivative of the CDF*. Conversely,
 
 The kernel density plot estimated by R is to the PDF what the empirical cumulative distribution function (ECDF; see @sec-08-sing-cdf) is to the CDF. Just like an ECDF plot presents an estimate of the true CDF, the kernel density plot presents an estimate of the true PDF. This means that presenting a kernel density plot or an ECDF plot is largely a matter of preference because they convey the same information in different ways.
 
-Note that a kernel density plot makes more sense for a [continuous distribution](@mod-09-cont) than for a [discrete distribution](@mod-09-disc). The equivalent plot for a discrete distribution is the **probability mass function (PMF)** plot, which looks like a barplot because the PMF is only non-zero for integer values. 
+Note that a kernel density plot makes more sense for a [continuous distribution](@sec-09-cont) than for a [discrete distribution](@sec-09-disc). The equivalent plot for a discrete distribution is the **probability mass function (PMF)** plot, which looks like a barplot because the PMF is only non-zero for integer values. 
 
 The example below shows kernel density plots for four distributions: $Normal\left(\mu=5,\sigma=2\right)$, $Gamma\left(k=3,\theta=2\right)$, $Uniform\left(min=0,max=1\right)$, and $Poisson\left(\lambda=4\right)$. The first 3 are continuous distributions and the last is a discrete distribution.
 
@@ -461,7 +460,7 @@ points(v4, y4, type="l", col="red", lwd=2)
 
 ## Visualizing 2 variables {#sec-08-two}
 
-So far in this course we have explored ways to [explore distributions of single variables](@#sec-09-single): histograms, ECDF plots, probability density plots, and so on. In this section we will explore ways to explore relationships *between* variables. This is a vital preliminary step in studying how two or more variables might be correlated with each other, or how one might cause the other. The focus on this page is on exploratory, correlative methods. Actual inference about relationships between two variables is better handled by [linear models (LM)](@mod-14-lin), [generalized linear models (GLM)](@mod-16), or [other kinds of models](@mod-20). 
+So far in this course we have explored ways to [explore distributions of single variables](@#sec-09-single): histograms, ECDF plots, probability density plots, and so on. In this section we will explore ways to explore relationships *between* variables. This is a vital preliminary step in studying how two or more variables might be correlated with each other, or how one might cause the other. The focus on this page is on exploratory, correlative methods. Actual inference about relationships between two variables is better handled by [linear models (LM)](@sec-14-lin), [generalized linear models (GLM)](@sec-16), or [other kinds of models](@sec-20). 
 
 ### Scatterplots for 2 continuous variables {#sec-08-two-scatter}
 
@@ -775,7 +774,7 @@ legend("topright", legend="Data", fill="lightgrey")
 hist(rnorm(n))
 ```
 
-For more advanced plotting, refer to @mod-28. There we'll explore special symbols and equations with `plotmath()`, fun with axes, adding images to figures, and `lattice` graphics.
+For more advanced plotting, refer to @sec-28. There we'll explore special symbols and equations with `plotmath()`, fun with axes, adding images to figures, and `lattice` graphics.
 
 ## Visualizing many variables {#sec-08-many}
 
@@ -870,7 +869,7 @@ These two rules will work for almost any ordination you are likely to encounter 
 **Principal components analysis (PCA)** is a method for extracting synthetic gradients from a multivariate dataset that capture most of the variation in that dataset. These gradients are calculated by finding linear combinations of the variables that minimize sums of squared deviations from the gradient. In other words, PCA translates the variation between observations in terms of the original, many variables, into variation along a few artificial variables called **principal components**. 
 
 The basic problem is this: you can see a pattern in one variable with a histogram (@sec-08-sing-hist). You can see a pattern in 2 or 3 variables (i.e., dimensions) with a scatterplot (@sec-08-two-scatter). But what if you have 4 variables? 10 variables?
-If you've never heard of PCA or ordination, it might be worth watching a video that explains and shows the basic ideas. Here is [**one that only takes 5 minutes and has a nice theme song**](https://www.youtube.com/watch?v=HMOI_lkzW08) (accessed 2021-08-10). For a more in-depth introduction to PCA, see [Module 24](#mod-24-pca). For now, let's just go with "PCA helps us visualize patterns involving many variables at once".
+If you've never heard of PCA or ordination, it might be worth watching a video that explains and shows the basic ideas. Here is [**one that only takes 5 minutes and has a nice theme song**](https://www.youtube.com/watch?v=HMOI_lkzW08) (accessed 2021-08-10). For a more in-depth introduction to PCA, see [Module 24](@sec-24-pca). For now, let's just go with "PCA helps us visualize patterns involving many variables at once".
 
 PCA is available in base R using the functions `prcomp()` and `princomp()`. Both of these functions produce similar outputs, but there are some subtle differences between them. For this course we are going to use the PCA function in package `vegan`. Although designed for community ecology, `vegan` is widely used for ordination and multivariate analysis in many fields. Importantly, `vegan` is actively maintained and updated with new techniques as they are developed. Also importantly, `vegan` offers a common interface for many kinds of ordination.
 
@@ -906,7 +905,7 @@ The "Importance of components" part tells us that the first principal component 
 
 Finally, we can see the variable **loadings**, which describe the contribution of each original variable to each principal component[^loadings]. Loadings with larger absolute values indicate variables that contribute more strongly to an axis, while the sign indicates the direction of that relationship. In the example below, unscaled loadings for PCs 1-4 are requested using `choices=1:4` and `scaling=0`.
 
-[^loadings]: Different software packages define loadings slightly differently. Some report the coefficients (eigenvectors) used to calculate the principal components, while others report the correlations between the original variables and the principal components. The two are closely related and usually lead to the same qualitative interpretation. We'll discuss this more in @mod-28.
+[^loadings]: Different software packages define loadings slightly differently. Some report the coefficients (eigenvectors) used to calculate the principal components, while others report the correlations between the original variables and the principal components. The two are closely related and usually lead to the same qualitative interpretation. We'll discuss this more in @sec-28.
 
 ```{r}
 scores(p1, choices = 1:4, display = "species", scaling = 0)
@@ -953,6 +952,12 @@ legend("topleft",
        pch=c(2, 2, 1, 1),
        col=c("red", "blue", "red", "blue"))
 ```
+
+Some interpretations of this plot:
+
+1. Almost all of the variance is on PC1. Because the underlying data are measurements, and measurements are often correlated with overall size, PC1 is probably a gradient of overall body size. If we wanted to use PCA to capture shape variation, we would need to factor out overall size first somehow. Or, not interpret PC1.
+1. The species B and O (triangles and circles) do not appear to be well distinguished by either PC1 or PC2.
+1. The sexes (red and blue) are well separated by PC2, with females having smaller values and males having greater values.
 
 #### Ordination wrap-up (for now)
 

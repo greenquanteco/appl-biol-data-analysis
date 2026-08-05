@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>5&nbsp; Data manipulation with R – Applied Biological Data Analysis</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -88,15 +91,14 @@ div.csl-indent {
 <link href="../chapters/ch04.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -127,7 +129,7 @@ div.csl-indent {
 <style>html{ scroll-behavior: smooth; }</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -180,9 +182,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -556,7 +556,7 @@ window.Quarto = {
 </header>
 
 
-<p>In <a href="ch02.html" class="quarto-xref"><span>Chapter 2</span></a> we introduced the basics of the R language and program environment. In this module, we’ll go a few steps further and get into the finer details of <strong>data manipulation</strong>: the practice of arranging, sorting, cleaning, and modifying data–and the objects that contain data. Data manipulation is an important R skill because real datasets usually need some fixing before they can be properly analyzed. Data manipulation is also and essential part of R programming for tasks other than data analysis. For example, <a href="https://doi.org/10.5066/P935Y7NO">simulation modeling</a> or document production (e.g., this website!).</p>
+<p>In <a href="#sec-02" class="quarto-xref"><span class="quarto-unresolved-ref">sec-02</span></a> we introduced the basics of the R language and program environment. In this module, we’ll go a few steps further and get into the finer details of <strong>data manipulation</strong>: the practice of arranging, sorting, cleaning, and modifying data–and the objects that contain data. Data manipulation is an important R skill because real datasets usually need some fixing before they can be properly analyzed. Data manipulation is also and essential part of R programming for tasks other than data analysis. For example, <a href="https://doi.org/10.5066/P935Y7NO">simulation modeling</a> or document production (e.g., this website!).</p>
 <section id="sec-05-make" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="sec-05-make"><span class="header-section-number">5.1</span> Making values</h2>
 <p>The typical analysis workflow in R involves importing data from text files or other sources. Sometimes, however, it is necessary to make values within R. This can be for a variety of reasons:</p>
@@ -764,18 +764,18 @@ window.Quarto = {
 <span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>my.df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    x x3 x4        x2
-1   1  1  1 0.4876010
-2   2  2  2 0.1369582
-3   3  3  3 0.4876010
-4   4  1  4 0.1369582
-5   5  2  1 0.4876010
-6   6  3  2 0.1369582
-7   7  1  3 0.4876010
-8   8  2  4 0.1369582
-9   9  3  1 0.4876010
-10 10  1  2 0.1369582
-11 11  2  3 0.4876010
-12 12  3  4 0.1369582</code></pre>
+1   1  1  1 0.9752318
+2   2  2  2 0.4133281
+3   3  3  3 0.9752318
+4   4  1  4 0.4133281
+5   5  2  1 0.9752318
+6   6  3  2 0.4133281
+7   7  1  3 0.9752318
+8   8  2  4 0.4133281
+9   9  3  1 0.9752318
+10 10  1  2 0.4133281
+11 11  2  3 0.9752318
+12 12  3  4 0.4133281</code></pre>
 </div>
 </div>
 <p>Trying to add a variable to <code>my.df</code> with a number of values that is not a factor of 12–like 5, 7, 8, 9, 10, or 11–will usually return an error.</p>
@@ -795,11 +795,11 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="co"># different results each time:</span></span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">3</span>)</span>
-<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.4645386 0.9145093 0.9254468</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.31334260 0.09387697 0.39822763</span></span>
 <span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">3</span>)</span>
-<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.7937920 0.3312109 0.3878908</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.2389854 0.1816877 0.6654149</span></span>
 <span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">3</span>)</span>
-<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.3848774 0.7213804 0.4205435</span></span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.82952968 0.14363993 0.02812006</span></span>
 <span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a><span class="co"># same results each time:</span></span>
 <span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
@@ -872,7 +872,7 @@ window.Quarto = {
 </section>
 <section id="sec-05-make-rand-dist" class="level4" data-number="5.1.3.3">
 <h4 data-number="5.1.3.3" class="anchored" data-anchor-id="sec-05-make-rand-dist"><span class="header-section-number">5.1.3.3</span> Random values from a distribution</h4>
-<p>One of the strengths of R is its ease of working with probability distributions. We will explore probability distributions more in <a href="ch09.html" class="quarto-xref"><span>Chapter 9</span></a>, but for now just understand that a probability distribution is a function that describes how likely different values of a random variable are. In R, random values from a probability distribution can be drawn using a function with a name like <code>r_()</code>, where <code>_</code> is the (abbreviated) name of the distribution.</p>
+<p>One of the strengths of R is its ease of working with probability distributions. We will explore probability distributions more in <a href="#sec-09" class="quarto-xref"><span class="quarto-unresolved-ref">sec-09</span></a>, but for now just understand that a probability distribution is a function that describes how likely different values of a random variable are. In R, random values from a probability distribution can be drawn using a function with a name like <code>r_()</code>, where <code>_</code> is the (abbreviated) name of the distribution.</p>
 <p>The syntax of the functions for working with distributions in R is very consistent. For random values, the first argument is always the sample size (<code>n</code>), and the next few arguments are the distributional parameters of the distribution. These arguments can be provided with or without their names. The default order of the arguments is shown on the help page for each function (e.g., <code>?rnorm</code>). Below are some examples of random draws from different distributions, displayed as histograms.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sample size</span></span>
@@ -1502,11 +1502,11 @@ $e2
 <span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a><span class="co"># time with seconds</span></span>
 <span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a><span class="fu">strptime</span>(a, <span class="at">format=</span><span class="st">"%H:%M:%S"</span>)</span>
-<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-08-03 01:15:03 EDT" "2026-08-03 14:28:21 EDT"</span></span>
+<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-08-05 01:15:03 EDT" "2026-08-05 14:28:21 EDT"</span></span>
 <span id="cb97-8"><a href="#cb97-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb97-9"><a href="#cb97-9" aria-hidden="true" tabindex="-1"></a><span class="co"># time with seconds dropped</span></span>
 <span id="cb97-10"><a href="#cb97-10" aria-hidden="true" tabindex="-1"></a><span class="fu">strptime</span>(a, <span class="at">format=</span><span class="st">"%H:%M"</span>)    <span class="co"># seconds dropped</span></span>
-<span id="cb97-11"><a href="#cb97-11" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-08-03 01:15:00 EDT" "2026-08-03 14:28:00 EDT"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb97-11"><a href="#cb97-11" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-08-05 01:15:00 EDT" "2026-08-05 14:28:00 EDT"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Notice that the current date was included in the result of <code>strptime()</code> (at least, the date when I rendered the document).</p>
 <p>Time zones should be specified when working with data that contain dates and times. Remember that R will assume the time is in the current user’s time zone. This almost always means the time zone used by the operating system in which R is running. If you did something silly like record data in one time zone and analyze it in another, you have to be careful. For example, I once ran a field study in Indiana where data were recorded in Eastern time. But, the office where I analyzed the data was in Missouri (Central time). R kept converting the time-stamped data to Central time, which interfered with the analysis until I learned how to work with time zones in R. To make things worse, data were recorded in the summer (Eastern daylight time) but analyzed in both early fall (Central daylight time) and late fall (Central standard time).</p>
@@ -1522,7 +1522,7 @@ $e2
 <span id="cb98-9"><a href="#cb98-9" aria-hidden="true" tabindex="-1"></a>a2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"13:21"</span>, <span class="st">"09:15"</span>)</span>
 <span id="cb98-10"><a href="#cb98-10" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">strptime</span>(a2, <span class="st">"%H:%M"</span>)</span>
 <span id="cb98-11"><a href="#cb98-11" aria-hidden="true" tabindex="-1"></a>x2</span>
-<span id="cb98-12"><a href="#cb98-12" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-08-03 13:21:00 EDT" "2026-08-03 09:15:00 EDT"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb98-12"><a href="#cb98-12" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-08-05 13:21:00 EDT" "2026-08-05 09:15:00 EDT"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Time zone names are not always portable across systems. R has a list of built-in time zones that it can handle, and these should work, but be careful and <strong><em>always</em></strong> validate any code that depends on time zones. The list of time zones R can use can be printed to the console with the command <code>OlsonNames()</code>.</p>
 <div class="cell">
@@ -1599,13 +1599,13 @@ $e2
 <span id="cb104-13"><a href="#cb104-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb104-14"><a href="#cb104-14" aria-hidden="true" tabindex="-1"></a><span class="do">## calculate time in different units:</span></span>
 <span id="cb104-15"><a href="#cb104-15" aria-hidden="true" tabindex="-1"></a><span class="fu">difftime</span>(y,x, <span class="at">units=</span><span class="st">"days"</span>)</span>
-<span id="cb104-16"><a href="#cb104-16" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 8002.375 days</span></span>
+<span id="cb104-16"><a href="#cb104-16" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 8000.334 days</span></span>
 <span id="cb104-17"><a href="#cb104-17" aria-hidden="true" tabindex="-1"></a><span class="fu">difftime</span>(y,x, <span class="at">units=</span><span class="st">"hours"</span>)</span>
-<span id="cb104-18"><a href="#cb104-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 192057 hours</span></span>
+<span id="cb104-18"><a href="#cb104-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 192008 hours</span></span>
 <span id="cb104-19"><a href="#cb104-19" aria-hidden="true" tabindex="-1"></a><span class="fu">difftime</span>(y,x, <span class="at">units=</span><span class="st">"mins"</span>)</span>
-<span id="cb104-20"><a href="#cb104-20" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 11523420 mins</span></span>
+<span id="cb104-20"><a href="#cb104-20" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 11520481 mins</span></span>
 <span id="cb104-21"><a href="#cb104-21" aria-hidden="true" tabindex="-1"></a>y<span class="sc">-</span>x</span>
-<span id="cb104-22"><a href="#cb104-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 8002.375 days</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb104-22"><a href="#cb104-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 8000.334 days</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Another application: what is the time difference between Chicago and Honolulu?</p>
 <div class="cell">
@@ -1763,7 +1763,7 @@ $e2
 <span id="cb113-46"><a href="#cb113-46" aria-hidden="true" tabindex="-1"></a><span class="do">##   iteration 5 part 3 complete! </span></span>
 <span id="cb113-47"><a href="#cb113-47" aria-hidden="true" tabindex="-1"></a><span class="do">## iteration 5 complete!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The other printing function, <code>sink()</code>, is specifically for printing outputs into text files. Refer back to the <a href="ch04.html#sec-04-export-sink" class="quarto-xref"><span>Section 4.4.4</span></a> for an example.</p>
+<p>The other printing function, <code>sink()</code>, is specifically for printing outputs into text files. Refer back to the <a href="#sec-04-export-sink" class="quarto-xref"><span class="quarto-unresolved-ref">sec-04-export-sink</span></a> for an example.</p>
 </section>
 <section id="sec-05-char-match" class="level3" data-number="5.4.3">
 <h3 data-number="5.4.3" class="anchored" data-anchor-id="sec-05-char-match"><span class="header-section-number">5.4.3</span> Matching character strings</h3>
@@ -1788,7 +1788,7 @@ $e2
 <span id="cb114-17"><a href="#cb114-17" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(x <span class="sc">==</span> <span class="st">"zebra"</span>)</span>
 <span id="cb114-18"><a href="#cb114-18" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] FALSE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Notice that this kind of matching is case-sensitive. If you need to match regardless of case, you can either force all of the comparands to be the same case, or use regular expressions (see <a href="#sec-05-char-grep" class="quarto-xref"><span>Section 5.4.4</span></a>).</p>
+<p>Notice that this kind of matching is case-sensitive. If you need to match regardless of case, you can either force all of the comparands to be the same case, or use regular expressions (see <a href="#sec-05-char-grep" class="quarto-xref"><span class="quarto-unresolved-ref">sec-05-char-grep</span></a>).</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"zebra"</span>, <span class="st">"hippo"</span>)</span>
@@ -1949,7 +1949,7 @@ $e2
 <span id="cb126-13"><a href="#cb126-13" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 1 2 1 2 4 3 3 4</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The first example shows what <code>match()</code> is doing. For element in the first vector, <code>match()</code> returns the first position where that value occurs in the second vector. The second example shows what happens when trying to match a value that is not in the second vector: R returns <code>NA</code>. The third example shows how <code>match()</code> can be used to relate tables. The longer vector <code>vec3</code> is matched to the shorter vector <code>vec1</code>, which contains each unique value only once. If <code>vec1</code> was a variable in a data frame that contained other variables associated with genes, then the result of <code>match(vec3, vec1)</code> would return the rows in <code>vec1</code>’s data frame associated with each row of <code>vec3</code>’s data frame.</p>
-<p>The code below demonstrates how <code>match()</code> might be used in practice. This example uses <code>iris</code> and an imaginary second table. The commands use <code>match()</code> to assign a second variable, petal color, to iris using species as the key variable. We’ll revisit this example dataset again in <a href="#sec-05-df-oth-merg" class="quarto-xref"><span>Section 5.5.3.1</span></a> when we learn how to merge data frames.</p>
+<p>The code below demonstrates how <code>match()</code> might be used in practice. This example uses <code>iris</code> and an imaginary second table. The commands use <code>match()</code> to assign a second variable, petal color, to iris using species as the key variable. We’ll revisit this example dataset again in <a href="#sec-05-df-oth-merg" class="quarto-xref"><span class="quarto-unresolved-ref">sec-05-df-oth-merg</span></a> when we learn how to merge data frames.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb127"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not run (see next section)</span></span>
 <span id="cb127-2"><a href="#cb127-2" aria-hidden="true" tabindex="-1"></a></span>

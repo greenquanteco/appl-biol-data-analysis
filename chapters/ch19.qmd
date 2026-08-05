@@ -4,3 +4,5 @@
 Even our curves have curves.
 
 It's what's under the curve that counts.
+
+## Binomial GLM for proportions {#sec-19-binom}
