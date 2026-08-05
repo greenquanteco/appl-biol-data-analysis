@@ -1,3 +1,6 @@
 # Introductory statistics with R {#sec-12}
 
 Everything you should have learned in Biostats.
+
+
+## Linear models {#mod-12-lin}

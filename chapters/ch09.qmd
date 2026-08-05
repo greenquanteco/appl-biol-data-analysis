@@ -1,3 +1,106 @@
 # Probability distributions for biologists {#sec-09}
 
-Just a little bit of calculus.
+
+## Introduction {#mod-09-intro}
+
+### Probability distributions in R {#mod-09-r}
+
+## Discrete distributions {#mod-09-disc}
+
+### Bernoulli distribution {#mod-09-bern}
+
+### Binomial distribution {#mod-09-binom}
+
+#### Binomial distribution in R {#mod-09-binom-r}
+
+### Poisson distribution {#mod-09-pois}
+
+#### Poisson distribution in R {#mod-09-pois-r}
+
+### Negative binomial distribution {#mod-09-negbin}
+
+#### Negative binomial distribution in R {#mod-09-negbin-r}
+
+### Geometric distribution {#mod-09-geom}
+
+### Beta-binomial distribution {#mod-09-betabin}
+
+### Multinomial distribution {#mod-09-multinom}
+
+## Continuous distributions {#mod-09-cont}
+
+### Uniform distribution {#mod-09-unif}
+
+#### Uniform distribution in R {#mod-09-unif-r}
+
+### Normal distribution {#mod-09-norm}
+
+#### Normal distribution in R {#mod-09-norm-r}
+
+### Lognormal distribution {#mod-09-lnorm}
+
+#### Lognormal distribution in R {#mod-09-lnorm-r}
+
+### Gamma distribution {#mod-09-gamma}
+
+#### Gamma distribution in R {#mod-09-gamma-r}
+
+### Beta distribution {#mod-09-beta}
+
+#### Beta distribution in R {#mod-09-beta-r}
+
+#### The beta and the binomial {#mod-09-beta-binom}
+
+### Dirichlet distribution {#mod-09-dirich}
+
+### Exponential distribution {#mod-09-exp}
+
+#### Exponential distribution in R {#mod-09-exp-r}
+
+### Triangular distribution {#mod-09-tri}
+
+#### Triangular distribution in R {#mod-09-tri-r}
+
+### Distribution summary {#mod-09-summary}
+
+## Fitting and testing distributions {#mod-09-fit}
+
+### Estimating distributional parameters {#mod-09-fit-param}
+
+### Graphical methods for examining distributions {#mod-09-fit-graph}
+
+#### Comparing distributions with PDF or PMF plots {#mod-09-fit-pdf}
+
+#### Comparing distributions using CDF and ECDF {#mod-09-fit-cdf}
+
+#### Comparing distributions using QQ plots {#mod-09-fit-qq}
+
+### Formal tests for distributions {#mod-09-tests}
+
+#### Tests for normality {#mod-09-tests-norm}
+
+#### Kolmogorov-Smirnov tests {#mod-09-tests-ks}
+
+## Data transformations {#mod-09-trans}
+
+### Why transform? {#mod-09-trans-why}
+
+### Transforms vs. link functions {#mod-09-trans-link}
+
+### Common transformations {#mod-09-trans-common}
+
+#### Log transformation {#mod-09-trans-log}
+
+#### Log transforming with 0 values {#mod-09-trans-log0}
+
+#### Rank transformation {#mod-09-trans-rank}
+
+#### Logit and probit transformations {#mod-09-trans-logit}
+
+### Uncommon transformations {#mod-09-trans-uncommon}
+
+#### Square-root transformation {#mod-09-trans-sqrt}
+
+#### Arcsine transformation {#mod-09-trans-asin}
+
+#### Box-Cox transformation {#mod-09-trans-boxcox}
