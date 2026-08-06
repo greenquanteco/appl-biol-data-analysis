@@ -400,9 +400,7 @@ rbinom(10, 10, 0.5)
 - Result 3 shows 10 results from Bernoulli distributions. Notice that if you add up the values in Result 3, you get a result like Result 2.
 - Finally, Result 4 shows 10 draws from a binomial distribution, which itself has *n* = 10.
 
-The take home message is that the first argument to `rbinom()` is not a parameter of the binomial distribution. It is instead the number of draws from the distribution that you want. The `size` parameter is the argument that helps define the distribution[^headache].
-
-[^headache]: If your brain hurts, that’s completely normal. This function gives me headaches too.
+The take home message is that the first argument to `rbinom()` is not a parameter of the binomial distribution. It is instead the number of draws from the distribution that you want. The `size` parameter is the argument that helps define the distribution.
 
 ### Poisson distribution {#sec-09-pois}
 
@@ -428,7 +426,7 @@ For example, the **coefficient of variation (CV)** is the ratio of a distributio
 
 $$CV\left(X\right)=\frac{\sqrt\lambda}{\lambda}$$
 
-So, if you measured 20 leaves and found a mean length of 17 cm, the CV would thus be $\approx$ 0.242 or 24%. But if you convert the measurements to mm, the CV would be about 0.077, or 7.7%! (In fact, if you change $\lambda$ by some factor *a*, then the CV will be scaled by $\sqrt a/a$). 
+So, if you measured 20 leaves and found a mean length of 17 cm, the CV would thus be $\approx$ 0.242 or 24%. But if you convert the measurements to mm, the CV would be about 0.077, or 7.7%!
 
 The figure below shows the effect of varying $\lambda$ on a Poisson distribution.
 
@@ -446,11 +444,11 @@ par(mfrow=c(1,1), mar=c(5.1, 5.1, 1.1, 1.1),
 plot(x, dlist[[1]], ylim=c(0, max(sapply(dlist, max))),
     type="n", ylab="PMF", xlab="Value (x)")
 for(i in 1:nlams){
-    points(x, dlist[[i]], pch=16, cex=1.3,
+    points(x, dlist[[i]], pch=i, cex=1.3,
         col=cols[i])
 }
 legend("topright", legend=lams,
-    pch=16, pt.cex=1.3, col=cols, bty="n", cex=1.3,
+    pch=1:nlams, pt.cex=1.3, col=cols, bty="n", cex=1.3,
     title=expression(lambda))
 ```
 
@@ -458,21 +456,19 @@ legend("topright", legend=lams,
 ### Negative binomial distribution {#sec-09-negbin}
 
 
-The **negative binomial distribution** has two common definitions. The original defintion is as the number of failures that occur in a series of Bernoulli trials until some predetermined number of successes is observed. For example, when flipping a fair coin, how many times should you expect to see tails before you observe 8 heads? This definition is, therefore, a discrete version of the [gamma distribution](#mod-05-gamma). This original definition of the negative binomial distribution is what names the negative binomial. 
+The **negative binomial distribution** as usually used in biology is used for counts that are **overdispersed**--that is, they have a variance greater than expected given other parameters. In this case, that means $\sigma^2>>\lambda$. This is *very common* in biological count data. For example, a bird species might have low abundance (0 to 4) at most sites in a study, but very high abundance (30 to 40) at a handful of sites. In that case using the Poisson distribution would not be appropriate because doing so would mean assuming that the variance was approximately equal to the mean when it really wasn't. 
 
-The second definition is as an alternative to the Poisson distribution when variance is not equal--and usually much greater than--the mean. Biologists tus often use the negative binomial as an **overdispersed** alternative to the Poisson distribution. Overdispersed means that a distribution has a variance greater than expected given other parameters. This is *very common* in biological count data. For example, a bird species might have low abundance (0 to 4) at most sites in a study, but very high abundance (30 to 40) at a handful of sites. In that case using the Poisson distribution would not be appropriate because doing so would imply that the variance $\lambda$ was greater than the mean (also $\lambda$); in other words, that $\lambda > \lambda$.
+The definition that is not used as commonly in biology is actually the original definition: the negative binomial distribution also describes the number of failures that occur in a series of Bernoulli trials until some predetermined number of successes is observed. For example, when flipping a fair coin, how many times should you expect to see tails before you observe 8 heads? This definition is, therefore, a discrete version of the [gamma distribution](@sec-09-gamma). This also makes the original definition of the negative binomial similar to the geometric distribution (@sec-09-geom).
 
-The version of the negative binomial that biologists use is parameterized by its mean $\mu$ and its overdispersion *k*. This definition views the negative binomial as a Poisson distribution with parameter $\lambda$, where $\lambda$ itself is a random variable that follows a Gamma distribution (see below). For this reason, some authors refer to the negative binomial as a **Gamma-Poisson mixture distribution**. A mixture distribution is exactly what it sounds like: a distribution that is formed by “mixing” or combining two distributions. Usually this manifests as having one or more parameters of one distribution vary as another distribution.
+The version of the negative binomial that biologists use is parameterized by its mean $\mu$ and its overdispersion $k$. This definition views the negative binomial as a Poisson distribution with parameter $\lambda$, where $\lambda$ itself is a random variable that follows a Gamma distribution (@sec-09-gamma). For this reason, some authors refer to the negative binomial as a **Gamma-Poisson mixture distribution**. A mixture distribution is exactly what it sounds like: a distribution that is formed by “mixing” or combining two distributions. Often a mixture is formed by having parameters of one distribution vary according to another distribution.
 
-The overdispersion parameter *k* is called **size** in the R functions that work with the negative binomial. Counterintuitively, the overdispersion in a negative binomial distribution gets larger as *k* becomes smaller. This is seen in the expression for the variance of a negative binomial distribution:
+The overdispersion parameter $k$ is called `size` in the R functions that work with the negative binomial. Counterintuitively, the overdispersion in a negative binomial distribution gets larger as $k$ becomes smaller. This is seen in the expression for the variance of a negative binomial distribution:
 
 $$Var\left(X\right)=\mu+\frac{\mu^2}{k}$$
 
-As *k* becomes large, the ratio $\mu^2/k$ becomes small, and thus $Var(x)$ approaches $\mu$. This means that a negative binomial distribution with large *k* approximates a Poisson distribution. As *k* approaches 0, the ratio $\mu^2/k$ becomes larger, and thus $Var(x)$ increases to be much larger than $\mu$.
-
+As $k$ becomes large, the ratio $\mu^2/k$ becomes small and approaches 0, and thus $Var(x)$ approaches $\mu$. This means that a negative binomial distribution with large $k$ approximates a Poisson distribution. As $k$ approaches 0, the ratio $\mu^2/k$ becomes larger, and thus $Var(x)$ increases to be much larger than $\mu$.
 
 #### Negative binomial distribution in R {#sec-09-negbin-r}
-
 
 The negative binomial distribution is accessed using the `_nbinom` group of functions, where the space could be `d`, `p`, `q`, or `r`. These functions calculate or returns something different:
 
@@ -483,7 +479,7 @@ The negative binomial distribution is accessed using the `_nbinom` group of func
 
 The R functions for the negative binomial distribution can work with either parameterization (waiting time or mean with overdispersion). Some of the argument names are used for both methods. If you are working with the negative binomial distribution in R you *need to name your arguments to make sure you get the version of the negative binomial that you want*.
 
-The figure below shows the effect of different overdispersion parameters. Notice that as *k* increases, the distribution looks more and more like a Poisson distribution with $\lambda = 10$. As *k* gets smaller, the distribution gets more and more concentrated near 0, and more and more right-skewed. 
+The figure below shows the effect of different overdispersion parameters. Notice that as $k$ increases, the distribution looks more and more like a Poisson distribution with $\lambda = 10$. As $k$ gets smaller, the distribution gets more and more concentrated near 0, and more and more right-skewed. 
 
 ```{r, fig.width=6, fig.height=6, fig.align="center"}
 xp <- 0:30
@@ -512,55 +508,81 @@ legend=c("Poisson", "k=0.2", "k=0.5", "k=1", "k=10",
      pch=c(17, rep(16,6)), col=c("black", cols))
 ```
 
-
 ### Geometric distribution {#sec-09-geom}
 
-
-The **geometric distribution** describes the number of Bernoulli trials that are seen before observing a single failure. It is thus related to the [binomial](#mod-05-binom) and [negative binomial](#mod-05-negbin). In fact, the geometric distribution is a special case of the negative binomial, with the number of successes = 1. The geometric distribution is the discrete version of the [exponential distribution](#mod-05-expo).
+The **geometric distribution** describes the number of failures that are seen before observing the first success, given that the probability remains constant. It is thus related to the [binomial](@sec-09-binom) and [negative binomial](@sec-09-negbin). In fact, the geometric distribution is a special case of the negative binomial, with the number of successes = 1. The geometric distribution is the discrete version of the [exponential distribution](@sec-09-expo).
  
-The geometric distribution arises in biology when modeling waiting times or life spans. For example, the number of years that an individual organism lives, if it has a constant probability of surviving each year. Or, the number of generations until a mutation in a cell line occurs, if mutations occur at a constant rate per generation.
+The geometric distribution arises in biology when modeling waiting times or life spans in discrete time steps. For example, if an animal has a constant annual mortality rate, the geometric distribution models the number of years that an individual organism completes before dying. Age- or stage-based population matrix models such as Leslie matrices are common in wildlife and fisheries management, and are based on annual monitoring data. So, it makes sense to use a discrete distribution to model survival in yearly time steps rather than continuous time. Another biological example of when to use a geometric distribution would be counting the number of generations until a mutation in a cell line occurs, if mutations occur at a constant rate per generation. 
 
-Imagine a fish that has a 5% chance of dying each year; i.e., a 95% annual survival rate. How long should we expect this fish to live, on average?
+Imagine a fish that has a 5% probability of dying each year (i.e., a 95% annual survival rate). If $X$ is the number of complete years the fish survives before dying, then $X$ follows a geometric distribution with $p=0.05$. Let's simulate a cohort of 100,000 fish to see what this looks like.
 
-```{r, fig.width=6, fig.height=5, fig.align="center"}
+```{r}
+# set annual mortality rate
 P <- 0.05
-X <- 0:100
-Y <- dgeom(X, P)
-plot(X,Y)
+
+# simulate 100000 fish
+fish <- rgeom(1e5, P)
+
+# plot the resulting lifespans
+use.breaks <- seq(-0.5, max(fish)+0.5, by=1)
+hist(fish, breaks=use.breaks, freq=FALSE, xlim=c(0, 80),
+     xlab="Years survived before death")
 ```
 
-The figure shows that the probability of living to any given age falls off quickly at first, then more gradually as time goes on. What is the mean life expectancy?
+Notice that the distribution of simulated fish lifespans has a long right tail: there are many small values, and a few very large values. We also call this **right skewed**. Practically, this means that while the median lifespan is 13 years, the average fish lives to 19. The long tail pulls the arithmetic mean upwards.
 
 ```{r}
-qgeom(0.5, P)
+# by what age do 50% of fish die?
+median(fish)
 ```
-
-What range of life expectancies can we expect for 95% of the population?
 
 ```{r}
-qgeom(c(0.025, 0.975), P)
+# how long does the "average" fish live?
+mean(fish)
 ```
 
-That’s quite a wide range! What is the probability that a fish lives to be at least 30 years old? 40 years old?
-```{r, label='chunkx410'}
-1-pgeom(30, P)
-1-pgeom(40, P)
+Compare our simulation to the theoretical distribution:
+```{r, fig.width=6, fig.height=5, fig.align="center"}
+X <- 0:max(fish)
+
+pmf <- dgeom(X, P)
+hist(fish, breaks=use.breaks, freq=FALSE, xlim=c(0, 80),
+     xlab="Years survived before death",
+     ylim=c(0, 0.05), 
+     main="Simulated vs. theoretical distribution")
+points(X,pmf, type="s", lwd=2, col="red")
+meanfish <- round(mean(fish),0)
+segments(meanfish, 0, meanfish, dgeom(meanfish,P),
+         lwd=2, col="blue")
+# calculate theoretical mean - matches simulation
+theomean <- (1-P)/P
+segments(theomean, 0, theomean, dgeom(theomean,P),
+         lwd=2, lty=2, col="black")
 ```
 
+The figure shows that the probability of living to any given age falls off quickly at first, then more gradually as time goes on. We can also answer questions like "What is the probability that a fish lives to at least 30 years old?
 
-### Beta-binomial distribution {#sec-09-betabin}
+```{r}
+# answer based on simulation
+# off a bit because of sampling variation
+length(which(fish >= 30)) / length(fish)
+```
 
+```{r}
+# answer based on distribution:
+pgeom(29, P, lower.tail=FALSE)
+```
 
-The **beta-binomial distribution** is a mixture that allows for modeling binomial processes with more variation than would be expected from a garden variety binomial distribution. The beta-binomial is a binomial distribution, but with the probability parameter *p* itself varying randomly according to a beta distribution (see below). This is similar to how a negative binomial distribution can be defined as a Poisson distribution mixed with a gamma distribution (with the Poisson $\lambda$ varying as a gamma variable). 
-  
-A beta-binomial distribution *X* is given by:
+Or equivalently:
 
-$$X \sim Bin\left(n,\ p\right)$$
+```{r}
+(1-P)^30
+```
+What age will 95% of fish reach?
 
-$$p \sim Beta\left(\alpha,\beta\right)$$
-
-The parameters of the beta distribution are positive shape parameters (see below). The parameters of the beta part of the beta-binomial distribution can make the binomial part overdispersed relative to an ordinary binomial distribution. 
-
+```{r}
+qgeom(0.95, P)
+```
 
 ### Multinomial distribution {#sec-09-multinom}
 
@@ -569,9 +591,9 @@ The **multinomial distribution** is a generalization of the binomial distributio
 
 There are some special cases of the multinomial distribution:
 
-- When *k* = 2 and *n* = 1, the multinomial distribution reduces to the Bernoulli distribution
-- When *k* = 2 and *n* > 1, the multinomial distribution reduces to the binomial distribution
-- When *k* > 2 and *n* = 1, the multinomial distribution is the categorical distribution.
+- When $k=2$ and $n=1$, the multinomial distribution reduces to the Bernoulli distribution
+- When $k=2$ and $n>1$, the multinomial distribution reduces to the binomial distribution
+- When $k>2$ and $n=1$, the multinomial distribution is the categorical distribution.
 
 The example below shows how to work with the multinomial distribution in R.
 
@@ -599,15 +621,16 @@ points(1:5, y2, pch=16, col="red")
 
 ## Continuous distributions {#sec-09-cont}
 
+A **continuous distribution** can take on any real value within its supported interval. This means that unlike discrete distributions, continuous distributions are not restricted to integers. Measurements like length, mass, temperature, etc., are best modeled using continuous distributions because, although we often record them to the nearest mm, gram, or degree, the underlying quantity varies continuously. The apparent discreteness comes from the limited precision of our measuring instruments.
 
-A **continuous distribution** can take an infinite number of values--any value within their domain. These values can come from an interval on the real number line, or the entire real number line. Contrast this to a discrete distribution, which can only take on integer values. Computing the probability of any possible outcome of a discrete distribution is relative straightforward because there are a limited number of outcomes. For example, a binomial distribution with *n* = 10 and *p* = 0.5 has only 11 possible outcomes (0, 1, 2, …, 9, or 10). The probabilities $p(0)$, $p(1)$, …, $p(10)$ must all sum to 1. The probability mass function (PMF) of the binomial distribution at any value is the probability of that value occurring.
+Computing the probability of any possible outcome of a discrete distribution is relative straightforward because there are a limited number of outcomes. For example, a binomial distribution with $n=10$ and $p=0.5$ has only 11 possible outcomes $\left(0,1,2,\ldots,9,10\right)$. The probabilities $p\left(x=0\right)$, $p\left(x=1\right)$, and so on up to $p\left(x=10\right)$ must all sum to 1. The probability mass function (PMF) of the binomial distribution at any value is the probability of that value occurring.
 
-This leads to an interesting question. How could we calculate the probability of any given outcome of a distribution with an infinite number of outcomes? If the probabilities of each individual value must all sum to 1, and there are infinitely many possible values, then doesn’t the probability of each value approach (or just be) 0? If the probability of every outcome is 0, how can the distribution take on any value?
+This leads to an interesting question. How could we calculate the probability of any given outcome of a distribution with an infinite number of outcomes? If the probabilities of each individual value must all sum to 1, and there are infinitely many possible values, then each individual value must have probability 0. If the probability of every possible outcome is 0, how can the distribution take on any value at all?
 
-To resolve this apparent contradiction, we have to take a step back and think about what distributions really mean. The first step is to realize that even if any single value has probability 0, an *interval* of values can have a non-zero probability. After all, the entire domain of a distribution has probability 1 (by definition). We can define some interval in the domain that covers half of the total probability, or one-quarter, or any arbitrary fraction. This means that for any value *x* in a distribution *X* (note lower case vs. upper case) we can calculate the probability of observing a value $\le x$. The figure below shows this:
+To resolve this apparent contradiction, we have to take a step back and think about what distributions really mean. The first step is to realize that even if any single value has probability 0, an *interval* of values can have a non-zero probability. After all, the entire supported interval of a distribution has probability 1 by definition. We can define some interval extending from the lower limit of the distribution up to some value $x$. This means that for any value $x$ in a distribution $X$ (note lower case vs. upper case) we can calculate the probability of observing a value $\le{x}$, or $p\left(X\le{x}\right)$. The figure below shows this:
 
 ```{r, echo=FALSE, fig.width=5, fig.height=5, fig.align="center"}
-par(mfrow=c(1,1), bty="n", mar=c(5.1, 5.1, 1.1, 1.1),
+par(mfrow=c(1,1), bty="n", mar=c(5.1, 5.1, 1.1, 1.4),
     lend=1, las=1, cex.axis=1.3, cex.lab=1.3)
 plot(0:1, 0:1, type="n", xaxt="n",
     xlab="Value", ylab=expression(P(italic(X)<=italic(x))))
@@ -616,17 +639,19 @@ axis(side=1, at=0:1,
     labels=c(expression(italic(min*(x))), expression(italic(max*(X)))))
 ```
 
-The *y*-axis in the figure, $P\left(X \le x\right)$, is called the **cumulative distribution function (CDF)**. This name derives from the fact that the CDF of some value *x* gives the cumulative probability of all values up to and including *x*. The CDF is sometimes labeled $F\left(x\right)$ (note the capitalized F). Another way to interpret this is that a value *x* lies at the *CDF(x)* quantile of a distribution. For example, if *CDF(x)* = 0.4, then *x* lies at the 0.4 quantile or 40th percentile of the distribution. Critically, this means that 40% of the total probability of the distribution lies at or to the left of *x*.
+The *y*-axis in the figure, $P\left(X\le{x}\right)$, is called the **cumulative distribution function (CDF)**. This name derives from the fact that the CDF of some value $x$ gives the cumulative or total probability of all values up to and including $x$. The CDF is sometimes labeled $F\left(x\right)$ (note the capitalized F). Another way to interpret this is that a value $x$ lies at the $CDF\left(x\right)$ quantile of a distribution. For example, if $CDF\left(x\right)=0.4$, then $x$ lies at the 0.4 quantile or 40th percentile of the distribution. Critically, this means that 40% of the total probability of the distribution lies at or to the left of $x$, and the remaining 60% of the probability lies to the right of $x$.
 
-Just as with discrete distributions, the relative probability of any given value in a continuous distribution is given by the rate at which the CDF changes at that value. For discrete distributions this relative probability also happens to be the absolute probability (because *dx* = 1 in the expression below). For continuous distributions, this probability is relative. The relative probability of a value in a continuous distribution is given by the **probability density function (PDF)**. The PDF, $f\left(x\right)$, is the derivative of the CDF:
+Just as the PMF describes how probability is distributed among the possible values of a discrete random variable, the **probability density function PDF** describes how probability is distributed over the continuum of possible values. Although the PDF is not itself a probability, the area under the PDF between any two values equals the probability that the random variable falls within that interval. Mathematically, the PDF is the rate at which the CDF changes with respect to $x$. That is, the PDF, $f\left(x\right)$, is the derivative of the CDF $F\left(x\right)$ evaluated at $x$:
 
 $$f\left(x\right)=\frac{dF(x)}{dx}$$
 
-This also means that the CDF is the integral of the PDF, according to the fundamental theorem of calculus:
+This also means that the CDF is the integral of the PDF up to $x$, according to the fundamental theorem of calculus:
 
 $$F\left(x\right)=\int_{-\infty}^{x}{f\left(x\right)\ dx}$$
 
-This might be easier to see with an example. The plots below show the PDF and CDF of a standard normal distribution (see below). Because the normal is unbounded, its PDF and CDF have the domain [$-\infty$, $+\infty$], but we usually truncate the plot to a range that covers most of the CDF.
+In other words, probabilities correspond to areas under the PDF, while the PDF itself represents the local density of probability. These areas under the PDF correspond to values of the CDF.
+
+This might be easier to see with an example. The plots below show the PDF and CDF of a standard normal distribution with mean 0 and SD 1 (@sec-09-norm). Because the normal is unbounded, its PDF and CDF have the domain $[-\infty,+\infty]$, but we usually truncate the plot to a range that covers most of the CDF. For the normal, the mean plus or minus 3 standard deviations, or  $\mu\pm{3\sigma}$, covers over 99.7% of values.
 
 ```{r, echo=FALSE, fig.width=8, fig.height=4, fig.align="center"}
 
@@ -643,13 +668,55 @@ plot(x, y2, type="l", lwd=3,
     ylab=expression(CDF:~italic(F*(x))))
 ```
 
-On the left, notice that the PDF peaks near *x* = 0 and tapers off quickly to either side. On the right, the slope of the CDF is greatest at *x* = 0. The value of the PDF at *x* = 0, about 0.4, is neither the probability of observing *x* = 0 nor the probability of observing *x* $\le$ 0, which is 0.5. The value $f(0) = 0.4$ is the rate of change in $F(X)$ at *x* = 0.
+On the left, notice that the PDF peaks near $x=0$ and tapers off quickly to either side. On the right, the slope of the CDF is greatest at $x=0$. The value of the PDF at $x=0$, about 0.4, is neither the probability of observing $x=0$ (which is 0) nor the probability of observing $x\le0$ (which is 0.5). The value $f(0)=0.4$ is the rate of change or slope in $F(X)$ at $x=0$.
 
+If we wanted to calculate something like the probability of $x=0$, we would actually have to calculate the probability of $x$ being in some interval that included 0. For example, the probability that $-0.1\le{X}\le+0.1$, or that $X\in\left[-1,+1\right]$, is
+
+$$P\left(-0.1\le{X}\le+0.1\right)=F\left(0.1\right)-F\left(-0.1\right)$$
+
+In R we can calculate:
+
+```{r}
+pnorm(0.1)-pnorm(-0.1)
+```
+So the probability that $x$ is within 0.1 of 0 is about 0.08 or 8%. If we use a narrow interval, say $-0.01\le{X}\le+0.01$, the calculation becomes:
+
+```{r}
+pnorm(0.01)-pnorm(-0.01)
+```
+
+Notice that as the interval becomes narrower, its probability becomes smaller. In the limit as the interval shrinks to a single point, the probability becomes 0. This is why the probability of observing any exact value in a continuous distribution is zero, even though the probability of observing values within any finite interval is positive.
+
+Visually, we can see this in the figure below. Notice how the red area is much larger than the light blue area--these are the intervals defined by $\pm{0.1}$ and $\pm{0.01}$.
+
+```{r}
+#| echo: false
+#| fig.width: 6
+#| fig.width: 6
+
+x1 <- seq(-3, 3, length=1000)
+x2 <- seq(-0.1, 0.1, length=1000)
+x3 <- seq(-0.01, 0.01, length=1000)
+y1 <- dnorm(x1)
+y2 <- dnorm(x2)
+y3 <- dnorm(x3)
+y0 <- rep(0, 1000)
+par(mfrow=c(1,1), bty="n", mar=c(5.1, 5.1, 1.1, 1.1),
+    lend=1, las=1, cex.axis=1.3, cex.lab=1.3)
+plot(x1, y1, type="l", lwd=3,xlab="Value of X",
+     ylab="PDF of X", xlim=c(-1, 1))
+polygon(x=c(x2, rev(x2)), y=c(y2, y0), border=NA, col="red")
+polygon(x=c(x3, rev(x3)), y=c(y2, y0), border=NA, col="lightblue")
+points(x1, y1, type="l", lwd=3)
+legend("bottomright",
+       legend=c(expression(-0.1 <= italic(X) * "," ~~ italic(X) <= 0.1),
+                expression(-0.01 <= italic(X) * "," ~~ italic(X) <= 0.01)),
+       fill=c("red", "lightblue"), bty="n", cex=1.1)
+```
 
 ### Uniform distribution {#sec-09-unif}
 
-
-The simplest continuous distribution is the **uniform distribution**. The uniform distribution is parameterized by its upper and lower bounds, usually called *a* and *b*, respectively. All values of a uniform distribution in the interval [*a*, *b*] are equally likely, and all values outside [*a*, *b*] have probability 0. The figure below shows the PDF of 3 different uniform distributions.
+The simplest continuous distribution is the **uniform distribution**. The uniform distribution is parameterized by its upper and lower bounds, usually called $a$ and $b$, respectively. All values of a uniform distribution in the interval $left[a,b\right]$ are equally likely, and all values outside $left[a,b\right]$ have probability 0. The figure below shows the PDFs of 3 different uniform distributions.
 
 ```{r, echo=FALSE, fig.width=6, fig.height=5, fig.align="center"}
 par(mfrow=c(1,1), bty="n", mar=c(5.1, 5.1, 1.1, 1.1),
@@ -665,17 +732,19 @@ legend("topright",
 	cex=1.3)
 ```
 
-Notice how each distribution has a flat PDF, but that the value of the PDF decreases as the width of the uniform distribution increases. Given what you learned above about the relationship between the CDF and the PDF, can you work out why this is?
+Notice how each distribution has a flat PDF, but that the value of the PDF decreases as the width of the uniform distribution increases. Given what you learned above about the relationship between the CDF and the PDF, can you work out why this is?[^uniform]
 
-Like the normal distribution, there is a standard uniform distribution that is frequently used. The **standard uniform** is defined as *Uniform(0, 1)*: a uniform distribution in the interval [0, 1]. The uniform distribution can sometimes be abbreviated as *U(a,b)* or *Unif(a,b)* instead of *Uniform(a,b)*.  
+[^uniform]: The area under the PDF must be 1, so the height of the PDF of a uniform distribution must be 1 divided by its width.
+
+Like the normal distribution, there is a standard uniform distribution that is frequently used. The **standard uniform** is defined as $Uniform\left(0,1\right)$: a uniform distribution in the interval $\left[0,1\right]$. The uniform distribution can sometimes be abbreviated as $U\left(a,b\right)$ or $Unif\left(a,b\right)$.  
 
 The mean of a uniform distribution is just the mean of its limits:
 
-$$\mu\left(X\right)=\frac{a+b}{2}$$
+$$\mu\left(Uniform\left(a,b\right)\right)=\frac{a+b}{2}$$
 
 The variance of a uniform distribution is:
 
-$$\sigma^2\left(X\right)=\frac{{(b-a)}^2}{12}$$
+$$\sigma^2\left(Uniform\left(a,b\right)\right)=\frac{{(b-a)}^2}{12}$$
 
 
 #### Uniform distribution in R {#sec-09-unif-r}
@@ -723,8 +792,13 @@ hist(x2, main="Truncated normal", xlim=c(0, 20))
 
 ### Normal distribution {#sec-09-norm}
 
+The **normal distribution** is probably the most important distribution in statistics. Many natural processes result in normal distributions. Consequently, most classical statistical methods (e.g., *t*-tests, ANOVA, and linear models) assume that data come from a normal distribution. The normal distribution is also sometimes called the **Gaussian** distribution because of the work of mathematician Carl Friedrich Gauss, although he did not discover it.
 
-The **normal distribution** is probably the most important distribution in statistics. Many natural processes result in normal distributions. Consequently, most classical statistical methods (e.g., *t*-tests, ANOVA, and linear models) assume that data come from a normal distribution. The normal distribution is also sometimes called the **Gaussian** distribution because of the work of mathematician Carl Friedrich Gauss, although he did not discover it. The normal distribution is also sometimes called the bell curve because of the shape of its PDF. This term should be avoided because other probability distributions also have a bell shape, and because normal distributions are not always bell-shaped. The figure below shows several normal distributions with different means ($\mu$) and standard deviations (SD, or $\sigma$).
+The normal distribution is also sometimes called the **bell curve** because of the shape of its PDF. This term should be avoided because other probability distributions also have a bell shape, and because normal distributions are not always bell-shaped.
+
+The normal distribution is parameterized by its mean, $\mu$, and standard deviation, $\sigma$. Some sources prefer the variance $\sigma^2$ instead of the standard deviation, and some even use the precision $1/\sigma^2$ or $\sigma^{-2}$. This is fine because, as the symbols imply, the SD, variance, and precision are all related. Just pay attention to the notation being used. Using $\sigma$ instead of $\sigma^2$ or $1/\sigma^2$ can be convenient because $\sigma$ is in the same units as $\mu$.
+
+The figure below shows several normal distributions with different means and standard deviations.
 
 ```{r, echo=FALSE, fig.width=6, fig.height=5, fig.align="center"}
 
@@ -738,43 +812,41 @@ y2 <- dnorm(x2, 5, 2)
 y3 <- dnorm(x3, -3, 4)
 
 par(mfrow=c(1,1))
-plot(x1, y1, type="l", lwd=3, 
+plot(x1, y1, type="l", lwd=3, lty=1,
     xlab=expression(Value~(italic(x))),
     ylab="PDF",
     xlim=c(-15, 15), ylim=c(0, 0.4))
-points(x2, y2, type="l", lwd=3, col="red")
-points(x3, y3, type="l", lwd=3, col="blue")
+points(x2, y2, type="l", lwd=3, col="red", lty=2)
+points(x3, y3, type="l", lwd=3, col="blue", lty=3)
 legend("topleft",
     legend=c(expression(paste(mu==0, ", ", sigma==1)),
         expression(paste(mu==5, ", ", sigma==2)),
         expression(paste(mu==-3, ", ", sigma==4))),
-    lwd=3, col=c("black", "red", "blue"), cex=1.3, bty="n")
+    lwd=3, col=c("black", "red", "blue"), cex=1.3, bty="n",
+    lty=1:3)
 ```
 
-Many phenomena result in normal distributions because of the **Central Limit Theorem (CLT)**. The CLT states that under certain conditions the sum of many random variables will approximate a normal distribution. The main condition is that the random variables will be independent and identically distributed (often abbreviated “*i.i.d.*”). In other words, the values do not depend on each other, and they all come from the same kind of distribution. The exact distribution does not matter. The example below uses the uniform distribution. The CLT also works with the mean of the random variables instead of the sum, because mean is just the sum scaled by sample size.
+Many phenomena result in normal distributions because of the **Central Limit Theorem (CLT)**. The CLT states that under certain conditions the sum of many random variables will approximate a normal distribution. The main condition is that the random variables will be independent and identically distributed (often abbreviated “*i.i.d.*”). In other words, the values do not depend on each other, but they all come from the same distribution. The exact distribution does not matter. The example below uses the uniform distribution. The CLT also works with the mean of the random variables instead of the sum, because mean is just the sum scaled by sample size.
 
 ```{r, fig.width=6, fig.height=5, fig.align="center"}
-
+# large sample size
 N <- 1e4
+
+# set up a vector to hold the sums of
+# the random values
 xvec <- numeric(N)
+
+# in a loop, draw 10 random values and 
+# calculate their sum...10000 times
 for(i in 1:N){xvec[i] <- sum(runif(10))}
+
+# histogram of the 10000 sums
 hist(xvec)
 ```
 
 It should be noted that just because a sample size is large does not mean that it is normal. For example, the R commands below produce distributions `x1` and `x2` that are in no way normal.
 
-```{r, fig.width=8, fig.height=4, fig.align="center"}
-par(mfrow=c(1,2))
-x1 <- runif(1e5)
-hist(x1)
-x2 <- c(rnorm(1e5), rnorm(1e5, 10, 2))
-hist(x2)
-```
-
-The normal distribution is parameterized by its mean ($\mu$, or “mu”) and its variance ($\sigma^2$, “sigma squared”). Some people prefer to use the mean and standard deviation ($\sigma$, “sigma”). This is fine because, as the symbols imply, the SD is simply the square root of the variance. Just pay attention to the notation being used. Using $\sigma$ instead of $\sigma^2$ can be convenient because $\sigma$ is in the same units as $\mu$.
-
-The **standard normal distribution** has $\mu$ = 0 and $\sigma$ = 1. This is often written as *N(0,1)*. These parameters are the defaults in the R functions that work with the normal distribution.
-
+The **standard normal distribution** has $\mu=0$ and $\sigma=1$. This is often written as $N\left(0,1\right)$. These parameters are the defaults in the R functions that work with the normal distribution.
 
 #### Normal distribution in R {#sec-09-norm-r}
 
@@ -805,13 +877,15 @@ legend("topright", legend=c(expression(sigma==2),
         lwd=3, col=c("black", "red", "blue"))
 ```
 
-The normal distribution has several useful properties. Generally, the mean and median are the same (if the distribution is not skewed). Approximately 68% of values fall within 1 SD of the mean, 95% of values fall within about 2 SD of the mean (technically 1.9599 SD, or `qnorm(0.975)`), and 99% of values fall within about 3 SD of the mean. So, deviations of >3 SD are very rare and may signify outliers. The number of SD a value falls away from the mean is sometimes referred to as a ***z*****-score** or a **sigma**. *Z*-scores are calculated as:
+The normal distribution has several useful properties. Generally, the mean and median are the same (if the distribution is not skewed). Approximately 68% of values fall within 1 SD of the mean, 95% of values fall within about 2 SD of the mean (technically 1.9599 SD, or `qnorm(0.975)`), and 99% of values fall within about 3 SD of the mean. So, deviations of >3 SD are very rare and may signify outliers. The number of SD a value falls away from the mean is sometimes referred to as a ***z*-score** or a **sigma**. *Z*-scores are calculated as:
 
 $$z\left(x\right)=\frac{x-\mu}{\sigma}$$
 
 Where *x* is the value, $\mu$ is the mean, and $\sigma$ is the SD. 
 
-*Z*-scores are sometimes used when comparing variables that are normally distributed, but on very different scales. Converting the raw values to their *z*-scores is referred to as **standardizing** them. Standardized values are sometimes used in regression analyses in place of raw values. Many ordination methods such as principal components analysis (PCA) standardize variables automatically. *Z*-scores (or standardized values) are calculated in R using the `scale()` function:
+*Z*-scores are sometimes used when comparing variables that are normally distributed, but on very different scales. Converting the raw values to their *z*-scores is referred to as **standardizing** them. Any variable, once standardized, has a mean of 0 and SD of 1. The units of a *z*-scaled variable are "standard deviations away from the mean".
+
+Standardized values are sometimes used in regression analyses in place of raw values. Many ordination methods such as principal components analysis (PCA) standardize variables automatically. *Z*-scores (or standardized values) are calculated in R using the `scale()` function:
 
 ```{r, label='chunkx420', fig.width=8, fig.height=4, fig.align="center"}
 x1 <- rnorm(100, 100, 40)
@@ -820,26 +894,64 @@ hist(x1)
 hist(scale(x1))
 ```
 
+Because standardized variables all have the same mean and SD, standardizing a set of variables has the effect of putting all of the variables on equal footing. Without standardizing, 
 
 ### Lognormal distribution {#sec-09-lnorm}
 
+The **lognormal distribution (a.k.a.: log-normal)** is, as the name implies, a distribution that is *normal on a logarithmic scale*. If a variable $X$ is normally distributed and we exponentiate it, the result $Z=e^X$ will be lognormally distributed. Conversely, if variable $Z$ is lognormally distributed, then $\log\left(Z\right)$ will be normally distributed. By convention the **natural log** $\ln$, or $\log_e$, is used to define the lognormal distribution. R's lognormal distribution functions use the natural log scale.
 
-The **lognormal distribution (a.k.a.: log-normal)** is, as the name implies, a distribution that is *normal on a logarithmic scale*. By convention the **natural log** (log~*e*~, ln, or just log) is used although you can use log~10~ if you pay attention to what you are doing and are explicit in your write-up^[It is possible, and not uncommon, to analyze data using the natural log scale but plot results on the log~10~ scale. This works because the choice of base is arbitrary for most analyses and because it is simple to convert values between scales with different bases (i.e., change of base).]. The functions in R that deal with the lognormal use the natural log^[In R, statistics, and in mathematics in general, if you see "log" it usually means "natural log".].
+The lognormal distribution arises naturally from **multiplicative** processes. Remember that logarithms relate the operations of multiplication and addition:
 
-The lognormal distribution arises in two ways. First, it comes about from processes where quantities are *multiplied together rather than added*. For example, growth of organisms or population sizes. This is because of the way that exponentiation relates multiplication and addition. This relationship to multiplication also means that the lognormal distribution results from a version of the CLT where values are multiplied, not added. The example below shows this.
+$$\log\left(ab\right)=\log\left(a\right)+\log\left(a\right)$$
+
+Suppose some quantity $z$ is determined by multiplying together many positive numbers:
+
+$$z=X_1X_2X_3\cdots X_n$$
+
+Taking its logarithm gives:
+
+$$\log(Z)=\log(X_1)+\log(X_2)+\log(X_3)+\cdots+\log(X_n)$$
+
+This connects the lognormal distribution to the Central Limit Theorem (@sec-09-norm). The ordinary CLT tells us that the sum of many independent random contributions tends toward a normal distribution under fairly general conditions. If a biological quantity instead results from the product of many independent positive contributions, then taking its logarithm converts that product into a sum. Consequently, the logarithm of the resulting quantity can approach a normal distribution, meaning that the original quantity approaches a lognormal distribution.
+
+where quantities are *multiplied together rather than added*. For example, growth of organisms or population sizes. As an individual organism grows, new body tissues are produced by cell division (mitosis), and the absolute rate of mitosis is proportional to the number of cells already present. 
+
+This is relevant to many biological processes in which changes are proportional rather than additive. For example, imagine an organism whose size changes during each time interval by a somewhat random growth multiplier. Its final size can be written as
+
+$$S=S_0G_1G_2\cdots G_n$$
+
+where each $G_i$ is a growth multiplier applied to the starting size $S_0$. Small random differences in growth therefore accumulate multiplicatively, potentially producing a lognormal distribution of final sizes[^euler].
+
+[^euler]: If the growth factors $G_n$ are constant, then $S_t=S_0G^t$, or more generally an exponential function $f\left(t\right)=ae^{bt}$. Attempting to calculate the derivative of this function leads to preferring Euler's constant $e$ as the base because the function $e^t$ is it's own derivative. Here is a [youtube video](https://www.youtube.com/watch?v=m2MIpDrF7Es) that explains this visually.
+
+We can demonstrate the same idea with a simulation. Suppose we repeatedly draw 10 random positive values and multiply them together:
+
 
 ```{r, fig.width=8, fig.height=4, fig.align="center"}
+# big sample size (10000)
 N <- 1e4
+# set up vector for 10000 values
 xvec <- numeric(N)
-for(i in 1:N){xvec[i] <- prod(runif(10))}
+# in a loop, draw 10 random values in [1,2]
+# and multiply them all together...10000 times
+for(i in 1:N){xvec[i] <- prod(runif(10, 1, 2))}
+
+# plot a histogram of the products,
+# and histogram of the log of the products
 par(mfrow=c(1,2))
-hist(xvec)
-hist(log(xvec))
+hist(xvec, xlab="Product", main="Original scale")
+hist(log(xvec), xlab="Log(Product)", main="Log scale")
 ```
 
-The second way that the lognormal arises is more phenomenological (i.e., descriptive). Processes that result in positive values with a long tail (mostly small values with few very large values) or positive values with a variance much larger than the mean. The latter case can also be well described by the [gamma distribution](#mod-05-gamma). The classic example of a lognormal distribution is personal income: most populations will have mostly small values, but with a small proportion of extreme outliers.
+The products in `xvec` are strongly right skewed on their original scale, but their logarithms are approximately normally distributed. This happens because
 
-The lognormal distribution is parameterized by a mean ($\mu$) and variance ($\sigma^2$), or by a mean and standard deviation ($\sigma$). ***These parameters are on the logarithmic scale.*** Forgetting this can cause some serious headaches, especially when trying to graph your data.
+$$\sum_{i=1}^{10}\log(X_i)=\prod_{i=1}^{10}X_i$$
+
+turning the multiplicative process into an additive one.
+
+More generally, lognormal distributions are useful for describing positive, right-skewed variables in which most observations are relatively small but a few observations are much larger. Such patterns are common in biological measurements including organism sizes, abundances, concentrations, and other quantities influenced by proportional or multiplicative processes. Other positive, right-skewed distributions, particularly the gamma distribution (@sec-09-gamma), can produce superficially similar shapes, so the shape of a histogram alone does not establish that a process is lognormal.
+
+The lognormal distribution is parameterized by the mean and standard deviation of the variable after taking its logarithm. In R these parameters are named `meanlog` and `sdlog`. Thus, they are not the mean and standard deviation of the lognormally distributed variable on its original scale. Forgetting which quantities are on the log scale is an easy way to produce confusing results, especially when calculating expected values or graphing distributions.
 
 The figure below shows various lognormal distributions with $\mu$ = 3 and different SD on a logarithmic scale (left) and a linear scale. 
 
@@ -869,18 +981,17 @@ points(log(x1), y3, type="l", lwd=3, col="blue")
 title(ylab="PDF", line=3.3)
 ```
 
-The figures show the effect that variance can have on the lognormal distribution. When the variance on the log scale is <$\mu$, the distribution is approximately normal on the log scale. As the variance gets larger, the distribution gets more and more right-skewed. Right-skewed means that the values are more and more concentrated near 0, and there are fewer very large values.
+The figures show the effect that variance can have on the lognormal distribution. When the variance on the log scale is $<\mu$, the distribution is approximately normal on the log scale. As the variance gets larger, the distribution gets more and more right-skewed. Right-skewed means that the values are more and more concentrated near 0, and there are fewer very large values.
 
 Interestingly, the mean of a log-normal distribution is not simply $e^\mu$ as one might expect. The mean of a lognormal distribution *X* on the linear scale is
 
 $$mean\left(X\right)=e^{\left(\frac{\mu+\sigma^2}{2}\right)}$$
 
-In this equation, $\mu$ and $\sigma$ are the mean and SD on the logarithmic scale. The variance on the linear scale is:
+In this equation, $\mu$ and $\sigma$ are the mean and SD on the logarithmic scale, or `logmean` and `logsigma` in R terms. The variance on the linear scale is:
 
 $$Var\left(X\right)=e^{2\mu+\sigma^2}\left(e^{\sigma^2}-1\right)$$
 
-What this means is that you cannot transform the parameters of a lognormal distribution from the logarithmic to the linear scale by simply exponentiating.
-
+What this means is that you cannot transform the parameters of a lognormal distribution from the logarithmic to the linear scale by simply exponentiating or taking logarithms of parameters.
 
 #### Lognormal distribution in R {#sec-09-lnorm-r}
 
@@ -896,26 +1007,42 @@ When working with the lognormal distribution in R it is important to keep in min
 
 
 ```{r}
+# draw some values
 x1 <- rlnorm(1e4, 2, 1)
 
-# mean of the values vs. mean of the log(values):
-mean(x1)
-mean(log(x1))
-
-# sd of the values vs. sd of the log(values):
-sd(x1)
-sd(log(x1))
-
-# exp(meanlog) != mean(x1)
-exp(2)
+# mean of the values
 mean(x1)
 ```
 
+```{r}
+# mean of the log(values)
+mean(log(x1))
+```
+
+```{r}
+# not the log of the mean of the values
+log(mean(x1))
+```
+
+```{r}
+# sd of the values
+sd(x1)
+```
+
+```{r}
+# sd of the log(values)
+sd(log(x1))
+```
+
+```{r}
+# exp(meanlog) != mean(x1)
+c(exp(2), 
+  mean(x1))
+```
 
 ### Gamma distribution {#sec-09-gamma}
 
-
-The **gamma distribution** describes waiting times until a certain number of events takes place. This means it is the continuous analogue of the [negative binomial distribution](#mod-05-negbin), which describes the number of trials until some certain number of successes. The gamma distribution can also be used to describe positive data whose SD is much larger than the mean. This makes it an alternative to the lognormal distribution for right-skewed data, much like the negative binomial is an alternative to the Poisson. Example gamma distributions are shown below.
+The **gamma distribution** describes waiting times until a certain number of events takes place. This means it is the continuous analogue of the [negative binomial distribution](@sec-09-negbin), which describes the number of trials until some certain number of successes. The gamma distribution can also be used empirically to describe positive data whose SD is much larger than the mean. This makes it an alternative to the lognormal distribution for right-skewed data, much like the negative binomial is an alternative to the Poisson. Example gamma distributions are shown below.
 
 ```{r, echo=FALSE, fig.width=6, fig.height=5, fig.align="center"}
 x <- seq(0, 20, length=1000)
@@ -954,7 +1081,15 @@ legend("topright",
     bty="n", cex=1.2, lwd=3, col=cols)
 ```
 
-The Gamma distribution is parameterized by its **shape** and **scale**. The shape parameter *k* describes the number of events; the scale parameter $\theta$ ("theta") describes the mean time until each event. The scale is sometimes expressed as the **rate**, which is the reciprocal of scale. Both versions are implemented in R, so you need to specify your arguments when working with the gamma distribution. For example, Gamma(4, 2) is the distribution of length of time in days it would take to observe 4 events if events occur on average once every two days. Equivalently, it is the time to observe 4 events if events occur at a rate of 1/2 event per day. Consequently, the mean of a gamma distribution given shape *k* and scale $\theta$ (or rate *r*) is:
+The Gamma distribution is parameterized by its **shape** and **scale**.
+
+- The shape parameter $k$ describes the number of events
+- The scale parameter $\theta$ ("theta") describes the mean time until each event.
+- The scale is sometimes expressed as its reciprocal, the **rate**.
+
+In R, the gamma can be parameterized by either the `shape` and `scale`, or `shape` and `rate`. This means you need to name your arguments when working with the gamma distribution.
+
+For example, $\Gamma(k=4,\theta=2)$ is the distribution of length of time in days it would take to observe 4 events if events occur on average once every two days. Equivalently, it is the time to observe 4 events if events occur at a rate of 1/2 event per day. Consequently, the mean of a gamma distribution given shape $k$ and scale $\theta$ (or rate $r$) is:
 
 $$\mu=k\theta=\frac{k}{r}$$
 
@@ -962,8 +1097,7 @@ The variance is calculated as:
 
 $$\sigma^2=k\theta^2=\frac{k}{r^2}$$
 
-Like the negative binomial, the gamma distribution is often used phenomenologically; that is, used to describe a variable even if its mechanistic description (waiting times) doesn’t make sense biologically. Just as the negative binomial can be used to model count data with variance greater than the mean (i.e., an overdispersed Poisson), a gamma distribution can be used for positive data with $\sigma \gg \mu$. I.e., the use case for the gamma is similar to that of the lognormal. 
-
+Like the negative binomial, the gamma distribution is often used phenomenologically; that is, used to describe a variable even if its mechanistic description (waiting times) doesn’t make sense biologically. Just as the negative binomial can be used to model count data with variance greater than the mean (i.e., an overdispersed Poisson), a gamma distribution can be used for positive data with $\sigma\gg\mu$. I.e., the gamma can be used in many of the same cases as the lognormal, although the lognormal may have a clearer biological interpretation.
 
 #### Gamma distribution in R {#sec-09-gamma-r}
 
@@ -986,13 +1120,15 @@ rgamma(10, shape=3, rate=0.5)
 rgamma(10, scale=2, rate=0.5)
 ```
 
-
 ### Beta distribution {#sec-09-beta}
 
+The **beta distribution** is defined on the interval $[0,1]$ and is parameterized by two positive shape parameters, $\alpha$ and $\beta$. For this reason, the beta distribution is often used to model the distribution of probabilities. The beta distribution is probably the most commonly used distribution for variables constrained to lie between 0 and 1, such as probabilities, proportions, and fractions. 
 
-The **beta distribution** is defined on the interval [0, 1] and is parameterized by two positive shape parameters, $\alpha$ and $\beta$. For this reason, the beta distribution is often used to model the distribution of probabilities. Besides the uniform, the beta distribution is probably the most well-known continuous distribution that is bounded by an interval. The beta distribution can also be used to model any continuous variable that occurs on a bounded interval, by rescaling the variable to the interval [0, 1]. However, this may be better accomplished with a logit transformation (see the [section on transformations](#mod-05-trans)).
+The beta distribution is closely related to the binomial distribution. One way to think about the two shape parameters is as summaries of a binomial trial. Parameter $\alpha$ behaves like the number of successes plus one, while $\beta$ behaves like the number of failures plus one. This interpretation provides useful intuition for the shape of the distribution: increasing $\alpha$ shifts probability toward 1, while increasing $\beta$ shifts probability toward 0. However, $\alpha$ and $\beta$ are simply shape parameters and do not have to be integers; but, they do have to be positive.
 
-The parameters of the beta distribution are a little tricky to understand, and relate to the binomial distribution. Each shape parameter is one plus the number of successes ($\alpha$) and failures ($\beta$) in a binomial trial. This gets a little weird when $\alpha$ and $\beta$ are <1 (how can you have <0 successes or failures?) but the distribution is still defined. The shape parameters can also be non-integers. The figure below shows various beta distributions. Notice how the distribution becomes U-shaped when $\alpha$ and $\beta$ both get close to 0.
+An even simpler explanation is that the balance of $\alpha$ and $\beta$ determine where most of the probability lies. Increasing $\alpha$ places more probability near 1, whereas increasing $\beta$ places more probability near 0. Increasing both will crowd the distribution near 0.5. Decreasing both will push the probability out towards 0 and 1 and away from 0.5.
+
+The figure below shows various beta distributions. Notice how probability is shifted toward the center when $\alpha$ and $\beta$ both increase, and how the distribution becomes U-shaped when they both decrease. 
 
 ```{r, echo=FALSE, fig.width=6, fig.height=5, fig.align="center"}
 x <- seq(0, 1, length=1000)
@@ -1041,21 +1177,36 @@ $$\alpha=\left(\frac{1-\mu}{\sigma^2}-\frac{1}{\mu}\right)\mu^2$$
 
 $$\beta=\alpha\left(\frac{1}{\mu}-1\right)$$
 
-This is useful if you want to use data that were reported as a mean and variance (or SD, or SE) that describe a proportion. For example, if a paper reports a survival rate estimate as 0.25 $\pm$ 0.18 SE, this implicitly suggests that the survival rate is a normally-distributed variable because a normal distribution is defined by the mean and SD (SE of a parameter estimate is equivalent to the SD of a distribution). However, this would imply that about 8% of the time, the survival rate was negative! (Verify this using R: `pnorm(0, 0.25, 0.18)`). So, you should convert these estimates to a beta distribution if you want to understand how they might vary:
+This is useful if you want to use proportions or percentages that were reported as a mean and variance (or SD, or SE). For example, if a paper reports a survival rate estimate as $0.25\pm0.18$ SE, it's tempting to misinterpret that as meaning that the survival rate is a normally-distributed variable. However, treating the survival rate as normally distributed would imply that about 8% of the time, the survival rate was negative!
+
+```{r}
+pnorm(0, 0.25, 0.18)
+```
+
+So, you should convert these estimates to a beta distribution if you want to understand how they might vary:
 
 $$\alpha=\left(\frac{1-0.25}{\left(0.18\right)^2}-\frac{1}{0.25}\right){0.25}^2\approx1.1968$$
 
 $$\beta=1.1968\left(\frac{1}{0.25}-1\right)\approx3.5903$$
 
-The figure below shows the two distributions, the normal in black and the beta in blue. The dashed vertical line at 0 shows that part of the normal distribution implied by the mean and SE of a survival “probability” is not possible. Converting to a beta distribution preserves the mean and variance, but probably more accurately reflects the true nature of the uncertainty about the probability. Note that this conversion cannot be done for some combinations of $\mu$ and $\sigma$: both $\alpha$ and $\beta$ must both be positive, so if you calculate a non-positive value for either parameter then the conversion won't work. This can sometimes happen for probabilties very close to 0 or 1 with large SE.
+The figure below shows the two distributions, the normal in black and the beta in blue. The dashed vertical line at 0 shows that part of the normal distribution implied by the mean and SE of a survival “probability” is not possible. Converting to a beta distribution preserves the mean and variance while ensuring that all values fall between 0 and 1. This more accurately reflects the true nature of the uncertainty about the probability.
 
-```{r, echo=FALSE, fig.width=6, fig.height=5, fig.align="center"}
+Note that this conversion cannot be done for some combinations of $\mu$ and $\sigma$: both $\alpha$ and $\beta$ must both be positive, so if you calculate a non-positive value for either parameter then the conversion won't work. These formulas also require that
+
+$$\sigma^2<\mu\left(1-\mu\right)$$
+
+This can sometimes happen for probabilities very close to 0 or 1 with large variances.
+
+```{r, echo=FALSE, fig.width=8, fig.height=5, fig.align="center"}
 
 x1 <- seq(-0.75, 1.25, length=1000)
 x2 <- seq(0, 1, length=1000)
+x3 <- seq(-0.75, 0, length=1000)
 
 y1 <- dnorm(x1, 0.25, 0.18)
 y2 <- dbeta(x2, 1.1968, 3.5903)
+y3 <- dnorm(x3, 0.25, 0.18)
+y0 <- rep(0, 1000)
 
 par(mfrow=c(1,1), mar=c(5.1, 5.1, 1.1, 1.1),
     bty="n", lend=1, las=1, 
@@ -1063,18 +1214,19 @@ par(mfrow=c(1,1), mar=c(5.1, 5.1, 1.1, 1.1),
 plot(x1, y1, type="l", lwd=3, 
     xlab=expression(Value~(italic(x))),
 	ylab="", xlim=c(-0.5, 1), ylim=c(0, 2.5))
-points(x2, y2, type="l", lwd=3, col="blue")
+polygon(x=c(x3, rev(x3)), y=c(y3,y0), border=NA, col="pink")
+points(x1, y1, type="l", lwd=3)
+points(x2, y2, type="l", lwd=3, lty=2, col="blue")
 segments(0, 0, 0, 2.5, lwd=2, lty=2)
 legend("topright", 
     legend=c("Normal (0.25, 0.18)", "Beta (1.197, 3.590)"),
     bty="n", lwd=3, col=c("black", "blue"),
-    cex=1.3)
-
+    cex=1.3, lty=1:2)
+text(-0.4, 1, "Pink region\nis impossible!", cex=1.3, adj=0)
+arrows(-0.25, 0.73, -0.1, 0.1, lwd=2, length=0.1)
 ```
 
-
 #### Beta distribution in R {#sec-09-beta-r}
-
 
 The beta distribution is accessed using the `_beta` group of functions, where the space could be `d`, `p`, `q`, or `r`. These functions calculate or returns something different:
 
@@ -1184,15 +1336,6 @@ points(x1, y2, type="l", lwd=3, col="red")
 legend("topleft", legend=c("Count-based", "Calculated"),
        lwd=3, col=c("black", "red"), bty="n")
 ```
-
-
-### Dirichlet distribution {#sec-09-dirich}
-
-
-The **Dirichlet distribution** (pronounced “Deer-eesh-lay”) is the distribution of probabilities for multiple outcomes of a random process. This makes it the generalization of beta distribution to multiple outcomes. The values of a Dirichlet distribution must add up to 1. For example, the beta distribution models the probability of throwing heads when you flip a coin. The Dirichlet distribution describes the probability of getting 1, 2, 3, 4, 5, or 6 when you throw a 6-sided die. Just as the probabilities of heads and not-heads must add to 1, the probabilities of 1, 2, 3, 4, 5, and 6 must add up to 1. 
-
-The Dirichlet distribution doesn’t come up on its own very often. Usually, biologists encounter the Dirichlet distribution when performing Bayesian analysis of multinomial outcomes. The Dirichlet distribution is the “conjugate prior” of the categorical and multinomial distributions.
-
 
 ### Exponential distribution {#sec-09-exp}
 

@@ -1,0 +1,37 @@
+Likewise, a population of individuals will grow over time at a rate proportional to the current size of the population. If that growth rate is a factor $B$, then: 
+
+$$f\left(t\right)=B^t$$
+
+And the change in $f\left(t\right)$ relative to a small change in $t$, $dt$, is 
+
+$$\frac{dB^t}{dt}\left(t\right)=\frac{B^{t+dt}-B^t}{dt}$$
+
+which can be rearranged to:
+
+$$\frac{dB^t}{dt}\left(t\right)=B^t\left(\frac{B^{dt}-1}{dt}\right)$$
+
+This is useful because now the part that depends on $t$ is separate from the part that depends on $dt$. The derivative of $B^t$ with respect to $t$ is therefore $B^t$ multiplied by a constant, $\left(B^{dt}/dt\right)$. Because we want to calculate an instantaneous rate of change, that means we want to find what that constant approaches as $dt\rightarrow0$. It turns out that
+
+$$
+\lim_{dt \to 0}\frac{B^{dt}-1}{dt}=\log(B)
+$$
+
+where $\log\left(B\right)$ is the natural logarithm of B. So, 
+
+$$\frac{dB^t}{dt}\left(t\right)=B^t\log\left(B\right)$$
+
+Which is already nicer. But, if we remember that $\log\left(e\right)=1$, we can simplify even further by redefining $f\left(t\right)$ with $e$ as the base using the fact that $z=e^{\log\left(z\right)}$:
+
+$$f\left(t\right)=B^t=\left(e^{\log\left(B\right)}\right)^{t}=e^{b\log\left(t\right)}$$
+
+and thus 
+
+$$\frac{df\left(t\right)}{dt}=e^{b\log\left(t\right)}$$
+
+Why do we care about all of that? We just showed that for function that grows proportionally to itself, (1) it is convenient to express that growth in terms of Euler's constant $e$ because the derivative of $e^t$ is just $e^t$, and (2) multiplicative processes expressed as exponentials like $e^{bt}$ can be expressed as an additive processes like $b+t$ by taking their logarithm:
+
+$$\log\left(ae^{bt}\right)=\log\left(a\right)+b\log\left(t\right)$$
+
+THe left hand side, an exponential, thus becomes an additive *linear* relationship on the right by taking its logarithm. So, the logarithm function, in addition to being the reverse operation of exponentiation, lets us relate multiplicative processes and additive processes.
+
+This is what makes the lognormal so useful. Many variables that are 
