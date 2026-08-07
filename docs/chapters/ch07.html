@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>7&nbsp; Summarizing biological data – Applied Biological Data Analysis</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -72,14 +69,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../chapters/ch06.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -110,7 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <style>html{ scroll-behavior: smooth; }</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -163,7 +161,9 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -518,7 +518,7 @@ window.Quarto = {
 </header>
 
 
-<p>In the last module we saw how single variables can be described or summarized using descriptive statistics (see <a href="#sec-06" class="quarto-xref"><span class="quarto-unresolved-ref">sec-06</span></a>). In this chapter we will extend that to summarizing values by groups. Indeed, comparing the mean values in different groups is one of the most important types of tests we do in biology (see <a href="#sec-11" class="quarto-xref"><span class="quarto-unresolved-ref">sec-11</span></a>).</p>
+<p>In the last module we saw how single variables can be described or summarized using descriptive statistics (see <a href="ch06.html" class="quarto-xref"><span>Chapter 6</span></a>). In this chapter we will extend that to summarizing values by groups. Indeed, comparing the mean values in different groups is one of the most important types of tests we do in biology (see <a href="ch11.html" class="quarto-xref"><span>Chapter 11</span></a>).</p>
 <section id="summarizing-a-data-frame" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="summarizing-a-data-frame"><span class="header-section-number">7.1</span> Summarizing a data frame</h2>
 <p>You can get a quick numerical summary of a vector or a dataset with <code>summary()</code>. The examples below use the built-in dataset <code>iris</code>.</p>
@@ -1235,7 +1235,7 @@ late  purple              8         12        16
       white              12         11        15</code></pre>
 </div>
 </div>
-<p>The output of <code>ftable()</code> is of class <code>ftable</code>, which <em>looks</em> like a matrix or data frame but does not function like one. Sometimes it is necessary to convert an <code>ftable()</code> output to different class in order to pull values from it. This can be done with base R conversion functions. Notice that the data frame form of <code>handed.table</code> resembles the “long” data format we discussed in <a href="#sec-05-df-oth-shap" class="quarto-xref"><span class="quarto-unresolved-ref">sec-05-df-oth-shap</span></a>.</p>
+<p>The output of <code>ftable()</code> is of class <code>ftable</code>, which <em>looks</em> like a matrix or data frame but does not function like one. Sometimes it is necessary to convert an <code>ftable()</code> output to different class in order to pull values from it. This can be done with base R conversion functions. Notice that the data frame form of <code>handed.table</code> resembles the “long” data format we discussed in <a href="ch05.html#sec-05-df-oth-shap" class="quarto-xref"><span>Section 5.5.3.2</span></a>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a>spp.color.ftab <span class="ot">&lt;-</span> <span class="fu">ftable</span>(x<span class="sc">$</span>Species<span class="sc">~</span>x<span class="sc">$</span>color)</span>
 <span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a><span class="fu">as.matrix</span>(spp.color.ftab)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>

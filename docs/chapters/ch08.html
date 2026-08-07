@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>8&nbsp; Visualizing biological data – Applied Biological Data Analysis</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -91,14 +88,15 @@ div.csl-indent {
 <link href="../chapters/ch07.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -129,7 +127,7 @@ div.csl-indent {
 <style>html{ scroll-behavior: smooth; }</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -182,7 +180,9 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -608,7 +608,7 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># reset</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Because the second histogram shows probability densities, the areas under the bars sum to 1 (this is part of the definition of a PDF) (see <a href="#sec-09-cont" class="quarto-xref"><span class="quarto-unresolved-ref">sec-09-cont</span></a>).</p>
+<p>Because the second histogram shows probability densities, the areas under the bars sum to 1 (this is part of the definition of a PDF) (see <a href="ch09.html#sec-09-cont" class="quarto-xref"><span>Section 9.3</span></a>).</p>
 <p>A histogram can provide a visual first clue as to the shape of a distribution’s PDF or PMF. For example, the histograms of <code>x1</code> and <code>x2</code> below suggest very different distributions:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1000</span>)</span>
@@ -701,7 +701,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>The above plot is called a “dynamite plot” because the bar and error bar look like an old stick of dynamite. Because they show less than a boxplot, and are harder to make than a boxplot, I almost never make dynamite plots. Instead, I suggest you use boxplots or something like the “point-and-whisker” plots below (<a href="#sec-08-sing-box" class="quarto-xref"><span class="quarto-unresolved-ref">sec-08-sing-box</span></a>).</p>
+<p>The above plot is called a “dynamite plot” because the bar and error bar look like an old stick of dynamite. Because they show less than a boxplot, and are harder to make than a boxplot, I almost never make dynamite plots. Instead, I suggest you use boxplots or something like the “point-and-whisker” plots below (<a href="#sec-08-sing-box" class="quarto-xref"><span>Section 8.1.3</span></a>).</p>
 </section>
 <section id="sec-08-sing-box" class="level3" data-number="8.1.3">
 <h3 data-number="8.1.3" class="anchored" data-anchor-id="sec-08-sing-box"><span class="header-section-number">8.1.3</span> Boxplots</h3>
@@ -909,7 +909,7 @@ window.Quarto = {
 </section>
 <section id="sec-08-sing-kern" class="level3" data-number="8.1.5">
 <h3 data-number="8.1.5" class="anchored" data-anchor-id="sec-08-sing-kern"><span class="header-section-number">8.1.5</span> Kernel density plots</h3>
-<p>Kernel density plots are a way to empirically estimate and visualize the <strong>probability distribution function (PDF)</strong> of a distribution (<a href="#sec-09-cont" class="quarto-xref"><span class="quarto-unresolved-ref">sec-09-cont</span></a>). A plot of the estimated PDF is essentially a histogram where the bin width approaches 0. The PDF tells us two things. Practically speaking, the PDF of a distribution at a given value is related to how likely that value is to occur relative to other values. However, that is NOT the same as the probability of that value occurring.</p>
+<p>Kernel density plots are a way to empirically estimate and visualize the <strong>probability distribution function (PDF)</strong> of a distribution (<a href="ch09.html#sec-09-cont" class="quarto-xref"><span>Section 9.3</span></a>). A plot of the estimated PDF is essentially a histogram where the bin width approaches 0. The PDF tells us two things. Practically speaking, the PDF of a distribution at a given value is related to how likely that value is to occur relative to other values. However, that is NOT the same as the probability of that value occurring.</p>
 <p>What the PDF really expresses is the <em>rate of change in cumulative density at a value</em>.</p>
 <ul>
 <li>The <strong>cumulative density</strong> of a distribution at some value <em>x</em> is the probability of a value <span class="math inline">\(\le\)</span> <em>x</em>.</li>
@@ -917,7 +917,7 @@ window.Quarto = {
 </ul>
 <p>The PDF is defined as is the <em>slope or first derivative of the CDF</em>. Conversely, the CDF is the integral of the PDF. The PDF is the rate at which the probability of observing a value <span class="math inline">\(\le{x}\)</span> increases at each <span class="math inline">\(x\)</span>. Again, this is related to but not the same as the probability of that value occurring.</p>
 <p><img src="../images/08-02.jpg" class="img-fluid" alt="Relationship between the probability density function (PDF) (left) and cumulative distribution function (CDF) (right) of a distribution. The PDF at some x value is the slope of the CDF at that x value. The CDF at some x value is the integral of the PDF up to that x value.">{fig-alt:“Relationship between the probability density function (PDF) and cumulative distribution function (CDF) of a normal distribution. The left panel shows the PDF, f(x), as a bell-shaped curve. The right panel shows the corresponding CDF, F(x), as an S-shaped curve increasing from 0 to 1. Red annotations connect corresponding values of x on the two graphs, illustrating that the probability density f(x) at a given value equals the rate of change (slope) of the cumulative distribution function F(x) at that same value. Larger PDF values correspond to steeper slopes of the CDF, while smaller PDF values correspond to flatter portions of the CDF.”}</p>
-<p>The kernel density plot estimated by R is to the PDF what the empirical cumulative distribution function (ECDF; see <a href="#sec-08-sing-cdf" class="quarto-xref"><span class="quarto-unresolved-ref">sec-08-sing-cdf</span></a>) is to the CDF. Just like an ECDF plot presents an estimate of the true CDF, the kernel density plot presents an estimate of the true PDF. This means that presenting a kernel density plot or an ECDF plot is largely a matter of preference because they convey the same information in different ways.</p>
+<p>The kernel density plot estimated by R is to the PDF what the empirical cumulative distribution function (ECDF; see <a href="#sec-08-sing-cdf" class="quarto-xref"><span>Section 8.1.4</span></a>) is to the CDF. Just like an ECDF plot presents an estimate of the true CDF, the kernel density plot presents an estimate of the true PDF. This means that presenting a kernel density plot or an ECDF plot is largely a matter of preference because they convey the same information in different ways.</p>
 <p>Note that a kernel density plot makes more sense for a <a href="@sec-09-cont">continuous distribution</a> than for a <a href="@sec-09-disc">discrete distribution</a>. The equivalent plot for a discrete distribution is the <strong>probability mass function (PMF)</strong> plot, which looks like a barplot because the PMF is only non-zero for integer values.</p>
 <p>The example below shows kernel density plots for four distributions: <span class="math inline">\(Normal\left(\mu=5,\sigma=2\right)\)</span>, <span class="math inline">\(Gamma\left(k=3,\theta=2\right)\)</span>, <span class="math inline">\(Uniform\left(min=0,max=1\right)\)</span>, and <span class="math inline">\(Poisson\left(\lambda=4\right)\)</span>. The first 3 are continuous distributions and the last is a discrete distribution.</p>
 <div class="cell">
@@ -1381,7 +1381,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>For more advanced plotting, refer to <a href="#sec-28" class="quarto-xref"><span class="quarto-unresolved-ref">sec-28</span></a>. There we’ll explore special symbols and equations with <code>plotmath()</code>, fun with axes, adding images to figures, and <code>lattice</code> graphics.</p>
+<p>For more advanced plotting, refer to <a href="ch28.html" class="quarto-xref"><span>Chapter 28</span></a>. There we’ll explore special symbols and equations with <code>plotmath()</code>, fun with axes, adding images to figures, and <code>lattice</code> graphics.</p>
 </section>
 </section>
 </section>
@@ -1445,7 +1445,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>Sometimes the Spearman rank correlation coefficient <span class="math inline">\(\rho\)</span> is more informative than the Pearson linear correlation coefficient <em>r</em> (<a href="#sec-06-co" class="quarto-xref"><span class="quarto-unresolved-ref">sec-06-co</span></a>). The function <code>panel.cor()</code> can be modified to use <span class="math inline">\(\rho\)</span> instead of <em>r</em>:</p>
+<p>Sometimes the Spearman rank correlation coefficient <span class="math inline">\(\rho\)</span> is more informative than the Pearson linear correlation coefficient <em>r</em> (<a href="ch06.html#sec-06-co" class="quarto-xref"><span>Section 6.4</span></a>). The function <code>panel.cor()</code> can be modified to use <span class="math inline">\(\rho\)</span> instead of <em>r</em>:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>panel.cor2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y, <span class="at">digits =</span> <span class="dv">2</span>, <span class="at">prefix =</span> <span class="st">""</span>, cex.cor, ...)</span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>{</span>
@@ -1475,7 +1475,7 @@ window.Quarto = {
 <section id="sec-08-many-ord" class="level3" data-number="8.3.2">
 <h3 data-number="8.3.2" class="anchored" data-anchor-id="sec-08-many-ord"><span class="header-section-number">8.3.2</span> Ordination (brief introduction)</h3>
 <p>The methods above are a way to examine single variables, or single pairs of variables. But what about many variables at once? In other words, how can we examine variation between samples by taking into account multiple variables at once? This is the realm of <strong>multivariate statistics</strong>.</p>
-<p><strong>Ordination</strong> is literally plotting or ordering observations along two or more axes. How that ordering is done varies wildly among techniques. We will get deeper into ordination later in the course (<a href="#sec-24" class="quarto-xref"><span class="quarto-unresolved-ref">sec-24</span></a>), but for now let’s look at one of the most common techniques, <strong>principal components analysis (PCA)</strong>, with a focus on interpretation rather than calculation. Some of the goals of all ordination techniques are:</p>
+<p><strong>Ordination</strong> is literally plotting or ordering observations along two or more axes. How that ordering is done varies wildly among techniques. We will get deeper into ordination later in the course (<a href="ch24.html" class="quarto-xref"><span>Chapter 24</span></a>), but for now let’s look at one of the most common techniques, <strong>principal components analysis (PCA)</strong>, with a focus on interpretation rather than calculation. Some of the goals of all ordination techniques are:</p>
 <ul>
 <li><strong>Cluster identification:</strong> observations that are closer to each other in the ordination space are more similar to each other</li>
 <li><strong>Dimension reduction:</strong> the axes of an ordination are estimates of synthetic variables that combine information about many variables at once</li>
@@ -1489,7 +1489,7 @@ window.Quarto = {
 <section id="principal-components-analysis-pca" class="level4" data-number="8.3.2.1">
 <h4 data-number="8.3.2.1" class="anchored" data-anchor-id="principal-components-analysis-pca"><span class="header-section-number">8.3.2.1</span> Principal components analysis (PCA)</h4>
 <p><strong>Principal components analysis (PCA)</strong> is a method for extracting synthetic gradients from a multivariate dataset that capture most of the variation in that dataset. These gradients are calculated by finding linear combinations of the variables that minimize sums of squared deviations from the gradient. In other words, PCA translates the variation between observations in terms of the original, many variables, into variation along a few artificial variables called <strong>principal components</strong>.</p>
-<p>The basic problem is this: you can see a pattern in one variable with a histogram (<a href="#sec-08-sing-hist" class="quarto-xref"><span class="quarto-unresolved-ref">sec-08-sing-hist</span></a>). You can see a pattern in 2 or 3 variables (i.e., dimensions) with a scatterplot (<a href="#sec-08-two-scatter" class="quarto-xref"><span class="quarto-unresolved-ref">sec-08-two-scatter</span></a>). But what if you have 4 variables? 10 variables? If you’ve never heard of PCA or ordination, it might be worth watching a video that explains and shows the basic ideas. Here is <a href="https://www.youtube.com/watch?v=HMOI_lkzW08"><strong>one that only takes 5 minutes and has a nice theme song</strong></a> (accessed 2021-08-10). For a more in-depth introduction to PCA, see <a href="@sec-24-pca">Module 24</a>. For now, let’s just go with “PCA helps us visualize patterns involving many variables at once”.</p>
+<p>The basic problem is this: you can see a pattern in one variable with a histogram (<a href="#sec-08-sing-hist" class="quarto-xref"><span>Section 8.1.1</span></a>). You can see a pattern in 2 or 3 variables (i.e., dimensions) with a scatterplot (<a href="#sec-08-two-scatter" class="quarto-xref"><span>Section 8.2.1</span></a>). But what if you have 4 variables? 10 variables? If you’ve never heard of PCA or ordination, it might be worth watching a video that explains and shows the basic ideas. Here is <a href="https://www.youtube.com/watch?v=HMOI_lkzW08"><strong>one that only takes 5 minutes and has a nice theme song</strong></a> (accessed 2021-08-10). For a more in-depth introduction to PCA, see <a href="@sec-24-pca">Module 24</a>. For now, let’s just go with “PCA helps us visualize patterns involving many variables at once”.</p>
 <p>PCA is available in base R using the functions <code>prcomp()</code> and <code>princomp()</code>. Both of these functions produce similar outputs, but there are some subtle differences between them. For this course we are going to use the PCA function in package <code>vegan</code>. Although designed for community ecology, <code>vegan</code> is widely used for ordination and multivariate analysis in many fields. Importantly, <code>vegan</code> is actively maintained and updated with new techniques as they are developed. Also importantly, <code>vegan</code> offers a common interface for many kinds of ordination.</p>
 <p>The example below uses the <code>varespec</code> dataset from <code>vegan</code>. Each column contains % cover by different species of plants in lichen pastures in northern Finland and Scandinavia. For the sake of making a simple example, we will ordinate only the 15 species with the most variance (many species in the dataset are rare or sparse, so including them makes the plot harder to interpret…in “real life”, don’t remove variables from your analysis without good reason!).</p>
 <div class="cell">
@@ -1566,7 +1566,7 @@ attr(,"const")
 </section>
 <section id="plotting-ordinations" class="level4" data-number="8.3.2.2">
 <h4 data-number="8.3.2.2" class="anchored" data-anchor-id="plotting-ordinations"><span class="header-section-number">8.3.2.2</span> Plotting ordinations</h4>
-<p>Extracting the scores from an ordination object can let you plot points with all of the <code>base</code> graphics formatting methods we learned above (<a href="#sec-08-two" class="quarto-xref"><span class="quarto-unresolved-ref">sec-08-two</span></a>), such as using color or shape to indicate group membership. In my experience this is more flexible than using the built-in graphics capabilities in <code>vegan</code><a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>, but your mileage may vary.</p>
+<p>Extracting the scores from an ordination object can let you plot points with all of the <code>base</code> graphics formatting methods we learned above (<a href="#sec-08-two" class="quarto-xref"><span>Section 8.2</span></a>), such as using color or shape to indicate group membership. In my experience this is more flexible than using the built-in graphics capabilities in <code>vegan</code><a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>, but your mileage may vary.</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load some data</span></span>
 <span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(crabs, <span class="at">package=</span><span class="st">"MASS"</span>)</span>
@@ -1635,7 +1635,7 @@ Bolker BM. 2008. Ecological models and data in <span>R</span>. Princeton, New Je
 <li id="fn3"><p>adapted from <a href="https://commons.wikimedia.org/wiki/File:Discrete_probability_distribution_illustration.svg" class="uri">https://commons.wikimedia.org/wiki/File:Discrete_probability_distribution_illustration.svg</a> (public domain).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>You can also specify colors by their RGB or hex codes. Just google “R color chart” to get some examples. The <a href="https://colorbrewer2.org/">ColorBrewer</a> website (accessed 2026-08-05) and R package can help picking appropriate color schemes.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>Locally estimated sums of squares, a common smoothing curve algorithm.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>Different software packages define loadings slightly differently. Some report the coefficients (eigenvectors) used to calculate the principal components, while others report the correlations between the original variables and the principal components. The two are closely related and usually lead to the same qualitative interpretation. We’ll discuss this more in <a href="#sec-28" class="quarto-xref"><span class="quarto-unresolved-ref">sec-28</span></a>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Different software packages define loadings slightly differently. Some report the coefficients (eigenvectors) used to calculate the principal components, while others report the correlations between the original variables and the principal components. The two are closely related and usually lead to the same qualitative interpretation. We’ll discuss this more in <a href="ch28.html" class="quarto-xref"><span>Chapter 28</span></a>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn7"><p>An introduction by the package’s lead author can be found by running this command:<code>vignette(topic="intro-vegan", package="vegan")</code>.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>

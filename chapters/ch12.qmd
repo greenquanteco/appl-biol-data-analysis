@@ -2,5 +2,4 @@
 
 Everything you should have learned in Biostats.
 
-
 ## Linear models {#sec-12-lin}
