@@ -1,3 +1,6 @@
-# Advanced R graphics {#sec-28}
+# Multivariate hypothesis testing {#sec-mtest}
 
-Base graphics are the best graphics.
+Anything is permuted.
+
+
+## Mantel tests {#sec-mtest-mantel}

@@ -1,5 +1,3 @@
-# Ordination {#sec-24}
+# Introduction to multivariate data and data analysis {#sec-mdata}
 
-We're all just points on a graph.
-
-## Principal components analysis {#sec-24-pca}
+How far is too far?

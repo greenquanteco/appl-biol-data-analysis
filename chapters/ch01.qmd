@@ -1,12 +1,12 @@
-# Statistics in biology {#sec-01}
+# Statistics in biology {#sec-intro}
 
-## Overview {#sec-01-over}
+## Overview {#sec-intro-over}
 
 Science works by testing ideas to see if they line up with observations. In other words, checking the predictions of hypotheses against *data*. This process is called **data analysis**, because it involves careful examination of numerical patterns in observational or experimental data. The branch of mathematics concerned with analyzing data is called **statistics**. Statistics is vital to modern science in general, including biology.
 
 This website and the course it supports is designed to introduce the ways that statistics are used in biology. This includes strategies for data analysis and an introduction to the open source program and language [R](https://www.r-project.org/). Specific tasks in the data analysis workflow (e.g., data manipulation) and specific analysis methods (e.g., generalized linear models) are covered in their own modules. This first module is a more general exploration of the role of statistics in modern biology, common statistical frameworks, and common misuses of statistics.
 
-## Statistics in modern biology {#sec-01-modern}
+## Statistics in modern biology {#sec-intro-modern}
 
 Biology, like all sciences, depends on the **scientific method**. This means testing proposed explanations, or **hypotheses**, against the data to see if the data support the hypothesis or not. That critical step, of deciding whether observations support or refute a hypothesis, is the domain of **statistics**: the branch of mathematics concerned with finding and interpreting patterns in data.
 
@@ -38,7 +38,7 @@ When we "do statistics", we are arguably not even answering biological questions
 
 Notice that these are “statistical” statements, not necessarily biological statements. Translating biological ideas and questions into statistical statements and questions is one of the hardest parts of “doing statistics”.
 
-## How do we use statistics in biology? {#sec-01-tests}
+## How do we use statistics in biology? {#sec-intro-tests}
 
 Although there are hundreds, if not thousands, of statistical tests out there, most biologists only ever need a handful. It turns out that statistical hypotheses in biology tend to fall into just a few categories:
 
@@ -52,9 +52,9 @@ Although there are hundreds, if not thousands, of statistical tests out there, m
 
 These categories are not mutually exclusive, and many biological questions can be phrased in more than one way. Understanding what kind of pattern you looking for--that is, which of the 4 categories above your question falls into--can get you a long way toward understanding how to analyze your data.
 
-## *P*-values and null hypotheses {#sec-01-pvals}
+## *P*-values and null hypotheses {#sec-intro-pvals}
 
-### Null and alternative hypotheses {#sec-01-pvals-null}
+### Null and alternative hypotheses {#sec-intro-pvals-null}
 
 When scientists design experiments, they are testing one or more hypotheses, or proposed explanations for a phenomenon. Contrary to popular belief, the statistical analysis of experimental results usually does not test a researcher's hypotheses directly. Instead, statistical analysis of experimental results focuses on comparing experimental results to the results that *might have occurred* if there was no effect of the factor under investigation.
 
@@ -109,7 +109,7 @@ Notice that of your choices, only the type II error has immediate evolutionary c
 
 What does this have to do with statistics in biology? Our human minds have evolved to find patterns in noisy data, and we are so good at it that we frequently “find” patterns that aren’t really there. So, we use the scientific method and statistical analysis as tools to help mitigate our bias toward pattern-finding.
 
-### Another way to frame null hypotheses {#sec-01-pvals-alt}
+### Another way to frame null hypotheses {#sec-intro-pvals-alt}
 
 When I teach statistics to biology majors, I try to avoid the terms "null hypothesis" and "alternative hypothesis" because most of my students find them confusing. Instead, I ask students to ask two questions about a hypothesis:
 
@@ -121,7 +121,7 @@ In order to be *scientific* hypothesis, both of those questions have to be answe
 
 [^ch01-2]: You may have noticed that questions 1 and 2 are really the null hypothesis and alternative hypothesis in disguise.
 
-### History and status of *p*-values {#sec-01-pvals-hist}
+### History and status of *p*-values {#sec-intro-pvals-hist}
 
 The *p*-value is a statistical statement about the likelihood of observing a pattern in data when the null hypothesis is true. They were first developed in the 1700s, and popularized by the statistician R.A. Fisher in the 1920s. In Fisher's formulation, the *p*-value was only meant as a "rule-of-thumb" or **heuristic** for determining whether the null hypothesis could be safely rejected. His original publications did not imply that rejecting the null hypothesis should automatically imply acceptance of the alternative hypothesis, or offer any justification for particular cut-offs or critical values of *p*. Those ideas came later.
 
@@ -137,7 +137,7 @@ Recently, the American Statistical Association (ASA) published a number of paper
 
 ### Where *p*-values come from
 
-So where do *p*-values come from, anyway? Remember, *p*-values are an expression of how likely the observed data would be if the null hypothesis was true. Then calculation of a *p*-value involves assumptions about the size of the effect (i.e., difference between the results if the null is true vs. not true), the variability of the outcome (random or otherwise), and the distribution of different summary statistics of the results assuming that the null hypothesis is true. Let's consider the example of a *t*-test. A *t*-test is used to compare means of two groups. We'll talk more about them in @sec-12 . We will use R to simulate some data and explore a basic *t*-test.
+So where do *p*-values come from, anyway? Remember, *p*-values are an expression of how likely the observed data would be if the null hypothesis was true. Then calculation of a *p*-value involves assumptions about the size of the effect (i.e., difference between the results if the null is true vs. not true), the variability of the outcome (random or otherwise), and the distribution of different summary statistics of the results assuming that the null hypothesis is true. Let's consider the example of a *t*-test. A *t*-test is used to compare means of two groups. We'll talk more about them in @sec-groups-2ttest. We will use R to simulate some data and explore a basic *t*-test.
 
 ```{r}
 set.seed(123)
@@ -254,4 +254,4 @@ Likewise, the *p*-value might help distinguish "difference in means is different
 
 ### Do you need a *p*-value?
 
-Now that we have a better handle on what a *p*-value really is, you might be tempted to ask, "Do I need a *p*-value?" Yes, you probably do. For better or for worse, *p*-values and NHST are firmly entrenched in most areas of science, including biology. Despite its shortcomings, the NHST paradigm does offer a powerful way to test and reject proposed explanations. This utility means that NHST and *p*-values are not going away any time soon. If you want an alternative to *p-*values and NHST, refer to @sec-26 or @sec-27.
+Now that we have a better handle on what a *p*-value really is, you might be tempted to ask, "Do I need a *p*-value?" Yes, you probably do. For better or for worse, *p*-values and NHST are firmly entrenched in most areas of science, including biology. Despite its shortcomings, the NHST paradigm does offer a powerful way to test and reject proposed explanations. This utility means that NHST and *p*-values are not going away any time soon. If you want an alternative to *p-*values and NHST, refer to @sec-it or @sec-bayes.

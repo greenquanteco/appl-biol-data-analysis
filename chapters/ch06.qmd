@@ -1,10 +1,10 @@
-# Basic descriptive statistics {#sec-06}
+# Basic descriptive statistics {#sec-desc}
 
 One of the first steps in exploratory data analysis is understanding how values in a variable are spread out (aka: distributed), and what a "typical" value is.
 
 Biologists use a few common **summary statistics**, or **descriptive statistics**, to describe variables. What makes descriptive statistics is that they are calculated directly from the data, and do not estimate any unknown parameters. Estimating unknown parameters is the realm of **inferential statistics**. Any method that tests a hypothesis--such as a *t*-test, ANOVA, linear regression, etc.--is an inferential technique.
 
-## Sample and population statistics {#sec-06-sp}
+## Sample and population statistics {#sec-desc-sp}
 
 In biology, we never have all of the possible values which could be observed. For example, if you wanted to study the body masses of squirrels, you could go and collect, say, 30 squirrels and weigh them. However, those 30 are only a small fraction of the millions of squirrels alive in the world. You would be assuming that your 30 squirrels somehow represent all squirrels.
 
@@ -41,7 +41,7 @@ plot(ns, meds, type="o", pch=16,
 segments(ns, mins, ns, maxs, lwd=2)
 ```
 
-## Central tendency {#sec-06-cen}
+## Central tendency {#sec-desc-cen}
 
 The **central tendency** of a variable is a value that represents a "typical" value from that set of values. Central tendency is usually expressed in one of three ways:
 
@@ -57,9 +57,9 @@ For many datasets, the mean and median will be approximately the same. Data that
 
 Biologists typically summarize data using the mean, but median can be appropriate in some situations--especially when data are not normally distributed.
 
-### Means {#sec-06-cen-mean}
+### Means {#sec-desc-cen-mean}
 
-#### Arithmetic mean {#sec-06-cen-mean-am}
+#### Arithmetic mean {#sec-desc-cen-mean-am}
 
 The **arithmetic mean** or just **mean** is the value that all values would be if they were all the same. Biologists consider both the **sample mean** $\bar{x}$ and the **population mean** $\mu$.
 
@@ -94,7 +94,7 @@ mean(x, na.rm=TRUE)
 
 While most poeple only ever use the arithmetic mean, there are other means.
 
-#### Geometric mean {#sec-06-cen-mean-gm}
+#### Geometric mean {#sec-desc-cen-mean-gm}
 
 The **geometric mean** is defined as the *n*-th root of the product of all values:
 
@@ -130,7 +130,7 @@ geomean2 <- function(x){prod(x)^(1/length(x))}
 geomean2(x)
 ```
 
-#### Harmonic mean {#sec-06-cen-mean-hm}
+#### Harmonic mean {#sec-desc-cen-mean-hm}
 
 The **harmonic mean** is less common than the arithmetic or geometric means. It is used when an average *rate* is needed. The harmonic mean is the reciprocal of the arithmetic mean of reciprocals of the values:
 
@@ -162,7 +162,7 @@ Interestingly, for any set of positive values with at least 2 unique values, the
 
 $$AM\left(x\right)>GM\left(x\right)>HM\left(x\right)$$
 
-#### Weighted mean {#sec-06-cen-mean-wm}
+#### Weighted mean {#sec-desc-cen-mean-wm}
 
 Sometimes we need to some observations to count more than others. The **weight** of an observation is the amount that it contributes to a statistic or analysis. A **weighted mean** is useful when some observations represent more data or experimental units.
 
@@ -187,7 +187,7 @@ mean(x)
 weighted.mean(x, wts)
 ```
 
-### Median {#sec-06-cen-med}
+### Median {#sec-desc-cen-med}
 
 The **median** is the central value of a set of values. If you were to rank the values from smallest to largest, the median would be the value in the middle (or, if there were an even number of values, the median would be the mean of the two central values). The median is also known as the 50^th^ percentile, or 0.5 quantile.
 
@@ -205,7 +205,7 @@ median(x)
 quantile(x, 0.5)
 ```
 
-### Mode {#sec-06-cen-mode}
+### Mode {#sec-desc-cen-mode}
 
 The **mode** is the *most common value* in a set of values. For many distributions, the mode will be the same as, or close to, the mean and median. Most distributions have one mode, or are **unimodal**. Another common case is distributions with two modes, or are **bimodal**.
 
@@ -236,7 +236,7 @@ b <- c(4,4,4,3,3,3,2,1)
 Mode(b)
 ```
 
-Another way to get the mode is to find peaks on a kernel density plot. We'll discuss what these plots really mean later in @sec-08-sing-kern, but for now, a kernel density plot shows how likely different values are a distribution. This method might be more useful when there are many values, or the values have a great deal of precision, making it hard to find a mode by counting up occurrences.
+Another way to get the mode is to find peaks on a kernel density plot. We'll discuss what these plots really mean later in @sec-plot1-sing-kern, but for now, a kernel density plot shows how likely different values are a distribution. This method might be more useful when there are many values, or the values have a great deal of precision, making it hard to find a mode by counting up occurrences.
 
 In the example below, the distribution has a peak around $x=12.01$. This means that the mode is about 12.01, which is very close to the mean and median as well as the true mean used to generate the distribution.
 
@@ -287,9 +287,9 @@ Mode3(a)
 abline(v=Mode3(a), lwd=2, col="red")
 ```
 
-## Variability {#sec-06-var}
+## Variability {#sec-desc-var}
 
-### Variance and standard deviation (SD) {#sec-06-var-var}
+### Variance and standard deviation (SD) {#sec-desc-var-var}
 
 Variability, both random and otherwise, is the *sine qua non* of statistics. If it weren't for all the uncertainty and variability inherent in experimental and real world data, data analysis would be a lot easier and we would barely [need a whole field for it](https://xkcd.com/793/). Understanding variability starts with summarizing it.
 
@@ -349,7 +349,7 @@ cv(b)        # as percent
 cv(b, FALSE) # as ratio
 ```
 
-#### Do not calculate the standard error (SE) {#sec-06-var-var-se}
+#### Do not calculate the standard error (SE) {#sec-desc-var-var-se}
 
 Another statistic related to the variance is the **standard error (SE)**, sometimes also called the "standard error of the mean (SEM)". It is calculated as:
 
@@ -376,7 +376,7 @@ sd(a)/sqrt(length(a))
 
 Again, you almost certainly should ***not*** calculate a SE.
 
-### Median absolute deviation (MAD) {#sec-06-var-mad}
+### Median absolute deviation (MAD) {#sec-desc-var-mad}
 
 An statistic called **median absolute deviation (MAD)** expresses variation as *absolute* deviations from the median rather than *squared* deviations from the mean. The MAD is useful when data do not follow a normal distribution, or any of the many bell-shaped distributions. The MAD is also considered more robust to outliers than the SD. "Robust" in this context means "not as influenced by outliers".
 
@@ -395,7 +395,7 @@ mad(x)
 sd(x)
 ```
 
-### Quantiles and ranges {#sec-06-var-qu}
+### Quantiles and ranges {#sec-desc-var-qu}
 
 A **quantile** is a value in a distribution or sample such that some specified proportion of observations are less than or equal to that value. For example, the 0.5 quantile is the value such that half of values are less than or equal to that value. Quantiles are usually expressed either as proportions in $\left[0,1\right]$ or as percentiles in $\left[1,100\right]$. R uses proportions to express quantiles, but you can always multiply by 100 to get percentiles.
 
@@ -510,7 +510,7 @@ range(a)
 range(a, na.rm=TRUE)
 ```
 
-## Covariance and correlation {#sec-06-co}
+## Covariance and correlation {#sec-desc-co}
 
 If anyone knows anything about statistics, or thinks they do, they know the phrase "Correlation does not equal causation". And that statement is true, both literally and philosophically. **Correlation** means that two sets of values tend to change together: larger values of one variable are associated with larger values of the other variable. Or, large values of one variable are associated with smaller values of the other variable. All this means is that the values seem to reliably change together. Actually demonstrating that one variable is causing another takes careful observation, experiments, and a different kind of analysis than correlation.
 
@@ -604,7 +604,7 @@ axis(side=2, at=c(0, 1), labels=NA)
 ```
 
 
-### Linear correlation {#sec-06-co-lin}
+### Linear correlation {#sec-desc-co-lin}
 
 When we suspect that two variables are correlated, and that the shape of that relationship is a straight line, we can use **Pearson's product moment correlation**, also called **Pearson's *r***. 
 
@@ -683,7 +683,7 @@ pairs(iris[,1:4], lower.panel=panel.smooth, upper.panel=panel.cor, gap=0)
 In this figure, scatterplots in the lower triangle correspond to the variables in the diagonal whom they intersect. For example, the far left and far bottom scatterplot has Sepal.Length for its horizontal axis, and Petal.Width for its vertical axis. Go one panel to the right, and the horizontal axis is now Sepal.Width. The correlation coefficients in the upper triangle are identified the same way. For example, the large 0.96 on the far right, 3rd panel down, is the correlation coefficient between Petal.Length and Petal.Width.
 
 
-### Nonlinear correlation {#sec-06-co-non}
+### Nonlinear correlation {#sec-desc-co-non}
 
 Many processes and relationships in biology are not linear, and sometimes we want to calculate correlation coefficients for those relationships. Consider the figure below. The left panel clearly shows some relationship between $X$ and $Y$, but it is not linear and using a linear correlation coefficient might miss something.
 

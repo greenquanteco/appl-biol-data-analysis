@@ -1,10 +1,10 @@
-# Data import and export {#sec-04}
+# Data import and export {#sec-ie}
 
 For a beginning R user, getting data into and out of R can seem like the hardest part. This is because R interacts with your computer in a way that you're probably not used to. Once you understand a few things like how your computer stores files and how to save in the correct format, things will get easier!
 
-## Working with your file system {#sec-04-files}
+## Working with your file system {#sec-ie-files}
 
-### Your file system {#sec-04-files-your}
+### Your file system {#sec-ie-files-your}
 
 Your file system begins with the **root directory**. In Windows, these are the top folder of a “letter drive” like **C:\\**, **E:\\**, and so on. On Mac and Linux, the root directory is simply **/**. Users should not store files in the root directory without a very good reason.
 
@@ -12,7 +12,7 @@ Every folder in the file system is a **branch** or **subdirectory** of the root.
 
 Each folder and file has a **name**. Names of files are also called **filenames** or **file names**.
 
-### Folder addresses {#sec-04-files-address}
+### Folder addresses {#sec-ie-files-address}
 
 The directory path or just **path** is the “address” of a folder or file within the hierarchy. Paths are constructed by combining the names of the root, the containing folders, and finally the terminal name (for folders) or filename (for files). The elements of the path are separated by slashes:
 
@@ -22,7 +22,7 @@ The directory path or just **path** is the “address” of a folder or file wit
 
 R uses front-slashes. So, Windows addresses need to have their **\\**  changed to **/**, or escaped by doubling each  to **\\\\** (see figure below).
 
-### The working directory {#sec-04-files-wd}
+### The working directory {#sec-ie-files-wd}
 
 Many programs, including R, will designate a folder as the **working directory**: a folder which contains the data the program can access, and which will contain any files created by the program. The default R working directory is the **Documents** folder on Windows, or the **Home** folder on a Mac. You should choose a different folder to be your working directory, however. One common practice is to create a single folder for each project which contains all the data needed for that project, and which will receive all the output from R for the project.
 
@@ -90,11 +90,11 @@ my.data <- read.csv("C:/Users/ngreen62/Documents/example.csv")
 
 If you open an R script with R or RStudio that is contained in a folder, that folder will be automatically set as the working directory. Clever use of the working directory can save you a lot of time. Sloppy use of the working directory (e.g., not specifying the working directory in each R or RStudio session) can lead to disaster and frustration.
 
-## Formatting data files {#sec-04-format}
+## Formatting data files {#sec-ie-format}
 
 Before you try to import your data into R, take a few minutes to set yourself up for success.
 
-### Naming data files {#sec-04-format-name}
+### Naming data files {#sec-ie-format-name}
 
 Good file names are essential for a working biologist. Chances are you will work on many projects over the course of your career, each with its own collection of data files. Even if you store each project’s data in a separate folder, it is a very good idea to give data files within those folders names that are descriptive. I have worked with many people who insist on using file names like “data.xlsx” and relying on their own memory or paper notes to tell them which file is which. Consider this list of particularly egregious file names:
 
@@ -132,7 +132,7 @@ This name signifies that the file contains a “combined” dataset, and include
 
 This name is similar to the last name, but includes some additional signifiers for the project (NRDA) and the fact that this is the final released version.
 
-### Setting up data files {#sec-04-format-set}
+### Setting up data files {#sec-ie-format-set}
 
 Recently @broman2018 reviewed good practices for storing data in spreadsheets. Their article is short and easy to read, and gave a few recommendations for data formatting:
 
@@ -162,7 +162,7 @@ Recently @broman2018 reviewed good practices for storing data in spreadsheets. T
 
 Most people who work with data, myself included, probably agree with their recommendations. Better, there is plenty of room for individual preferences in the exact implementation of each principle. You will save yourself a lot of headache if you follow their advice.
 
-#### Variable names {#sec-04-format-set-vars}
+#### Variable names {#sec-ie-format-set-vars}
 
 Variable names, like data file names, should be brief but informative. There are few restrictions on what variable names can be in R. For simplicity, I recommend you use only lowercase letters, numbers, underscores (`_`), and periods (`.`) in variable names. Other symbols are either inconvenient to type, or can cause issues being parsed by R. Some common pitfalls include:
 
@@ -251,9 +251,9 @@ names(x)[4] <- "SeP.lEn" # just don't
 x
 ```
 
-#### Data values {#sec-04-format-set-vars-values}
+#### Data values {#sec-ie-format-set-vars-values}
 
-All data in R have a type: numeric, logical, character, etc., as we learned in @sec-03-type. Within a vector, matrix, or array, all values must have the same type or they will be converted to character strings. Each variable in a data frame (the most common R data structure) is essentially a vector. This means that in your input file you should try to have one and only one type of data in each column. Otherwise, R will coerce the values into character strings, which may or may not be a problem. Putting only one type of value into each column will also help get your data into “wide” or “tidy” format [@wickham2014].
+All data in R have a type: numeric, logical, character, etc., as we learned in @sec-object-type. Within a vector, matrix, or array, all values must have the same type or they will be converted to character strings. Each variable in a data frame (the most common R data structure) is essentially a vector. This means that in your input file you should try to have one and only one type of data in each column. Otherwise, R will coerce the values into character strings, which may or may not be a problem. Putting only one type of value into each column will also help get your data into “wide” or “tidy” format [@wickham2014].
 
 Entering data should also include some measure of **quality assurance and quality control (QA/QC)**. This basically means making sure that your data are entered correctly, and are formatted correctly. Correct entry can be accomplished by direct comparison to original datasheets or lab notebooks. Cross-checking is a valuable tool here: have two people enter the data and compare their files.
 
@@ -261,9 +261,9 @@ Data formatting requires thinking about what kinds of data are being entered. Fo
 
 ![Examples of bad data management that some simple QA/QC might fix.](../images/04_04.jpg)
 
-## Data import {#sec-04-import}
+## Data import {#sec-ie-import}
 
-### Importing from text files {#sec-04-import-text}
+### Importing from text files {#sec-ie-import-text}
 
 #### Importing from the working directory
 
@@ -334,7 +334,7 @@ cx <- read.csv(in.path)
 
 ```
 
-#### Arguments to `read.table()` and `read.csv()` {#sec-04-import-text-args}
+#### Arguments to `read.table()` and `read.csv()` {#sec-ie-import-text-args}
 
 The text file reading functions have a lot of options, but there are a few that I find very useful (in addition to `header` above).
 
@@ -359,7 +359,7 @@ dat <- read.table(in.name, header=TRUE, sep="\t")
 dat <- read.table(in.name, header=TRUE, sep=" ")
 ```
 
-The `sep` argument is usually necessary when using the “clipboard trick” (see @sec-04-import-special)
+The `sep` argument is usually necessary when using the “clipboard trick” (see @sec-ie-import-special)
 
 ##### `row.names`
 
@@ -413,7 +413,7 @@ options(stringsAsFactors=FALSE)
 
 Back when this option was `TRUE` by default I put this command at the start of every new R script to avoid problems with text strings being misinterpreted as factors.
 
-### Saving and importing R objects {#sec-04-import-object}
+### Saving and importing R objects {#sec-ie-import-object}
 
 Some R objects are not easily represented by tables. For example, the outputs of statistical methods are usually **lists**. Such objects can be saved using function `saveRDS()` and read into R using `readRDS()`. The example below will save an R data object to file `rds_test.rds` in your R working directory.
 
@@ -440,9 +440,9 @@ a <- iris[1:6,]
 dput(a)
 ```
 
-### Importing from saved workspaces {#sec-04-import-rdata}
+### Importing from saved workspaces {#sec-ie-import-rdata}
 
-Everything you do in R takes place within the **workspace**. This can be thought of as a sandbox where all of your data and functions reside. If you want to save this entire environment and continue working later you can do this by saving the workspace with `save.image()` (see @sec-04-export-rdata).
+Everything you do in R takes place within the **workspace**. This can be thought of as a sandbox where all of your data and functions reside. If you want to save this entire environment and continue working later you can do this by saving the workspace with `save.image()` (see @sec-ie-export-rdata).
 
 Workspaces can be loaded using function `load()`. The example below loads workspace `example.RData` from your home directory. Notice that this command will load every object from the saved workspace into your current workspace. This might cause problems if the saved workspace and current workspace have objects with the same names.
 
@@ -489,9 +489,9 @@ rm(temp)
 a
 ```
 
-### Importing special cases {#sec-04-import-special}
+### Importing special cases {#sec-ie-import-special}
 
-#### The clipboard trick {#sec-04-import-special-clip}
+#### The clipboard trick {#sec-ie-import-special-clip}
 
 Sometimes it can be convenient to copy and paste data directly from a spreadsheet into R. This is fine for quick or one-off data imports, but not recommended for routine use because it is tedious to reproduce and error-prone. The procedure is as follows:
 
@@ -502,7 +502,7 @@ Sometimes it can be convenient to copy and paste data directly from a spreadshee
 
 Note that if you try to copy/paste the `read.table("clipboard",...)` command into the R console, you will then have that command in your clipboard and not your data.
 
-#### Entering data using `scan()` {#sec-04-import-special-scan}
+#### Entering data using `scan()` {#sec-ie-import-special-scan}
 
 The `scan()` function lets you enter values one-by-one, separated by pressing ENTER. You can use this just like typing values into Excel. Or, you can copy and paste a single column of values from Excel. The latter case works because R interprets the values within a column as being separated by a line return (i.e., pressing ENTER).
 
@@ -525,7 +525,7 @@ a
 
 You can use this function to enter values from a column in Excel, highlight and copy the column. Then go to R, enter the command below, and press ENTER. Then paste your values and press ENTER again.
 
-#### Entering data directl using `c()` {#sec-04-import-special-c}
+#### Entering data directl using `c()` {#sec-ie-import-special-c}
 
 Function `c()` combines its arguments as a vector. As with all functions, arguments must be separated by commas. Arguments can be on the same line or on different lines.
 
@@ -544,9 +544,9 @@ a
 
 Like `scan()`, data can be entered directly into the console using `c()`. Also like `scan()`, this is comically inefficient but can be useful for small numbers of values.
 
-## Data export {#sec-04-export}
+## Data export {#sec-ie-export}
 
-### Exporting text files {#sec-04-export-text}
+### Exporting text files {#sec-ie-export-text}
 
 Everything you do in R takes place within the “workspace”. You can save entire workspaces, but in most situations it is more useful to write out data or results as delimited text files. I’ve found that comma-delimited files are slightly less likely to have issues because they use a character (`,`) rather than whitespace to separate values. So, for the rest of this course we'll use CSV files.
 
@@ -643,7 +643,7 @@ out.name <- paste0("mydata", "_", Sys.Date(), ".csv")
 write.csv(dat, paste(out.dir, out.name, sep="/"))
 ```
 
-### Saving R objects {#sec-04-export-robj}
+### Saving R objects {#sec-ie-export-robj}
 
 Some data do not fit easily into tables. Individual R objects can be saved to an “.rds” file using the function saveRDS(). This function saves a single object that can later be loaded into another R session with function readRDS().
 
@@ -661,7 +661,7 @@ saveRDS(x, "zebra.rds")
 z <- readRDS("zebra.rds")
 ```
 
-### Saving workspaces {#sec-04-export-rdata}
+### Saving workspaces {#sec-ie-export-rdata}
 
 Entire R workspaces or parts of workspaces can be saved using the function save.image(). The command by itself will save the entire current workspace with a generic name to the working directory. It is more useful to save the workspace under a particular name and/or only save specific objects.
 
@@ -682,9 +682,9 @@ z <- t.test(x)
 save(list=c("x", "z"), file="testworkspace.RData")
 ```
 
-### Write text to a file (special cases) {#sec-04-export-sink}
+### Write text to a file (special cases) {#sec-ie-export-sink}
 
-Sometimes you need to write out data that do not fit easily into tables. An example might be the results of a single *t*-test or ANOVA. This is also sometimes necessary when working with programs outside of R. For example, the program JAGS requires a text file that defines the model to be fit (see @sec-27). This text file can be generated by R, which makes your workflow simpler because you don’t need to use a separate program to store the outputs.
+Sometimes you need to write out data that do not fit easily into tables. An example might be the results of a single *t*-test or ANOVA. This is also sometimes necessary when working with programs outside of R. For example, the program JAGS requires a text file that defines the model to be fit (see @sec-bayes). This text file can be generated by R, which makes your workflow simpler because you don’t need to use a separate program to store the outputs.
 
 The function to write text files with arbitrary content (i.e., not tables) is `sink()`. Functions `print()` and `cat()` are also useful in conjunction with `sink()`.
 
@@ -707,7 +707,7 @@ print(my.result)
 sink()
 ```
 
-### Exporting graphics {#sec-04-export-graphics}
+### Exporting graphics {#sec-ie-export-graphics}
 
 Finally, at some point you will need to export R graphics. In the base R GUI, you can right-click your image and select "Copy as bitmap", and then paste it somewhere as a .jpeg. In RStudio, you can right-click and "Save image as...". However, when preparing presentation or publication quality graphs, it helps to exert more control over the final figure with graphics functions.
 

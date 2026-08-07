@@ -1,6 +1,6 @@
-# Summarizing biological data {#sec-07}
+# Summarizing biological data {#sec-summ}
 
-In the last module we saw how single variables can be described or summarized using descriptive statistics (see @sec-06). In this chapter we will extend that to summarizing values by groups. Indeed, comparing the mean values in different groups is one of the most important types of tests we do in biology (see @sec-11).
+In the last module we saw how single variables can be described or summarized using descriptive statistics (see @sec-desc). In this chapter we will extend that to summarizing values by groups. Indeed, comparing the mean values in different groups is one of the most important types of tests we do in biology (see @sec-groups).
 
 ## Summarizing a data frame
 
@@ -19,7 +19,7 @@ summary(iris$Petal.Length)
 
 The function `summary()` has methods for many other types of R objects such as `glm`, `lm`, `aov`, and so on. 
 
-### Summarizing by groups (AKA: pivot tables) {#sec-07-agg}
+### Summarizing by groups (AKA: pivot tables) {#sec-summ-agg}
 
 One of the most common data operations is **aggregation**, or **summarization by groups**. In Excel, this is done using **Pivot Tables**. In R, the functions `aggregate()` and `tapply()` are used for pivot table-like functionality. The `tidyverse` equivalent for `aggregate()` and `tapply()` is `dplyr::summarise()`. All of these can be much more powerful than an Excel pivot table because while Excel pivot tables are limited to a small set of built-in functions, R can aggregate by any function.
 
@@ -344,7 +344,7 @@ do.call(c, lapply(mylist, function(x){x$estimate}))
 
 Clever use of `lapply()` and `sapply()` can save you a lot of time and typing. Interestingly, using these functions can make base R code feel a lot like `tidyverse` code, in the sense that commands are issued as functions with much less focus on manipulating objects.
 
-## Tabulation (frequency tables) {#sec-07-tab}
+## Tabulation (frequency tables) {#sec-summ-tab}
 
 **Aggregation** is summarizing numeric variables by group.
 The equivalent for counting up occurrences of values in non-numeric variables is **tabulation**. A lot of tabulation is just counting. R can do a lot of counting for you.
@@ -387,7 +387,7 @@ This is similar to what you get with a command like `plot(...,type = "h")`.[^ell
 plot(table(rpois(30, 10)))
 ```
 
-### Contingency tables with `ftable()` {#sec-07-ftable}
+### Contingency tables with `ftable()` {#sec-summ-ftable}
 
 **Contingency tables** summarize how many observations occur in combinations of categories. They are calculated with `ftable()`. This function counts the number of values in each combination of different factors. The example below uses the built-in dataset `iris` modified to have some additional factors.
 
@@ -451,7 +451,7 @@ ftable(Species~bloom+color, data=x)
 The output of `ftable()` is of class `ftable`, which *looks* like a matrix or data frame but does not function like one.
 Sometimes it is necessary to convert an `ftable()` output to different class in order to pull values from it.
 This can be done with base R conversion functions.
-Notice that the data frame form of `handed.table` resembles the "long" data format we discussed in @sec-05-df-oth-shap.
+Notice that the data frame form of `handed.table` resembles the "long" data format we discussed in @sec-manip-df-oth-shap.
 
 ```{r}
 spp.color.ftab <- ftable(x$Species~x$color)

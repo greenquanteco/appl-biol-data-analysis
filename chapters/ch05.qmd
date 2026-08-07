@@ -1,8 +1,8 @@
-# Data manipulation with R {#sec-05}
+# Data manipulation with R {#sec-manip}
 
-In @sec-02 we introduced the basics of the R language and program environment. In this module, we'll go a few steps further and get into the finer details of **data manipulation**: the practice of arranging, sorting, cleaning, and modifying data--and the objects that contain data. Data manipulation is an important R skill because real datasets usually need some fixing before they can be properly analyzed. Data manipulation is also and essential part of R programming for tasks other than data analysis. For example, [simulation modeling](https://doi.org/10.5066/P935Y7NO) or document production (e.g., this website!).
+In #sec-r we introduced the basics of the R language and program environment. In this module, we'll go a few steps further and get into the finer details of **data manipulation**: the practice of arranging, sorting, cleaning, and modifying data--and the objects that contain data. Data manipulation is an important R skill because real datasets usually need some fixing before they can be properly analyzed. Data manipulation is also and essential part of R programming for tasks other than data analysis. For example, [simulation modeling](https://doi.org/10.5066/P935Y7NO) or document production (e.g., this website!).
 
-## Making values {#sec-05-make}
+## Making values {#sec-manip-make}
 
 The typical analysis workflow in R involves importing data from text files or other sources. Sometimes, however, it is necessary to make values within R. This can be for a variety of reasons:
 
@@ -14,9 +14,9 @@ The typical analysis workflow in R involves importing data from text files or ot
 
 This section demonstrates some methods for producing values--i.e., data--within R.
 
-### Make arbitrary values with the c() function {#sec-05-make-c}
+### Make arbitrary values with the c() function {#sec-manip-make-c}
 
-In a [previous section](#mod-03-c) we saw how function `c()` combines its arguments as a **vector**. As with all functions, arguments must be separated by commas and can be on different lines. This method can be used to make vectors with any set of values.
+The function `c()` combines its arguments as a **vector**. As with all functions, arguments must be separated by commas and can be on different lines. This method can be used to make vectors with any set of values.
 
 ```{r}
 c(1:3,9:5)
@@ -29,9 +29,9 @@ a
 
 Like `scan()`, this is an inefficient way to make vectors but can be useful for small numbers of values. Or, for sets of values that can't be defined algorithmically.
 
-### Generating sequences {#sec-05-make-seq}
+### Generating sequences {#sec-manip-make-seq}
 
-#### Consecutive values with the colon : operator {#sec-05-make-seq-col}
+#### Consecutive values with the colon : operator {#sec-manip-make-seq-col}
 
 Consecutive values can be generated using the colon operator `:`. A command like `X:Y` will generate consecutive values from *X* to *Y* in increments of 1 or -1. If $X<Y$, the increment is 1; if $X>Y$, the increment is -1. The usual use case is to make sets of consecutive integers.
 
@@ -69,7 +69,7 @@ Most people use `:` to produce sets of integers, but it can also make non-intege
 2.7:6.1
 ```
 
-#### Regular sequences with the seq() function {#sec-05-make-seq-seq}
+#### Regular sequences with the seq() function {#sec-manip-make-seq-seq}
 
 Function `seq()` generates regular sequences of a given length (`length=`), or by an interval (`by=`). The command must be supplied with a length or an interval, but not both. If you specify a length, R will calculate the intervals for you. If you specify an interval, R will calculate the length for you. If you specify a length and an interval, R will return an error.
 
@@ -104,7 +104,7 @@ rev(seq(-10, -1, by=1))
 -1*(seq(1, 10, by=1))
 ```
 
-#### Repeated values with the rep() function {#sec-05-make-seq-rep}
+#### Repeated values with the rep() function {#sec-manip-make-seq-rep}
 
 The function `rep()` creates a sequence of repeated elements. It can be used in several ways.
 
@@ -128,7 +128,7 @@ rep(1:3, each=4, times=2)
 rep(1:3, each=2, times=4)
 ```
 
-#### The recycling rule {#sec-05-make-seq-rec}
+#### The recycling rule {#sec-manip-make-seq-rec}
 
 One quirk of R sequences and vectors is the **recycling rule**. Values in one vector can be "recycled" to match up with values in another vector. This rule is ***only*** invoked if the length of the longer vector is a multiple of the length of the shorter vector. Otherwise you will get an error. Consider the following example:
 
@@ -156,11 +156,11 @@ Trying to add a variable to `my.df` with a number of values that is not a factor
 my.df$x7 <- 1:7
 ```
 
-### Random values {#sec-05-make-rand}
+### Random values {#sec-manip-make-rand}
 
 R can generate many types of **random values**. This makes sense because R was designed for statistical analysis, and randomness is a key feature of statistics. What most people don't realize is that random values in R (or in most programs) are not really random--they are **pseudorandom**. This means that while the values appear random, and can pass many statistical tests for randomness, they are calculated deterministically from the state of your computer. So, if you want your analysis or script to be fully reproducible, you need to set the state so that the same pseudorandom values are always returned. Otherwise, you will get different results every time.
 
-#### The random number seed {#sec-05-make-rand-seed}
+#### The random number seed {#sec-manip-make-rand-seed}
 
 The random number seed can be set with function `set.seed()`. Setting the seed defines the initial state of R's pseudo-random number generator.
 
@@ -184,7 +184,7 @@ set.seed(42)
 runif(3)
 ```
 
-#### Random values from a set with the sample() function {#sec-05-make-rand-samp}
+#### Random values from a set with the sample() function {#sec-manip-make-rand-samp}
 
 The function `sample()` pulls random values from a set of values. This can be done with or without replacement. If you try to pull too many values from a set without replacement R will return an error. The default argument for `replace=` is `FALSE`.
 
@@ -244,9 +244,9 @@ table(a)
 table(b)
 ```
 
-#### Random values from a distribution {#sec-05-make-rand-dist}
+#### Random values from a distribution {#sec-manip-make-rand-dist}
 
-One of the strengths of R is its ease of working with probability distributions. We will explore probability distributions more in @sec-09, but for now just understand that a probability distribution is a function that describes how likely different values of a random variable are. In R, random values from a probability distribution can be drawn using a function with a name like `r_()`, where `_` is the (abbreviated) name of the distribution.
+One of the strengths of R is its ease of working with probability distributions. We will explore probability distributions more in @sec-dist, but for now just understand that a probability distribution is a function that describes how likely different values of a random variable are. In R, random values from a probability distribution can be drawn using a function with a name like `r_()`, where `_` is the (abbreviated) name of the distribution.
 
 The syntax of the functions for working with distributions in R is very consistent. For random values, the first argument is always the sample size (`n`), and the next few arguments are the distributional parameters of the distribution. These arguments can be provided with or without their names. The default order of the arguments is shown on the help page for each function (e.g., `?rnorm`). Below are some examples of random draws from different distributions, displayed as histograms.
 
@@ -287,7 +287,7 @@ hist(a6)
 par(mfrow=c(1,1))
 ```
 
-## Selecting data with square brackets {#sec-05-select}
+## Selecting data with square brackets {#sec-manip-select}
 
 One of the most common data manipulation tasks is selecting, or **extracting**, from your data. The most common way of selecting subsets of an object (aka: extracting) is the R **bracket notation**. This refers to the symbols used, `[]`. These are also sometimes called **square brackets**, to distinguish them from **curly brackets**, `{}`. The latter are more properly called **braces** and have a different purpose in R.
 
@@ -295,7 +295,7 @@ Brackets tell R that you want a part of an object. Which part is determined eith
 
 Brackets can also be used to exclude certain elements by using the negative sign, but this can be tricky. We'll explore how negative indices work below.
 
-### Basics of brackets {#sec-05-select-bas}
+### Basics of brackets {#sec-manip-select-bas}
 
 The most direct way to work with most R objects is the **bracket notation**. Square brackets `[]` allow you to access parts of objects with a simple syntax to specify position within the object.
 
@@ -307,7 +307,7 @@ The values inside the brackets that specify rows or columns or whatever are call
 
 ![In R bracket notation, the comma separates margins and allows you to select an entire margin worth of values.](../images/05_02.jpg){fig.align="center"}
 
-#### Selecting from a vector {#sec-05-select-bas-vec}
+#### Selecting from a vector {#sec-manip-select-bas-vec}
 
 Vectors have 1 dimension, so you must specify a single vector of indices. Notice that the brackets can be empty, in which case all elements can be returned. If the vector supplied is of length 0, then no elements will be returned. When a vector of indices with $>0$ elements is specified, R will return the elements of the vector in the order requested. For example, `a[c(1,3,5)]` and `a[c(3,5,1)]` will return the same values but in different order.
 
@@ -334,7 +334,7 @@ a[c(3:7,2)]
 a[c(2:7)]   
 ```
 
-#### Selecting from a matrix {#sec-05-select-bas-mat}
+#### Selecting from a matrix {#sec-manip-select-bas-mat}
 
 Matrices have 2 dimensions, so you must specify two dimension's worth of indices. If you want all of one dimension (e.g., rows 1 to 3 and all columns), you can leave the spot for the index blank. Separate the dimensions using a comma. Positive indices select elements; negative elements remove elements.
 
@@ -395,7 +395,7 @@ Notice that all three of the commands above return a vector, not a matrix. This 
 a[-c(1,2),,drop=FALSE]
 ```
 
-#### Selecting from an array {#sec-05-select-bas-arr}
+#### Selecting from an array {#sec-manip-select-bas-arr}
 
 Selecting from an array is a lot like selecting from a matrix, only with one more dimension. Consider an array with 3 dimensions: rows, columns, and "layers"[^arraylayers].
 
@@ -446,7 +446,7 @@ Ar[1:2,,2:1]
 
 I can't think of a reason why you would need to do something like the last example, but it's nice to know that you could.
 
-#### Selecting from a data frame {#sec-05-select-bas-df}
+#### Selecting from a data frame {#sec-manip-select-bas-df}
 
 Selecting from a data frame using brackets is largely the same as selecting from a matrix. Just keep in mind that the result might come back as a vector (if you select rows in a single column) or a data frame (any other situation).
 
@@ -472,7 +472,7 @@ a[1:3,]
 a[1:3, 1:3]
 ```
 
-#### Selecting from lists {#sec-05-select-bas-list}
+#### Selecting from lists {#sec-manip-select-bas-list}
 
 One of the most important kinds of R object is the **list**. A list can be thought of like a series of containers or buckets. Each bucket can contain completely unrelated things, or even other series of buckets. Each bucket is called an **element** of the list. Because of this flexibility, lists are extremely versatile and useful in R programming. Many function outputs are really lists (e.g., the outputs of `lm()` or `t.test()`).
 
@@ -660,7 +660,7 @@ iris[iris$Species %in% c("setosa", "versicolor"),]
 
 We'll go over some more complicated selection methods in a future section, but what you've seen so far can be very powerful.
 
-## Dates and temporal data {#sec-05-date}
+## Dates and temporal data {#sec-manip-date}
 
 Most of the data we deal with in R are numbers, but textual and temporal data are important two. Working with dates, times, and character strings can be significantly more complicated than working with numbers...so, I've put together an entire page on it. I am the first to admit that the approaches demonstrated here are a little "old-school" compared to some of the newer packages. In particular, many people prefer the tidyverse package `lubridate` [@grolemund2011] for temporal data. Much of this section is based on @spector2008.
 
@@ -668,7 +668,7 @@ Temporal data can be read and interpreted by R in many formats. The general rule
 
 It should be noted that the easiest way to deal with dates and times is "don't". In many situations it's actually not necessary to use temporal data classes. For example, if a field study was conducted in two years, and there is no temporal component to the question, it might be sufficient to just call the years `year1` and `year2` in the dataset. Or, if an elapsed time is used as a variable, it might make more sense to store the elapsed time (e.g., 10 minutes, 11.2 minutes, etc.) rather than use full date/time codes for each observation time.
 
-### Dates without times {#sec-05-date-date}
+### Dates without times {#sec-manip-date-date}
 
 The easiest way to handle dates is to use the base function `as.Date()`. This function converts character strings to the R date format. This implies that you will have a much easier time if you send dates to R in YYYY-MM-DD format. You can do this in Excel by setting a custom number format. Once in R, use `as.Date()` to convert your properly-formatted text strings into date objects. Once converted, R can do simple arithmetic such as finding intervals between dates.
 
@@ -758,7 +758,7 @@ format(x, "%Y-%m-%d")
 format(x, "%b/%d/%y")
 ```
 
-### Dates with times and time zones {#sec-05-date-time}
+### Dates with times and time zones {#sec-manip-date-time}
 
 [Here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons).
 
@@ -858,7 +858,7 @@ attr(b2, "tzone") <- "Europe/London"
 as.numeric(b2)
 ```
 
-### Working with dates and times {#sec-05-date-work}
+### Working with dates and times {#sec-manip-date-work}
 
 Why should we go through all of this trouble to format dates and times as dates and times? The answer is that R can perform many useful calculations with dates and times. One of these is time intervals by using subtraction or the function `difftime()`. Subtracting two date/times will return an answer but perhaps not in the units you want; use `difftime()` if you want to specify the units.
 
@@ -926,13 +926,13 @@ seq(a, by="6 weeks", length=10)
 seq(a, by="-4 weeks", length=5)
 ```
 
-## Character data {#sec-05-char}
+## Character data {#sec-manip-char}
 
 Recall from earlier that "character" is just another **type** of data in R--the type that contains text. This means that text values can be stored and manipulated in many of the same ways as numeric data. The vectorized functions in R can make managing your text-based data very fast and efficient.
 
 A value containing text, or stored as text, is called a **character string**. Character strings can be stored in many R objects. A set of character strings is called a **character vector**.
 
-### Combining character strings {#sec-05-char-comb}
+### Combining character strings {#sec-manip-char-comb}
 
 Character strings can be combined together into larger character strings using the function `paste()`. Notice that this is not the same as making a vector containing several character strings. That operation is done with `c()`.
 
@@ -992,7 +992,7 @@ paste(a, collapse="-")
 paste(a)
 ```
 
-### Printing character strings {#sec-05-char-print}
+### Printing character strings {#sec-manip-char-print}
 
 The `cat()` function can not only put strings together, but also print them to the R console. This is useful if you want to generate messages from inside functions or loops. When `cat()` receives inputs that are not character strings, it evaluates them and converts them to character strings. The examples below show how inputs can be evaluated and printed. It also illustrates the use of `\n` and `\t` to insert new lines and tabs, respectively. Finally, the command `flush.console()` ensures that the console is updated with the most recent outputs.
 
@@ -1019,9 +1019,9 @@ for(i in 1:5){
 }
 ```
 
-The other printing function, `sink()`, is specifically for printing outputs into text files. Refer back to the @sec-04-export-sink for an example.
+The other printing function, `sink()`, is specifically for printing outputs into text files. Refer back to the @sec-ie-export-sink for an example.
 
-### Matching character strings {#sec-05-char-match}
+### Matching character strings {#sec-manip-char-match}
 
 Like numeric data, character strings can be matched exactly with the comparison operator `==`.
 
@@ -1043,7 +1043,7 @@ any(x == "zebra")
 all(x == "zebra")
 ```
 
-Notice that this kind of matching is case-sensitive. If you need to match regardless of case, you can either force all of the comparands to be the same case, or use regular expressions (see @sec-05-char-grep).
+Notice that this kind of matching is case-sensitive. If you need to match regardless of case, you can either force all of the comparands to be the same case, or use regular expressions (see @sec-manip-char-grep).
 
 ```{r}
 #| collapse: true
@@ -1067,7 +1067,7 @@ sort(x)
 which(x > "jaguar")
 ```
 
-### Searching text with the grep() and grepl() functions {#sec-05-char-grep}
+### Searching text with the grep() and grepl() functions {#sec-manip-char-grep}
 
 **Regular expressions**, or **regex**, are a [syntax for searching text strings](https://en.wikipedia.org/wiki/Regular_expression). Learning how to use regular expressions is easily a semester-long course on its own. Here we'll just explore a few common use cases. The R functions that deal with regular expressions are `grep()` and its cousins. The most commonly used versions are `grep()` and `grepl()`.
 
@@ -1119,7 +1119,7 @@ grep("TIGER", x, ignore.case=TRUE)
 
 We will see some uses of `grep()` and its cousins in the examples later.
 
-### Replacing parts of character strings {#sec-05-char-replace}
+### Replacing parts of character strings {#sec-manip-char-replace}
 
 Text within character strings can be replaced or modified in several ways. If you are comfortable with regular expressions (see previous section) then you can use function `gsub()`. The syntax for `gsub()` is similar to that of `grep()`, with an additional input for the replacement string.
 
@@ -1135,7 +1135,7 @@ gsub("z", "Z", x)
 sub("tiger", "giraffe", x, ignore.case=TRUE)
 ```
 
-### Extracting from and splitting strings {#sec-05-char-split}
+### Extracting from and splitting strings {#sec-manip-char-split}
 
 Character strings can be split up using the function `strsplit()` (short for "string split"). This function can use regular expressions like `grep()` or `gsub()` can. It works by breaking a character string apart at a given text string. Unfortunately, its output can be a little confusing if you're not used to working with R objects:
 
@@ -1183,7 +1183,7 @@ class(a$mon)  # numbers!
 class(a$day)  # numbers!
 ```
 
-### Matching text strings as indices {#sec-04-char-inds}
+### Matching text strings as indices {#sec-ie-char-inds}
 
 As biologists we often keep our data in several separate spreadsheets or tables. These tables are interrelated by a set of "key" variables. If that sounds like a sketchy, haphazard way to build a database, that's because it is. Databases are outside the scope of this course, but we will learn how to relate tables using R. If you've ever used the VLOOKUP function in Excel, then you know exactly what problem `match()` is designed to solve.
 
@@ -1206,7 +1206,7 @@ match(vec3, vec1)
 
 The first example shows what `match()` is doing. For element in the first vector, `match()` returns the first position where that value occurs in the second vector. The second example shows what happens when trying to match a value that is not in the second vector: R returns `NA`. The third example shows how `match()` can be used to relate tables. The longer vector `vec3` is matched to the shorter vector `vec1`, which contains each unique value only once. If `vec1` was a variable in a data frame that contained other variables associated with genes, then the result of `match(vec3, vec1)` would return the rows in `vec1`'s data frame associated with each row of `vec3`'s data frame.
 
-The code below demonstrates how `match()` might be used in practice. This example uses `iris` and an imaginary second table. The commands use `match()` to assign a second variable, petal color, to iris using species as the key variable. We'll revisit this example dataset again in @sec-05-df-oth-merg when we learn how to merge data frames.
+The code below demonstrates how `match()` might be used in practice. This example uses `iris` and an imaginary second table. The commands use `match()` to assign a second variable, petal color, to iris using species as the key variable. We'll revisit this example dataset again in @sec-manip-df-oth-merg when we learn how to merge data frames.
 
 ```{r, eval=FALSE}
 # not run (see next section)
@@ -1239,7 +1239,7 @@ dat$lat <- x3$lat[matchx]
 dat$long <- x3$long[matchx]
 ```
 
-### Standardizing numbers as text {#sec-05-char-stan}
+### Standardizing numbers as text {#sec-manip-char-stan}
 
 The function `formatC()` formats numbers in a manner similar to the language C[^ch05-4]. This is useful for naming objects or parts of objects with numeric names that have a fixed width or format. The most common use case is converting numbers like "1, 12, 112" to strings like "001, 012, 112". The example below uses `formatC()` in combination with `paste()` to generate some file names.
 
@@ -1253,7 +1253,7 @@ file.names
 
 This is useful for generating text strings that need to be sorted. In the example above, the files "file_001.txt", "file_002.txt", "file_003.txt", and "file_004.txt" would be in the order you expect, and a file like "file_010.txt" would come *after* "file009.txt". If the leading zeros had not been added, then the order would be "file_1.txt", "file_10.txt", "file_2.txt", "file_3.txt", etc. (notice that 10 was between 1 and 2).
 
-## Data frame management {#sec-05-df}
+## Data frame management {#sec-manip-df}
 
 Most of the time when you work with data in R, those data will be stored in **data frames**. A data frame looks like a matrix, but functions in many ways spreadsheet. Internally, a data frame is really a list, but for most day-to-day use you can think of a data frame as a table with *rows* and *columns*.
 
@@ -1261,13 +1261,13 @@ Most of the time when you work with data in R, those data will be stored in **da
 
 This section demonstrates some of the most common data frame operations.
 
-### Data frame structure {#sec-05-df-str}
+### Data frame structure {#sec-manip-df-str}
 
 Data frames and matrices look very similar, but their internal structures are very different. This has huge implications for how you work with and manipulate data frames and matrices. The figure below shows some of the most important differences.
 
 ![Illustration of the differences between an R data frame (left) and an R matrix (right).](../images/05_08.jpg)
 
-When using [bracket notation](@sec-05-select-bas), accessing parts of a data frame is the same as for a matrix. There are a couple of differences though:
+When using [bracket notation](@sec-manip-select-bas), accessing parts of a data frame is the same as for a matrix. There are a couple of differences though:
 
 -   Matrices do not need column names, but data frames do. They are accessed with `colnames()` for matrices, but `names()` for data frames.
 
@@ -1295,9 +1295,9 @@ iris[1,]
 
 When a data frame is printed to the console, this is only a representation of the data frame's true form: a **list**. This is why single columns are accessible by a `$`: this is the symbol for accessing an element of a list. The list nature of a data frame is also why **rows** of a dataset are actually data frames themselves and not vectors.
 
-### Common operations {#sec-05-df-com}
+### Common operations {#sec-manip-df-com}
 
-#### Adding and deleting variables {#sec-05-df-com-vars}
+#### Adding and deleting variables {#sec-manip-df-com-vars}
 
 New variables can be added to a data frame by **assignment** (`<-`). Assigning values to a variable in a data frame will create that variable if it doesn't already exist--and overwrite values if the variable is already in the data frame.
 
@@ -1356,7 +1356,7 @@ z <- z[,which(!names(z) %in% del.cols)]
 z
 ```
 
-#### Modifying variables {#sec-05-df-com-mod}
+#### Modifying variables {#sec-manip-df-com-mod}
 
 Variables in a data frame (or anywhere) can be modified by assigning them new values. Note that this overwrites the previous values. If you think you might want the old values for some reason, save the modified values in a new variable or even new object instead.
 
@@ -1378,7 +1378,7 @@ x <- iris[1:5,]
 x$log.petlen <- log(x$Petal.Length)
 ```
 
-#### Changing values using a rule {#sec-05-df-com-rule}
+#### Changing values using a rule {#sec-manip-df-com-rule}
 
 By combining the logical tests, bracket notation, and assignment, values in a variable can be replaced according to their values.
 
@@ -1406,7 +1406,7 @@ x$Petal.Length[flag1 & flag2] <- 4
 x
 ```
 
-#### Renaming variables {#sec-05-df-com-renam}
+#### Renaming variables {#sec-manip-df-com-renam}
 
 Renaming variables in Excel is easy: just enter the new name into the cell at the top of a column. Things are a little more complicated in R but not much.
 
@@ -1454,7 +1454,7 @@ x$Petal.Length <- NULL
 x
 ```
 
-#### Rearranging columns {#sec-05-df-com-rearr}
+#### Rearranging columns {#sec-manip-df-com-rearr}
 
 Reordering records or columns within a data frame is accomplished by creating a new version of the dataset with the desired arrangement. This rearrangement is accomplished using methods we have already seen.
 
@@ -1477,7 +1477,7 @@ x <- x[,col.order]
 x
 ```
 
-#### Sorting and ordering data {#sec-05-df-com-sort}
+#### Sorting and ordering data {#sec-manip-df-com-sort}
 
 Sorting data frames is mostly done using the function `order()` (function `sort()` works on vectors, not data frames). Function `order()` is usually put inside brackets in the rows slot. The arguments to `order()` define the variables by which the data frame will be sorted. Rows are sorted by the first variable, then the second, and so on. By default, rows are placed in *ascending* order.
 
@@ -1553,7 +1553,7 @@ z[order(z$Species, z$Petal.Length,
            method="radix"),]
 ```
 
-#### Adding and removing rows {#sec-05-df-com-add}
+#### Adding and removing rows {#sec-manip-df-com-add}
 
 Removing rows works a lot like removing columns. You can use the bracket notation to either remove the rows with negative indices, or make a new version of the data frame with only some of the rows.
 
@@ -1600,9 +1600,9 @@ rbind(x,y2)
 rbind(y2,x)
 ```
 
-### Other operations {#sec-05-df-oth}
+### Other operations {#sec-manip-df-oth}
 
-#### Merging data frames {#sec-05-df-oth-merg}
+#### Merging data frames {#sec-manip-df-oth-merg}
 
 Data sets for a complex project might reside in several tables, related by **key variables**. These are variables that are shared by more than one table, and define which records in each table are related to records in another table. This is exactly what **relational databases** do, but most biologists have small enough datasets that proper databases aren't really necessary.
 
@@ -1720,7 +1720,7 @@ head(res2)
 
 Some of the tidyverse packages offer alternative solutions for merging datasets that can be more or less elegant than `merge()`. However, the methods shown above use only base R functions and will get the job done.
 
-#### Reshaping data frames {#sec-05-df-oth-shap}
+#### Reshaping data frames {#sec-manip-df-oth-shap}
 
 In your career you are likely to encounter datasets organized in a variety of formats. Most of these formats fall into one of two categories: **wide** and **long**.
 

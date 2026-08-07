@@ -1,3 +1,5 @@
-# Introduction to Bayesian inference for biologists {#sec-27}
+# Ordination {#sec-ord}
 
-Bayes bayes bayes.
+We're all just points on a graph.
+
+## Principal components analysis {#sec-ord-pca}

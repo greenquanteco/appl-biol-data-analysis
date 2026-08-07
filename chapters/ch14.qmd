@@ -1,3 +1,5 @@
-# Tests for continous patterns {#sec-14}
+# Introductory statistics with R {#sec-review}
 
-Lines lines lines.
+Everything you should have learned in Biostats.
+
+## Linear models {#sec-review-lin}

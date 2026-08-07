@@ -1,338 +1,379 @@
-# Common problems in biological data {#sec-problems}
+# Comparing data to distributions {#sec-dtest}
 
+## Fitting and testing distributions {#sec-dtest-fit}
 
-Many statistical methods assume that data follow certain distributions, and we have already explored methods for making sure your data follow those distributions. Other problems are not so easy to diagnose or fix. This section will introduce you to some methods for dealing with more subtle data problems. Note that none of these issues have one-size-fits-all solutions. Dealing with these issues will require understanding your study system and thinking through the consequences of potential solutions.
+Deciding what probability distribution to use to analyze your data is an important step in biological data analysis. The next step is to see how well your data actually match a distribution. This section demonstrates ways to compare data to probability distributions. We will also explore some methods to explicitly test whether or not a set of values came from a particular distribution.
 
-## Outliers and erroneous values
+## Estimating distributional parameters {#sec-dtest-fit-param}
 
-Outliers are values that much larger or smaller than other values in the data set. While these values are theoretically possible in any distribution, they are by their nature extremely unlikely. Outliers can cause problems with many statistical tests because they are often given undue weight. This is because deviations from the mean are often squared.
+The function `fitdistr()` in package `MASS` estimates the **parameters** of a distribution most likely to produce random variables supplied as input. Simply put, if you have a variable `x` and want to know what parameters of some distribution are most likely to produce `x`, then `fitdistr()` will estimate this for you. 
 
-There are two problems with outliers: how to detect them, and what to do with them.
+```{r}
+library(MASS)
 
-### Detecting outliers
+set.seed(123)
+n <- 50
 
-There are several definitions of outlier. Some researchers have suggested simple measures such as *Z*-scores to detect outliers. *Z*-scores measure how many standard deviations (SD) an observation is away from the mean. The *Z*-score of an observation $x_i$ (observation *i* of variable *x*) is calculated as:
-
-$$Z\left(x_i\right)=\frac{x_i-\bar{x}}{\sigma\left(x\right)}$$
-
-where $\bar{x}$ is the mean of *x* and $\sigma\left(x\right)$ is the SD of *x*. For example, *Z*-scores of -2.3 and +4.1 indicate observations 2.3 SD below and 4.1 SD above the mean, respectively. *Z*-scores are also referred to as **sigmas**, referring to the symbol for SD. E.g., a 4$\sigma$ observation is 4 SD away from the mean. Various $\sigma$ levels have been used to detect outliers, in which researchers discard any observation 2$\sigma$, 3$\sigma$, etc., away from the mean. This threshold varies by discipline, so follow the conventions in your field.
-
-The figure below shows *Z*-scores relative to the standard normal distribution ($\mu$ = 0, SD = 1). About 68% of observations are expected to have a *Z*-score between -1 and 1--i.e., deviate by $\le$ 1 $\sigma$. About 95% of observations should be $\le$ 2 $\sigma$, and over 99% of observations should be $\le$ 3 $\sigma$. The greater the magnitude of a value's *Z*-score, the less likely it is. Values with \> 3 or 4 $\sigma$ should almost never occur. Thus, observations with large-magnitude *Z*-scores may turn out to be outliers.
-
-```{r, echo=FALSE, fig.width=8, fig.height=6, fig.align="center"}
-x <- seq(-4, 4, length=1000)
-y <- dnorm(x)
-
-par(mfrow=c(1,1), mar=c(5.1, 5.1, 1.1, 1.1),
-    bty="n", lend=1, las=1, cex.axis=1.3, cex.lab=1.3)
-plot(x, y, type="l", lwd=4,
-    xlab=expression(Value~(italic(x))),
-    ylab="", yaxt="n", ylim=c(0, 0.42))
-xx <- seq(-3, 3, by=1)
-for(i in 1:length(xx)){
-    segments(xx[i], 0, xx[i], dnorm(xx[i]), lwd=2, col="blue")
-}
-yoff <- 0.02
-text(xx[1], yoff+dnorm(xx[1]), expression(-3*sigma), col="blue", cex=1.4, adj=1)
-text(xx[2], yoff+dnorm(xx[2]), expression(-2*sigma), col="blue", cex=1.4, adj=1)
-text(xx[3], yoff+dnorm(xx[3]), expression(-1*sigma), col="blue", cex=1.4, adj=1)
-text(xx[4], yoff+dnorm(xx[4]), expression(0*sigma~(mu)), col="blue", cex=1.4, adj=0.5)
-text(xx[5], yoff+dnorm(xx[5]), expression(1*sigma), col="blue", cex=1.4, adj=0)
-text(xx[6], yoff+dnorm(xx[6]), expression(2*sigma), col="blue", cex=1.4, adj=0)
-text(xx[7], yoff+dnorm(xx[7]), expression(3*sigma), col="blue", cex=1.4, adj=0)
-rect(-0.5, dnorm(1:3), 0.5, dnorm(1:3)+1.5*yoff, col="white", border=NA)
-arrows(-0.9, dnorm(1), 0.9, dnorm(1), col="red", lwd=3, code=3)
-arrows(-1.9, dnorm(2), 1.9, dnorm(2), col="red", lwd=3, code=3)
-arrows(-2.9, dnorm(3), 2.9, dnorm(3), col="red", lwd=3, code=3)
-text(0, dnorm(1)+yoff, expression(phantom()%~~% '68.3%'), col="red", cex=1.4)
-text(0, dnorm(2)+yoff, expression(phantom()%~~% '95.4%'), col="red", cex=1.4)
-text(0, dnorm(3)+yoff, expression(phantom()%~~% '99.7%'), col="red", cex=1.4)
+# estimate parameters of a normal
+x1 <- rnorm(n, 12, 2)
+fitdistr(x1, "normal")
 ```
 
-It must be noted that a large magnitude *Z*-score does ***not*** prove that an observation is an outlier. Like *p*-values, *Z*-scores are just a heuristic for making decisions. Don't just delete any observation $|Z|\ge$ 3; examine those observations to see if they are legitimate and don't take any action without a good biological reason.
-
-### Dealing with outliers
-
-The easiest way to deal with outliers is simply to delete them. This can be fine if you have a lot of data--many 1000s or even millions of records. I’ve worked with several statisticians who routinely delete observations with response variables in the top and bottom 5 percentiles. This may not always be an appropriate strategy in biology. For one thing, outliers can occur for completely legitimate reasons and deleting them would be discarding important information about the study system.
-
-***Never*** **delete an observation based solely on its magnitude.**
-
-Data should only be deleted when there is a biological or experimental reason. These might include experimental errors, inappropriate sampling, extraordinary field conditions, etc. Furthermore, you should always document when observations were deleted and why, and disclose that information in your write up and to reviewers. The possibility of including supplemental information or documents with manuscripts leaves little excuse not to be transparent about what observations you deleted and why.
-
-Another way to deal with outliers is to [transform the data](#mod-05-trans). Variance-stabilizing transformations, such as the log-transform, often have the side-effect of reducing outliers in the data.
-
-The third method for dealing with outliers is **censoring**. Censoring data in statistics means analyzing data as either the measured value or the interval in which the value falls. For example, if a mouse is weighed with a scale that goes up to 60 g, and maxes out the scale, we record the mouse as weighing $\ge$ 60 g. Statistical methods for censored data have been developed but are outside the scope of this course. One popular form of censoring is called **Winsorizing**, where values below the 5th percentile are set to the 5th percentile and values above the 95th percentile are set to the 95th percentile. Censoring is common practice in fields involving certain types of instrumentation. For example, many spectrophotometers (e.g., microplate readers) record optical density (OD) as the amount of light passing through a specimen as a measurement of concentration. Most machines have a lower limit to the OD that they can detect. Observations below this minimum OD might be censored to 0, or to some pre-determined fraction of the minimum detectable OD.
-
-Similar to censoring, outlying data can be removed by **truncation**. Truncation in statistics means ignoring values outside of a certain range. As with deletion, you must be very explicit about what criteria were used to truncate the data.
-
-**Weighting** is a strategy where observations can be given greater or lesser weight to adjust how much influence they have. This strategy can become very complicated and involve a lot of arbitrary decisions. So, a simpler strategy such as truncation or transformation might be more appropriate.
-
-Finally, researchers can use analysis strategies that are less sensitive to outliers. For example, **robust statistics** use absolute deviations rather than squared deviations. This gives outliers much less influence than under conventional methods based on sums of squared errors. **Nonparametric methods**, particularly those based on rank order, can also be less sensitive to outliers.
-
-Whatever strategy you choose to deal with your outliers, you need to be aware of how much your decision affected the outcome. It is a good idea to analyze your data both with and without suspected outliers to measure how much influence they really have. If the analysis returns the same results with and without the outliers, leave them in.
-
-## Autocorrelation
-
-Autocorrelation describes a phenomenon where set of values is correlated with itself, with the strength of that correlation determined by the distance between observations. In biology, the “distance” that defines autocorrelation is often spatial, temporal, or phylogenetic.
-
-| Autocorrelation type | Distance measure  | Explanation                                                                                                                                                                      |
-|-----------|-----------|--------------------------------------------------|
-| Spatial              | Space (e.g., km)  | Samples from sites that are close together in space are more similar to each other than they are to sites that are farther away, just because they are closer to each other.     |
-| Temporal             | Time (e.g., days) | Observations taken closer together in time are more similar to each other than they are to observations separated by more time.                                                  |
-| Phylogenetic         | Relatedness       | Taxa that share a more recent common ancestor (i.e., are more closely related) are more similar to each other than they are to taxa that are less closely related to each other. |
-
-The main consequence of autocorrelation is similar to the problems associated with pseudoreplication: because observations are not independent, the statistically relevant number of observations (degrees of freedom) is smaller than the nominal number of observations. This means that the power of the test is inflated. A related idea is that the residuals of a statistical model can be autocorrelated. In that case, the model violates the assumption of independent residuals shared by most statistical methods. Autocorrelation can be controlled for if you have some idea of its source and nature.
-
-### Graphical methods to identify autocorrelation
-
-One way to explore potential autocorrelation is to construct a variogram. A variogram plots the squared differences between samples against their distance (temporal, spatial, etc.). A semivariogram uses half of that variance. An example semivariogram is below.
-
-This figure shows some important quantities on the semivariogram:
-
-```{r, out.width="90%", echo=FALSE, fig.align="center"}
-knitr::include_graphics("07_01.jpg", auto_pdf=TRUE)
+```{r}
+# estimate parameters of a poisson
+x2 <- rpois(n, 8)
+fitdistr(x2, "Poisson")
 ```
 
-```{r, label='chunkx520', eval=FALSE, echo=FALSE, fig.width=7, fig.height=5, fig.align="center", message=FALSE, warning=FALSE}
-# inspired by http://santiago.begueria.es/2010/10/generating-spatially-correlated-random-fields-with-r/
-# and https://www.r-bloggers.com/2019/07/exploring-spatial-autocorrelation-in-r/
+```{r}
+# estimate parameters of a geometric
+x3 <- rgeom(n, 0.7)
+fitdistr(x3, "geometric")
+```
 
-library(gstat)
-library(sp)
+```{r}
+# estimate parameters of a beta
+# unlike most distributions, need to 
+# supply starting values
+x4 <- rbeta(n, 2, 0.5)
+fitdistr(x4, "beta", start=list(shape1=1, shape2=1))
+```
+
+```{r}
+# estimate parameters of a negative binomial
+x5 <- rnbinom(n, 4, 0.2)
+fitdistr(x5, "negative binomial")
+```
+
+How did `fitdistr()` do? Most of the parameter estimates were pretty close to the true values. The estimates generally get closer as the sample size increases. Try increasing `n` to 500 and rerunning the code above.
+
+## Graphical methods for examining distributions {#sec-dtest-fit-graph}
+
+### Comparing distributions with PDF or PMF plots {#sec-dtest-fit-pdf}
+
+We can compare the distributions implied by the estimated parameters to the actual data using the quantile or distribution functions. The basic idea is to plot the data distribution, and superimpose the equivalent plots of the hypothetical distributions.
+
+In the example below, we compare the probability mass function (PMF) of a discrete distribution (e.g., counts) to the PMFs of two possible distributions that might match the data. Note that the PMF of a discrete distribution can be estimated as the proportion of observations that take on each value.
+
+```{r, fig.width=6, fig.height=5, fig.align="center"}
 set.seed(123)
 
-# variogram model with defined sill and range
-use.psill <- 1
-use.range <- 20
-use.nugg <- 0.1
-variomod <- vgm(psill=use.psill,
-    range=use.range,
-    nugget=use.nugg,
-    model="Exp")
+# the counts:
+x <- rnbinom(100, mu=4, size=2)
 
-# create grid structure
-grid.n <- 100
-xy <- expand.grid(x=1:grid.n, y=1:grid.n)
+# fit parameters for poisson and negative binomial
+f1 <- fitdistr(x, "Poisson")
+f2 <- fitdistr(x, "negative binomial")
 
+# calculate PMFs of candidate distributions across
+# range of data
+xx <- 0:max(x)
+y1 <- dpois(xx, f1$estimate)
+y2 <- dnbinom(xx, size=f2$estimate["size"],
+              mu=f2$estimate["mu"])
 
-# define the gstat object (spatial model)
-g.dummy <- gstat(formula=z~1, locations=~x+y,
-    dummy=T, beta=1,
-    model=variomod,
-    nmax=20)
- 
-# simulated predictor variables based on the gstat object
-pred <- predict(g.dummy, newdata=xy, nsim=2)
+# empirical PMF of counts
+y3 <- table(x)/length(x)
+plot.x <- as.numeric(names(y3))
+plot.y <- as.numeric(y3)
 
-# autocorrelated response variable
-err <- rnorm(nrow(pred), sd=1)
-pred$z <- 0.7*pred$sim1 + 1.4*pred$sim2 + err
-
-
-# plot simulated values
-dat <- pred
-gridded(dat) = ~x+y
-#spplot(dat)
-
-# variogram
-vario <- variogram(z~1, data=pred, locations=~x+y)
-
-par(mfrow=c(1,1), mar=c(5.1, 6.1, 1.1, 1.1),
-    bty="n", lend=1, las=1, cex.axis=1.3, cex.lab=1.3)
-plot(vario$dist, vario$gamma, xlim=c(0, 50), ylim=c(0, 4),
-    xlab="Distance", ylab="",
-    type="l", lwd=4, yaxt="n", xaxt="n")
-axis(side=2, at=0:4, labels=NA, tcl=0)
-axis(side=2, at=c(min(vario$gamma), max(vario$gamma)),
-    labels=c("Nugget", "Sill"))
-axis(side=1, at=0:5*10, labels=NA, tcl=0)
-axis(side=1, at=41, labels="Range")
-title(ylab="Semivariance", line=5.1)
-segments(-1, max(vario$gamma), 41, max(vario$gamma), lty=2)
-segments(41, 0.98*max(vario$gamma), 41, -1, lty=2)
-
-```
-
--   **Nugget**: The variance or semivariance at 0 distance. I.e., the *y*-intercept. Variation at zero distance represents other sources of error, such as sampling error, demographic stochasticity, etc.
--   **Sill**: The variance or semivariance at which the curve gets close to its maximum or asymptotic value.
--   **Range**: The distance at which the variance or semivariance reaches the sill.
-
-Semivariograms should always increase, at least initially, because closer observations should be similar to each other simply as a matter of proximity. Samples separated by distances less than the range are autocorrelated. Semivariograms sometimes reach a peak and then start decreasing, or varying up and down. The initial peak is usually interpreted as the sill, and the distance when the curve reaches the sill is considered the range. The importance and interpreation of the semivariogram is something that you, as a biologist, have to figure out.
-
-### Mantel tests for autocorrelation
-
-**Spatial autocorrelation** is a particular problem for ecologists and environmental biologists. The [**Mantel test**](#mod-13-sims) can be used to measure spatial autocorrelation as the correlation between distance in space and distance in terms of the measured variables. The Mantel test can be thought of as a multivariate generalization of linear correlation that measures correlation between two matrices. Whereas linear correlation measures how variation in one variable is related to variation in another variable, the Mantel test measures how variation in one matrix (i.e., set of variables) is related to variation in another matrix.
-
-The application to spatial autocorrelation is obvious. The spatial distance matrix can be calculated from coordinates such as latitude or longitude[^07-problems-1], and compared to the biological distance matrix. When other types of autocorrelation are of interest, you can calculate a distance matrix based on time or on phylogenetic relatedness, or whatever else might be driving the autocorrelation.
-
-[^07-problems-1]: When calculating a distance matrix using geographic coordinates, be sure to account for the curvature of the Earth. Often using unprojected latitude and longitude will produce a misleading distance matrix, because latitude and longitude are not equivalent.
-
-```{r, out.width="100%", echo=FALSE, fig.align="center"}
-knitr::include_graphics("07_02.jpg", auto_pdf=TRUE)
-```
-
-The [Mantel test](#mod-13-sims) works by first calculating two **distance matrices**, which define the ["distances" or "dissimilarities" between each sample](#mod-13-dist). One distance matrix relates to spatial, temporal, or phylogenetic distance. The other relates to dissimilarity in terms of the measured variables. The dissimilarity metric incorporates information about how much any pair of observations differ in terms of every variable represented in the matrix. The Mantel correlation coefficient *r* is the linear correlation coefficient (like Pearson's *r*) between the two distance matrices. It answers the question, “How is variation in this set of variables related to distance in space (or time, or phylogeny, etc.)?”.
-
-The example below illustrates another use for the Mantel test: measuring association between two sets of variables taken from the same sample units. In this example, dissimilarity in terms of species composition is related to dissimilarity in soil chemical characteristics.
-
-```{r, fig.width=7, fig.height=5, fig.align="center", collapse=TRUE}
-library(vegan)
-
-# biological data
-data(varespec)
-
-# soil chemistry data
-data(varechem)
-
-x <- varechem
-y <- varespec
-
-dy <- vegdist(varespec) # Bray-Curtis metric
-dx <- vegdist(scale(varechem), "euclid") # Euclidean metric
-mantel(dx, dy)
-
+# make plot
 par(mfrow=c(1,1), mar=c(5.1, 5.1, 1.1, 1.1),
-    bty="n", lend=1, las=1, cex.axis=1.3, cex.lab=1.3)
-plot(dx, dy, xlab="Chemical dissimilarity",
-     ylab="Vegetation dissimilarity",
-     ylim=c(0,1), xlim=c(0, 10))
-text(0, 0.05, 
-     expression(Mantel~italic(r)==0.305),
-     adj=0, cex=1.5)
-text(5.38, 0.2, 
-    "Each point represents \n a pair of observations",
-    cex=1.3, adj=0, col="red")
+    las=1, lend=1, 
+    cex.axis=1.2, cex.lab=1.2, bty="n")
+plot(plot.x, plot.y, type="o", 
+    pch=15, cex=1.3, ylim=c(0, 0.2),
+    ylab="PMF", xlab="X")
+points(xx, y1, type="o", pch=16, cex=1.3, col="red")
+points(xx, y2, type="o", pch=17, cex=1.3, col="blue")
+legend("topright", legend=c("data", "Poisson", "negative binomial"),
+       pch=15:17, pt.cex=1.3,
+       col=c("black", "red", "blue"), bty="n")
 ```
 
-The figure above shows the result visually. The Mantel *r* statistic describes the sign and magnitude of the correlation between dissimilarity in terms of chemistry (*x*-axis) and dissimilarity in terms of the plant community (*y*-axis). It is interpreted just like Pearson’s *r*. In the plot it is important to realize that each point represents a *pair* of observations, plotted by the dissimilarities between them. The correct interpretation of this plot is that samples with similar soil chemistry tend to also have similar plant communities. Alternatively, you could say that the larger the difference in soil chemistry, the larger the difference in plant communities (or something like that).
+In this example, the data (black) seem to be better described by the negative binomial (blue) than by the Poisson (red).
 
-### Dealing with autocorrelation
+The same idea can be applied to continuous distributions. The only difference is in how the probability density function (PDF) of the data is estimated (note PDF, not PMF). The PDF of a continuous distribution is estimated with function `density()`. It is a good idea to limit the estimation of density functions to the domain of the data. Keep in mind, however, that different distributions have different limits. If the data contain values outside the supported interval of the suspected distribution, that distribution cannot be correct. 
 
-Autocorrelation may or may not be a problem in your dataset. As pointed out by @kuehn2012, there is a difference between autocorrelation in a response variable and autocorrelation in the residuals of a statistical model. Autocorrelation in a response variable can be managed by inclusion of appropriate predictor variables (which may themselves be autocorrelated or correlated; see [next section](#mod-07-multicol)). This works because if autocorrelated values can be predicted by a predictor variable, then the autocorrelation is controlled for, by definition.
+The example below illustrates this: the data (`x`) are all positive, but one of the distributions tested (normal) will produce negative values using the estimated parameters (`f1`). That alone should lead the researcher in this situation to eliminate the normal as a possibility; the plot only confirms the unsuitability of the normal for modeling `x`.
 
-Autocorrelation in residuals, however, represents a pattern in the data that is not accounted for. There are methods for accounting for autocorrelated residuals such as conditional autoregressive models (CAR) [@gelfand2003], generalized or ordinary least squares models (GLS or OLS), classification and regression trees or CART [@mccune2002analysis], and mixed models [@bolker2009]. None of these solutions is appropriate for every situation.
+```{r, fig.width=6, fig.height=5, fig.align="center", warning=FALSE}
+set.seed(123)
 
-## Collinearity {#mod-07-multicol}
-
-Sometimes we face the problem of having predictor variables that are not only related to the response variable, but also related to each other. This phenomenon is called **collinearity**. In large datasets the problem becomes **multicollinearity**, when many variables are related to each other. Including collinear predictor variables in an analysis can severely bias the parameter estimates of that analysis (e.g., regression coefficients) and as a result make the results misleading or not generalizable. The effects of collinear predictor variables are by definition confounded with each other, meaning that the effects cannot be separated [@dormann2013].
-
-The most straightforward way of detecting collinearity is with scatterplot matrices and correlation coefficients (see [here](#mod-06-smat)). This is a technique to visualize how many variables in a dataset relate to each other simultaneously. As shown in the linked section, replacing the upper triangle of boxes with the correlation coefficients can help detect potentially problematic pairs of variables. The figure below shows an example from the `crabs` dataset in package `MASS`. In this dataset, all of the variables are highly correlated with each other.
-
-```{r, echo=FALSE, fig.width=8, fig.height=8, fig.align="center"}
-
-panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
-{
-    #usr <- par("usr")
-    #on.exit(par(usr))
-    par(usr = c(0, 1, 0, 1))
-    r <- abs(cor(x, y))
-    txt <- format(c(r, 0.123456789), digits = digits)[1]
-    txt <- paste0(prefix, txt)
-    if(missing(cex.cor)) cex.cor <- 0.8/strwidth(txt)
-    text(0.5, 0.5, txt, cex = cex.cor * r)
-}
-
-data(crabs, package="MASS")
-x <- crabs
-dat.cols <- 4:8
-
-pairs(x[,dat.cols], lower.panel=panel.smooth, upper.panel=panel.cor, gap=0)
-
+# the data:
+x <- rgamma(200, shape=2, scale=20)
+hist(x)
 ```
 
-If you have many variables, then a figure like the one above can be hard to read or interpret. One solution might be to create a table of correlation coefficients between every pair of variables. The base function `cor()` can do this, but a better-formatted table takes a little more work.
+```{r, fig.width=6, fig.height=5, fig.align="center", warning=FALSE}
+# fit parameters for poisson and negative binomial
+f1 <- fitdistr(x, "normal")
+f2 <- fitdistr(x, "lognormal")
+f3 <- fitdistr(x, "gamma")
+
+# calculate PMFs of candidate distributions across
+# range of data
+xx <- seq(min(x), max(x), length=1000)
+y1 <- dnorm(xx, f1$estimate[1], f1$estimate[2])
+y2 <- dlnorm(xx, f2$estimate[1], f2$estimate[2])
+y3 <- dgamma(xx, shape=f3$estimate[1], rate=f3$estimate[2])
+
+# empirical PDF of data
+dx <- density(x, from=min(x), to=max(x))
+
+# make plot
+par(mfrow=c(1,1), mar=c(5.1, 5.1, 1.1, 1.1),
+    las=1, lend=1, 
+    cex.axis=1.2, cex.lab=1.2, bty="n")
+plot(dx$x, dx$y,
+    type="l", lwd=3, ylim=c(0, 0.025),
+    ylab="", xlab="X")
+title(ylab="PDF", line=4)
+points(xx, y1, type="l", lwd=3, col="red")
+points(xx, y2, type="l", lwd=3, col="blue")
+points(xx, y3, type="l", lwd=3, col="green")
+legend("topright", 
+    legend=c("data", "normal", "lognormal", "gamma"),
+    lwd=3, col=c("black", "red", "blue", "green"),
+    cex=1.3, bty="n")
+```
+
+The plot suggests that the data are better described by a gamma distribution than by a normal or lognormal. This is because the curve for the data is most closely matched by the curve for the gamma. Try adjusting the sample size in the example above (e.g., `n <- 50`) and see if the correct distribution always matches the data.
+
+### Comparing distributions using CDF and ECDF {#sec-dtest-fit-cdf}
+
+Another way to compare data to distributions is with the cumulative distribution function (CDF). The basic idea is the same as using density functions: compare the empirical CDF (ECDF) of the data to the CDFs potential distributions and judge which one best matches the data.
+
+The example below shows how to use ECDF and CDF to compare a continuous distribution to various target distributions.
+
+```{r, fig.width=6, fig.height=5, fig.align="center"}
+set.seed(123)
+
+# make the data:
+x <- rlnorm(100, meanlog=log(4), sdlog=log(3))
+
+# fit some distributions
+f1 <- fitdistr(x, "normal")
+f2 <- fitdistr(x, "lognormal")
+f3 <- fitdistr(x, "gamma")
+f4 <- fitdistr(x, "exponential")
+
+# calculate density functions over domain of x
+xx <- seq(min(x), max(x), length=100)
+y1 <- pnorm(xx, f1$estimate["mean"], f1$estimate["sd"])
+y2 <- plnorm(xx, f2$estimate["meanlog"], f2$estimate["sdlog"])
+y3 <- pgamma(xx,
+             shape=f3$estimate["shape"], 
+             rate=f3$estimate["rate"])
+y4 <- pexp(xx, rate=f4$estimate["rate"])
+
+# ecdf of data
+y5 <- ecdf(x)(xx)
+
+# fancy plot
+cols <- c("black", rainbow(4))
+par(mfrow=c(1,1), mar=c(5.1, 5.1, 1.1, 1.1),
+    las=1, lend=1, 
+    cex.axis=1.2, cex.lab=1.2, bty="n")
+plot(xx, y5, type="l", lwd=3, xlab="X",
+    ylab="(E)CDF", ylim=c(0,1), col=cols[1])
+points(xx, y1, type="l", lwd=3, col=cols[2])
+points(xx, y2, type="l", lwd=3, col=cols[3])
+points(xx, y3, type="l", lwd=3, col=cols[4])
+points(xx, y4, type="l", lwd=3, col=cols[5])
+legend("bottomright", 
+    legend=c("ECDF(data)", "Normal", "Lognormal", "Gamma", "Exponential"), 
+    lwd=3, col=cols, bty="n", cex=1.3)
+```
+
+In this example, the ECDF of the original data (black) appears to best match the lognormal (green)—as well it should, because the data came from a lognormal distribution. The normal (red) is clearly inappropriate because it diverges from the actual data over most of the range of the data. The gamma and exponential are each better than the normal, but not as close to the data as the lognormal.
+
+### Comparing distributions using QQ plots {#sec-dtest-fit-qq}
+
+Finally, you can use **quantile-quantile (QQ) plots** to compare data to different distributions that you suspect they may follow. The example below uses a QQ plot instead of ECDF as seen above.
+
+```{r, fig.width=9, fig.height=9, fig.align="center"}
+set.seed(123)
+
+# true distribution: lognormal
+n <- 100
+x <- rlnorm(n, meanlog=log(4), sdlog=log(3))
+
+# estimate distributional parameters
+f1 <- fitdistr(x, "normal")
+f2 <- fitdistr(x, "lognormal")
+f3 <- fitdistr(x, "gamma")
+f4 <- fitdistr(x, "exponential")
+
+# quantiles of reference distribution
+qx <- ppoints(n)
+
+# define functions to draw from each reference distribution
+dfun1 <- function(p){qnorm(p, f1$estimate[1], f1$estimate[2])}
+dfun2 <- function(p){qlnorm(p, f2$estimate[1], f2$estimate[2])}
+dfun3 <- function(p){qgamma(p, shape=f3$estimate[1],
+                            rate=f3$estimate[2])}
+dfun4 <- function(p){qexp(p, f4$estimate)}
+
+# get values at each reference quantile
+qy1 <- dfun1(qx)
+qy2 <- dfun2(qx)
+qy3 <- dfun3(qx)
+qy4 <- dfun4(qx)
+
+# make plot
+par(mfrow=c(2,2), mar=c(5.1, 5.1, 1.1, 1.1),
+    las=1, lend=1, 
+    cex.axis=1.2, cex.lab=1.2, bty="n")
+qqplot(qy1, x, main="Normal")
+qqline(x, distribution=dfun1, col="red")
+qqplot(qy2, x, main="Lognormal")
+qqline(x, distribution=dfun2, col="red")
+qqplot(qy3, x, main="Gamma")
+qqline(x, distribution=dfun3, col="red")
+qqplot(qy4, x, main="Exponential")
+qqline(x, distribution=dfun4, col="red")
+```
+
+The figure shows that the normal is clearly inappropriate because the points do not fall on the line. The gamma and exponential are okay over most of the domain of x, but depart for large values. The lognormal plot (top right) shows the best match between the data and the reference distribution.
+
+It is important to keep in mind that the comparisons we’ve made here are of idealized cases. Real data are often much messier and noisier than the distributions used in these examples. Sometimes real data are best characterized by mixture distributions for which there are no straightforward ways to estimate parameters. Still, the steps outlined above for estimating distributional parameters and comparing to idealized distributions are important first steps in data analysis.
+
+## Formal tests for distributions {#sec-dtest-tests}
+
+### Tests for normality {#sec-dtest-tests-norm}
+
+The normal distribution is so important for so many statistical methods that people have developed tests to formally determine whether data come from a normal distribution. The most common test for normality is the **Shapiro-Wilk test**. The Shapiro-Wilk test tests the null hypothesis that a sample *x*~1~, …, *x~n~* comes from a normally distributed population. The test statistic *W* is calculated as:
+
+$$W=\frac{\left(\sum_{i=1}^{n}{a_ix_{(i)}}\right)^2}{\sum_{i=1}^{n}\left(x_i-\bar{x}\right)^2}$$
+
+where $\bar{x}$ is the sample mean, $x_i$~ is the $i^{th}$ order statistic, and $a_i$ is a coefficient related to expected values of *i.i.d.* normal variables. When the null hypothesis of a Shapiro-Wilk test is rejected, then there is evidence that the data are not normally distributed. The code below shows some examples of the Shapiro-Wilk test in R.
+
+```{r, collapse=TRUE}
+set.seed(123)
+x1 <- rnorm(20)
+shapiro.test(x1)
+```
 
 ```{r}
-data(crabs, package="MASS")
-x <- crabs
-dat.cols <- 4:8
-cor(x[,dat.cols])
-
-# better table:
-vars <- names(x)[dat.cols]
-
-# generate every unique pair of two variables by name:
-cx <- data.frame(t(combn(vars, 2)))
-
-# calculate correlation coefficients for each pair:
-cx$r <- NA
-for(i in 1:nrow(cx)){
-	cx$r[i] <- cor(x[,cx$X1[i]], x[,cx$X2[i]])
-}
-cx
-
+x2 <- rpois(20, 10)
+shapiro.test(x2)
 ```
-
-The resulting table can then be sorted or filtered by `r` to identify pairs of variables that are correlated with each other.
-
-```{r, eval=FALSE}
-# not run:
-# filter to |r| > 0.7
-cx[which(abs(cx$r) > 0.7),]
-```
-
-@dormann2013 suggest to use a cutoff of $|r|$ in between 0.5 and 0.7 to identify collinear pairs of variables. When a pair of variables are identified as collinear, the easiest solution is to simply run the analysis without one of them. This is because the variables are redundant, and any conclusions made using one would also be obtained using the other.
-
-## Missing data
-
-The last target of exploratory data analysis that we will explore is **missing data**. Data can be missing for many reasons. Equipment failures, human error, natural disasters, and other causes can cause values in your dataset to go missing or otherwise be invalid. How to handle the missing data is up to you as a biologist: *there is no one-size-fits-all statistical solution*. The two basic ways to deal with missing data are to (1) not deal with it and (2) estimate the missing values.
-
-### Option 1: Ignore missing data
-
-The easiest solution is simply to ignore missing data. Consider [this dataset](https://greenquanteco.github.io/missing_data_example.csv), which contains morphological data on 63 species of bats [@hutcheon2002]. This dataset is modified from [an example in the unit on nonlinear models](#mod-11-cart1). Notice that in this version the brain masses (`brw`) are missing for 3 species of bats.
 
 ```{r}
-in.name <- "missing_data_example.csv"
-dat <- read.csv(in.name, header=TRUE)
+x3 <- runif(20)
+shapiro.test(x3)
 ```
-
-Because there are a lot of data, one option for analyzing this dataset would be to simply ignore the missing observations. For example, if someone was interested in the relationship between body size (variable `bow`) and brain mass, they could just fit a model and R would (for most methods) automatically ignore missing values. Note that in this example both variables are log-transformed to ensure normality and positivity.
 
 ```{r}
-dat$logbw <- log(dat$bow)
-dat$logbr <- log(dat$brw)
-
-mod1 <- lm(logbr~logbw, data=dat)
-summary(mod1)
+x4 <- runif(100)
+shapiro.test(x4)
 ```
 
-The parameter estimates of intercept = 3.9659 and slope = 0.7532 are very close to the values obtained using the full dataset of 3.9685 and 0.7516. In this case, ignoring the missing data worked just fine.
+Interestingly, the Shapiro-Wilk test turns out to be very powerful. That is, it can detect very small differences from the null hypothesis (i.e., normality) if the sample size is large enough. So, if you have data that you suspect are normal, but the Shapiro-Wilk test says otherwise, you need to visually inspect the data to determine how serious the departure from normality is. 
 
-### Option 2: Interpolate or impute missing data
+### Kolmogorov-Smirnov tests {#sec-dtest-tests-ks}
 
-If you need to replace the missing data, then the best option is to **interpolate** or **impute** them. How exactly to do this depends on the question being asked. If there is a clear relationship between the variable with missing values and another variable, then you can use that relationship to estimate the missing values. You can also use **multiple imputation** to estimate the missing values using information from several related variables at once. The example below illustrates simple interpolation (aka: single imputation) to replace the missing brain weights using known body masses.
+The **Kolmogorov-Smirnov (KS) test** is a non-parametric test that compares a dataset to a distribution. Unlike the Shapiro-Wilk test, which only tests for normality, the KS test can compare data to any distribution. The KS test is useful because it is sensitive to differences in both location (i.e., mean) and shape. The example below illustrates the use of the KS test and plots the distributions.
+
+```{r, fig.width=6, fig.height=5, fig.align="center"}
+n <- 1e2
+x1 <- rnorm(n, 10, 2)
+x2 <- rnorm(n, 10, 2)
+x3 <- rnorm(n, 14, 2)
+x4 <- rnorm(n, 14, 20)
+x5 <- rpois(n, 14)
+
+# run KS tests:
+ks.test(x1, x2)
+```
 
 ```{r}
-# flag missing observations
-flag <- which(is.na(dat$brw))
-
-# log transform (if not done already)
-dat$logbw <- log(dat$bow)
-dat$logbr <- log(dat$brw)
-
-# fit model
-mod1 <- lm(logbr~logbw, data=dat)
-
-# predict missing logbr at logbw
-px <- data.frame(logbw=dat$logbw[flag])
-pr <- predict(mod1, newdata=data.frame(px))
-
-# insert predicted values
-dat$logbr[flag] <- pr
-
-# back-transform to original scale
-dat$brw[flag] <- exp(dat$logbr[flag])
+ks.test(x1, x3)
 ```
-
-The interpolated values are similar to the true values, but with quite a bit of error. The term for this is “correct to an order of magnitude”.
 
 ```{r}
-dat$brw[flag]
-
-true.vals <- c(597, 543, 2070)
-
-# percentage bias in interpolated values:
-100 * (dat$brw[flag]-true.vals) / true.vals
+ks.test(x3, x4)
 ```
 
-Interpolation can be improved by predicting the missing values using additional variables. Multiple imputation, like any statistical model, can suffer from the effects of multicollinearity in the "predictors", so be mindful that you don't obtain--and use--biased estimates of your missing values. @penone2014 reviewed some strategies for imputing missing data in the context of life history traits, but the approaches could be applied to other areas of biology.
+```{r}
+ks.test(x3, x5)
+```
+
+```{r}
+# make a plot
+xx <- 5:25
+y1 <- ecdf(x1)(xx)
+y2 <- ecdf(x2)(xx)
+y3 <- ecdf(x3)(xx)
+y4 <- ecdf(x4)(xx)
+y5 <- ecdf(x5)(xx)
+
+cols <- rainbow(5)
+par(mfrow=c(1,1), mar=c(5.1, 5.1, 1.1, 1.1),
+    bty="n", las=1, lend=1,
+    cex.axis=1.2, cex.lab=1.2)
+plot(xx, y1, type="l", lwd=3,
+     xlab="X", ylab="ECDF", col=cols[1])
+points(xx, y2, type="l", lwd=3, col=cols[2])
+points(xx, y3, type="l", lwd=3, col=cols[3])
+points(xx, y4, type="l", lwd=3, col=cols[4])
+points(xx, y5, type="l", lwd=3, col=cols[5])
+legend("bottomright", 
+  legend=c("N(10,2)", "N(10,2)", 
+              "N(14,2)", "N(14,20)", "Pois(14)"),
+  lwd=3, col=cols, bty="n", cex=1.3)
+```
+
+The KS test results show that distributions `x1` and `x2` are not different ($p>0.05$). This makes sense because they are both normal distributions with the same mean and SD. Distributions `x1` and `x3` are different because they have different means (10 vs. 14). Distributions `x3` and `x4` were different because they had different SD (2 vs. 20). Finally, distributions `x3` and `x5` were different because they were different distributions with different shapes (normal vs. Poisson).
+
+The KS test can be useful when you want to see how well your data matches up with their theoretical distribution. Consider the example of a lognormally distributed response below. If we suspect that the data come from a lognormal distribution or a gamma distribution, we can use the function `fitdistr()` to estimate the parameters of a lognormal and a gamma distribution that are most likely to produce those data. Then, we use a KS test to compare the data to the idealized candidates.
+
+```{r}
+# random number seed
+set.seed(123)
+
+# generate data
+x1 <- rlnorm(100, 2, 2)
+
+# estimate moments
+fit1 <- fitdistr(x1, "lognormal")
+fit2 <- fitdistr(x1, "gamma")
+```
+
+Notice that the parameters from `fitdistr()` are supplied as arguments to `ks.test()`, following the name of the distribution we want to compare to. If parameters are not supplied, then R will perform the KS test using the default parameter values (e.g., `meanlog=0` and `sdlog=1` for `plnorm()`; none for `pgamma()`), which is not what we want.
+
+```{r}
+ks.test(x1, "plnorm", fit1$estimate[1], fit1$estimate[2])
+```
+
+The test shows that we cannot conclude that `x1` is different from a lognormal distribution.
+
+```{r}
+ks.test(x1, "pgamma", shape=fit2$estimate[1],
+        rate=fit2$estimate[2])
+```
+
+The test shows that `x1` is likely different from a gamma distribution.
+
+```{r, fig.width=6, fig.height=5, fig.align="center"}
+# plot x1 and its theoretical distribution
+xx <- seq(min(x1), max(x1), length=500)
+y1 <- ecdf(x1)(xx)
+y2 <- plnorm(xx, fit1$estimate[1], fit1$estimate[2])
+y3 <- pgamma(xx, shape=fit2$estimate[1], rate=fit2$estimate[2])
+
+par(mfrow=c(1,1), mar=c(5.1, 5.1, 1.1, 1.1), bty="n", 
+    las=1, lend=1, cex.axis=1.2, cex.lab=1.2)
+plot(log(xx), y1, type="l", lwd=3, xlab="log(X)", ylab="ECDF")
+points(log(xx), y2, type="l", lwd=3, col="red")
+points(log(xx), y3, type="l", lwd=3, col="blue")
+legend("topleft",
+       legend=c("Data", "Lognormal", "Gamma"),
+       lwd=3,
+       col=c("black", "red", "blue"),
+       bty="n",
+       cex=1.3)
+```
+
+While neither the lognormal distribution nor the gamma distribution are awful at representing the data, the KS tests suggest that the simulated data `x1` come from a lognormal distribution, not a gamma distribution. This is because the KS test was non-significant when comparing the data to the lognormal, and significant when comparing the data to the gamma distribution. The test comparing the data to the gamma distribution was, however, close to non-significant ($p\approx0.01$). See what happens if you change the random number seed and re-run the random generation and the test.

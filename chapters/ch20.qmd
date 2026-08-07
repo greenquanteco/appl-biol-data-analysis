@@ -1,3 +1,7 @@
-# Nonlinear models for biology {#sec-20}
+# GLM for count data {#sec-glm3}
 
-Things are not always linear.
+1! Hah ha ha
+
+2! Hah ha ha
+
+## Poisson GLM for counts {#sec-glm3-poisson}

@@ -43,37 +43,39 @@ book:
         - chapters/ch09.qmd
         - chapters/ch10.qmd
         - chapters/ch11.qmd
-    - part: chapters/part_04.qmd
-      chapters:
         - chapters/ch12.qmd
         - chapters/ch13.qmd
+    - part: chapters/part_04.qmd
+      chapters:
         - chapters/ch14.qmd
         - chapters/ch15.qmd
-    - part: chapters/part_05.qmd
-      chapters:
         - chapters/ch16.qmd
         - chapters/ch17.qmd
+    - part: chapters/part_05.qmd
+      chapters:
         - chapters/ch18.qmd
         - chapters/ch19.qmd
-    - part: chapters/part_06.qmd
-      chapters:
         - chapters/ch20.qmd
         - chapters/ch21.qmd
-    - part: chapters/part_07.qmd
+    - part: chapters/part_06.qmd
       chapters:
         - chapters/ch22.qmd
         - chapters/ch23.qmd
+    - part: chapters/part_07.qmd
+      chapters:
         - chapters/ch24.qmd
         - chapters/ch25.qmd
-    - part: chapters/part_08.qmd
-      chapters:
         - chapters/ch26.qmd
         - chapters/ch27.qmd
-    - part: chapters/part_09.qmd
+    - part: chapters/part_08.qmd
       chapters:
         - chapters/ch28.qmd
+        - chapters/ch29.qmd
+    - part: chapters/part_09.qmd
+      chapters:
+        - chapters/ch30.qmd
   appendices:
-    - chapters/ch29.qmd
+    - chapters/appa.qmd      
 
 license: "CC BY-SA"
 copyright:

@@ -1,7 +1,3 @@
-# GLM for count data {#sec-18}
+# Introduction to generalized linear models (GLM) {#sec-glm1}
 
-1! Hah ha ha
-
-2! Hah ha ha
-
-## Poisson GLM for counts {#sec-18-poisson}
+A link function to the past.

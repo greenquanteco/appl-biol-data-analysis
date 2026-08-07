@@ -1,11 +1,11 @@
-# Introduction to R {#sec-02}
+# Introduction to R {#sec-r}
 
 ```{r}
 #| include: false
 options(width=70)
 ```
 
-This module is an introduction to the R program and language. We will begin with downloading and installing R, then explore the basics of running R commands and storing data, and finally answer some frequently asked questions (FAQ). Some of the topics in this module are covered in greater detail in @sec-03, @sec-04, and @sec-05. The current module is meant to get you up and running before moving on to more advanced material.
+This module is an introduction to the R program and language. We will begin with downloading and installing R, then explore the basics of running R commands and storing data, and finally answer some frequently asked questions (FAQ). Some of the topics in this module are covered in greater detail in @sec-object, @sec-ie, and @sec-manip. The current module is meant to get you up and running before moving on to more advanced material.
 
 By the end of this module you should be able to:
 
@@ -18,9 +18,9 @@ By the end of this module you should be able to:
 -   Manage and use R packages
 -   Identify sources of help for R programming
 
-## Getting started with R {#sec-02-start}
+## Getting started with R {#sec-r-start}
 
-### Download and install R (and RStudio) {#sec-02-start-install}
+### Download and install R (and RStudio) {#sec-r-start-install}
 
 If you are on a university campus, many on-campus computers may already have R installed on them. This is the bare minimum you need to work with R. Many people also prefer to use another program for writing R code. The most popular is probably [RStudio](https://posit.co/downloads), which is a more user-friendly interface for R. If you are on a PC or Mac, you will need to download and install both R and RStudio. If you are using a Linux machine, you may already have R because it is included in some distros. You can still install RStudio to make your life easier.
 
@@ -34,7 +34,7 @@ Next, install any code editing or IDE you want.
 
 -   Other popular choices include [Visual Studio Code](https://code.visualstudio.com/download) and [emacs](https://www.gnu.org/software/emacs/).
 
-### Using R {#sec-02-start-using}
+### Using R {#sec-r-start-using}
 
 #### Base R GUI
 
@@ -91,13 +91,13 @@ RStudio has an entire environment for working with R in one window. Each of the 
 
 The bottom right panel also has a tab called "**Plots**". This is where plots that you make can be seen. Sometimes you will need to resize this panel to see the plots clearly. All of the panels can be resized by clicking and dragging the borders between them.
 
-## Commands, objects, and output {#sec-02-comm}
+## Commands, objects, and output {#sec-r-comm}
 
 The key to understanding R is to understand [object orientation](https://en.wikipedia.org/wiki/Object-oriented_programming). This means that R code is built around manipulating objects. In programming, an **object** is a construct or thing with well-defined attributes and behaviors. For example, a graphics program might have object classes like “polygon” and “circle”. Rather than redefine “polygon” every time the user needs to draw a polygon, the program creates a polygon object with attributes like “number of sides” and “side length”. The new object is an **instance** of the polygon class. The **class** of an object defines what attributes it has and how it interacts with other objects.
 
-### R commands--basics {#sec-02-comm-basic}
+### R commands--basics {#sec-r-comm-basic}
 
-In R, ***everything*** is an object. We will learn more about some of the most important R object types in the examples in @sec-03. Objects are created in R by many functions.
+In R, ***everything*** is an object. We will learn more about some of the most important R object types in the examples in @sec-object. Objects are created in R by many functions.
 
 Objects are stored to memory by **assignment**, using the left arrow `<-` (a “less than” followed by a hyphen). If an object already exists, then assignment is used to either modify the object, or replace it entirely. Here is an example:
 
@@ -190,7 +190,7 @@ Notice in the above example that the closing parenthesis for `rnorm()` is marked
 
 When writing comments or writing multi-line commands you should keep in mind that most code editors don’t do line breaks very well. Or, they will wrap text displayed in the editor, but this might not display the same on every device. As a rule I try to keep lines of code to ≤ 80 characters, so I don’t have to scroll over to see the end of a command. You can do this too, by breaking up commands and long comments into multiple lines. It also helps to indent additional lines by a set amount--most people prefer either 2 or 4 spaces rather than a tab stop.
 
-### Using R functions {#sec-02-comm-functions}
+### Using R functions {#sec-r-comm-functions}
 
 R **functions** are objects that do things to other objects, or create objects, or modify objects... basically, functions ***do*** stuff while most other objects ***store*** stuff. Functions are called by name, and they have options or **arguments** contained within parentheses. It’s good practice to have the parentheses touching the function name.
 
@@ -247,7 +247,7 @@ set.seed(123)
 runif(10)
 ```
 
-### The R workspace {#sec-02-comm-workspace}
+### The R workspace {#sec-r-comm-workspace}
 
 When you use R, all objects and data that you use exist in the R **workspace**. Objects in the workspace can be called from the console. You can think of the workspace like a kind of sandbox or workbench.
 
@@ -294,9 +294,9 @@ rm(list=c("y", "z"))
 ls() # x, y, and z are all gone
 ```
 
-## R syntax {#sec-02-syn}
+## R syntax {#sec-r-syn}
 
-### Object size and structure {#sec-02-syn-oss}
+### Object size and structure {#sec-r-syn-oss}
 
 As you've already seen, the most important R function is **assignment**. When you assign a value to a variable, you can then use that variable in place of the value. Assigning a value to variable name will automatically create a new object in the workspace with that name. If an object with that name already exists, assigning a new value to that name will overwrite the old object.
 
@@ -336,7 +336,7 @@ You can chain multiple assignments together in a single command. This is useful 
 list3 <- list2 <- list1 <- vector("list", 5)
 ```
 
-Assignment can also be used to **change or overwrite** parts of pre-existing objects. Usually this involves the bracket notation, which we will explore more in @sec-05. In the example below, the third element of object `a`, `a[3]`, is replaced with the number 42.
+Assignment can also be used to **change or overwrite** parts of pre-existing objects. Usually this involves the bracket notation, which we will explore more in @sec-manip. In the example below, the third element of object `a`, `a[3]`, is replaced with the number 42.
 
 ```{r}
 #| collapse: true
@@ -375,7 +375,7 @@ a <- c(a, b)
 a
 ```
 
-### Operators {#sec-02-syn-ops}
+### Operators {#sec-r-syn-ops}
 
 Most math operators in R are similar to those in other languages or programs. For math expressions, the standard order of operations (PEMDAS) applies, but you can use parentheses if you want to be sure. The integer sequence operator `:` comes first, and comparison tests (`==`, `<`, `<=`, `>`, and `>=`) come last. The examples below show how many common R operators function, taking advantage of the fact that you can use an object’s name in place of its value in most situations.
 
@@ -464,7 +464,7 @@ b <- 4:5
 a + b
 ```
 
-## R packages {#sec-02-pack}
+## R packages {#sec-r-pack}
 
 **Packages** are modules that can be added to R to extend its capabilities. Most packages are written by R users and researchers who need functions that are not provided with the base R installation. These add-ons are one of the greatest strengths of R compared to other software packages. Commercial and proprietary statistics programs (like SAS) are upgraded only by a single group of developers, if at all. In contrast, new functions and capabilities are added to R by the user community every day.
 
@@ -474,11 +474,11 @@ Most packages are stored on The Comprehensive R Archive Network, or CRAN. Other 
 
 R-Forge and BioConductor can usually be accessed from the R command line just like CRAN. Installing packages from GitHub may require a different procedure. Most R packages are written in the R language itself, so even if you can’t find a way to install a package you can usually just copy and run its source code.
 
-### Your R library {#sec-02-pack-lib}
+### Your R library {#sec-r-pack-lib}
 
 When you install R packages, the files are downloaded and stored on your machine for R to access when needed. R will probably create a folder in your R home directory for this purpose. The first time you install a package in R you will be asked if R can create a personal library in which to store the package. Package installations are specific to the version of R that you used for the installation, and specific to your operating system login. This means that if someone else logs in to your machine and wants to use a package, they will have to install the package for themselves. This also means that if you update your R installation to a new version, you may need to install packages again because some packages are version-specific.
 
-### Installing R packages {#sec-02-pack-install}
+### Installing R packages {#sec-r-pack-install}
 
 #### Installing R packages using the GUI
 
@@ -498,7 +498,7 @@ In the R console, you can install packages using function install.packages() as 
 install.packages("vegan")
 ```
 
-### Working with packages in R {#sec-02-pack-work}
+### Working with packages in R {#sec-r-pack-work}
 
 You can access the packages you have installed by loading them. In most situations you must load a package before you use it. The usual way is to use the `library()` function. Once a package is loaded, you can use its functions and datasets. The function require() does the same thing as `library()`, but it is designed for use inside other functions. Most of the time you should use `library()`. The command below will load the package `vegan` so its functions and datasets become available:
 
@@ -539,7 +539,7 @@ search()
 sessionInfo()
 ```
 
-#### Package dependencies {#sec-02-pack-work-dep}
+#### Package dependencies {#sec-r-pack-work-dep}
 
 Many R packages are built taking advantage of other R packages. The packages that a package depends on are called its dependencies or depends. Some packages have no dependencies (other than R itself), while others have many. Something to think about when deciding whether to use a package are the number and nature of its dependencies. If you use a package that depends on many other packages, then you are relying on the authors of those packages to maintain and update their code to work with new versions of R and new versions of packages. And, relying upon the authors of all of those packages’ dependencies. And so on.
 
@@ -557,7 +557,7 @@ The point here is that you don’t want your code to break because one of the pa
 
 Because most R packages are written in R itself, you can usually find and adapt the code you need. This is almost always permitted by the license of the package because most packages are released under some version of the GNU Public License (GPL). If you do borrow code from a package, it is considered good form to attribute the package authors in some way (e.g., “we adapted code from the package ”foo” version 1.0 (Nobody 2001)“).
 
-#### Citing packages {#sec-02-pack-work-cite}
+#### Citing packages {#sec-r-pack-work-cite}
 
 Just like any software, you need to cite a package if you use it. This is both to give appropriate credit to the package authors, and to allow others to understand what you did. The appropriate citation for a package can be accessed from the console with the `citation()` command.
 
@@ -573,9 +573,9 @@ Citation for a package (note the quotation marks):
 citation("MASS")
 ```
 
-## Frequently asked questions about R {#sec-02-faq}
+## Frequently asked questions about R {#sec-r-faq}
 
-### What is R {#sec-02-faq-what}
+### What is R {#sec-r-faq-what}
 
 **R** is both a computer program that does statistics, and the programming language for using that program. It was developed in the late 1990s and became popular among biologists by the mid-2000s. R offers several key advantages over other statistical programs:
 
@@ -589,7 +589,7 @@ citation("MASS")
 
 5.  New methods and functions are constantly being added as add-on packages for R that can be downloaded for free and integrate (mostly) seamlessly with other packages. See the [CRAN task views](https://cran.r-project.org/web/views/) for a list of package collections by application area.
 
-### Why do we have to write code? {#sec-02-faq-code}
+### Why do we have to write code? {#sec-r-faq-code}
 
 Why don’t we use a point and click program? Why do we have to write code? There are 3 main reasons:
 
@@ -601,7 +601,7 @@ Why don’t we use a point and click program? Why do we have to write code? Ther
 
 As you learn, it’s better to think of R as a language, rather than as a code. Don’t think, “How do I *do* X in R?” Instead, think, “How do I *say* X in R?” With this perspective, it becomes clear that “writing code” is really an exercise in “expressing instructions clearly and efficiently”.
 
-### Advantages and disadvantages {#sec-02-faq-advdis}
+### Advantages and disadvantages {#sec-r-faq-advdis}
 
 For all of its advantages, R has some drawbacks. Chief among them:
 
@@ -609,7 +609,7 @@ For all of its advantages, R has some drawbacks. Chief among them:
 
 -   Along the same lines, R is distributed with absolutely no warranty (it says so every time you open R). The accuracy of your analysis depends on the competence of the (unpaid) contributors and the user.
 
--   R often requires more coding than SAS or other tools to get a similar amount of output or perform a similar amount of work. The `tidyverse` ecosystem of packages addresses some of these issues, but not without some costs (see @sec-02-faq-tidy).
+-   R often requires more coding than SAS or other tools to get a similar amount of output or perform a similar amount of work. The `tidyverse` ecosystem of packages addresses some of these issues, but not without some costs (see #sec-r-faq-tidy).
 
 -   R is slower than SAS and other tools at handling large datasets because it holds all data and objects in memory (RAM) at once. This limits the performance of your machine if you are doing other tasks.
 
@@ -619,7 +619,7 @@ For all of its advantages, R has some drawbacks. Chief among them:
 
 -   Error messages that R gives are often vague and infuriating.
 
-### Base R vs. tidyverse {#sec-02-faq-tidy}
+### Base R vs. tidyverse {#sec-r-faq-tidy}
 
 A colleague of mine who moved from using mostly SAS to using mostly R says that the tidyverse makes R feel more like SAS. The difference he was referring to is the way that SAS functions (“PROCs”, or procedures) tend to automate or abstract away a lot of the low-level functionality and options associated with their methods. Those functions and options are there, but they can be inconvenient to access. The equivalent base R functions, on the other hand, require the user to specify options and manipulate output to a far greater extent. Or, depending on your perspective, they *allow* the user to specify options and manipulate output. Some people like that, and some people don’t. The amount of interaction and coding in R require to get outputs that other programs like SAS produce automatically is, in my experience, one of the biggest stumbling blocks for new R users.
 
@@ -653,11 +653,11 @@ The other two reasons are more functional and less subjective:
 
 The takehome message is that while both base R and tidyverse offer powerful tools for working with and analyzing data, they represent two overlapping but different programming paradigms. Which framework you use depends on what level of abstraction vs. explicitness you are comfortable with in your own code. Base R makes it easier to work flexibly with the different kinds of inputs and outputs, but usually at the cost of a steeper learning curve. tidyverse makes routine tasks more streamlined with a unified syntax and grammar for data manipulation, but at the cost of flexibility. My advice is to learn base R first, then move on to tidyverse if and only if it has a specific tool you need that is not available in base R.
 
-### Where can I get R help? {#sec-02-faq-help}
+### Where can I get R help? {#sec-r-faq-help}
 
 The most important message of this course is simple: ***Don't panic!*** Lots of people have trouble with R. The learning curve is steep, and the error messages are inscrutable. But, there are a lot of resources available to help you.
 
-#### R documentation (help) files {#sec-02-faq-help-doc}
+#### R documentation (help) files {#sec-r-faq-help-doc}
 
 Documentation for each function, or help files, come included with the base R installation. You can access them from within R by using the `?` command. `?functionname` will open the documentation file for function `functionname`. `?` will search all currently attached packages. The command below opens the page for the `mean` function. Notice that this file is stored on your local machine, so no internet access is required.
 
@@ -713,7 +713,7 @@ The R documentation pages all tend to follow the same format:
 
 R documentation pages tend to be very terse and include very little in the way of background or explanation. They are generally meant to refresh the memory of people already familiar with R and with statistics, not to educate new R users or inexperienced statisticians. If you fall into one of the latter categories, or if you are trying to learn a new function, read on.
 
-#### R vignettes {#sec-02-faq-help-vig}
+#### R vignettes {#sec-r-faq-help-vig}
 
 A **vignette** is a document demonstrating the use of an R package or its functions, with more details and explanation than in the help files. Not all packages offer vignettes. You can see what vignettes are available with the command `vignette()`. Specific vignettes are accessed by name and package. The examples below show how to get a list of available vignettes, available vignettes by package, and open specific vignettes.
 
@@ -742,7 +742,7 @@ vignette("intro-vegan", package="vegan")
 
 ![A vignette from package `vegan` in PDF format.](../images/02_10.jpg){fig-align="center"}
 
-#### Official resources {#sec-02-faq-help-off}
+#### Official resources {#sec-r-faq-help-off}
 
 The R project maintains an [official help page](https://www.r-project.org/help.html) with lists of places to get help. They also maintain a [list of manuals and documentation](https://cran.r-project.org/manuals.html). If you want a handy desk reference, you could do worse than the [R reference card](https://cran.r-project.org/doc/contrib/Short-refcard.pdf) (accessed 2021-12-21).
 
@@ -754,7 +754,7 @@ The [Task Views](https://cran.r-project.org/web/views/) on CRAN contain frequent
 
 (All links accessed 2025-08-06).
 
-#### R mailing lists {#sec-02-faq-help-mail}
+#### R mailing lists {#sec-r-faq-help-mail}
 
 If your question has been asked before---and this is very likely---there may be an answer waiting for you on the [R Help mailing list](https://www.r-project.org/mail.html). Results from the R help mailing list will usually show up in Google results. You can submit a question to the R mailing list, but be very cautious about doing so. You will need to provide a short, clear, reproducible example in your question so that other people can see the issue you are having[^mailing]. You also need to be sure that your question hasn't been asked before. Some members of the mailing list will respond with great hostility and condescension if you fail to follow those rules.
 
@@ -762,13 +762,13 @@ If your question has been asked before---and this is very likely---there may be 
 
 There are several [special interest groups (SIG)](https://stat.ethz.ch/mailman/listinfo), e-mail mailing lists for R users who work in specific fields. For example, [R-sig-ecology](https://stat.ethz.ch/mailman/listinfo/r-sig-ecology) is an e-mail list for ecologists who use R. Other SIG of interest to biologists include [R-sig-genetics](https://stat.ethz.ch/mailman/listinfo/r-sig-genetics) for genetics, [R-sig-mixed-models](https://stat.ethz.ch/mailman/listinfo/r-sig-mixed-models) for mixed models, [R-sig-phylo](https://stat.ethz.ch/mailman/listinfo/r-sig-phylo) for phylogenetics and related methods, and [R-sig-Geo](https://stat.ethz.ch/mailman/listinfo/r-sig-geo) for GIS and spatial analysis.
 
-#### Unofficial online resources {#sec-02-faq-help-unoff}
+#### Unofficial online resources {#sec-r-faq-help-unoff}
 
 Unofficial resources are becoming more and more abundant and useful. One of the most important sources for R help is [StackOverflow](https://stackoverflow.com). StackOverflow is a hugely popular forum site where programmers ask and answer questions, and has an active [R section](https://stackoverflow.com/questions/tagged/r). When (not if) you find a solution on StackOverflow, include a link to the answer in your code as a comment. This can save you some headache down the line when you need to remember how you solved a problem. Other useful resources include [RSeek.org](https://rseek.org/), a search engine for R resources; and [R-Bloggers](https://www.r-bloggers.com/), which aggregates many blogs about R and statistics.
 
 Many R users maintain blogs or websites that may or may not be aggregated on R-Bloggers. You can usually find these via a Google search. I have used the pages on [Quick-R](https://www.statmethods.net/) many times. The UCLA Statistical Consulting Group has an [excellent collection of tutorials](https://stats.oarc.ucla.edu/r/).
 
-#### R books {#sec-02-faq-help-books}
+#### R books {#sec-r-faq-help-books}
 
 The last few years have seen an explosion of books published specifically about the R language and its uses. Some of these books are general introductions to R and statistics; others are very domain specific. Inclusion of a book here does not constitute specific endorsement. I own some of these, but others are included because they are common R-related references that you might find helpful.
 
@@ -785,7 +785,7 @@ The last few years have seen an explosion of books published specifically about 
 
 When I was first starting out with R I found several books invaluable. Having code examples printed where I could highlight, annotate, etc., was really helpful. Over time I've found myself relying less on textbooks and more on online sources (especially StackOverflow). Still, a there are a few books that I use frequently, for their statistical exposition more than their code examples. At least one of @bolker2008ecological, @kery2010, @legendre2012numerical, @zuur2007analysing, and @zuur2009mixed is usually on my desk at any given time.
 
-#### Two reminders {#sec-02-faq-help-two}
+#### Two reminders {#sec-r-faq-help-two}
 
 I said it at the beginning of this section, and it bears repeating: ***Don't panic!*** R has a steep learning curve, but the pay-off is worth it. There are plenty of resources and people out there who can help you.
 

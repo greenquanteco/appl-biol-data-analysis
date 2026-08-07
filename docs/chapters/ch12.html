@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>12&nbsp; Introductory statistics with R – Applied Biological Data Analysis</title>
+<title>12&nbsp; Common problems in biological data – Applied Biological Data Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -31,7 +85,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../chapters/ch13.html" rel="next">
-<link href="../chapters/part_04.html" rel="prev">
+<link href="../chapters/ch11.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -72,6 +126,35 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -84,7 +167,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/part_04.html">Introductory statistics with R</a></li><li class="breadcrumb-item"><a href="../chapters/ch12.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Introductory statistics with R</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/part_03.html">Exploratory data analysis with R</a></li><li class="breadcrumb-item"><a href="../chapters/ch12.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Common problems in biological data</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -208,13 +291,25 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Common problems in biological data</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Comparing data to distributions</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Planning your data analysis</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data transformation and rescaling</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch12.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Common problems in biological data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Planning your data analysis</span></span></a>
   </div>
 </li>
       </ul>
@@ -230,26 +325,26 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/ch12.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Introductory statistics with R</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/ch13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Tests comparing groups</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../chapters/ch14.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Tests for continous patterns</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Introductory statistics with R</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch15.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests for contingency</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests comparing groups</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tests for continous patterns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Tests for contingency</span></span></a>
   </div>
 </li>
       </ul>
@@ -265,26 +360,26 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/ch16.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduction to generalized linear models (GLM)</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/ch17.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">GLM for continuous response data</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../chapters/ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">GLM for count data</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Introduction to generalized linear models (GLM)</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">GLM for binary and proportional responses</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">GLM for continuous response data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">GLM for count data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch21.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GLM for binary and proportional responses</span></span></a>
   </div>
 </li>
       </ul>
@@ -300,14 +395,14 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/ch20.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Nonlinear models for biology</span></span></a>
+  <a href="../chapters/ch22.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear models for biology</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/ch21.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Random effects and mixed models</span></span></a>
+  <a href="../chapters/ch23.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Random effects and mixed models</span></span></a>
   </div>
 </li>
       </ul>
@@ -323,26 +418,26 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/ch22.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Introduction to multivariate data and data analysis</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/ch23.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Clustering for biologists</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../chapters/ch24.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Ordination</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Introduction to multivariate data and data analysis</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch25.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Multivariate hypothesis testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Dissimilarity and distance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch26.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Clustering for biologists</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch27.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Ordination</span></span></a>
   </div>
 </li>
       </ul>
@@ -358,14 +453,14 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/ch26.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Information theoretic model-based inference</span></span></a>
+  <a href="../chapters/ch28.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Multivariate hypothesis testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/ch27.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Introduction to Bayesian inference for biologists</span></span></a>
+  <a href="../chapters/ch29.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Information theoretic model-based inference</span></span></a>
   </div>
 </li>
       </ul>
@@ -381,8 +476,8 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/ch28.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Advanced R graphics</span></span></a>
+  <a href="../chapters/ch30.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Introduction to Bayesian inference for biologists</span></span></a>
   </div>
 </li>
       </ul>
@@ -398,8 +493,8 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/ch29.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Source and preparation of NEON data</span></span></a>
+  <a href="../chapters/appa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Appendix A</span></span></a>
   </div>
 </li>
       </ul>
@@ -414,16 +509,32 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-12-lin" id="toc-sec-12-lin" class="nav-link active" data-scroll-target="#sec-12-lin"><span class="header-section-number">12.1</span> Linear models</a></li>
+  <li><a href="#outliers-and-erroneous-values" id="toc-outliers-and-erroneous-values" class="nav-link active" data-scroll-target="#outliers-and-erroneous-values"><span class="header-section-number">12.1</span> Outliers and erroneous values</a>
+  <ul class="collapse">
+  <li><a href="#detecting-outliers" id="toc-detecting-outliers" class="nav-link" data-scroll-target="#detecting-outliers"><span class="header-section-number">12.1.1</span> Detecting outliers</a></li>
+  <li><a href="#dealing-with-outliers" id="toc-dealing-with-outliers" class="nav-link" data-scroll-target="#dealing-with-outliers"><span class="header-section-number">12.1.2</span> Dealing with outliers</a></li>
+  </ul></li>
+  <li><a href="#sec-problems-auto" id="toc-sec-problems-auto" class="nav-link" data-scroll-target="#sec-problems-auto"><span class="header-section-number">12.2</span> Autocorrelation</a>
+  <ul class="collapse">
+  <li><a href="#sec-problems-auto-graph" id="toc-sec-problems-auto-graph" class="nav-link" data-scroll-target="#sec-problems-auto-graph"><span class="header-section-number">12.2.1</span> Graphical methods to identify autocorrelation</a></li>
+  <li><a href="#sec-problems-auto-mantel" id="toc-sec-problems-auto-mantel" class="nav-link" data-scroll-target="#sec-problems-auto-mantel"><span class="header-section-number">12.2.2</span> Mantel tests for autocorrelation</a></li>
+  <li><a href="#sec-problems-auto-deal" id="toc-sec-problems-auto-deal" class="nav-link" data-scroll-target="#sec-problems-auto-deal"><span class="header-section-number">12.2.3</span> Dealing with autocorrelation</a></li>
+  </ul></li>
+  <li><a href="#sec-problems-collin" id="toc-sec-problems-collin" class="nav-link" data-scroll-target="#sec-problems-collin"><span class="header-section-number">12.3</span> Collinearity</a></li>
+  <li><a href="#sec-problems-miss" id="toc-sec-problems-miss" class="nav-link" data-scroll-target="#sec-problems-miss"><span class="header-section-number">12.4</span> Missing data</a>
+  <ul class="collapse">
+  <li><a href="#sec-problems-miss-ignore" id="toc-sec-problems-miss-ignore" class="nav-link" data-scroll-target="#sec-problems-miss-ignore"><span class="header-section-number">12.4.1</span> Option 1: Ignore missing data</a></li>
+  <li><a href="#sec-problems-miss-inter" id="toc-sec-problems-miss-inter" class="nav-link" data-scroll-target="#sec-problems-miss-inter"><span class="header-section-number">12.4.2</span> Option 2: Interpolate or impute missing data</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch12.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/part_04.html">Introductory statistics with R</a></li><li class="breadcrumb-item"><a href="../chapters/ch12.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Introductory statistics with R</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/part_03.html">Exploratory data analysis with R</a></li><li class="breadcrumb-item"><a href="../chapters/ch12.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Common problems in biological data</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-12" class="quarto-section-identifier"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Introductory statistics with R</span></span></h1>
+<h1 class="title"><span id="sec-problems" class="quarto-section-identifier"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Common problems in biological data</span></span></h1>
 </div>
 
 
@@ -440,11 +551,330 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Everything you should have learned in Biostats.</p>
-<section id="sec-12-lin" class="level2" data-number="12.1">
-<h2 data-number="12.1" class="anchored" data-anchor-id="sec-12-lin"><span class="header-section-number">12.1</span> Linear models</h2>
+<p>Many statistical methods assume that data follow certain distributions, and we have already explored methods for making sure your data follow those distributions. Other problems are not so easy to diagnose or fix. This section will introduce you to some methods for dealing with more subtle data problems. Note that none of these issues have one-size-fits-all solutions. Dealing with these issues will require understanding your study system and thinking through the consequences of potential solutions.</p>
+<section id="outliers-and-erroneous-values" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="outliers-and-erroneous-values"><span class="header-section-number">12.1</span> Outliers and erroneous values</h2>
+<p>Outliers are values that much larger or smaller than other values in the data set. While these values are theoretically possible in any distribution, they are by their nature extremely unlikely. Outliers can cause problems with many statistical tests because they are often given undue weight. This is because deviations from the mean are often squared.</p>
+<p>There are two problems with outliers: how to detect them, and what to do with them.</p>
+<section id="detecting-outliers" class="level3" data-number="12.1.1">
+<h3 data-number="12.1.1" class="anchored" data-anchor-id="detecting-outliers"><span class="header-section-number">12.1.1</span> Detecting outliers</h3>
+<p>There are several definitions of outlier. Some researchers have suggested simple measures such as <em>Z</em>-scores to detect outliers. <em>Z</em>-scores measure how many standard deviations (SD) an observation is away from the mean. The <em>Z</em>-score of an observation <span class="math inline">\(x_i\)</span> (observation <em>i</em> of variable <em>x</em>) is calculated as:</p>
+<p><span class="math display">\[Z\left(x_i\right)=\frac{x_i-\bar{x}}{\sigma\left(x\right)}\]</span></p>
+<p>where <span class="math inline">\(\bar{x}\)</span> is the mean of <em>x</em> and <span class="math inline">\(\sigma\left(x\right)\)</span> is the SD of <em>x</em>. For example, <em>Z</em>-scores of -2.3 and +4.1 indicate observations 2.3 SD below and 4.1 SD above the mean, respectively. <em>Z</em>-scores are also referred to as <strong>sigmas</strong>, referring to the symbol for SD. E.g., a 4<span class="math inline">\(\sigma\)</span> observation is 4 SD away from the mean. Various <span class="math inline">\(\sigma\)</span> levels have been used to detect outliers, in which researchers discard any observation 2<span class="math inline">\(\sigma\)</span>, 3<span class="math inline">\(\sigma\)</span>, etc., away from the mean. This threshold varies by discipline, so follow the conventions in your field.</p>
+<p>The figure below shows <em>Z</em>-scores relative to the standard normal distribution (<span class="math inline">\(\mu\)</span> = 0, SD = 1). About 68% of observations are expected to have a <em>Z</em>-score between -1 and 1–i.e., deviate by <span class="math inline">\(\le\)</span> 1 <span class="math inline">\(\sigma\)</span>. About 95% of observations should be <span class="math inline">\(\le\)</span> 2 <span class="math inline">\(\sigma\)</span>, and over 99% of observations should be <span class="math inline">\(\le\)</span> 3 <span class="math inline">\(\sigma\)</span>. The greater the magnitude of a value’s <em>Z</em>-score, the less likely it is. Values with &gt; 3 or 4 <span class="math inline">\(\sigma\)</span> should almost never occur. Thus, observations with large-magnitude <em>Z</em>-scores may turn out to be outliers.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch12_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It must be noted that a large magnitude <em>Z</em>-score does <strong><em>not</em></strong> prove that an observation is an outlier. Like <em>p</em>-values, <em>Z</em>-scores are just a heuristic for making decisions. Don’t just delete any observation <span class="math inline">\(|Z|\ge\)</span> 3; examine those observations to see if they are legitimate and don’t take any action without a good biological reason.</p>
+</section>
+<section id="dealing-with-outliers" class="level3" data-number="12.1.2">
+<h3 data-number="12.1.2" class="anchored" data-anchor-id="dealing-with-outliers"><span class="header-section-number">12.1.2</span> Dealing with outliers</h3>
+<p>The easiest way to deal with outliers is simply to delete them. This can be fine if you have a lot of data–many 1000s or even millions of records. I’ve worked with several statisticians who routinely delete observations with response variables in the top and bottom 5 percentiles. This may not always be an appropriate strategy in biology. For one thing, outliers can occur for completely legitimate reasons and deleting them would be discarding important information about the study system.</p>
+<p><strong><em>Never</em></strong> <strong>delete an observation based solely on its magnitude.</strong></p>
+<p>Data should only be deleted when there is a biological or experimental reason. These might include experimental errors, inappropriate sampling, extraordinary field conditions, etc. Furthermore, you should always document when observations were deleted and why, and disclose that information in your write up and to reviewers. The possibility of including supplemental information or documents with manuscripts leaves little excuse not to be transparent about what observations you deleted and why.</p>
+<p>Another way to deal with outliers is to <a href="@sec-trans">transform the data</a>. Variance-stabilizing transformations, such as the log-transform, often have the side-effect of reducing outliers in the data.</p>
+<p>The third method for dealing with outliers is <strong>censoring</strong>. Censoring data in statistics means analyzing data as either the measured value or the interval in which the value falls. For example, if a mouse is weighed with a scale that goes up to 60 g, and maxes out the scale, we record the mouse as weighing <span class="math inline">\(\ge\)</span> 60 g. Statistical methods for censored data have been developed but are outside the scope of this course. One popular form of censoring is called <strong>Winsorizing</strong>, where values below the 5th percentile are set to the 5th percentile and values above the 95th percentile are set to the 95th percentile. Censoring is common practice in fields involving certain types of instrumentation. For example, many spectrophotometers (e.g., microplate readers) record optical density (OD) as the amount of light passing through a specimen as a measurement of concentration. Most machines have a lower limit to the OD that they can detect. Observations below this minimum OD might be censored to 0, or to some pre-determined fraction of the minimum detectable OD.</p>
+<p>Similar to censoring, outlying data can be removed by <strong>truncation</strong>. Truncation in statistics means ignoring values outside of a certain range. As with deletion, you must be very explicit about what criteria were used to truncate the data.</p>
+<p><strong>Weighting</strong> is a strategy where observations can be given greater or lesser weight to adjust how much influence they have. This strategy can become very complicated and involve a lot of arbitrary decisions. So, a simpler strategy such as truncation or transformation might be more appropriate.</p>
+<p>Finally, researchers can use analysis strategies that are less sensitive to outliers. For example, <strong>robust statistics</strong> use absolute deviations rather than squared deviations. This gives outliers much less influence than under conventional methods based on sums of squared errors. <strong>Nonparametric methods</strong>, particularly those based on rank order, can also be less sensitive to outliers.</p>
+<p>Whatever strategy you choose to deal with your outliers, you need to be aware of how much your decision affected the outcome. It is a good idea to analyze your data both with and without suspected outliers to measure how much influence they really have. If the analysis returns the same results with and without the outliers, leave them in.</p>
+</section>
+</section>
+<section id="sec-problems-auto" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="sec-problems-auto"><span class="header-section-number">12.2</span> Autocorrelation</h2>
+<p>Autocorrelation describes a phenomenon where set of values is correlated with itself, with the strength of that correlation determined by the distance between observations. In biology, the “distance” that defines autocorrelation is often spatial, temporal, or phylogenetic.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 69%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Autocorrelation type</th>
+<th>Distance measure</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Spatial</td>
+<td>Space (e.g., km)</td>
+<td>Samples from sites that are close together in space are more similar to each other than they are to sites that are farther away, just because they are closer to each other.</td>
+</tr>
+<tr class="even">
+<td>Temporal</td>
+<td>Time (e.g., days)</td>
+<td>Observations taken closer together in time are more similar to each other than they are to observations separated by more time.</td>
+</tr>
+<tr class="odd">
+<td>Phylogenetic</td>
+<td>Relatedness</td>
+<td>Taxa that share a more recent common ancestor (i.e., are more closely related) are more similar to each other than they are to taxa that are less closely related to each other.</td>
+</tr>
+</tbody>
+</table>
+<p>The main consequence of autocorrelation is similar to the problems associated with pseudoreplication: because observations are not independent, the statistically relevant number of observations (degrees of freedom) is smaller than the nominal number of observations. This means that the power of the test is inflated. A related idea is that the residuals of a statistical model can be autocorrelated. In that case, the model violates the assumption of independent residuals shared by most statistical methods. Autocorrelation can be controlled for if you have some idea of its source and nature.</p>
+<section id="sec-problems-auto-graph" class="level3" data-number="12.2.1">
+<h3 data-number="12.2.1" class="anchored" data-anchor-id="sec-problems-auto-graph"><span class="header-section-number">12.2.1</span> Graphical methods to identify autocorrelation</h3>
+<p>One way to explore potential autocorrelation is to construct a variogram. A variogram plots the squared differences between samples against their distance (temporal, spatial, etc.). A semivariogram uses half of that variance. An example semivariogram is below.</p>
+<p>This figure shows some important quantities on the semivariogram:</p>
+<p><img src="../images/12-01.jpg" class="img-fluid" alt="Anatomy of a semivariogram. Semivariance increases with the distance between observations until reaching the sill. The range is the distance at which the sill is reached, beyond which observations are no longer spatially autocorrelated. The nugget represents variation at very short distances, including fine-scale variation and measurement error.">{alt-text: “Schematic semivariogram with distance on the x-axis and semivariance on the y-axis. A curved line begins above zero at the labeled nugget, increases with distance, and levels off at the labeled sill. A vertical dashed line marks the range, where the curve reaches the sill.”}</p>
+<ul>
+<li><strong>Nugget</strong>: The variance or semivariance at 0 or very short distance. This represents other sources of error, such as sampling error, demographic stochasticity, etc.</li>
+<li><strong>Sill</strong>: The variance or semivariance at which the curve gets close to its maximum or asymptotic value.</li>
+<li><strong>Range</strong>: The distance at which the variance or semivariance reaches the sill. Samples at distances beyond the range are considered no longer spatially autocorrelated.</li>
+</ul>
+<p>Semivariograms should always increase, at least initially, because closer observations should be similar to each other simply as a matter of proximity. Samples separated by distances less than the range are autocorrelated. Semivariograms sometimes reach a peak and then start decreasing, or varying up and down. The initial peak is usually interpreted as the sill, and the distance when the curve reaches the sill is considered the range. The importance and interpreation of the semivariogram is something that you, as a biologist, have to figure out.</p>
+</section>
+<section id="sec-problems-auto-mantel" class="level3" data-number="12.2.2">
+<h3 data-number="12.2.2" class="anchored" data-anchor-id="sec-problems-auto-mantel"><span class="header-section-number">12.2.2</span> Mantel tests for autocorrelation</h3>
+<p><strong>Spatial autocorrelation</strong> is a particular problem for ecologists and environmental biologists. The <a href="@sec-mtest-mantel"><strong>Mantel test</strong></a> can be used to measure spatial autocorrelation as the correlation between distance in space and distance in terms of the measured variables. The Mantel test can be thought of as a multivariate generalization of linear correlation that measures correlation between two matrices. Whereas linear correlation measures how variation in one variable is related to variation in another variable, the Mantel test measures how variation in one matrix (i.e., set of variables) is related to variation in another matrix.</p>
+<p>The application to spatial autocorrelation is obvious. The spatial distance matrix can be calculated from coordinates such as latitude or longitude<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, and compared to the biological distance matrix. When other types of autocorrelation are of interest, you can calculate a distance matrix based on time or on phylogenetic relatedness, or whatever else might be driving the autocorrelation.</p>
+<p><img src="../images/12-01.jpg" class="img-fluid" alt="Schematic of the Mantel test. Pairwise distances are calculated among the same n observations in two multivariate datasets, X and Y, using an appropriate distance metric for each dataset. The Mantel test evaluates the association between the resulting distance matrices, d(X) and d(Y).">{alt-text: “Diagram illustrating a Mantel test. Two matrices, X and Y, each contain the same n observations measured on multiple variables. A distance metric is applied separately to each matrix to calculate pairwise distances among all observations. Arrows from the two resulting distance matrices converge on a Mantel test, which compares distances in X-space with corresponding distances in Y-space.”}</p>
+<p>The <a href="@sec-mtest-mantel">Mantel test</a> works by first calculating two <strong>distance matrices</strong>, which define the <a href="@sec-dist">“distances” or “dissimilarities” between each sample</a>. One distance matrix relates to spatial, temporal, or phylogenetic distance. The other relates to dissimilarity in terms of the measured variables. The dissimilarity metric incorporates information about how much any pair of observations differ in terms of every variable represented in the matrix. The Mantel correlation coefficient <em>r</em> is the linear correlation coefficient (like Pearson’s <em>r</em>) between the two distance matrices. It answers the question, “How is variation in this set of variables related to distance in space (or time, or phylogeny, etc.)?”.</p>
+<p>The example below illustrates another use for the Mantel test: measuring association between two sets of variables taken from the same sample units. In this example, dissimilarity in terms of species composition is related to dissimilarity in soil chemical characteristics.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># biological data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(varespec)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># soil chemistry data</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(varechem)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> varechem</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> varespec</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>dy <span class="ot">&lt;-</span> <span class="fu">vegdist</span>(varespec) <span class="co"># Bray-Curtis metric</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">vegdist</span>(<span class="fu">scale</span>(varechem), <span class="st">"euclid"</span>) <span class="co"># Euclidean metric</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">mantel</span>(dx, dy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Mantel statistic based on Pearson's product-moment correlation 
+
+Call:
+mantel(xdis = dx, ydis = dy) 
+
+Mantel statistic r: 0.3047 
+      Significance: 0.001 
+
+Upper quantiles of permutations (null model):
+  90%   95% 97.5%   99% 
+0.105 0.136 0.169 0.198 
+Permutation: free
+Number of permutations: 999</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>),</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">lend=</span><span class="dv">1</span>, <span class="at">las=</span><span class="dv">1</span>, <span class="at">cex.axis=</span><span class="fl">1.3</span>, <span class="at">cex.lab=</span><span class="fl">1.3</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx, dy, <span class="at">xlab=</span><span class="st">"Chemical dissimilarity"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Vegetation dissimilarity"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>))</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="dv">0</span>, <span class="fl">0.05</span>, </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>     <span class="fu">expression</span>(Mantel<span class="sc">~</span><span class="fu">italic</span>(r)<span class="sc">==</span><span class="fl">0.305</span>),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">adj=</span><span class="dv">0</span>, <span class="at">cex=</span><span class="fl">1.5</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fl">5.38</span>, <span class="fl">0.2</span>, </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Each point represents </span><span class="sc">\n</span><span class="st"> a pair of observations"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex=</span><span class="fl">1.3</span>, <span class="at">adj=</span><span class="dv">0</span>, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch12_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The figure above shows the result visually. The Mantel <em>r</em> statistic describes the sign and magnitude of the correlation between dissimilarity in terms of chemistry (<em>x</em>-axis) and dissimilarity in terms of the plant community (<em>y</em>-axis). It is interpreted just like Pearson’s <em>r</em>. In the plot it is important to realize that each point represents a <em>pair</em> of observations, plotted by the dissimilarities between them. The correct interpretation of this plot is that samples with similar soil chemistry tend to also have similar plant communities. Alternatively, you could say that the larger the difference in soil chemistry, the larger the difference in plant communities (or something like that).</p>
+</section>
+<section id="sec-problems-auto-deal" class="level3" data-number="12.2.3">
+<h3 data-number="12.2.3" class="anchored" data-anchor-id="sec-problems-auto-deal"><span class="header-section-number">12.2.3</span> Dealing with autocorrelation</h3>
+<p>Autocorrelation may or may not be a problem in your dataset. As pointed out by <span class="citation" data-cites="kuehn2012">Kuehn and Dormann (<a href="#ref-kuehn2012" role="doc-biblioref">2012</a>)</span>, there is a difference between autocorrelation in a response variable and autocorrelation in the residuals of a statistical model. Autocorrelation in a response variable can be managed by inclusion of appropriate predictor variables (which may themselves be autocorrelated or correlated; see <a href="@sec-problems-collin">next section</a>). This works because if autocorrelated values can be predicted by a predictor variable, then the autocorrelation is controlled for, by definition.</p>
+<p>Autocorrelation in residuals, however, represents a pattern in the data that is not accounted for. There are methods for accounting for autocorrelated residuals such as conditional autoregressive models (CAR) <span class="citation" data-cites="gelfand2003">(<a href="#ref-gelfand2003" role="doc-biblioref">Gelfand and Vounatsou 2003</a>)</span>, generalized or ordinary least squares models (GLS or OLS), classification and regression trees or CART <span class="citation" data-cites="mccune2002analysis">(<a href="#ref-mccune2002analysis" role="doc-biblioref">McCune <em>et al.</em> 2002</a>)</span>, and mixed models <span class="citation" data-cites="bolker2009">(<a href="#ref-bolker2009" role="doc-biblioref">Bolker <em>et al.</em> 2009</a>)</span>. None of these solutions is appropriate for every situation.</p>
+</section>
+</section>
+<section id="sec-problems-collin" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="sec-problems-collin"><span class="header-section-number">12.3</span> Collinearity</h2>
+<p>Sometimes we face the problem of having predictor variables that are not only related to the response variable, but also related to each other. This phenomenon is called <strong>collinearity</strong>. In large datasets the problem becomes <strong>multicollinearity</strong>, when many variables are related to each other. Including collinear predictor variables in an analysis can severely bias the parameter estimates of that analysis (e.g., regression coefficients) and as a result make the results misleading or not generalizable. The effects of collinear predictor variables are by definition confounded with each other, meaning that the effects cannot be separated <span class="citation" data-cites="dormann2013">(<a href="#ref-dormann2013" role="doc-biblioref">Dormann <em>et al.</em> 2013</a>)</span>.</p>
+<p>The most straightforward way of detecting collinearity is with scatterplot matrices and correlation coefficients (see <a href="ch08.html#sec-plot1-many-pair" class="quarto-xref"><span>Section 8.3.1</span></a>). This is a technique to visualize how many variables in a dataset relate to each other simultaneously. As shown in the linked section, replacing the upper triangle of boxes with the correlation coefficients can help detect potentially problematic pairs of variables. The figure below shows an example from the <code>crabs</code> dataset in package <code>MASS</code>. In this dataset, all of the variables are highly correlated with each other.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ch12_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>If you have many variables, then a figure like the one above can be hard to read or interpret. One solution might be to create a table of correlation coefficients between every pair of variables. The base function <code>cor()</code> can do this, but a better-formatted table takes a little more work.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(crabs, <span class="at">package=</span><span class="st">"MASS"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> crabs</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>dat.cols <span class="ot">&lt;-</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">8</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(x[,dat.cols])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          FL        RW        CL        CW        BD
+FL 1.0000000 0.9069876 0.9788418 0.9649558 0.9876272
+RW 0.9069876 1.0000000 0.8927430 0.9004021 0.8892054
+CL 0.9788418 0.8927430 1.0000000 0.9950225 0.9832038
+CW 0.9649558 0.9004021 0.9950225 1.0000000 0.9678117
+BD 0.9876272 0.8892054 0.9832038 0.9678117 1.0000000</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># better table:</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>vars <span class="ot">&lt;-</span> <span class="fu">names</span>(x)[dat.cols]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># generate every unique pair of two variables by name:</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>cx <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">t</span>(<span class="fu">combn</span>(vars, <span class="dv">2</span>)))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate correlation coefficients for each pair:</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>cx<span class="sc">$</span>r <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(cx)){</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    cx<span class="sc">$</span>r[i] <span class="ot">&lt;-</span> <span class="fu">cor</span>(x[,cx<span class="sc">$</span>X1[i]], x[,cx<span class="sc">$</span>X2[i]])</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>cx</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   X1 X2         r
+1  FL RW 0.9069876
+2  FL CL 0.9788418
+3  FL CW 0.9649558
+4  FL BD 0.9876272
+5  RW CL 0.8927430
+6  RW CW 0.9004021
+7  RW BD 0.8892054
+8  CL CW 0.9950225
+9  CL BD 0.9832038
+10 CW BD 0.9678117</code></pre>
+</div>
+</div>
+<p>The resulting table can then be sorted or filtered by <code>r</code> to identify pairs of variables that are correlated with each other.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not run:</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># filter to |r| &gt; 0.7</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>cx[<span class="fu">which</span>(<span class="fu">abs</span>(cx<span class="sc">$</span>r) <span class="sc">&gt;</span> <span class="fl">0.7</span>),]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><span class="citation" data-cites="dormann2013">Dormann <em>et al.</em> (<a href="#ref-dormann2013" role="doc-biblioref">2013</a>)</span> suggest to use a cutoff of <span class="math inline">\(|r|\)</span> in between 0.5 and 0.7 to identify collinear pairs of variables. When a pair of variables are identified as collinear, the easiest solution is to simply run the analysis without one of them. This is because the variables are redundant, and any conclusions made using one would also be obtained using the other.</p>
+</section>
+<section id="sec-problems-miss" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="sec-problems-miss"><span class="header-section-number">12.4</span> Missing data</h2>
+<p>The last target of exploratory data analysis that we will explore is <strong>missing data</strong>. Data can be missing for many reasons. Equipment failures, human error, natural disasters, and other causes can cause values in your dataset to go missing or otherwise be invalid. How to handle the missing data is up to you as a biologist: <em>there is no one-size-fits-all statistical solution</em>. The two basic ways to deal with missing data are to (1) not deal with it and (2) estimate the missing values.</p>
+<section id="sec-problems-miss-ignore" class="level3" data-number="12.4.1">
+<h3 data-number="12.4.1" class="anchored" data-anchor-id="sec-problems-miss-ignore"><span class="header-section-number">12.4.1</span> Option 1: Ignore missing data</h3>
+<p>The easiest solution is simply to ignore missing data. Consider <a href="../datasets/missing-data-example.csv">this dataset</a>, which contains morphological data on 63 species of bats <span class="citation" data-cites="hutcheon2002">(<a href="#ref-hutcheon2002" role="doc-biblioref">Hutcheon <em>et al.</em> 2002</a>)</span>. Notice that in this version the brain masses (<code>brw</code>) are missing for 3 species of bats.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># replace with your working directory and path!</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>in.name <span class="ot">&lt;-</span> <span class="st">"../datasets/missing-data-example.csv"</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(in.name, <span class="at">header=</span><span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Because there are a lot of data, one option for analyzing this dataset would be to simply ignore the missing observations. For example, if someone was interested in the relationship between body size (variable <code>bow</code>) and brain mass, they could just fit a model and R would (for most methods) automatically ignore missing values. Note that in this example both variables are log-transformed to ensure normality and positivity.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>logbw <span class="ot">&lt;-</span> <span class="fu">log</span>(dat<span class="sc">$</span>bow)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>logbr <span class="ot">&lt;-</span> <span class="fu">log</span>(dat<span class="sc">$</span>brw)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(logbr<span class="sc">~</span>logbw, <span class="at">data=</span>dat)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = logbr ~ logbw, data = dat)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.82879 -0.16408  0.05009  0.19548  0.35881 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  3.96599    0.09476   41.85   &lt;2e-16 ***
+logbw        0.75322    0.02881   26.14   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.2616 on 58 degrees of freedom
+  (3 observations deleted due to missingness)
+Multiple R-squared:  0.9218,    Adjusted R-squared:  0.9204 
+F-statistic: 683.4 on 1 and 58 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>The parameter estimates of intercept = <code>3.9659</code> and slope = <code>0.7532</code> are very close to the values obtained using the full dataset of <code>3.9685</code> and <code>0.7516</code>. In this case, ignoring the missing data worked just fine.</p>
+</section>
+<section id="sec-problems-miss-inter" class="level3" data-number="12.4.2">
+<h3 data-number="12.4.2" class="anchored" data-anchor-id="sec-problems-miss-inter"><span class="header-section-number">12.4.2</span> Option 2: Interpolate or impute missing data</h3>
+<p>If you need to replace the missing data, then the best option is to <strong>interpolate</strong> or <strong>impute</strong> them. How exactly to do this depends on the question being asked. If there is a clear relationship between the variable with missing values and another variable, then you can use that relationship to estimate the missing values. You can also use <strong>multiple imputation</strong> to estimate the missing values using information from several related variables at once. The example below illustrates simple interpolation (aka: single imputation) to replace the missing brain weights using known body masses.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flag missing observations</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">is.na</span>(dat<span class="sc">$</span>brw))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># log transform (if not done already)</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>logbw <span class="ot">&lt;-</span> <span class="fu">log</span>(dat<span class="sc">$</span>bow)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>logbr <span class="ot">&lt;-</span> <span class="fu">log</span>(dat<span class="sc">$</span>brw)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># fit model</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(logbr<span class="sc">~</span>logbw, <span class="at">data=</span>dat)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co"># predict missing logbr at logbw</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">logbw=</span>dat<span class="sc">$</span>logbw[flag])</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>pr <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod1, <span class="at">newdata=</span><span class="fu">data.frame</span>(px))</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co"># insert predicted values</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>logbr[flag] <span class="ot">&lt;-</span> pr</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="co"># back-transform to original scale</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>brw[flag] <span class="ot">&lt;-</span> <span class="fu">exp</span>(dat<span class="sc">$</span>logbr[flag])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The interpolated values are similar to the true values, but with quite a bit of error. The term of art here is “correct to an order of magnitude”.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>brw[flag]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  729.7784  507.7160 2138.6809</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>true.vals <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">597</span>, <span class="dv">543</span>, <span class="dv">2070</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># percentage bias in interpolated values:</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="dv">100</span> <span class="sc">*</span> (dat<span class="sc">$</span>brw[flag]<span class="sc">-</span>true.vals) <span class="sc">/</span> true.vals</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 22.240932 -6.497972  3.317919</code></pre>
+</div>
+</div>
+<p>Interpolation can be improved by predicting the missing values using additional variables. Multiple imputation, like any statistical model, can suffer from the effects of multicollinearity in the “predictors”, so be mindful that you don’t obtain–and use–biased estimates of your missing values. <span class="citation" data-cites="penone2014">Penone <em>et al.</em> (<a href="#ref-penone2014" role="doc-biblioref">2014</a>)</span> reviewed some strategies for imputing missing data in the context of life history traits, but the approaches could be applied to other areas of biology.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-bolker2009" class="csl-entry" role="listitem">
+Bolker BM, Brooks ME, Clark CJ, Geange SW, Poulsen JR, Stevens MHH, White J-SS. 2009. Generalized linear mixed models: A practical guide for ecology and evolution. Trends in Ecology &amp; Evolution 24(3):127–135. <a href="https://doi.org/10.1016/j.tree.2008.10.008">https://doi.org/10.1016/j.tree.2008.10.008</a>
+</div>
+<div id="ref-dormann2013" class="csl-entry" role="listitem">
+Dormann CF, Elith J, Bacher S, Buchmann C, Carl G, Carré G, Marquéz JRG, Gruber B, Lafourcade B, Leitão PJ <em>et al.</em> 2013. Collinearity: A review of methods to deal with it and a simulation study evaluating their performance. Ecography 36(1):27–46. <a href="https://doi.org/10.1111/j.1600-0587.2012.07348.x">https://doi.org/10.1111/j.1600-0587.2012.07348.x</a>
+</div>
+<div id="ref-gelfand2003" class="csl-entry" role="listitem">
+Gelfand AE, Vounatsou P. 2003. Proper multivariate conditional autoregressive models for spatial data analysis. Biostatistics 4(1):11–15. <a href="https://doi.org/10.1093/biostatistics/4.1.11">https://doi.org/10.1093/biostatistics/4.1.11</a>
+</div>
+<div id="ref-hutcheon2002" class="csl-entry" role="listitem">
+Hutcheon JM, Kirsch JAW, Jr TG. 2002. A comparative analysis of brain size in relation to foraging ecology and phylogeny in the <span>C</span>hiroptera. Brain, behavior and evolution 60(3):165–180. <a href="https://doi.org/10.1159/000065938">https://doi.org/10.1159/000065938</a>
+</div>
+<div id="ref-kuehn2012" class="csl-entry" role="listitem">
+Kuehn I, Dormann CF. 2012. <a href="https://doi.org/10.1111/j.1365-2699.2012.02707.x">Less than eight (and a half) misconceptions of spatial analysis</a>. Journal of Biogeography 39(5):995–998.
+</div>
+<div id="ref-mccune2002analysis" class="csl-entry" role="listitem">
+McCune B, Grace JB, Urban DL. 2002. Analysis of ecological communities. MjM software design, Gleneden Beach, Oregon, USA.
+</div>
+<div id="ref-penone2014" class="csl-entry" role="listitem">
+Penone C, Davidson AD, Shoemaker KT, Di Marco M, Rondinini C, Brooks TM, Young BE, Graham CH, Costa GC. 2014. <a href="https://doi.org/10.1111/2041-210X.12232">Imputation of missing data in life-history trait datasets: Which approach performs the best?</a> Methods in Ecology and Evolution 5(9):961–970.
+</div>
+</div>
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>When calculating a distance matrix using geographic coordinates, be sure to account for the curvature of the Earth. Often using unprojected latitude and longitude will produce a misleading distance matrix, because latitude and longitude are not equivalent.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
@@ -850,13 +1280,13 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/part_04.html" class="pagination-link" aria-label="Introductory statistics with R">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Introductory statistics with R</span>
+      <a href="../chapters/ch11.html" class="pagination-link" aria-label="Data transformation and rescaling">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data transformation and rescaling</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../chapters/ch13.html" class="pagination-link" aria-label="Tests comparing groups">
-        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Tests comparing groups</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../chapters/ch13.html" class="pagination-link" aria-label="Planning your data analysis">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Planning your data analysis</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

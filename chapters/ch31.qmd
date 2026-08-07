@@ -1,0 +1,3 @@
+# Advanced R graphics {#sec-plot2}
+
+Base graphics are the best graphics.

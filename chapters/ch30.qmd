@@ -1,0 +1,3 @@
+# Introduction to Bayesian inference for biologists {#sec-bayes}
+
+Bayes bayes bayes.

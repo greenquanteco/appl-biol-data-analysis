@@ -1,3 +1,5 @@
-# Multivariate hypothesis testing {#sec-25}
+# Dissimilarity and distance {#sec-dist}
 
-Anything is permuted.
+Two is company, but three's a crowd.
+
+## Mantel tests

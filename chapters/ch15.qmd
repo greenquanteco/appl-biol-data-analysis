@@ -1,3 +1,7 @@
-# Tests for contingency {#sec-15}
+# Tests comparing groups {#sec-groups}
 
-It's not an X, it's a $\chi$.
+All the t-tests.
+
+## Tests comparing 2 groups
+
+### Two-sample *t*-tests {#sec-groups-2ttest}

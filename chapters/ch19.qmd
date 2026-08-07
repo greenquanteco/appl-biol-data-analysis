@@ -1,11 +1,3 @@
-# GLM for binary and proportional responses {#sec-19}
+# GLM for continuous response data {#sec-glm2}
 
-Even our curves have curves.
-
-It's what's under the curve that counts.
-
-## Logistic GLM for binary responses {#sec-19-logistics}
-
-### Odds ratios {#sec-19-logistics-or}
-
-## Binomial GLM for proportions {#sec-19-binom}
+Still kind of linear.

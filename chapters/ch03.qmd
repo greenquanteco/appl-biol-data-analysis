@@ -1,6 +1,6 @@
-# R data types and objects {#sec-03}
+# R data types and objects {#sec-object}
 
-## R data types {#sec-03-type}
+## R data types {#sec-object-type}
 
 In R, data are stored in **objects** with a well-defined structure. The structures of these objects can facilitate manipulating and retrieving your data. The structure of an R object is determined by its **class**. The format of data (i.e., the kinds of values contained in an object) is referred to as the data **type**. Most R users only encounter types when trying to understand error messages. This is because many R functions will return errors if their inputs are not of the correct type.
 
@@ -184,9 +184,9 @@ rm(T)
 T == (1+1==2)
 ```
 
-### Special values {#sec-03-type-spec}
+### Special values {#sec-object-type-spec}
 
-#### Missing values `NA` {#sec-03-type-spec-na}
+#### Missing values `NA` {#sec-object-type-spec-na}
 
 Missing data in R are labeled as `NA`, or "Not Available". This is R-speak for a blank or missing value. Some functions can ignore `NA`, some cannot. Some functions produce `NA` when you supply them with improper inputs. Note that this is a feature, not a bug. R is set up to produce `NA` by default in many cases to help you track down where the missing values are coming from. Function `is.na()` tests to see if a value is missing.
 
@@ -219,7 +219,7 @@ aa[which(!is.na(aa))]
 rpois(10,-2) 
 ```
 
-#### Infinities {#sec-03-type-spec-inf}
+#### Infinities {#sec-object-type-spec-inf}
 
 Positive and negative infinity ($+\infty$ and $-\infty$) are labeled in R as `Inf` and `–Inf`. Dividing a non-zero number by 0 produces `Inf`. Taking the log of 0 produces `–Inf`. Trying to generate a value greater than R's maximal value can produce `Inf`.
 
@@ -231,7 +231,7 @@ log(0)
 10^10^10
 ```
 
-#### Undefined values {#sec-03-type-spec-nan}
+#### Undefined values {#sec-object-type-spec-nan}
 
 Some values that are undefined are labeled `NaN` (not a number). This means that a value is undefined, not that it is missing (which would be `NA`) or infinite (which would be `Inf` or `-Inf`). Dividing 0 by 0, or taking the log of a negative number, produces `NaN`. The function `is.nan()` tests to see if a value is `NaN`.
 
@@ -242,7 +242,7 @@ Some values that are undefined are labeled `NaN` (not a number). This means that
 log(-1)
 ```
 
-#### Special values are useful {#sec-03-type-spec-why}
+#### Special values are useful {#sec-object-type-spec-why}
 
 Why are there so many special values? Often they are meant to help track down where erroneous values are coming from. If every undefined value returned the same symbol (or word, etc.), then it would be harder to know why a program was returning undefined values. Instead, the different results help point the way:
 
@@ -250,13 +250,13 @@ Why are there so many special values? Often they are meant to help track down wh
 -   `-Inf`: Negative non-zero number divided by 0 *or* `log(0)`.
 -   `NaN`: `0/0` or logarithm of a negative number
 
-## Basic R data structures {#sec-03-struct}
+## Basic R data structures {#sec-object-struct}
 
 In R, data are stored in **objects** with a well-defined structure. The structures of these objects can facilitate manipulating and retrieving your data. The structure of an R object is determined by its class. The format of data (i.e., the kinds of values contained in an object) is referred to as the data type.
 
 For a solid introduction to R classes and data types, refer to [An introduction to R](https://cran.r-project.org/doc/manuals/r-release/R-intro.html), one of the official R help manuals. The book *Data manipulation with R* [@spector2008] is also good. If you want to explore the odder and less benign aspects of R data structures, I recommend the truly excellent [*The R Inferno*](https://www.burns-stat.com/pages/Tutor/R_inferno.pdf) (accessed 2025-08-06).
 
-### Vectors {#sec-03-struct-vect}
+### Vectors {#sec-object-struct-vect}
 
 In R, as in mathematics, a **vector** is an ordered set of values. Vectors are a key concept in statistics and linear algebra. For example, the set $[1,2,3,4,5]$ is a vector. This vector is different than the set (and vector) $[2,3,1,5,4]$. These sets are different vectors because even though they contain the same values, those values are in different orders. In R we could call either of those sets a "vector". Note that we don't call them "lists" because a list is a special kind of object in R that is not synonymous with vector.
 
@@ -403,7 +403,7 @@ mean(my.vec)
 dpois(my.vec, lambda=5)
 ```
 
-#### Atomic vectors {#sec-03-struct-vect-atom}
+#### Atomic vectors {#sec-object-struct-vect-atom}
 
 A final note about vectors: some R functions, help pages, and error messages refer to "atomic vectors". These are any object type whose elements cannot be split (i.e., "atomic" in the way Democritus meant the word). For example, the scalar `2` is considered atomic, being a numeric vector of length 1 whose sole element cannot be split up into something smaller. Likewise, the vector `2:3` is also atomic, because neither of its elements (`2` and `3`) can be split up into small elements. This definition extends to arrays with $\geq3$ dimensions.
 
@@ -499,7 +499,7 @@ a[,"a"]
 
 Atomic vectors can contain 1 and only one type of data: logical, integer, double, character, complex, and raw.
 
-### Data frames {#sec-03-struct-df}
+### Data frames {#sec-object-struct-df}
 
 Most of the time when you work with data in R, you will work with objects of the **data frame** class. A data frame looks and acts a lot like a spreadsheet. One key aspect of data frames is that data frames can store data of more than one type, while vectors, matrices, and arrays cannot. The examples below use the built-in data frame `iris`.
 
@@ -576,9 +576,9 @@ iris2$petal.area <- NULL
 head(iris2)
 ```
 
-We'll explore more aspects of data frames in @sec-05.
+We'll explore more aspects of data frames in @sec-manip.
 
-### Matrices and arrays {#sec-03-struct-mat}
+### Matrices and arrays {#sec-object-struct-mat}
 
 Sometimes you have a structured set of values that does not need to be stored as a data frame, or should not be stored as a data frame for ease of access. These situations call for matrices and arrays.
 
@@ -646,7 +646,7 @@ my.array[1,2,]
 my.array[,2,1:2]
 ```
 
-### Lists {#sec-03-struct-list}
+### Lists {#sec-object-struct-list}
 
 One of the most important kinds of R object is the **list**. A list can be thought of like a *series of containers or buckets*. Each bucket can contain completely unrelated things, or even other series of buckets. Because of this flexibility, lists are extremely versatile and useful in R programming. Many function outputs are really lists (e.g., the outputs of `lm()` or `t.test()`). Data frames are also lists.
 
@@ -714,7 +714,7 @@ a2 <- a[1:2]
 a2
 ```
 
-### S3, S4, and other paradigms {#sec-03-struct-other}
+### S3, S4, and other paradigms {#sec-object-struct-other}
 
 We've seen so far that R is object-oriented. What is little appreciated is that R has at least three object-oriented paradigms: **S3**, **S4**, and **R5**. Most objects in R are S3 objects: data frames, matrices, vectors, etc. The R5 objects are more formally called "Reference Classes" and are still being developed. The S4 objects are only occasionally encountered by the average user, although some R developers believe that S4 objects should replace S3 in general use. Their reasons are esoteric and we won't get into them here. In a nutshell, S4 classes are structured more formally than S3 classes and are better for validation and code testing.
 

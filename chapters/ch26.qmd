@@ -1,3 +1,4 @@
-# Information theoretic model-based inference {#sec-26}
+# Clustering for biologists {#sec-clust}
 
-Ain't AIC grand?
+Two is company, but three's a crowd.
+

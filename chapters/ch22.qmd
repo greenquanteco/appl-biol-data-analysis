@@ -1,3 +1,3 @@
-# Introduction to multivariate data and data analysis {#sec-22}
+# Nonlinear models for biology {#sec-non}
 
-How far is too far?
+Things are not always linear.

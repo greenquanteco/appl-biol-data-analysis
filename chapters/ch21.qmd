@@ -1,3 +1,12 @@
-# Random effects and mixed models {#sec-21}
+# GLM for binary and proportional responses {#sec-glm4}
 
-So random.
+Even our curves have curves.
+
+It's what's under the curve that counts.
+
+## Logistic GLM for binary responses {#sec-glm4-logistics}
+
+### Odds ratios {#sec-glm4-logistics-or}
+
+## Binomial GLM for proportions {#sec-glm4-binom}
+
