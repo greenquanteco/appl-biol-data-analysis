@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>22&nbsp; Nonlinear models for biology – Applied Biological Data Analysis</title>
+<title>22&nbsp; Nonlinear methods for biology – Applied Biological Data Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -84,7 +84,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/part_06.html">Extensions of GLMs: nonlinear and mixed models</a></li><li class="breadcrumb-item"><a href="../chapters/ch22.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear models for biology</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/part_06.html">Extensions of GLMs: nonlinear and mixed models</a></li><li class="breadcrumb-item"><a href="../chapters/ch22.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear methods for biology</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -249,7 +249,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch15.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests comparing groups</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests for differences in mean or location</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -296,7 +296,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch21.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GLM for binary and proportional responses</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GLM for categorical and proportional responses</span></span></a>
   </div>
 </li>
       </ul>
@@ -313,7 +313,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch22.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear models for biology</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear methods for biology</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -421,15 +421,24 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-non-nls" id="toc-sec-non-nls" class="nav-link active" data-scroll-target="#sec-non-nls"><span class="header-section-number">22.1</span> Nonlinear least squares</a></li>
+  <li><a href="#sec-non-gam" id="toc-sec-non-gam" class="nav-link" data-scroll-target="#sec-non-gam"><span class="header-section-number">22.2</span> Generalized additive models (GAM)</a></li>
+  <li><a href="#sec-non-gnm" id="toc-sec-non-gnm" class="nav-link" data-scroll-target="#sec-non-gnm"><span class="header-section-number">22.3</span> Generalized nonlinear models (GNM)</a></li>
+  <li><a href="#sec-non-cart" id="toc-sec-non-cart" class="nav-link" data-scroll-target="#sec-non-cart"><span class="header-section-number">22.4</span> Regression trees for nonlinear patterns</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch22.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/part_06.html">Extensions of GLMs: nonlinear and mixed models</a></li><li class="breadcrumb-item"><a href="../chapters/ch22.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear models for biology</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/part_06.html">Extensions of GLMs: nonlinear and mixed models</a></li><li class="breadcrumb-item"><a href="../chapters/ch22.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear methods for biology</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-non" class="quarto-section-identifier"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear models for biology</span></span></h1>
+<h1 class="title"><span id="sec-non" class="quarto-section-identifier"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear methods for biology</span></span></h1>
 </div>
 
 
@@ -447,8 +456,20 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>Things are not always linear.</p>
+<section id="sec-non-nls" class="level2" data-number="22.1">
+<h2 data-number="22.1" class="anchored" data-anchor-id="sec-non-nls"><span class="header-section-number">22.1</span> Nonlinear least squares</h2>
+</section>
+<section id="sec-non-gam" class="level2" data-number="22.2">
+<h2 data-number="22.2" class="anchored" data-anchor-id="sec-non-gam"><span class="header-section-number">22.2</span> Generalized additive models (GAM)</h2>
+</section>
+<section id="sec-non-gnm" class="level2" data-number="22.3">
+<h2 data-number="22.3" class="anchored" data-anchor-id="sec-non-gnm"><span class="header-section-number">22.3</span> Generalized nonlinear models (GNM)</h2>
+</section>
+<section id="sec-non-cart" class="level2" data-number="22.4">
+<h2 data-number="22.4" class="anchored" data-anchor-id="sec-non-cart"><span class="header-section-number">22.4</span> Regression trees for nonlinear patterns</h2>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -868,5 +889,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch22.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch22.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

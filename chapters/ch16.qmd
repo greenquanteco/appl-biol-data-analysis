@@ -1,3 +1,30 @@
 # Tests for continous patterns {#sec-lin}
 
-Lines lines lines.
+## Correlation {#sec-lin-cor}
+
+### Linear correlation {#sec-lin-cor-lin}
+
+### Nonlinear correlation {#sec-lin-cor-non}
+
+## Linear models {#sec-lin-lm}
+
+### Definition {#sec-lin-lm-def}
+
+### Lots of analyses are linear models in disguise (or can be)  {#sec-lin-lm-disguise}
+
+#### Ordinary linear models {#sec-lin-lm-disguise-lm}
+
+#### Polynomials {#sec-lin-lm-disguise-poly}
+
+#### Exponentials {#sec-lin-lm-disguise-exp}
+
+#### Power laws {#sec-lin-lm-disguise-pow}
+
+## Linear regression {#sec-lin-reg}
+
+## Multiple regression {#sec-lin-mult}
+
+## Analysis of covariance (ANCOVA) {#sec-lin-ancova}
+
+### Main effects and interaction effects  {#sec-lin-ancova-inter}
+

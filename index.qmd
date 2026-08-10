@@ -171,6 +171,8 @@ and distance measures.
 
 [Module 31](chapters/ch31.qmd#sec-plot2) takes a deep dive into building quality graphics using base R.
 
+[Module 32](chapters/ch32.qmd#sec-cart) introduces classification and regression trees (CART), a technique for flexibly capturing and modeling patterns in data without first deciding on a data model.
+
 Finally, [Appendix A](chapters/appa.qmd#sec-append) describes the NEON dataset that I used to build Parts 4 through 8, and the steps taken to process the raw data download to the files provided here.
 
 ## About the author {.unnumbered}

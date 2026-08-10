@@ -1,5 +1,5 @@
-# Dissimilarity and distance {#sec-dist}
+# Dissimilarity and distance {#sec-diss}
 
-Two is company, but three's a crowd.
+How far is too far?
 
 ## Mantel tests

@@ -332,7 +332,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch15.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests comparing groups</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests for differences in mean or location</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -379,7 +379,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch21.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GLM for binary and proportional responses</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GLM for categorical and proportional responses</span></span></a>
   </div>
 </li>
       </ul>
@@ -396,7 +396,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch22.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear models for biology</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear methods for biology</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -610,7 +610,7 @@ window.Quarto = {
 <p><span class="math display">\[y_i \sim Normal\left(z_i,\sigma^2_{residual}\right)\]</span></p>
 <p><span class="math display">\[\log{\left(z_i\right)} = \eta_i\]</span></p>
 <p><span class="math display">\[\eta_i = X\beta\]</span></p>
-<p>Notice where the stochasticity appears. In the transformed LM, normally distributed residual variation is added to <span class="math inline">\(\log{(y_i\right)}\)</span>. In the GLM, observations <span class="math inline">\(y_i\)</span> are drawn from a normal distribution with mean <span class="math inline">\(\mu_i\)</span>, variance <span class="math inline">\(\sigma^2\)</span>, and the predictors are expressed on the log scale. Thus, <code>lm(log(y)~x)</code> and <code>glm(y~x, family=gaussian(link="log"))</code> are not equivalent, even though they both involve logarithms.</p>
+<p>Notice where the stochasticity appears. In the transformed LM, normally distributed residual variation is added to <span class="math inline">\(\log{\left(y_i\right)}\)</span>. In the GLM, observations <span class="math inline">\(y_i\)</span> are drawn from a normal distribution with mean <span class="math inline">\(\mu_i\)</span>, variance <span class="math inline">\(\sigma^2\)</span>, and the predictors are expressed on the log scale. Thus, <code>lm(log(y)~x)</code> and <code>glm(y~x, family=gaussian(link="log"))</code> are not equivalent, even though they both involve logarithms.</p>
 </section>
 <section id="sec-trans-common" class="level2" data-number="11.4">
 <h2 data-number="11.4" class="anchored" data-anchor-id="sec-trans-common"><span class="header-section-number">11.4</span> Common transformations</h2>

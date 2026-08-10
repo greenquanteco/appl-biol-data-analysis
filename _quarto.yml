@@ -74,6 +74,9 @@ book:
     - part: chapters/part_09.qmd
       chapters:
         - chapters/ch30.qmd
+        - chapters/ch31.qmd
+        - chapters/ch32.qmd
+
   appendices:
     - chapters/appa.qmd      
 

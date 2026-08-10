@@ -1,3 +1,11 @@
 # Tests for contingency {#sec-indep}
 
-It's not an X, it's a $\chi$.
+## Fisher's exact test {#sec-indep-fisher}
+
+## Chi-squared test {#sec-indep-chisq}
+
+## G-test {#sec-indep-gtest}
+
+## Contingency tests and odds ratios {#sec-indep-odds}
+
+

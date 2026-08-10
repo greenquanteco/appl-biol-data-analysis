@@ -1,3 +1,275 @@
 # Planning your data analysis {#sec-plan}
 
-What test do I do?
+One of the main questions that biologists have after collecting data is, "What statistical test do I use?" Ignoring the fact that they should have thought about that ***before collecting their data***, the answer to that question depends on the answers to two other questions:
+
+1.  What question are you trying to answer?
+2.  What kind of data do you have?
+
+After [exploring the data](@sec-desc), [summarizing the data](@sec-summ), [thinking about distributions](@sec-dist), [checking data distributions](@sec-dtest), and gaining an understanding of the [patterns](@sec-plot1) and [problems](@sec-problem) in a dataset, it is time to run the main analysis. This guide is designed to help you use what you learned in exploring the data to choose an appropriate analytical strategy.
+
+## How to use this guide {#sec-plan-how}
+
+The sections below list some common analysis strategies that you might use for some common types of biological questions, and guides you through the selection process. This document is meant to serve as a primer and rough guide; it is not meant to be exhaustive. This document is also very much a work in progress. Not every situation is covered, and there might be issues in your dataset that make the recommendations below problematic.
+
+Each section is structured as a dichotomous key, because biologists love dichotomous keys. At each step, choose the option that best applies to your situation If you don't know the answer to a question or which option to choose, you may need to go back and do some more exploratory data analysis. R functions are provided for most methods.
+
+## What question are you trying to answer? {#sec-plan-question}
+
+### Quantifying your question  {#sec-plan-question-quant}
+
+The first thing to nail down is what *statistical question* you are trying to answer. This does not mean what *biological question* you are investigating, but two are related. An example biological question might be:
+
+**How do small mammals (rodents) adapt to live in urban environments?**
+
+This is a good biological question, but it is *not* a question that you can answer with statistics. In order to answer the overarching biological question, we usually need to break it down into smaller chunks: hypotheses that can either be true or false, and predictions (patterns in the data) that would be observed if the hypothesis is true and not observed if a hypothesis is false. For the question above, we might have some working hypothesis like:
+
+**Rodents living in urban environments shift their diet to take advantage of anthropogenic food sources.**
+
+This is a good scientific hypothesis, because it is **falsifiable**. For this or any other hypothesis we need to be able to define:
+
+1.  What would we observe if the hypothesis is not true?
+1.  What would we observe if the hypothesis is true?
+
+For this statement, these are relatively straightforward. We are are closer to a statistical hypothesis, but we're not quite there yet. What does it mean to "shift their diet"? Compared to what? How do we quantify a "shift"?
+
+To make a statistical hypothesis we need to think of *specific quantitative or categorical comparisons that would support or contradict the hypothesis*. For example, here are a few of the potential predictions implied by the hypothesis above:
+
+- Rodents in urban environments will have a **greater proportion** of artificial foods in their feces than conspecific rodents in rural or natural environments.
+- Rodents in urban environments will consume a **smaller number** of different kinds of food than rodents in rural environments because of the availability of calorie-dense foods associated with humans.
+- Rodents in urban environments will spend **less** time foraging and make **shorter** foraging movements than rodents in rural or natural environments.
+- Stable isotope ratios of whole-body tissues in urban animals will be **different than** those ratios in rural animals.
+- Serum triglyceride concentrations will be **correlated with** amount of impervious surface within 150 m of their home range.
+
+These predictions are statements of the kinds of patterns that we should observe if the hypothesis was true. Note the bolded parts: these are quantitative comparisons that can be true or not true.
+
+We can also define their logical negation: what would we observe if the hypothesis was not true? Critically, these predictions include comparison phrases like **greater than** or **smaller number of** or **less time than**. Those comparisons are the sorts of patterns that a statistical model can actually evaluate. Knowing what kind of pattern you are testing is a key step in planning your data analysis.
+
+### Types of questions {#sec-plan-question-types}
+
+Broadly speaking, statistical hypotheses in biology tend to fall into just a few categories:
+
+1. Testing for a *difference in mean or location* between groups.
+1. Testing for a *continuous relationship* between a response variable (or multiple variables) and one or more predictor variables. Also referred to as "predicting" or "modeling" a continuous variable.
+1. Testing for (lack of) *independence between categories* of observations.
+1. *Classifying* observations based on predictor variables.
+
+These categories are not mutually exclusive. Many questions phrased as one category can be reframed into another. How you frame your question depends on many factors and at some point will involve some discretion on your part. *There is often more than one right way analyze a dataset*, but the right ways are a vanishingly small subset of the possible ways to analyze your data.
+
+## Testing for a difference in mean or location {#sec-plan-meanloc}
+
+**Dichotomous key for testing for a difference in mean or location:**
+
+**1.**
+: Single response variable (or one variable tested at a time) → **3**
+
+**1′.**
+: Multiple response variables tested at once → **2**
+
+**2.**
+: Data are appropriate for a parametric multivariate analysis → Try
+  [MANOVA](@sec-mtest-group-man).  
+  R function: `manova()`.
+
+**2′.**
+: Data are not appropriate for MANOVA, or differences are being measured
+  using a distance or dissimilarity measure → Try
+  [permutational MANOVA (PERMANOVA)](@sec-mtest-group-perm).  
+  R function: `vegan::adonis2()`.
+
+**3.**
+: Need to compare values in one group to a target value → **4**
+
+**3′.**
+: Need to compare values in one group to values in at least one other
+  group → **5**
+
+**4.**
+: Data are appropriate for a parametric test → Try a one-sample
+  *t*-test.  
+  R function: `t.test()`.
+
+**4′.**
+: Data are not appropriate for a parametric test → Try a one-sample
+  Wilcoxon signed-rank test.  
+  R function: `wilcox.test()`.
+
+**5.**
+: Comparing two groups in a simple design → **6**
+
+**5′.**
+: Comparing more than two groups, or using a more complex design
+  involving multiple factors, interactions, blocking, or repeated
+  measures → **7**
+
+**6.**
+: Data are appropriate for a parametric test → Try a
+  [two-sample *t*-test](@sec-groups-2samp-2t), including a paired
+  *t*-test if observations are paired or matched.  
+  R function: `t.test()`.
+
+**6′.**
+: Data are not appropriate for a parametric test → Try a
+  [Mann-Whitney test (Wilcoxon rank sum test)](@sec-groups-2samp-wilcoxon),
+  or a Wilcoxon signed-rank test for paired data.  
+  R function: `wilcox.test()`.
+
+**7.**
+: Data are appropriate for a parametric test → Try
+  [ANOVA](@sec-groups-more-anova). This includes designs with multiple
+  factors, interactions, blocking, and repeated measures.  
+  R functions commonly include `lm()` and `aov()`.
+
+**7′.**
+: Data are not appropriate for a parametric test → For a simple
+  independent-groups design, try the
+  [Kruskal-Wallis test](@sec-groups-more-kw). More complex designs may
+  require another method appropriate for the study design.  
+  R function: `kruskal.test()`.
+
+### Additional considerations {#sec-plan-meanloc-addl}
+
+Once you reach a decision from the key above, there are a few more options to consider:
+
+- Are there any **interactions** (see @sec-groups-more-anova-inter and @sec-lin-ancova-inter) between your predictor variables? This means that the effects of two predictors are not additive; i.e., the effect of one variable affects the effect of another variable. Most of the methods above can accommodate interactions. You can use R function `interaction.plot()` to explore potential interactions visually.
+- Is there a hierarchical structure to your data, with the higher-level groups representing variation that you are interested in explaining? This is often called "blocking" and needs to be included in your model. Usually the blocking factor can be included as a predictor in the model (see @sec-groups-more-anova-block).
+- Is there a hierarchical structure to your data, with the higher-level groups representing variance you are not interested in but still need to account for? If so, you may want to consider adding random effects to your model. This creates a **mixed model** (see @sec-mixed).
+
+## Testing for a continuous relationship between two or more variables  {#sec-plan-cont}
+
+**Dichotomous key for testing for a continuous relationship between two or more variables:**
+
+**1.**
+: Need to measure whether two variables vary together, without distinguishing
+  between predictor and response variables → **2**
+
+**1′.**
+: Need to model or predict a response variable using one or more predictor
+  variables → **3**
+
+**2.**
+: Interested in the strength of a linear relationship → Use
+  [Pearson's product-moment correlation, *r*](@sec-lin-cor-lin).  
+  R functions: `cor()` or `cor.test()`.
+
+**2′.**
+: Interested in the strength of a monotonic relationship, or data are
+  ordinal or otherwise inappropriate for Pearson's correlation → Use
+  [Spearman's rank correlation coefficient, $\rho$](@sec-lin-cor-non).  
+  R functions: `cor()` or `cor.test()` with `method="spearman"`.
+
+**3.**
+: Response variable is continuous and can reasonably be modeled using a
+  normal distribution → **4**
+
+**3′.**
+: Response variable is better described by another probability distribution,
+  such as binary, proportion, or count data → Use a
+  [generalized linear model (GLM)](@sec-glm1).  
+  R function: `glm()`.
+
+**4.**
+: Relationship between the response and predictor variables can reasonably
+  be represented by a linear model → Use
+  [linear regression](@sec-lin-reg) or
+  [multiple linear regression](@sec-lin-mult).  
+  R function: `lm()`.
+
+**4′.**
+: Relationship between the response and predictor variables is nonlinear → **5**
+
+**5.**
+: Have a biologically or mathematically meaningful function describing
+  the expected relationship → Use
+  [nonlinear regression](@sec-non-nls).  
+  R function: `nls()`.
+
+**5′.**
+: Shape of the relationship is unknown or needs to be estimated flexibly
+  from the data → Try a
+  [generalized additive model (GAM)](@sec-non-gam) or
+  [regression tree](@sec-non-cart).  
+  R functions: `mgcv::gam()` or `rpart::rpart()`.
+### Additional considerations  {#sec-plan-cont-addl}
+
+Once you reach a decision from the key above, there are a few more options to consider:
+
+- Is there autocorrelation in your data? If so, you may want to consider including an autocorrelation structure.
+- Is there a hierarchical structure to your data, with the higher-level groups representing variance you are not interested in but still need to account for? If so, you may want to consider adding [random effects](@sec-mixed-effects) to your model. This creates a **mixed model**:
+  - Linear models become [linear mixed models (LMM)](@sec-mixed-lme). R function `lme4::lmer()`.
+  - Generalized linear models become [generalized linear mixed models (GLMM)](sec-mixed-glmm). R function `lme4::glmer()`.
+  - Additive models become [generalized additive mixed models (GAMM)](sec-mixed-gamm). R function `mgcv::gamm()`.
+  - NLS models become [nonlinear mixed models (NLME)](sec-mixed-nlme). R function `nlme::nlme()` or `lme4::nlmer()`.
+- Do your data meet most of the assumptions for linear regression, but with heteroscedasticity (non-constant variance in residuals)? You might consider using generalized least squares (GLS) with a different variance structure. R function `nlme::gls()`.
+- Is there severe [multicollinearity](@sec-problems-collin) among your predictor variables? If so, try dropping some of the collinear predictors or try a regularization technique such as ridge or lasso regression. Various R packages.
+-   Do you not have a clear idea of the form of the relationship between your continuous response variable and the predictors? Or, do you not want to assume a data model and just let the data speak for themselves? Try a machine learning technique like boosted regression trees. R function `gbm::gbm()`.
+
+## Relationships between categorical variables  {#sec-plan-cont-ind}
+
+When all variables are categorical, the question being asked is likely something like, "Do the observed frequencies differ between groups?". Such data are usually summarized in a contingency table (R function `ftable()`; see @sec-summ-ftable) and analyzed with a $\chi^2$ test ("chi-squared test"). But, the $\chi^2$ test isn't the only option:
+
+Dichotomous key for tests of independence:
+
+**Dichotomous key for testing independence between categorical variables:**
+
+**1.**
+: Observations are independent → **2**
+
+**1′.**
+: Observations are paired or matched, with a binary categorical response
+  measured twice → Use [McNemar's test](@sec-indep-mcnemar).  
+  R function: `mcnemar.test()`.
+
+**2.**
+: Expected cell counts are sufficiently large → Use a
+  [$\chi^2$ test of independence](@sec-indep-chisq).  
+  R function: `chisq.test()`.
+
+**2′.**
+: Some expected cell counts are too small for the $\chi^2$ approximation
+  to be reliable → Use
+  [Fisher's exact test](@sec-indep-fisher).  
+  R function: `fisher.test()`.
+
+## Classifying observations {#sec-plan-class}
+
+**Dichotomous key for classifying observations:**
+
+**1.**
+: Outcome has two possible categories → **2**
+
+**1′.**
+: Outcome has more than two possible categories → **3**
+
+**2.**
+: Want to model how predictor variables are related to the probability
+  of an outcome → Use
+  [logistic regression](@sec-glm4-logistic).  
+  R function: `glm()` with `family=binomial`.
+
+**2′.**
+: Want a flexible method primarily for classification or prediction → Try
+  a [classification tree](@sec-glm4-cart).  
+  R function: `rpart::rpart()`.
+
+**3.**
+: Outcome categories have a meaningful order → Use
+  ordinal logistic regression (@sec-glm4-ord).
+  R functions include `MASS::polr()` and `ordinal::clm()`.
+
+**3′.**
+: Outcome categories do not have a meaningful order → **4**
+
+**4.**
+: Want to model how predictor variables are related to the probabilities
+  of different outcomes → Try multinomial logistic regression.  
+  R function: `nnet::multinom()`. These methods are beyond the scope
+  of this course.
+
+**4′.**
+: Want a flexible method primarily for classification or prediction → Try
+  a [classification tree](@sec-glm4-cart).  
+  R function: `rpart::rpart()`.
+
+## Conclusions {#sec-plan-conc}
+
+This guide was designed to cover a lot of possible pathways for biological data analysis, but of course there are some situations that aren't covered. By the time you have deconstructed your problem enough to answer the diagnostic questions above, you should be well on your way to figuring out what analysis to use. Whatever you do, make sure that you document your decision and its justification...this will be very helpful later!

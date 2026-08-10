@@ -1,3 +1,11 @@
-# Nonlinear models for biology {#sec-non}
+# Nonlinear methods for biology {#sec-non}
 
 Things are not always linear.
+
+## Nonlinear least squares {#sec-non-nls}
+
+## Generalized additive models (GAM) {#sec-non-gam}
+
+## Generalized nonlinear models (GNM) {#sec-non-gnm}
+
+## Regression trees for nonlinear patterns {#sec-non-cart}

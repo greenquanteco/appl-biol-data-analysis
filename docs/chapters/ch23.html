@@ -249,7 +249,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch15.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests comparing groups</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests for differences in mean or location</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -296,7 +296,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch21.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GLM for binary and proportional responses</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GLM for categorical and proportional responses</span></span></a>
   </div>
 </li>
       </ul>
@@ -313,7 +313,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch22.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear models for biology</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear methods for biology</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -421,8 +421,18 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-mixed-effects" id="toc-sec-mixed-effects" class="nav-link active" data-scroll-target="#sec-mixed-effects"><span class="header-section-number">23.1</span> Fixed and random effects</a></li>
+  <li><a href="#sec-mixed-lme" id="toc-sec-mixed-lme" class="nav-link" data-scroll-target="#sec-mixed-lme"><span class="header-section-number">23.2</span> Linear mixed effects models (LMM)</a></li>
+  <li><a href="#sec-mixed-glmm" id="toc-sec-mixed-glmm" class="nav-link" data-scroll-target="#sec-mixed-glmm"><span class="header-section-number">23.3</span> Generalized linear mixed effects models (GLMM)</a></li>
+  <li><a href="#sec-mixed-nlme" id="toc-sec-mixed-nlme" class="nav-link" data-scroll-target="#sec-mixed-nlme"><span class="header-section-number">23.4</span> Nonlinear mixed effects models (NLME)</a></li>
+  <li><a href="#sec-mixed-gamm" id="toc-sec-mixed-gamm" class="nav-link" data-scroll-target="#sec-mixed-gamm"><span class="header-section-number">23.5</span> Additive mixed models (GAMM)</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch23.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -447,8 +457,23 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>So random.</p>
+<section id="sec-mixed-effects" class="level2" data-number="23.1">
+<h2 data-number="23.1" class="anchored" data-anchor-id="sec-mixed-effects"><span class="header-section-number">23.1</span> Fixed and random effects</h2>
+</section>
+<section id="sec-mixed-lme" class="level2" data-number="23.2">
+<h2 data-number="23.2" class="anchored" data-anchor-id="sec-mixed-lme"><span class="header-section-number">23.2</span> Linear mixed effects models (LMM)</h2>
+</section>
+<section id="sec-mixed-glmm" class="level2" data-number="23.3">
+<h2 data-number="23.3" class="anchored" data-anchor-id="sec-mixed-glmm"><span class="header-section-number">23.3</span> Generalized linear mixed effects models (GLMM)</h2>
+</section>
+<section id="sec-mixed-nlme" class="level2" data-number="23.4">
+<h2 data-number="23.4" class="anchored" data-anchor-id="sec-mixed-nlme"><span class="header-section-number">23.4</span> Nonlinear mixed effects models (NLME)</h2>
+</section>
+<section id="sec-mixed-gamm" class="level2" data-number="23.5">
+<h2 data-number="23.5" class="anchored" data-anchor-id="sec-mixed-gamm"><span class="header-section-number">23.5</span> Additive mixed models (GAMM)</h2>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -853,8 +878,8 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/ch22.html" class="pagination-link" aria-label="Nonlinear models for biology">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear models for biology</span></span>
+      <a href="../chapters/ch22.html" class="pagination-link" aria-label="Nonlinear methods for biology">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear methods for biology</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
@@ -868,5 +893,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch23.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch23.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

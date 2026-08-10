@@ -72,6 +72,35 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -249,7 +278,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch15.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests comparing groups</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests for differences in mean or location</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -296,7 +325,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch21.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GLM for binary and proportional responses</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GLM for categorical and proportional responses</span></span></a>
   </div>
 </li>
       </ul>
@@ -313,7 +342,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch22.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear models for biology</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear methods for biology</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -421,8 +450,27 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-plan-how" id="toc-sec-plan-how" class="nav-link active" data-scroll-target="#sec-plan-how"><span class="header-section-number">13.1</span> How to use this guide</a></li>
+  <li><a href="#sec-plan-question" id="toc-sec-plan-question" class="nav-link" data-scroll-target="#sec-plan-question"><span class="header-section-number">13.2</span> What question are you trying to answer?</a>
+  <ul class="collapse">
+  <li><a href="#sec-plan-question-quant" id="toc-sec-plan-question-quant" class="nav-link" data-scroll-target="#sec-plan-question-quant"><span class="header-section-number">13.2.1</span> Quantifying your question</a></li>
+  <li><a href="#sec-plan-question-types" id="toc-sec-plan-question-types" class="nav-link" data-scroll-target="#sec-plan-question-types"><span class="header-section-number">13.2.2</span> Types of questions</a></li>
+  </ul></li>
+  <li><a href="#sec-plan-meanloc" id="toc-sec-plan-meanloc" class="nav-link" data-scroll-target="#sec-plan-meanloc"><span class="header-section-number">13.3</span> Testing for a difference in mean or location</a>
+  <ul class="collapse">
+  <li><a href="#sec-plan-meanloc-addl" id="toc-sec-plan-meanloc-addl" class="nav-link" data-scroll-target="#sec-plan-meanloc-addl"><span class="header-section-number">13.3.1</span> Additional considerations</a></li>
+  </ul></li>
+  <li><a href="#sec-plan-cont" id="toc-sec-plan-cont" class="nav-link" data-scroll-target="#sec-plan-cont"><span class="header-section-number">13.4</span> Testing for a continuous relationship between two or more variables</a></li>
+  <li><a href="#sec-plan-cont-ind" id="toc-sec-plan-cont-ind" class="nav-link" data-scroll-target="#sec-plan-cont-ind"><span class="header-section-number">13.5</span> Relationships between categorical variables</a></li>
+  <li><a href="#sec-plan-class" id="toc-sec-plan-class" class="nav-link" data-scroll-target="#sec-plan-class"><span class="header-section-number">13.6</span> Classifying observations</a></li>
+  <li><a href="#sec-plan-conc" id="toc-sec-plan-conc" class="nav-link" data-scroll-target="#sec-plan-conc"><span class="header-section-number">13.7</span> Conclusions</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch13.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -446,9 +494,274 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>What test do I do?</p>
+<p>One of the main questions that biologists have after collecting data is, “What statistical test do I use?” Ignoring the fact that they should have thought about that <strong><em>before collecting their data</em></strong>, the answer to that question depends on the answers to two other questions:</p>
+<ol type="1">
+<li>What question are you trying to answer?</li>
+<li>What kind of data do you have?</li>
+</ol>
+<p>After <a href="@sec-desc">exploring the data</a>, <a href="@sec-summ">summarizing the data</a>, <a href="@sec-dist">thinking about distributions</a>, <a href="@sec-dtest">checking data distributions</a>, and gaining an understanding of the <a href="@sec-plot1">patterns</a> and <a href="@sec-problem">problems</a> in a dataset, it is time to run the main analysis. This guide is designed to help you use what you learned in exploring the data to choose an appropriate analytical strategy.</p>
+<section id="sec-plan-how" class="level2" data-number="13.1">
+<h2 data-number="13.1" class="anchored" data-anchor-id="sec-plan-how"><span class="header-section-number">13.1</span> How to use this guide</h2>
+<p>The sections below list some common analysis strategies that you might use for some common types of biological questions, and guides you through the selection process. This document is meant to serve as a primer and rough guide; it is not meant to be exhaustive. This document is also very much a work in progress. Not every situation is covered, and there might be issues in your dataset that make the recommendations below problematic.</p>
+<p>Each section is structured as a dichotomous key, because biologists love dichotomous keys. At each step, choose the option that best applies to your situation If you don’t know the answer to a question or which option to choose, you may need to go back and do some more exploratory data analysis. R functions are provided for most methods.</p>
+</section>
+<section id="sec-plan-question" class="level2" data-number="13.2">
+<h2 data-number="13.2" class="anchored" data-anchor-id="sec-plan-question"><span class="header-section-number">13.2</span> What question are you trying to answer?</h2>
+<section id="sec-plan-question-quant" class="level3" data-number="13.2.1">
+<h3 data-number="13.2.1" class="anchored" data-anchor-id="sec-plan-question-quant"><span class="header-section-number">13.2.1</span> Quantifying your question</h3>
+<p>The first thing to nail down is what <em>statistical question</em> you are trying to answer. This does not mean what <em>biological question</em> you are investigating, but two are related. An example biological question might be:</p>
+<p><strong>How do small mammals (rodents) adapt to live in urban environments?</strong></p>
+<p>This is a good biological question, but it is <em>not</em> a question that you can answer with statistics. In order to answer the overarching biological question, we usually need to break it down into smaller chunks: hypotheses that can either be true or false, and predictions (patterns in the data) that would be observed if the hypothesis is true and not observed if a hypothesis is false. For the question above, we might have some working hypothesis like:</p>
+<p><strong>Rodents living in urban environments shift their diet to take advantage of anthropogenic food sources.</strong></p>
+<p>This is a good scientific hypothesis, because it is <strong>falsifiable</strong>. For this or any other hypothesis we need to be able to define:</p>
+<ol type="1">
+<li>What would we observe if the hypothesis is not true?</li>
+<li>What would we observe if the hypothesis is true?</li>
+</ol>
+<p>For this statement, these are relatively straightforward. We are are closer to a statistical hypothesis, but we’re not quite there yet. What does it mean to “shift their diet”? Compared to what? How do we quantify a “shift”?</p>
+<p>To make a statistical hypothesis we need to think of <em>specific quantitative or categorical comparisons that would support or contradict the hypothesis</em>. For example, here are a few of the potential predictions implied by the hypothesis above:</p>
+<ul>
+<li>Rodents in urban environments will have a <strong>greater proportion</strong> of artificial foods in their feces than conspecific rodents in rural or natural environments.</li>
+<li>Rodents in urban environments will consume a <strong>smaller number</strong> of different kinds of food than rodents in rural environments because of the availability of calorie-dense foods associated with humans.</li>
+<li>Rodents in urban environments will spend <strong>less</strong> time foraging and make <strong>shorter</strong> foraging movements than rodents in rural or natural environments.</li>
+<li>Stable isotope ratios of whole-body tissues in urban animals will be <strong>different than</strong> those ratios in rural animals.</li>
+<li>Serum triglyceride concentrations will be <strong>correlated with</strong> amount of impervious surface within 150 m of their home range.</li>
+</ul>
+<p>These predictions are statements of the kinds of patterns that we should observe if the hypothesis was true. Note the bolded parts: these are quantitative comparisons that can be true or not true.</p>
+<p>We can also define their logical negation: what would we observe if the hypothesis was not true? Critically, these predictions include comparison phrases like <strong>greater than</strong> or <strong>smaller number of</strong> or <strong>less time than</strong>. Those comparisons are the sorts of patterns that a statistical model can actually evaluate. Knowing what kind of pattern you are testing is a key step in planning your data analysis.</p>
+</section>
+<section id="sec-plan-question-types" class="level3" data-number="13.2.2">
+<h3 data-number="13.2.2" class="anchored" data-anchor-id="sec-plan-question-types"><span class="header-section-number">13.2.2</span> Types of questions</h3>
+<p>Broadly speaking, statistical hypotheses in biology tend to fall into just a few categories:</p>
+<ol type="1">
+<li>Testing for a <em>difference in mean or location</em> between groups.</li>
+<li>Testing for a <em>continuous relationship</em> between a response variable (or multiple variables) and one or more predictor variables. Also referred to as “predicting” or “modeling” a continuous variable.</li>
+<li>Testing for (lack of) <em>independence between categories</em> of observations.</li>
+<li><em>Classifying</em> observations based on predictor variables.</li>
+</ol>
+<p>These categories are not mutually exclusive. Many questions phrased as one category can be reframed into another. How you frame your question depends on many factors and at some point will involve some discretion on your part. <em>There is often more than one right way analyze a dataset</em>, but the right ways are a vanishingly small subset of the possible ways to analyze your data.</p>
+</section>
+</section>
+<section id="sec-plan-meanloc" class="level2" data-number="13.3">
+<h2 data-number="13.3" class="anchored" data-anchor-id="sec-plan-meanloc"><span class="header-section-number">13.3</span> Testing for a difference in mean or location</h2>
+<p><strong>Dichotomous key for testing for a difference in mean or location:</strong></p>
+<dl>
+<dt><strong>1.</strong></dt>
+<dd>
+Single response variable (or one variable tested at a time) → <strong>3</strong>
+</dd>
+<dt><strong>1′.</strong></dt>
+<dd>
+Multiple response variables tested at once → <strong>2</strong>
+</dd>
+<dt><strong>2.</strong></dt>
+<dd>
+Data are appropriate for a parametric multivariate analysis → Try <a href="@sec-mtest-group-man">MANOVA</a>.<br>
+R function: <code>manova()</code>.
+</dd>
+<dt><strong>2′.</strong></dt>
+<dd>
+Data are not appropriate for MANOVA, or differences are being measured using a distance or dissimilarity measure → Try <a href="@sec-mtest-group-perm">permutational MANOVA (PERMANOVA)</a>.<br>
+R function: <code>vegan::adonis2()</code>.
+</dd>
+<dt><strong>3.</strong></dt>
+<dd>
+Need to compare values in one group to a target value → <strong>4</strong>
+</dd>
+<dt><strong>3′.</strong></dt>
+<dd>
+Need to compare values in one group to values in at least one other group → <strong>5</strong>
+</dd>
+<dt><strong>4.</strong></dt>
+<dd>
+Data are appropriate for a parametric test → Try a one-sample <em>t</em>-test.<br>
+R function: <code>t.test()</code>.
+</dd>
+<dt><strong>4′.</strong></dt>
+<dd>
+Data are not appropriate for a parametric test → Try a one-sample Wilcoxon signed-rank test.<br>
+R function: <code>wilcox.test()</code>.
+</dd>
+<dt><strong>5.</strong></dt>
+<dd>
+Comparing two groups in a simple design → <strong>6</strong>
+</dd>
+<dt><strong>5′.</strong></dt>
+<dd>
+Comparing more than two groups, or using a more complex design involving multiple factors, interactions, blocking, or repeated measures → <strong>7</strong>
+</dd>
+<dt><strong>6.</strong></dt>
+<dd>
+Data are appropriate for a parametric test → Try a <a href="@sec-groups-2samp-2t">two-sample <em>t</em>-test</a>, including a paired <em>t</em>-test if observations are paired or matched.<br>
+R function: <code>t.test()</code>.
+</dd>
+<dt><strong>6′.</strong></dt>
+<dd>
+Data are not appropriate for a parametric test → Try a <a href="@sec-groups-2samp-wilcoxon">Mann-Whitney test (Wilcoxon rank sum test)</a>, or a Wilcoxon signed-rank test for paired data.<br>
+R function: <code>wilcox.test()</code>.
+</dd>
+<dt><strong>7.</strong></dt>
+<dd>
+Data are appropriate for a parametric test → Try <a href="@sec-groups-more-anova">ANOVA</a>. This includes designs with multiple factors, interactions, blocking, and repeated measures.<br>
+R functions commonly include <code>lm()</code> and <code>aov()</code>.
+</dd>
+<dt><strong>7′.</strong></dt>
+<dd>
+Data are not appropriate for a parametric test → For a simple independent-groups design, try the <a href="@sec-groups-more-kw">Kruskal-Wallis test</a>. More complex designs may require another method appropriate for the study design.<br>
+R function: <code>kruskal.test()</code>.
+</dd>
+</dl>
+<section id="sec-plan-meanloc-addl" class="level3" data-number="13.3.1">
+<h3 data-number="13.3.1" class="anchored" data-anchor-id="sec-plan-meanloc-addl"><span class="header-section-number">13.3.1</span> Additional considerations</h3>
+<p>Once you reach a decision from the key above, there are a few more options to consider:</p>
+<ul>
+<li>Are there any <strong>interactions</strong> (see <a href="ch15.html#sec-groups-more-anova-inter" class="quarto-xref"><span>Section 15.5.1.3</span></a> and <a href="ch16.html#sec-lin-ancova-inter" class="quarto-xref"><span>Section 16.5.1</span></a>) between your predictor variables? This means that the effects of two predictors are not additive; i.e., the effect of one variable affects the effect of another variable. Most of the methods above can accommodate interactions. You can use R function <code>interaction.plot()</code> to explore potential interactions visually.</li>
+<li>Is there a hierarchical structure to your data, with the higher-level groups representing variation that you are interested in explaining? This is often called “blocking” and needs to be included in your model. Usually the blocking factor can be included as a predictor in the model (see <a href="ch15.html#sec-groups-more-anova-block" class="quarto-xref"><span>Section 15.5.1.4</span></a>).</li>
+<li>Is there a hierarchical structure to your data, with the higher-level groups representing variance you are not interested in but still need to account for? If so, you may want to consider adding random effects to your model. This creates a <strong>mixed model</strong> (see <a href="ch23.html" class="quarto-xref"><span>Chapter 23</span></a>).</li>
+</ul>
+</section>
+</section>
+<section id="sec-plan-cont" class="level2" data-number="13.4">
+<h2 data-number="13.4" class="anchored" data-anchor-id="sec-plan-cont"><span class="header-section-number">13.4</span> Testing for a continuous relationship between two or more variables</h2>
+<p><strong>Dichotomous key for testing for a continuous relationship between two or more variables:</strong></p>
+<dl>
+<dt><strong>1.</strong></dt>
+<dd>
+Need to measure whether two variables vary together, without distinguishing between predictor and response variables → <strong>2</strong>
+</dd>
+<dt><strong>1′.</strong></dt>
+<dd>
+Need to model or predict a response variable using one or more predictor variables → <strong>3</strong>
+</dd>
+<dt><strong>2.</strong></dt>
+<dd>
+Interested in the strength of a linear relationship → Use <a href="@sec-lin-cor-lin">Pearson’s product-moment correlation, <em>r</em></a>.<br>
+R functions: <code>cor()</code> or <code>cor.test()</code>.
+</dd>
+<dt><strong>2′.</strong></dt>
+<dd>
+Interested in the strength of a monotonic relationship, or data are ordinal or otherwise inappropriate for Pearson’s correlation → Use <a href="@sec-lin-cor-non">Spearman’s rank correlation coefficient, <span class="math inline">\(\rho\)</span></a>.<br>
+R functions: <code>cor()</code> or <code>cor.test()</code> with <code>method="spearman"</code>.
+</dd>
+<dt><strong>3.</strong></dt>
+<dd>
+Response variable is continuous and can reasonably be modeled using a normal distribution → <strong>4</strong>
+</dd>
+<dt><strong>3′.</strong></dt>
+<dd>
+Response variable is better described by another probability distribution, such as binary, proportion, or count data → Use a <a href="@sec-glm1">generalized linear model (GLM)</a>.<br>
+R function: <code>glm()</code>.
+</dd>
+<dt><strong>4.</strong></dt>
+<dd>
+Relationship between the response and predictor variables can reasonably be represented by a linear model → Use <a href="@sec-lin-reg">linear regression</a> or <a href="@sec-lin-mult">multiple linear regression</a>.<br>
+R function: <code>lm()</code>.
+</dd>
+<dt><strong>4′.</strong></dt>
+<dd>
+Relationship between the response and predictor variables is nonlinear → <strong>5</strong>
+</dd>
+<dt><strong>5.</strong></dt>
+<dd>
+Have a biologically or mathematically meaningful function describing the expected relationship → Use <a href="@sec-non-nls">nonlinear regression</a>.<br>
+R function: <code>nls()</code>.
+</dd>
+<dt><strong>5′.</strong></dt>
+<dd>
+Shape of the relationship is unknown or needs to be estimated flexibly from the data → Try a <a href="@sec-non-gam">generalized additive model (GAM)</a> or <a href="@sec-non-cart">regression tree</a>.<br>
+R functions: <code>mgcv::gam()</code> or <code>rpart::rpart()</code>. ### Additional considerations {#sec-plan-cont-addl}
+</dd>
+</dl>
+<p>Once you reach a decision from the key above, there are a few more options to consider:</p>
+<ul>
+<li>Is there autocorrelation in your data? If so, you may want to consider including an autocorrelation structure.</li>
+<li>Is there a hierarchical structure to your data, with the higher-level groups representing variance you are not interested in but still need to account for? If so, you may want to consider adding <a href="@sec-mixed-effects">random effects</a> to your model. This creates a <strong>mixed model</strong>:
+<ul>
+<li>Linear models become <a href="@sec-mixed-lme">linear mixed models (LMM)</a>. R function <code>lme4::lmer()</code>.</li>
+<li>Generalized linear models become <a href="sec-mixed-glmm">generalized linear mixed models (GLMM)</a>. R function <code>lme4::glmer()</code>.</li>
+<li>Additive models become <a href="sec-mixed-gamm">generalized additive mixed models (GAMM)</a>. R function <code>mgcv::gamm()</code>.</li>
+<li>NLS models become <a href="sec-mixed-nlme">nonlinear mixed models (NLME)</a>. R function <code>nlme::nlme()</code> or <code>lme4::nlmer()</code>.</li>
+</ul></li>
+<li>Do your data meet most of the assumptions for linear regression, but with heteroscedasticity (non-constant variance in residuals)? You might consider using generalized least squares (GLS) with a different variance structure. R function <code>nlme::gls()</code>.</li>
+<li>Is there severe <a href="@sec-problems-collin">multicollinearity</a> among your predictor variables? If so, try dropping some of the collinear predictors or try a regularization technique such as ridge or lasso regression. Various R packages.</li>
+<li>Do you not have a clear idea of the form of the relationship between your continuous response variable and the predictors? Or, do you not want to assume a data model and just let the data speak for themselves? Try a machine learning technique like boosted regression trees. R function <code>gbm::gbm()</code>.</li>
+</ul>
+</section>
+<section id="sec-plan-cont-ind" class="level2" data-number="13.5">
+<h2 data-number="13.5" class="anchored" data-anchor-id="sec-plan-cont-ind"><span class="header-section-number">13.5</span> Relationships between categorical variables</h2>
+<p>When all variables are categorical, the question being asked is likely something like, “Do the observed frequencies differ between groups?”. Such data are usually summarized in a contingency table (R function <code>ftable()</code>; see <a href="ch07.html#sec-summ-ftable" class="quarto-xref"><span>Section 7.3.2</span></a>) and analyzed with a <span class="math inline">\(\chi^2\)</span> test (“chi-squared test”). But, the <span class="math inline">\(\chi^2\)</span> test isn’t the only option:</p>
+<p>Dichotomous key for tests of independence:</p>
+<p><strong>Dichotomous key for testing independence between categorical variables:</strong></p>
+<dl>
+<dt><strong>1.</strong></dt>
+<dd>
+Observations are independent → <strong>2</strong>
+</dd>
+<dt><strong>1′.</strong></dt>
+<dd>
+Observations are paired or matched, with a binary categorical response measured twice → Use <a href="@sec-indep-mcnemar">McNemar’s test</a>.<br>
+R function: <code>mcnemar.test()</code>.
+</dd>
+<dt><strong>2.</strong></dt>
+<dd>
+Expected cell counts are sufficiently large → Use a <a href="@sec-indep-chisq"><span class="math inline">\(\chi^2\)</span> test of independence</a>.<br>
+R function: <code>chisq.test()</code>.
+</dd>
+<dt><strong>2′.</strong></dt>
+<dd>
+Some expected cell counts are too small for the <span class="math inline">\(\chi^2\)</span> approximation to be reliable → Use <a href="@sec-indep-fisher">Fisher’s exact test</a>.<br>
+R function: <code>fisher.test()</code>.
+</dd>
+</dl>
+</section>
+<section id="sec-plan-class" class="level2" data-number="13.6">
+<h2 data-number="13.6" class="anchored" data-anchor-id="sec-plan-class"><span class="header-section-number">13.6</span> Classifying observations</h2>
+<p><strong>Dichotomous key for classifying observations:</strong></p>
+<dl>
+<dt><strong>1.</strong></dt>
+<dd>
+Outcome has two possible categories → <strong>2</strong>
+</dd>
+<dt><strong>1′.</strong></dt>
+<dd>
+Outcome has more than two possible categories → <strong>3</strong>
+</dd>
+<dt><strong>2.</strong></dt>
+<dd>
+Want to model how predictor variables are related to the probability of an outcome → Use <a href="@sec-glm4-logistic">logistic regression</a>.<br>
+R function: <code>glm()</code> with <code>family=binomial</code>.
+</dd>
+<dt><strong>2′.</strong></dt>
+<dd>
+Want a flexible method primarily for classification or prediction → Try a <a href="@sec-glm4-cart">classification tree</a>.<br>
+R function: <code>rpart::rpart()</code>.
+</dd>
+<dt><strong>3.</strong></dt>
+<dd>
+Outcome categories have a meaningful order → Use ordinal logistic regression (<a href="ch21.html#sec-glm4-ord" class="quarto-xref"><span>Section 21.3</span></a>). R functions include <code>MASS::polr()</code> and <code>ordinal::clm()</code>.
+</dd>
+<dt><strong>3′.</strong></dt>
+<dd>
+Outcome categories do not have a meaningful order → <strong>4</strong>
+</dd>
+<dt><strong>4.</strong></dt>
+<dd>
+Want to model how predictor variables are related to the probabilities of different outcomes → Try multinomial logistic regression.<br>
+R function: <code>nnet::multinom()</code>. These methods are beyond the scope of this course.
+</dd>
+<dt><strong>4′.</strong></dt>
+<dd>
+Want a flexible method primarily for classification or prediction → Try a <a href="@sec-glm4-cart">classification tree</a>.<br>
+R function: <code>rpart::rpart()</code>.
+</dd>
+</dl>
+</section>
+<section id="sec-plan-conc" class="level2" data-number="13.7">
+<h2 data-number="13.7" class="anchored" data-anchor-id="sec-plan-conc"><span class="header-section-number">13.7</span> Conclusions</h2>
+<p>This guide was designed to cover a lot of possible pathways for biological data analysis, but of course there are some situations that aren’t covered. By the time you have deconstructed your problem enough to answer the diagnostic questions above, you should be well on your way to figuring out what analysis to use. Whatever you do, make sure that you document your decision and its justification…this will be very helpful later!</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -868,5 +1181,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch13.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch13.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

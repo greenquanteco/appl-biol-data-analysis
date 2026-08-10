@@ -1,3 +1,13 @@
 # Random effects and mixed models {#sec-mixed}
 
 So random.
+
+## Fixed and random effects {#sec-mixed-effects}
+
+## Linear mixed effects models (LMM) {#sec-mixed-lme}
+
+## Generalized linear mixed effects models (GLMM) {#sec-mixed-glmm}
+
+## Nonlinear mixed effects models (NLME) {#sec-mixed-nlme}
+
+## Additive mixed models (GAMM) {#sec-mixed-gamm}

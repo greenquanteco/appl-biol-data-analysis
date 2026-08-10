@@ -1,12 +1,14 @@
-# GLM for binary and proportional responses {#sec-glm4}
+# GLM for categorical and proportional responses {#sec-glm4}
 
 Even our curves have curves.
 
 It's what's under the curve that counts.
 
-## Logistic GLM for binary responses {#sec-glm4-logistics}
+## Logistic GLM for binary responses {#sec-glm4-logistic}
 
 ### Odds ratios {#sec-glm4-logistics-or}
 
 ## Binomial GLM for proportions {#sec-glm4-binom}
+
+## Ordinal logistic regression {#sec-glm4-ord}
 

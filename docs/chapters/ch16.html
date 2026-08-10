@@ -249,7 +249,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch15.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests comparing groups</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests for differences in mean or location</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -296,7 +296,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch21.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GLM for binary and proportional responses</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GLM for categorical and proportional responses</span></span></a>
   </div>
 </li>
       </ul>
@@ -313,7 +313,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch22.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear models for biology</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear methods for biology</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -421,8 +421,29 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-lin-cor" id="toc-sec-lin-cor" class="nav-link active" data-scroll-target="#sec-lin-cor"><span class="header-section-number">16.1</span> Correlation</a>
+  <ul class="collapse">
+  <li><a href="#sec-lin-cor-lin" id="toc-sec-lin-cor-lin" class="nav-link" data-scroll-target="#sec-lin-cor-lin"><span class="header-section-number">16.1.1</span> Linear correlation</a></li>
+  <li><a href="#sec-lin-cor-non" id="toc-sec-lin-cor-non" class="nav-link" data-scroll-target="#sec-lin-cor-non"><span class="header-section-number">16.1.2</span> Nonlinear correlation</a></li>
+  </ul></li>
+  <li><a href="#sec-lin-lm" id="toc-sec-lin-lm" class="nav-link" data-scroll-target="#sec-lin-lm"><span class="header-section-number">16.2</span> Linear models</a>
+  <ul class="collapse">
+  <li><a href="#sec-lin-lm-def" id="toc-sec-lin-lm-def" class="nav-link" data-scroll-target="#sec-lin-lm-def"><span class="header-section-number">16.2.1</span> Definition</a></li>
+  <li><a href="#sec-lin-lm-disguise" id="toc-sec-lin-lm-disguise" class="nav-link" data-scroll-target="#sec-lin-lm-disguise"><span class="header-section-number">16.2.2</span> Lots of analyses are linear models in disguise (or can be)</a></li>
+  </ul></li>
+  <li><a href="#sec-lin-reg" id="toc-sec-lin-reg" class="nav-link" data-scroll-target="#sec-lin-reg"><span class="header-section-number">16.3</span> Linear regression</a></li>
+  <li><a href="#sec-lin-mult" id="toc-sec-lin-mult" class="nav-link" data-scroll-target="#sec-lin-mult"><span class="header-section-number">16.4</span> Multiple regression</a></li>
+  <li><a href="#sec-lin-ancova" id="toc-sec-lin-ancova" class="nav-link" data-scroll-target="#sec-lin-ancova"><span class="header-section-number">16.5</span> Analysis of covariance (ANCOVA)</a>
+  <ul class="collapse">
+  <li><a href="#sec-lin-ancova-inter" id="toc-sec-lin-ancova-inter" class="nav-link" data-scroll-target="#sec-lin-ancova-inter"><span class="header-section-number">16.5.1</span> Main effects and interaction effects</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch16.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -446,9 +467,50 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Lines lines lines.</p>
+<section id="sec-lin-cor" class="level2" data-number="16.1">
+<h2 data-number="16.1" class="anchored" data-anchor-id="sec-lin-cor"><span class="header-section-number">16.1</span> Correlation</h2>
+<section id="sec-lin-cor-lin" class="level3" data-number="16.1.1">
+<h3 data-number="16.1.1" class="anchored" data-anchor-id="sec-lin-cor-lin"><span class="header-section-number">16.1.1</span> Linear correlation</h3>
+</section>
+<section id="sec-lin-cor-non" class="level3" data-number="16.1.2">
+<h3 data-number="16.1.2" class="anchored" data-anchor-id="sec-lin-cor-non"><span class="header-section-number">16.1.2</span> Nonlinear correlation</h3>
+</section>
+</section>
+<section id="sec-lin-lm" class="level2" data-number="16.2">
+<h2 data-number="16.2" class="anchored" data-anchor-id="sec-lin-lm"><span class="header-section-number">16.2</span> Linear models</h2>
+<section id="sec-lin-lm-def" class="level3" data-number="16.2.1">
+<h3 data-number="16.2.1" class="anchored" data-anchor-id="sec-lin-lm-def"><span class="header-section-number">16.2.1</span> Definition</h3>
+</section>
+<section id="sec-lin-lm-disguise" class="level3" data-number="16.2.2">
+<h3 data-number="16.2.2" class="anchored" data-anchor-id="sec-lin-lm-disguise"><span class="header-section-number">16.2.2</span> Lots of analyses are linear models in disguise (or can be)</h3>
+<section id="sec-lin-lm-disguise-lm" class="level4" data-number="16.2.2.1">
+<h4 data-number="16.2.2.1" class="anchored" data-anchor-id="sec-lin-lm-disguise-lm"><span class="header-section-number">16.2.2.1</span> Ordinary linear models</h4>
+</section>
+<section id="sec-lin-lm-disguise-poly" class="level4" data-number="16.2.2.2">
+<h4 data-number="16.2.2.2" class="anchored" data-anchor-id="sec-lin-lm-disguise-poly"><span class="header-section-number">16.2.2.2</span> Polynomials</h4>
+</section>
+<section id="sec-lin-lm-disguise-exp" class="level4" data-number="16.2.2.3">
+<h4 data-number="16.2.2.3" class="anchored" data-anchor-id="sec-lin-lm-disguise-exp"><span class="header-section-number">16.2.2.3</span> Exponentials</h4>
+</section>
+<section id="sec-lin-lm-disguise-pow" class="level4" data-number="16.2.2.4">
+<h4 data-number="16.2.2.4" class="anchored" data-anchor-id="sec-lin-lm-disguise-pow"><span class="header-section-number">16.2.2.4</span> Power laws</h4>
+</section>
+</section>
+</section>
+<section id="sec-lin-reg" class="level2" data-number="16.3">
+<h2 data-number="16.3" class="anchored" data-anchor-id="sec-lin-reg"><span class="header-section-number">16.3</span> Linear regression</h2>
+</section>
+<section id="sec-lin-mult" class="level2" data-number="16.4">
+<h2 data-number="16.4" class="anchored" data-anchor-id="sec-lin-mult"><span class="header-section-number">16.4</span> Multiple regression</h2>
+</section>
+<section id="sec-lin-ancova" class="level2" data-number="16.5">
+<h2 data-number="16.5" class="anchored" data-anchor-id="sec-lin-ancova"><span class="header-section-number">16.5</span> Analysis of covariance (ANCOVA)</h2>
+<section id="sec-lin-ancova-inter" class="level3" data-number="16.5.1">
+<h3 data-number="16.5.1" class="anchored" data-anchor-id="sec-lin-ancova-inter"><span class="header-section-number">16.5.1</span> Main effects and interaction effects</h3>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -853,8 +915,8 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/ch15.html" class="pagination-link" aria-label="Tests comparing groups">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests comparing groups</span></span>
+      <a href="../chapters/ch15.html" class="pagination-link" aria-label="Tests for differences in mean or location">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests for differences in mean or location</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
@@ -868,5 +930,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch16.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch16.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

@@ -5,3 +5,6 @@
 2! Hah ha ha
 
 ## Poisson GLM for counts {#sec-glm3-poisson}
+
+## Negative binomial GLM for overdispersed counts {#sec-glm3-negbin}
+

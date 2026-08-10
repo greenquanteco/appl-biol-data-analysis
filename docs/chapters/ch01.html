@@ -332,7 +332,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch15.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests comparing groups</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests for differences in mean or location</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -379,7 +379,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch21.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GLM for binary and proportional responses</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GLM for categorical and proportional responses</span></span></a>
   </div>
 </li>
       </ul>
@@ -396,7 +396,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch22.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear models for biology</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear methods for biology</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -659,7 +659,7 @@ window.Quarto = {
 </section>
 <section id="where-p-values-come-from" class="level3" data-number="1.4.4">
 <h3 data-number="1.4.4" class="anchored" data-anchor-id="where-p-values-come-from"><span class="header-section-number">1.4.4</span> Where <em>p</em>-values come from</h3>
-<p>So where do <em>p</em>-values come from, anyway? Remember, <em>p</em>-values are an expression of how likely the observed data would be if the null hypothesis was true. Then calculation of a <em>p</em>-value involves assumptions about the size of the effect (i.e., difference between the results if the null is true vs.&nbsp;not true), the variability of the outcome (random or otherwise), and the distribution of different summary statistics of the results assuming that the null hypothesis is true. Let’s consider the example of a <em>t</em>-test. A <em>t</em>-test is used to compare means of two groups. We’ll talk more about them in <a href="ch15.html#sec-groups-2ttest" class="quarto-xref"><span>Section 15.1.1</span></a>. We will use R to simulate some data and explore a basic <em>t</em>-test.</p>
+<p>So where do <em>p</em>-values come from, anyway? Remember, <em>p</em>-values are an expression of how likely the observed data would be if the null hypothesis was true. Then calculation of a <em>p</em>-value involves assumptions about the size of the effect (i.e., difference between the results if the null is true vs.&nbsp;not true), the variability of the outcome (random or otherwise), and the distribution of different summary statistics of the results assuming that the null hypothesis is true. Let’s consider the example of a <em>t</em>-test. A <em>t</em>-test is used to compare means of two groups. We’ll talk more about them in <span class="quarto-unresolved-ref">?sec-groups-2ttest</span>. We will use R to simulate some data and explore a basic <em>t</em>-test.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>

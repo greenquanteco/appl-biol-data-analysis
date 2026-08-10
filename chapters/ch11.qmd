@@ -119,7 +119,7 @@ $$\log{\left(z_i\right)} = \eta_i$$
 
 $$\eta_i = X\beta$$
 
-Notice where the stochasticity appears. In the transformed LM, normally distributed residual variation is added to $\log{(y_i\right)}$. In the GLM, observations $y_i$ are drawn from a normal distribution with mean $\mu_i$, variance $\sigma^2$, and the predictors are expressed on the log scale. Thus, `lm(log(y)~x)` and `glm(y~x, family=gaussian(link="log"))` are not equivalent, even though they both involve logarithms.
+Notice where the stochasticity appears. In the transformed LM, normally distributed residual variation is added to $\log{\left(y_i\right)}$. In the GLM, observations $y_i$ are drawn from a normal distribution with mean $\mu_i$, variance $\sigma^2$, and the predictors are expressed on the log scale. Thus, `lm(log(y)~x)` and `glm(y~x, family=gaussian(link="log"))` are not equivalent, even though they both involve logarithms.
 
 ## Common transformations {#sec-trans-common}
 

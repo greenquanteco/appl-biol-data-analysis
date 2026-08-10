@@ -52,21 +52,87 @@ It must be noted that a large magnitude *Z*-score does ***not*** prove that an o
 
 ### Dealing with outliers
 
+#### Deletion
+
 The easiest way to deal with outliers is simply to delete them. This can be fine if you have a lot of data--many 1000s or even millions of records. I’ve worked with several statisticians who routinely delete observations with response variables in the top and bottom 5 percentiles. This may not always be an appropriate strategy in biology. For one thing, outliers can occur for completely legitimate reasons and deleting them would be discarding important information about the study system.
 
 ***Never*** **delete an observation based solely on its magnitude.**
 
 Data should only be deleted when there is a biological or experimental reason. These might include experimental errors, inappropriate sampling, extraordinary field conditions, etc. Furthermore, you should always document when observations were deleted and why, and disclose that information in your write up and to reviewers. The possibility of including supplemental information or documents with manuscripts leaves little excuse not to be transparent about what observations you deleted and why.
 
-Another way to deal with outliers is to [transform the data](@sec-trans). Variance-stabilizing transformations, such as the log-transform, often have the side-effect of reducing outliers in the data.
+#### Truncation and censoring
 
-The third method for dealing with outliers is **censoring**. Censoring data in statistics means analyzing data as either the measured value or the interval in which the value falls. For example, if a mouse is weighed with a scale that goes up to 60 g, and maxes out the scale, we record the mouse as weighing $\ge$ 60 g. Statistical methods for censored data have been developed but are outside the scope of this course. One popular form of censoring is called **Winsorizing**, where values below the 5th percentile are set to the 5th percentile and values above the 95th percentile are set to the 95th percentile. Censoring is common practice in fields involving certain types of instrumentation. For example, many spectrophotometers (e.g., microplate readers) record optical density (OD) as the amount of light passing through a specimen as a measurement of concentration. Most machines have a lower limit to the OD that they can detect. Observations below this minimum OD might be censored to 0, or to some pre-determined fraction of the minimum detectable OD.
+**Censoring** and **truncation** are options for dealing with extreme values. Censoring data in statistics means analyzing data as either the measured value or the interval in which the value falls. For example, if a mouse is weighed with a scale that goes up to 60 g, and maxes out the scale, we record the mouse as weighing $\ge60$ g. Statistical methods for censored data have been developed but are outside the scope of this course. One popular form of censoring is called **Winsorizing**, where values below the 5th percentile are set to the 5th percentile and values above the 95th percentile are set to the 95th percentile. Censoring is common practice in fields involving certain types of instrumentation. For example, many spectrophotometers (e.g., microplate readers) record optical density (OD) as the amount of light passing through a specimen as a measurement of concentration. Most machines have a lower limit to the OD that they can detect. Observations below this minimum OD might be censored to 0, or to some pre-determined fraction of the minimum detectable OD.
 
-Similar to censoring, outlying data can be removed by **truncation**. Truncation in statistics means ignoring values outside of a certain range. As with deletion, you must be very explicit about what criteria were used to truncate the data.
+Similar to censoring, outlying data can be removed by **truncation**. Truncation in statistics means ignoring values outside of a certain range. As with deletion, you must be very explicit about what criteria were used to truncate the data. Just as with deletion:
 
-**Weighting** is a strategy where observations can be given greater or lesser weight to adjust how much influence they have. This strategy can become very complicated and involve a lot of arbitrary decisions. So, a simpler strategy such as truncation or transformation might be more appropriate.
+***Never*** **remove an observation based solely on its magnitude.**
 
-Finally, researchers can use analysis strategies that are less sensitive to outliers. For example, **robust statistics** use absolute deviations rather than squared deviations. This gives outliers much less influence than under conventional methods based on sums of squared errors. **Nonparametric methods**, particularly those based on rank order, can also be less sensitive to outliers.
+#### Transformation
+
+Another way to deal with outliers is to [transform the data](@sec-trans). Variance-stabilizing transformations, such as the log-transform, often have the side-effect of reducing the influence of outliers in the data.
+
+#### Weighting
+
+**Weighting** is a strategy where observations can be given greater or lesser weight to adjust how much influence they have. In ordinary least squares regression, every observation contributes equally to the sum of squared residuals. Weighted regression instead minimizes a weighted sum,
+
+$$\sum_i^n{w_i\left(y_i-\hat{y_i}\right)^2}$$
+
+where observations with smaller weights $w_i$ have less influence on the fitted models.
+
+Weighting is most straightforward when the weights are known for some external reason. For example, an observation measured with high precision might reasonably receive more weight than an observation measured with low precision. Choosing weights simply because observations appear to be outliers is more difficult, because arbitrary weights can produce arbitrary results.
+
+One approach that formalizes this idea is **robust regression**. Robust regression is a category of techniques that reduces the influence of extreme observations. The most famous version is probably **least absolute deviations** regression, which uses absolute rather than squared deviations. Below we see a version called **Huber M-estimator regression**, which uses iteratively-weighted least squares to arrive at a model in which observations with small residuals receive full weight, while observations with larger residuals are progressively downweighted. 
+
+Here is an example of using Huber regression to fit a linear model with less weight given to extreme values:
+
+```{r}
+# simulate some data
+# according to linear model
+set.seed(123)
+x <- sort(runif(100, 1, 20))
+ey <- 1.5 + 1.8*x
+y <- rnorm(100, ey, 2)
+
+# add a few extreme observations
+outliers <- c(95, 97, 99)
+y[outliers] <- y[outliers] + 20
+pt.cols <- rep("black",100)
+pt.cols[outliers] <- "red"
+
+# make a plot
+plot(x,y, col=pt.cols, cex=1.4)
+legend("topleft", legend=c("Possible outliers", "Not suspected outliers"),
+       col=c("red", "black"), cex=1.2, pch=1)
+```
+
+Let's compare ordinary regression with the possible outliers (`mod1`), ordinary regression without the possible outliers (`mod2`), and robust regression (`mod3`).
+
+```{r}
+my.dat <- data.frame(y=y, x=x)
+mod1 <- lm(y ~ x, data=my.dat)
+mod2 <- lm(y ~ x, data=my.dat[-outliers,])
+mod3 <- MASS::rlm(y ~ x, data=my.dat)
+
+plot(x, y, col=pt.cols, cex=1.4)
+abline(mod1, lwd=3, col="red", lty=2)
+abline(mod2, lwd=3)
+abline(mod3, lwd=3, col="blue", lty=3)
+legend("topleft",
+       legend=c("OLS with outliers",
+                "OLS without outliers",
+                "Robust regression"),
+       lwd=3, lty=c(2,1,3),
+       col=c("red","black","blue"),
+       cex=1.2)
+```
+
+The robust regression finds a line very similar to the model without the outliers, but does so without discarding data.
+
+
+#### Alternative strategies
+
+Finally, researchers can use analysis strategies that are less sensitive to outliers. As mentioned above, there are is a large class of **robust statistics** that use different strategies to give suspected outliers much less influence than under conventional methods based on sums of squared errors. **Nonparametric methods**, particularly those based on rank order, can also be less sensitive to outliers.
 
 Whatever strategy you choose to deal with your outliers, you need to be aware of how much your decision affected the outcome. It is a good idea to analyze your data both with and without suspected outliers to measure how much influence they really have. If the analysis returns the same results with and without the outliers, leave them in.
 
@@ -98,66 +164,39 @@ Semivariograms should always increase, at least initially, because closer observ
 
 ### Mantel tests for autocorrelation {#sec-problems-auto-mantel}
 
-**Spatial autocorrelation** is a particular problem for ecologists and environmental biologists. The [**Mantel test**](@sec-mtest-mantel) can be used to measure spatial autocorrelation as the correlation between distance in space and distance in terms of the measured variables. The Mantel test can be thought of as a multivariate generalization of linear correlation that measures correlation between two matrices. Whereas linear correlation measures how variation in one variable is related to variation in another variable, the Mantel test measures how variation in one matrix (i.e., set of variables) is related to variation in another matrix.
+**Spatial autocorrelation** is an ever-present problem for ecologists and environmental biologists: observations that are closer together in space might be similar to each other in terms of biology, just because they are closer together. The cause of that spatial autocorrelation determines how you need to deal with it in your analysis.
 
-The application to spatial autocorrelation is obvious. The spatial distance matrix can be calculated from coordinates such as latitude or longitude[^07-problems-1], and compared to the biological distance matrix. When other types of autocorrelation are of interest, you can calculate a distance matrix based on time or on phylogenetic relatedness, or whatever else might be driving the autocorrelation.
+The fact that observations close together in space tend to be more similar is not in and of itself a problem. There can be a strong spatial structure in the data that is explained by predictors like latitude, longitude, or some environmental gradient. In other words, the spatial structure may be what you are trying to discover in the first place.
 
-[^07-problems-1]: When calculating a distance matrix using geographic coordinates, be sure to account for the curvature of the Earth. Often using unprojected latitude and longitude will produce a misleading distance matrix, because latitude and longitude are not equivalent.
+Where spatial structure becomes a problem is in the *residuals* of your analysis. If the residuals contain spatial structure *after accounting for environmental and other predictors*, then there is a problem called "lack of independence". This means that observations contain less independent information than the model assumes. Consequently the analysis is conducted with more degrees of freedom than there really are. This inflates the power of the test, increasing the possibility of a false positive (a Type I error).
 
-![Schematic of the Mantel test. Pairwise distances are calculated among the same $n$ observations in two multivariate datasets, $X$ and $Y$, using an appropriate distance metric for each dataset. The Mantel test evaluates the association between the resulting distance matrices, $d(X)$ and $d(Y)$.](../images/12-01.jpg){alt-text: "Diagram illustrating a Mantel test. Two matrices, X and Y, each contain the same n observations measured on multiple variables. A distance metric is applied separately to each matrix to calculate pairwise distances among all observations. Arrows from the two resulting distance matrices converge on a Mantel test, which compares distances in X-space with corresponding distances in Y-space."}
+Historically, biologists often used a [**Mantel test**](@sec-mtest-mantel) to test for spatial autocorrelation in the response variable. Briefly, the Mantel test can be thought of as a multivariate generalization of linear correlation that measures correlation between two matrices. Whereas linear correlation measures how variation in one variable is related to variation in another variable, the Mantel test measures how variation in one matrix is related to variation in another matrix. But given what you just read, you should now recognize that as insufficient:
 
-The [Mantel test](@sec-mtest-mantel) works by first calculating two **distance matrices**, which define the ["distances" or "dissimilarities" between each sample](@sec-dist). One distance matrix relates to spatial, temporal, or phylogenetic distance. The other relates to dissimilarity in terms of the measured variables. The dissimilarity metric incorporates information about how much any pair of observations differ in terms of every variable represented in the matrix. The Mantel correlation coefficient *r* is the linear correlation coefficient (like Pearson's *r*) between the two distance matrices. It answers the question, “How is variation in this set of variables related to distance in space (or time, or phylogeny, etc.)?”.
+1. autocorrelation in response *values* is not necessarily a problem if it can be modeled by predictor variables;
+1. autocorrelation in model residuals is where the problem lies; and,
+1. a Mantel test can fail to detect distance decay in response values, even when residuals are spatially dependent.
 
-The example below illustrates another use for the Mantel test: measuring association between two sets of variables taken from the same sample units. In this example, dissimilarity in terms of species composition is related to dissimilarity in soil chemical characteristics.
+Nowadays, we have a tests specifically designed for measuring spatial autocorrelations. One of the most common is **Moran's** ***I***. This is a common measure of spatial autocorrelation that is easy to interpret: $I>0$ means that nearby observations are more similar than expected; $I\approx0$ means little evidence of spatial autocorrelation; and $I<0$ means that nearby observations tend to be more dissimilar to each other than expected. 
 
+The "than expected" part refers to the amount of similarity expected if the values were distributed randomly with respect to the specified spatial relationships among observations..
 
+We will illustrate use of Moran's *I* in a future module. For now, the basic procedure is to:
 
-```{r}
-library(vegan)
-```
-
-```{r}
-# biological data
-data(varespec)
-
-# soil chemistry data
-data(varechem)
-
-x <- varechem
-y <- varespec
-
-dy <- vegdist(varespec) # Bray-Curtis metric
-dx <- vegdist(scale(varechem), "euclid") # Euclidean metric
-mantel(dx, dy)
-```
-
-```{r, fig.width=7, fig.height=5, fig.align="center"}
-par(mfrow=c(1,1), mar=c(5.1, 5.1, 1.1, 1.1),
-    bty="n", lend=1, las=1, cex.axis=1.3, cex.lab=1.3)
-plot(dx, dy, xlab="Chemical dissimilarity",
-     ylab="Vegetation dissimilarity",
-     ylim=c(0,1), xlim=c(0, 10))
-text(0, 0.05, 
-     expression(Mantel~italic(r)==0.305),
-     adj=0, cex=1.5)
-text(5.38, 0.2, 
-    "Each point represents \n a pair of observations",
-    cex=1.3, adj=0, col="red")
-```
-
-The figure above shows the result visually. The Mantel *r* statistic describes the sign and magnitude of the correlation between dissimilarity in terms of chemistry (*x*-axis) and dissimilarity in terms of the plant community (*y*-axis). It is interpreted just like Pearson’s *r*. In the plot it is important to realize that each point represents a *pair* of observations, plotted by the dissimilarities between them. The correct interpretation of this plot is that samples with similar soil chemistry tend to also have similar plant communities. Alternatively, you could say that the larger the difference in soil chemistry, the larger the difference in plant communities (or something like that).
+1. Define spatial weights for each pair of observations (a kind of distance matrix). These could be based on a distance threshold, nearest neighbors, or geographic distance.
+1. Fit your model (regression, GLM, or whatever).
+1. Test for spatial autocorrelation of the model residuals by calculating Moran's *I* using the spatial weights. One option is the function `spdep::moran.test()`. 
 
 ### Dealing with autocorrelation {#sec-problems-auto-deal}
 
-Autocorrelation may or may not be a problem in your dataset. As pointed out by @kuehn2012, there is a difference between autocorrelation in a response variable and autocorrelation in the residuals of a statistical model. Autocorrelation in a response variable can be managed by inclusion of appropriate predictor variables (which may themselves be autocorrelated or correlated; see [next section](@sec-problems-collin)). This works because if autocorrelated values can be predicted by a predictor variable, then the autocorrelation is controlled for, by definition.
+If you detect significant autocorrelation, don't panic. Autocorrelation may or may not be a problem in your dataset. As pointed out by @kuehn2012, there is a difference between autocorrelation in a response variable and autocorrelation in the residuals of a statistical model. Autocorrelation in a response variable can be managed by inclusion of appropriate predictor variables. This works because if autocorrelated values can be predicted by a predictor variable, then it won't be present in the residuals.
 
-Autocorrelation in residuals, however, represents a pattern in the data that is not accounted for. There are methods for accounting for autocorrelated residuals such as conditional autoregressive models (CAR) [@gelfand2003], generalized or ordinary least squares models (GLS or OLS), classification and regression trees or CART [@mccune2002analysis], and mixed models [@bolker2009]. None of these solutions is appropriate for every situation.
+Autocorrelation in residuals, however, represents spatial structure that is not accounted for by the model. There are methods for accounting for autocorrelated residuals such as generalized least squares models (GLS) with spatial correlation structures [@zuur2007analysing], conditional autoregressive models (CAR) [@gelfand2003], and mixed models that explicitly account for spatial dependence [@bolker2009]. Other approaches may incorporate spatial predictors or smooth spatial trends directly into the model. None of these solutions is appropriate for every situation, so consider the likely cause and spatial scale of the autocorrelation, the goals of the analysis, and what your data can support.
 
 ## Collinearity {#sec-problems-collin}
 
 Sometimes we face the problem of having predictor variables that are not only related to the response variable, but also related to each other. This phenomenon is called **collinearity**. In large datasets the problem becomes **multicollinearity**, when many variables are related to each other. Including collinear predictor variables in an analysis can severely bias the parameter estimates of that analysis (e.g., regression coefficients) and as a result make the results misleading or not generalizable. The effects of collinear predictor variables are by definition confounded with each other, meaning that the effects cannot be separated [@dormann2013].
 
-The most straightforward way of detecting collinearity is with scatterplot matrices and correlation coefficients (see @sec-plot1-many-pair). This is a technique to visualize how many variables in a dataset relate to each other simultaneously. As shown in the linked section, replacing the upper triangle of boxes with the correlation coefficients can help detect potentially problematic pairs of variables. The figure below shows an example from the `crabs` dataset in package `MASS`. In this dataset, all of the variables are highly correlated with each other.
+The most straightforward way of detecting collinearity is with scatterplot matrices and correlation coefficients (see @sec-plot1-many-pair). This is a technique to visualize how many variables in a dataset relate to each other simultaneously. As shown in the linked section, replacing the upper triangle of boxes with the correlation coefficients can help detect potentially problematic pairs of variables. The figure below shows an example from the `crabs` dataset in package `MASS`. In this dataset, all of the variables are highly correlated with each other. Using more than one of them as a predictor in a model would make it hard for the algorithm to distinguish their effects from each other.
 
 ```{r, echo=FALSE, fig.width=8, fig.height=8, fig.align="center"}
 
@@ -188,8 +227,10 @@ data(crabs, package="MASS")
 x <- crabs
 dat.cols <- 4:8
 cor(x[,dat.cols])
+```
 
-# better table:
+```{r}
+# same table as a data frame:
 vars <- names(x)[dat.cols]
 
 # generate every unique pair of two variables by name:

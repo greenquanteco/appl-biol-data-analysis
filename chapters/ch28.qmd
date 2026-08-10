@@ -3,4 +3,14 @@
 Anything is permuted.
 
 
-## Mantel tests {#sec-mtest-mantel}
+## Comparing groups {#sec-mtest-group}
+
+### MANOVA {#sec-mtest-group-man}
+
+### PERMANOVA {#sec-mtest-group-perm}
+
+### MRPP {#sec-mtest-group-mrpp}
+
+## Analyzing dissimilarity {#sec-mtest-dis}
+
+### Mantel tests {#sec-mtest-dis-mantel}

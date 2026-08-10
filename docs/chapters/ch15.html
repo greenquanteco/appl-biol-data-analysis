@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>15&nbsp; Tests comparing groups – Applied Biological Data Analysis</title>
+<title>15&nbsp; Tests for differences in mean or location – Applied Biological Data Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -72,6 +72,35 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -84,7 +113,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/part_04.html">Introductory statistics with R</a></li><li class="breadcrumb-item"><a href="../chapters/ch15.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests comparing groups</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/part_04.html">Introductory statistics with R</a></li><li class="breadcrumb-item"><a href="../chapters/ch15.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests for differences in mean or location</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -249,7 +278,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch15.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests comparing groups</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests for differences in mean or location</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -296,7 +325,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch21.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GLM for binary and proportional responses</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GLM for categorical and proportional responses</span></span></a>
   </div>
 </li>
       </ul>
@@ -313,7 +342,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch22.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear models for biology</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear methods for biology</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -426,9 +455,34 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#tests-comparing-2-groups" id="toc-tests-comparing-2-groups" class="nav-link active" data-scroll-target="#tests-comparing-2-groups"><span class="header-section-number">15.1</span> Tests comparing 2 groups</a>
+  <li><a href="#sec-groups-1samp" id="toc-sec-groups-1samp" class="nav-link active" data-scroll-target="#sec-groups-1samp"><span class="header-section-number">15.1</span> Tests for 1 group</a>
   <ul class="collapse">
-  <li><a href="#sec-groups-2ttest" id="toc-sec-groups-2ttest" class="nav-link" data-scroll-target="#sec-groups-2ttest"><span class="header-section-number">15.1.1</span> Two-sample <em>t</em>-tests</a></li>
+  <li><a href="#sec-groups-1samp-2t" id="toc-sec-groups-1samp-2t" class="nav-link" data-scroll-target="#sec-groups-1samp-2t"><span class="header-section-number">15.1.1</span> One-sample, two-tailed <em>t</em>-test</a></li>
+  <li><a href="#sec-groups-1samp-1t" id="toc-sec-groups-1samp-1t" class="nav-link" data-scroll-target="#sec-groups-1samp-1t"><span class="header-section-number">15.1.2</span> One-sample, one-tailed <em>t</em>-test</a></li>
+  <li><a href="#sec-groups-1samp-tost" id="toc-sec-groups-1samp-tost" class="nav-link" data-scroll-target="#sec-groups-1samp-tost"><span class="header-section-number">15.1.3</span> Equivalence testing</a></li>
+  </ul></li>
+  <li><a href="#sec-groups-2samp" id="toc-sec-groups-2samp" class="nav-link" data-scroll-target="#sec-groups-2samp"><span class="header-section-number">15.2</span> Tests for 2 groups</a>
+  <ul class="collapse">
+  <li><a href="#sec-groups-2samp-2t" id="toc-sec-groups-2samp-2t" class="nav-link" data-scroll-target="#sec-groups-2samp-2t"><span class="header-section-number">15.2.1</span> Two-sample, two-tailed <em>t</em>-tests</a></li>
+  <li><a href="#sec-groups-2samp-1t" id="toc-sec-groups-2samp-1t" class="nav-link" data-scroll-target="#sec-groups-2samp-1t"><span class="header-section-number">15.2.2</span> Two-sample, one-tailed <em>t</em>-tests</a></li>
+  </ul></li>
+  <li><a href="#sec-groups-paired" id="toc-sec-groups-paired" class="nav-link" data-scroll-target="#sec-groups-paired"><span class="header-section-number">15.3</span> Tests for paired data</a>
+  <ul class="collapse">
+  <li><a href="#sec-groups-paired-pt" id="toc-sec-groups-paired-pt" class="nav-link" data-scroll-target="#sec-groups-paired-pt"><span class="header-section-number">15.3.1</span> Paired <em>t</em>-test</a></li>
+  </ul></li>
+  <li><a href="#sec-groups-ttests" id="toc-sec-groups-ttests" class="nav-link" data-scroll-target="#sec-groups-ttests"><span class="header-section-number">15.4</span> <em>t</em>-test summary</a>
+  <ul class="collapse">
+  <li><a href="#sec-groups-2samp-wilcoxon" id="toc-sec-groups-2samp-wilcoxon" class="nav-link" data-scroll-target="#sec-groups-2samp-wilcoxon"><span class="header-section-number">15.4.1</span> Wilcoxon rank-sum test</a></li>
+  </ul></li>
+  <li><a href="#sec-groups-more" id="toc-sec-groups-more" class="nav-link" data-scroll-target="#sec-groups-more"><span class="header-section-number">15.5</span> Tests for 3 or more groups</a>
+  <ul class="collapse">
+  <li><a href="#sec-groups-more-anova" id="toc-sec-groups-more-anova" class="nav-link" data-scroll-target="#sec-groups-more-anova"><span class="header-section-number">15.5.1</span> Analysis of variance</a></li>
+  <li><a href="#sec-groups-more-kw" id="toc-sec-groups-more-kw" class="nav-link" data-scroll-target="#sec-groups-more-kw"><span class="header-section-number">15.5.2</span> Kruskal-Wallis test</a></li>
+  </ul></li>
+  <li><a href="#sec-groups-ord" id="toc-sec-groups-ord" class="nav-link" data-scroll-target="#sec-groups-ord"><span class="header-section-number">15.6</span> Tests with ordered factors</a>
+  <ul class="collapse">
+  <li><a href="#sec-groups-ord-fac" id="toc-sec-groups-ord-fac" class="nav-link" data-scroll-target="#sec-groups-ord-fac"><span class="header-section-number">15.6.1</span> Ordering factors</a></li>
+  <li><a href="#sec-groups-ord-poly" id="toc-sec-groups-ord-poly" class="nav-link" data-scroll-target="#sec-groups-ord-poly"><span class="header-section-number">15.6.2</span> Polynomial patterns in group data</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch15.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -436,9 +490,9 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/part_04.html">Introductory statistics with R</a></li><li class="breadcrumb-item"><a href="../chapters/ch15.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests comparing groups</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/part_04.html">Introductory statistics with R</a></li><li class="breadcrumb-item"><a href="../chapters/ch15.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests for differences in mean or location</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-groups" class="quarto-section-identifier"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests comparing groups</span></span></h1>
+<h1 class="title"><span id="sec-groups" class="quarto-section-identifier"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests for differences in mean or location</span></span></h1>
 </div>
 
 
@@ -456,10 +510,112 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>All the t-tests.</p>
-<section id="tests-comparing-2-groups" class="level2" data-number="15.1">
-<h2 data-number="15.1" class="anchored" data-anchor-id="tests-comparing-2-groups"><span class="header-section-number">15.1</span> Tests comparing 2 groups</h2>
-<section id="sec-groups-2ttest" class="level3" data-number="15.1.1">
-<h3 data-number="15.1.1" class="anchored" data-anchor-id="sec-groups-2ttest"><span class="header-section-number">15.1.1</span> Two-sample <em>t</em>-tests</h3>
+<section id="sec-groups-1samp" class="level2" data-number="15.1">
+<h2 data-number="15.1" class="anchored" data-anchor-id="sec-groups-1samp"><span class="header-section-number">15.1</span> Tests for 1 group</h2>
+<p>When all of the values come from the same set of observations, we can ask questions such as:</p>
+<ul>
+<li><p>Is the mean in this group equal to, or different from, some arbitrary value?</p></li>
+<li><p>Is the mean in this group greater than, or not greater than, some arbitrary value?</p></li>
+</ul>
+<p>These are the domain of <strong>one-sample tests</strong>. The most important is the <strong>one-sample <em>t</em>-test</strong>, which comes in two varieties: one-tailed and two-tailed. All one-sample tests compare the mean of a set of values to some quantity (hypothetical mean) of interest, called μ (the Greek letter “mu”). In a one-tailed test, the null hypothesis is that the underlying population mean is either ≤ or ≥ μ. In a two-tailed test, the null hypothesis is that the population mean is = μ.</p>
+<div class="tip">
+<p><strong>A note on symbology: sample vs.&nbsp;population parameters</strong></p>
+<p>In statistics, we analyze <strong>samples</strong> (randomly-selected subsets of observed entities) to make inferences about <strong>populations</strong> (the hypothetical set of all possible entities which could be included in a sample). For example, if you wanted to know how the population of a nation of 100 million citizens felt about some political issue, it would be time-consuming and expensive to ask each citizen what they thought. Instead, you would sample a randomly selected set of, say, 1000 citizens and then assume that those results reflected the opinion of the entire citizenry. For this assumption to work, your sample must be both random and representative of the entire population.</p>
+<p>Similarly, in science we cannot collect a infinite amount of data, or measure every squirrel in the forest, or any other type of exhaustive and comprehensive data collection. We instead take representative samples of all the possible samples–i.e., the population–and rely on good practices in experimental design to enable us to assume that our sample represents the population.</p>
+<p>The reason I bring this up here is that we need to keep in mind the difference between sample statistics and population statistics. <strong>Sample statistics</strong> are calculated from your data. <strong>Population statistics</strong> are <strong>inferred</strong> from your data using statistical models. This is why statistical tests are commonly referred to as <strong>inferential statistics</strong>, and why simple calculations from data are referred to as <strong>descriptive statistics</strong>.</p>
+<p>The most common descriptive statistics are shown below:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th style="text-align: center;">Sample</th>
+<th style="text-align: center;">Population</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mean</td>
+<td style="text-align: center;"><span class="math inline">\(\bar{x}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\mu\)</span></td>
+</tr>
+<tr class="even">
+<td>Variance</td>
+<td style="text-align: center;"><span class="math inline">\(s^{2}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\sigma^{2}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Standard deviation</td>
+<td style="text-align: center;"><span class="math inline">\(s\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\sigma\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="sec-groups-1samp-2t" class="level3" data-number="15.1.1">
+<h3 data-number="15.1.1" class="anchored" data-anchor-id="sec-groups-1samp-2t"><span class="header-section-number">15.1.1</span> One-sample, two-tailed <em>t</em>-test</h3>
+</section>
+<section id="sec-groups-1samp-1t" class="level3" data-number="15.1.2">
+<h3 data-number="15.1.2" class="anchored" data-anchor-id="sec-groups-1samp-1t"><span class="header-section-number">15.1.2</span> One-sample, one-tailed <em>t</em>-test</h3>
+</section>
+<section id="sec-groups-1samp-tost" class="level3" data-number="15.1.3">
+<h3 data-number="15.1.3" class="anchored" data-anchor-id="sec-groups-1samp-tost"><span class="header-section-number">15.1.3</span> Equivalence testing</h3>
+</section>
+</section>
+<section id="sec-groups-2samp" class="level2" data-number="15.2">
+<h2 data-number="15.2" class="anchored" data-anchor-id="sec-groups-2samp"><span class="header-section-number">15.2</span> Tests for 2 groups</h2>
+<section id="sec-groups-2samp-2t" class="level3" data-number="15.2.1">
+<h3 data-number="15.2.1" class="anchored" data-anchor-id="sec-groups-2samp-2t"><span class="header-section-number">15.2.1</span> Two-sample, two-tailed <em>t</em>-tests</h3>
+</section>
+<section id="sec-groups-2samp-1t" class="level3" data-number="15.2.2">
+<h3 data-number="15.2.2" class="anchored" data-anchor-id="sec-groups-2samp-1t"><span class="header-section-number">15.2.2</span> Two-sample, one-tailed <em>t</em>-tests</h3>
+</section>
+</section>
+<section id="sec-groups-paired" class="level2" data-number="15.3">
+<h2 data-number="15.3" class="anchored" data-anchor-id="sec-groups-paired"><span class="header-section-number">15.3</span> Tests for paired data</h2>
+<section id="sec-groups-paired-pt" class="level3" data-number="15.3.1">
+<h3 data-number="15.3.1" class="anchored" data-anchor-id="sec-groups-paired-pt"><span class="header-section-number">15.3.1</span> Paired <em>t</em>-test</h3>
+</section>
+</section>
+<section id="sec-groups-ttests" class="level2" data-number="15.4">
+<h2 data-number="15.4" class="anchored" data-anchor-id="sec-groups-ttests"><span class="header-section-number">15.4</span> <em>t</em>-test summary</h2>
+<section id="sec-groups-2samp-wilcoxon" class="level3" data-number="15.4.1">
+<h3 data-number="15.4.1" class="anchored" data-anchor-id="sec-groups-2samp-wilcoxon"><span class="header-section-number">15.4.1</span> Wilcoxon rank-sum test</h3>
+</section>
+</section>
+<section id="sec-groups-more" class="level2" data-number="15.5">
+<h2 data-number="15.5" class="anchored" data-anchor-id="sec-groups-more"><span class="header-section-number">15.5</span> Tests for 3 or more groups</h2>
+<section id="sec-groups-more-anova" class="level3" data-number="15.5.1">
+<h3 data-number="15.5.1" class="anchored" data-anchor-id="sec-groups-more-anova"><span class="header-section-number">15.5.1</span> Analysis of variance</h3>
+<section id="sec-groups-more-anova-1way" class="level4" data-number="15.5.1.1">
+<h4 data-number="15.5.1.1" class="anchored" data-anchor-id="sec-groups-more-anova-1way"><span class="header-section-number">15.5.1.1</span> One-way ANOVA without interaction</h4>
+</section>
+<section id="sec-groups-more-anova-ways" class="level4" data-number="15.5.1.2">
+<h4 data-number="15.5.1.2" class="anchored" data-anchor-id="sec-groups-more-anova-ways"><span class="header-section-number">15.5.1.2</span> Two- or more way ANOVA</h4>
+</section>
+<section id="sec-groups-more-anova-inter" class="level4" data-number="15.5.1.3">
+<h4 data-number="15.5.1.3" class="anchored" data-anchor-id="sec-groups-more-anova-inter"><span class="header-section-number">15.5.1.3</span> ANOVA with interaction</h4>
+</section>
+<section id="sec-groups-more-anova-block" class="level4" data-number="15.5.1.4">
+<h4 data-number="15.5.1.4" class="anchored" data-anchor-id="sec-groups-more-anova-block"><span class="header-section-number">15.5.1.4</span> Blocking designs</h4>
+</section>
+<section id="sec-groups-more-anova-tukey" class="level4" data-number="15.5.1.5">
+<h4 data-number="15.5.1.5" class="anchored" data-anchor-id="sec-groups-more-anova-tukey"><span class="header-section-number">15.5.1.5</span> Tukey’s HSD post hoc test</h4>
+</section>
+</section>
+<section id="sec-groups-more-kw" class="level3" data-number="15.5.2">
+<h3 data-number="15.5.2" class="anchored" data-anchor-id="sec-groups-more-kw"><span class="header-section-number">15.5.2</span> Kruskal-Wallis test</h3>
+<section id="sec-groups-more-kw-dunn" class="level4" data-number="15.5.2.1">
+<h4 data-number="15.5.2.1" class="anchored" data-anchor-id="sec-groups-more-kw-dunn"><span class="header-section-number">15.5.2.1</span> Dunn’s test</h4>
+</section>
+</section>
+</section>
+<section id="sec-groups-ord" class="level2" data-number="15.6">
+<h2 data-number="15.6" class="anchored" data-anchor-id="sec-groups-ord"><span class="header-section-number">15.6</span> Tests with ordered factors</h2>
+<section id="sec-groups-ord-fac" class="level3" data-number="15.6.1">
+<h3 data-number="15.6.1" class="anchored" data-anchor-id="sec-groups-ord-fac"><span class="header-section-number">15.6.1</span> Ordering factors</h3>
+</section>
+<section id="sec-groups-ord-poly" class="level3" data-number="15.6.2">
+<h3 data-number="15.6.2" class="anchored" data-anchor-id="sec-groups-ord-poly"><span class="header-section-number">15.6.2</span> Polynomial patterns in group data</h3>
 
 
 </section>

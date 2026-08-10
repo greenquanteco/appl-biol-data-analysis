@@ -332,7 +332,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch15.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests comparing groups</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Tests for differences in mean or location</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -379,7 +379,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch21.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GLM for binary and proportional responses</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GLM for categorical and proportional responses</span></span></a>
   </div>
 </li>
       </ul>
@@ -396,7 +396,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch22.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear models for biology</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Nonlinear methods for biology</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -575,15 +575,89 @@ window.Quarto = {
 </section>
 <section id="dealing-with-outliers" class="level3" data-number="12.1.2">
 <h3 data-number="12.1.2" class="anchored" data-anchor-id="dealing-with-outliers"><span class="header-section-number">12.1.2</span> Dealing with outliers</h3>
+<section id="deletion" class="level4" data-number="12.1.2.1">
+<h4 data-number="12.1.2.1" class="anchored" data-anchor-id="deletion"><span class="header-section-number">12.1.2.1</span> Deletion</h4>
 <p>The easiest way to deal with outliers is simply to delete them. This can be fine if you have a lot of data–many 1000s or even millions of records. I’ve worked with several statisticians who routinely delete observations with response variables in the top and bottom 5 percentiles. This may not always be an appropriate strategy in biology. For one thing, outliers can occur for completely legitimate reasons and deleting them would be discarding important information about the study system.</p>
 <p><strong><em>Never</em></strong> <strong>delete an observation based solely on its magnitude.</strong></p>
 <p>Data should only be deleted when there is a biological or experimental reason. These might include experimental errors, inappropriate sampling, extraordinary field conditions, etc. Furthermore, you should always document when observations were deleted and why, and disclose that information in your write up and to reviewers. The possibility of including supplemental information or documents with manuscripts leaves little excuse not to be transparent about what observations you deleted and why.</p>
-<p>Another way to deal with outliers is to <a href="@sec-trans">transform the data</a>. Variance-stabilizing transformations, such as the log-transform, often have the side-effect of reducing outliers in the data.</p>
-<p>The third method for dealing with outliers is <strong>censoring</strong>. Censoring data in statistics means analyzing data as either the measured value or the interval in which the value falls. For example, if a mouse is weighed with a scale that goes up to 60 g, and maxes out the scale, we record the mouse as weighing <span class="math inline">\(\ge\)</span> 60 g. Statistical methods for censored data have been developed but are outside the scope of this course. One popular form of censoring is called <strong>Winsorizing</strong>, where values below the 5th percentile are set to the 5th percentile and values above the 95th percentile are set to the 95th percentile. Censoring is common practice in fields involving certain types of instrumentation. For example, many spectrophotometers (e.g., microplate readers) record optical density (OD) as the amount of light passing through a specimen as a measurement of concentration. Most machines have a lower limit to the OD that they can detect. Observations below this minimum OD might be censored to 0, or to some pre-determined fraction of the minimum detectable OD.</p>
-<p>Similar to censoring, outlying data can be removed by <strong>truncation</strong>. Truncation in statistics means ignoring values outside of a certain range. As with deletion, you must be very explicit about what criteria were used to truncate the data.</p>
-<p><strong>Weighting</strong> is a strategy where observations can be given greater or lesser weight to adjust how much influence they have. This strategy can become very complicated and involve a lot of arbitrary decisions. So, a simpler strategy such as truncation or transformation might be more appropriate.</p>
-<p>Finally, researchers can use analysis strategies that are less sensitive to outliers. For example, <strong>robust statistics</strong> use absolute deviations rather than squared deviations. This gives outliers much less influence than under conventional methods based on sums of squared errors. <strong>Nonparametric methods</strong>, particularly those based on rank order, can also be less sensitive to outliers.</p>
+</section>
+<section id="truncation-and-censoring" class="level4" data-number="12.1.2.2">
+<h4 data-number="12.1.2.2" class="anchored" data-anchor-id="truncation-and-censoring"><span class="header-section-number">12.1.2.2</span> Truncation and censoring</h4>
+<p><strong>Censoring</strong> and <strong>truncation</strong> are options for dealing with extreme values. Censoring data in statistics means analyzing data as either the measured value or the interval in which the value falls. For example, if a mouse is weighed with a scale that goes up to 60 g, and maxes out the scale, we record the mouse as weighing <span class="math inline">\(\ge60\)</span> g. Statistical methods for censored data have been developed but are outside the scope of this course. One popular form of censoring is called <strong>Winsorizing</strong>, where values below the 5th percentile are set to the 5th percentile and values above the 95th percentile are set to the 95th percentile. Censoring is common practice in fields involving certain types of instrumentation. For example, many spectrophotometers (e.g., microplate readers) record optical density (OD) as the amount of light passing through a specimen as a measurement of concentration. Most machines have a lower limit to the OD that they can detect. Observations below this minimum OD might be censored to 0, or to some pre-determined fraction of the minimum detectable OD.</p>
+<p>Similar to censoring, outlying data can be removed by <strong>truncation</strong>. Truncation in statistics means ignoring values outside of a certain range. As with deletion, you must be very explicit about what criteria were used to truncate the data. Just as with deletion:</p>
+<p><strong><em>Never</em></strong> <strong>remove an observation based solely on its magnitude.</strong></p>
+</section>
+<section id="transformation" class="level4" data-number="12.1.2.3">
+<h4 data-number="12.1.2.3" class="anchored" data-anchor-id="transformation"><span class="header-section-number">12.1.2.3</span> Transformation</h4>
+<p>Another way to deal with outliers is to <a href="@sec-trans">transform the data</a>. Variance-stabilizing transformations, such as the log-transform, often have the side-effect of reducing the influence of outliers in the data.</p>
+</section>
+<section id="weighting" class="level4" data-number="12.1.2.4">
+<h4 data-number="12.1.2.4" class="anchored" data-anchor-id="weighting"><span class="header-section-number">12.1.2.4</span> Weighting</h4>
+<p><strong>Weighting</strong> is a strategy where observations can be given greater or lesser weight to adjust how much influence they have. In ordinary least squares regression, every observation contributes equally to the sum of squared residuals. Weighted regression instead minimizes a weighted sum,</p>
+<p><span class="math display">\[\sum_i^n{w_i\left(y_i-\hat{y_i}\right)^2}\]</span></p>
+<p>where observations with smaller weights <span class="math inline">\(w_i\)</span> have less influence on the fitted models.</p>
+<p>Weighting is most straightforward when the weights are known for some external reason. For example, an observation measured with high precision might reasonably receive more weight than an observation measured with low precision. Choosing weights simply because observations appear to be outliers is more difficult, because arbitrary weights can produce arbitrary results.</p>
+<p>One approach that formalizes this idea is <strong>robust regression</strong>. Robust regression is a category of techniques that reduces the influence of extreme observations. The most famous version is probably <strong>least absolute deviations</strong> regression, which uses absolute rather than squared deviations. Below we see a version called <strong>Huber M-estimator regression</strong>, which uses iteratively-weighted least squares to arrive at a model in which observations with small residuals receive full weight, while observations with larger residuals are progressively downweighted.</p>
+<p>Here is an example of using Huber regression to fit a linear model with less weight given to extreme values:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># simulate some data</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># according to linear model</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">runif</span>(<span class="dv">100</span>, <span class="dv">1</span>, <span class="dv">20</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>ey <span class="ot">&lt;-</span> <span class="fl">1.5</span> <span class="sc">+</span> <span class="fl">1.8</span><span class="sc">*</span>x</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, ey, <span class="dv">2</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># add a few extreme observations</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>outliers <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">95</span>, <span class="dv">97</span>, <span class="dv">99</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>y[outliers] <span class="ot">&lt;-</span> y[outliers] <span class="sc">+</span> <span class="dv">20</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>pt.cols <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">"black"</span>,<span class="dv">100</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>pt.cols[outliers] <span class="ot">&lt;-</span> <span class="st">"red"</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># make a plot</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x,y, <span class="at">col=</span>pt.cols, <span class="at">cex=</span><span class="fl">1.4</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"Possible outliers"</span>, <span class="st">"Not suspected outliers"</span>),</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"black"</span>), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">pch=</span><span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch12_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Let’s compare ordinary regression with the possible outliers (<code>mod1</code>), ordinary regression without the possible outliers (<code>mod2</code>), and robust regression (<code>mod3</code>).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>my.dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y=</span>y, <span class="at">x=</span>x)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data=</span>my.dat)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>mod2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data=</span>my.dat[<span class="sc">-</span>outliers,])</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>mod3 <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">rlm</span>(y <span class="sc">~</span> x, <span class="at">data=</span>my.dat)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col=</span>pt.cols, <span class="at">cex=</span><span class="fl">1.4</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(mod1, <span class="at">lwd=</span><span class="dv">3</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(mod2, <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(mod3, <span class="at">lwd=</span><span class="dv">3</span>, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lty=</span><span class="dv">3</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"OLS with outliers"</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                <span class="st">"OLS without outliers"</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Robust regression"</span>),</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">lwd=</span><span class="dv">3</span>, <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">3</span>),</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>,<span class="st">"black"</span>,<span class="st">"blue"</span>),</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex=</span><span class="fl">1.2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch12_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The robust regression finds a line very similar to the model without the outliers, but does so without discarding data.</p>
+</section>
+<section id="alternative-strategies" class="level4" data-number="12.1.2.5">
+<h4 data-number="12.1.2.5" class="anchored" data-anchor-id="alternative-strategies"><span class="header-section-number">12.1.2.5</span> Alternative strategies</h4>
+<p>Finally, researchers can use analysis strategies that are less sensitive to outliers. As mentioned above, there are is a large class of <strong>robust statistics</strong> that use different strategies to give suspected outliers much less influence than under conventional methods based on sums of squared errors. <strong>Nonparametric methods</strong>, particularly those based on rank order, can also be less sensitive to outliers.</p>
 <p>Whatever strategy you choose to deal with your outliers, you need to be aware of how much your decision affected the outcome. It is a good idea to analyze your data both with and without suspected outliers to measure how much influence they really have. If the analysis returns the same results with and without the outliers, leave them in.</p>
+</section>
 </section>
 </section>
 <section id="sec-problems-auto" class="level2" data-number="12.2">
@@ -635,91 +709,49 @@ window.Quarto = {
 </section>
 <section id="sec-problems-auto-mantel" class="level3" data-number="12.2.2">
 <h3 data-number="12.2.2" class="anchored" data-anchor-id="sec-problems-auto-mantel"><span class="header-section-number">12.2.2</span> Mantel tests for autocorrelation</h3>
-<p><strong>Spatial autocorrelation</strong> is a particular problem for ecologists and environmental biologists. The <a href="@sec-mtest-mantel"><strong>Mantel test</strong></a> can be used to measure spatial autocorrelation as the correlation between distance in space and distance in terms of the measured variables. The Mantel test can be thought of as a multivariate generalization of linear correlation that measures correlation between two matrices. Whereas linear correlation measures how variation in one variable is related to variation in another variable, the Mantel test measures how variation in one matrix (i.e., set of variables) is related to variation in another matrix.</p>
-<p>The application to spatial autocorrelation is obvious. The spatial distance matrix can be calculated from coordinates such as latitude or longitude<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, and compared to the biological distance matrix. When other types of autocorrelation are of interest, you can calculate a distance matrix based on time or on phylogenetic relatedness, or whatever else might be driving the autocorrelation.</p>
-<p><img src="../images/12-01.jpg" class="img-fluid" alt="Schematic of the Mantel test. Pairwise distances are calculated among the same n observations in two multivariate datasets, X and Y, using an appropriate distance metric for each dataset. The Mantel test evaluates the association between the resulting distance matrices, d(X) and d(Y).">{alt-text: “Diagram illustrating a Mantel test. Two matrices, X and Y, each contain the same n observations measured on multiple variables. A distance metric is applied separately to each matrix to calculate pairwise distances among all observations. Arrows from the two resulting distance matrices converge on a Mantel test, which compares distances in X-space with corresponding distances in Y-space.”}</p>
-<p>The <a href="@sec-mtest-mantel">Mantel test</a> works by first calculating two <strong>distance matrices</strong>, which define the <a href="@sec-dist">“distances” or “dissimilarities” between each sample</a>. One distance matrix relates to spatial, temporal, or phylogenetic distance. The other relates to dissimilarity in terms of the measured variables. The dissimilarity metric incorporates information about how much any pair of observations differ in terms of every variable represented in the matrix. The Mantel correlation coefficient <em>r</em> is the linear correlation coefficient (like Pearson’s <em>r</em>) between the two distance matrices. It answers the question, “How is variation in this set of variables related to distance in space (or time, or phylogeny, etc.)?”.</p>
-<p>The example below illustrates another use for the Mantel test: measuring association between two sets of variables taken from the same sample units. In this example, dissimilarity in terms of species composition is related to dissimilarity in soil chemical characteristics.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># biological data</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(varespec)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># soil chemistry data</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(varechem)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> varechem</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> varespec</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>dy <span class="ot">&lt;-</span> <span class="fu">vegdist</span>(varespec) <span class="co"># Bray-Curtis metric</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">vegdist</span>(<span class="fu">scale</span>(varechem), <span class="st">"euclid"</span>) <span class="co"># Euclidean metric</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">mantel</span>(dx, dy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Mantel statistic based on Pearson's product-moment correlation 
-
-Call:
-mantel(xdis = dx, ydis = dy) 
-
-Mantel statistic r: 0.3047 
-      Significance: 0.001 
-
-Upper quantiles of permutations (null model):
-  90%   95% 97.5%   99% 
-0.105 0.136 0.169 0.198 
-Permutation: free
-Number of permutations: 999</code></pre>
-</div>
-</div>
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>),</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">lend=</span><span class="dv">1</span>, <span class="at">las=</span><span class="dv">1</span>, <span class="at">cex.axis=</span><span class="fl">1.3</span>, <span class="at">cex.lab=</span><span class="fl">1.3</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx, dy, <span class="at">xlab=</span><span class="st">"Chemical dissimilarity"</span>,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Vegetation dissimilarity"</span>,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>))</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="dv">0</span>, <span class="fl">0.05</span>, </span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>     <span class="fu">expression</span>(Mantel<span class="sc">~</span><span class="fu">italic</span>(r)<span class="sc">==</span><span class="fl">0.305</span>),</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">adj=</span><span class="dv">0</span>, <span class="at">cex=</span><span class="fl">1.5</span>)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fl">5.38</span>, <span class="fl">0.2</span>, </span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Each point represents </span><span class="sc">\n</span><span class="st"> a pair of observations"</span>,</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex=</span><span class="fl">1.3</span>, <span class="at">adj=</span><span class="dv">0</span>, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="ch12_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The figure above shows the result visually. The Mantel <em>r</em> statistic describes the sign and magnitude of the correlation between dissimilarity in terms of chemistry (<em>x</em>-axis) and dissimilarity in terms of the plant community (<em>y</em>-axis). It is interpreted just like Pearson’s <em>r</em>. In the plot it is important to realize that each point represents a <em>pair</em> of observations, plotted by the dissimilarities between them. The correct interpretation of this plot is that samples with similar soil chemistry tend to also have similar plant communities. Alternatively, you could say that the larger the difference in soil chemistry, the larger the difference in plant communities (or something like that).</p>
+<p><strong>Spatial autocorrelation</strong> is an ever-present problem for ecologists and environmental biologists: observations that are closer together in space might be similar to each other in terms of biology, just because they are closer together. The cause of that spatial autocorrelation determines how you need to deal with it in your analysis.</p>
+<p>The fact that observations close together in space tend to be more similar is not in and of itself a problem. There can be a strong spatial structure in the data that is explained by predictors like latitude, longitude, or some environmental gradient. In other words, the spatial structure may be what you are trying to discover in the first place.</p>
+<p>Where spatial structure becomes a problem is in the <em>residuals</em> of your analysis. If the residuals contain spatial structure <em>after accounting for environmental and other predictors</em>, then there is a problem called “lack of independence”. This means that observations contain less independent information than the model assumes. Consequently the analysis is conducted with more degrees of freedom than there really are. This inflates the power of the test, increasing the possibility of a false positive (a Type I error).</p>
+<p>Historically, biologists often used a <a href="@sec-mtest-mantel"><strong>Mantel test</strong></a> to test for spatial autocorrelation in the response variable. Briefly, the Mantel test can be thought of as a multivariate generalization of linear correlation that measures correlation between two matrices. Whereas linear correlation measures how variation in one variable is related to variation in another variable, the Mantel test measures how variation in one matrix is related to variation in another matrix. But given what you just read, you should now recognize that as insufficient:</p>
+<ol type="1">
+<li>autocorrelation in response <em>values</em> is not necessarily a problem if it can be modeled by predictor variables;</li>
+<li>autocorrelation in model residuals is where the problem lies; and,</li>
+<li>a Mantel test can fail to detect distance decay in response values, even when residuals are spatially dependent.</li>
+</ol>
+<p>Nowadays, we have a tests specifically designed for measuring spatial autocorrelations. One of the most common is <strong>Moran’s</strong> <strong><em>I</em></strong>. This is a common measure of spatial autocorrelation that is easy to interpret: <span class="math inline">\(I&gt;0\)</span> means that nearby observations are more similar than expected; <span class="math inline">\(I\approx0\)</span> means little evidence of spatial autocorrelation; and <span class="math inline">\(I&lt;0\)</span> means that nearby observations tend to be more dissimilar to each other than expected.</p>
+<p>The “than expected” part refers to the amount of similarity expected if the values were distributed randomly with respect to the specified spatial relationships among observations..</p>
+<p>We will illustrate use of Moran’s <em>I</em> in a future module. For now, the basic procedure is to:</p>
+<ol type="1">
+<li>Define spatial weights for each pair of observations (a kind of distance matrix). These could be based on a distance threshold, nearest neighbors, or geographic distance.</li>
+<li>Fit your model (regression, GLM, or whatever).</li>
+<li>Test for spatial autocorrelation of the model residuals by calculating Moran’s <em>I</em> using the spatial weights. One option is the function <code>spdep::moran.test()</code>.</li>
+</ol>
 </section>
 <section id="sec-problems-auto-deal" class="level3" data-number="12.2.3">
 <h3 data-number="12.2.3" class="anchored" data-anchor-id="sec-problems-auto-deal"><span class="header-section-number">12.2.3</span> Dealing with autocorrelation</h3>
-<p>Autocorrelation may or may not be a problem in your dataset. As pointed out by <span class="citation" data-cites="kuehn2012">Kuehn and Dormann (<a href="#ref-kuehn2012" role="doc-biblioref">2012</a>)</span>, there is a difference between autocorrelation in a response variable and autocorrelation in the residuals of a statistical model. Autocorrelation in a response variable can be managed by inclusion of appropriate predictor variables (which may themselves be autocorrelated or correlated; see <a href="@sec-problems-collin">next section</a>). This works because if autocorrelated values can be predicted by a predictor variable, then the autocorrelation is controlled for, by definition.</p>
-<p>Autocorrelation in residuals, however, represents a pattern in the data that is not accounted for. There are methods for accounting for autocorrelated residuals such as conditional autoregressive models (CAR) <span class="citation" data-cites="gelfand2003">(<a href="#ref-gelfand2003" role="doc-biblioref">Gelfand and Vounatsou 2003</a>)</span>, generalized or ordinary least squares models (GLS or OLS), classification and regression trees or CART <span class="citation" data-cites="mccune2002analysis">(<a href="#ref-mccune2002analysis" role="doc-biblioref">McCune <em>et al.</em> 2002</a>)</span>, and mixed models <span class="citation" data-cites="bolker2009">(<a href="#ref-bolker2009" role="doc-biblioref">Bolker <em>et al.</em> 2009</a>)</span>. None of these solutions is appropriate for every situation.</p>
+<p>If you detect significant autocorrelation, don’t panic. Autocorrelation may or may not be a problem in your dataset. As pointed out by <span class="citation" data-cites="kuehn2012">Kuehn and Dormann (<a href="#ref-kuehn2012" role="doc-biblioref">2012</a>)</span>, there is a difference between autocorrelation in a response variable and autocorrelation in the residuals of a statistical model. Autocorrelation in a response variable can be managed by inclusion of appropriate predictor variables. This works because if autocorrelated values can be predicted by a predictor variable, then it won’t be present in the residuals.</p>
+<p>Autocorrelation in residuals, however, represents spatial structure that is not accounted for by the model. There are methods for accounting for autocorrelated residuals such as generalized least squares models (GLS) with spatial correlation structures <span class="citation" data-cites="zuur2007analysing">(<a href="#ref-zuur2007analysing" role="doc-biblioref">Zuur <em>et al.</em> 2007</a>)</span>, conditional autoregressive models (CAR) <span class="citation" data-cites="gelfand2003">(<a href="#ref-gelfand2003" role="doc-biblioref">Gelfand and Vounatsou 2003</a>)</span>, and mixed models that explicitly account for spatial dependence <span class="citation" data-cites="bolker2009">(<a href="#ref-bolker2009" role="doc-biblioref">Bolker <em>et al.</em> 2009</a>)</span>. Other approaches may incorporate spatial predictors or smooth spatial trends directly into the model. None of these solutions is appropriate for every situation, so consider the likely cause and spatial scale of the autocorrelation, the goals of the analysis, and what your data can support.</p>
 </section>
 </section>
 <section id="sec-problems-collin" class="level2" data-number="12.3">
 <h2 data-number="12.3" class="anchored" data-anchor-id="sec-problems-collin"><span class="header-section-number">12.3</span> Collinearity</h2>
 <p>Sometimes we face the problem of having predictor variables that are not only related to the response variable, but also related to each other. This phenomenon is called <strong>collinearity</strong>. In large datasets the problem becomes <strong>multicollinearity</strong>, when many variables are related to each other. Including collinear predictor variables in an analysis can severely bias the parameter estimates of that analysis (e.g., regression coefficients) and as a result make the results misleading or not generalizable. The effects of collinear predictor variables are by definition confounded with each other, meaning that the effects cannot be separated <span class="citation" data-cites="dormann2013">(<a href="#ref-dormann2013" role="doc-biblioref">Dormann <em>et al.</em> 2013</a>)</span>.</p>
-<p>The most straightforward way of detecting collinearity is with scatterplot matrices and correlation coefficients (see <a href="ch08.html#sec-plot1-many-pair" class="quarto-xref"><span>Section 8.3.1</span></a>). This is a technique to visualize how many variables in a dataset relate to each other simultaneously. As shown in the linked section, replacing the upper triangle of boxes with the correlation coefficients can help detect potentially problematic pairs of variables. The figure below shows an example from the <code>crabs</code> dataset in package <code>MASS</code>. In this dataset, all of the variables are highly correlated with each other.</p>
+<p>The most straightforward way of detecting collinearity is with scatterplot matrices and correlation coefficients (see <a href="ch08.html#sec-plot1-many-pair" class="quarto-xref"><span>Section 8.3.1</span></a>). This is a technique to visualize how many variables in a dataset relate to each other simultaneously. As shown in the linked section, replacing the upper triangle of boxes with the correlation coefficients can help detect potentially problematic pairs of variables. The figure below shows an example from the <code>crabs</code> dataset in package <code>MASS</code>. In this dataset, all of the variables are highly correlated with each other. Using more than one of them as a predictor in a model would make it hard for the algorithm to distinguish their effects from each other.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="ch12_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+<p><img src="ch12_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>If you have many variables, then a figure like the one above can be hard to read or interpret. One solution might be to create a table of correlation coefficients between every pair of variables. The base function <code>cor()</code> can do this, but a better-formatted table takes a little more work.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(crabs, <span class="at">package=</span><span class="st">"MASS"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> crabs</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>dat.cols <span class="ot">&lt;-</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">8</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(x[,dat.cols])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(crabs, <span class="at">package=</span><span class="st">"MASS"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> crabs</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>dat.cols <span class="ot">&lt;-</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">8</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(x[,dat.cols])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          FL        RW        CL        CW        BD
 FL 1.0000000 0.9069876 0.9788418 0.9649558 0.9876272
@@ -728,18 +760,20 @@ CL 0.9788418 0.8927430 1.0000000 0.9950225 0.9832038
 CW 0.9649558 0.9004021 0.9950225 1.0000000 0.9678117
 BD 0.9876272 0.8892054 0.9832038 0.9678117 1.0000000</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># better table:</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>vars <span class="ot">&lt;-</span> <span class="fu">names</span>(x)[dat.cols]</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># generate every unique pair of two variables by name:</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>cx <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">t</span>(<span class="fu">combn</span>(vars, <span class="dv">2</span>)))</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate correlation coefficients for each pair:</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>cx<span class="sc">$</span>r <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(cx)){</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    cx<span class="sc">$</span>r[i] <span class="ot">&lt;-</span> <span class="fu">cor</span>(x[,cx<span class="sc">$</span>X1[i]], x[,cx<span class="sc">$</span>X2[i]])</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>cx</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># same table as a data frame:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>vars <span class="ot">&lt;-</span> <span class="fu">names</span>(x)[dat.cols]</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># generate every unique pair of two variables by name:</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>cx <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">t</span>(<span class="fu">combn</span>(vars, <span class="dv">2</span>)))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate correlation coefficients for each pair:</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>cx<span class="sc">$</span>r <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(cx)){</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    cx<span class="sc">$</span>r[i] <span class="ot">&lt;-</span> <span class="fu">cor</span>(x[,cx<span class="sc">$</span>X1[i]], x[,cx<span class="sc">$</span>X2[i]])</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>cx</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   X1 X2         r
 1  FL RW 0.9069876
@@ -756,9 +790,9 @@ BD 0.9876272 0.8892054 0.9832038 0.9678117 1.0000000</code></pre>
 </div>
 <p>The resulting table can then be sorted or filtered by <code>r</code> to identify pairs of variables that are correlated with each other.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not run:</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># filter to |r| &gt; 0.7</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>cx[<span class="fu">which</span>(<span class="fu">abs</span>(cx<span class="sc">$</span>r) <span class="sc">&gt;</span> <span class="fl">0.7</span>),]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not run:</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># filter to |r| &gt; 0.7</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>cx[<span class="fu">which</span>(<span class="fu">abs</span>(cx<span class="sc">$</span>r) <span class="sc">&gt;</span> <span class="fl">0.7</span>),]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><span class="citation" data-cites="dormann2013">Dormann <em>et al.</em> (<a href="#ref-dormann2013" role="doc-biblioref">2013</a>)</span> suggest to use a cutoff of <span class="math inline">\(|r|\)</span> in between 0.5 and 0.7 to identify collinear pairs of variables. When a pair of variables are identified as collinear, the easiest solution is to simply run the analysis without one of them. This is because the variables are redundant, and any conclusions made using one would also be obtained using the other.</p>
 </section>
@@ -769,17 +803,17 @@ BD 0.9876272 0.8892054 0.9832038 0.9678117 1.0000000</code></pre>
 <h3 data-number="12.4.1" class="anchored" data-anchor-id="sec-problems-miss-ignore"><span class="header-section-number">12.4.1</span> Option 1: Ignore missing data</h3>
 <p>The easiest solution is simply to ignore missing data. Consider <a href="../datasets/missing-data-example.csv">this dataset</a>, which contains morphological data on 63 species of bats <span class="citation" data-cites="hutcheon2002">(<a href="#ref-hutcheon2002" role="doc-biblioref">Hutcheon <em>et al.</em> 2002</a>)</span>. Notice that in this version the brain masses (<code>brw</code>) are missing for 3 species of bats.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># replace with your working directory and path!</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>in.name <span class="ot">&lt;-</span> <span class="st">"../datasets/missing-data-example.csv"</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(in.name, <span class="at">header=</span><span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># replace with your working directory and path!</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>in.name <span class="ot">&lt;-</span> <span class="st">"../datasets/missing-data-example.csv"</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(in.name, <span class="at">header=</span><span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Because there are a lot of data, one option for analyzing this dataset would be to simply ignore the missing observations. For example, if someone was interested in the relationship between body size (variable <code>bow</code>) and brain mass, they could just fit a model and R would (for most methods) automatically ignore missing values. Note that in this example both variables are log-transformed to ensure normality and positivity.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>logbw <span class="ot">&lt;-</span> <span class="fu">log</span>(dat<span class="sc">$</span>bow)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>logbr <span class="ot">&lt;-</span> <span class="fu">log</span>(dat<span class="sc">$</span>brw)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(logbr<span class="sc">~</span>logbw, <span class="at">data=</span>dat)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>logbw <span class="ot">&lt;-</span> <span class="fu">log</span>(dat<span class="sc">$</span>bow)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>logbr <span class="ot">&lt;-</span> <span class="fu">log</span>(dat<span class="sc">$</span>brw)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(logbr<span class="sc">~</span>logbw, <span class="at">data=</span>dat)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -808,36 +842,36 @@ F-statistic: 683.4 on 1 and 58 DF,  p-value: &lt; 2.2e-16</code></pre>
 <h3 data-number="12.4.2" class="anchored" data-anchor-id="sec-problems-miss-inter"><span class="header-section-number">12.4.2</span> Option 2: Interpolate or impute missing data</h3>
 <p>If you need to replace the missing data, then the best option is to <strong>interpolate</strong> or <strong>impute</strong> them. How exactly to do this depends on the question being asked. If there is a clear relationship between the variable with missing values and another variable, then you can use that relationship to estimate the missing values. You can also use <strong>multiple imputation</strong> to estimate the missing values using information from several related variables at once. The example below illustrates simple interpolation (aka: single imputation) to replace the missing brain weights using known body masses.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flag missing observations</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">is.na</span>(dat<span class="sc">$</span>brw))</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># log transform (if not done already)</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>logbw <span class="ot">&lt;-</span> <span class="fu">log</span>(dat<span class="sc">$</span>bow)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>logbr <span class="ot">&lt;-</span> <span class="fu">log</span>(dat<span class="sc">$</span>brw)</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># fit model</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(logbr<span class="sc">~</span>logbw, <span class="at">data=</span>dat)</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co"># predict missing logbr at logbw</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">logbw=</span>dat<span class="sc">$</span>logbw[flag])</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>pr <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod1, <span class="at">newdata=</span><span class="fu">data.frame</span>(px))</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co"># insert predicted values</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>logbr[flag] <span class="ot">&lt;-</span> pr</span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="co"># back-transform to original scale</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>brw[flag] <span class="ot">&lt;-</span> <span class="fu">exp</span>(dat<span class="sc">$</span>logbr[flag])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flag missing observations</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">is.na</span>(dat<span class="sc">$</span>brw))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># log transform (if not done already)</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>logbw <span class="ot">&lt;-</span> <span class="fu">log</span>(dat<span class="sc">$</span>bow)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>logbr <span class="ot">&lt;-</span> <span class="fu">log</span>(dat<span class="sc">$</span>brw)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># fit model</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(logbr<span class="sc">~</span>logbw, <span class="at">data=</span>dat)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co"># predict missing logbr at logbw</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">logbw=</span>dat<span class="sc">$</span>logbw[flag])</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>pr <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod1, <span class="at">newdata=</span><span class="fu">data.frame</span>(px))</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co"># insert predicted values</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>logbr[flag] <span class="ot">&lt;-</span> pr</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co"># back-transform to original scale</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>brw[flag] <span class="ot">&lt;-</span> <span class="fu">exp</span>(dat<span class="sc">$</span>logbr[flag])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The interpolated values are similar to the true values, but with quite a bit of error. The term of art here is “correct to an order of magnitude”.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>brw[flag]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>brw[flag]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  729.7784  507.7160 2138.6809</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>true.vals <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">597</span>, <span class="dv">543</span>, <span class="dv">2070</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># percentage bias in interpolated values:</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="dv">100</span> <span class="sc">*</span> (dat<span class="sc">$</span>brw[flag]<span class="sc">-</span>true.vals) <span class="sc">/</span> true.vals</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>true.vals <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">597</span>, <span class="dv">543</span>, <span class="dv">2070</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># percentage bias in interpolated values:</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="dv">100</span> <span class="sc">*</span> (dat<span class="sc">$</span>brw[flag]<span class="sc">-</span>true.vals) <span class="sc">/</span> true.vals</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 22.240932 -6.497972  3.317919</code></pre>
 </div>
@@ -861,20 +895,14 @@ Hutcheon JM, Kirsch JAW, Jr TG. 2002. A comparative analysis of brain size in re
 <div id="ref-kuehn2012" class="csl-entry" role="listitem">
 Kuehn I, Dormann CF. 2012. <a href="https://doi.org/10.1111/j.1365-2699.2012.02707.x">Less than eight (and a half) misconceptions of spatial analysis</a>. Journal of Biogeography 39(5):995–998.
 </div>
-<div id="ref-mccune2002analysis" class="csl-entry" role="listitem">
-McCune B, Grace JB, Urban DL. 2002. Analysis of ecological communities. MjM software design, Gleneden Beach, Oregon, USA.
-</div>
 <div id="ref-penone2014" class="csl-entry" role="listitem">
 Penone C, Davidson AD, Shoemaker KT, Di Marco M, Rondinini C, Brooks TM, Young BE, Graham CH, Costa GC. 2014. <a href="https://doi.org/10.1111/2041-210X.12232">Imputation of missing data in life-history trait datasets: Which approach performs the best?</a> Methods in Ecology and Evolution 5(9):961–970.
 </div>
+<div id="ref-zuur2007analysing" class="csl-entry" role="listitem">
+Zuur AF, Ieno EN, Smith GM. 2007. Analysing ecological data. New York: Springer Science+Business Media.
+</div>
 </div>
 </section>
-</section>
-<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn1"><p>When calculating a distance matrix using geographic coordinates, be sure to account for the curvature of the Earth. Often using unprojected latitude and longitude will produce a misleading distance matrix, because latitude and longitude are not equivalent.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
 </section>
 
 </main> <!-- /main -->

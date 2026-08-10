@@ -1,3 +1,11 @@
 # GLM for continuous response data {#sec-glm2}
 
-Still kind of linear.
+## Gaussian GLM {#sec-glm2-gauss}
+
+## Log-normal GLM {#sec-glm2-lognorm}
+
+## Gamma GLM {#sec-glm2-gamma}
+
+
+
+
