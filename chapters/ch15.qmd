@@ -324,6 +324,70 @@ statistically significant difference between the mean petal length of
 *Iris setosa* and *Iris versicolor*.
 
 ### Two-sample, one-tailed *t*-tests {#sec-groups-2samp-1t}
+
+
+**Question:** Is the true difference in means between 2 groups greater
+than, or less than, some target value $\mu$?
+
+**Null hypothesis:** The true difference in means between 2 groups is
+$\mu$. I.e., $\mu_1-\mu_2=\mu$.
+
+**Alternative hypothesis:** The true difference in means between 2
+groups is either greater than $>\mu$ or $<\mu$. I.e., either
+$\mu_1-\mu_2>\mu$ or $\mu_1-\mu_2<\mu$.
+
+**Example use case:** Betty needs to compare two stock solutions and
+check that their pH differs by no more than 0.2.
+
+The 2-sample, 1-tailed *t*-test that can be used in several ways:
+
+1.  Test whether the mean in one group is greater or less than the mean
+    in another group.
+2.  Test whether the the mean in one group is greater or less than the
+    mean in another group, and that the difference is at least some
+    specified value.
+
+For example, if you know that the mean of group 1 must be less than the
+mean in group 2, and will not even consider that the mean of group 2 is
+less than that of group 1, then you could run a 2-sample 1-tailed test.
+
+```{r}
+# simulate data
+set.seed(789)
+x1 <- rnorm(20, 10, 1)
+x2 <- rnorm(20, 12, 1)
+
+# is mean(x1) > mean(x2)?
+t.test(x1, x2, alternative="greater")
+
+# is mean(x1) < mean(x2)?
+t.test(x1, x2, alternative="less")
+
+# is mean(x1) - mean(x2) at least 1?
+t.test(x1, x2, alternative="greater", mu=1)
+
+# is mean(x1) - mean(x2) at most 1?
+t.test(x1, x2, alternative="less", mu=1)
+
+```
+
+an uncommon variant used to test whether two groups have a difference in
+means that is less than or greater than some specified value. For
+example, if you produce two batches of bacteria by inoculation,
+incubation, and then serial dilution, you may want to confirm that the
+difference in cell count between them is less than some acceptable
+value. You could use a 2-sample, 1-tailed test with the "alternative"
+hypothesis being that the difference is "greater" than your benchmark.
+
+```{r}
+set.seed(789)
+x1 <- rnorm(30, 5, 2)
+x2 <- rnorm(30, 5.5, 2)
+
+# is the true difference in means <1?
+t.test(x1, x2, alternative="greater")
+```
+
 ### Equivalence testing {#sec-groups-1samp-tost}
 
 It is not possible to demonstrate statistically that a difference in
@@ -361,25 +425,384 @@ Interpretation: Test 1 showed that the difference in means is $>-0.5$.
 Test 2 showed that the difference in means is $<0.5$. So, the difference
 in means is in the interval $\left(-0.5,0.5\right)$, which means the difference in means is at most 0.5 in either direction.
 
+### Wilcoxon rank-sum test {#sec-groups-2samp-wilcoxon}
+
+**Question:** Are values in one group consistently greater than or less than those in another group? OR: Is the median rank in one group
+different from that in another group?
+
+**Null hypothesis:** For randomly selected values $x$ and $y$ from two
+groups, $p\left(x>y\right)=p\left(y>x\right)$.
+
+**Alternative hypothesis:** For randomly selected values X and Y from
+two groups, $p\left(x>y\right)\neq p\left(y>x\right)$.
+
+**Example use case:** Homer is interested in whether plots where
+invasive plants have been removed have more squirrels than plots where
+invasive plants are not removed, but does not want to model the actual
+number of squirrels.
+
+The **Mann-Whitney *U* test**, also known as the **Wilcoxon test**, is a
+nonparametric alternative to the two-sample *t*-test. **Nonparametric**
+means that the test does not make restrictive assumptions about the
+distribution of the data or a test statistic. Nonparametric tests are
+often based on the **ranks** of the data: the smallest value is rank 1,
+the next smallest is rank 2, and so on. Because of this, nonparametric
+tests allow you make statements about how consistent a pattern is,
+rather than about the actual values.
+
+This test has two common use cases:
+
+-   The researcher is only interested in whether values in one group are
+    consistently larger than those in another group.
+
+-   The researcher needs to perform a *t*-test, but the data do not meet
+    the assumptions of the *t*-test.
+
+The syntax for the Wilcoxon test is fairly similar to that of a
+*t*-test.
+
+Example Wilcoxon test in R:
+
+```{r}
+# simulate some data:
+set.seed(123)
+a <- runif(20, 1, 6)
+b <- runif(20, 4, 9)
+
+# run the test
+wilcox.test(a,b)
+```
+
+Here is the same kind of test, but using the formula interface. You can
+use the formula interface for *t*-tests as well.
+
+```{r}
+# pull some data from example dataset iris
+# i.e., make a new data frame with only 2 groups
+use.species <- c("versicolor", "virginica")
+dx <- iris[which(iris$Species %in% use.species),]
+dx$Species <- factor(dx$Species, levels=use.species)
+
+# perform the test.
+wilcox.test(Petal.Length~Species, data=dx)
+```
+
+Interpretation: The researcher can say that values in one group are
+consistently greater than values in the other group. Which way that goes
+should be obvious from looking at the sample medians or a boxplot.
+
+```{r}
+# follow up the test with a boxplot
+# note that the formula interface is used here as well!
+boxplot(Petal.Length~Species, data=dx)
+```
+
+When sample sizes or effect sizes are large, the Wilcoxon test and the
+*t*-test will often give the same answers in terms of significance vs.
+nonsignificance.
+
+Because the *t*-test tests for a difference in means, and the Wilcoxon
+is its rank-based alternative, some people think that the Wilcoxon test
+is a test for a difference in medians…but this is **not correct**. It’s
+more accurate to say that the Wilcoxon test tests for a median
+difference.
+
 ## Tests for paired data {#sec-groups-paired}
 
 ### Paired *t*-test {#sec-groups-paired-pt}
 
+**Question:** Is the mean of the differences of paired observations = 0,
+or different from 0?
+
+**Null hypothesis:** Mean of pairwise differences = 0.
+
+**Alternative hypothesis:** Mean of pairwise differences $\neq0$.
+
+**Example use case:** Pebbles needs to test for a mean change in the
+body mass of individual mice before and after a feeding trial. Each
+mouse is weighed both before and after the trial.
+
+Many biological experiments involved **paired samples**, where a single
+unit or entity was measured twice. For example, a single mouse might be
+weighed before and after a feeding trial. In a **paired *t*-test**, we
+test whether or not the mean of differences is 0. This is subtly
+different than the test for differences in means evaluated in a
+two-sample test. Consequently, a paired *t*-test is tantamount to a
+one-sample test on the pairwise differences. Compare the null hypotheses
+tested by the two-sample *t*-test and paired *t*-test below:
+
+**Two-sample *t*-test:**
+$\frac{\sum_{i=1}^{n_1}x_{1,i}}{n_1}=\frac{\sum_{i=1}^{n_2}x_{2,i}}{n_2}$
+
+**Paired *t*-test:** $\frac{\sum_{i=1}^{n}{x_{1,i}-x_{2,i}}}{n}=0$
+
+Let's simulate some data, conduct a paired *t*-test, and convince
+ourselves that the paired *t*-test is equivalent to a one-sample test on
+pairwise differences.
+
+```{r}
+# Example paired t-test in R
+# simulate data
+set.seed(42)
+a <- rnorm(100, 5, 2)
+# add pair-wise differences
+b <- a + rnorm(100, 2, 0.2)
+```
+
+Interpretation: The researcher should conclude that the mean difference
+for each subject was significantly different from 0, at -1.98 with a 95%
+CI of [-2.02, -1.95].
+
+Note that the paired *t*-test gives essentially the same result as
+conducting a one-sample test on the pair-wise differences.
+
+```{r}
+# compare to one sample t-test on differences:
+
+dif <- b - a
+t.test(dif)
+```
+
 ## *t*-test summary {#sec-groups-ttests}
 
-### Wilcoxon rank-sum test {#sec-groups-2samp-wilcoxon}
+As we have seen, the *t*-test in all of its variations is a very useful and flexible family of tests that can be applied to many biological problems. One of the reasons that *t*-tests are so widely applicable-and why there are so many *t*-tests--is that the test statistic *t* is so elegant in its construction: it represents the quantity of interest directly in its numerator, and then the denominator scales that quantity according to the level of uncertainty in the data. It is thus a kind of **signal-to-noise ratio** that predated information theory by almost 50 years. 
+
+As a review, the table below summarizes the different *t*-tests and their use cases:
+
+| Type | Use | Section |
+|---|---|---|
+| One-sample *t*-test, one-tailed | Tests whether the population mean of a single set of values is less than or greater than a specified value $\mu_0$. Appropriate when differences in only one direction are of interest. | @sec-groups-1samp-1t |
+| One-sample *t*-test, two-tailed | Tests whether the population mean is equal to a specified value $\mu_0$ (null hypothesis) or differs from it (alternative hypothesis). | @sec-groups-1samp-2t |
+| Two-sample *t*-test, two-tailed | Tests whether the population means of two groups ($\mu_1$ and $\mu_2$) differ. This can also be thought of as testing whether the difference between the means is equal to 0. Welch's *t*-test, which does not assume equal variances, should generally be used and is the default in R. | @sec-groups-2samp-2t |
+| Two-sample *t*-test, one-tailed | Tests whether the population mean of one group ($\mu_1$) is less than or greater than the mean of another group ($\mu_2$). Appropriate when differences in only one direction are of interest. | @sec-groups-2samp-1t |
+| Paired *t*-test | Tests whether the mean difference between paired observations differs from a specified value $D_0$, usually 0. The test may be one- or two-tailed depending on the hypothesis. | @sec-groups-paired-pt |
+
+: Common types of *t*-tests and the hypotheses they evaluate. {#tbl-t-tests}
+
+The number of "samples" in a *t*-test refers to how many sets of
+observations are being compared. There can be either 1 sample (all
+observations compared to some value) or 2 samples (2 sets of
+observations compared to each other).
+
+The number of "tails" refers to how sides (left (negative) and/or right
+(positive)) are of interest in the test statistic distribution. In a
+two-tailed test, or two-sided test, an extreme test statistic could fall
+in either the right or the left tail of the distribution. The figure
+below shows the range of *t* values which would be declared significant
+for each kind of test. Notice that for a one-tailed test, the
+significance region extends closer to the center, because its area must
+be equal to the same $\alpha$ as a two-tailed test.
+
+```{r, echo=FALSE, fig.align="center", fig.height=3.5, fig.width=8}
+x <- seq(-5, 5, by=0.001)
+DF <- 10
+y <- dt(x, DF)
+
+x1 <- seq(-5, qt(0.05, DF), length=1000)
+x2 <- seq(qt(0.95, DF), 5, length=1000)
+y1 <- dt(x1, DF)
+y2 <- dt(x2, DF)
+par(mar=c(5.1, 5.1, 1.1, 1.1), bty="n", las=1,
+  cex.axis=1.5, cex.lab=1.5, mfrow=c(1,3),
+  cex.main=1.8)
+plot(x, y, type="l", lwd=3, ylab="",
+  xlab=expression(italic(t)~values))
+title(ylab="Probability density", line=3.5)
+title(main="1-tailed test (lesser)")
+polygon(x=c(x1, rev(x1)),
+        y=c(y1, rep(0, 1000)), border=NA, col="red")
+points(x, y, type="l", lwd=3)
+plot(x, y, type="l", lwd=3, ylab="",
+  xlab=expression(italic(t)~values))
+title(ylab="Probability density", line=3.5)
+title(main="1-tailed test (greater)")
+polygon(x=c(x2, rev(x2)),
+        y=c(y2, rep(0, 1000)), border=NA, col="red")
+points(x, y, type="l", lwd=3)
+
+plot(x, y, type="l", lwd=3, ylab="",
+  xlab=expression(italic(t)~values))
+title(ylab="Probability density", line=3.5)
+title(main="2-tailed test")
+x1 <- seq(-5, qt(0.025, DF), length=1000)
+x2 <- seq(qt(0.975, DF), 5, length=1000)
+y1 <- dt(x1, DF)
+y2 <- dt(x2, DF)
+polygon(x=c(x1, rev(x1)),
+        y=c(y1, rep(0, 1000)), border=NA, col="red")
+polygon(x=c(x2, rev(x2)),
+        y=c(y2, rep(0, 1000)), border=NA, col="red")
+points(x, y, type="l", lwd=3)
+```
+
+The *t*-test is usually one of the first methods taught because its use
+cases are simple, and its test statistic is pretty easy to understand.
+Consider the original *t* statistic introduced to the English statistics
+literature by Gosset and popularized as "Student's *t*" by Fisher:
+
+$$
+t=\frac{\bar{x_1}-\bar{x_2}}{\sqrt{\frac{s_{x_1}^2+s_{x_2}^2}{2}}\sqrt{\frac{2}{n}}}
+$$
+
+The numerator is the quantity of interest: the difference in sample
+means. It should make sense that the larger the difference in sample
+means, the greater the probability that the difference will be
+statistically significant. However, considering only the sample means
+$\bar{x_1}$ and $\bar{x_2}$ is not enough. We also need to account for
+variation within each sample, and for the total sample size. Variance
+should *decrease* *t*, while sample size should increase it. Both terms
+are put in the denominator so that the difference in means is relative
+to them. Notice that in the denominator, the variances $s_{x_1}^1$ and
+$s_{x_2}^1$ are in a numerator. Thus, increasing them will decrease *t*.
+On the other hand, the sample size *n* is in a numerator in the
+denominator (which is tantamount to being in the overall numerator).
+Thus, increasing sample size will increase *t*.
+
+But as elegant as Student's *t* is, it has some drawbacks. It can
+produce biased estimates and *p*-values when the two groups have unqual
+sample sizes, or unequal variances. For these reasons, a more modern
+version of the *t* statistic was developed by Welch in the 1940s. This
+is sometimes called the "Welch's *t*-test", or less precisely the
+"Welch-Satterthwaite *t*-test". Satterthwaite's contribution was not to
+the *t* statistic, but rather an equation to better calculate the
+degrees of freedom to use for the test[^09-basic-2].
+
+[^09-basic-2]: This is why *t*-tests in R often report non-integer
+    degrees of freedom.
+
+$$
+t=\frac{\bar{x_1}-\bar{x_2}}{\sqrt{\frac{s_1}{\sqrt{n_1}}+\frac{s_2}{\sqrt{n2}}}}
+$$ This newer version has the same numerator, but instead of pooling the
+variances and sample sizes, keeps them separate. This allows for more
+flexibility when dealing with unequal sample sizes or (mildly)
+heteroscedastic data.
 
 ## Tests for 3 or more groups {#sec-groups-more}
 
 ### Analysis of variance {#sec-groups-more-anova}
 
+**Question:** Do the means differ between groups (with number of groups
+$\geq2$.
+
+**Null hypothesis:** All group means are equal.
+
+**Alternative hypothesis:** At least one group mean is different from
+the others.
+
+**Example use case:** Marge needs to test whether cucumber mass is
+greater in plants grown in potting mix, sandy soil, or clayey soil.
+
+**Analysis of variance (ANOVA)** is a special case of the linear model.
+When people say “ANOVA” they usually mean the specific linear model that
+compares the means of 3 or more groups. In this way it can be thought of
+as an extension of the *t*-test from 2 groups to \>2, but this is
+incorrect from a frequentist perspective because of how differently the
+*t*-test and ANOVA arrive at a *P*-value[^09-basic-3]. It’s better to
+think of the frequentist *t*-test and ANOVA as cousins. Frequentist
+ANOVA assesses statistical significance using the statistic *F*, which
+is related to the amount of variance associated with different sources
+of variance, relative to the number of degrees of freedom. This is
+different from *t*, which is a difference in means scaled by variances
+and sample sizes, *F*. Either way, *t* and *F* (and all test statistics)
+are just contrivances to obtain a *P*-value.
+
+[^09-basic-3]: From a Bayesian perspective, where no *P*-values or test
+    statistic distributions are involved, the *t*-test and ANOVA are
+    exactly the same model.
+
+The nature of the *F* statistic belies the other meaning of ANOVA: the
+partitioning of variation into its different sources. In other words,
+what proportion of variation in the *Y* variable does each factor
+explain? How much variation is due to random chance (i.e., residual
+variation)? ANOVA in this sense can be applied to many models, including
+all linear models.
+
+From the state-space linear modelling perspective (or Bayesian
+perspective), the differences between the *t*-test and ANOVA are
+trivial. Consider this model:
+
+$$
+y_i\sim Normal\left(\mu_{x_i},\ \sigma_{res.}\right)
+$$
+
+If $\mu_{x_i}$ is the mean for the group defined by $x_i$, then what is
+this model saying? It’s saying that the value of *y* for observation *i*
+is drawn from a normal distribution with a mean that depends on group of
+observation *i*, and some residual variation . This single equation
+covers a lot of situations:
+
+-   If the number of groups is 1, then this is a one-sample *t*-test
+
+-   If the number of groups is 2, then this is a two-sample *t*-test.
+
+-   If the number of groups is ≥3, then this is a one-way ANOVA with 3
+    levels to its 1 factor ("way").
+
+    -   For example, if the number of groups is 4, then it could be a
+        two-way ANOVA, with two factors with 2 levels each.
+
+-   If the number of groups is 1, but the values represented paired
+    differences, then this is a paired *t*-test.
+
+In a typical frequentist ANOVA, one first conducts the **omnibus test**,
+which assesses whether [***any***]{.underline} of the group means differ
+from each other. Then, a **post-hoc test** is performed to check
+[***which***]{.underline} groups differ from each other. The code below
+illustrates this process in R using the built-in `iris` dataset.
+
+```{r}
+# fit the linear model, which is what
+# ANOVA really is.
+mod1 <- lm(Petal.Length~Species, data=iris)
+
+# omnibus test:
+anova(mod1)
+```
+
+The ANOVA table shows us that the factor species uses 2 degrees of
+freedom (variously abbreviated as DF, Df, or d.f.) to account for 437.10
+of the squared errors; the residuals use 147 d.f. to account for 27.22
+of the squared errors. The ratio of the mean squared error per d.f.
+associated with each source, 218.551 / 0.185 = 1180.2, is the test
+statistic *F*. This is used to calculate the *P*-value (much like *t*,
+*F* follows a particular distribution defined by DF, which allows $p(F)$
+to be calculated). We can also see that about 94.1% of variation (437.10
+/ (437.10+27.22)) is associated with species. This is the model’s
+coefficient of determination, or $R^2$. The $R^2$ tells you the
+proportion of variation in *Y* explained by the model.
+
+Remember that the all that the omnibus test *P*-value tells you is that
+the means of at least one pair of species differ. To find out which pair
+or pairs, we need to use a post-hoc test. My favorite is the Tukey’s
+honest significant difference (HSD) test because it automatically
+adjusts for multiple comparisons.
+
+```{r}
+TukeyHSD(aov(mod1))
+```
+
+This result shows us that all of the species differ from each other. We
+can see this because all of the *P*-values (`p adj`) for the pairwise
+comparisons are $<0.05$ (they are printed by R as `0`, but are really
+just approximated to very tiny value. Report them as "\<0.001" or
+something like that). We can also see this because the 95% CI for the
+pairwise differences do not include 0. For example, the difference in
+means for species `versicolor` and `setosa` is `2.798`, with 95% CI =
+[`2.59`, `3.00`]. The value `diff` is literally the mean of `versicolor`
+minus the mean of `setosa`, as printed on the left of the table.
+
+
 #### One-way ANOVA without interaction {#sec-groups-more-anova-1way}
+
+#### The ANOVA table {#sec-groups-more-anova-table}
 
 #### Two- or more way ANOVA {#sec-groups-more-anova-ways}
 
 #### ANOVA with interaction {#sec-groups-more-anova-inter}
 
-#### Blocking designs  {#sec-groups-more-anova-block}
+#### Blocking designs {#sec-groups-more-anova-block}
+
+#### Repeated measures ANOVA {#sec-groups-more-anova-rep}
 
 #### Tukey's HSD post hoc test {#sec-groups-more-anova-tukey}
 
@@ -392,5 +815,3 @@ in means is in the interval $\left(-0.5,0.5\right)$, which means the difference 
 ### Ordering factors {#sec-groups-ord-fac}
 
 ### Polynomial patterns in group data {#sec-groups-ord-poly}
-
-

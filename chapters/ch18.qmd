@@ -1,3 +1,36 @@
 # Introduction to generalized linear models (GLM) {#sec-glm1}
 
 A link function to the past.
+
+## Prelude with linear models
+
+## GLM basics
+
+### Overall structure
+
+### Response distributions
+
+### Linear predictors
+
+### Link functions
+
+
+## Common GLMs
+
+### GLMs for continuous data
+
+#### Linear regression as a GLM
+
+#### GLMs for overdispersed data
+
+### GLMs for count data
+
+### GLMs for binary and proportional data
+
+## Deviance and other GLM diagnostics
+
+### Deviance
+
+### Pseudo-*R*^2 or not?
+
+### AIC and likelihood functions

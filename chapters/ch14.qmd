@@ -251,3 +251,23 @@ When a statistical test returns a *p*-value less than 0.05, we say that the
 results are “statistically significant” and we "reject the null hypothesis". For example, a “statistically significant difference” in means between two groups, or a “statistically significant correlation” between two numeric variables.
 
 When a statistical test returns a *p*-value of 0.05 or greater, we say that the test (or difference, or whatever) is "not statistically significant" and we "fail to reject the null hypothesis". Notice that we do not "accept the null hypothesis"--that would require a different kind of analysis.
+
+## Alternatives to frequentist statistics {#sec-review-alt}
+
+### Information-theoretic methods {#sec-review-alt-it}
+
+### Bayesian inference {#sec-review-alt-bayes}
+
+## Linear models {#sec-review-lin}
+
+### What is "linear"? {#sec-review-lin-def}
+
+### Linear models and sums of squares {#sec-review-lin-ss}
+
+### Analysis of variance (ANOVA) {#sec-review-lin-anova}
+
+The term **analysis of variance (ANOVA)** is used in two related ways. In introductory statistics, ANOVA usually refers to a linear model used to compare means among groups, such as comparing mean body mass among three species of frog. If someone says something like, "we compared the treatments using ANOVA", this is the sense they mean. We will explore this sense of ANOVA in @sec-groups-more-anova.
+
+More generally, ANOVA refers to a framework for evaluating how variation is attributed to different components of a statistical model. This is called "partitioning the variance" or "partitioning sums of squares". For example, an ANOVA table can be used to test a linear regression even when the predictor is continuous and there are no groups to compare. The function of ANOVA in that case is to determine how much variation is explained by the different predictors--be they continuous or factors--in the model and how much variation is left over (residual). We will explore this sense of ANOVA in @sec-groups-more-anova-table.
+
+This broader usage is reflected in R's `anova()` function, which can be applied to many kinds of models. For ordinary linear models, ANOVA tests are based on partitioning sums of squares. For generalized linear models, analogous tests are commonly based on changes in **deviance** rather than sums of squares. Deviance is a generalization of variance (which is calculated from sums of squares), so sums of squares are a special case of deviance. This reflects the fact that linear models based on sums of squares are a special case of generalized linear models (@sec-).
