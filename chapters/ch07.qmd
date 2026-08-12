@@ -2,7 +2,7 @@
 
 In the last module we saw how single variables can be described or summarized using descriptive statistics (see @sec-desc). In this chapter we will extend that to summarizing values by groups. Indeed, comparing the mean values in different groups is one of the most important types of tests we do in biology (see @sec-groups).
 
-## Summarizing a data frame
+## Summarizing a data frame {#sec-summ-df}
 
 You can get a quick numerical summary of a vector or a dataset with `summary()`.
 The examples below use the built-in dataset `iris`.

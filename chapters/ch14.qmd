@@ -447,12 +447,215 @@ Bayesian inference is beyond the scope of this course, but if you're interested 
 
 ### What is "linear"? {#sec-review-lin-def}
 
-### Linear models and sums of squares {#sec-review-lin-ss}
+**Linear models** are called *linear* models because they can be expressed as **linear combinations** of a set of estimated parameters. A linear combination is an expression formed by multiplying each term by a constant, and adding the products together. For example,
 
-### Analysis of variance (ANOVA) {#sec-review-lin-anova}
+$$ax+by$$
 
-The term **analysis of variance (ANOVA)** is used in two related ways. In introductory statistics, ANOVA usually refers to a linear model used to compare means among groups, such as comparing mean body mass among three species of frog. If someone says something like, "we compared the treatments using ANOVA", this is the sense they mean. We will explore this sense of ANOVA in @sec-groups-more-anova.
+is a linear combination of $x$ and $y$, where $a$ and $b$ are constants. The $x$ and the $y$ could be single values, or, as commonly used in statistics, **vectors** of values. A vector in this sense is an ordered set of values. One example of a linear combination that you're already familiar with is a [weighted mean](sec-desc-cen-mean-wm). The weighted mean of a set of numbers $\left[x_1,x_2,\ldots,x_n\right]$ is given by the sum
+
+$$\bar{x}_w=\sum_i^n\left(\frac{w_i}{\sum_i^nw_i}\right)x_i$$
+
+Because the sum of all weights must be 1, this simplifies to:
+
+$$\bar{x}_w=\sum_i^n\left(w_i\right)x_i$$
+
+meaning that the weights are the coefficients, and the values of $x$ are the terms. Actually, the mean itself is a linear combination, where all weights are equal to $1/n$. 
+
+To generalize, a linear model consists of the sum of the products of an input vector and a series of coefficients of the same length. In a simple linear regression, the coefficient is the slope: the expected change in $Y$ associated with a unit increase in $X$. 
+
+Importantly, a linear model must be *linear in its parameters*, not necessarily in the predictor variables themselves. For example, the model $y=\beta_0+\beta_1x+\beta_2x^2$ is nonlinear in $x$ because the $x^2$ forces a curved graph. But, if $x^2$ increases by 1, then $y$ will increase by $\beta_2$. This is what it means to be "linear in its parameters".
+
+All linear models can be written very compactly in matrix notation:
+
+$$
+\mathbf{Y}=\mathbf{X}\boldsymbol{\beta}+\boldsymbol{\varepsilon}
+$$
+
+The boldface variables indicate that each term is a matrix or a vector, not a variable in the usual sense. In most biological analyses, $\mathbf{Y}$, $\mathbf{\beta}$, and $\mathbf{\varepsilon}$ are column vectors, which are like matrices with 1 column. The matrix $\mathbf{X}$ is the **design matrix**, which contains the values of the  explanatory variables used to fit the model. 
+
+The notation above may be compact, but expanding everything out makes it clearer what is going on:
+
+$$
+\left[
+\begin{matrix}
+y_1 \\
+y_2 \\
+\vdots \\
+y_n
+\end{matrix}
+\right]
+=
+\left[
+\begin{matrix}
+1 & x_{11} & \cdots & x_{1p} \\
+1 & x_{21} & \cdots & x_{2p} \\
+\vdots & \vdots & \ddots & \vdots \\
+1 & x_{n1} & \cdots & x_{np}
+\end{matrix}
+\right]
+\left[
+\begin{matrix}
+\beta_0 \\
+\beta_1 \\
+\vdots \\
+\beta_p
+\end{matrix}
+\right]
++
+\left[
+\begin{matrix}
+\varepsilon_1 \\
+\varepsilon_2 \\
+\vdots \\
+\varepsilon_n
+\end{matrix}
+\right]
+$$
+
+where $n$ is the number of observations, and $p$ is the number of predictors. The leftmost column in $\mathbf{X}$, consisting of all 1s, are what gets multiplied by $\beta_0$ to produce the intercept. For example, the expected value for the first value of the response $y_1$ is equal to:
+
+$$E\left(y_1\right)=\beta_0\left(1\right)+\beta_1\left(x_{11}\right)+\beta_2\left(x_{12}\right)+\ldots+\beta_p\left(x_{1p}\right)$$
+
+where $x_{ij}$ is the $x$ value for observation $i$, predictor variable $j$. The observed value of $y_i$ the expected value plus some random deviation $\varepsilon_i$, which comes from a normal distribution with mean 0 and SD $\sigma_{res}$ ("res" is for "residual").
+
+#### Factors in linear models
+
+This notion of linearity is what makes many analyses with **factors**
+(categories or grouping variables) as predictors “linear”. For example,
+the *t*-test is a linear model, but it doesn’t really describe a line on
+a plot of *y* vs. *x* the way that linear regression does. However, if
+you encode the factor (grouping variable) it should be clear what the difference in group means really means:
+
+$$
+E\left(y_i\right)=\left(1\times\beta_0\right)+\left(x_i\times\beta_1\right)
+$$
+
+For group 1, $x_1=0$, so the expected value is $\beta_0$. For group 2,
+$x_i=1$, so the $\beta_1$ term comes into play as the difference in
+means between groups 1 and 2. This is what R, SAS, and other programs
+are doing internally when you analyze data with a factor variable. Here
+is what that looks like visually:
+
+![Illustration of how a *t*-test qualifies as a linear model.](../images/review-ttest.jpg){}
+Similarly, a one-way ANOVA with 3 levels can be thought of this way:
+
+$$
+E\left(y_i\right)=\left(1\times\beta_0\right)+\left(x_{1,i}\times\beta_1\right)+\left(x_{2,i}\times\beta_2\right)
+$$
+
+And visualized this way:
+
+![Illustration of how a one-way ANOVA with 3 levels qualifies as a linear model.](../images/review-3anova.jpg){}
+
+#### Linear models and sums of squares {#sec-review-lin-ss}
+
+There are tangible and intangible benefits to using linear models. First, as shown above, linear models can be written very compactly in the language of linear algebra (i.e., the branch of mathematics that deals with certain types of operations on matrices and vectors). From a practical standpoint, this forces us to organize our datasets sensibly, into matrices with rows that describe observations and columns that describe variables. From a computational standpoint, this makes the computer’s job much more efficient because of the architecture of modern computers.
+
+Second, and less obvious, is that the model coefficients of a linear model can be **solved for**, rather than approximated. When we fit a linear model to data, we are really after the values in the coefficients matrix. A modern statistical program can solve for these values rather than having to estimate them. For example, a simple linear regression with 1 predictor variable $X$ can be solved by finding the intercept $\beta_0$ and $\beta_1$ that together minimize the sum of squared residuals $SS_{res}$. These coefficients are: 
+
+$$
+{\hat{\beta}}_1=\frac{\sum_{i=1}^{n}\left(x_i-\bar{x}\right)\left(y_i-\bar{y}\right)}{\sum_{i=1}^{n}\left(x_i-\bar{x}\right)^2}
+$$
+
+to yield the effect of $x_1$, $\beta_1$. The intercept is then:
+
+$$
+{\hat{\beta}}_0=\bar{y}-{\hat{\beta}}_1\bar{x}
+$$
+
+The caret symbol $\hat{}$ indicates that a value is an “estimate”, even
+when it is solved for from data (e.g., $\hat{\beta_1}$ is pronounced
+“beta-one-hat” and is the estimated slope). Similarly, the bar above a
+letter indicates the sample mean (e.g., $\bar{x}$" is pronounced “x bar”
+and is the mean of all observed *x*).
+
+#### Assumptions of linear models {#sec-review-lin-assum}
+
+Linear models have some other features and assumptions that you need to be aware of. If your data or variables violate the assumptions below, you may need to use something other than linear models to analyze your data.
+
+##### Assumption 1: Normal residuals
+
+The linear model assumes that model residuals, the random errors representing the differences between observed and predicted values, follow a normal distribution. Models for data that do not have normal residuals exist, but they are not linear models. We’ll explore those in @sec-glm1.
+
+The assumption of normal residuals explains the last term in the linear
+model equation, $\varepsilon_i$:
+
+$$
+y_i=\beta_0+\beta_1x_i+\varepsilon_i
+$$
+
+In this equation, $y_i$ is observation *i* of the response variable *y*; $\beta_0$ is the intercept; $\beta_1$ is the slope; $x_i$ is the predictor variable *x* for observation *i*, and $\varepsilon_i$ is the residual for observation *i* ($\varepsilon$ is the Greek letter “epsilon” and usually stands for error or residual terms). The residual term can be expanded like this:
+
+$$y_i=\beta_0+\beta_1x_i+Normal\left(0,\sigma_{res}\right)$$
+
+This expansion makes it clear that each residual $\varepsilon_i$ comes
+independently from a normal distribution with mean 0 and standard
+deviation (SD) $\sigma_{res}$. For convenience, we sometimes separate
+the deterministic part and the stochastic part of the model and write
+the **state space** form of the linear regression model:
+
+$$
+y_i\sim Normal\left(\eta_i,\ \sigma_{res}\right)
+$$
+
+$$
+\eta_i=\beta_0+\beta_1x_i
+$$
+
+In this version, the symbol $\sim$ means “distributed as” and denotes a
+**stochastic** relationship—a relationship that contains some element of
+randomness. This is in contrast to a **deterministic** relationship,
+which does not (equality, aka: identity, = is the most famous kind of
+deterministic relationship).
+
+##### Assumption 2: Homogeneity of variance
+
+Linear models assume **homoscedasticity**, or constant variance. This
+means that the residual variance does not depend on either *x* or
+*y*.If the variance in the response variable depends on some predictor variable, then this should be incorporated into the model (resulting in something other thana linear model). If the variance appears to depend on the response variable, then there is probably an issue with the assumed response distribution.
+
+The figure below shows two datasets with a linear relationship between
+*x* and *y*. In the left panel, the variance is the same everywhere
+(homoscedastic). The right panel shows a heteroscedastic relationship
+where the variance increases at larger *x*.
+
+![Example of heteroscedasticity, or unequal variance, across the domain of $x$. The left panel shows homoscedasticity, where residual varincee is approximately the same for all $x$. The right panel shows heteroscedasticity, where residual variance increases with $x$](../images/review-homog.jpg){}
+
+The figure below shows two datasets with a categorical predictor,
+suitable for a *t*-test. The left panel shows a relationship with equal
+variances in each group, while the right panel shows a situation with
+unequal variances.
+
+![Example of heteroscedasticity, or unequal variance, between two levels *a* and *b* of some factor. The left panel shows homoscedasticity, where residual varincee is approximately the same in group *a* and group *b*. The right panel shows heteroscedasticity, where residual variance is different in each group.](../images/review-homog2.jpg){}
+
+
+Heteroscedasticity is a serious problem for linear models because it
+leads to biased parameter estimates and standard errors (SE) of those
+estimates. The latter issue means that significance tests on parameters
+will be incorrect. Bayesian statistics does not involve significance
+tests, but heteroscedasticity that is unaccounted for will still lead to
+biased estimates. The usual solution is to either apply a
+variance-stabilizing transformation (like the log-transform),
+incorporate variance parameters that can be estimated, or be clever
+about choosing a response distribution.
+
+##### Assumption 3: Fixed and independent predictors
+
+Linear models assume that predictor values are precisely known (“fixed”) and independent of each other. If there is uncertainty in the predictor variables, this adds uncertainty to the response values that linear models cannot account for. Simply put, linear models have a term for uncertainty in *y*, $\sigma_{res}$, but no term for uncertainty in *x*.
+
+##### Assumption 4: Independently and identically distributed errors
+(*i*.*i*.*d*.)
+
+The assumption of independently and identically distributed (*i.i.d.*) errors is ***very*** important. It means that the residual for each observation depends only on the parameters of the residual distribution and ***not*** on predictor variables or other observations. When the assumption of independence is violated, the degrees of freedom in the analysis is artificially inflated because the number of unique pieces of information is smaller than the number used in the analysis. In frequentist analyses, this deflates the *p*-value and increases the chance of a type I error (false positive).
+
+##### Final note about linear model assumptions
+
+Real data almost always violate the linear model assumptions to some degree, so the answer to "do my data meet the assumptions of linear models?" is "No.". The more useful question is, "do my data violate the assumptions of linear models *enough to be a problem*?". Linear models can be robust to *mild* violations of these assumptions, but you need to be careful. Many of these assumptions can be tested directly—for example, testing residuals for normality or homoscedasticity—and if there is any doubt about whether your data meet the assumptions, you should perform those tests. Actually, you should perform the tests anyway just to be safe.
+
+## Analysis of variance (ANOVA) {#sec-review-lin-anova}
+
+The term **analysis of variance (ANOVA)** is used in two related ways, and we need to clear them up before the next module. In introductory statistics, ANOVA usually refers to a linear model used to compare means among groups, such as comparing mean body mass among three species of frog. If someone says something like, "we compared the treatments using ANOVA", this is the sense they mean. We will explore this sense of ANOVA in @sec-groups-more-anova.
 
 More generally, ANOVA refers to a framework for evaluating how variation is attributed to different components of a statistical model. This is called "partitioning the variance" or "partitioning sums of squares". For example, an ANOVA table can be used to test a linear regression even when the predictor is continuous and there are no groups to compare. The function of ANOVA in that case is to determine how much variation is explained by the different predictors--be they continuous or factors--in the model and how much variation is left over (residual). We will explore this sense of ANOVA in @sec-groups-more-anova-table.
 
-This broader usage is reflected in R's `anova()` function, which can be applied to many kinds of models. For ordinary linear models, ANOVA tests are based on partitioning sums of squares. For generalized linear models, analogous tests are commonly based on changes in **deviance** rather than sums of squares. Deviance is a generalization of variance (which is calculated from sums of squares), so sums of squares are a special case of deviance. This reflects the fact that linear models based on sums of squares are a special case of generalized linear models (@sec-glm1).
+This broader usage is reflected in R's `anova()` function, which can be applied to many kinds of models. For ordinary linear models, ANOVA tests are based on partitioning sums of squares. For generalized linear models, analogous tests are commonly based on changes in **deviance** rather than sums of squares. Deviance is a generalization of variance (which is calculated from sums of squares), so sums of squares are a special case of deviance (@sec-glm1-dev). This reflects the fact that linear models based on sums of squares are a special case of generalized linear models (@sec-glm1).

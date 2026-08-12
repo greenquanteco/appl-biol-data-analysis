@@ -2,35 +2,35 @@
 
 A link function to the past.
 
-## Prelude with linear models
+## Prelude with linear models {#sec-glm1-prelude}
 
-## GLM basics
+## GLM basics {#sec-glm1-basics}
 
-### Overall structure
+### Overall structure {#sec-glm1-basics-struc}
 
-### Response distributions
+### Response distributions {#sec-glm1-basics-resp}
 
-### Linear predictors
+### Linear predictors {#sec-glm1-basics-lp}
 
-### Link functions
+### Link functions {#sec-glm1-basics-link}
 
 
-## Common GLMs
+## Common GLMs {#sec-glm1-common}
 
-### GLMs for continuous data
+### GLMs for continuous data {#sec-glm1-common-cont}
 
-#### Linear regression as a GLM
+#### Linear regression as a GLM {#sec-glm1-common-cont-lr}
 
-#### GLMs for overdispersed data
+#### GLMs for overdispersed data {#sec-glm1-common-cont-over}
 
-### GLMs for count data
+### GLMs for count data {#sec-glm1-common-count}
 
-### GLMs for binary and proportional data
+### GLMs for binary and proportional data {#sec-glm1-common-binom}
 
-## Deviance and other GLM diagnostics
+## Deviance and other GLM diagnostics {#sec-glm1-dev}
 
-### Deviance
+### Deviance {#sec-glm1-dev-defin}
 
-### Pseudo-*R*^2 or not?
+### Pseudo-*R*^2 or not? {#sec-glm1-dev-pseudo}
 
-### AIC and likelihood functions
+### AIC and likelihood functions {#sec-glm1-dev-aic}

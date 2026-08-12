@@ -281,30 +281,25 @@ round those to 0.001 or 0.0001.
 
 A *t*-test can also be performed using the **formula** interface, which
 is an R programming construct for specifying a response variable and its
-predictors.
+predictors. Notice that the formula interface here is the same as used in `boxplot()` (@sec-plot1-sing-box) and `aggregate()` (@sec-summ-agg).
 
 **Syntax note:** Formula syntax has the response variable on the left,
 then a `~`, then the predictor or predictors. For predictors, `a + b`
 means an additive model; while `a * b` specifies an interaction. For a
-*t*-test, there can be only 1 predictor. If you want to test \>1
+*t*-test, there can be only 1 predictor. If you want to test $>1$
 predictor at a time, you need to use ANOVA instead.
 
 Here are some common formula examples:
 
-**Formula:** `y ~ x`
+| Formula | Meaning |
+|---|---|
+| `y ~ x` | `y` is modeled as a function of `x`. |
+| `y ~ x1 + x2` | `y` is modeled as a function of `x1` and `x2`, with their effects treated as **additive** (i.e., no interaction between them is included). |
+| `y ~ x1 * x2` | `y` is modeled as a function of `x1`, `x2`, and their **interaction**. An interaction means that the effect of one predictor depends on the value of the other predictor. This is shorthand for `y~x1 + x2 + x1:x2`. |
+| `y ~ 1` | `y` is modeled using only a constant (the intercept), with no predictors. This is often called an **intercept-only** or **null model**. |
+| `y ~ 0 + x` | `y` is modeled as a function of `x`, but without an intercept (i.e., the intercept is constrained to 0). |
 
-**Meaning:** `y` is a function of `x`.
-
-**Formula:** `y ~ x1 + x2`
-
-**Meaning:** `y` is a function of `x1` and `x2`, and the effects of `x1`
-and `x2` are orthogonal (i.e., independent of each other).
-
-**Formula:** `y ~ x1 * x2`
-
-**Meaning:** `y` is a function of `x1` and `x2`, and the effects of `x1`
-and `x2` **interact**. This means that one variable alters the effect of
-another variable.
+: Common R model formulas and their meanings. {#tbl-model-formulas}
 
 The formula interface is used in several contexts in R, including
 plotting, modeling, and aggregating.
@@ -324,7 +319,6 @@ statistically significant difference between the mean petal length of
 *Iris setosa* and *Iris versicolor*.
 
 ### Two-sample, one-tailed *t*-tests {#sec-groups-2samp-1t}
-
 
 **Question:** Is the true difference in means between 2 groups greater
 than, or less than, some target value $\mu$?
@@ -681,6 +675,35 @@ heteroscedastic data.
 
 ### Analysis of variance {#sec-groups-more-anova}
 
+In this section, we will explore the "test comparing group means" sense of analysis of variance (ANOVA) (@sec-review-lin-anova). The linear model version of ANOVA assesses significance using an *F*-test. Much like *t*, *F* is a test statistic that summarizes a quantity of interest in a test that can be compared to the typical strength of a pattern produced by random noise (see @sec-groups-2samp-2t}). Whereas *t* is usually a difference in means scaled by sample size and variance, *F* compares variances. The basic idea of an *F* statistic is:
+
+$$F=\frac{\text{explained variance}}{\text{unexplained variance}}$$
+
+In the case of a one-way ANOVA, this translates to:
+
+$$F=\frac{\text{between-group variability}}{\text{within-group variability}}$$
+
+The numerator is essentially the variance in group means:
+
+$$\sum_{i=1}^Kn_i\frac{\left(\bar{Y}_{i}-\bar{Y}\right)^2}{\left(K-1\right)}$$
+
+where $\bar{Y}_{i}$ is the sample mean in group $i$, $n_i$ is the number of observations in group $i$, $\bar{Y}$ is the overall mean of the data, and $K$ is the number of groups.
+
+The denominator is close to the the sum of within-group variances:
+
+$$
+\frac{
+\sum_{i=1}^K\sum_{j=1}^{n_i}
+\left(Y_{ij}-\bar{Y}_i\right)^2
+}{
+N-K
+}
+$$
+
+where $Y_{ij}$ is observation $j$ in group $i$ (out of $K$ groups), and $N$ is the overall sample size.
+
+The $F$ statistic is a ratio of *variance explained* to *variance not explained*. *F* values follow the *F* distribution, which is defined by degrees of freedom $d_1=K-1$ and $d_2=N-K$ under the null hypothesis. Practically, *F* will be large when there is more explained variance than unexplained variance, which is unlikely if the group means are not different.
+
 **Question:** Do the means differ between groups (with number of groups
 $\geq2$.
 
@@ -692,24 +715,6 @@ the others.
 **Example use case:** Marge needs to test whether cucumber mass is
 greater in plants grown in potting mix, sandy soil, or clayey soil.
 
-**Analysis of variance (ANOVA)** is a special case of the linear model.
-When people say “ANOVA” they usually mean the specific linear model that
-compares the means of 3 or more groups. In this way it can be thought of
-as an extension of the *t*-test from 2 groups to \>2, but this is
-incorrect from a frequentist perspective because of how differently the
-*t*-test and ANOVA arrive at a *P*-value[^09-basic-3]. It’s better to
-think of the frequentist *t*-test and ANOVA as cousins. Frequentist
-ANOVA assesses statistical significance using the statistic *F*, which
-is related to the amount of variance associated with different sources
-of variance, relative to the number of degrees of freedom. This is
-different from *t*, which is a difference in means scaled by variances
-and sample sizes, *F*. Either way, *t* and *F* (and all test statistics)
-are just contrivances to obtain a *P*-value.
-
-[^09-basic-3]: From a Bayesian perspective, where no *P*-values or test
-    statistic distributions are involved, the *t*-test and ANOVA are
-    exactly the same model.
-
 The nature of the *F* statistic belies the other meaning of ANOVA: the
 partitioning of variation into its different sources. In other words,
 what proportion of variation in the *Y* variable does each factor
@@ -717,88 +722,106 @@ explain? How much variation is due to random chance (i.e., residual
 variation)? ANOVA in this sense can be applied to many models, including
 all linear models.
 
-From the state-space linear modelling perspective (or Bayesian
-perspective), the differences between the *t*-test and ANOVA are
-trivial. Consider this model:
+The first step in a typical ANOVA is the **omnibus test**,
+which assesses whether *any* of the group means differ
+from each other. Then, a **post-hoc test** is performed to check *which* groups differ from each other. 
 
-$$
-y_i\sim Normal\left(\mu_{x_i},\ \sigma_{res.}\right)
-$$
+ANOVAs are typically described as "X-way ANOVA", where X is the number of factors. For example, a test of mean stomach size in herbivorous, carnivorous, and omnivorous mammals would be a "one-way ANOVA" because it has one grouping variable, "diet". The three groups in the factor diet are the **levels** of the factor.
 
-If $\mu_{x_i}$ is the mean for the group defined by $x_i$, then what is
-this model saying? It’s saying that the value of *y* for observation *i*
-is drawn from a normal distribution with a mean that depends on group of
-observation *i*, and some residual variation . This single equation
-covers a lot of situations:
 
--   If the number of groups is 1, then this is a one-sample *t*-test
 
--   If the number of groups is 2, then this is a two-sample *t*-test.
+#### One-way ANOVA {#sec-groups-more-anova-1way}
 
--   If the number of groups is ≥3, then this is a one-way ANOVA with 3
-    levels to its 1 factor ("way").
-
-    -   For example, if the number of groups is 4, then it could be a
-        two-way ANOVA, with two factors with 2 levels each.
-
--   If the number of groups is 1, but the values represented paired
-    differences, then this is a paired *t*-test.
-
-In a typical frequentist ANOVA, one first conducts the **omnibus test**,
-which assesses whether [***any***]{.underline} of the group means differ
-from each other. Then, a **post-hoc test** is performed to check
-[***which***]{.underline} groups differ from each other. The code below
-illustrates this process in R using the built-in `iris` dataset.
+When there is one explanatory **factor**, or grouping variable, the test is called a **one-way ANOVA** regardless of how many **levels** or groups that factor contains. Here is an example using the built-in example dataset `iris`. There are two common ways to fit an ANOVA in R.
 
 ```{r}
-# fit the linear model, which is what
-# ANOVA really is.
+# method 1: lm()
 mod1 <- lm(Petal.Length~Species, data=iris)
 
-# omnibus test:
+# method 2: aov()
+mod2 <- aov(Petal.Length~Species, data=iris)
+```
+
+Once the model is fit, we request the **anova table** so we can see the contributions of each source of variation.
+
+```{r}
+# method 1: using lm
 anova(mod1)
 ```
 
-The ANOVA table shows us that the factor species uses 2 degrees of
-freedom (variously abbreviated as DF, Df, or d.f.) to account for 437.10
-of the squared errors; the residuals use 147 d.f. to account for 27.22
-of the squared errors. The ratio of the mean squared error per d.f.
-associated with each source, 218.551 / 0.185 = 1180.2, is the test
-statistic *F*. This is used to calculate the *P*-value (much like *t*,
-*F* follows a particular distribution defined by DF, which allows $p(F)$
-to be calculated). We can also see that about 94.1% of variation (437.10
-/ (437.10+27.22)) is associated with species. This is the model’s
-coefficient of determination, or $R^2$. The $R^2$ tells you the
-proportion of variation in *Y* explained by the model.
+```{r}
+# method 2: using aov
+summary(mod2)
+```
 
-Remember that the all that the omnibus test *P*-value tells you is that
+No matter which method we use, the ANOVA table shows us that the factor `Species` uses 2 degrees of freedom (variously abbreviated as DF, Df, or d.f.) to account for 437.10 of the squared errors; the residuals use 147 d.f. to account for 27.22 of the squared errors. The ratio of the mean squared error per d.f. associated with each source, 218.551 / 0.185 = 1180.2, is the test statistic *F*. This is used to calculate the *P*-value (much like *t*, *F* follows a particular distribution defined by DF, which allows $p(F)$ to be calculated). We can also see that about 94.1% of variation (437.10 / (437.10+27.22)) is associated with species. This is the model’s coefficient of determination, or $R^2$. The $R^2$ tells you the proportion of variation in *Y* explained by the model.
+
+:::{.callout-tip}
+**Rounding errors**
+
+R is somewhat idiosyncratic in choosing how many digits it prints, and this can lead to confusion if values are rounded to too few decimal places. In the ANOVA example above, the MSE for the two sources of variation should divide to the F statistic. However, $218.55/0.19\neq1180$. If you look at the raw output of `mod1`, however, you that the sums of squares for Species and Residuals are 437.1028 and 27.2226, respectively. With more decimal places, you can then recalculate $\left(437.1028/2\right)/\left(27.2226/147\right)=1180.161$, the correct $F$ ratio.
+:::
+
+Remember that the all that the omnibus test *p*-value tells you is that
 the means of at least one pair of species differ. To find out which pair
 or pairs, we need to use a post-hoc test. My favorite is the Tukey’s
 honest significant difference (HSD) test because it automatically
 adjusts for multiple comparisons.
 
 ```{r}
+# method 1:
 TukeyHSD(aov(mod1))
 ```
 
-This result shows us that all of the species differ from each other. We
-can see this because all of the *P*-values (`p adj`) for the pairwise
-comparisons are $<0.05$ (they are printed by R as `0`, but are really
-just approximated to very tiny value. Report them as "\<0.001" or
-something like that). We can also see this because the 95% CI for the
-pairwise differences do not include 0. For example, the difference in
-means for species `versicolor` and `setosa` is `2.798`, with 95% CI =
-[`2.59`, `3.00`]. The value `diff` is literally the mean of `versicolor`
-minus the mean of `setosa`, as printed on the left of the table.
+```{r}
+# method 2:
+TukeyHSD(mod2)
+```
+The Tukey output shows us that every group differs from every other, with *p<0.001* (here *p* is rounded to 0, although it can never be 0). The differences in group means are presented with their **95% confidence intervals (CI)**. For example, the difference between the group means of versicolor and setosa is 2.798 cm, with 95% CI = [2.594, 3.002]. Notice that none of these CI include 0: this suggests that a true difference of 0 between any two groups is very unlikely. Even without examining *p*-values, CI provide a useful way to evaluate both the direction and magnitude of differences.
 
+One of the nice things about the Tukey HSD test is that the *p*-values are automatically adjusted for **multiple comparisons**, a phenomenon where the probability of a false positive goes up as a [researcher performs more tests](https://xkcd.com/882/), using a customized version of the probability distribution for the test statistic. This controls the **family wise error rate**, or total false positive probability for this set of three related tests. 
 
-#### One-way ANOVA without interaction {#sec-groups-more-anova-1way}
+As with a *t*-test, a boxplot is usually the best way to show the results of an ANOVA.
 
-#### The ANOVA table {#sec-groups-more-anova-table}
+```{r}
+#| fig-cap: "Boxplot showing that petal length is greater in *Iris versicolor* than in *Iris setosa*, and greater still in *Iris virginica*."
+#| fig-alt:  "Boxplot showing that petal length is greater in *Iris versicolor* than in *Iris setosa*, and greater still in *Iris virginica*."
+#| label: fig-ttestboxplot2
+
+boxplot(Petal.Length~Species, data=iris, ylim=c(0, 8))
+```
 
 #### Two- or more way ANOVA {#sec-groups-more-anova-ways}
 
+When there are 2 or more explanatory factors, the test is called a **two-way ANOVA**, or **three-way ANOVA**, and so on. We can add additional factors to an ANOVA with the `+` sign.
+
+```{r}
+# make a copy of iris with an extra grouping variable
+iris2 <- iris
+iris2$Flower <- c("purple", "pink")
+
+# fit the two-way ANOVA without interaction
+mod3 <- aov(Petal.Length~Species+Flower, data=iris2)
+summary(mod3)
+```
+
+Adding the colors that way just repeated them until the column was full: purple, pink, purple, pink, and so on until the new vector had length 150 (the number of rows in `iris`). This essentially distributes the colors randomly with respect to the species and thus the petal lengths, so it should be no surprise that flower color had no effect on petal length ($p=0.61$). A Tukey test confirms the effects of species, and the non-effect of `Flower`. Technically, you don't need to do or report a Tukey test if the main effect is nonsignificant.
+
+```{r}
+TukeyHSD(mod3)
+```
+
 #### ANOVA with interaction {#sec-groups-more-anova-inter}
+
+Another important question is whether there is an **interaction** between two variables. An interaction is a situation where one variable changes the effect of another. To test for an interaction between two variables, use the `*` symbol instead of the `+`. The result `y~x1*x2` is shorthand for `y~x1+x2+x1:x2`. The individual effects of the variables `x1` and `x2` are called their **main effects**. The effect of both together `x1:x2` is the **interaction effect**. If a significant interaction effect is detected, then the main effects should not be interpreted by themselves.
+
+```{r}
+# fit the two-way ANOVA WITH interaction
+mod3 <- aov(Petal.Length~Species*Flower, data=iris2)
+summary(mod3)
+```
+
+The interaction is nonsignificant, so we should instead report the main effects in the model without the interaction (`mod2`). If there is an interaction present, then it becomes impossible to discuss the effects of one variable without discussing the effects of the other. We will explore interactions more in the section on ANCOVA below.
 
 #### Blocking designs {#sec-groups-more-anova-block}
 
@@ -808,10 +831,87 @@ minus the mean of `setosa`, as printed on the left of the table.
 
 ### Kruskal-Wallis test {#sec-groups-more-kw}
 
-#### Dunn's test {#sec-groups-more-kw-dunn}
+**Question:** Are values in one or more groups consistently greater or
+less than values in another group? (number of groups $\geq3$); essentially extends Wilcoxon test to more groups)
+
+**Null hypothesis:** For randomly selected values $x$ and $y$ from any 2
+groups, $p\left(x>y\right)=p\left(y>x\right)$.
+
+**Alternative hypothesis:** For randomly selected values $x$ and $y$
+from any 2 groups, $p\left(x>y\right)\neq p\left(y>x\right)$
+
+**Example use case:** Bart is studying whether tomato yields tend to be
+greater in plants treated with no pesticide, pesticide A, or pesticide
+B. He is not interested in predicting the actual tomato yield.
+
+Because ANOVA is a linear model, the data used in ANOVA must meet the [assumptions of the linear model](@sec-review-lin-assum). If the data do not meet the assumptions, or cannot be transformed to do so, then a nonparametric alternative to ANOVA is needed. The most common alternative is the **Kruskal-Wallis test**. Some texts refer to this as a “nonparametric ANOVA”, but this is not correct because at no point is variance actually partitioned. Like the Wilcoxon test, the Kruskal-Wallis test is based on ranks of the data. A significant Kruskal-Wallis test indicates that values in at least one group are consistently greater than values in at least one other group. As with ANOVA, a post-hoc test is needed to determine which groups differ significantly from each other.
+
+**Example Kruskal-Wallis test in R**
+
+```{r}
+kruskal.test(Petal.Length~Species, data=iris)
+```
+
+The significant result means that petal length is consistently greater
+for at least species compared to the other. This is analogous to the
+omnibus ANOVA test. If we want to know which groups differ, we need a
+post-hoc test. The most common option is the Dunn's test.
+
+```{r}
+library(dunn.test)
+dunn.test(iris$Petal.Length, iris$Species, method="bonferroni")
+```
+
+Interpretation: A posthoc Dunn’s test showed that all three species
+differed from each other in terms of the rank order of petal lengths.
 
 ## Tests with ordered factors {#sec-groups-ord}
 
-### Ordering factors {#sec-groups-ord-fac}
+Some factors can represent group membership, but still have an inherent ordering to them. For example, soft drinks come in sizes "small", "medium", and "large". These are categories, but categories in order: small < medium < large. In contrast, the three species in the `iris` dataset have no ordering. 
 
-### Polynomial patterns in group data {#sec-groups-ord-poly}
+You may have data with a factor for age, like "juvenile", "subadult", "adult". These categories correspond to ages, but cannot be treated as literal numbers of years or months. It would also be a mistake to treat the comparison of "juvenile vs. subadult" the same as the comparison of "juvenile vs. adult".
+
+If you analyze an ordered factor, R will estimate polynomial terms of order up to $k-1$, where $k$ is the number of factor levels. The polynomial function is a way to fit different patterns across the ordered levels. For example, a linear pattern captures a monotonic increase or decrease across the levels. A quadratic pattern can describe a situation where the middle of three levels has greater (or smaller) values than the first and third levels. Let's create a toy dataset to illustrate working with an ordered factor.
+
+```{r}
+ages <- c("juvenile", "subadult", "adult")
+dx <- data.frame(age=rep(ages, each=20))
+# tell R that this is an ordered factor
+dx$age <- factor(dx$age, levels=ages, ordered=TRUE)
+
+# notice the levels statement:
+dx$age
+```
+
+Here we use our new factor to plot and analyze french fry consumption across age categories: 
+
+```{r}
+#| fig-cap: "Boxplot showing that french fry consumption is greatest in subadults, less in adults, and lowest in juveniles."
+#| fig-alt:  "Boxplot showing that french fry consumption is greatest in subadults, less in adults, and lowest in juveniles."
+#| label: fig-ttestboxplot3
+
+# add y values
+dx$ff <- NA
+dx$ff[which(dx$age=="juvenile")] <- rnorm(20, 5, 1)
+dx$ff[which(dx$age=="subadult")] <- rnorm(20, 15, 1)
+dx$ff[which(dx$age=="adult")] <- rnorm(20, 10, 1)
+
+# inspect the data
+boxplot(ff~age, data=dx, ylab="French fry consumption")
+```
+Now fit the model using the ordered factor `age`:
+
+```{r}
+mod11 <- aov(ff~age, data=dx)
+summary(mod11)
+```
+
+The omnibus test shows us that `age` is significant. However, because we have an ordered factor, we don't want something like a Tukey test. Group means are not of interest; rather, the pattern in group means across groups is. So, we what we want is to see which patterns across `age` are significant.
+
+```{r}
+summary.lm(mod11)
+```
+
+The coefficients for `age.L` and `age.Q` are the linear and quadratic trends, respectively. In this case, there is a positive linear trend (`3.5113`), so $Y$ generally increases with age category. There is also a significant negative quadratic trend (`-6.2328`), meaning that the relationship is curved. These trends describe the *shape* of the trend with respect to the age categories, not literally the values of $Y$ given $X$ (as in a polynomial equation), so you need to inspect the boxplot or a plot of means.
+
+This analysis was simple because there were only 3 levels of `age`. When an ordered factor has many levels, you may observe "significant" polynomial trends that are biologically unimportant or difficult to interpret. It is up to you as a biologist to exercise some judgement in deciding how many terms to interpret. For example, a quadratic pattern can be readily interpreted biologically. But what about a quintic? Or an octic?
