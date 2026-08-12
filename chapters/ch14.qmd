@@ -121,7 +121,7 @@ The basic procedure of any frequentist test is as follows:
     chance alone, and reject the null hypothesis of no effect. I.e.,
     declare a "significant" test result.
 
-Frequentist tests vary wildly in their assumptions, the nature of their
+Frequentist tests vary widely in their assumptions, the nature of their
 test statistics, and so on, but the procedure above describes most of
 them.
 
@@ -256,7 +256,192 @@ When a statistical test returns a *p*-value of 0.05 or greater, we say that the 
 
 ### Information-theoretic methods {#sec-review-alt-it}
 
+One of the main alternatives to NHST is information-theoretic (IT) modeling. IT methods borrow insights from information theory to draw conclusions about the extent to which statistical models describe data [@burnham2002]. Rather than evaluating individual hypotheses primarily using *p*-values, IT methods can be used to compare different models in terms of how much information is expected to be lost by using each model to represent the underlying process [@hobbs2006]. In other words, whereas NHST often asks whether particular effects are supported by the data, IT methods emphasize comparing the relative support for entire models.
+
+There are several information criteria in use, but many balance two components: one representing how well the model fits the observed data, based on its likelihood, and another that penalizes the model for complexity (i.e., number of parameters). These information criteria are used to compare models to each other, not to determine whether any particular model is "significant" or whether any of its terms are significant. The complexity penalty is important because adding parameters will generally improve, or at least not worsen, the fit of a model to the observed data, even when those additional parameters have little value for describing the underlying process. Without such a penalty, model selection would therefore tend to favor overly complex models...a phenomenon called **overfitting**.
+
+The most common information criterion is Akaike's Information Criterion ($AIC$) [@burnham2002]:
+
+$$AIC=-2\log{\left(\hat{L}\right)+2K}$$
+
+where $\hat{L}$ is the maximum value of the likelihood function and $K$ is the number of estimated parameters in the model (e.g., slopes and intercepts). Lower values of AIC indicate a better balance between model fit and model complexity. The multiplier of 2 on the $K$ term is the penalty for complexity (i.e., adding additional parameters). This makes adding another parameter supported only if it improves the likelihood enough to overcome the penalty.
+
+Other information criteria exist, such as the $AIC$ corrected for small sample sizes, $AIC_C$:
+
+$${AIC}_C=AIC+\frac{2K\left(K+1\right)}{n-K-1}$$
+
+Where $n$ is the number of observations used to fit the model. The correction becomes smaller as smaple size increases relative to the number of parameters, so $AIC_C$ converges toward $AIC$ as sample size increases.  Exactly what constitutes a "small" sample size is subjective, but @burnham2002 suggest that $AIC_C$ should be used when $n/K<40$.
+
+Many other information criteria exist, such as $QAIC$ and $QAIC_C$ for use when overdispersion in suspected [@lebreton1992], Bayesian information criterion (*BIC*) which has a stronger complexity penalty; and deviance information criterion (*DIC*) which is often used in Bayesian inference.
+
+#### Likelihood?
+
+Before we jump into an example IT data analysis, we also need to understand the concept of the **likelihood function**. A likelihood function describes how well different possible parameter values are supported by the observed data under a particular statistical model. A statistical model specifies the mathematical relationships among variables and the probability distribution of the observations; examples include a linear regression model or a Poisson GLM.
+
+In symbols, we can write the likelihood function as:
+
+$$\mathcal{L}\left(\theta|x\right)$$
+
+where $x$ represents the observed data and $\theta$ represents one or more unobserved parameters. For the data we actually observed, the likelihood function asks: which possible values of $\theta$ would make these data more or less plausible?
+
+Importantly, likelihood is ***not*** the probability that a particular parameter value or model is correct. Although $\mathcal{L}\left(\theta|x\right)$ is written with the parameters to the left of the vertical bar, it is based on the probability of the data given the parameters, $p\left(x|\theta\right)$, not the probability of the parameters given the data, $p\left(\theta|x\right)$. The latter is a Bayesian posterior probability (see @sec-review-alt-bayes).
+
+The takeaway is that probability askes about data when the model is known, while likelihood asks about parameter values after the data have been observed.
+
+Likelihoods are most famously used in modern data analysis as **maximum likelihood explanation (MLE)**. This procedure attempts to estimate the parameters of a model most likely to produce the observed data. 
+
+Here's a quick example: imagine you have measured 5 squirrel femurs and found lengths of 63.6, 66.5, 64.2, 67.6, and 68.3 mm, yielding an observed sample mean and SD of $66.0\pm2.1$ mm. What estimate of the population mean $\mu$ that makes this set of measurements most plausible?
+
+```{r}
+a <- c(63.6, 66.5, 64.2, 67.6, 68.3)
+mean(a)
+```
+
+```{r}
+sd(a)
+```
+
+Consider 3 candidates for $\mu$: 64, 66, and 68. For any proposed value of $\mu$, `dnorm()` tells us the probability density of observing each femur length under a normal distribution with that mean:
+
+```{r}
+samp.sd <- 2.1
+dnorm(a, mean=64, sd=samp.sd)
+```
+
+```{r}
+dnorm(a, mean=66, sd=samp.sd)
+```
+
+```{r}
+dnorm(a, mean=68, sd=samp.sd)
+```
+
+Because we observed more than 1 measurement, and assume that they are independent, the joint likelihood is the product of their densities:
+
+```{r}
+prod(dnorm(a, mean=64, sd=samp.sd))
+```
+```{r}
+prod(dnorm(a, mean=66, sd=samp.sd))
+```
+```{r}
+prod(dnorm(a, mean=68, sd=samp.sd))
+```
+
+It looks like 66 has the greatest joint likelihood across all observed data. But we can get a fuller picture if we test more values:
+
+```{r}
+#| fig.width: 8
+#| fig.height: 7
+
+# series of possible mu to test
+test.mu <- seq(60, 72, by=0.01)
+
+# number of possible mu
+n <- length(test.mu)
+
+# set up vector to hold likelihood
+# function of each candidate mu
+lik <- numeric(n)
+
+# calculate likelihoods of mu's in a loop
+for(i in 1:n){lik[i] <- prod(dnorm(a, test.mu[i], sd=samp.sd))}#i
+
+# now plot the likelihood function vs. mu
+plot(test.mu, lik, type="l", lwd=3,
+     xlab=expression(mu),
+     ylab="Likelihood")
+abline(v=mean(a), lwd=2, lty=2, col="red")
+text(66.2, 0.5e-5, expression(bar(x)==66.04), adj=0, col="red")
+abline(h=lik[which.max(lik)], lty=2, lwd=2, col="blue")
+text(67.5, 3.4e-5, expression(hat(mu)==66.04), adj=0, col="blue")
+```
+
+In this case, the sample mean $\bar{x}=66.04$ (`mean(a)`) is the same as the $\mu$ value that maximized the joint likelihood of the 5 observed values, $\hat{\mu}=66.04$ (`test.mu[which.max(lik)]`). But, the code above only worked because we held the SD to be known and the same as the sample SD. If we didn't, we would have to search over a range of possible SD values, and find the combination of $\hat{\mu}$ and $\hat{\sigma}$ that maximized the likelihood. In that case, the profile of likelihoods would have been a surface, not a line. The maximum likelihood estimates for something like a linear regression model, or a Poisson GLM, are found by similar procedure, only with multiple parameters making the profiling much more complicated.
+
 ### Bayesian inference {#sec-review-alt-bayes}
+
+**Bayesian inference** is a framework for evaluating evidence and *updating beliefs based on evidence*. When conducting Bayesian inference, researchers start with some initial idea about their model system: a **prior**. They then collect evidence (data), and update their idea based on the evidence. The updated idea is called the **posterior**.
+
+- When the prior is strong, or the evidence weak, their ideas will not be updated much and the posterior will be strongly influenced by the prior.
+- When the evidence is strong, or the prior weak, the posterior will be updated more and thus less influenced by the prior.
+
+Some researchers prefer to use naïve or uninformative priors, so that their conclusions are influenced mostly by the evidence. Bayesian statistical methods will return essentially the same parameter estimates (e.g., differences in means or slopes) as other methods when uninformative priors are used. This means that almost any traditional statistical analysis can be replaced with an equivalent Bayesian one. The statistical models that are fit, such as linear regression or ANOVA, are the same. All that really changes is how the researcher interprets the relationship between the model and the data. 
+
+In frequentist inference, researchers consider parameters like slopes, intercepts, effect sizes, etc., as fixed, unknown parameters and consider the data to occur stochastically following probability distributions. Bayesian inference flips that script, treating the data as fixed, and assuming that the model parameters are unknown quantities following probability distributions.
+
+Bayesian inference depends on **Bayes' theorem**:
+
+$$p\left(H|E\right)=\frac{P\left(E|H\right)P\left(H\right)}{P\left(H\right)P\left(E|H\right)+P\left(\lnot H\right)P\left(E|\lnot H\right)}=\frac{P\left(E|H\right)P\left(H\right)}{P\left(E\right)}$$
+
+where
+
+-   $H$ is a hypothesis that can be true or false
+-   $p\left(H\right)$ is the prior, an estimate of the probability of the hypothesis being true before any new data ($E$) are observed
+-   $E$ is evidence, specifically new data used to update the prior
+-   $p\left(H|E\right)$ is the probability of $H$ given $E$. I.e., the probability of the hypothesis being true after new evidence is observed. This is also called the **posterior probability**.
+-   $p\left(E\right)$ is the probability of $E$ regardless of $H$. I.e., the probability of observing the evidence whether or not the hypothesis is true. $p\left(E\right)$ is called the **marginal likelihood**.
+-   $p\left(E|H\right)$ is the probability of observing the evidence $E$ given $H$. I.e., the probability of observing the evidence if the hypothesis is true. $p\left(E|H\right)$ is also called the **likelihood**.
+
+Bayes' theorem is powerful because it is very general. The precise nature of $E$ and $H$ do not matter. All that matters is that one could sensibly define an experiment or set of observations in which $E$* might depend on $H$ and vice versa.
+
+Bayesian inference is attractive to many biologists because it mimics the way that scientists actually think: starting with one idea (a prior), collecting evidence, then updating that idea (posterior). Part of the Bayesian calculation is $p\left(H|E\right)$, or the probability of the hypothesis being true given the evidence that is observed. Contrast this with the frequentist *p*-value, which is $p\left(E|\lnot H\right)$. Most people instinctively want the first, but have to settle with the almost backwards logic of the *p*-value.
+
+Here is a quick example of Bayesian reasoning. Imagine you go to the doctor and get tested for a rare condition, [Niemann-Pick disease](https://medlineplus.gov/genetics/condition/niemann-pick-disease/). Your doctor tells you that this disease affects about 1 in 250000 people. Unfortunately, you test positive. But, the doctor tells you not to worry because the test is only 99% reliable. Why is the doctor so sanguine, and what is the probability that you have Niemann-Pick disease?
+
+The probability of having this disease can be estimated using Bayes' theorem. First, use what you know to assemble the terms:
+
+- The overall incidence is 1 in 250000 people, or 0.0004%. So, the prior probability $P\left(H\right)$ is 0.000004.
+- The probability of a positive test given that you have the disease, $P\left(E|H\right)$, is 0.99 because the test is 99% reliable.
+- The denominator, $P\left(E\right)$, is the unconditional probability of a positive test.
+
+The denominator includes two possibilities: either a positive test when someone has the disease, or a positive test when someone doesn't have the disease. That is, the probability of a true positive *or* a false positive. This can be calculated as:
+
+$$p\left(H\right)\left(E|H\right)+p\left(\lnot H\right)p\left(E|\lnot H\right)$$.
+
+The first term is the probability of a true positive ($p\left(E|H\right)$) scaled by the probability of having the disease ($p\left(H\right)$). The second is the probability of a false positive ($p\left(E|\lnot H\right)$) scaled by the probability of not having the disease ($p\left(\lnot H\right)$). We can simplify a bit by reasoning that $p\left(\lnot H\right)$ is really $1-p\left(H\right)$.
+
+Plug every thing into Bayes' rule:
+
+$$p\left(H|E\right)=\frac{P\left(E|H\right)P\left(H\right)}{P\left(H\right)P\left(E|H\right)+\left(1-P\left(H\right)\right)P\left(E|\lnot H\right)}=p\left(H|E\right)=\frac{\left(0.99\right)\left(0.000004\right)}{\left(0.000004\right)\left(0.99\right)+\left(0.999996\right)\left(0.01\right)}$$
+and simplify:
+
+$$p\left(H|E\right)=\frac{0.00000396}{0.01000392}=0.000396$$
+
+That's not very worrying! In this example, the test evidence can't overcome the fact that the disease is so rare. In other words, even among people who get a positive test, it's far more likely that you don't have the disease but got a false positive than that you have the disease and got a true positive. This is an example of a very strong prior being more influential than the evidence.
+
+There's an issue with this calculation, though. The prior probability of 0.000004 was based on the assumption that the test was conducted on a random person from the population. Do physicians conduct tests for vanishingly rare diseases on random people? Of course not. Maybe this physician only orders this test if they think that there is a 10% chance that you really have the disease. This might be because, in their experience, 10% of people with your symptoms turn out to have the disease. In that case, the calculation becomes:
+
+$$\left(H|E\right)=\frac{\left(0.99\right)\left(0.1\right)}{\left(0.1\right)\left(0.99\right)+\left(0.9\right)\left(0.01\right)}$$
+
+which simplifies to:
+
+$$p\left(H|E\right)=\frac{0.099}{0.108}=0.916$$
+
+91.6% is a lot more worrying than 0.0004%. This example shows that the prior probability can have a huge effect on the posterior probability.
+
+One way to visualize Bayes' rule is to think of the entire probability space as occupying a square with area 1. The square has 4 sections:
+
+![Bayes theorem helps us reason about the relative probabilities of observing a piece of evidence E or not when a hypothesis H is true or not true. The area of all four sections must add up to 1. According to Bayes' theorem, the probability of a hypothesis H being true, given evidence E, is the ratio of $P\left(E|H\right)$ to $P\left(E|H\right)+P\left(E|lnot H\right)$.](../images/review-bayes1.jpg){}
+
+Notice that the prior probability $p\left(H\right)$ (the two left, blue sections) is much smaller than the probability of $\lnot H$. Bayes' rule restricts our focus to the cases where we observe the evidence--the bottom two sections. Given that the evidence was observed, the sections with $\lnot E$ are irrelevant. The calculation then becomes:
+
+![In Bayesian inference, the probability of the hypothesis being true given the observed evidence is the ratio of cases where the evidence is observed *and* the hypothesis is true, to all cases where the evidence is observed.](../images/review-bayes2.jpg){}
+Besides its epistemological neatness, another advantage of Bayesian inference in practice is that parameters in Bayesian models (e.g, slopes, intercepts, etc.) are estimated with **credible intervals (CRI)**, not **confidence intervals (CI)**. 
+
+- A frequentist 95% confidence interval is a statement about the long run performance of a series of repeated experiments. If we repeatedly collected new samples and calculated intervals the same way, about 95% of those intervals would contain the true parameter. This is not the same as saying that there is a 95% probability that the true parameter value lies within out estimated CI.
+- A Bayesian 95% credible interval is a statement about the parameter itself. Given the data, model, and prior, there is a 95% probability that the parameter lies within the interval. That is, a credible interval does what most people mistakenly think the confidence interval does!
+
+I'm a big fan of Bayesian inference. But, I'll admit that there is a downside: Bayesian model-fitting is not available in base R, and requires specialized packages and sometimes external software. Should you go through all of this Bayesian trouble? There are a few reasons where Bayesian inference might be preferable to traditional frequentist statistics.
+
+1. The model to be fit is very complex. Because the user can specify any model they want, they can fit any model they want.
+1. Maximum-likelihood methods often require explicit derivations of model likelihoods, whereas an MCMC approach does not (MCMC, or Markov-chain Monte Carlo, is a common method for fitting Bayesian models). This means that models whose likelihoods have no closed form solution, or have computationally difficult solutions, can be estimated more easily with Bayesian methods than maximum likelihood (sometimes).
+1. The researcher has prior information that they would like to incorporate into the analysis. This can reduce the amount of data needed to reach certain conclusions.
+1. Maximum likelihood methods are not effective in some situations.
+1. Error propagation is very easy under Bayesian inference (especially MCMC).
+1. The researcher prefers the philosophy of Bayesian inference.
+
+Bayesian inference is beyond the scope of this course, but if you're interested head on over to my course notes for [BIOL 7950: Bayesian Inference for Biologists]().
 
 ## Linear models {#sec-review-lin}
 
@@ -270,4 +455,4 @@ The term **analysis of variance (ANOVA)** is used in two related ways. In introd
 
 More generally, ANOVA refers to a framework for evaluating how variation is attributed to different components of a statistical model. This is called "partitioning the variance" or "partitioning sums of squares". For example, an ANOVA table can be used to test a linear regression even when the predictor is continuous and there are no groups to compare. The function of ANOVA in that case is to determine how much variation is explained by the different predictors--be they continuous or factors--in the model and how much variation is left over (residual). We will explore this sense of ANOVA in @sec-groups-more-anova-table.
 
-This broader usage is reflected in R's `anova()` function, which can be applied to many kinds of models. For ordinary linear models, ANOVA tests are based on partitioning sums of squares. For generalized linear models, analogous tests are commonly based on changes in **deviance** rather than sums of squares. Deviance is a generalization of variance (which is calculated from sums of squares), so sums of squares are a special case of deviance. This reflects the fact that linear models based on sums of squares are a special case of generalized linear models (@sec-).
+This broader usage is reflected in R's `anova()` function, which can be applied to many kinds of models. For ordinary linear models, ANOVA tests are based on partitioning sums of squares. For generalized linear models, analogous tests are commonly based on changes in **deviance** rather than sums of squares. Deviance is a generalization of variance (which is calculated from sums of squares), so sums of squares are a special case of deviance. This reflects the fact that linear models based on sums of squares are a special case of generalized linear models (@sec-glm1).
