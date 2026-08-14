@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>18&nbsp; Introduction to generalized linear models (GLM) – Applied Biological Data Analysis</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -34,15 +37,14 @@ ul.task-list li input[type="checkbox"] {
 <link href="../chapters/part_05.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -97,9 +99,7 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -397,6 +397,18 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Introduction to Bayesian inference for biologists</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch31.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Advanced R graphics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch32.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Classification and regression trees</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -421,8 +433,33 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-glm1-prelude" id="toc-sec-glm1-prelude" class="nav-link active" data-scroll-target="#sec-glm1-prelude"><span class="header-section-number">18.1</span> Prelude with linear models</a></li>
+  <li><a href="#sec-glm1-basics" id="toc-sec-glm1-basics" class="nav-link" data-scroll-target="#sec-glm1-basics"><span class="header-section-number">18.2</span> GLM basics</a>
+  <ul class="collapse">
+  <li><a href="#sec-glm1-basics-struc" id="toc-sec-glm1-basics-struc" class="nav-link" data-scroll-target="#sec-glm1-basics-struc"><span class="header-section-number">18.2.1</span> Overall structure</a></li>
+  <li><a href="#sec-glm1-basics-resp" id="toc-sec-glm1-basics-resp" class="nav-link" data-scroll-target="#sec-glm1-basics-resp"><span class="header-section-number">18.2.2</span> Response distributions</a></li>
+  <li><a href="#sec-glm1-basics-lp" id="toc-sec-glm1-basics-lp" class="nav-link" data-scroll-target="#sec-glm1-basics-lp"><span class="header-section-number">18.2.3</span> Linear predictors</a></li>
+  <li><a href="#sec-glm1-basics-link" id="toc-sec-glm1-basics-link" class="nav-link" data-scroll-target="#sec-glm1-basics-link"><span class="header-section-number">18.2.4</span> Link functions</a></li>
+  </ul></li>
+  <li><a href="#sec-glm1-common" id="toc-sec-glm1-common" class="nav-link" data-scroll-target="#sec-glm1-common"><span class="header-section-number">18.3</span> Common GLMs</a>
+  <ul class="collapse">
+  <li><a href="#sec-glm1-common-cont" id="toc-sec-glm1-common-cont" class="nav-link" data-scroll-target="#sec-glm1-common-cont"><span class="header-section-number">18.3.1</span> GLMs for continuous data</a></li>
+  <li><a href="#sec-glm1-common-count" id="toc-sec-glm1-common-count" class="nav-link" data-scroll-target="#sec-glm1-common-count"><span class="header-section-number">18.3.2</span> GLMs for count data</a></li>
+  <li><a href="#sec-glm1-common-binom" id="toc-sec-glm1-common-binom" class="nav-link" data-scroll-target="#sec-glm1-common-binom"><span class="header-section-number">18.3.3</span> GLMs for binary and proportional data</a></li>
+  </ul></li>
+  <li><a href="#sec-glm1-dev" id="toc-sec-glm1-dev" class="nav-link" data-scroll-target="#sec-glm1-dev"><span class="header-section-number">18.4</span> Deviance and other GLM diagnostics</a>
+  <ul class="collapse">
+  <li><a href="#sec-glm1-dev-defin" id="toc-sec-glm1-dev-defin" class="nav-link" data-scroll-target="#sec-glm1-dev-defin"><span class="header-section-number">18.4.1</span> Deviance</a></li>
+  <li><a href="#sec-glm1-dev-pseudo" id="toc-sec-glm1-dev-pseudo" class="nav-link" data-scroll-target="#sec-glm1-dev-pseudo"><span class="header-section-number">18.4.2</span> Pseudo-<em>R</em>^2 or not?</a></li>
+  <li><a href="#sec-glm1-dev-aic" id="toc-sec-glm1-dev-aic" class="nav-link" data-scroll-target="#sec-glm1-dev-aic"><span class="header-section-number">18.4.3</span> AIC and likelihood functions</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch18.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -447,8 +484,56 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>A link function to the past.</p>
+<section id="sec-glm1-prelude" class="level2" data-number="18.1">
+<h2 data-number="18.1" class="anchored" data-anchor-id="sec-glm1-prelude"><span class="header-section-number">18.1</span> Prelude with linear models</h2>
+</section>
+<section id="sec-glm1-basics" class="level2" data-number="18.2">
+<h2 data-number="18.2" class="anchored" data-anchor-id="sec-glm1-basics"><span class="header-section-number">18.2</span> GLM basics</h2>
+<section id="sec-glm1-basics-struc" class="level3" data-number="18.2.1">
+<h3 data-number="18.2.1" class="anchored" data-anchor-id="sec-glm1-basics-struc"><span class="header-section-number">18.2.1</span> Overall structure</h3>
+</section>
+<section id="sec-glm1-basics-resp" class="level3" data-number="18.2.2">
+<h3 data-number="18.2.2" class="anchored" data-anchor-id="sec-glm1-basics-resp"><span class="header-section-number">18.2.2</span> Response distributions</h3>
+</section>
+<section id="sec-glm1-basics-lp" class="level3" data-number="18.2.3">
+<h3 data-number="18.2.3" class="anchored" data-anchor-id="sec-glm1-basics-lp"><span class="header-section-number">18.2.3</span> Linear predictors</h3>
+</section>
+<section id="sec-glm1-basics-link" class="level3" data-number="18.2.4">
+<h3 data-number="18.2.4" class="anchored" data-anchor-id="sec-glm1-basics-link"><span class="header-section-number">18.2.4</span> Link functions</h3>
+</section>
+</section>
+<section id="sec-glm1-common" class="level2" data-number="18.3">
+<h2 data-number="18.3" class="anchored" data-anchor-id="sec-glm1-common"><span class="header-section-number">18.3</span> Common GLMs</h2>
+<section id="sec-glm1-common-cont" class="level3" data-number="18.3.1">
+<h3 data-number="18.3.1" class="anchored" data-anchor-id="sec-glm1-common-cont"><span class="header-section-number">18.3.1</span> GLMs for continuous data</h3>
+<section id="sec-glm1-common-cont-lr" class="level4" data-number="18.3.1.1">
+<h4 data-number="18.3.1.1" class="anchored" data-anchor-id="sec-glm1-common-cont-lr"><span class="header-section-number">18.3.1.1</span> Linear regression as a GLM</h4>
+</section>
+<section id="sec-glm1-common-cont-over" class="level4" data-number="18.3.1.2">
+<h4 data-number="18.3.1.2" class="anchored" data-anchor-id="sec-glm1-common-cont-over"><span class="header-section-number">18.3.1.2</span> GLMs for overdispersed data</h4>
+</section>
+</section>
+<section id="sec-glm1-common-count" class="level3" data-number="18.3.2">
+<h3 data-number="18.3.2" class="anchored" data-anchor-id="sec-glm1-common-count"><span class="header-section-number">18.3.2</span> GLMs for count data</h3>
+</section>
+<section id="sec-glm1-common-binom" class="level3" data-number="18.3.3">
+<h3 data-number="18.3.3" class="anchored" data-anchor-id="sec-glm1-common-binom"><span class="header-section-number">18.3.3</span> GLMs for binary and proportional data</h3>
+</section>
+</section>
+<section id="sec-glm1-dev" class="level2" data-number="18.4">
+<h2 data-number="18.4" class="anchored" data-anchor-id="sec-glm1-dev"><span class="header-section-number">18.4</span> Deviance and other GLM diagnostics</h2>
+<section id="sec-glm1-dev-defin" class="level3" data-number="18.4.1">
+<h3 data-number="18.4.1" class="anchored" data-anchor-id="sec-glm1-dev-defin"><span class="header-section-number">18.4.1</span> Deviance</h3>
+</section>
+<section id="sec-glm1-dev-pseudo" class="level3" data-number="18.4.2">
+<h3 data-number="18.4.2" class="anchored" data-anchor-id="sec-glm1-dev-pseudo"><span class="header-section-number">18.4.2</span> Pseudo-<em>R</em>^2 or not?</h3>
+</section>
+<section id="sec-glm1-dev-aic" class="level3" data-number="18.4.3">
+<h3 data-number="18.4.3" class="anchored" data-anchor-id="sec-glm1-dev-aic"><span class="header-section-number">18.4.3</span> AIC and likelihood functions</h3>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -868,5 +953,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch18.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch18.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

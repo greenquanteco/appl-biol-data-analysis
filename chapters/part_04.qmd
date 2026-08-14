@@ -2,4 +2,4 @@
 title: "Introductory statistics with R"
 ---
 
-Blah blah test test test.
+Everything you definitely learned in undergraduate statistics, but could use a refresher on.

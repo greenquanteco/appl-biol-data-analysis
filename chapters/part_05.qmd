@@ -2,4 +2,4 @@
 title: "Generalized linear models (GLM)"
 ---
 
-Blah blah test test test.
+A link function to the past.

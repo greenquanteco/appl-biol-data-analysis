@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>2&nbsp; Introduction to R – Applied Biological Data Analysis</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -88,15 +91,14 @@ div.csl-indent {
 <link href="../chapters/part_02.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -127,7 +129,7 @@ div.csl-indent {
 <style>html{ scroll-behavior: smooth; }</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -180,9 +182,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -478,6 +478,18 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch30.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Introduction to Bayesian inference for biologists</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch31.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Advanced R graphics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch32.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Classification and regression trees</span></span></a>
   </div>
 </li>
       </ul>
@@ -1194,7 +1206,7 @@ loaded via a namespace (and not attached):
 <li><p>Access the source code to the package you need, and “borrow” the functions or code you need.</p></li>
 <li><p>Sometimes, if you only need 1 or 2 functions from a package, or you need to modify a function from a package to suit your needs. In these cases, you can “borrow” directly from the package source code. For most packages, the CRAN page will have a link to an online code repository (usually Github) and/or the package source as a “tarball” (“.tar.gz” file). A tarball is a compressed version of the package source code that may or may not need to be compiled using special functions in R.</p></li>
 </ol>
-<p>Because most R packages are written in R itself, you can usually find and adapt the code you need. This is almost always permitted by the license of the package because most packages are released under some version of the GNU Public License (GPL). If you do borrow code from a package, it is considered good form to attribute the package authors in some way (e.g., “we adapted code from the package”foo” version 1.0 (Nobody 2001)“).</p>
+<p>Because most R packages are written in R itself, you can usually find and adapt the code you need. This is almost always permitted by the license of the package because most packages are released under some version of the GNU Public License (GPL). If you do borrow code from a package, it is considered good form to attribute the package authors in some way (e.g., “we adapted code from the package ”foo” version 1.0 (Nobody 2001)“).</p>
 </section>
 <section id="sec-r-pack-work-cite" class="level4" data-number="2.4.3.2">
 <h4 data-number="2.4.3.2" class="anchored" data-anchor-id="sec-r-pack-work-cite"><span class="header-section-number">2.4.3.2</span> Citing packages</h4>
@@ -1433,7 +1445,7 @@ A BibTeX entry for LaTeX users is
 <li>Advanced R by Hadley Wickham</li>
 <li>R for Dummies by Andrie DeVries</li>
 </ul>
-<p>When I was first starting out with R I found several books invaluable. Having code examples printed where I could highlight, annotate, etc., was really helpful. Over time I’ve found myself relying less on textbooks and more on online sources (especially StackOverflow). Still, a there are a few books that I use frequently, for their statistical exposition more than their code examples. At least one of <span class="citation" data-cites="bolker2008ecological">Bolker (<a href="#ref-bolker2008ecological" role="doc-biblioref">2008</a>)</span>, <span class="citation" data-cites="kery2010">Kéry (<a href="#ref-kery2010" role="doc-biblioref">2010</a>)</span>, <span class="citation" data-cites="legendre2012numerical">Legendre and Legendre (<a href="#ref-legendre2012numerical" role="doc-biblioref">2012</a>)</span>, <span class="citation" data-cites="zuur2007analysing">Zuur <em>et al.</em> (<a href="#ref-zuur2007analysing" role="doc-biblioref">2007</a>)</span>, and <span class="citation" data-cites="zuur2009mixed">Zuur <em>et al.</em> (<a href="#ref-zuur2009mixed" role="doc-biblioref">2009</a>)</span> is usually on my desk at any given time.</p>
+<p>When I was first starting out with R I found several books invaluable. Having code examples printed where I could highlight, annotate, etc., was really helpful. Over time I’ve found myself relying less on textbooks and more on online sources (especially StackOverflow). Still, a there are a few books that I use frequently, for their statistical exposition more than their code examples. At least one of <span class="citation" data-cites="bolker2008ecological">Bolker (<a href="#ref-bolker2008ecological" role="doc-biblioref">2008</a>)</span>, <span class="citation" data-cites="kery2010">Kéry (<a href="#ref-kery2010" role="doc-biblioref">2010</a>)</span>, <span class="citation" data-cites="legendre2012numerical">Legendre and Legendre (<a href="#ref-legendre2012numerical" role="doc-biblioref">2012</a>)</span>, <span class="citation" data-cites="zuur2007analysing">Zuur <em>et al.</em> (<a href="#ref-zuur2007analysing" role="doc-biblioref">2007</a>)</span>, and <span class="citation" data-cites="zuur2009mixed"><span class="nocase">Zuur <em>et al.</em></span> (<a href="#ref-zuur2009mixed" role="doc-biblioref">2009</a>)</span> is usually on my desk at any given time.</p>
 </section>
 <section id="sec-r-faq-help-two" class="level4" data-number="2.5.5.8">
 <h4 data-number="2.5.5.8" class="anchored" data-anchor-id="sec-r-faq-help-two"><span class="header-section-number">2.5.5.8</span> Two reminders</h4>
@@ -1461,7 +1473,7 @@ Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R, Grolemund G, Ha
 Zuur AF, Ieno EN, Smith GM. 2007. Analysing ecological data. New York: Springer Science+Business Media.
 </div>
 <div id="ref-zuur2009mixed" class="csl-entry" role="listitem">
-Zuur AF, Ieno EN, Walker NJ, Saveliev AA, Smith GM <em>et al.</em> 2009. Mixed effects models and extensions in ecology with <span>R</span>. Vol. 574. New York: Springer.
+<span class="nocase">Zuur AF, Ieno EN, Walker NJ, Saveliev AA, Smith GM <em>et al.</em></span> 2009. Mixed effects models and extensions in ecology with <span>R</span>. Vol. 574. New York: Springer.
 </div>
 </div>
 </section>

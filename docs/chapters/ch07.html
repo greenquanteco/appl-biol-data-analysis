@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>7&nbsp; Summarizing biological data – Applied Biological Data Analysis</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -69,15 +72,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../chapters/ch06.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -108,7 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <style>html{ scroll-behavior: smooth; }</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -161,9 +163,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -461,6 +461,18 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Introduction to Bayesian inference for biologists</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch31.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Advanced R graphics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch32.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Classification and regression trees</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -490,7 +502,7 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#summarizing-a-data-frame" id="toc-summarizing-a-data-frame" class="nav-link active" data-scroll-target="#summarizing-a-data-frame"><span class="header-section-number">7.1</span> Summarizing a data frame</a>
+  <li><a href="#sec-summ-df" id="toc-sec-summ-df" class="nav-link active" data-scroll-target="#sec-summ-df"><span class="header-section-number">7.1</span> Summarizing a data frame</a>
   <ul class="collapse">
   <li><a href="#sec-summ-agg" id="toc-sec-summ-agg" class="nav-link" data-scroll-target="#sec-summ-agg"><span class="header-section-number">7.1.1</span> Summarizing by groups (AKA: pivot tables)</a></li>
   <li><a href="#summarizing-by-arbitrary-functions" id="toc-summarizing-by-arbitrary-functions" class="nav-link" data-scroll-target="#summarizing-by-arbitrary-functions"><span class="header-section-number">7.1.2</span> Summarizing by arbitrary functions</a></li>
@@ -531,8 +543,8 @@ window.Quarto = {
 
 
 <p>In the last module we saw how single variables can be described or summarized using descriptive statistics (see <a href="ch06.html" class="quarto-xref"><span>Chapter 6</span></a>). In this chapter we will extend that to summarizing values by groups. Indeed, comparing the mean values in different groups is one of the most important types of tests we do in biology (see <a href="ch15.html" class="quarto-xref"><span>Chapter 15</span></a>).</p>
-<section id="summarizing-a-data-frame" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="summarizing-a-data-frame"><span class="header-section-number">7.1</span> Summarizing a data frame</h2>
+<section id="sec-summ-df" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="sec-summ-df"><span class="header-section-number">7.1</span> Summarizing a data frame</h2>
 <p>You can get a quick numerical summary of a vector or a dataset with <code>summary()</code>. The examples below use the built-in dataset <code>iris</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># summarize a data frame</span></span>
@@ -1015,24 +1027,24 @@ color   setosa versicolor virginica
 <span id="cb65-12"><a href="#cb65-12" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(mylist, <span class="cf">function</span>(x){x<span class="sc">$</span>estimate})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
-mean of x 
- 0.476857 
+ mean of x 
+-0.1667446 
 
 [[2]]
- mean of x 
--0.1546412 
+mean of x 
+ 0.116918 
 
 [[3]]
- mean of x 
--0.3651309 
+mean of x 
+0.1961034 
 
 [[4]]
 mean of x 
-0.2032824 
+0.4194864 
 
 [[5]]
-  mean of x 
-0.001224846 </code></pre>
+   mean of x 
+-0.007551175 </code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1040,7 +1052,7 @@ mean of x
 <span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(mylist, <span class="cf">function</span>(x){x<span class="sc">$</span>estimate})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   mean of x    mean of x    mean of x    mean of x    mean of x 
- 0.476856990 -0.154641243 -0.365130876  0.203282386  0.001224846 </code></pre>
+-0.166744584  0.116918048  0.196103420  0.419486438 -0.007551175 </code></pre>
 </div>
 </div>
 <p>The function <code>lapply()</code> can sometimes be combined with <code>do.call()</code> to produce similar outputs as <code>sapply()</code>:</p>
@@ -1048,7 +1060,7 @@ mean of x
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">do.call</span>(c, <span class="fu">lapply</span>(mylist, <span class="cf">function</span>(x){x<span class="sc">$</span>estimate}))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   mean of x    mean of x    mean of x    mean of x    mean of x 
- 0.476856990 -0.154641243 -0.365130876  0.203282386  0.001224846 </code></pre>
+-0.166744584  0.116918048  0.196103420  0.419486438 -0.007551175 </code></pre>
 </div>
 </div>
 <p>Clever use of <code>lapply()</code> and <code>sapply()</code> can save you a lot of time and typing. Interestingly, using these functions can make base R code feel a lot like <code>tidyverse</code> code, in the sense that commands are issued as functions with much less focus on manipulating objects.</p>
@@ -1065,8 +1077,8 @@ mean of x
 <span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(aa)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>aa
- 4  5  6  7  8  9 10 11 12 13 15 16 17 
- 2  1  4  7  7  3  3  6  6  3  2  4  2 </code></pre>
+ 4  5  6  7  8  9 10 11 12 15 16 17 18 
+ 1  4  4  8  6  9  8  1  3  2  1  1  2 </code></pre>
 </div>
 </div>
 <p>If you need a count that includes 0s for missing values, there are a few ways to do this. My preferred solution is to use the custom function below. This function counts how many times each value in <code>values</code> occurs in <code>input</code>.</p>
@@ -1083,7 +1095,7 @@ mean of x
 <span id="cb73-10"><a href="#cb73-10" aria-hidden="true" tabindex="-1"></a><span class="fu">table.all</span>(x1, <span class="dv">0</span><span class="sc">:</span><span class="dv">30</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 
- 0  0  0  0  0  1  0  2  2  2  3  5  2  0  1  0  2  0  0  0  0  0  0  0  0  0 
+ 0  0  0  0  3  2  0  0  1  3  4  2  2  1  1  0  0  0  0  1  0  0  0  0  0  0 
 26 27 28 29 30 
  0  0  0  0  0 </code></pre>
 </div>
@@ -1093,8 +1105,8 @@ mean of x
 <span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(x1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>x1
- 5  7  8  9 10 11 12 14 16 
- 1  2  2  2  3  5  2  1  2 </code></pre>
+ 4  5  8  9 10 11 12 13 14 19 
+ 3  2  1  3  4  2  2  1  1  1 </code></pre>
 </div>
 </div>
 <p>If you plot a <code>table()</code> result, you get a sort of bar graph. This is similar to what you get with a command like <code>plot(...,type = "h")</code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>

@@ -2,4 +2,4 @@
 title: "Extensions of GLMs: nonlinear and mixed models"
 ---
 
-Blah blah test test test.
+Even our curves have curves.

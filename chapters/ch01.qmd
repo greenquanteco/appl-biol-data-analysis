@@ -137,7 +137,7 @@ Recently, the American Statistical Association (ASA) published a number of paper
 
 ### Where *p*-values come from
 
-So where do *p*-values come from, anyway? Remember, *p*-values are an expression of how likely the observed data would be if the null hypothesis was true. Then calculation of a *p*-value involves assumptions about the size of the effect (i.e., difference between the results if the null is true vs. not true), the variability of the outcome (random or otherwise), and the distribution of different summary statistics of the results assuming that the null hypothesis is true. Let's consider the example of a *t*-test. A *t*-test is used to compare means of two groups. We'll talk more about them in @sec-groups-2ttest. We will use R to simulate some data and explore a basic *t*-test.
+So where do *p*-values come from, anyway? Remember, *p*-values are an expression of how likely the observed data would be if the null hypothesis was true. Then calculation of a *p*-value involves assumptions about the size of the effect (i.e., difference between the results if the null is true vs. not true), the variability of the outcome (random or otherwise), and the distribution of different summary statistics of the results assuming that the null hypothesis is true. Let's consider the example of a *t*-test. A *t*-test is used to compare means of two groups. We'll talk more about them in @sec-groups-2samp. We will use R to simulate some data and explore a basic *t*-test.
 
 ```{r}
 set.seed(123)

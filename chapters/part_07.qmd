@@ -2,4 +2,4 @@
 title: "Multivariate data analysis"
 ---
 
-Blah blah test test test.
+The needs of the many outweigh the needs of the few, or the one.

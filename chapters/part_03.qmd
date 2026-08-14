@@ -2,4 +2,4 @@
 title: "Exploratory data analysis with R"
 ---
 
-Blah blah test test test.
+If it looks like a duck, and quacks like a duck, it's not a normal distribution.

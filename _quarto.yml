@@ -10,7 +10,8 @@ book:
   repo-actions: [edit, issue]
   cover-image: images/lab_logo_02.jpg
   title: "Applied Biological Data Analysis"
-  date: "July 28, 2026"
+  date: today
+  date-format: long
   author:
   - name: Nick Green
     degrees:
