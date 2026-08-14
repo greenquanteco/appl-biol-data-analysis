@@ -1,6 +1,39 @@
 # Tests for contingency {#sec-indep}
 
+Tests for contingency, or tests for independence, are tests where both the predictor and the reponse variables are categorical. The question being asked is usually some version of, "If an observation is in category A, does it also tend to be in category B?". 
+
+
 ## Fisher's exact test {#sec-indep-fisher}
+
+**Question:** Are the proportions of data described by two or more categorical variables random or nonrandom?
+
+**Null hypothesis:** Membership in one of one set of categories is independent of membership in one of another set of categories.
+
+**Alternative hypothesis:** Membership in one of one set of categories is not independent of membership in one of another set of categories.
+
+**Example use case:** Rick is studying if whether a fish spawning or not spawning is related to whether it resides in main channel or off-channel habitat, and he has dozens of fish in his dataset.
+
+
+**Fisher’s exact test** is a test for independence in contingency tables
+that is usually only used when sample sizes are small. This is because
+the *P*-value calculation involves a numerous factorials, which can
+quickly overwhelm even modern desktop computers. Consequently, most
+modern programs use an approximation to the true *P*-value, obviating
+the purpose of an exact test. For any situation where a Fisher’s exact
+test is appropriate, a chi-square ($\chi^2$) test will usually give the
+same answer, but faster (as long as the sample size is large enough).
+
+```{r}
+# make a matrix from the table above
+a <- matrix(c(17,6,3,4,4,14), byrow=TRUE, nrow=3)
+a
+fisher.test(a)
+```
+
+Because Fisher's is an exact test (i.e., the *P*-value is an direct,
+exact calculation), there is no test statistic and no degrees of freedom
+to report.
+
 
 ## Chi-squared test {#sec-indep-chisq}
 

@@ -777,7 +777,9 @@ TukeyHSD(aov(mod1))
 # method 2:
 TukeyHSD(mod2)
 ```
-The Tukey output shows us that every group differs from every other, with *p<0.001* (here *p* is rounded to 0, although it can never be 0). The differences in group means are presented with their **95% confidence intervals (CI)**. For example, the difference between the group means of versicolor and setosa is 2.798 cm, with 95% CI = [2.594, 3.002]. Notice that none of these CI include 0: this suggests that a true difference of 0 between any two groups is very unlikely. Even without examining *p*-values, CI provide a useful way to evaluate both the direction and magnitude of differences.
+The Tukey output shows us that every group differs from every other, with *p<0.001* (here *p* is rounded to 0, although it can never be 0). The differences in group means are presented with their **95% confidence intervals (CI)**. For example, the difference between the group means of `versicolor` and `setosa` is 2.798 cm, with 95% CI = [2.594, 3.002]. The fact that the difference is $>0$ means that the mean in `versicolor` is greater than the mean in `setosa`. If the difference was negative, then that would mean that the mean in `setosa` was greater.
+
+Notice that none of these CI include 0: this suggests that a true difference of 0 between any two groups is very unlikely. Even without examining *p*-values, CI provide a useful way to evaluate both the direction and magnitude of differences.
 
 One of the nice things about the Tukey HSD test is that the *p*-values are automatically adjusted for **multiple comparisons**, a phenomenon where the probability of a false positive goes up as a [researcher performs more tests](https://xkcd.com/882/), using a customized version of the probability distribution for the test statistic. This controls the **family wise error rate**, or total false positive probability for this set of three related tests. 
 
@@ -825,9 +827,88 @@ The interaction is nonsignificant, so we should instead report the main effects 
 
 #### Blocking designs {#sec-groups-more-anova-block}
 
+**Blocking** is a strategy in experimental design that attempts to control for variation by grouping experimental units (observations) into groups called **blocks**. Blocks are defined by observations that are similar to each other in some attribute--like location, time, sex, species, etc.--that contributes to overall variation and that the researcher needs to control for. 
+
+Consider the example below. 
+
+![Illustration of a field experiment with 3 researcher-applied treatments, A, B, and C, spread out over a landscape.](../images/review-blocking1.jpg){fig-alt="Schematic of an unblocked experimental design with three treatments. Experimental units assigned to Treatment A, Treatment B, and Treatment C are represented by blue squares, orange triangles, and green circles, respectively. Units from all three treatments are distributed throughout the experimental area without being grouped into blocks."}
+
+This experiment appears to have randomly distributed its treatments across space, which is good. However, there will still be variation among observations that is caused by different environments or habitats in different places. Rather than model those location-specific differences explicitly, the research could instead distributed **blocks** of observations randomly across space, with each block containing 1 observation of each of the 3 treatments.
+
+![Illustration of a field experiment with 3 researcher-applied treatments, A, B, and C, arranged in blocks spread out over a landscape.](../images/review-blocking2.jpg){fig-alt="fig-alt="Schematic of a blocked experimental design with three treatments. Experimental units assigned to Treatment A, Treatment B, and Treatment C are represented by blue squares, orange triangles, and green circles, respectively. The units are arranged into nine blocks, shown as rectangles, with each block containing one unit from each treatment."}
+
+Now, variation attributable to spatial factors can be associated with the blocks and no longer confounds the effects of treatment. Observations within a block should be close enough that they experience the same environmental conditions.
+
+In the example code below, we are going to add an imaginary factor to the `iris` dataset, `color`. The example analysis shows how a researcher would test for a difference in petal length between flowers of different colors, while accounting for the fact that different species have different petal lengths. In this analysis, the researcher is interested in differences between colors, and considers species a potential confounding variable. 
+
+This example works because we force the color effect with an artificial variable, and because the setup says explicitly that the researcher considers species a potential confound. From an experimental design standpoint, blocking is not synonymous with "a second categorical factor in an ANOVA", although that is how it is treated mathematically.
+
+```{r}
+# spare copy
+dx <- iris
+
+# make the largest flowers within each species purple,
+# and the smallest flowers blue. 
+# scale within species
+z <- tapply(dx$Petal.Length, dx$Species, scale)
+dx$z <- do.call(c, z)
+
+# any flower >= 0.6 SD away from mean
+# is a non-white color
+dx$color <- "white"
+dx$color[which(dx$z <= -0.6)] <- "blue"
+dx$color[which(dx$z >= 0.6)] <- "purple"
+
+# vector of colors
+cols <- c("blue", "purple", "white")
+
+boxplot(Petal.Length~color, data=dx, col=cols)
+```
+
+The boxplot shows that the sample medians for blue, white, and purple are the smallest, intermediate, and greatest, respectively. But is that a significant difference?
+
+```{r}
+# test for effect of color on petal length
+summary(aov(Petal.Length~color, data=dx))
+```
+
+No, it's not. But at this point the researcher should suspect that a lot of variation is size is really due to species. If she controls for species by treating it as a blocking factor, then she might be better able to detect an effect of color.
+
+Below is the same petal length data broken up by color within species. Now, we can see that within each species, blue flowers are smaller and purple flower are larger. The first ANOVA couldn't detect that because it didn't consider species.
+
+Also, note the use of `axis()` to create a more elegant set of labels for the x-axis.
+
+```{r}
+#| fig.width: 8
+#| fig.height: 7
+
+par(mar=c(6.1, 4.1, 1.1, 1.1), bty="n")
+boxplot(Petal.Length~color+Species, data=dx, col=cols,
+        xaxt="n", xlab="", ylab="Petal length (cm)")
+axis(side=1, at=1:3, labels=cols)
+axis(side=1, at=4:6, labels=cols)
+axis(side=1, at=7:9, labels=cols)
+axis(side=1, at=c(2, 5, 8), labels=levels(dx$Species), line=3)
+```
+
+Here is the ANOVA rerun with species as a blocking factor:
+
+```{r}
+anovatable <- summary(aov(Petal.Length~color+Species, data=dx))
+anovatable
+```
+
+This shows that there is a significant effect of color, after species has been accounted for. We can also see why species covered the effect of color: there are considerably more sums of squares associated with species than with color.
+
+```{r}
+anovatable[[1]][,2]/sum(anovatable[[1]][,2])
+```
+
+The total variance is approximately $13.61+443.16+7.56=464.33$. Most of that variance ($100\left(443.16/464.33\right)\approx\text{95.4%}$) is attributed to differences between species. Only about 3% ($13.61/464.33$) is attributed to color. It's a small effect, but a significant one, and only detectable after accounting for species.
+
 #### Repeated measures ANOVA {#sec-groups-more-anova-rep}
 
-#### Tukey's HSD post hoc test {#sec-groups-more-anova-tukey}
+Coming soon!
 
 ### Kruskal-Wallis test {#sec-groups-more-kw}
 

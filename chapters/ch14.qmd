@@ -31,7 +31,7 @@ packages may refer to this as a spreadsheet, data frame, or matrix.
 Whatever you call them, a typical biological dataset usually looks like
 this:
 
-![Structure of a typical biological dataset. Observations are stored on rows, and variables that describe those observations are stored in columns. All information about an observation is contained in 1 row. All observations of one variable are contained in 1 column.](../images/review-01.jpg){fig-alt: "Structure of a typical biological dataset. Observations are stored on rows, and variables that describe those observations are stored in columns. All information about an observation is contained in 1 row. All observations of one variable are contained in 1 column."}
+![Structure of a typical biological dataset. Observations are stored on rows, and variables that describe those observations are stored in columns. All information about an observation is contained in 1 row. All observations of one variable are contained in 1 column.](../images/review-01.jpg){fig-alt="Structure of a typical biological dataset. Observations are stored on rows, and variables that describe those observations are stored in columns. All information about an observation is contained in 1 row. All observations of one variable are contained in 1 column."}
 
 - Each row of the dataset is called an **observation**, or sometimes    **record**. Each entity about which data is collected corresponds to    1 row of the dataset. For example, the dataset for a study of limb    morphology in bats might have one row for each species.
   - If someone asks what your "sample size" or "number of samples" is, the answer is likely the number of rows in your dataset (minus any blanks or missing values, of course).
@@ -44,7 +44,7 @@ spreadsheet. Unlike a **matrix**, rows and columns are not
 interchangeable: a row of a data frame is a data frame with 1 row, while
 a column is really a vector (i.e., not a data frame).
 
-![The differences between R data frames (left) and matrices (right). ](../images/review-dataframe.jpg){fig-alt: ""}
+![Comparison of the structure of data frames and matrices in R.](../images/review-02.jpg){#fig-review-dataframe-matrix fig-alt="Side-by-side comparison of a data frame and a matrix. In the data frame, columns are vectors accessed with the dollar-sign operator, while rows are data frames; values within each column must share a type, but different columns may contain different types. In the matrix, columns and rows are vectors accessed with brackets, and all values in the matrix must share the same type. A red outline highlights one column in each structure and a blue outline highlights one row."}
 
 Variables in a dataset come in three varieties. Understanding these is
 crucial to being able to think about the structure of your dataset and

@@ -746,7 +746,7 @@ plot(d2$Petal.Length, d2$Sepal.Length, xlim=c(0,6), ylim=c(0,8))
 
 The argument `mfcol` to `par()` works similarly to `mfrow`, but on columns instead of rows. For `mfcol` you supply the number of columns, then the number of rows. Likewise, panels are filled by column first instead of row first. The panel layout `mfrow=c(2,3)` is the same as `mfcol=c(3,2)`, but the panels will be filled in a different order:
 
-![Illustration of how `par()$mfrow` and `par()$mfcol` draw and fill figure panels. `mfrow` fills by rows, while `mfcol` fills by columns.](../images/08-05.jpg){fig-alt: "Illustration of how par options mfrow and mfcol draw and fill figure panels. mfrow fills by rows, while mfcol fills by columns."}
+![Illustration of how `par()$mfrow` and `par()$mfcol` draw and fill figure panels. `mfrow` fills by rows, while `mfcol` fills by columns.](../images/08-05.jpg){fig-alt="Illustration of how par options mfrow and mfcol draw and fill figure panels. mfrow fills by rows, while mfcol fills by columns."}
 
 Whether to use `mfrow` or `mfcol` is usually a matter of preference. Clever use of one or the other can allow you to automatically make multi-panel plots in a preferred layout in a `for()` loop from data stored in a list or indexed by a vector.
 
