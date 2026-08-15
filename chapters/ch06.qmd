@@ -606,6 +606,7 @@ axis(side=2, at=c(0, 1), labels=NA)
 
 ### Linear correlation {#sec-desc-co-lin}
 
+#### Correlations between 2 variables {#sec-desc-co-lin-two}
 When we suspect that two variables are correlated, and that the shape of that relationship is a straight line, we can use **Pearson's product moment correlation**, also called **Pearson's *r***. 
 
 ```{r}
@@ -619,6 +620,7 @@ You can also request a significance test on the coefficient, although some might
 cor.test(iris$Petal.Length, iris$Petal.Width)
 ```
 
+#### Correlations between many pairs of variables  {#sec-desc-co-lin-many}
 One of the neat features of `cor()` is that you can get a correlation matrix showing the correlation coefficients between many pairs of variable at once.
 
 ```{r}
@@ -655,6 +657,7 @@ for(i in 1:nrow(cor.df)){
 cor.df
 ```
 
+#### Scatterplot matrices {#sec-desc-co-lin-pairs}
 If you want to visualize many potential correlations at once, you can construct a **scatterplot matrix** using function `pairs()`. This will plot every pair of variables in a data frame. We are going borrow a function called `panel.cor()` from the `pairs()` help page so that we get both the scatterplots *and* the linear correlation coefficients.
 
 ```{r}
@@ -736,3 +739,37 @@ cor.test(iris$Petal.Length, iris$Sepal.Width, method="spearman")
 ```
 
 When you run a nonlinear correlation test, you will often get the warning `Warning in cor.test.default ... : Cannot compute exact p-value with ties`. All this means is that some of the rankings are tied. This warning can be safely ignored.
+
+#### Nonlinear correlations between many pairs of variables  {#sec-desc-co-non-pairs}
+
+Every function that works with linear correlation will also work with nonlinear correlation. For example, we can get a matrix of Spearman correlations by using the `method` argument to `cor()`.
+
+```{r}
+# Nonlinear correlation matrix
+cor(iris[,1:4], method="spearman")
+```
+
+And we can modify the accessory functions of `pairs()` to use the Spearman correlation.
+
+```{r}
+#| fig-cap: "Scatterplot matrix showing possible nonlinear correlations between the numeric variables in the `iris` data frame."
+#| fig-alt:  "Scatterplot matrix showing possible nonlinear correlations between the numeric variables in the `iris` data frame."
+#| label: fig-scatterplotmatrix2
+
+
+# from ?pairs
+# just paste this in once to define the function
+# try changing some arguments to change the behavior!
+panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
+{
+    par(usr = c(0, 1, 0, 1))
+    r <- abs(cor(x, y, method="spearman")) # <-- changed here
+    txt <- format(c(r, 0.123456789), digits = digits)[1]
+    txt <- paste0(prefix, txt)
+    if(missing(cex.cor)) cex.cor <- 0.8/strwidth(txt)
+    text(0.5, 0.5, txt, cex = cex.cor * r)
+}
+
+# make the scatterplot matrix
+pairs(iris[,1:4], lower.panel=panel.smooth, upper.panel=panel.cor, gap=0)
+```

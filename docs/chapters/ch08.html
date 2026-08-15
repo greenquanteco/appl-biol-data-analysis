@@ -1369,7 +1369,12 @@ window.Quarto = {
 </div>
 </div>
 <p>The argument <code>mfcol</code> to <code>par()</code> works similarly to <code>mfrow</code>, but on columns instead of rows. For <code>mfcol</code> you supply the number of columns, then the number of rows. Likewise, panels are filled by column first instead of row first. The panel layout <code>mfrow=c(2,3)</code> is the same as <code>mfcol=c(3,2)</code>, but the panels will be filled in a different order:</p>
-<p><img src="../images/08-05.jpg" class="img-fluid" alt="Illustration of how par()$mfrow and par()$mfcol draw and fill figure panels. mfrow fills by rows, while mfcol fills by columns.">{fig-alt: “Illustration of how par options mfrow and mfcol draw and fill figure panels. mfrow fills by rows, while mfcol fills by columns.”}</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<figcaption>Illustration of how <code>par()$mfrow</code> and <code>par()$mfcol</code> draw and fill figure panels. <code>mfrow</code> fills by rows, while <code>mfcol</code> fills by columns.</figcaption>
+<p><img src="../images/08-05.jpg" class="img-fluid figure-img" alt="Illustration of how par options mfrow and mfcol draw and fill figure panels. mfrow fills by rows, while mfcol fills by columns."></p>
+</figure>
+</div>
 <p>Whether to use <code>mfrow</code> or <code>mfcol</code> is usually a matter of preference. Clever use of one or the other can allow you to automatically make multi-panel plots in a preferred layout in a <code>for()</code> loop from data stored in a list or indexed by a vector.</p>
 <p>One last point about multi-panel plots: the <code>plot()</code> function both creates new panels and creates plots within each panel. Part of this process is defining the coordinate system for a panel. When you make a plot, subsequent commands that add elements to plots such as <code>points()</code>, <code>abline()</code>, <code>legend()</code>, etc., will use the coordinate system of the most recent panel. Think about this when designing complicated figures. The example below demonstrates how a legend is placed according to the coordinate system of the most recently-created plot.</p>
 <div class="cell" data-layout-align="center">

@@ -269,7 +269,7 @@
 
 \title{Applied Biological Data Analysis}
 \author{Nick Green}
-\date{August 14, 2026}
+\date{August 15, 2026}
 \begin{document}
 \maketitle
 
@@ -335,10 +335,11 @@ dataset. So, I settled on 3 datasets:
 \item
   The famous \texttt{iris} dataset included with R. This will be used
   primarily in early modules covering data manipulation and data frame
-  management, as well as the review of basic statistics in Module 9.
+  management, as well as the review of basic statistics in Modules 14 to
+  17.
 \item
   Datasets simulated \emph{ad hoc} to demonstrate simple concepts with
-  no underlying biological reality (i.e., numbers to demonstrate the
+  no underlying biological reality (e.g., numbers to demonstrate the
   properties of a probability distribution).
 \item
   Small mammal trapping and measurement data from the
@@ -525,8 +526,9 @@ textbooks:
   WinBUGS or JAGS, which can be accessed from R.
 \end{itemize}
 
-If you want a PDF version of this website, please be patient. I'll put a
-PDF version here once I can get it to exist.
+An online version of this book is available at
+\url{https://greenquanteco.github.io/appl-biol-data-analysis/}. The
+online version and the PDF hosted there are updated from time to time.
 
 \section*{Course organization}\label{course-organization}
 \addcontentsline{toc}{section}{Course organization}
@@ -703,8 +705,7 @@ the raw data download to the files provided here.
 \pandocbounded{\includegraphics[keepaspectratio]{images/squirrel_pic.jpg}}
 \end{center}
 
-I'm a
-\href{https://facultyweb.kennesaw.edu/ngreen62/index.php}{quantitative
+I'm a \href{https://greenquanteco.github.io/research}{quantitative
 ecologist at Kennesaw State University} who studies human impacts on
 animal populations. Since earning my PhD at Baylor University in 2012,
 I've been fortunate to have worked in a variety of government and
@@ -9789,7 +9790,7 @@ You can get the mean of a variable in R using the function
 \end{Shaded}
 
 \begin{verbatim}
-[1] 4.986525
+[1] 5.056531
 \end{verbatim}
 
 Like many summarization functions in R, \texttt{mean()} does not
@@ -9854,12 +9855,12 @@ combining base functions.
 
 \CommentTok{\# test it out:}
 \FunctionTok{geomean}\NormalTok{(x)}
-\DocumentationTok{\#\# [1] 6.048237}
+\DocumentationTok{\#\# [1] 5.958454}
 
 \CommentTok{\# another way:}
 \NormalTok{geomean2 }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x)\{}\FunctionTok{prod}\NormalTok{(x)}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\FunctionTok{length}\NormalTok{(x))\}}
 \FunctionTok{geomean2}\NormalTok{(x)}
-\DocumentationTok{\#\# [1] 6.048237}
+\DocumentationTok{\#\# [1] 5.958454}
 \end{Highlighting}
 \end{Shaded}
 
@@ -9894,11 +9895,11 @@ get:
 
 \CommentTok{\# compare mean, geometric mean, and harmonic mean:}
 \FunctionTok{mean}\NormalTok{(a)}
-\DocumentationTok{\#\# [1] 38.8423}
+\DocumentationTok{\#\# [1] 30.75888}
 \FunctionTok{geomean}\NormalTok{(a)}
-\DocumentationTok{\#\# [1] 26.54886}
+\DocumentationTok{\#\# [1] 20.89664}
 \FunctionTok{har.mean}\NormalTok{(a)}
-\DocumentationTok{\#\# [1] 17.04769}
+\DocumentationTok{\#\# [1] 13.71774}
 \end{Highlighting}
 \end{Shaded}
 
@@ -9971,10 +9972,10 @@ function. You can also use \texttt{quantile()} with argument
 \begin{Highlighting}[]
 \NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(}\DecValTok{100}\NormalTok{)}
 \FunctionTok{median}\NormalTok{(x)}
-\DocumentationTok{\#\# [1] {-}0.2467164}
+\DocumentationTok{\#\# [1] {-}0.111393}
 \FunctionTok{quantile}\NormalTok{(x, }\FloatTok{0.5}\NormalTok{)}
-\DocumentationTok{\#\#        50\% }
-\DocumentationTok{\#\# {-}0.2467164}
+\DocumentationTok{\#\#       50\% }
+\DocumentationTok{\#\# {-}0.111393}
 \end{Highlighting}
 \end{Shaded}
 
@@ -10511,6 +10512,9 @@ of consistency (\emph{r}).}
 
 \subsection{Linear correlation}\label{sec-desc-co-lin}
 
+\subsubsection{Correlations between 2
+variables}\label{sec-desc-co-lin-two}
+
 When we suspect that two variables are correlated, and that the shape of
 that relationship is a straight line, we can use \textbf{Pearson's
 product moment correlation}, also called \textbf{Pearson's \emph{r}}.
@@ -10550,6 +10554,9 @@ sample estimates:
       cor 
 0.9628654 
 \end{verbatim}
+
+\subsubsection{Correlations between many pairs of
+variables}\label{sec-desc-co-lin-many}
 
 One of the neat features of \texttt{cor()} is that you can get a
 correlation matrix showing the correlation coefficients between many
@@ -10617,6 +10624,8 @@ a loop:
 5  Sepal.Width  Petal.Width -0.366 0.000
 6 Petal.Length  Petal.Width  0.963 0.000
 \end{verbatim}
+
+\subsubsection{Scatterplot matrices}\label{sec-desc-co-lin-pairs}
 
 If you want to visualize many potential correlations at once, you can
 construct a \textbf{scatterplot matrix} using function \texttt{pairs()}.
@@ -10733,6 +10742,65 @@ warning
 \texttt{Warning\ in\ cor.test.default\ ...\ :\ Cannot\ compute\ exact\ p-value\ with\ ties}.
 All this means is that some of the rankings are tied. This warning can
 be safely ignored.
+
+\subsubsection{Nonlinear correlations between many pairs of
+variables}\label{sec-desc-co-non-pairs}
+
+Every function that works with linear correlation will also work with
+nonlinear correlation. For example, we can get a matrix of Spearman
+correlations by using the \texttt{method} argument to \texttt{cor()}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Nonlinear correlation matrix}
+\FunctionTok{cor}\NormalTok{(iris[,}\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{], }\AttributeTok{method=}\StringTok{"spearman"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+             Sepal.Length Sepal.Width Petal.Length Petal.Width
+Sepal.Length    1.0000000  -0.1667777    0.8818981   0.8342888
+Sepal.Width    -0.1667777   1.0000000   -0.3096351  -0.2890317
+Petal.Length    0.8818981  -0.3096351    1.0000000   0.9376668
+Petal.Width     0.8342888  -0.2890317    0.9376668   1.0000000
+\end{verbatim}
+
+And we can modify the accessory functions of \texttt{pairs()} to use the
+Spearman correlation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# from ?pairs}
+\CommentTok{\# just paste this in once to define the function}
+\CommentTok{\# try changing some arguments to change the behavior!}
+\NormalTok{panel.cor }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, y, }\AttributeTok{digits =} \DecValTok{2}\NormalTok{, }\AttributeTok{prefix =} \StringTok{""}\NormalTok{, cex.cor, ...)}
+\NormalTok{\{}
+    \FunctionTok{par}\NormalTok{(}\AttributeTok{usr =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\NormalTok{    r }\OtherTok{\textless{}{-}} \FunctionTok{abs}\NormalTok{(}\FunctionTok{cor}\NormalTok{(x, y, }\AttributeTok{method=}\StringTok{"spearman"}\NormalTok{)) }\CommentTok{\# \textless{}{-}{-} changed here}
+\NormalTok{    txt }\OtherTok{\textless{}{-}} \FunctionTok{format}\NormalTok{(}\FunctionTok{c}\NormalTok{(r, }\FloatTok{0.123456789}\NormalTok{), }\AttributeTok{digits =}\NormalTok{ digits)[}\DecValTok{1}\NormalTok{]}
+\NormalTok{    txt }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(prefix, txt)}
+    \ControlFlowTok{if}\NormalTok{(}\FunctionTok{missing}\NormalTok{(cex.cor)) cex.cor }\OtherTok{\textless{}{-}} \FloatTok{0.8}\SpecialCharTok{/}\FunctionTok{strwidth}\NormalTok{(txt)}
+    \FunctionTok{text}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\FloatTok{0.5}\NormalTok{, txt, }\AttributeTok{cex =}\NormalTok{ cex.cor }\SpecialCharTok{*}\NormalTok{ r)}
+\NormalTok{\}}
+
+\CommentTok{\# make the scatterplot matrix}
+\FunctionTok{pairs}\NormalTok{(iris[,}\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{], }\AttributeTok{lower.panel=}\NormalTok{panel.smooth, }\AttributeTok{upper.panel=}\NormalTok{panel.cor, }\AttributeTok{gap=}\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-scatterplotmatrix2}Scatterplot matrix showing
+possible nonlinear correlations between the numeric variables in the
+\texttt{iris} data frame.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Scatterplot matrix showing possible nonlinear correlations between the numeric variables in the `iris` data frame.}]{chapters/ch06_files/figure-pdf/fig-scatterplotmatrix2-1.pdf}}
+
+}
+
+\end{figure}%
 
 \chapter{Summarizing biological data}\label{sec-summ}
 
@@ -13174,9 +13242,17 @@ are filled by column first instead of row first. The panel layout
 \texttt{mfrow=c(2,3)} is the same as \texttt{mfcol=c(3,2)}, but the
 panels will be filled in a different order:
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Illustration of how par()\$mfrow and par()\$mfcol draw and fill figure panels. mfrow fills by rows, while mfcol fills by columns.}]{chapters/../images/08-05.jpg}}\{fig-alt:
-``Illustration of how par options mfrow and mfcol draw and fill figure
-panels. mfrow fills by rows, while mfcol fills by columns.''\}
+\begin{figure}[H]
+
+\caption{Illustration of how \texttt{par()\$mfrow} and
+\texttt{par()\$mfcol} draw and fill figure panels. \texttt{mfrow} fills
+by rows, while \texttt{mfcol} fills by columns.}
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio,alt={Illustration of how par options mfrow and mfcol draw and fill figure panels. mfrow fills by rows, while mfcol fills by columns.}]{chapters/../images/08-05.jpg}}
+
+}
+
+\end{figure}%
 
 Whether to use \texttt{mfrow} or \texttt{mfcol} is usually a matter of
 preference. Clever use of one or the other can allow you to
@@ -17328,12 +17404,19 @@ function.
 The figure below shows the relationship between the logit and logistic
 functions:
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={The logit and logistic functions. The logit function (left) maps probabilities in the interval \textbackslash left(0,1\textbackslash right) onto the unbounded interval \textbackslash left(−\textbackslash infty,+\textbackslash infty). The logistic function (right) is its inverse, mapping values from \textbackslash left(−\textbackslash infty,+\textbackslash infty) back onto \textbackslash left(0,1\textbackslash right).}]{chapters/../images/09-03.jpg}}\{fig-alt:
-``Two plots illustrating inverse functions. The logit function increases
-from negative infinity as X approaches 0 to positive infinity as X
-approaches 1, crossing zero at X=0.5. The logistic function is an
-S-shaped curve increasing from 0 to 1 as X ranges from negative to
-positive infinity, crossing 0.5 at X=0.''\}
+\begin{figure}[H]
+
+\caption{The logit and logistic functions. The logit function (left)
+maps probabilities in the interval \(\left(0,1\right)\) onto the
+unbounded interval \(\left(−\infty,+\infty\right)\). The logistic
+function (right) is its inverse, mapping values from
+\(\left(−\infty,+\infty\right)\) back onto \(\left(0,1\right)\).}
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio,alt={Two plots illustrating inverse functions. The logit function increases from negative infinity as X approaches 0 to positive infinity as X approaches 1, crossing zero at X=0.5. The logistic function is an S-shaped curve increasing from 0 to 1 as X ranges from negative to positive infinity, crossing 0.5 at X=0.}]{chapters/../images/09-03.jpg}}
+
+}
+
+\end{figure}%
 
 The logit transformation has the effect of stretching out the ends of a
 distribution, while keeping the relationship between the original and
@@ -19017,11 +19100,18 @@ software packages may refer to this as a spreadsheet, data frame, or
 matrix. Whatever you call them, a typical biological dataset usually
 looks like this:
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Structure of a typical biological dataset. Observations are stored on rows, and variables that describe those observations are stored in columns. All information about an observation is contained in 1 row. All observations of one variable are contained in 1 column.}]{chapters/../images/review-01.jpg}}\{fig-alt:
-``Structure of a typical biological dataset. Observations are stored on
-rows, and variables that describe those observations are stored in
-columns. All information about an observation is contained in 1 row. All
-observations of one variable are contained in 1 column.''\}
+\begin{figure}[H]
+
+\caption{Structure of a typical biological dataset. Observations are
+stored on rows, and variables that describe those observations are
+stored in columns. All information about an observation is contained in
+1 row. All observations of one variable are contained in 1 column.}
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio,alt={Structure of a typical biological dataset. Observations are stored on rows, and variables that describe those observations are stored in columns. All information about an observation is contained in 1 row. All observations of one variable are contained in 1 column.}]{chapters/../images/review-01.jpg}}
+
+}
+
+\end{figure}%
 
 \begin{itemize}
 \tightlist
@@ -19059,8 +19149,18 @@ spreadsheet. Unlike a \textbf{matrix}, rows and columns are not
 interchangeable: a row of a data frame is a data frame with 1 row, while
 a column is really a vector (i.e., not a data frame).
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={The differences between R data frames (left) and matrices (right).}]{chapters/../images/review-dataframe.jpg}}\{fig-alt:
-``\,``\}
+\begin{figure}
+
+\caption{\label{fig-review-dataframe-matrix}Comparison of the structure
+of data frames and matrices in R.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Side-by-side comparison of a data frame and a matrix. In the data frame, columns are vectors accessed with the dollar-sign operator, while rows are data frames; values within each column must share a type, but different columns may contain different types. In the matrix, columns and rows are vectors accessed with brackets, and all values in the matrix must share the same type. A red outline highlights one column in each structure and a blue outline highlights one row.}]{chapters/../images/review-dfvsmatrix.jpg}}
+
+}
+
+\end{figure}%
 
 Variables in a dataset come in three varieties. Understanding these is
 crucial to being able to think about the structure of your dataset and
@@ -21479,11 +21579,17 @@ The Tukey output shows us that every group differs from every other,
 with \emph{p\textless0.001} (here \emph{p} is rounded to 0, although it
 can never be 0). The differences in group means are presented with their
 \textbf{95\% confidence intervals (CI)}. For example, the difference
-between the group means of versicolor and setosa is 2.798 cm, with 95\%
-CI = {[}2.594, 3.002{]}. Notice that none of these CI include 0: this
-suggests that a true difference of 0 between any two groups is very
-unlikely. Even without examining \emph{p}-values, CI provide a useful
-way to evaluate both the direction and magnitude of differences.
+between the group means of \texttt{versicolor} and \texttt{setosa} is
+2.798 cm, with 95\% CI = {[}2.594, 3.002{]}. The fact that the
+difference is \(>0\) means that the mean in \texttt{versicolor} is
+greater than the mean in \texttt{setosa}. If the difference was
+negative, then that would mean that the mean in \texttt{setosa} was
+greater.
+
+Notice that none of these CI include 0: this suggests that a true
+difference of 0 between any two groups is very unlikely. Even without
+examining \emph{p}-values, CI provide a useful way to evaluate both the
+direction and magnitude of differences.
 
 One of the nice things about the Tukey HSD test is that the
 \emph{p}-values are automatically adjusted for \textbf{multiple
@@ -21615,10 +21721,172 @@ will explore interactions more in the section on ANCOVA below.
 
 \subsubsection{Blocking designs}\label{sec-groups-more-anova-block}
 
+\textbf{Blocking} is a strategy in experimental design that attempts to
+control for variation by grouping experimental units (observations) into
+groups called \textbf{blocks}. Blocks are defined by observations that
+are similar to each other in some attribute--like location, time, sex,
+species, etc.--that contributes to overall variation and that the
+researcher needs to control for.
+
+Consider the example below.
+
+\begin{figure}[H]
+
+\caption{Illustration of a field experiment with 3 researcher-applied
+treatments, A, B, and C, spread out over a landscape.}
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio,alt={Schematic of an unblocked experimental design with three treatments. Experimental units assigned to Treatment A, Treatment B, and Treatment C are represented by blue squares, orange triangles, and green circles, respectively. Units from all three treatments are distributed throughout the experimental area without being grouped into blocks.}]{chapters/../images/review-blocking1.jpg}}
+
+}
+
+\end{figure}%
+
+This experiment appears to have randomly distributed its treatments
+across space, which is good. However, there will still be variation
+among observations that is caused by different environments or habitats
+in different places. Rather than model those location-specific
+differences explicitly, the research could instead distributed
+\textbf{blocks} of observations randomly across space, with each block
+containing 1 observation of each of the 3 treatments.
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Illustration of a field experiment with 3 researcher-applied treatments, A, B, and C, arranged in blocks spread out over a landscape.}]{chapters/../images/review-blocking2.jpg}}\{fig-alt=``fig-alt=''Schematic
+of a blocked experimental design with three treatments. Experimental
+units assigned to Treatment A, Treatment B, and Treatment C are
+represented by blue squares, orange triangles, and green circles,
+respectively. The units are arranged into nine blocks, shown as
+rectangles, with each block containing one unit from each treatment.''\}
+
+Now, variation attributable to spatial factors can be associated with
+the blocks and no longer confounds the effects of treatment.
+Observations within a block should be close enough that they experience
+the same environmental conditions.
+
+In the example code below, we are going to add an imaginary factor to
+the \texttt{iris} dataset, \texttt{color}. The example analysis shows
+how a researcher would test for a difference in petal length between
+flowers of different colors, while accounting for the fact that
+different species have different petal lengths. In this analysis, the
+researcher is interested in differences between colors, and considers
+species a potential confounding variable.
+
+This example works because we force the color effect with an artificial
+variable, and because the setup says explicitly that the researcher
+considers species a potential confound. From an experimental design
+standpoint, blocking is not synonymous with ``a second categorical
+factor in an ANOVA'', although that is how it is treated mathematically.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# spare copy}
+\NormalTok{dx }\OtherTok{\textless{}{-}}\NormalTok{ iris}
+
+\CommentTok{\# make the largest flowers within each species purple,}
+\CommentTok{\# and the smallest flowers blue. }
+\CommentTok{\# scale within species}
+\NormalTok{z }\OtherTok{\textless{}{-}} \FunctionTok{tapply}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{Petal.Length, dx}\SpecialCharTok{$}\NormalTok{Species, scale)}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{z }\OtherTok{\textless{}{-}} \FunctionTok{do.call}\NormalTok{(c, z)}
+
+\CommentTok{\# any flower \textgreater{}= 0.6 SD away from mean}
+\CommentTok{\# is a non{-}white color}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{color }\OtherTok{\textless{}{-}} \StringTok{"white"}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{color[}\FunctionTok{which}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{z }\SpecialCharTok{\textless{}=} \SpecialCharTok{{-}}\FloatTok{0.6}\NormalTok{)] }\OtherTok{\textless{}{-}} \StringTok{"blue"}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{color[}\FunctionTok{which}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{z }\SpecialCharTok{\textgreater{}=} \FloatTok{0.6}\NormalTok{)] }\OtherTok{\textless{}{-}} \StringTok{"purple"}
+
+\CommentTok{\# vector of colors}
+\NormalTok{cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"blue"}\NormalTok{, }\StringTok{"purple"}\NormalTok{, }\StringTok{"white"}\NormalTok{)}
+
+\FunctionTok{boxplot}\NormalTok{(Petal.Length}\SpecialCharTok{\textasciitilde{}}\NormalTok{color, }\AttributeTok{data=}\NormalTok{dx, }\AttributeTok{col=}\NormalTok{cols)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch15_files/figure-pdf/unnamed-chunk-28-1.pdf}}
+
+The boxplot shows that the sample medians for blue, white, and purple
+are the smallest, intermediate, and greatest, respectively. But is that
+a significant difference?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# test for effect of color on petal length}
+\FunctionTok{summary}\NormalTok{(}\FunctionTok{aov}\NormalTok{(Petal.Length}\SpecialCharTok{\textasciitilde{}}\NormalTok{color, }\AttributeTok{data=}\NormalTok{dx))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+             Df Sum Sq Mean Sq F value Pr(>F)
+color         2   13.6   6.805   2.219  0.112
+Residuals   147  450.7   3.066               
+\end{verbatim}
+
+No, it's not. But at this point the researcher should suspect that a lot
+of variation is size is really due to species. If she controls for
+species by treating it as a blocking factor, then she might be better
+able to detect an effect of color.
+
+Below is the same petal length data broken up by color within species.
+Now, we can see that within each species, blue flowers are smaller and
+purple flower are larger. The first ANOVA couldn't detect that because
+it didn't consider species.
+
+Also, note the use of \texttt{axis()} to create a more elegant set of
+labels for the x-axis.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\FloatTok{6.1}\NormalTok{, }\FloatTok{4.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{boxplot}\NormalTok{(Petal.Length}\SpecialCharTok{\textasciitilde{}}\NormalTok{color}\SpecialCharTok{+}\NormalTok{Species, }\AttributeTok{data=}\NormalTok{dx, }\AttributeTok{col=}\NormalTok{cols,}
+        \AttributeTok{xaxt=}\StringTok{"n"}\NormalTok{, }\AttributeTok{xlab=}\StringTok{""}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"Petal length (cm)"}\NormalTok{)}
+\FunctionTok{axis}\NormalTok{(}\AttributeTok{side=}\DecValTok{1}\NormalTok{, }\AttributeTok{at=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{, }\AttributeTok{labels=}\NormalTok{cols)}
+\FunctionTok{axis}\NormalTok{(}\AttributeTok{side=}\DecValTok{1}\NormalTok{, }\AttributeTok{at=}\DecValTok{4}\SpecialCharTok{:}\DecValTok{6}\NormalTok{, }\AttributeTok{labels=}\NormalTok{cols)}
+\FunctionTok{axis}\NormalTok{(}\AttributeTok{side=}\DecValTok{1}\NormalTok{, }\AttributeTok{at=}\DecValTok{7}\SpecialCharTok{:}\DecValTok{9}\NormalTok{, }\AttributeTok{labels=}\NormalTok{cols)}
+\FunctionTok{axis}\NormalTok{(}\AttributeTok{side=}\DecValTok{1}\NormalTok{, }\AttributeTok{at=}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{8}\NormalTok{), }\AttributeTok{labels=}\FunctionTok{levels}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{Species), }\AttributeTok{line=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch15_files/figure-pdf/unnamed-chunk-30-1.pdf}}
+
+Here is the ANOVA rerun with species as a blocking factor:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{anovatable }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(}\FunctionTok{aov}\NormalTok{(Petal.Length}\SpecialCharTok{\textasciitilde{}}\NormalTok{color}\SpecialCharTok{+}\NormalTok{Species, }\AttributeTok{data=}\NormalTok{dx))}
+\NormalTok{anovatable}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+             Df Sum Sq Mean Sq F value Pr(>F)    
+color         2   13.6    6.81   130.6 <2e-16 ***
+Species       2  443.2  221.58  4251.0 <2e-16 ***
+Residuals   145    7.6    0.05                   
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+This shows that there is a significant effect of color, after species
+has been accounted for. We can also see why species covered the effect
+of color: there are considerably more sums of squares associated with
+species than with color.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{anovatable[[}\DecValTok{1}\NormalTok{]][,}\DecValTok{2}\NormalTok{]}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(anovatable[[}\DecValTok{1}\NormalTok{]][,}\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.02931143 0.95441113 0.01627743
+\end{verbatim}
+
+The total variance is approximately \(13.61+443.16+7.56=464.33\). Most
+of that variance (\(100\left(443.16/464.33\right)\approx95.4\%\)) is
+attributed to differences between species. Only about 3\%
+(\(13.61/464.33\)) is attributed to color. It's a small effect, but a
+significant one, and only detectable after accounting for species.
+
 \subsubsection{Repeated measures ANOVA}\label{sec-groups-more-anova-rep}
 
-\subsubsection{Tukey's HSD post hoc
-test}\label{sec-groups-more-anova-tukey}
+Coming soon!
 
 \subsection{Kruskal-Wallis test}\label{sec-groups-more-kw}
 
@@ -21849,45 +22117,1582 @@ about a quintic? Or an octic?
 
 \chapter{Tests for continous patterns}\label{sec-lin}
 
+This module discusses classic tests for patterns where we relate changes
+in one continuous variable to another continuous variable. By
+convention, the \textbf{response} or \textbf{dependent} variable is
+plotted on the y-axis, and is taken to be the ``effect'' being studied.
+The \textbf{predictor} or \textbf{independent} or \textbf{explanatory}
+variable the one interpreted as the cause. Predictors are plotted on the
+x-axis. Such a plot or model is said to be of ``y versus x''.
+
+However, as we see in the section on correlation, we can also
+investigate patterns between variables without assuming that one causes
+the other--only that they reliably change together.
+
 \section{Correlation}\label{sec-lin-cor}
+
+\textbf{Correlation} is a statistical relationship where changes in one
+variable are reliably associated with changes in another variable. This
+relationship need not be causal, hence the famous mantra, ``correlation
+does not equal causation''. As such, correlation is usually a
+\textbf{descriptive technique}, which lets researchers characterize
+patterns, rather than an \textbf{inferential technique}, which lets
+researchers make estimates about unknown parameters (i.e., infer
+unobserved quantities).
+
+Correlations are typically expressed as a \textbf{correlation
+coefficient}, a value that indicates the strength of the correlation by
+its magnitude and the direction of the correlation by its sign.
+
+\begin{itemize}
+\item
+  \textbf{Positive correlation:} as one variable gets larger, the other
+  variable does too. Correlation coefficient approaches \(+1\).
+\item
+  \textbf{Negative correlation:} as one variable gets larger, the other
+  variable gets smaller. Correlation coefficient approaches \(-1\).
+\end{itemize}
+
+When a correlation coefficient is near 0, this indicates no correlation.
+
+\begin{figure}
+
+\caption{\label{fig-correlations}Illustration of possible positive and
+negative relationships between pairs of variables, with different levels
+of consistency (\emph{r}).}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Illustration of possible positive and negative relationships between pairs of variables, with different levels of consistency (r).}]{chapters/ch16_files/figure-pdf/fig-correlations-1.pdf}}
+
+}
+
+\end{figure}%
+
+\textbf{Correlation coefficients} are often calculated when we want to
+see if two values are related, without going as far as to infer a causal
+relationship. Because science is all about finding explanations (i.e.,
+causes) for natural phenomena, a correlation analysis is usually not
+presented on its own. However, correlation analysis can be part of a
+larger workflow:
+
+\begin{itemize}
+\item
+  Correlations can indicate if some variables in a dataset are
+  \emph{redundant}---that is, any analysis of one would say the same as
+  analyzing the other.
+\item
+  Correlations can indicate association without inference---e.g., it
+  might be sufficient to know that your residuals are correlated with
+  some other variable, without being able to model the relationship.
+\item
+  Correlations can help identify proxy variables---variables that can
+  stand in for one another. E.g., correlation analysis may reveal that
+  an inexpensive, easily obtainable variable is a good stand-in for an
+  expensive, but less obtainable one.
+\item
+  Correlations can screen large numbers of variables for possible
+  patterns and inform future investigations. For example, in some
+  analyses I will start by testing many variables for correlations, and
+  only invest time fitting inferential models (e.g., GLMs) for the
+  variables that show some correlation with the response variable.
+\end{itemize}
 
 \subsection{Linear correlation}\label{sec-lin-cor-lin}
 
+\textbf{Question:} As values in one set change, do values in another set
+change at a constant rate?
+
+\textbf{Null hypothesis:} N/A (descriptive statistic)
+
+\textbf{Alternative hypothesis:} N/A (descriptive statistic)
+
+\textbf{Example use case:} Lisa is studying whether the size of a
+mammal's cecum is related to the proportion of plant material in its
+diet, and suspects that the relationship is linear.
+
+When we suspect that two variables are correlated, and that the shape of
+that relationship is a straight line, we can use \textbf{Pearson's
+product moment correlation}, also called \textbf{Pearson's \emph{r}}.
+This is probably the most commonly used correlation coefficient, and can
+be calculated in many ways. One way is this:
+
+\[
+r_{xy}=\frac{\sum_{i=1}^n\left(x_i-\bar{x}\right)\left(y_i-\bar{y}\right)}{\sqrt{\sum_{i=1}^n\left(x_i-\bar{x}\right)^2}\sqrt{\sum_{i=1}^n\left(y_i-\bar{y}\right)^2}}
+\]
+
+In this expression, \(r_{xy}\) is the correlation between vectors \(x\)
+and \(y\); \(n\) is the total number of observations; \(x_i\) and
+\(y_i\) are the \emph{i}-th value of \(x\) and \(y\), respectively;
+\(\bar{x}\) and \(\bar{y}\) are the sample means of \(x\) and \(y\).
+This expression shows that \emph{r} gets larger as the slope of the
+relationship between \(x\) and \(y\) gets larger, regardless of sign;
+and that increasing variance decreases \emph{r}.
+
+The numerator is also called the \textbf{covariance} of \(x\) and \(y\).
+You might recognize the denominator as the product of the SD of \(x\)
+and \(y\). So, the formula for Pearson's \emph{r} can be written very
+compactly as:
+
+\[
+r_{xy}=\frac{\text{cov}\left(x,y\right)}{s_xs_y}
+\]
+
+The base function \texttt{cor()} calculates correlation coefficients,
+including \emph{r}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# calculate linear correlation coefficient}
+\FunctionTok{cor}\NormalTok{(iris}\SpecialCharTok{$}\NormalTok{Petal.Length, iris}\SpecialCharTok{$}\NormalTok{Petal.Width)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.9628654
+\end{verbatim}
+
+You can also request a significance test on the coefficient, although
+some might consider this unnecessary because correlation is inherently a
+descriptive technique. If you are using correlation as a hypothesis
+test, however, you do need a \emph{p}-value.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor.test}\NormalTok{(iris}\SpecialCharTok{$}\NormalTok{Petal.Length, iris}\SpecialCharTok{$}\NormalTok{Petal.Width)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+    Pearson's product-moment correlation
+
+data:  iris$Petal.Length and iris$Petal.Width
+t = 43.387, df = 148, p-value < 2.2e-16
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.9490525 0.9729853
+sample estimates:
+      cor 
+0.9628654 
+\end{verbatim}
+
+You can also get correlations between a set of variables. The result is
+a correlation matrix (see Section~\ref{sec-desc-co-lin-pairs}).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# correlations between several variables at once:}
+\CommentTok{\# i.e., a correlation matrix}
+\FunctionTok{cor}\NormalTok{(iris[,}\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+             Sepal.Length Sepal.Width Petal.Length Petal.Width
+Sepal.Length    1.0000000  -0.1175698    0.8717538   0.8179411
+Sepal.Width    -0.1175698   1.0000000   -0.4284401  -0.3661259
+Petal.Length    0.8717538  -0.4284401    1.0000000   0.9628654
+Petal.Width     0.8179411  -0.3661259    0.9628654   1.0000000
+\end{verbatim}
+
+There isn't a built-in way to check for significant correlations between
+many pairs of variables at once. This is because \texttt{cor.test()}
+only works with one pair at a time. Fortunately, it's not hard to do in
+a \texttt{for()} loop:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# data frame with just the variables we need}
+\NormalTok{dx }\OtherTok{\textless{}{-}}\NormalTok{ iris[,}\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{]}
+
+\CommentTok{\# set up data frame to hold results}
+\DocumentationTok{\#\# get the names of the variables}
+\NormalTok{var.names }\OtherTok{\textless{}{-}} \FunctionTok{names}\NormalTok{(dx)}
+\DocumentationTok{\#\# get every unique combination of 2 of those names}
+\NormalTok{var.pairs }\OtherTok{\textless{}{-}} \FunctionTok{combn}\NormalTok{(var.names, }\DecValTok{2}\NormalTok{)}
+\DocumentationTok{\#\# transpose the result (swap rows and columns)}
+\DocumentationTok{\#\# so it is oriented like a data frame, and convert}
+\DocumentationTok{\#\# from matrix to data frame}
+\NormalTok{cor.df }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{t}\NormalTok{(var.pairs))}
+\NormalTok{cor.df}\SpecialCharTok{$}\NormalTok{r }\OtherTok{\textless{}{-}} \ConstantTok{NA}
+\NormalTok{cor.df}\SpecialCharTok{$}\NormalTok{p }\OtherTok{\textless{}{-}} \ConstantTok{NA}
+
+\DocumentationTok{\#\#\#\# }\AlertTok{NOTE}\DocumentationTok{: you can create the object cor.df more      \#\#}
+\DocumentationTok{\#\#\#\#       quickly by combining commands like this:   \#\#}
+\DocumentationTok{\#\#\#\#\# not run:                                        \#\# }
+\DocumentationTok{\#\#\#\#\# cor.df \textless{}{-} as.data.frame(t(combn(names(dx),2)))  \#\#}
+
+\CommentTok{\# find the r and p values in a loop}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(cor.df))\{}
+  \CommentTok{\# test once per iteration  }
+\NormalTok{  curr }\OtherTok{\textless{}{-}} \FunctionTok{cor.test}\NormalTok{(dx[,cor.df}\SpecialCharTok{$}\NormalTok{V1[i]], dx[,cor.df}\SpecialCharTok{$}\NormalTok{V2[i]])}
+  \CommentTok{\# pull out values we need from correlation test result}
+  \CommentTok{\# and round to 3 decimal places}
+\NormalTok{  cor.df}\SpecialCharTok{$}\NormalTok{r[i] }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(curr}\SpecialCharTok{$}\NormalTok{estimate, }\DecValTok{3}\NormalTok{)}
+\NormalTok{  cor.df}\SpecialCharTok{$}\NormalTok{p[i] }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(curr}\SpecialCharTok{$}\NormalTok{p.value, }\DecValTok{3}\NormalTok{)}
+\NormalTok{\}}\CommentTok{\#close i loop}
+
+\CommentTok{\# print result}
+\NormalTok{cor.df}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+            V1           V2      r     p
+1 Sepal.Length  Sepal.Width -0.118 0.152
+2 Sepal.Length Petal.Length  0.872 0.000
+3 Sepal.Length  Petal.Width  0.818 0.000
+4  Sepal.Width Petal.Length -0.428 0.000
+5  Sepal.Width  Petal.Width -0.366 0.000
+6 Petal.Length  Petal.Width  0.963 0.000
+\end{verbatim}
+
+It's not pretty, but we can see right away that every pair is
+significantly correlated except sepal width and sepal length. Remember
+that the \emph{p}-values printed as \texttt{0.000} are not literally 0;
+report them as ``\textless0.001''.
+
+Another way to explore correlations between many pairs of variables is
+to visualize them in a scatterplot matrix (see
+Section~\ref{sec-desc-co-lin-pairs}).
+
 \subsection{Nonlinear correlation}\label{sec-lin-cor-non}
+
+Many processes and relationships in biology are not linear, and but we
+still want to study correlations in those processes. So, instead of
+asking whether or not the assocation is linear, we ask whether it is
+\textbf{monotonic}, meaning that the changes in one variable associated
+with changes in another tend to have the same sign. For example, as
+\(X\) increases, \(Y\) either consistently increases or consistently
+decreases, but does not go up and down across the domain of \(X\).
+
+Consider the figure below. The left panel clearly shows some
+relationship between \(X\) and \(Y\), but it is not linear and using a
+linear correlation coefficient might miss something. The right panel
+shows the same data points after a \href{@sec-trans-common-rank}{rank
+transform}.
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch16_files/figure-pdf/unnamed-chunk-5-1.pdf}}
+
+Often when two variables share a nonlinear relationship, a rank
+transform will make that relationship appear more linear. A
+``rank-transform'' assigns the smallest value value ``0'', the second
+smallest value to ``1'', and so on. Rank-transforming these data lets us
+calculate a nonparametric, nonlinear correlation.
+
+\subsubsection{\texorpdfstring{Spearman's
+\(\rho\)}{Spearman's \textbackslash rho}}\label{sec-lin-cor-non-rho}
+
+The nonparametric equivalent of Pearson's \emph{r} is Spearman's
+\(\rho\) (``rho''). Spearman's \(\rho\) is calculated as the Pearson's
+\emph{r} linear correlation coefficient of the rank-transformed values.
+
+\[\rho_{xy}=\frac{cov\left(R\left[x\right],R\left[y\right]\right)}{s_{R\left[x\right]}s_{R\left[y\right]}}\]
+
+When observations have identical values, their ranks may be tied, which
+creates some minor issues in the calculation of \(\rho\) and its
+\emph{p}-value. For this reason, R may throw a warning when calculating
+a Spearman correlation. You can ignore this warning.
+
+It can be obtained using code similar to what was done for linear
+correlation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# just the coefficient}
+\FunctionTok{cor}\NormalTok{(iris}\SpecialCharTok{$}\NormalTok{Petal.Length, iris}\SpecialCharTok{$}\NormalTok{Sepal.Width, }\AttributeTok{method=}\StringTok{"spearman"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] -0.3096351
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# confirming the connection to Pearson\textquotesingle{}s r}
+\FunctionTok{cor}\NormalTok{(}\FunctionTok{rank}\NormalTok{(iris}\SpecialCharTok{$}\NormalTok{Petal.Length), }\FunctionTok{rank}\NormalTok{(iris}\SpecialCharTok{$}\NormalTok{Sepal.Width))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] -0.3096351
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# can also get a significance test for rho}
+\FunctionTok{cor.test}\NormalTok{(iris}\SpecialCharTok{$}\NormalTok{Petal.Length, iris}\SpecialCharTok{$}\NormalTok{Sepal.Width, }\AttributeTok{method=}\StringTok{"spearman"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+    Spearman's rank correlation rho
+
+data:  iris$Petal.Length and iris$Sepal.Width
+S = 736637, p-value = 0.0001154
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.3096351 
+\end{verbatim}
+
+Just as with linear correlation, you can get a correlation matrix of
+nonlinear \(\rho\) correlation coefficients, and a scatterplot matrix
+with \texttt{pairs()}. See Section~\ref{sec-desc-co-non-pairs}.
+
+\subsubsection{\texorpdfstring{Kendall's
+\(\tau\)}{Kendall's \textbackslash tau}}\label{sec-lin-cor-non-tau}
+
+There is another nonparametric rank-based correlation coefficient,
+Kendall's \(\tau\) (``tau''). Kendall's \(\tau\) is based not upon a
+correlation coefficient between ranked observations, but instead on the
+concordance or agreement between the rankings of \(x\) and \(y\). This
+means that for any pair of observations \(\left(x_i,y_i\right)\) and
+\(\left(x_j,y_j\right)\), the ranking order of \(\left(x_i,x_j\right)\)
+and \(\left(y_i,y_j\right)\) agree. Put another way, if both \(x_i>x_j\)
+and \(y_i>y_j\) \emph{or} \(x_i<x_j\) and \(y_i<y_j\), then the pair of
+observations \(i\) and \(j\) is \textbf{concordant}. Any other finding
+is \textbf{discordant}. The original version of Kendall's \(\tau\), now
+called \(\tau_a\) is thus calculated:
+
+\[\tau_{xy}=\frac{\left(\text{number of concordant pairs}\right)-\left(\text{number of discordant pairs}\right)}{\left(\text{number of pairs}\right)}\]
+
+There is a
+\href{https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient\#Tau-b}{more
+modern version} of \(\tau\), called \(\tau_b\), that can account for
+ties. This is what the R functions \texttt{cor()} and
+\texttt{cor.test()} calculate.
+
+In practice, Kendall's \(\tau\) and Spearman's \(\rho\) tend to give
+qualitatively similar results, so you can often choose freely between
+them. However, there are some situations where \(\tau\) might be
+preferable. First, the magnitude of \(\tau\) has a much more intuitive
+meaning than that of \(\rho\). It is related to the degree to which
+concordant pairs are more common than discordant pairs. E.g.,
+\(\tau=0.6\) indicates roughly that concordant pairs are 60\% more
+common than discordant pairs. When \(\rho=0.6\), on the other
+hand\ldots well, \(\rho=0.6\).
+
+Second, \(\tau\) can work better at small sample sizes because its
+sampling distribution and exact tests are well developed.
+
+Finally, \(\tau\) may be preferred when the data are genuinely ordinal,
+because of how comparison between ranks is central to the calculation of
+\(\tau\). This is philosophical rather than computational: \(\rho\)
+works just fine on ordinal data, too.
+
+That last thing I'll add is that while \(\rho\) and \(\tau\) address the
+same question, they go about it in different ways and so they are on
+different scales. This is why they give qualitatively similar results
+even when the numbers are different. In fact, \(\rho\) and \(\tau\) have
+a known relationship under certain conditions:
+
+\[\tau=\frac{2}{\pi}\arcsin\left(\rho\right)\]
+
+You can obtain Kendall's \(\tau\) in R with the \texttt{method}
+argument.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# just the coefficient}
+\FunctionTok{cor}\NormalTok{(iris}\SpecialCharTok{$}\NormalTok{Petal.Length, iris}\SpecialCharTok{$}\NormalTok{Sepal.Width, }\AttributeTok{method=}\StringTok{"kendall"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] -0.1859944
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# can also get a significance test for rho}
+\FunctionTok{cor.test}\NormalTok{(iris}\SpecialCharTok{$}\NormalTok{Petal.Length, iris}\SpecialCharTok{$}\NormalTok{Sepal.Width, }\AttributeTok{method=}\StringTok{"kendall"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+    Kendall's rank correlation tau
+
+data:  iris$Petal.Length and iris$Sepal.Width
+z = -3.2197, p-value = 0.001283
+alternative hypothesis: true tau is not equal to 0
+sample estimates:
+       tau 
+-0.1859944 
+\end{verbatim}
 
 \section{Linear models}\label{sec-lin-lm}
 
-\subsection{Definition}\label{sec-lin-lm-def}
+We reviewed the definition and properties of linear models in
+Section~\ref{sec-review-lin}. Linear models are an important part of
+classical, frequentist statistics because of their power and,
+historically, their ease of computation. Many methods that are taught in
+introductory statistics classes are just special cases of the linear
+model: \href{@sec-groups-ttests}{t-tests},
+\href{@sec-groups-more-anova}{ANOVA}, \href{@sec-lin-reg}{linear
+regression}, and so on. As we will see in Chapter~\ref{sec-glm1}, linear
+models themselves are a special case of an even more powerful, broader
+framework called the \textbf{generalized linear model (GLM)}.
 
 \subsection{Lots of analyses are linear models in disguise (or can
 be)}\label{sec-lin-lm-disguise}
 
+One of the reasons that linear models are so powerful is that many
+models or curves that people fit to data, even some whose curves are
+nonlinear, are actually linear models in a statistical sense. A ``linear
+model'' here does not mean that the graph must be a straight line. It
+means that the model is built by adding together predictor variables
+that are multiplied by constants (slopes), and these slopes are used
+only as multipliers of the predictor variables. For example, both
+\(y=\beta_0+\beta_1x\) and \(y=\beta_0+\beta_1x+\beta_2x^2+\beta_3x^3\)
+are linear models because the coefficients (\(beta\) terms) are used
+only as multipliers of the predictor variables.
+
+Other models that appear nonlinear can \emph{become} linear models
+through transformation. For example, an exponential model
+\(y=ae^{\beta_1x}\) is nonlinear, but log-transforming both sides yields
+the linear expression \(\log\left(y\right)=log\left(a\right)+\beta_1x\).
+The section below illustrates a few of these ``linear models in
+disguise'' so you can recognize and apply these methods on your own
+data.
+
 \subsubsection{Ordinary linear models}\label{sec-lin-lm-disguise-lm}
+
+The basic linear regression model is written as
+
+\[y=\beta_0+\beta_1x\]
+
+and is the same as the equation for a line that you learned in high
+school or college algebra: \(y=mx+b\). Statisticians just use
+\(\beta_0\) for the \(y\)-intercept and \(\beta_1\) for the slope
+instead of \(b\) and \(m\).
+
+\textbf{Why it's linear:} the parameters \(\beta_0\) and \(\beta_1\)
+appear only as multipliers or additive constants, and are combined by
+addition.
 
 \subsubsection{Polynomials}\label{sec-lin-lm-disguise-poly}
 
+A polynomial is a function such as
+\(Y=\beta_0+\beta_1X+\beta_2X^2+...+\beta_kX^k\), where \(k\) is the
+\textbf{order} of the polynomial. A polynomial of order 2 is a quadratic
+equation. A polynomial of order 3 is a cubic, and so on. Polynomials
+have well-known shapes, such as the parabola of the quadratic function.
+Any polynomial with order \(\ge2\) will not be a straight line.
+
+\begin{figure}
+
+\caption{\label{fig-polynomials1}Curve shapes produced by polynomial
+equations of order 1, 2, and 3: linear, quadratic, and cubic,
+respectively.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Curve shapes produced by polynomial equations of order 1, 2, and 3: linear, quadratic, and cubic, respectively.}]{chapters/ch16_files/figure-pdf/fig-polynomials1-1.pdf}}
+
+}
+
+\end{figure}%
+
+\textbf{Why it's linear:} although the graph may be curved, the
+parameters \(\beta_0\), \(\beta_1\), \(\beta_2\), and so on appear only
+as multipliers on predictor variables, are combined by addition, and are
+not raised to powers, exponentiated, or use inside other functions. So,
+a polynomial is linear in its predictors. Look what happens in the
+figure below. On the left, the polynomial \(5+2.1x+6.5x^2\) is plotted
+vs.~\(x\) and appears nonlinear. On the right, \(y\) is plotted against
+\(x^2\) and \emph{is} linear.
+
+\begin{figure}
+
+\caption{\label{fig-polynomials2}Left: a plot of the nonlinear
+polynomial function \$\$. Right: The same function plotted against
+\(x^2\) produces a straight line.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Curve shapes produced by polynomial equations of order 1, 2, and 3: linear, quadratic, and cubic, respectively.}]{chapters/ch16_files/figure-pdf/fig-polynomials2-1.pdf}}
+
+}
+
+\end{figure}%
+
 \subsubsection{Exponentials}\label{sec-lin-lm-disguise-exp}
+
+The exponential function \(y=ae^{bx}\) is ubiquitous in biology because
+it describes compounding growth (like compound interest). This function
+is not linear, but it can be turned into and analyzed as linear by
+log-transforming both sides.
+
+\begin{figure}
+
+\caption{\label{fig-extrasteps}Rick and Morty meme saying this sounds
+like linear with extra steps.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/cont-rickmorty.jpg}}
+
+}
+
+\end{figure}%
+
+\textbf{Why it \emph{can be} linear:} While the exponential function
+appears nonlinear, it can be made linear by log-transforming both sides:
+
+\[log\left(y\right)=log\left(ae^{bx}\right)\]
+
+\[log\left(y\right)=log\left(a\right)+log\left(e^{bx}\right)\]
+
+and because \(log\left(e^z\right)=z\):
+
+\[log\left(y\right)=log\left(a\right)+bx\]
+
+which is the form of a straight line with intercept
+\(log\left(a\right)\) and slope \(b\).
+
+\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Tip}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
+
+\textbf{Logarithm bases}
+
+Mathematicians and statisticians almost always work with the
+\textbf{natural logarithm}, which uses Euler's number \(e\)
+(\(\approx2.7182\)) as its base. The natural logarithm can be written
+\(log\left(x\right)\), \(log_e\left(x\right)\), or \(ln\left(x\right)\).
+Natural log is used because many
+\href{https://www.youtube.com/watch?v=m2MIpDrF7Es}{equations related to
+growth or change become easier} when \(e\) is the base. In this
+tutorial, and any math or statistics text, assume natural logarithm.
+
+In contrast, scientists and engineers often use other bases, like
+\(log_{10}\) or \(log_2\), because these are more intuitive for humans.
+You can use whatever base you like so long as you are clear about what
+you did. If you are working with R, you will have an easier time working
+in natural logs because many functions are set up to use it.
+
+\end{tcolorbox}
 
 \subsubsection{Power laws}\label{sec-lin-lm-disguise-pow}
 
+\textbf{Power laws} of the form \(Y=aX^b\) are also ubiquitous in
+biology, as they describe proportional growth. Power laws are similar to
+exponential functions, but with a key difference: in a power law, \(X\)
+is in the base and is raised to a power, while in an exponential, \(X\)
+is in the exponent of some other base.
+
+\textbf{Why it \emph{can be} linear:} Like an exponential, a power law
+can be linearized by taking the logarithm of both sides.
+
+\[log\left(Y\right)=log\left(aX^b\right)\]
+
+\[log\left(Y\right)=log\left(a\right)+b\times log\left(X\right)\]
+
+In this form, the power law is linear with intercept
+\(log\left(a\right)\) and slope \(b\).
+
 \section{Linear regression}\label{sec-lin-reg}
+
+The linear regression model describes a pattern where the response
+variable \(Y\) changes as a linear function of the predictor variable
+\(X\). It looks like this:
+
+\[Y=\beta_0+\beta_1X+\varepsilon\]
+
+where \(\beta_0\) is the \(y\)-intercept, \(\beta_1\) is the slope
+(effect of a unit increase in \(X\) on \(Y\)), and \(\varepsilon\) is
+residual variation in \(Y\) not explained by \(X\)--the spread of points
+above or below the line. In a linear model, residual variation follows a
+normal distribution with mean 0 and some unknown SD
+\(\sigma_{\mathrm{res}}\). Each residual \(\varepsilon_i\) follows the
+same distribution:
+
+\[\varepsilon_i \sim \mathcal{N}\left(0,\sigma_{\mathrm{res}}\right)\]
+
+where \(\mathcal{N}\) signifies the normal distribution.
+
+The R syntax for linear regression is basically the same as that for
+ANOVA and the \emph{t}-test we've seen before, or a boxplot for that
+matter, but this time the right hand side of the formula has a
+continuous predictor rather than a factor.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# fit a linear regression model}
+\NormalTok{mod5 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(Petal.Length}\SpecialCharTok{\textasciitilde{}}\NormalTok{Petal.Width, }\AttributeTok{data=}\NormalTok{iris)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# test for significance of terms}
+\FunctionTok{anova}\NormalTok{(mod5)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Analysis of Variance Table
+
+Response: Petal.Length
+             Df Sum Sq Mean Sq F value    Pr(>F)    
+Petal.Width   1 430.48  430.48  1882.5 < 2.2e-16 ***
+Residuals   148  33.84    0.23                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# see estimates of parameter coefficients}
+\FunctionTok{summary}\NormalTok{(mod5)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = Petal.Length ~ Petal.Width, data = iris)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.33542 -0.30347 -0.02955  0.25776  1.39453 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  1.08356    0.07297   14.85   <2e-16 ***
+Petal.Width  2.22994    0.05140   43.39   <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.4782 on 148 degrees of freedom
+Multiple R-squared:  0.9271,    Adjusted R-squared:  0.9266 
+F-statistic:  1882 on 1 and 148 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+The \texttt{summary()} output tells you a lot about the regression: the
+coefficients (and their \emph{p}-values), the omnibus ANOVA for the
+model (the \emph{F} test at the bottom), and the coefficient of
+determination (Adjusted \emph{R}-squared). Coefficients are identified
+as the y-intercept \(\beta_0\) (\texttt{Intercept}) and by the variable
+names (e.g., the slope with respect to petal width is
+\texttt{Petal.Width}). Each coefficient is presented as its estimate and
+SE (e.g., the intercept is \texttt{1.08\ ±\ 0.07}). The test statistic
+\emph{t} for each coefficient is the ratio of the estimate to the SE,
+and the \emph{p}-value for \emph{t} calculated from a
+\emph{t}-distribution (much as in a \emph{t}-test). The coefficient of
+determination \(R^2\) is the proportion of variation in \(Y\) explained
+by the model. In this case, about 93\% of variation in Petal.Length is
+explained by Petal.Width.
+
+When you present a linear regression, you should present the parameters,
+their SE, test statistics, and \emph{p}-values in a table. The omnibus
+\(F\) test and \(R^2\) can be reported in Results text. Finally, you
+should present the data as a scatterplot, with the predicted values as a
+trendline and the 95\% CI of that trendline if feasible. Here is how to
+do that for the model above:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# generate x values over which to draw trendline}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{100}
+\NormalTok{minx }\OtherTok{\textless{}{-}} \FunctionTok{min}\NormalTok{(iris}\SpecialCharTok{$}\NormalTok{Petal.Width, }\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{maxx }\OtherTok{\textless{}{-}} \FunctionTok{max}\NormalTok{(iris}\SpecialCharTok{$}\NormalTok{Petal.Width, }\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{px }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(minx, maxx, }\AttributeTok{length=}\NormalTok{n)}
+
+\CommentTok{\# put in a data frame with same variable names as in the model}
+\NormalTok{prx }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Petal.Width=}\NormalTok{px)}
+
+\CommentTok{\# calculate predicted values and their SE}
+\NormalTok{pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod5, }\AttributeTok{newdata=}\NormalTok{prx,}
+                \AttributeTok{se.fit=}\ConstantTok{TRUE}\NormalTok{, }\AttributeTok{interval=}\StringTok{"confidence"}\NormalTok{)}
+
+\CommentTok{\# best way to get expected value and 95\% confidence limits:}
+\CommentTok{\# (use this with linear models)}
+\NormalTok{prx}\SpecialCharTok{$}\NormalTok{mn }\OtherTok{\textless{}{-}}\NormalTok{ pred}\SpecialCharTok{$}\NormalTok{fit[,}\StringTok{"fit"}\NormalTok{]}
+\NormalTok{prx}\SpecialCharTok{$}\NormalTok{lo }\OtherTok{\textless{}{-}}\NormalTok{ pred}\SpecialCharTok{$}\NormalTok{fit[,}\StringTok{"lwr"}\NormalTok{]}
+\NormalTok{prx}\SpecialCharTok{$}\NormalTok{up }\OtherTok{\textless{}{-}}\NormalTok{ pred}\SpecialCharTok{$}\NormalTok{fit[,}\StringTok{"upr"}\NormalTok{]}
+
+\CommentTok{\# when using methods other than linear regression, you can }
+\CommentTok{\# approximate the 95\% CI using the predicted values and}
+\CommentTok{\# their SE, by drawing quantiles from the normal distribution}
+\CommentTok{\# defined by predicted value (pred$fit) and SEs (pred$se.fit).}
+\CommentTok{\# When using this with GLMs, you need to keep track of what }
+\CommentTok{\# values are on the link scale, and which are on the }
+\CommentTok{\# data scale.}
+\DocumentationTok{\#\#\# not run:}
+\DocumentationTok{\#\#\# prx$mn \textless{}{-} qnorm(0.5, mean=pred$fit, sd=pred$se.fit)}
+\DocumentationTok{\#\#\# prx$lo \textless{}{-} qnorm(0.025, mean=pred$fit, sd=pred$se.fit)}
+\DocumentationTok{\#\#\# prx$up \textless{}{-} qnorm(0.975, mean=pred$fit, sd=pred$se.fit)}
+
+\CommentTok{\# make the plot}
+\DocumentationTok{\#\# include some par options for a more professional figure}
+\DocumentationTok{\#\# see ?par for more options}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{),              }\CommentTok{\# 1 x 1 figure layout}
+    \AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\FloatTok{5.1}\NormalTok{, }\FloatTok{5.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{), }\CommentTok{\# margin sizes in lines of text}
+    \AttributeTok{lend=}\DecValTok{1}\NormalTok{,                    }\CommentTok{\# flat ends on lines}
+    \AttributeTok{las=}\DecValTok{1}\NormalTok{,                     }\CommentTok{\# axis text in reading orientation}
+    \AttributeTok{bty=}\StringTok{"n"}\NormalTok{,                   }\CommentTok{\# no box around figure}
+    \AttributeTok{cex.axis=}\FloatTok{1.3}\NormalTok{,              }\CommentTok{\# size of axis text}
+    \AttributeTok{cex.lab=}\FloatTok{1.3}\NormalTok{)               }\CommentTok{\# size of axis labels}
+
+\DocumentationTok{\#\# make the base plot}
+\FunctionTok{plot}\NormalTok{(iris}\SpecialCharTok{$}\NormalTok{Petal.Width,         }\CommentTok{\# x values}
+\NormalTok{     iris}\SpecialCharTok{$}\NormalTok{Petal.Length,        }\CommentTok{\# y values}
+     \AttributeTok{pch=}\DecValTok{16}\NormalTok{,                   }\CommentTok{\# type of points (see ?points)}
+     \AttributeTok{cex=}\FloatTok{1.2}\NormalTok{,                  }\CommentTok{\# size of points}
+     \AttributeTok{xlab=}\StringTok{"Petal width (cm)"}\NormalTok{,  }\CommentTok{\# x axis label}
+     \AttributeTok{ylab=}\StringTok{"Petal length (cm)"}\NormalTok{, }\CommentTok{\# y axis label}
+     \AttributeTok{xlim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{2.5}\NormalTok{),           }\CommentTok{\# limits of x axis}
+     \AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{8}\NormalTok{))             }\CommentTok{\# limits of y axis}
+
+\DocumentationTok{\#\# add trendline and 95\% confidence limits as lines}
+\DocumentationTok{\#\# with points(...,type="l")}
+\FunctionTok{points}\NormalTok{(prx}\SpecialCharTok{$}\NormalTok{Petal.Width, }\CommentTok{\# x values}
+\NormalTok{       prx}\SpecialCharTok{$}\NormalTok{lo,          }\CommentTok{\# y values}
+       \AttributeTok{type=}\StringTok{"l"}\NormalTok{,        }\CommentTok{\# lines (see ?base::plot)}
+       \AttributeTok{lwd=}\DecValTok{2}\NormalTok{,           }\CommentTok{\# line width (1 is default)}
+       \AttributeTok{col=}\StringTok{"red"}\NormalTok{,       }\CommentTok{\# line color ("black" is default)}
+       \AttributeTok{lty=}\DecValTok{2}\NormalTok{)           }\CommentTok{\# dashed line (1, solid line, is default)}
+\FunctionTok{points}\NormalTok{(prx}\SpecialCharTok{$}\NormalTok{Petal.Width, prx}\SpecialCharTok{$}\NormalTok{up, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(prx}\SpecialCharTok{$}\NormalTok{Petal.Width, prx}\SpecialCharTok{$}\NormalTok{mn, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{col=}\StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-scattertrend}Data plotted with the trendline (solid)
+and its 95\% confidence interval (dashed).}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Data plotted with the trendline (solid) and its 95\% confidence interval (dashed).}]{chapters/ch16_files/figure-pdf/fig-scattertrend-1.pdf}}
+
+}
+
+\end{figure}%
 
 \section{Multiple regression}\label{sec-lin-mult}
 
+Linear regression is easily extended to \textbf{multiple linear
+regression}, where there are \textgreater1 continuous predictors. Just
+as with ANOVA, additional predictor variables are added to the model
+formula using \texttt{+}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mod6 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(Petal.Length}\SpecialCharTok{\textasciitilde{}}\NormalTok{Petal.Width }\SpecialCharTok{+}\NormalTok{ Sepal.Width, }\AttributeTok{data=}\NormalTok{iris)}
+\FunctionTok{summary}\NormalTok{(mod6)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = Petal.Length ~ Petal.Width + Sepal.Width, data = iris)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.33753 -0.29251 -0.00989  0.21447  1.24707 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  2.25816    0.31352   7.203 2.84e-11 ***
+Petal.Width  2.15561    0.05283  40.804  < 2e-16 ***
+Sepal.Width -0.35503    0.09239  -3.843  0.00018 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.4574 on 147 degrees of freedom
+Multiple R-squared:  0.9338,    Adjusted R-squared:  0.9329 
+F-statistic:  1036 on 2 and 147 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+Adding predictors to a multiple regression model will almost always
+increase the model fit (e.g., proportion of variance explained,
+\(R^2\)), but this does not mean you should keep adding predictors.
+Multiple regression models are vulnerable to \textbf{overfitting}, where
+random noise (i.e., residual variation) is modeled as if it was part of
+the deterministic part of the model. Multiple regression models are also
+highly vulnerable to \textbf{collinearity}, where the predictors are
+correlated with each other. When collinear predictors are included in a
+model, it is impossible for the model to unambiguously partition the
+sums of squares associated with each predictor.
+
+When plotting the results of a multiple linear regression, you should
+present the effects of all significant predictors. This is done by
+plotting the expected y value across a range of each predictor, while
+holding the other predictor (or predictors) constant at their median.
+This will show the marginal effect of each predictor on its own. Here is
+a quick example:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# simulate some data}
+\DocumentationTok{\#\# random number seed}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{42}\NormalTok{)}
+
+\DocumentationTok{\#\# number of observations}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{100}
+
+\DocumentationTok{\#\# x variables}
+\NormalTok{x1 }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(n, }\DecValTok{1}\NormalTok{, }\DecValTok{20}\NormalTok{)}
+\NormalTok{x2 }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(n, }\DecValTok{1}\NormalTok{, }\DecValTok{30}\NormalTok{)}
+
+\DocumentationTok{\#\# coefficients}
+\NormalTok{beta0 }\OtherTok{\textless{}{-}} \DecValTok{121}
+\NormalTok{beta1 }\OtherTok{\textless{}{-}} \FloatTok{6.1}
+\NormalTok{beta2 }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{3.1}
+
+\DocumentationTok{\#\# expected y values}
+\NormalTok{ey }\OtherTok{\textless{}{-}}\NormalTok{ beta0 }\SpecialCharTok{+}\NormalTok{ beta1}\SpecialCharTok{*}\NormalTok{x1 }\SpecialCharTok{+}\NormalTok{ beta2}\SpecialCharTok{*}\NormalTok{x2}
+
+\CommentTok{\# add residual variation}
+\NormalTok{sigma.res }\OtherTok{\textless{}{-}} \FloatTok{7.8}
+\NormalTok{y }\OtherTok{\textless{}{-}}\NormalTok{ ey }\SpecialCharTok{+} \FunctionTok{rnorm}\NormalTok{(n, }\DecValTok{0}\NormalTok{, sigma.res)}
+
+\CommentTok{\# put in a data frame}
+\NormalTok{dx }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{y=}\NormalTok{y, }\AttributeTok{x1=}\NormalTok{x1, }\AttributeTok{x2=}\NormalTok{x2)}
+
+\CommentTok{\# fit the model}
+\NormalTok{mod7 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(y}\SpecialCharTok{\textasciitilde{}}\NormalTok{x1}\SpecialCharTok{+}\NormalTok{x2, }\AttributeTok{data=}\NormalTok{dx)}
+
+\CommentTok{\# check significance of terms}
+\FunctionTok{anova}\NormalTok{(mod7)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Analysis of Variance Table
+
+Response: y
+          Df Sum Sq Mean Sq F value    Pr(>F)    
+x1         1 125985  125985  2486.3 < 2.2e-16 ***
+x2         1  62984   62984  1243.0 < 2.2e-16 ***
+Residuals 97   4915      51                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+And check the coefficients:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(mod7)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = y ~ x1 + x2, data = dx)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-15.2269  -4.4098   0.0963   4.2975  21.6348 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 120.23351    2.11508   56.85   <2e-16 ***
+x1            6.06715    0.12478   48.62   <2e-16 ***
+x2           -3.07237    0.08715  -35.26   <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 7.118 on 97 degrees of freedom
+Multiple R-squared:  0.9746,    Adjusted R-squared:  0.9741 
+F-statistic:  1865 on 2 and 97 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+Now make a figure showing \texttt{y\textasciitilde{}x1} and
+\texttt{y\textasciitilde{}x2}. In each panel, hold the other x value at
+its median to show the marginal effect of the plotted x value.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# define sequences of each x value}
+\NormalTok{plot.n }\OtherTok{\textless{}{-}} \DecValTok{100}
+
+\NormalTok{minx1 }\OtherTok{\textless{}{-}} \FunctionTok{min}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{x1, }\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{maxx1 }\OtherTok{\textless{}{-}} \FunctionTok{max}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{x1, }\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{px1 }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(minx1, maxx1, }\AttributeTok{length=}\NormalTok{plot.n)}
+
+\NormalTok{minx2 }\OtherTok{\textless{}{-}} \FunctionTok{min}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{x2, }\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{maxx2 }\OtherTok{\textless{}{-}} \FunctionTok{max}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{x2, }\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{px2 }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(minx2, maxx2, }\AttributeTok{length=}\NormalTok{plot.n)}
+
+\CommentTok{\# medians of x1 and x2}
+\NormalTok{medx1 }\OtherTok{\textless{}{-}} \FunctionTok{median}\NormalTok{(x1, }\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{medx2 }\OtherTok{\textless{}{-}} \FunctionTok{median}\NormalTok{(x2, }\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# assemble data frames with all predictors in the model}
+\NormalTok{prx1 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{x1=}\NormalTok{px1, }\AttributeTok{x2=}\NormalTok{medx2)}
+\NormalTok{prx2 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{x1=}\NormalTok{medx1, }\AttributeTok{x2=}\NormalTok{px2)}
+
+\CommentTok{\# generate predictions}
+\NormalTok{pred1 }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod7, }\AttributeTok{newdata=}\NormalTok{prx1,}
+                 \AttributeTok{interval=}\StringTok{"confidence"}\NormalTok{, }\AttributeTok{se.fit=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{pred2 }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod7, }\AttributeTok{newdata=}\NormalTok{prx2,}
+                 \AttributeTok{interval=}\StringTok{"confidence"}\NormalTok{, }\AttributeTok{se.fit=}\ConstantTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# put expected values and 95\% CI in their}
+\CommentTok{\# respective data frames}
+\NormalTok{prx1}\SpecialCharTok{$}\NormalTok{mn }\OtherTok{\textless{}{-}}\NormalTok{ pred1}\SpecialCharTok{$}\NormalTok{fit[,}\StringTok{"fit"}\NormalTok{]}
+\NormalTok{prx1}\SpecialCharTok{$}\NormalTok{lo }\OtherTok{\textless{}{-}}\NormalTok{ pred1}\SpecialCharTok{$}\NormalTok{fit[,}\StringTok{"lwr"}\NormalTok{]}
+\NormalTok{prx1}\SpecialCharTok{$}\NormalTok{up }\OtherTok{\textless{}{-}}\NormalTok{ pred1}\SpecialCharTok{$}\NormalTok{fit[,}\StringTok{"upr"}\NormalTok{]}
+
+\NormalTok{prx2}\SpecialCharTok{$}\NormalTok{mn }\OtherTok{\textless{}{-}}\NormalTok{ pred2}\SpecialCharTok{$}\NormalTok{fit[,}\StringTok{"fit"}\NormalTok{]}
+\NormalTok{prx2}\SpecialCharTok{$}\NormalTok{lo }\OtherTok{\textless{}{-}}\NormalTok{ pred2}\SpecialCharTok{$}\NormalTok{fit[,}\StringTok{"lwr"}\NormalTok{]}
+\NormalTok{prx2}\SpecialCharTok{$}\NormalTok{up }\OtherTok{\textless{}{-}}\NormalTok{ pred2}\SpecialCharTok{$}\NormalTok{fit[,}\StringTok{"upr"}\NormalTok{]}
+
+\CommentTok{\# now make the plot}
+
+\DocumentationTok{\#\# include some par options for a more professional figure}
+\DocumentationTok{\#\# see ?par for more options}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{),              }\CommentTok{\# 1 x 2 figure layout}
+    \AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\FloatTok{5.1}\NormalTok{, }\FloatTok{5.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{), }\CommentTok{\# margin sizes in lines of text}
+    \AttributeTok{lend=}\DecValTok{1}\NormalTok{,                    }\CommentTok{\# flat ends on lines}
+    \AttributeTok{las=}\DecValTok{1}\NormalTok{,                     }\CommentTok{\# axis text in reading orientation}
+    \AttributeTok{bty=}\StringTok{"n"}\NormalTok{,                   }\CommentTok{\# no box around figure}
+    \AttributeTok{cex.axis=}\FloatTok{1.3}\NormalTok{,              }\CommentTok{\# size of axis text}
+    \AttributeTok{cex.lab=}\FloatTok{1.3}\NormalTok{,               }\CommentTok{\# size of axis labels}
+    \AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{)                    }\CommentTok{\# allows points to print in margin}
+
+\DocumentationTok{\#\# make the first panel}
+\FunctionTok{plot}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{x1,          }\CommentTok{\# x values}
+\NormalTok{     dx}\SpecialCharTok{$}\NormalTok{y,           }\CommentTok{\# y values}
+     \AttributeTok{pch=}\DecValTok{16}\NormalTok{,         }\CommentTok{\# type of points (see ?points)}
+     \AttributeTok{cex=}\FloatTok{1.2}\NormalTok{,        }\CommentTok{\# size of points}
+     \AttributeTok{xlab=}\StringTok{"x1"}\NormalTok{,      }\CommentTok{\# x axis label}
+     \AttributeTok{ylab=}\StringTok{"y"}\NormalTok{,      }\CommentTok{\# y axis label}
+     \AttributeTok{xlim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{20}\NormalTok{),  }\CommentTok{\# limits of x axis}
+     \AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{250}\NormalTok{)) }\CommentTok{\# limits of y axis}
+
+\DocumentationTok{\#\# add trendline and 95\% confidence limits as lines}
+\DocumentationTok{\#\# with points(...,type="l")}
+\FunctionTok{points}\NormalTok{(prx1}\SpecialCharTok{$}\NormalTok{x1, }\CommentTok{\# x values}
+\NormalTok{       prx1}\SpecialCharTok{$}\NormalTok{lo,          }\CommentTok{\# y values}
+       \AttributeTok{type=}\StringTok{"l"}\NormalTok{,        }\CommentTok{\# lines (see ?base::plot)}
+       \AttributeTok{lwd=}\DecValTok{2}\NormalTok{,           }\CommentTok{\# line width (1 is default)}
+       \AttributeTok{col=}\StringTok{"red"}\NormalTok{,       }\CommentTok{\# line color ("black" is default)}
+       \AttributeTok{lty=}\DecValTok{2}\NormalTok{)           }\CommentTok{\# dashed line (1, solid line, is default)}
+\FunctionTok{points}\NormalTok{(prx1}\SpecialCharTok{$}\NormalTok{x1, prx1}\SpecialCharTok{$}\NormalTok{up, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(prx1}\SpecialCharTok{$}\NormalTok{x1, prx1}\SpecialCharTok{$}\NormalTok{mn, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{col=}\StringTok{"red"}\NormalTok{)}
+
+\CommentTok{\# make the second panel}
+\DocumentationTok{\#\# make the first panel}
+\FunctionTok{plot}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{x2, dx}\SpecialCharTok{$}\NormalTok{y,}
+     \AttributeTok{pch=}\DecValTok{16}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"x2"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"y"}\NormalTok{,}
+     \AttributeTok{xlim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{30}\NormalTok{), }\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{250}\NormalTok{))}
+\FunctionTok{points}\NormalTok{(prx2}\SpecialCharTok{$}\NormalTok{x2, prx2}\SpecialCharTok{$}\NormalTok{up, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(prx2}\SpecialCharTok{$}\NormalTok{x2, prx2}\SpecialCharTok{$}\NormalTok{up, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(prx2}\SpecialCharTok{$}\NormalTok{x2, prx2}\SpecialCharTok{$}\NormalTok{mn, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{col=}\StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch16_files/figure-pdf/unnamed-chunk-17-1.pdf}}
+
 \section{Analysis of covariance (ANCOVA)}\label{sec-lin-ancova}
+
+Sometimes biologists want to test for effects of one variable while
+controlling for another. For example, the slope between \(Y\) and \(X\)
+might differ between groups. Or, groups might differ only after
+accounting for some continuous covariate. Here are some specific
+examples:
+
+\begin{itemize}
+\item
+  Herbivorous mammals tend to have longer intestines than carnivorous
+  mammals, but only after accounting for the effect of body mass on
+  intestine length. The researcher wants to see how groups differ, but
+  needs to control for a continuous variable (body length) first.
+\item
+  Humerus length and femur length both increase with body mass in birds,
+  but humerus length increases faster than femur length (i.e., their
+  slopes are different). The researcher wants to test for a difference
+  in a continous relationship, but needs to control for a factor (which
+  bone) first.
+\end{itemize}
+
+The method for both situations is called \textbf{analysis of
+covariance}, or \textbf{ANCOVA}. You can think of ANCOVA as combining
+linear regression and ANOVA. ANCOVA is especialy useful for studying
+\textbf{interactions}, where one variable changes the effect of another.
+
+\begin{figure}
+
+\caption{\label{fig-cont-ancova}Illustration of ANCOVA without an
+interaction (different intercepts, same slope) and with an interaction
+(different intercepts and slopes.)}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/cont-ancova.jpg}}
+
+}
+
+\end{figure}%
+
+So that we really understand what an ANCOVA does, let's simulate our own
+dataset where groups A and B have different slopes.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# simulation parameters}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{42}\NormalTok{)}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{30}
+\NormalTok{beta0\_a }\OtherTok{\textless{}{-}} \DecValTok{2}
+\NormalTok{beta0\_b }\OtherTok{\textless{}{-}} \DecValTok{6}
+\NormalTok{beta1\_a }\OtherTok{\textless{}{-}} \FloatTok{1.4}
+\NormalTok{beta1\_b }\OtherTok{\textless{}{-}} \FloatTok{2.5}
+\NormalTok{sigma\_res }\OtherTok{\textless{}{-}} \DecValTok{2}
+
+\CommentTok{\# groups A and B start in separate data frames}
+\NormalTok{data\_a }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{group=}\StringTok{"A"}\NormalTok{, }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{pch=}\DecValTok{15}\NormalTok{, }\AttributeTok{x=}\FunctionTok{runif}\NormalTok{(n, }\DecValTok{5}\NormalTok{, }\DecValTok{20}\NormalTok{))}
+\NormalTok{data\_b }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{group=}\StringTok{"B"}\NormalTok{, }\AttributeTok{col=}\StringTok{"blue"}\NormalTok{, }\AttributeTok{pch=}\DecValTok{16}\NormalTok{, }\AttributeTok{x=}\FunctionTok{runif}\NormalTok{(n, }\DecValTok{5}\NormalTok{, }\DecValTok{20}\NormalTok{))}
+
+\CommentTok{\# add expected values}
+\NormalTok{data\_a}\SpecialCharTok{$}\NormalTok{ey }\OtherTok{\textless{}{-}}\NormalTok{ beta0\_a }\SpecialCharTok{+}\NormalTok{ beta1\_a }\SpecialCharTok{*}\NormalTok{ data\_a}\SpecialCharTok{$}\NormalTok{x}
+\NormalTok{data\_b}\SpecialCharTok{$}\NormalTok{ey }\OtherTok{\textless{}{-}}\NormalTok{ beta0\_b }\SpecialCharTok{+}\NormalTok{ beta1\_b }\SpecialCharTok{*}\NormalTok{ data\_b}\SpecialCharTok{$}\NormalTok{x}
+
+\CommentTok{\# combine to single data frame}
+\NormalTok{data\_all }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(data\_a, data\_b)}
+
+\CommentTok{\# add residuals}
+\NormalTok{data\_all}\SpecialCharTok{$}\NormalTok{y }\OtherTok{\textless{}{-}}\NormalTok{ data\_all}\SpecialCharTok{$}\NormalTok{ey }\SpecialCharTok{+} \FunctionTok{rnorm}\NormalTok{(n}\SpecialCharTok{*}\DecValTok{2}\NormalTok{, }\AttributeTok{mean=}\DecValTok{0}\NormalTok{, }\AttributeTok{sd=}\NormalTok{sigma\_res)}
+
+\CommentTok{\# and make a plot to inspect our data}
+\FunctionTok{plot}\NormalTok{(data\_all}\SpecialCharTok{$}\NormalTok{x, data\_all}\SpecialCharTok{$}\NormalTok{y, }\AttributeTok{col=}\NormalTok{data\_all}\SpecialCharTok{$}\NormalTok{col, }\AttributeTok{pch=}\NormalTok{data\_all}\SpecialCharTok{$}\NormalTok{pch,}
+     \AttributeTok{xlim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{20}\NormalTok{), }\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{60}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch16_files/figure-pdf/unnamed-chunk-18-1.pdf}}
+
+Now we can fit the ANCOVA and see the results.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# fit the model. Notice the * to specify an interaction}
+\NormalTok{mod7 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(y}\SpecialCharTok{\textasciitilde{}}\NormalTok{x}\SpecialCharTok{*}\NormalTok{group, }\AttributeTok{data=}\NormalTok{data\_all)}
+
+\CommentTok{\# test significance of terms}
+\FunctionTok{anova}\NormalTok{(mod7)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Analysis of Variance Table
+
+Response: y
+          Df Sum Sq Mean Sq  F value    Pr(>F)    
+x          1 3507.2  3507.2 1012.289 < 2.2e-16 ***
+group      1 5664.0  5664.0 1634.827 < 2.2e-16 ***
+x:group    1  311.0   311.0   89.778 3.108e-13 ***
+Residuals 56  194.0     3.5                       
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+Now check the model parameters
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(mod7)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = y ~ x * group, data = data_all)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-5.5122 -0.9491  0.4801  1.1691  3.8166 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.44990    1.17053   0.384 0.702170    
+x            1.49194    0.07883  18.925  < 2e-16 ***
+groupB       5.62958    1.55677   3.616 0.000642 ***
+x:groupB     1.03148    0.10886   9.475 3.11e-13 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.861 on 56 degrees of freedom
+Multiple R-squared:  0.9799,    Adjusted R-squared:  0.9789 
+F-statistic: 912.3 on 3 and 56 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+R treats group A as the control or \textbf{baseline} because it is
+alphabetically first. Any effect involving group B is relative to the
+effect in group A. Here:
+
+\begin{itemize}
+\tightlist
+\item
+  The intercept in group A is \texttt{(Intercept)}, 0.4499.
+\item
+  The slope in group A is \texttt{x}, 1.4919.
+\item
+  The intercept in group B is the group A intercept plus the effect of
+  being in group B: \(0.4499 + 5.6295=6.0794\).
+\item
+  The slope in group B is the slope in group A plus the effect of being
+  in group B on the slope: \(1.4919 + 1.0314=2.5233\)`
+\end{itemize}
+
+Making a plot with trendlines for an ANCOVA follows much the same
+procedure as we used to make the plot for linear regression, but, you
+have to take care to include each group. Notice that when plotting a
+line for each group, we make sure to define the line only for the range
+of x values present in that group in the data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# get x sequence within the x domain of each group}
+\NormalTok{pxa }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(data\_all}\SpecialCharTok{$}\NormalTok{x[data\_all}\SpecialCharTok{$}\NormalTok{group}\SpecialCharTok{==}\StringTok{"A"}\NormalTok{]),}
+           \FunctionTok{max}\NormalTok{(data\_all}\SpecialCharTok{$}\NormalTok{x[data\_all}\SpecialCharTok{$}\NormalTok{group}\SpecialCharTok{==}\StringTok{"A"}\NormalTok{]),}
+           \AttributeTok{length=}\DecValTok{100}\NormalTok{)}
+\NormalTok{pxb }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(data\_all}\SpecialCharTok{$}\NormalTok{x[data\_all}\SpecialCharTok{$}\NormalTok{group}\SpecialCharTok{==}\StringTok{"B"}\NormalTok{]),}
+           \FunctionTok{max}\NormalTok{(data\_all}\SpecialCharTok{$}\NormalTok{x[data\_all}\SpecialCharTok{$}\NormalTok{group}\SpecialCharTok{==}\StringTok{"B"}\NormalTok{]),}
+           \AttributeTok{length=}\DecValTok{100}\NormalTok{)}
+\CommentTok{\# put in data frames}
+\NormalTok{prxa }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{group=}\StringTok{"A"}\NormalTok{, }\AttributeTok{x=}\NormalTok{pxa)}
+\NormalTok{prxb }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{group=}\StringTok{"B"}\NormalTok{, }\AttributeTok{x=}\NormalTok{pxb)}
+
+\CommentTok{\# calculate predictions}
+\NormalTok{preda }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod7, }\AttributeTok{newdata=}\NormalTok{prxa, }\AttributeTok{se.fit=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{predb }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod7, }\AttributeTok{newdata=}\NormalTok{prxb, }\AttributeTok{se.fit=}\ConstantTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# add to data frames}
+\NormalTok{prxa}\SpecialCharTok{$}\NormalTok{mn }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.5}\NormalTok{, preda}\SpecialCharTok{$}\NormalTok{fit, preda}\SpecialCharTok{$}\NormalTok{se.fit)}
+\NormalTok{prxa}\SpecialCharTok{$}\NormalTok{lo }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.025}\NormalTok{, preda}\SpecialCharTok{$}\NormalTok{fit, preda}\SpecialCharTok{$}\NormalTok{se.fit)}
+\NormalTok{prxa}\SpecialCharTok{$}\NormalTok{up }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.975}\NormalTok{, preda}\SpecialCharTok{$}\NormalTok{fit, preda}\SpecialCharTok{$}\NormalTok{se.fit)}
+
+\NormalTok{prxb}\SpecialCharTok{$}\NormalTok{mn }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.5}\NormalTok{, predb}\SpecialCharTok{$}\NormalTok{fit, predb}\SpecialCharTok{$}\NormalTok{se.fit)}
+\NormalTok{prxb}\SpecialCharTok{$}\NormalTok{lo }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.025}\NormalTok{, predb}\SpecialCharTok{$}\NormalTok{fit, predb}\SpecialCharTok{$}\NormalTok{se.fit)}
+\NormalTok{prxb}\SpecialCharTok{$}\NormalTok{up }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.975}\NormalTok{, predb}\SpecialCharTok{$}\NormalTok{fit, predb}\SpecialCharTok{$}\NormalTok{se.fit)}
+
+\CommentTok{\# make the plot}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\FloatTok{5.1}\NormalTok{, }\FloatTok{5.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{las=}\DecValTok{1}\NormalTok{, }\AttributeTok{lend=}\DecValTok{1}\NormalTok{,}
+    \AttributeTok{cex.axis=}\FloatTok{1.3}\NormalTok{, }\AttributeTok{cex.lab=}\FloatTok{1.3}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(data\_all}\SpecialCharTok{$}\NormalTok{x, data\_all}\SpecialCharTok{$}\NormalTok{y, }\AttributeTok{col=}\NormalTok{data\_all}\SpecialCharTok{$}\NormalTok{col, }\AttributeTok{pch=}\NormalTok{data\_all}\SpecialCharTok{$}\NormalTok{pch,}
+     \AttributeTok{xlim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{20}\NormalTok{), }\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{60}\NormalTok{))}
+\FunctionTok{points}\NormalTok{(prxa}\SpecialCharTok{$}\NormalTok{x, prxa}\SpecialCharTok{$}\NormalTok{mn, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{col=}\StringTok{"red"}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(prxa}\SpecialCharTok{$}\NormalTok{x, prxa}\SpecialCharTok{$}\NormalTok{lo, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(prxa}\SpecialCharTok{$}\NormalTok{x, prxa}\SpecialCharTok{$}\NormalTok{up, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(prxb}\SpecialCharTok{$}\NormalTok{x, prxb}\SpecialCharTok{$}\NormalTok{mn, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{col=}\StringTok{"blue"}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(prxb}\SpecialCharTok{$}\NormalTok{x, prxb}\SpecialCharTok{$}\NormalTok{lo, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{col=}\StringTok{"blue"}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(prxb}\SpecialCharTok{$}\NormalTok{x, prxb}\SpecialCharTok{$}\NormalTok{up, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{col=}\StringTok{"blue"}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{, }\AttributeTok{legend=}\FunctionTok{c}\NormalTok{(}\StringTok{"Group A"}\NormalTok{, }\StringTok{"Group B"}\NormalTok{),}
+       \AttributeTok{pch=}\FunctionTok{c}\NormalTok{(}\DecValTok{15}\NormalTok{, }\DecValTok{16}\NormalTok{), }\AttributeTok{col=}\FunctionTok{c}\NormalTok{(}\StringTok{"red"}\NormalTok{, }\StringTok{"blue"}\NormalTok{), }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+       \AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-ancovatrend}Plot of Y vs.~X with groups A and B in
+the data, where the groups have different slopes. This illustrations
+ANCOVA with an interaction between X and group.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Plot of Y vs. X with groups A and B in the data, where the groups have different slopes. This illustrations ANCOVA with an interaction between X and group.}]{chapters/ch16_files/figure-pdf/fig-ancovatrend-1.pdf}}
+
+}
+
+\end{figure}%
 
 \subsection{Main effects and interaction
 effects}\label{sec-lin-ancova-inter}
 
 \chapter{Tests for contingency}\label{sec-indep}
 
+Tests for contingency, or tests for independence, are tests where both
+the predictor and the response variables are \textbf{categorical}. The
+question being asked is usually some version of, ``If an observation is
+in category A, does it also tend to be in category B?''.
+
+Consider the (made up) data from a pesticide exposure experiment below:
+
+\begin{longtable}[]{@{}lrr@{}}
+\caption{Pollen production by pesticide
+treatment.}\label{tbl-pollen}\tabularnewline
+\toprule\noalign{}
+Pollen production & Unexposed & Exposed \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Pollen production & Unexposed & Exposed \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+None & 17 & 6 \\
+Reduced & 3 & 4 \\
+Normal & 4 & 14 \\
+\end{longtable}
+
+This table tallies the fates of 48 plants that were \emph{exposed} or
+\emph{not exposed} to an experimental pesticide. The outcomes were
+classified as \emph{no pollen production}, \emph{reduced pollen
+production}, and \emph{normal pollen production}. Rather than asking a
+question about the mean pollen production in each group, the researchers
+might ask whether the fate of a plant (in terms of pollen production) is
+independent of whether or not it was treated. This is why the tests in
+this module are sometimes called \textbf{tests of independence}.
+
+A good clue for whether or not you need to do a test for independence is
+whether or not your data are best summarized in a contingency table
+(Section~\ref{sec-summ-ftable}). A contingency table shows how often
+observations fall into each category within a dataset.
+
 \section{Fisher's exact test}\label{sec-indep-fisher}
+
+\textbf{Fisher's exact test} is a test for independence in contingency
+tables that is usually only used when expected values are small
+(\(\lessapprox5\)) or when the \(\chi^2\) test gives questionable
+approximations.
+
+\textbf{Question:} Are the proportions of data described by two or more
+categorical variables random or nonrandom?
+
+\textbf{Null hypothesis:} Membership in one of one set of categories is
+independent of membership in one of another set of categories.
+
+\textbf{Alternative hypothesis:} Membership in one of one set of
+categories is not independent of membership in one of another set of
+categories.
+
+\textbf{Example use case:} Rick is studying if whether a fish spawning
+or not spawning is related to whether it resides in main channel or
+off-channel habitat, and he has dozens of fish in his dataset.
+
+\textbf{Fisher's exact test} is a test for independence in contingency
+tables that is usually only used when the some of the expected values
+are 5 or less. Although historically it was not used at large sample
+sizes because the \emph{p}-value calculation involves numerous
+factorials that were intractable with older computers, modern algorithms
+can use computational shortcuts to shorten this substantially. In fact,
+the Fisher's exact test is valid at any sample size, but tends to be
+more conservative than alternatives like the \(\chi^2\) test.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# make a matrix from the table above}
+\NormalTok{a }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\DecValTok{17}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{14}\NormalTok{), }\AttributeTok{byrow=}\ConstantTok{TRUE}\NormalTok{, }\AttributeTok{nrow=}\DecValTok{3}\NormalTok{)}
+\NormalTok{a}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+     [,1] [,2]
+[1,]   17    6
+[2,]    3    4
+[3,]    4   14
+\end{verbatim}
+
+The expected values, ironically, can be calculated by the
+\texttt{chisq.test()} function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{chisq.test}\NormalTok{(a)}\SpecialCharTok{$}\NormalTok{expected}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+     [,1] [,2]
+[1,] 11.5 11.5
+[2,]  3.5  3.5
+[3,]  9.0  9.0
+\end{verbatim}
+
+Notice that some of the expected cell counts are less than 5. In such
+situations, the \(\chi^2\) approximation can be suspect and the Fisher's
+test is preferred.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{fisher.test}\NormalTok{(a)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+    Fisher's Exact Test for Count Data
+
+data:  a
+p-value = 0.002849
+alternative hypothesis: two.sided
+\end{verbatim}
+
+Because Fisher's is an exact test (i.e., the \emph{P}-value is an
+direct, exact calculation), there are no test statistics or degrees of
+freedom to report.
 
 \section{Chi-squared test}\label{sec-indep-chisq}
 
+The chi-square (\(\chi^2\)) test is a more powerful, flexible, and
+computationally efficient cousin of the Fisher's exact test. It works by
+comparing the input contingency table to what the contingency table
+would be expected to look like under the assumption of independence.
+That is, if the null hypothesis were true. The test statistic,
+\(\chi^2\), measures how different the two contingency tables are. The
+test works better with large sample sizes; with small sample sizes, the
+approximations use to estimate the \emph{p}-value can break down. A good
+rule of thumb is that every cell (or most cells) of the hypothetical
+null contingency table should have \(\geq5\) observations.
+
+To meet the \(E\left(n\right)\ge5\) criterion, we need to collect more
+data for our imaginary pesticide experiment above. Consider the (made
+up) data from a pesticide exposure experiment below:
+
+\begin{longtable}[]{@{}lrr@{}}
+\caption{Pollen production by pesticide
+treatment.}\label{tbl-pollen}\tabularnewline
+\toprule\noalign{}
+Pollen production & Unexposed & Exposed \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Pollen production & Unexposed & Exposed \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+None & 33 & 15 \\
+Reduced & 8 & 13 \\
+Normal & 9 & 22 \\
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# make a matrix from the table above}
+\NormalTok{b }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\DecValTok{33}\NormalTok{, }\DecValTok{15}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{13}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{22}\NormalTok{), }\AttributeTok{byrow=}\ConstantTok{TRUE}\NormalTok{, }\AttributeTok{nrow=}\DecValTok{3}\NormalTok{)}
+\NormalTok{b}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+     [,1] [,2]
+[1,]   33   15
+[2,]    8   13
+[3,]    9   22
+\end{verbatim}
+
+The \(\chi^2\) test assumes that every outcome category is equally
+likely within every input category. In other words, input and outcome
+categories are independent of each other. The expected cell counts can
+be calculated by scaling observed cell counts by the marginal and grand
+total:
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule\noalign{}
+Pollen production & Unexposed & Exposed & Row totals \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+None & 33 & 15 & \textbf{48} \\
+Reduced & 8 & 13 & \textbf{21} \\
+Normal & 9 & 22 & \textbf{31} \\
+Column totals & \textbf{50} & \textbf{50} & \textbf{100} \\
+\end{longtable}
+}
+
+The expected count in the cell in row \(i\), column \(j\), is:
+
+\[E_{ij}=\frac{R_iC_j}{T}\]
+
+where \(R_i\) is the total for row \(i\), \(C_j\) is the total for
+column \(j\), and \(T\) is the grand total. For example, for row 1,
+column 2, the expected value is:
+
+\[E_{1,2}=\frac{48\cdot50}{100}=24\]
+
+So the entire table is:
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3878}}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2245}}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1837}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2041}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Pollen production
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Unexposed
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Exposed
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Row totals
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+None & \(\left(48\cdot50\right)/100=24\) &
+\(\left(48\cdot50\right)/100=24\) & \textbf{48} \\
+Reduced & \(\left(21\cdot50\right)/100=10.5\) &
+\(\left(21\cdot50\right)/100=10.5\) & \textbf{21} \\
+Normal & \(\left(31\cdot50\right)/100=15.5\) &
+\(\left(31\cdot50\right)/100=15.5\) & \textbf{31} \\
+Column totals & \textbf{50} & \textbf{50} & \textbf{100} \\
+\end{longtable}
+}
+
+Once we have the expected counts, we can calculate the \(\chi^2\)
+statistic as:
+
+\[\chi_{stat}^2=\sum_{i=1}^{n_{row}}\sum_{j=1}^{n_{col}}\frac{\left(O_{ij}-E_{ij}\right)^2}{E_{ij}}\]
+
+The \(\chi^2\) statistic is then compared to a \(\chi^2\) distribution
+with \(\left(n_{row}-1\right)\left(n_{col}-1\right)\) degrees of
+freedom. In this case, \(DF=\left(3-1\right)\left(2-1\right)=2\). The
+\emph{p}-value is then calculated as:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1}\SpecialCharTok{{-}}\FunctionTok{pchisq}\NormalTok{(}\FloatTok{13.392}\NormalTok{, }\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.001235845
+\end{verbatim}
+
+Fortunately, we don't have to calculate all of that by hand. The
+\texttt{chisq()} function includes the expected counts in its output
+object, and prints everything you need to report in your write-up. The
+\(\chi^2\) test is not an exact test, so you need to report the test
+statistic and degrees of freedom.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# chi squared test}
+\NormalTok{chi.b }\OtherTok{\textless{}{-}} \FunctionTok{chisq.test}\NormalTok{(b)}
+\NormalTok{chi.b}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+    Pearson's Chi-squared test
+
+data:  b
+X-squared = 13.392, df = 2, p-value = 0.001236
+\end{verbatim}
+
+In your manuscript, thesis, or whatever, the test would be reported as,
+``pollen production class was not independent of pesticide application
+(\(\chi^2=13.39\), 2 d.f., \emph{p} = 0.001)''.
+
+Let's check the expected counts to make sure none are \(<5\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# check the expected counts}
+\CommentTok{\# if \textgreater{}1 are \textless{}5, consider a Fisher\textquotesingle{}s exact test}
+\NormalTok{chi.b}\SpecialCharTok{$}\NormalTok{expected}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+     [,1] [,2]
+[1,] 24.0 24.0
+[2,] 10.5 10.5
+[3,] 15.5 15.5
+\end{verbatim}
+
 \section{G-test}\label{sec-indep-gtest}
 
+The \emph{G}-test is another test for independence that can be used in
+situations where the \(\chi^2\) test is appropriate. It's main advantage
+is that it is more computationally efficient at very large sample sizes
+(1000s or more). Its test statistic is a bit different:
+
+\[
+G=2\sum_{i}^{n}{O_ilog{\left(\frac{O_i}{E_i}\right)}}
+\]
+
+Where the terms are the same as in the equation for \(\chi^2\) and
+``log'' is the natural logarithm function. Further, the total observed
+count must equal the total expected count:
+
+\[
+\sum_{i}^{n} O_i=\sum_{i}^{n} E_i
+\]
+
+The \emph{G}-test should be used when sample sizes are large, because it
+is more computationally efficient than \(\chi^2\), and in situations
+where \(O_i>2E_i\) for at least some cells.
+
+Despite that fact that is has been recommended in literature for over 3
+decades, the \emph{G}-test is not available in the base R \texttt{stats}
+package. It is implemented in several add-on packages such as
+\texttt{AMR}.
+
 \section{Contingency tests and odds ratios}\label{sec-indep-odds}
+
+One interesting way to express the results of a test for independence is
+to use the \textbf{odds ratio} of one outcome relative to another. The
+\textbf{odds} of some event \(k\) with probability \(p\) is:
+
+\[Odds\left(k\right)=\frac{p\left(k\right)}{1-p\left(k\right)}\]
+
+So the odds ratio of two events \(k\) and \(m\) is simply the odds of
+\(k\) divided by the odds of \(\neg k\).
+
+\[OR\left(k,m\right)=\frac{\frac{p\left(k\right)}{1-p\left(k\right)}}{\frac{p\left(m\right)}{1-p\left(m\right)}}\]
+
+Odds ratios make it easier to interpret relative likelihoods than
+probabilities. For example, if the control treatment in some experiment
+results in 96\% mortality, and the other treatment has 98\% mortality,
+the effect size of the treatment is not 2\%. It is really
+\(\left(\left(0.98\right)/\left(0.02\right)\right)/\left(\left(0.96\right)/\left(0.04\right)\right)=2.04\).
+That is, the treatment more than doubled the likelihood of mortality!
+Expressing that result as an odds ratio feels like it is overstating
+things, until you realize that the proportion of non-mortalities was cut
+in half. If the mortality rates were lower, say 52\% vs.~54\%, the odds
+ratio would be 1.08, meaning that mortality was 8\% more likely than in
+the control.
+
+Let's calculate the odds ratios for our pesticide study. Collapse the 3
+outcomes into 2: normal pollen, and less than normal pollen (which
+includes no pollen):
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lrrr@{}}
+\toprule\noalign{}
+Pollen production & Unexposed & Exposed & Row totals \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Reduced & 41 & 28 & \textbf{69} \\
+Normal & 9 & 22 & \textbf{31} \\
+Column totals & \textbf{50} & \textbf{50} & \textbf{100} \\
+\end{longtable}
+}
+
+The odds ratio for reduced pollen in the exposed treatment compared to
+control is:
+
+\[\frac{\frac{28}{22}}{\frac{41}{8}}=\frac{1.273}{4.556}=0.248\]
+
+This means that plants in the exposed treatment were 0.248 times as
+likely to have reduced pollen production as plants in the control
+treatment. Or, you could reverse the calculation and find that exposed
+plants were 4.03 times as likely to have normal pollen counts.
 
 \part{Generalized linear models (GLM)}
 

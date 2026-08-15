@@ -23,6 +23,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -74,6 +109,35 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -467,17 +531,312 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>Tests for contingency, or tests for independence, are tests where both the predictor and the response variables are <strong>categorical</strong>. The question being asked is usually some version of, “If an observation is in category A, does it also tend to be in category B?”.</p>
+<p>Consider the (made up) data from a pesticide exposure experiment below:</p>
+<div id="tbl-pollen" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-pollen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;17.1: Pollen production by pesticide treatment.
+</figcaption>
+<div aria-describedby="tbl-pollen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Pollen production</th>
+<th style="text-align: right;">Unexposed</th>
+<th style="text-align: right;">Exposed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">None</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Reduced</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Normal</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">14</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>This table tallies the fates of 48 plants that were <em>exposed</em> or <em>not exposed</em> to an experimental pesticide. The outcomes were classified as <em>no pollen production</em>, <em>reduced pollen production</em>, and <em>normal pollen production</em>. Rather than asking a question about the mean pollen production in each group, the researchers might ask whether the fate of a plant (in terms of pollen production) is independent of whether or not it was treated. This is why the tests in this module are sometimes called <strong>tests of independence</strong>.</p>
+<p>A good clue for whether or not you need to do a test for independence is whether or not your data are best summarized in a contingency table (<a href="ch07.html#sec-summ-ftable" class="quarto-xref"><span>Section 7.3.2</span></a>). A contingency table shows how often observations fall into each category within a dataset.</p>
 <section id="sec-indep-fisher" class="level2" data-number="17.1">
 <h2 data-number="17.1" class="anchored" data-anchor-id="sec-indep-fisher"><span class="header-section-number">17.1</span> Fisher’s exact test</h2>
+<p><strong>Fisher’s exact test</strong> is a test for independence in contingency tables that is usually only used when expected values are small (<span class="math inline">\(\lessapprox5\)</span>) or when the <span class="math inline">\(\chi^2\)</span> test gives questionable approximations.</p>
+<p><strong>Question:</strong> Are the proportions of data described by two or more categorical variables random or nonrandom?</p>
+<p><strong>Null hypothesis:</strong> Membership in one of one set of categories is independent of membership in one of another set of categories.</p>
+<p><strong>Alternative hypothesis:</strong> Membership in one of one set of categories is not independent of membership in one of another set of categories.</p>
+<p><strong>Example use case:</strong> Rick is studying if whether a fish spawning or not spawning is related to whether it resides in main channel or off-channel habitat, and he has dozens of fish in his dataset.</p>
+<p><strong>Fisher’s exact test</strong> is a test for independence in contingency tables that is usually only used when the some of the expected values are 5 or less. Although historically it was not used at large sample sizes because the <em>p</em>-value calculation involves numerous factorials that were intractable with older computers, modern algorithms can use computational shortcuts to shorten this substantially. In fact, the Fisher’s exact test is valid at any sample size, but tends to be more conservative than alternatives like the <span class="math inline">\(\chi^2\)</span> test.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make a matrix from the table above</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">17</span>,<span class="dv">6</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">14</span>), <span class="at">byrow=</span><span class="cn">TRUE</span>, <span class="at">nrow=</span><span class="dv">3</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>a</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2]
+[1,]   17    6
+[2,]    3    4
+[3,]    4   14</code></pre>
+</div>
+</div>
+<p>The expected values, ironically, can be calculated by the <code>chisq.test()</code> function:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(a)<span class="sc">$</span>expected</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2]
+[1,] 11.5 11.5
+[2,]  3.5  3.5
+[3,]  9.0  9.0</code></pre>
+</div>
+</div>
+<p>Notice that some of the expected cell counts are less than 5. In such situations, the <span class="math inline">\(\chi^2\)</span> approximation can be suspect and the Fisher’s test is preferred.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fisher.test</span>(a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Fisher's Exact Test for Count Data
+
+data:  a
+p-value = 0.002849
+alternative hypothesis: two.sided</code></pre>
+</div>
+</div>
+<p>Because Fisher’s is an exact test (i.e., the <em>P</em>-value is an direct, exact calculation), there are no test statistics or degrees of freedom to report.</p>
 </section>
 <section id="sec-indep-chisq" class="level2" data-number="17.2">
 <h2 data-number="17.2" class="anchored" data-anchor-id="sec-indep-chisq"><span class="header-section-number">17.2</span> Chi-squared test</h2>
+<p>The chi-square (<span class="math inline">\(\chi^2\)</span>) test is a more powerful, flexible, and computationally efficient cousin of the Fisher’s exact test. It works by comparing the input contingency table to what the contingency table would be expected to look like under the assumption of independence. That is, if the null hypothesis were true. The test statistic, <span class="math inline">\(\chi^2\)</span>, measures how different the two contingency tables are. The test works better with large sample sizes; with small sample sizes, the approximations use to estimate the <em>p</em>-value can break down. A good rule of thumb is that every cell (or most cells) of the hypothetical null contingency table should have <span class="math inline">\(\geq5\)</span> observations.</p>
+<p>To meet the <span class="math inline">\(E\left(n\right)\ge5\)</span> criterion, we need to collect more data for our imaginary pesticide experiment above. Consider the (made up) data from a pesticide exposure experiment below:</p>
+<div id="tbl-pollen" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-pollen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;17.2: Pollen production by pesticide treatment.
+</figcaption>
+<div aria-describedby="tbl-pollen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Pollen production</th>
+<th style="text-align: right;">Unexposed</th>
+<th style="text-align: right;">Exposed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">None</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Reduced</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Normal</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">22</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make a matrix from the table above</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">33</span>, <span class="dv">15</span>, <span class="dv">8</span>, <span class="dv">13</span>, <span class="dv">9</span>, <span class="dv">22</span>), <span class="at">byrow=</span><span class="cn">TRUE</span>, <span class="at">nrow=</span><span class="dv">3</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>b</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2]
+[1,]   33   15
+[2,]    8   13
+[3,]    9   22</code></pre>
+</div>
+</div>
+<p>The <span class="math inline">\(\chi^2\)</span> test assumes that every outcome category is equally likely within every input category. In other words, input and outcome categories are independent of each other. The expected cell counts can be calculated by scaling observed cell counts by the marginal and grand total:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Pollen production</th>
+<th style="text-align: right;">Unexposed</th>
+<th style="text-align: right;">Exposed</th>
+<th style="text-align: right;">Row totals</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">None</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;"><strong>48</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Reduced</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;"><strong>21</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Normal</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;"><strong>31</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Column totals</td>
+<td style="text-align: right;"><strong>50</strong></td>
+<td style="text-align: right;"><strong>50</strong></td>
+<td style="text-align: right;"><strong>100</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The expected count in the cell in row <span class="math inline">\(i\)</span>, column <span class="math inline">\(j\)</span>, is:</p>
+<p><span class="math display">\[E_{ij}=\frac{R_iC_j}{T}\]</span></p>
+<p>where <span class="math inline">\(R_i\)</span> is the total for row <span class="math inline">\(i\)</span>, <span class="math inline">\(C_j\)</span> is the total for column <span class="math inline">\(j\)</span>, and <span class="math inline">\(T\)</span> is the grand total. For example, for row 1, column 2, the expected value is:</p>
+<p><span class="math display">\[E_{1,2}=\frac{48\cdot50}{100}=24\]</span></p>
+<p>So the entire table is:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 38%">
+<col style="width: 22%">
+<col style="width: 18%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Pollen production</th>
+<th style="text-align: center;">Unexposed</th>
+<th style="text-align: center;">Exposed</th>
+<th style="text-align: right;">Row totals</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">None</td>
+<td style="text-align: center;"><span class="math inline">\(\left(48\cdot50\right)/100=24\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\left(48\cdot50\right)/100=24\)</span></td>
+<td style="text-align: right;"><strong>48</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Reduced</td>
+<td style="text-align: center;"><span class="math inline">\(\left(21\cdot50\right)/100=10.5\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\left(21\cdot50\right)/100=10.5\)</span></td>
+<td style="text-align: right;"><strong>21</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Normal</td>
+<td style="text-align: center;"><span class="math inline">\(\left(31\cdot50\right)/100=15.5\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\left(31\cdot50\right)/100=15.5\)</span></td>
+<td style="text-align: right;"><strong>31</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Column totals</td>
+<td style="text-align: center;"><strong>50</strong></td>
+<td style="text-align: center;"><strong>50</strong></td>
+<td style="text-align: right;"><strong>100</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Once we have the expected counts, we can calculate the <span class="math inline">\(\chi^2\)</span> statistic as:</p>
+<p><span class="math display">\[\chi_{stat}^2=\sum_{i=1}^{n_{row}}\sum_{j=1}^{n_{col}}\frac{\left(O_{ij}-E_{ij}\right)^2}{E_{ij}}\]</span></p>
+<p>The <span class="math inline">\(\chi^2\)</span> statistic is then compared to a <span class="math inline">\(\chi^2\)</span> distribution with <span class="math inline">\(\left(n_{row}-1\right)\left(n_{col}-1\right)\)</span> degrees of freedom. In this case, <span class="math inline">\(DF=\left(3-1\right)\left(2-1\right)=2\)</span>. The <em>p</em>-value is then calculated as:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span><span class="fu">pchisq</span>(<span class="fl">13.392</span>, <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.001235845</code></pre>
+</div>
+</div>
+<p>Fortunately, we don’t have to calculate all of that by hand. The <code>chisq()</code> function includes the expected counts in its output object, and prints everything you need to report in your write-up. The <span class="math inline">\(\chi^2\)</span> test is not an exact test, so you need to report the test statistic and degrees of freedom.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># chi squared test</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>chi.b <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(b)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>chi.b</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  b
+X-squared = 13.392, df = 2, p-value = 0.001236</code></pre>
+</div>
+</div>
+<p>In your manuscript, thesis, or whatever, the test would be reported as, “pollen production class was not independent of pesticide application (<span class="math inline">\(\chi^2=13.39\)</span>, 2 d.f., <em>p</em> = 0.001)”.</p>
+<p>Let’s check the expected counts to make sure none are <span class="math inline">\(&lt;5\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check the expected counts</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># if &gt;1 are &lt;5, consider a Fisher's exact test</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>chi.b<span class="sc">$</span>expected</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2]
+[1,] 24.0 24.0
+[2,] 10.5 10.5
+[3,] 15.5 15.5</code></pre>
+</div>
+</div>
 </section>
 <section id="sec-indep-gtest" class="level2" data-number="17.3">
 <h2 data-number="17.3" class="anchored" data-anchor-id="sec-indep-gtest"><span class="header-section-number">17.3</span> G-test</h2>
+<p>The <em>G</em>-test is another test for independence that can be used in situations where the <span class="math inline">\(\chi^2\)</span> test is appropriate. It’s main advantage is that it is more computationally efficient at very large sample sizes (1000s or more). Its test statistic is a bit different:</p>
+<p><span class="math display">\[
+G=2\sum_{i}^{n}{O_ilog{\left(\frac{O_i}{E_i}\right)}}
+\]</span></p>
+<p>Where the terms are the same as in the equation for <span class="math inline">\(\chi^2\)</span> and “log” is the natural logarithm function. Further, the total observed count must equal the total expected count:</p>
+<p><span class="math display">\[
+\sum_{i}^{n} O_i=\sum_{i}^{n} E_i
+\]</span></p>
+<p>The <em>G</em>-test should be used when sample sizes are large, because it is more computationally efficient than <span class="math inline">\(\chi^2\)</span>, and in situations where <span class="math inline">\(O_i&gt;2E_i\)</span> for at least some cells.</p>
+<p>Despite that fact that is has been recommended in literature for over 3 decades, the <em>G</em>-test is not available in the base R <code>stats</code> package. It is implemented in several add-on packages such as <code>AMR</code>.</p>
 </section>
 <section id="sec-indep-odds" class="level2" data-number="17.4">
 <h2 data-number="17.4" class="anchored" data-anchor-id="sec-indep-odds"><span class="header-section-number">17.4</span> Contingency tests and odds ratios</h2>
+<p>One interesting way to express the results of a test for independence is to use the <strong>odds ratio</strong> of one outcome relative to another. The <strong>odds</strong> of some event <span class="math inline">\(k\)</span> with probability <span class="math inline">\(p\)</span> is:</p>
+<p><span class="math display">\[Odds\left(k\right)=\frac{p\left(k\right)}{1-p\left(k\right)}\]</span></p>
+<p>So the odds ratio of two events <span class="math inline">\(k\)</span> and <span class="math inline">\(m\)</span> is simply the odds of <span class="math inline">\(k\)</span> divided by the odds of <span class="math inline">\(\neg k\)</span>.</p>
+<p><span class="math display">\[OR\left(k,m\right)=\frac{\frac{p\left(k\right)}{1-p\left(k\right)}}{\frac{p\left(m\right)}{1-p\left(m\right)}}\]</span></p>
+<p>Odds ratios make it easier to interpret relative likelihoods than probabilities. For example, if the control treatment in some experiment results in 96% mortality, and the other treatment has 98% mortality, the effect size of the treatment is not 2%. It is really <span class="math inline">\(\left(\left(0.98\right)/\left(0.02\right)\right)/\left(\left(0.96\right)/\left(0.04\right)\right)=2.04\)</span>. That is, the treatment more than doubled the likelihood of mortality! Expressing that result as an odds ratio feels like it is overstating things, until you realize that the proportion of non-mortalities was cut in half. If the mortality rates were lower, say 52% vs.&nbsp;54%, the odds ratio would be 1.08, meaning that mortality was 8% more likely than in the control.</p>
+<p>Let’s calculate the odds ratios for our pesticide study. Collapse the 3 outcomes into 2: normal pollen, and less than normal pollen (which includes no pollen):</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Pollen production</th>
+<th style="text-align: right;">Unexposed</th>
+<th style="text-align: right;">Exposed</th>
+<th style="text-align: right;">Row totals</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Reduced</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;"><strong>69</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Normal</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;"><strong>31</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column totals</td>
+<td style="text-align: right;"><strong>50</strong></td>
+<td style="text-align: right;"><strong>50</strong></td>
+<td style="text-align: right;"><strong>100</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The odds ratio for reduced pollen in the exposed treatment compared to control is:</p>
+<p><span class="math display">\[\frac{\frac{28}{22}}{\frac{41}{8}}=\frac{1.273}{4.556}=0.248\]</span></p>
+<p>This means that plants in the exposed treatment were 0.248 times as likely to have reduced pollen production as plants in the control treatment. Or, you could reverse the calculation and find that exposed plants were 4.03 times as likely to have normal pollen counts.</p>
 
 
 </section>

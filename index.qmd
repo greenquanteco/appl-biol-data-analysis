@@ -21,8 +21,8 @@ This website presents many examples of data analyses or data manipulation. In pa
 
 However, it turns out that it's hard to do everything with a single dataset. So, I settled on 3 datasets:
 
-1.  The famous `iris` dataset included with R. This will be used primarily in early modules covering data manipulation and data frame management, as well as the review of basic statistics in Module 9.
-2.  Datasets simulated *ad hoc* to demonstrate simple concepts with no underlying biological reality (i.e., numbers to demonstrate the properties of a probability distribution).
+1.  The famous `iris` dataset included with R. This will be used primarily in early modules covering data manipulation and data frame management, as well as the review of basic statistics in Modules 14 to 17.
+2.  Datasets simulated *ad hoc* to demonstrate simple concepts with no underlying biological reality (e.g., numbers to demonstrate the properties of a probability distribution).
 3.  Small mammal trapping and measurement data from the [National Ecological Observatory Network (NEON)](https://www.neonscience.org/data-collection/small-mammals)[@neon2025]. The details of which data I used and how I packaged them for this website can be found in Appendix A.
 
 ## License and permissions {.unnumbered}
@@ -83,7 +83,13 @@ Parts of the course also lean heavily on some more specialized textbooks:
 
 -   *An introduction to WinBUGS for ecologists* by Marc Kéry [@kery2010]. This book introduces Bayesian inference using the free programs WinBUGS or JAGS, which can be accessed from R.
 
-If you want a PDF version of this website, please be patient. I'll put a PDF version here once I can get it to exist.
+::: {.content-visible when-format="html"}
+If you want a PDF version of this website, you can download it [here](Applied-Biological-Data-Analysis.pdf).
+:::
+
+::: {.content-visible when-format="pdf"}
+An online version of this book is available at [https://greenquanteco.github.io/appl-biol-data-analysis/](https://greenquanteco.github.io/appl-biol-data-analysis/). The online version and the PDF hosted there are updated from time to time.
+:::
 
 ## Course organization {.unnumbered}
 
@@ -179,7 +185,7 @@ Finally, [Appendix A](chapters/appa.qmd#sec-append) describes the NEON dataset t
 
 ![](images/squirrel_pic.jpg){fig-align="center"}
 
-I'm a [quantitative ecologist at Kennesaw State University](https://facultyweb.kennesaw.edu/ngreen62/index.php) who studies human impacts on animal populations. Since earning my PhD at Baylor University in 2012, I've been fortunate to have worked in a variety of government and industry roles. Those experiences have shaped my perspective on biology and education. In my courses and advising I do my best to impress upon students the variety of biological experiences and perspectives that different domains bring to the table...and the value that they all bring. Most of my [current research](https://greenquanteco.github.io/research) focuses on understanding human impacts on animal communities and how animal populations adapt to rapidly changing environments.
+I'm a [quantitative ecologist at Kennesaw State University](https://greenquanteco.github.io/research) who studies human impacts on animal populations. Since earning my PhD at Baylor University in 2012, I've been fortunate to have worked in a variety of government and industry roles. Those experiences have shaped my perspective on biology and education. In my courses and advising I do my best to impress upon students the variety of biological experiences and perspectives that different domains bring to the table...and the value that they all bring. Most of my [current research](https://greenquanteco.github.io/research) focuses on understanding human impacts on animal communities and how animal populations adapt to rapidly changing environments.
 
 ![](images/lab_logo_02.jpg){fig-align="center"}
 

@@ -23,6 +23,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -74,6 +109,35 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -445,8 +509,7 @@ ul.task-list li input[type="checkbox"] {
   </ul></li>
   <li><a href="#sec-lin-lm" id="toc-sec-lin-lm" class="nav-link" data-scroll-target="#sec-lin-lm"><span class="header-section-number">16.2</span> Linear models</a>
   <ul class="collapse">
-  <li><a href="#sec-lin-lm-def" id="toc-sec-lin-lm-def" class="nav-link" data-scroll-target="#sec-lin-lm-def"><span class="header-section-number">16.2.1</span> Definition</a></li>
-  <li><a href="#sec-lin-lm-disguise" id="toc-sec-lin-lm-disguise" class="nav-link" data-scroll-target="#sec-lin-lm-disguise"><span class="header-section-number">16.2.2</span> Lots of analyses are linear models in disguise (or can be)</a></li>
+  <li><a href="#sec-lin-lm-disguise" id="toc-sec-lin-lm-disguise" class="nav-link" data-scroll-target="#sec-lin-lm-disguise"><span class="header-section-number">16.2.1</span> Lots of analyses are linear models in disguise (or can be)</a></li>
   </ul></li>
   <li><a href="#sec-lin-reg" id="toc-sec-lin-reg" class="nav-link" data-scroll-target="#sec-lin-reg"><span class="header-section-number">16.3</span> Linear regression</a></li>
   <li><a href="#sec-lin-mult" id="toc-sec-lin-mult" class="nav-link" data-scroll-target="#sec-lin-mult"><span class="header-section-number">16.4</span> Multiple regression</a></li>
@@ -479,44 +542,794 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>This module discusses classic tests for patterns where we relate changes in one continuous variable to another continuous variable. By convention, the <strong>response</strong> or <strong>dependent</strong> variable is plotted on the y-axis, and is taken to be the “effect” being studied. The <strong>predictor</strong> or <strong>independent</strong> or <strong>explanatory</strong> variable the one interpreted as the cause. Predictors are plotted on the x-axis. Such a plot or model is said to be of “y versus x”.</p>
+<p>However, as we see in the section on correlation, we can also investigate patterns between variables without assuming that one causes the other–only that they reliably change together.</p>
 <section id="sec-lin-cor" class="level2" data-number="16.1">
 <h2 data-number="16.1" class="anchored" data-anchor-id="sec-lin-cor"><span class="header-section-number">16.1</span> Correlation</h2>
+<p><strong>Correlation</strong> is a statistical relationship where changes in one variable are reliably associated with changes in another variable. This relationship need not be causal, hence the famous mantra, “correlation does not equal causation”. As such, correlation is usually a <strong>descriptive technique</strong>, which lets researchers characterize patterns, rather than an <strong>inferential technique</strong>, which lets researchers make estimates about unknown parameters (i.e., infer unobserved quantities).</p>
+<p>Correlations are typically expressed as a <strong>correlation coefficient</strong>, a value that indicates the strength of the correlation by its magnitude and the direction of the correlation by its sign.</p>
+<ul>
+<li><p><strong>Positive correlation:</strong> as one variable gets larger, the other variable does too. Correlation coefficient approaches <span class="math inline">\(+1\)</span>.</p></li>
+<li><p><strong>Negative correlation:</strong> as one variable gets larger, the other variable gets smaller. Correlation coefficient approaches <span class="math inline">\(-1\)</span>.</p></li>
+</ul>
+<p>When a correlation coefficient is near 0, this indicates no correlation.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-correlations" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Illustration of possible positive and negative relationships between pairs of variables, with different levels of consistency (r).">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-correlations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.1: Illustration of possible positive and negative relationships between pairs of variables, with different levels of consistency (<em>r</em>).
+</figcaption>
+<div aria-describedby="fig-correlations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch16_files/figure-html/fig-correlations-1.png" class="img-fluid figure-img" alt="Illustration of possible positive and negative relationships between pairs of variables, with different levels of consistency (r)." width="864">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Correlation coefficients</strong> are often calculated when we want to see if two values are related, without going as far as to infer a causal relationship. Because science is all about finding explanations (i.e., causes) for natural phenomena, a correlation analysis is usually not presented on its own. However, correlation analysis can be part of a larger workflow:</p>
+<ul>
+<li><p>Correlations can indicate if some variables in a dataset are <em>redundant</em>—that is, any analysis of one would say the same as analyzing the other.</p></li>
+<li><p>Correlations can indicate association without inference—e.g., it might be sufficient to know that your residuals are correlated with some other variable, without being able to model the relationship.</p></li>
+<li><p>Correlations can help identify proxy variables—variables that can stand in for one another. E.g., correlation analysis may reveal that an inexpensive, easily obtainable variable is a good stand-in for an expensive, but less obtainable one.</p></li>
+<li><p>Correlations can screen large numbers of variables for possible patterns and inform future investigations. For example, in some analyses I will start by testing many variables for correlations, and only invest time fitting inferential models (e.g., GLMs) for the variables that show some correlation with the response variable.</p></li>
+</ul>
 <section id="sec-lin-cor-lin" class="level3" data-number="16.1.1">
 <h3 data-number="16.1.1" class="anchored" data-anchor-id="sec-lin-cor-lin"><span class="header-section-number">16.1.1</span> Linear correlation</h3>
+<p><strong>Question:</strong> As values in one set change, do values in another set change at a constant rate?</p>
+<p><strong>Null hypothesis:</strong> N/A (descriptive statistic)</p>
+<p><strong>Alternative hypothesis:</strong> N/A (descriptive statistic)</p>
+<p><strong>Example use case:</strong> Lisa is studying whether the size of a mammal’s cecum is related to the proportion of plant material in its diet, and suspects that the relationship is linear.</p>
+<p>When we suspect that two variables are correlated, and that the shape of that relationship is a straight line, we can use <strong>Pearson’s product moment correlation</strong>, also called <strong>Pearson’s <em>r</em></strong>. This is probably the most commonly used correlation coefficient, and can be calculated in many ways. One way is this:</p>
+<p><span class="math display">\[
+r_{xy}=\frac{\sum_{i=1}^n\left(x_i-\bar{x}\right)\left(y_i-\bar{y}\right)}{\sqrt{\sum_{i=1}^n\left(x_i-\bar{x}\right)^2}\sqrt{\sum_{i=1}^n\left(y_i-\bar{y}\right)^2}}
+\]</span></p>
+<p>In this expression, <span class="math inline">\(r_{xy}\)</span> is the correlation between vectors <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>; <span class="math inline">\(n\)</span> is the total number of observations; <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i\)</span> are the <em>i</em>-th value of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, respectively; <span class="math inline">\(\bar{x}\)</span> and <span class="math inline">\(\bar{y}\)</span> are the sample means of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. This expression shows that <em>r</em> gets larger as the slope of the relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> gets larger, regardless of sign; and that increasing variance decreases <em>r</em>.</p>
+<p>The numerator is also called the <strong>covariance</strong> of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. You might recognize the denominator as the product of the SD of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. So, the formula for Pearson’s <em>r</em> can be written very compactly as:</p>
+<p><span class="math display">\[
+r_{xy}=\frac{\text{cov}\left(x,y\right)}{s_xs_y}
+\]</span></p>
+<p>The base function <code>cor()</code> calculates correlation coefficients, including <em>r</em>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate linear correlation coefficient</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(iris<span class="sc">$</span>Petal.Length, iris<span class="sc">$</span>Petal.Width)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9628654</code></pre>
+</div>
+</div>
+<p>You can also request a significance test on the coefficient, although some might consider this unnecessary because correlation is inherently a descriptive technique. If you are using correlation as a hypothesis test, however, you do need a <em>p</em>-value.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(iris<span class="sc">$</span>Petal.Length, iris<span class="sc">$</span>Petal.Width)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's product-moment correlation
+
+data:  iris$Petal.Length and iris$Petal.Width
+t = 43.387, df = 148, p-value &lt; 2.2e-16
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.9490525 0.9729853
+sample estimates:
+      cor 
+0.9628654 </code></pre>
+</div>
+</div>
+<p>You can also get correlations between a set of variables. The result is a correlation matrix (see <a href="ch06.html#sec-desc-co-lin-pairs" class="quarto-xref"><span>Section 6.4.1.3</span></a>).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># correlations between several variables at once:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># i.e., a correlation matrix</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(iris[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             Sepal.Length Sepal.Width Petal.Length Petal.Width
+Sepal.Length    1.0000000  -0.1175698    0.8717538   0.8179411
+Sepal.Width    -0.1175698   1.0000000   -0.4284401  -0.3661259
+Petal.Length    0.8717538  -0.4284401    1.0000000   0.9628654
+Petal.Width     0.8179411  -0.3661259    0.9628654   1.0000000</code></pre>
+</div>
+</div>
+<p>There isn’t a built-in way to check for significant correlations between many pairs of variables at once. This is because <code>cor.test()</code> only works with one pair at a time. Fortunately, it’s not hard to do in a <code>for()</code> loop:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># data frame with just the variables we need</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> iris[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># set up data frame to hold results</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="do">## get the names of the variables</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>var.names <span class="ot">&lt;-</span> <span class="fu">names</span>(dx)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="do">## get every unique combination of 2 of those names</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>var.pairs <span class="ot">&lt;-</span> <span class="fu">combn</span>(var.names, <span class="dv">2</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="do">## transpose the result (swap rows and columns)</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="do">## so it is oriented like a data frame, and convert</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="do">## from matrix to data frame</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>cor.df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">t</span>(var.pairs))</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>cor.df<span class="sc">$</span>r <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>cor.df<span class="sc">$</span>p <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="do">#### </span><span class="al">NOTE</span><span class="do">: you can create the object cor.df more      ##</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="do">####       quickly by combining commands like this:   ##</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="do">##### not run:                                        ## </span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="do">##### cor.df &lt;- as.data.frame(t(combn(names(dx),2)))  ##</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co"># find the r and p values in a loop</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(cor.df)){</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># test once per iteration  </span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  curr <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(dx[,cor.df<span class="sc">$</span>V1[i]], dx[,cor.df<span class="sc">$</span>V2[i]])</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># pull out values we need from correlation test result</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># and round to 3 decimal places</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  cor.df<span class="sc">$</span>r[i] <span class="ot">&lt;-</span> <span class="fu">round</span>(curr<span class="sc">$</span>estimate, <span class="dv">3</span>)</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  cor.df<span class="sc">$</span>p[i] <span class="ot">&lt;-</span> <span class="fu">round</span>(curr<span class="sc">$</span>p.value, <span class="dv">3</span>)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>}<span class="co">#close i loop</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="co"># print result</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>cor.df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            V1           V2      r     p
+1 Sepal.Length  Sepal.Width -0.118 0.152
+2 Sepal.Length Petal.Length  0.872 0.000
+3 Sepal.Length  Petal.Width  0.818 0.000
+4  Sepal.Width Petal.Length -0.428 0.000
+5  Sepal.Width  Petal.Width -0.366 0.000
+6 Petal.Length  Petal.Width  0.963 0.000</code></pre>
+</div>
+</div>
+<p>It’s not pretty, but we can see right away that every pair is significantly correlated except sepal width and sepal length. Remember that the <em>p</em>-values printed as <code>0.000</code> are not literally 0; report them as “&lt;0.001”.</p>
+<p>Another way to explore correlations between many pairs of variables is to visualize them in a scatterplot matrix (see <a href="ch06.html#sec-desc-co-lin-pairs" class="quarto-xref"><span>Section 6.4.1.3</span></a>).</p>
 </section>
 <section id="sec-lin-cor-non" class="level3" data-number="16.1.2">
 <h3 data-number="16.1.2" class="anchored" data-anchor-id="sec-lin-cor-non"><span class="header-section-number">16.1.2</span> Nonlinear correlation</h3>
+<p>Many processes and relationships in biology are not linear, and but we still want to study correlations in those processes. So, instead of asking whether or not the assocation is linear, we ask whether it is <strong>monotonic</strong>, meaning that the changes in one variable associated with changes in another tend to have the same sign. For example, as <span class="math inline">\(X\)</span> increases, <span class="math inline">\(Y\)</span> either consistently increases or consistently decreases, but does not go up and down across the domain of <span class="math inline">\(X\)</span>.</p>
+<p>Consider the figure below. The left panel clearly shows some relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, but it is not linear and using a linear correlation coefficient might miss something. The right panel shows the same data points after a <a href="@sec-trans-common-rank">rank transform</a>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch16_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Often when two variables share a nonlinear relationship, a rank transform will make that relationship appear more linear. A “rank-transform” assigns the smallest value value “0”, the second smallest value to “1”, and so on. Rank-transforming these data lets us calculate a nonparametric, nonlinear correlation.</p>
+<section id="sec-lin-cor-non-rho" class="level4" data-number="16.1.2.1">
+<h4 data-number="16.1.2.1" class="anchored" data-anchor-id="sec-lin-cor-non-rho"><span class="header-section-number">16.1.2.1</span> Spearman’s <span class="math inline">\(\rho\)</span></h4>
+<p>The nonparametric equivalent of Pearson’s <em>r</em> is Spearman’s <span class="math inline">\(\rho\)</span> (“rho”). Spearman’s <span class="math inline">\(\rho\)</span> is calculated as the Pearson’s <em>r</em> linear correlation coefficient of the rank-transformed values.</p>
+<p><span class="math display">\[\rho_{xy}=\frac{cov\left(R\left[x\right],R\left[y\right]\right)}{s_{R\left[x\right]}s_{R\left[y\right]}}\]</span></p>
+<p>When observations have identical values, their ranks may be tied, which creates some minor issues in the calculation of <span class="math inline">\(\rho\)</span> and its <em>p</em>-value. For this reason, R may throw a warning when calculating a Spearman correlation. You can ignore this warning.</p>
+<p>It can be obtained using code similar to what was done for linear correlation.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># just the coefficient</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(iris<span class="sc">$</span>Petal.Length, iris<span class="sc">$</span>Sepal.Width, <span class="at">method=</span><span class="st">"spearman"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.3096351</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># confirming the connection to Pearson's r</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(<span class="fu">rank</span>(iris<span class="sc">$</span>Petal.Length), <span class="fu">rank</span>(iris<span class="sc">$</span>Sepal.Width))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.3096351</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># can also get a significance test for rho</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(iris<span class="sc">$</span>Petal.Length, iris<span class="sc">$</span>Sepal.Width, <span class="at">method=</span><span class="st">"spearman"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Spearman's rank correlation rho
+
+data:  iris$Petal.Length and iris$Sepal.Width
+S = 736637, p-value = 0.0001154
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.3096351 </code></pre>
+</div>
+</div>
+<p>Just as with linear correlation, you can get a correlation matrix of nonlinear <span class="math inline">\(\rho\)</span> correlation coefficients, and a scatterplot matrix with <code>pairs()</code>. See <a href="ch06.html#sec-desc-co-non-pairs" class="quarto-xref"><span>Section 6.4.2.1</span></a>.</p>
+</section>
+<section id="sec-lin-cor-non-tau" class="level4" data-number="16.1.2.2">
+<h4 data-number="16.1.2.2" class="anchored" data-anchor-id="sec-lin-cor-non-tau"><span class="header-section-number">16.1.2.2</span> Kendall’s <span class="math inline">\(\tau\)</span></h4>
+<p>There is another nonparametric rank-based correlation coefficient, Kendall’s <span class="math inline">\(\tau\)</span> (“tau”). Kendall’s <span class="math inline">\(\tau\)</span> is based not upon a correlation coefficient between ranked observations, but instead on the concordance or agreement between the rankings of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. This means that for any pair of observations <span class="math inline">\(\left(x_i,y_i\right)\)</span> and <span class="math inline">\(\left(x_j,y_j\right)\)</span>, the ranking order of <span class="math inline">\(\left(x_i,x_j\right)\)</span> and <span class="math inline">\(\left(y_i,y_j\right)\)</span> agree. Put another way, if both <span class="math inline">\(x_i&gt;x_j\)</span> and <span class="math inline">\(y_i&gt;y_j\)</span> <em>or</em> <span class="math inline">\(x_i&lt;x_j\)</span> and <span class="math inline">\(y_i&lt;y_j\)</span>, then the pair of observations <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> is <strong>concordant</strong>. Any other finding is <strong>discordant</strong>. The original version of Kendall’s <span class="math inline">\(\tau\)</span>, now called <span class="math inline">\(\tau_a\)</span> is thus calculated:</p>
+<p><span class="math display">\[\tau_{xy}=\frac{\left(\text{number of concordant pairs}\right)-\left(\text{number of discordant pairs}\right)}{\left(\text{number of pairs}\right)}\]</span></p>
+<p>There is a <a href="https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient#Tau-b">more modern version</a> of <span class="math inline">\(\tau\)</span>, called <span class="math inline">\(\tau_b\)</span>, that can account for ties. This is what the R functions <code>cor()</code> and <code>cor.test()</code> calculate.</p>
+<p>In practice, Kendall’s <span class="math inline">\(\tau\)</span> and Spearman’s <span class="math inline">\(\rho\)</span> tend to give qualitatively similar results, so you can often choose freely between them. However, there are some situations where <span class="math inline">\(\tau\)</span> might be preferable. First, the magnitude of <span class="math inline">\(\tau\)</span> has a much more intuitive meaning than that of <span class="math inline">\(\rho\)</span>. It is related to the degree to which concordant pairs are more common than discordant pairs. E.g., <span class="math inline">\(\tau=0.6\)</span> indicates roughly that concordant pairs are 60% more common than discordant pairs. When <span class="math inline">\(\rho=0.6\)</span>, on the other hand…well, <span class="math inline">\(\rho=0.6\)</span>.</p>
+<p>Second, <span class="math inline">\(\tau\)</span> can work better at small sample sizes because its sampling distribution and exact tests are well developed.</p>
+<p>Finally, <span class="math inline">\(\tau\)</span> may be preferred when the data are genuinely ordinal, because of how comparison between ranks is central to the calculation of <span class="math inline">\(\tau\)</span>. This is philosophical rather than computational: <span class="math inline">\(\rho\)</span> works just fine on ordinal data, too.</p>
+<p>That last thing I’ll add is that while <span class="math inline">\(\rho\)</span> and <span class="math inline">\(\tau\)</span> address the same question, they go about it in different ways and so they are on different scales. This is why they give qualitatively similar results even when the numbers are different. In fact, <span class="math inline">\(\rho\)</span> and <span class="math inline">\(\tau\)</span> have a known relationship under certain conditions:</p>
+<p><span class="math display">\[\tau=\frac{2}{\pi}\arcsin\left(\rho\right)\]</span></p>
+<p>You can obtain Kendall’s <span class="math inline">\(\tau\)</span> in R with the <code>method</code> argument.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># just the coefficient</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(iris<span class="sc">$</span>Petal.Length, iris<span class="sc">$</span>Sepal.Width, <span class="at">method=</span><span class="st">"kendall"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.1859944</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># can also get a significance test for rho</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(iris<span class="sc">$</span>Petal.Length, iris<span class="sc">$</span>Sepal.Width, <span class="at">method=</span><span class="st">"kendall"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Kendall's rank correlation tau
+
+data:  iris$Petal.Length and iris$Sepal.Width
+z = -3.2197, p-value = 0.001283
+alternative hypothesis: true tau is not equal to 0
+sample estimates:
+       tau 
+-0.1859944 </code></pre>
+</div>
+</div>
+</section>
 </section>
 </section>
 <section id="sec-lin-lm" class="level2" data-number="16.2">
 <h2 data-number="16.2" class="anchored" data-anchor-id="sec-lin-lm"><span class="header-section-number">16.2</span> Linear models</h2>
-<section id="sec-lin-lm-def" class="level3" data-number="16.2.1">
-<h3 data-number="16.2.1" class="anchored" data-anchor-id="sec-lin-lm-def"><span class="header-section-number">16.2.1</span> Definition</h3>
+<p>We reviewed the definition and properties of linear models in <a href="ch14.html#sec-review-lin" class="quarto-xref"><span>Section 14.4</span></a>. Linear models are an important part of classical, frequentist statistics because of their power and, historically, their ease of computation. Many methods that are taught in introductory statistics classes are just special cases of the linear model: <a href="@sec-groups-ttests">t-tests</a>, <a href="@sec-groups-more-anova">ANOVA</a>, <a href="@sec-lin-reg">linear regression</a>, and so on. As we will see in <a href="ch18.html" class="quarto-xref"><span>Chapter 18</span></a>, linear models themselves are a special case of an even more powerful, broader framework called the <strong>generalized linear model (GLM)</strong>.</p>
+<section id="sec-lin-lm-disguise" class="level3" data-number="16.2.1">
+<h3 data-number="16.2.1" class="anchored" data-anchor-id="sec-lin-lm-disguise"><span class="header-section-number">16.2.1</span> Lots of analyses are linear models in disguise (or can be)</h3>
+<p>One of the reasons that linear models are so powerful is that many models or curves that people fit to data, even some whose curves are nonlinear, are actually linear models in a statistical sense. A “linear model” here does not mean that the graph must be a straight line. It means that the model is built by adding together predictor variables that are multiplied by constants (slopes), and these slopes are used only as multipliers of the predictor variables. For example, both <span class="math inline">\(y=\beta_0+\beta_1x\)</span> and <span class="math inline">\(y=\beta_0+\beta_1x+\beta_2x^2+\beta_3x^3\)</span> are linear models because the coefficients (<span class="math inline">\(beta\)</span> terms) are used only as multipliers of the predictor variables.</p>
+<p>Other models that appear nonlinear can <em>become</em> linear models through transformation. For example, an exponential model <span class="math inline">\(y=ae^{\beta_1x}\)</span> is nonlinear, but log-transforming both sides yields the linear expression <span class="math inline">\(\log\left(y\right)=log\left(a\right)+\beta_1x\)</span>. The section below illustrates a few of these “linear models in disguise” so you can recognize and apply these methods on your own data.</p>
+<section id="sec-lin-lm-disguise-lm" class="level4" data-number="16.2.1.1">
+<h4 data-number="16.2.1.1" class="anchored" data-anchor-id="sec-lin-lm-disguise-lm"><span class="header-section-number">16.2.1.1</span> Ordinary linear models</h4>
+<p>The basic linear regression model is written as</p>
+<p><span class="math display">\[y=\beta_0+\beta_1x\]</span></p>
+<p>and is the same as the equation for a line that you learned in high school or college algebra: <span class="math inline">\(y=mx+b\)</span>. Statisticians just use <span class="math inline">\(\beta_0\)</span> for the <span class="math inline">\(y\)</span>-intercept and <span class="math inline">\(\beta_1\)</span> for the slope instead of <span class="math inline">\(b\)</span> and <span class="math inline">\(m\)</span>.</p>
+<p><strong>Why it’s linear:</strong> the parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> appear only as multipliers or additive constants, and are combined by addition.</p>
 </section>
-<section id="sec-lin-lm-disguise" class="level3" data-number="16.2.2">
-<h3 data-number="16.2.2" class="anchored" data-anchor-id="sec-lin-lm-disguise"><span class="header-section-number">16.2.2</span> Lots of analyses are linear models in disguise (or can be)</h3>
-<section id="sec-lin-lm-disguise-lm" class="level4" data-number="16.2.2.1">
-<h4 data-number="16.2.2.1" class="anchored" data-anchor-id="sec-lin-lm-disguise-lm"><span class="header-section-number">16.2.2.1</span> Ordinary linear models</h4>
+<section id="sec-lin-lm-disguise-poly" class="level4" data-number="16.2.1.2">
+<h4 data-number="16.2.1.2" class="anchored" data-anchor-id="sec-lin-lm-disguise-poly"><span class="header-section-number">16.2.1.2</span> Polynomials</h4>
+<p>A polynomial is a function such as <span class="math inline">\(Y=\beta_0+\beta_1X+\beta_2X^2+...+\beta_kX^k\)</span>, where <span class="math inline">\(k\)</span> is the <strong>order</strong> of the polynomial. A polynomial of order 2 is a quadratic equation. A polynomial of order 3 is a cubic, and so on. Polynomials have well-known shapes, such as the parabola of the quadratic function. Any polynomial with order <span class="math inline">\(\ge2\)</span> will not be a straight line.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-polynomials1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Curve shapes produced by polynomial equations of order 1, 2, and 3: linear, quadratic, and cubic, respectively.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-polynomials1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.2: Curve shapes produced by polynomial equations of order 1, 2, and 3: linear, quadratic, and cubic, respectively.
+</figcaption>
+<div aria-describedby="fig-polynomials1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch16_files/figure-html/fig-polynomials1-1.png" class="img-fluid figure-img" alt="Curve shapes produced by polynomial equations of order 1, 2, and 3: linear, quadratic, and cubic, respectively." width="864">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Why it’s linear:</strong> although the graph may be curved, the parameters <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, and so on appear only as multipliers on predictor variables, are combined by addition, and are not raised to powers, exponentiated, or use inside other functions. So, a polynomial is linear in its predictors. Look what happens in the figure below. On the left, the polynomial <span class="math inline">\(5+2.1x+6.5x^2\)</span> is plotted vs.&nbsp;<span class="math inline">\(x\)</span> and appears nonlinear. On the right, <span class="math inline">\(y\)</span> is plotted against <span class="math inline">\(x^2\)</span> and <em>is</em> linear.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-polynomials2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Curve shapes produced by polynomial equations of order 1, 2, and 3: linear, quadratic, and cubic, respectively.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-polynomials2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.3: Left: a plot of the nonlinear polynomial function $$. Right: The same function plotted against <span class="math inline">\(x^2\)</span> produces a straight line.
+</figcaption>
+<div aria-describedby="fig-polynomials2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch16_files/figure-html/fig-polynomials2-1.png" class="img-fluid figure-img" alt="Curve shapes produced by polynomial equations of order 1, 2, and 3: linear, quadratic, and cubic, respectively." width="864">
+</div>
+</figure>
+</div>
+</div>
+</div>
 </section>
-<section id="sec-lin-lm-disguise-poly" class="level4" data-number="16.2.2.2">
-<h4 data-number="16.2.2.2" class="anchored" data-anchor-id="sec-lin-lm-disguise-poly"><span class="header-section-number">16.2.2.2</span> Polynomials</h4>
+<section id="sec-lin-lm-disguise-exp" class="level4" data-number="16.2.1.3">
+<h4 data-number="16.2.1.3" class="anchored" data-anchor-id="sec-lin-lm-disguise-exp"><span class="header-section-number">16.2.1.3</span> Exponentials</h4>
+<p>The exponential function <span class="math inline">\(y=ae^{bx}\)</span> is ubiquitous in biology because it describes compounding growth (like compound interest). This function is not linear, but it can be turned into and analyzed as linear by log-transforming both sides.</p>
+<div id="fig-extrasteps" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-cap="Well that sounds like linear with extra steps.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-extrasteps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.4: Rick and Morty meme saying this sounds like linear with extra steps.
+</figcaption>
+<div aria-describedby="fig-extrasteps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/cont-rickmorty.jpg" class="img-fluid figure-img" data-fig-cap="Well that sounds like linear with extra steps.">
+</div>
+</figure>
+</div>
+<p><strong>Why it <em>can be</em> linear:</strong> While the exponential function appears nonlinear, it can be made linear by log-transforming both sides:</p>
+<p><span class="math display">\[log\left(y\right)=log\left(ae^{bx}\right)\]</span></p>
+<p><span class="math display">\[log\left(y\right)=log\left(a\right)+log\left(e^{bx}\right)\]</span></p>
+<p>and because <span class="math inline">\(log\left(e^z\right)=z\)</span>:</p>
+<p><span class="math display">\[log\left(y\right)=log\left(a\right)+bx\]</span></p>
+<p>which is the form of a straight line with intercept <span class="math inline">\(log\left(a\right)\)</span> and slope <span class="math inline">\(b\)</span>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Logarithm bases</strong></p>
+<p>Mathematicians and statisticians almost always work with the <strong>natural logarithm</strong>, which uses Euler’s number <span class="math inline">\(e\)</span> (<span class="math inline">\(\approx2.7182\)</span>) as its base. The natural logarithm can be written <span class="math inline">\(log\left(x\right)\)</span>, <span class="math inline">\(log_e\left(x\right)\)</span>, or <span class="math inline">\(ln\left(x\right)\)</span>. Natural log is used because many <a href="https://www.youtube.com/watch?v=m2MIpDrF7Es">equations related to growth or change become easier</a> when <span class="math inline">\(e\)</span> is the base. In this tutorial, and any math or statistics text, assume natural logarithm.</p>
+<p>In contrast, scientists and engineers often use other bases, like <span class="math inline">\(log_{10}\)</span> or <span class="math inline">\(log_2\)</span>, because these are more intuitive for humans. You can use whatever base you like so long as you are clear about what you did. If you are working with R, you will have an easier time working in natural logs because many functions are set up to use it.</p>
+</div>
+</div>
 </section>
-<section id="sec-lin-lm-disguise-exp" class="level4" data-number="16.2.2.3">
-<h4 data-number="16.2.2.3" class="anchored" data-anchor-id="sec-lin-lm-disguise-exp"><span class="header-section-number">16.2.2.3</span> Exponentials</h4>
-</section>
-<section id="sec-lin-lm-disguise-pow" class="level4" data-number="16.2.2.4">
-<h4 data-number="16.2.2.4" class="anchored" data-anchor-id="sec-lin-lm-disguise-pow"><span class="header-section-number">16.2.2.4</span> Power laws</h4>
+<section id="sec-lin-lm-disguise-pow" class="level4" data-number="16.2.1.4">
+<h4 data-number="16.2.1.4" class="anchored" data-anchor-id="sec-lin-lm-disguise-pow"><span class="header-section-number">16.2.1.4</span> Power laws</h4>
+<p><strong>Power laws</strong> of the form <span class="math inline">\(Y=aX^b\)</span> are also ubiquitous in biology, as they describe proportional growth. Power laws are similar to exponential functions, but with a key difference: in a power law, <span class="math inline">\(X\)</span> is in the base and is raised to a power, while in an exponential, <span class="math inline">\(X\)</span> is in the exponent of some other base.</p>
+<p><strong>Why it <em>can be</em> linear:</strong> Like an exponential, a power law can be linearized by taking the logarithm of both sides.</p>
+<p><span class="math display">\[log\left(Y\right)=log\left(aX^b\right)\]</span></p>
+<p><span class="math display">\[log\left(Y\right)=log\left(a\right)+b\times log\left(X\right)\]</span></p>
+<p>In this form, the power law is linear with intercept <span class="math inline">\(log\left(a\right)\)</span> and slope <span class="math inline">\(b\)</span>.</p>
 </section>
 </section>
 </section>
 <section id="sec-lin-reg" class="level2" data-number="16.3">
 <h2 data-number="16.3" class="anchored" data-anchor-id="sec-lin-reg"><span class="header-section-number">16.3</span> Linear regression</h2>
+<p>The linear regression model describes a pattern where the response variable <span class="math inline">\(Y\)</span> changes as a linear function of the predictor variable <span class="math inline">\(X\)</span>. It looks like this:</p>
+<p><span class="math display">\[Y=\beta_0+\beta_1X+\varepsilon\]</span></p>
+<p>where <span class="math inline">\(\beta_0\)</span> is the <span class="math inline">\(y\)</span>-intercept, <span class="math inline">\(\beta_1\)</span> is the slope (effect of a unit increase in <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span>), and <span class="math inline">\(\varepsilon\)</span> is residual variation in <span class="math inline">\(Y\)</span> not explained by <span class="math inline">\(X\)</span>–the spread of points above or below the line. In a linear model, residual variation follows a normal distribution with mean 0 and some unknown SD <span class="math inline">\(\sigma_{\mathrm{res}}\)</span>. Each residual <span class="math inline">\(\varepsilon_i\)</span> follows the same distribution:</p>
+<p><span class="math display">\[\varepsilon_i \sim \mathcal{N}\left(0,\sigma_{\mathrm{res}}\right)\]</span></p>
+<p>where <span class="math inline">\(\mathcal{N}\)</span> signifies the normal distribution.</p>
+<p>The R syntax for linear regression is basically the same as that for ANOVA and the <em>t</em>-test we’ve seen before, or a boxplot for that matter, but this time the right hand side of the formula has a continuous predictor rather than a factor.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit a linear regression model</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>mod5 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Petal.Length<span class="sc">~</span>Petal.Width, <span class="at">data=</span>iris)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># test for significance of terms</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod5)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: Petal.Length
+             Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+Petal.Width   1 430.48  430.48  1882.5 &lt; 2.2e-16 ***
+Residuals   148  33.84    0.23                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># see estimates of parameter coefficients</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod5)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Petal.Length ~ Petal.Width, data = iris)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.33542 -0.30347 -0.02955  0.25776  1.39453 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  1.08356    0.07297   14.85   &lt;2e-16 ***
+Petal.Width  2.22994    0.05140   43.39   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.4782 on 148 degrees of freedom
+Multiple R-squared:  0.9271,    Adjusted R-squared:  0.9266 
+F-statistic:  1882 on 1 and 148 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>The <code>summary()</code> output tells you a lot about the regression: the coefficients (and their <em>p</em>-values), the omnibus ANOVA for the model (the <em>F</em> test at the bottom), and the coefficient of determination (Adjusted <em>R</em>-squared). Coefficients are identified as the y-intercept <span class="math inline">\(\beta_0\)</span> (<code>Intercept</code>) and by the variable names (e.g., the slope with respect to petal width is <code>Petal.Width</code>). Each coefficient is presented as its estimate and SE (e.g., the intercept is <code>1.08 ± 0.07</code>). The test statistic <em>t</em> for each coefficient is the ratio of the estimate to the SE, and the <em>p</em>-value for <em>t</em> calculated from a <em>t</em>-distribution (much as in a <em>t</em>-test). The coefficient of determination <span class="math inline">\(R^2\)</span> is the proportion of variation in <span class="math inline">\(Y\)</span> explained by the model. In this case, about 93% of variation in Petal.Length is explained by Petal.Width.</p>
+<p>When you present a linear regression, you should present the parameters, their SE, test statistics, and <em>p</em>-values in a table. The omnibus <span class="math inline">\(F\)</span> test and <span class="math inline">\(R^2\)</span> can be reported in Results text. Finally, you should present the data as a scatterplot, with the predicted values as a trendline and the 95% CI of that trendline if feasible. Here is how to do that for the model above:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate x values over which to draw trendline</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>minx <span class="ot">&lt;-</span> <span class="fu">min</span>(iris<span class="sc">$</span>Petal.Width, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>maxx <span class="ot">&lt;-</span> <span class="fu">max</span>(iris<span class="sc">$</span>Petal.Width, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="fu">seq</span>(minx, maxx, <span class="at">length=</span>n)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co"># put in a data frame with same variable names as in the model</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>prx <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Petal.Width=</span>px)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate predicted values and their SE</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod5, <span class="at">newdata=</span>prx,</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>                <span class="at">se.fit=</span><span class="cn">TRUE</span>, <span class="at">interval=</span><span class="st">"confidence"</span>)</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="co"># best way to get expected value and 95% confidence limits:</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="co"># (use this with linear models)</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>prx<span class="sc">$</span>mn <span class="ot">&lt;-</span> pred<span class="sc">$</span>fit[,<span class="st">"fit"</span>]</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>prx<span class="sc">$</span>lo <span class="ot">&lt;-</span> pred<span class="sc">$</span>fit[,<span class="st">"lwr"</span>]</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>prx<span class="sc">$</span>up <span class="ot">&lt;-</span> pred<span class="sc">$</span>fit[,<span class="st">"upr"</span>]</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="co"># when using methods other than linear regression, you can </span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="co"># approximate the 95% CI using the predicted values and</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a><span class="co"># their SE, by drawing quantiles from the normal distribution</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="co"># defined by predicted value (pred$fit) and SEs (pred$se.fit).</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a><span class="co"># When using this with GLMs, you need to keep track of what </span></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a><span class="co"># values are on the link scale, and which are on the </span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a><span class="co"># data scale.</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a><span class="do">### not run:</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a><span class="do">### prx$mn &lt;- qnorm(0.5, mean=pred$fit, sd=pred$se.fit)</span></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a><span class="do">### prx$lo &lt;- qnorm(0.025, mean=pred$fit, sd=pred$se.fit)</span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a><span class="do">### prx$up &lt;- qnorm(0.975, mean=pred$fit, sd=pred$se.fit)</span></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a><span class="co"># make the plot</span></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a><span class="do">## include some par options for a more professional figure</span></span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a><span class="do">## see ?par for more options</span></span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),              <span class="co"># 1 x 1 figure layout</span></span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>), <span class="co"># margin sizes in lines of text</span></span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">lend=</span><span class="dv">1</span>,                    <span class="co"># flat ends on lines</span></span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">las=</span><span class="dv">1</span>,                     <span class="co"># axis text in reading orientation</span></span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">bty=</span><span class="st">"n"</span>,                   <span class="co"># no box around figure</span></span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex.axis=</span><span class="fl">1.3</span>,              <span class="co"># size of axis text</span></span>
+<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex.lab=</span><span class="fl">1.3</span>)               <span class="co"># size of axis labels</span></span>
+<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a><span class="do">## make the base plot</span></span>
+<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(iris<span class="sc">$</span>Petal.Width,         <span class="co"># x values</span></span>
+<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a>     iris<span class="sc">$</span>Petal.Length,        <span class="co"># y values</span></span>
+<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span><span class="dv">16</span>,                   <span class="co"># type of points (see ?points)</span></span>
+<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex=</span><span class="fl">1.2</span>,                  <span class="co"># size of points</span></span>
+<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"Petal width (cm)"</span>,  <span class="co"># x axis label</span></span>
+<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Petal length (cm)"</span>, <span class="co"># y axis label</span></span>
+<span id="cb24-50"><a href="#cb24-50" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">2.5</span>),           <span class="co"># limits of x axis</span></span>
+<span id="cb24-51"><a href="#cb24-51" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">8</span>))             <span class="co"># limits of y axis</span></span>
+<span id="cb24-52"><a href="#cb24-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-53"><a href="#cb24-53" aria-hidden="true" tabindex="-1"></a><span class="do">## add trendline and 95% confidence limits as lines</span></span>
+<span id="cb24-54"><a href="#cb24-54" aria-hidden="true" tabindex="-1"></a><span class="do">## with points(...,type="l")</span></span>
+<span id="cb24-55"><a href="#cb24-55" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prx<span class="sc">$</span>Petal.Width, <span class="co"># x values</span></span>
+<span id="cb24-56"><a href="#cb24-56" aria-hidden="true" tabindex="-1"></a>       prx<span class="sc">$</span>lo,          <span class="co"># y values</span></span>
+<span id="cb24-57"><a href="#cb24-57" aria-hidden="true" tabindex="-1"></a>       <span class="at">type=</span><span class="st">"l"</span>,        <span class="co"># lines (see ?base::plot)</span></span>
+<span id="cb24-58"><a href="#cb24-58" aria-hidden="true" tabindex="-1"></a>       <span class="at">lwd=</span><span class="dv">2</span>,           <span class="co"># line width (1 is default)</span></span>
+<span id="cb24-59"><a href="#cb24-59" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span><span class="st">"red"</span>,       <span class="co"># line color ("black" is default)</span></span>
+<span id="cb24-60"><a href="#cb24-60" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="dv">2</span>)           <span class="co"># dashed line (1, solid line, is default)</span></span>
+<span id="cb24-61"><a href="#cb24-61" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prx<span class="sc">$</span>Petal.Width, prx<span class="sc">$</span>up, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb24-62"><a href="#cb24-62" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prx<span class="sc">$</span>Petal.Width, prx<span class="sc">$</span>mn, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-scattertrend" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Data plotted with the trendline (solid) and its 95% confidence interval (dashed).">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-scattertrend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.5: Data plotted with the trendline (solid) and its 95% confidence interval (dashed).
+</figcaption>
+<div aria-describedby="fig-scattertrend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch16_files/figure-html/fig-scattertrend-1.png" class="img-fluid figure-img" alt="Data plotted with the trendline (solid) and its 95% confidence interval (dashed)." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="sec-lin-mult" class="level2" data-number="16.4">
 <h2 data-number="16.4" class="anchored" data-anchor-id="sec-lin-mult"><span class="header-section-number">16.4</span> Multiple regression</h2>
+<p>Linear regression is easily extended to <strong>multiple linear regression</strong>, where there are &gt;1 continuous predictors. Just as with ANOVA, additional predictor variables are added to the model formula using <code>+</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>mod6 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Petal.Length<span class="sc">~</span>Petal.Width <span class="sc">+</span> Sepal.Width, <span class="at">data=</span>iris)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod6)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Petal.Length ~ Petal.Width + Sepal.Width, data = iris)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.33753 -0.29251 -0.00989  0.21447  1.24707 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  2.25816    0.31352   7.203 2.84e-11 ***
+Petal.Width  2.15561    0.05283  40.804  &lt; 2e-16 ***
+Sepal.Width -0.35503    0.09239  -3.843  0.00018 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.4574 on 147 degrees of freedom
+Multiple R-squared:  0.9338,    Adjusted R-squared:  0.9329 
+F-statistic:  1036 on 2 and 147 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>Adding predictors to a multiple regression model will almost always increase the model fit (e.g., proportion of variance explained, <span class="math inline">\(R^2\)</span>), but this does not mean you should keep adding predictors. Multiple regression models are vulnerable to <strong>overfitting</strong>, where random noise (i.e., residual variation) is modeled as if it was part of the deterministic part of the model. Multiple regression models are also highly vulnerable to <strong>collinearity</strong>, where the predictors are correlated with each other. When collinear predictors are included in a model, it is impossible for the model to unambiguously partition the sums of squares associated with each predictor.</p>
+<p>When plotting the results of a multiple linear regression, you should present the effects of all significant predictors. This is done by plotting the expected y value across a range of each predictor, while holding the other predictor (or predictors) constant at their median. This will show the marginal effect of each predictor on its own. Here is a quick example:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># simulate some data</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="do">## random number seed</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="do">## number of observations</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="do">## x variables</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="dv">1</span>, <span class="dv">20</span>)</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="dv">1</span>, <span class="dv">30</span>)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="do">## coefficients</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>beta0 <span class="ot">&lt;-</span> <span class="dv">121</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>beta1 <span class="ot">&lt;-</span> <span class="fl">6.1</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>beta2 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">3.1</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="do">## expected y values</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>ey <span class="ot">&lt;-</span> beta0 <span class="sc">+</span> beta1<span class="sc">*</span>x1 <span class="sc">+</span> beta2<span class="sc">*</span>x2</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="co"># add residual variation</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>sigma.res <span class="ot">&lt;-</span> <span class="fl">7.8</span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> ey <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, sigma.res)</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a><span class="co"># put in a data frame</span></span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y=</span>y, <span class="at">x1=</span>x1, <span class="at">x2=</span>x2)</span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a><span class="co"># fit the model</span></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>mod7 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span>x1<span class="sc">+</span>x2, <span class="at">data=</span>dx)</span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a><span class="co"># check significance of terms</span></span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod7)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: y
+          Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+x1         1 125985  125985  2486.3 &lt; 2.2e-16 ***
+x2         1  62984   62984  1243.0 &lt; 2.2e-16 ***
+Residuals 97   4915      51                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>And check the coefficients:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod7)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = y ~ x1 + x2, data = dx)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-15.2269  -4.4098   0.0963   4.2975  21.6348 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 120.23351    2.11508   56.85   &lt;2e-16 ***
+x1            6.06715    0.12478   48.62   &lt;2e-16 ***
+x2           -3.07237    0.08715  -35.26   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 7.118 on 97 degrees of freedom
+Multiple R-squared:  0.9746,    Adjusted R-squared:  0.9741 
+F-statistic:  1865 on 2 and 97 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>Now make a figure showing <code>y~x1</code> and <code>y~x2</code>. In each panel, hold the other x value at its median to show the marginal effect of the plotted x value.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define sequences of each x value</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>plot.n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>minx1 <span class="ot">&lt;-</span> <span class="fu">min</span>(dx<span class="sc">$</span>x1, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>maxx1 <span class="ot">&lt;-</span> <span class="fu">max</span>(dx<span class="sc">$</span>x1, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>px1 <span class="ot">&lt;-</span> <span class="fu">seq</span>(minx1, maxx1, <span class="at">length=</span>plot.n)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>minx2 <span class="ot">&lt;-</span> <span class="fu">min</span>(dx<span class="sc">$</span>x2, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>maxx2 <span class="ot">&lt;-</span> <span class="fu">max</span>(dx<span class="sc">$</span>x2, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>px2 <span class="ot">&lt;-</span> <span class="fu">seq</span>(minx2, maxx2, <span class="at">length=</span>plot.n)</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="co"># medians of x1 and x2</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>medx1 <span class="ot">&lt;-</span> <span class="fu">median</span>(x1, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>medx2 <span class="ot">&lt;-</span> <span class="fu">median</span>(x2, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a><span class="co"># assemble data frames with all predictors in the model</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>prx1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x1=</span>px1, <span class="at">x2=</span>medx2)</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>prx2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x1=</span>medx1, <span class="at">x2=</span>px2)</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a><span class="co"># generate predictions</span></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>pred1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod7, <span class="at">newdata=</span>prx1,</span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>                 <span class="at">interval=</span><span class="st">"confidence"</span>, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>pred2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod7, <span class="at">newdata=</span>prx2,</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>                 <span class="at">interval=</span><span class="st">"confidence"</span>, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a><span class="co"># put expected values and 95% CI in their</span></span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a><span class="co"># respective data frames</span></span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>prx1<span class="sc">$</span>mn <span class="ot">&lt;-</span> pred1<span class="sc">$</span>fit[,<span class="st">"fit"</span>]</span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>prx1<span class="sc">$</span>lo <span class="ot">&lt;-</span> pred1<span class="sc">$</span>fit[,<span class="st">"lwr"</span>]</span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>prx1<span class="sc">$</span>up <span class="ot">&lt;-</span> pred1<span class="sc">$</span>fit[,<span class="st">"upr"</span>]</span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>prx2<span class="sc">$</span>mn <span class="ot">&lt;-</span> pred2<span class="sc">$</span>fit[,<span class="st">"fit"</span>]</span>
+<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>prx2<span class="sc">$</span>lo <span class="ot">&lt;-</span> pred2<span class="sc">$</span>fit[,<span class="st">"lwr"</span>]</span>
+<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>prx2<span class="sc">$</span>up <span class="ot">&lt;-</span> pred2<span class="sc">$</span>fit[,<span class="st">"upr"</span>]</span>
+<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a><span class="co"># now make the plot</span></span>
+<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a><span class="do">## include some par options for a more professional figure</span></span>
+<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a><span class="do">## see ?par for more options</span></span>
+<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),              <span class="co"># 1 x 2 figure layout</span></span>
+<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>), <span class="co"># margin sizes in lines of text</span></span>
+<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">lend=</span><span class="dv">1</span>,                    <span class="co"># flat ends on lines</span></span>
+<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">las=</span><span class="dv">1</span>,                     <span class="co"># axis text in reading orientation</span></span>
+<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">bty=</span><span class="st">"n"</span>,                   <span class="co"># no box around figure</span></span>
+<span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex.axis=</span><span class="fl">1.3</span>,              <span class="co"># size of axis text</span></span>
+<span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex.lab=</span><span class="fl">1.3</span>,               <span class="co"># size of axis labels</span></span>
+<span id="cb31-47"><a href="#cb31-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">xpd=</span><span class="cn">NA</span>)                    <span class="co"># allows points to print in margin</span></span>
+<span id="cb31-48"><a href="#cb31-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-49"><a href="#cb31-49" aria-hidden="true" tabindex="-1"></a><span class="do">## make the first panel</span></span>
+<span id="cb31-50"><a href="#cb31-50" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx<span class="sc">$</span>x1,          <span class="co"># x values</span></span>
+<span id="cb31-51"><a href="#cb31-51" aria-hidden="true" tabindex="-1"></a>     dx<span class="sc">$</span>y,           <span class="co"># y values</span></span>
+<span id="cb31-52"><a href="#cb31-52" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span><span class="dv">16</span>,         <span class="co"># type of points (see ?points)</span></span>
+<span id="cb31-53"><a href="#cb31-53" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex=</span><span class="fl">1.2</span>,        <span class="co"># size of points</span></span>
+<span id="cb31-54"><a href="#cb31-54" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"x1"</span>,      <span class="co"># x axis label</span></span>
+<span id="cb31-55"><a href="#cb31-55" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"y"</span>,      <span class="co"># y axis label</span></span>
+<span id="cb31-56"><a href="#cb31-56" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">20</span>),  <span class="co"># limits of x axis</span></span>
+<span id="cb31-57"><a href="#cb31-57" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">250</span>)) <span class="co"># limits of y axis</span></span>
+<span id="cb31-58"><a href="#cb31-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-59"><a href="#cb31-59" aria-hidden="true" tabindex="-1"></a><span class="do">## add trendline and 95% confidence limits as lines</span></span>
+<span id="cb31-60"><a href="#cb31-60" aria-hidden="true" tabindex="-1"></a><span class="do">## with points(...,type="l")</span></span>
+<span id="cb31-61"><a href="#cb31-61" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prx1<span class="sc">$</span>x1, <span class="co"># x values</span></span>
+<span id="cb31-62"><a href="#cb31-62" aria-hidden="true" tabindex="-1"></a>       prx1<span class="sc">$</span>lo,          <span class="co"># y values</span></span>
+<span id="cb31-63"><a href="#cb31-63" aria-hidden="true" tabindex="-1"></a>       <span class="at">type=</span><span class="st">"l"</span>,        <span class="co"># lines (see ?base::plot)</span></span>
+<span id="cb31-64"><a href="#cb31-64" aria-hidden="true" tabindex="-1"></a>       <span class="at">lwd=</span><span class="dv">2</span>,           <span class="co"># line width (1 is default)</span></span>
+<span id="cb31-65"><a href="#cb31-65" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span><span class="st">"red"</span>,       <span class="co"># line color ("black" is default)</span></span>
+<span id="cb31-66"><a href="#cb31-66" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="dv">2</span>)           <span class="co"># dashed line (1, solid line, is default)</span></span>
+<span id="cb31-67"><a href="#cb31-67" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prx1<span class="sc">$</span>x1, prx1<span class="sc">$</span>up, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb31-68"><a href="#cb31-68" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prx1<span class="sc">$</span>x1, prx1<span class="sc">$</span>mn, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb31-69"><a href="#cb31-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-70"><a href="#cb31-70" aria-hidden="true" tabindex="-1"></a><span class="co"># make the second panel</span></span>
+<span id="cb31-71"><a href="#cb31-71" aria-hidden="true" tabindex="-1"></a><span class="do">## make the first panel</span></span>
+<span id="cb31-72"><a href="#cb31-72" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx<span class="sc">$</span>x2, dx<span class="sc">$</span>y,</span>
+<span id="cb31-73"><a href="#cb31-73" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">1.2</span>,</span>
+<span id="cb31-74"><a href="#cb31-74" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"x2"</span>, <span class="at">ylab=</span><span class="st">"y"</span>,</span>
+<span id="cb31-75"><a href="#cb31-75" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">30</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">250</span>))</span>
+<span id="cb31-76"><a href="#cb31-76" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prx2<span class="sc">$</span>x2, prx2<span class="sc">$</span>up, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb31-77"><a href="#cb31-77" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prx2<span class="sc">$</span>x2, prx2<span class="sc">$</span>up, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb31-78"><a href="#cb31-78" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prx2<span class="sc">$</span>x2, prx2<span class="sc">$</span>mn, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch16_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="sec-lin-ancova" class="level2" data-number="16.5">
 <h2 data-number="16.5" class="anchored" data-anchor-id="sec-lin-ancova"><span class="header-section-number">16.5</span> Analysis of covariance (ANCOVA)</h2>
+<p>Sometimes biologists want to test for effects of one variable while controlling for another. For example, the slope between <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span> might differ between groups. Or, groups might differ only after accounting for some continuous covariate. Here are some specific examples:</p>
+<ul>
+<li><p>Herbivorous mammals tend to have longer intestines than carnivorous mammals, but only after accounting for the effect of body mass on intestine length. The researcher wants to see how groups differ, but needs to control for a continuous variable (body length) first.</p></li>
+<li><p>Humerus length and femur length both increase with body mass in birds, but humerus length increases faster than femur length (i.e., their slopes are different). The researcher wants to test for a difference in a continous relationship, but needs to control for a factor (which bone) first.</p></li>
+</ul>
+<p>The method for both situations is called <strong>analysis of covariance</strong>, or <strong>ANCOVA</strong>. You can think of ANCOVA as combining linear regression and ANOVA. ANCOVA is especialy useful for studying <strong>interactions</strong>, where one variable changes the effect of another.</p>
+<div id="fig-cont-ancova" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-cap="Left: ANCOVA with main effects only, where group membership (a factor variable) affects the intercept of the relationship between Y and X. Right: ANCOVA with interaction effects, where group membership can affect the intercept and the slope (effect of X on Y).">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cont-ancova-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.6: Illustration of ANCOVA without an interaction (different intercepts, same slope) and with an interaction (different intercepts and slopes.)
+</figcaption>
+<div aria-describedby="fig-cont-ancova-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/cont-ancova.jpg" class="img-fluid figure-img" data-fig-cap="Left: ANCOVA with main effects only, where group membership (a factor variable) affects the intercept of the relationship between Y and X. Right: ANCOVA with interaction effects, where group membership can affect the intercept and the slope (effect of X on Y).">
+</div>
+</figure>
+</div>
+<p>So that we really understand what an ANCOVA does, let’s simulate our own dataset where groups A and B have different slopes.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># simulation parameters</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>beta0_a <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>beta0_b <span class="ot">&lt;-</span> <span class="dv">6</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>beta1_a <span class="ot">&lt;-</span> <span class="fl">1.4</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>beta1_b <span class="ot">&lt;-</span> <span class="fl">2.5</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>sigma_res <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="co"># groups A and B start in separate data frames</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>data_a <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">group=</span><span class="st">"A"</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">pch=</span><span class="dv">15</span>, <span class="at">x=</span><span class="fu">runif</span>(n, <span class="dv">5</span>, <span class="dv">20</span>))</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>data_b <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">group=</span><span class="st">"B"</span>, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">x=</span><span class="fu">runif</span>(n, <span class="dv">5</span>, <span class="dv">20</span>))</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="co"># add expected values</span></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>data_a<span class="sc">$</span>ey <span class="ot">&lt;-</span> beta0_a <span class="sc">+</span> beta1_a <span class="sc">*</span> data_a<span class="sc">$</span>x</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>data_b<span class="sc">$</span>ey <span class="ot">&lt;-</span> beta0_b <span class="sc">+</span> beta1_b <span class="sc">*</span> data_b<span class="sc">$</span>x</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a><span class="co"># combine to single data frame</span></span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>data_all <span class="ot">&lt;-</span> <span class="fu">rbind</span>(data_a, data_b)</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a><span class="co"># add residuals</span></span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>data_all<span class="sc">$</span>y <span class="ot">&lt;-</span> data_all<span class="sc">$</span>ey <span class="sc">+</span> <span class="fu">rnorm</span>(n<span class="sc">*</span><span class="dv">2</span>, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span>sigma_res)</span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a><span class="co"># and make a plot to inspect our data</span></span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(data_all<span class="sc">$</span>x, data_all<span class="sc">$</span>y, <span class="at">col=</span>data_all<span class="sc">$</span>col, <span class="at">pch=</span>data_all<span class="sc">$</span>pch,</span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">20</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">60</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch16_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now we can fit the ANCOVA and see the results.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit the model. Notice the * to specify an interaction</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>mod7 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span>x<span class="sc">*</span>group, <span class="at">data=</span>data_all)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># test significance of terms</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod7)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: y
+          Df Sum Sq Mean Sq  F value    Pr(&gt;F)    
+x          1 3507.2  3507.2 1012.289 &lt; 2.2e-16 ***
+group      1 5664.0  5664.0 1634.827 &lt; 2.2e-16 ***
+x:group    1  311.0   311.0   89.778 3.108e-13 ***
+Residuals 56  194.0     3.5                       
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Now check the model parameters</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod7)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = y ~ x * group, data = data_all)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-5.5122 -0.9491  0.4801  1.1691  3.8166 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.44990    1.17053   0.384 0.702170    
+x            1.49194    0.07883  18.925  &lt; 2e-16 ***
+groupB       5.62958    1.55677   3.616 0.000642 ***
+x:groupB     1.03148    0.10886   9.475 3.11e-13 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.861 on 56 degrees of freedom
+Multiple R-squared:  0.9799,    Adjusted R-squared:  0.9789 
+F-statistic: 912.3 on 3 and 56 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>R treats group A as the control or <strong>baseline</strong> because it is alphabetically first. Any effect involving group B is relative to the effect in group A. Here:</p>
+<ul>
+<li>The intercept in group A is <code>(Intercept)</code>, 0.4499.</li>
+<li>The slope in group A is <code>x</code>, 1.4919.</li>
+<li>The intercept in group B is the group A intercept plus the effect of being in group B: <span class="math inline">\(0.4499 + 5.6295=6.0794\)</span>.</li>
+<li>The slope in group B is the slope in group A plus the effect of being in group B on the slope: <span class="math inline">\(1.4919 + 1.0314=2.5233\)</span>`</li>
+</ul>
+<p>Making a plot with trendlines for an ANCOVA follows much the same procedure as we used to make the plot for linear regression, but, you have to take care to include each group. Notice that when plotting a line for each group, we make sure to define the line only for the range of x values present in that group in the data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get x sequence within the x domain of each group</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>pxa <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(data_all<span class="sc">$</span>x[data_all<span class="sc">$</span>group<span class="sc">==</span><span class="st">"A"</span>]),</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">max</span>(data_all<span class="sc">$</span>x[data_all<span class="sc">$</span>group<span class="sc">==</span><span class="st">"A"</span>]),</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">length=</span><span class="dv">100</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>pxb <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(data_all<span class="sc">$</span>x[data_all<span class="sc">$</span>group<span class="sc">==</span><span class="st">"B"</span>]),</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">max</span>(data_all<span class="sc">$</span>x[data_all<span class="sc">$</span>group<span class="sc">==</span><span class="st">"B"</span>]),</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">length=</span><span class="dv">100</span>)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="co"># put in data frames</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>prxa <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">group=</span><span class="st">"A"</span>, <span class="at">x=</span>pxa)</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>prxb <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">group=</span><span class="st">"B"</span>, <span class="at">x=</span>pxb)</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate predictions</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>preda <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod7, <span class="at">newdata=</span>prxa, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>predb <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod7, <span class="at">newdata=</span>prxb, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a><span class="co"># add to data frames</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>prxa<span class="sc">$</span>mn <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.5</span>, preda<span class="sc">$</span>fit, preda<span class="sc">$</span>se.fit)</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>prxa<span class="sc">$</span>lo <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.025</span>, preda<span class="sc">$</span>fit, preda<span class="sc">$</span>se.fit)</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>prxa<span class="sc">$</span>up <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>, preda<span class="sc">$</span>fit, preda<span class="sc">$</span>se.fit)</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>prxb<span class="sc">$</span>mn <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.5</span>, predb<span class="sc">$</span>fit, predb<span class="sc">$</span>se.fit)</span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>prxb<span class="sc">$</span>lo <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.025</span>, predb<span class="sc">$</span>fit, predb<span class="sc">$</span>se.fit)</span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>prxb<span class="sc">$</span>up <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>, predb<span class="sc">$</span>fit, predb<span class="sc">$</span>se.fit)</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a><span class="co"># make the plot</span></span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>), <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">las=</span><span class="dv">1</span>, <span class="at">lend=</span><span class="dv">1</span>,</span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex.axis=</span><span class="fl">1.3</span>, <span class="at">cex.lab=</span><span class="fl">1.3</span>)</span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(data_all<span class="sc">$</span>x, data_all<span class="sc">$</span>y, <span class="at">col=</span>data_all<span class="sc">$</span>col, <span class="at">pch=</span>data_all<span class="sc">$</span>pch,</span>
+<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">20</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">60</span>))</span>
+<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prxa<span class="sc">$</span>x, prxa<span class="sc">$</span>mn, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prxa<span class="sc">$</span>x, prxa<span class="sc">$</span>lo, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prxa<span class="sc">$</span>x, prxa<span class="sc">$</span>up, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prxb<span class="sc">$</span>x, prxb<span class="sc">$</span>mn, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span>
+<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prxb<span class="sc">$</span>x, prxb<span class="sc">$</span>lo, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prxb<span class="sc">$</span>x, prxb<span class="sc">$</span>up, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb37-36"><a href="#cb37-36" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"Group A"</span>, <span class="st">"Group B"</span>),</span>
+<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span><span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">16</span>), <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>), <span class="at">cex=</span><span class="fl">1.4</span>,</span>
+<span id="cb37-38"><a href="#cb37-38" aria-hidden="true" tabindex="-1"></a>       <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-ancovatrend" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Plot of Y vs. X with groups A and B in the data, where the groups have different slopes. This illustrations ANCOVA with an interaction between X and group.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-ancovatrend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.7: Plot of Y vs.&nbsp;X with groups A and B in the data, where the groups have different slopes. This illustrations ANCOVA with an interaction between X and group.
+</figcaption>
+<div aria-describedby="fig-ancovatrend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch16_files/figure-html/fig-ancovatrend-1.png" class="img-fluid figure-img" alt="Plot of Y vs. X with groups A and B in the data, where the groups have different slopes. This illustrations ANCOVA with an interaction between X and group." width="672">
+</div>
+</figure>
+</div>
+</div>
+</div>
 <section id="sec-lin-ancova-inter" class="level3" data-number="16.5.1">
 <h3 data-number="16.5.1" class="anchored" data-anchor-id="sec-lin-ancova-inter"><span class="header-section-number">16.5.1</span> Main effects and interaction effects</h3>
 

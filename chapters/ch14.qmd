@@ -44,7 +44,7 @@ spreadsheet. Unlike a **matrix**, rows and columns are not
 interchangeable: a row of a data frame is a data frame with 1 row, while
 a column is really a vector (i.e., not a data frame).
 
-![Comparison of the structure of data frames and matrices in R.](../images/review-02.jpg){#fig-review-dataframe-matrix fig-alt="Side-by-side comparison of a data frame and a matrix. In the data frame, columns are vectors accessed with the dollar-sign operator, while rows are data frames; values within each column must share a type, but different columns may contain different types. In the matrix, columns and rows are vectors accessed with brackets, and all values in the matrix must share the same type. A red outline highlights one column in each structure and a blue outline highlights one row."}
+![Comparison of the structure of data frames and matrices in R.](../images/review-dfvsmatrix.jpg){#fig-review-dataframe-matrix fig-alt="Side-by-side comparison of a data frame and a matrix. In the data frame, columns are vectors accessed with the dollar-sign operator, while rows are data frames; values within each column must share a type, but different columns may contain different types. In the matrix, columns and rows are vectors accessed with brackets, and all values in the matrix must share the same type. A red outline highlights one column in each structure and a blue outline highlights one row."}
 
 Variables in a dataset come in three varieties. Understanding these is
 crucial to being able to think about the structure of your dataset and

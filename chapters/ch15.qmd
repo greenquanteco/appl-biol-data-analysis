@@ -904,7 +904,7 @@ This shows that there is a significant effect of color, after species has been a
 anovatable[[1]][,2]/sum(anovatable[[1]][,2])
 ```
 
-The total variance is approximately $13.61+443.16+7.56=464.33$. Most of that variance ($100\left(443.16/464.33\right)\approx\text{95.4%}$) is attributed to differences between species. Only about 3% ($13.61/464.33$) is attributed to color. It's a small effect, but a significant one, and only detectable after accounting for species.
+The total variance is approximately $13.61+443.16+7.56=464.33$. Most of that variance ($100\left(443.16/464.33\right)\approx95.4\%$) is attributed to differences between species. Only about 3% ($13.61/464.33$) is attributed to color. It's a small effect, but a significant one, and only detectable after accounting for species.
 
 #### Repeated measures ANOVA {#sec-groups-more-anova-rep}
 
