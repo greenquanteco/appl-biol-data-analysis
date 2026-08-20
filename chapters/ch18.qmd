@@ -1,19 +1,142 @@
 # Introduction to generalized linear models (GLM) {#sec-glm1}
 
-A link function to the past.
-
 ## Prelude with linear models {#sec-glm1-prelude}
+
+If you've had an introductory statistics course, or if you've made it this far in BIOL 7410, then you are probably familiar with the **linear regression** model (@sec-lin-reg). Ordinary linear regression, or simple linear regression, is a special case of [linear models](@sec-lin-lm), which analyze continuous response variables as predicted by continuous or categorical predictors. Several models that you've probably heard of are actually all special cases of the linear model:
+
+- **Linear regression:** Continuous response and continuous one predictor (@sec-lin-lm).
+- **Multiple linear regression:** Continuous response and more than 1    continuous predictor (@sec-lin-mult).
+- **Two-sample *t*-test:** Continuous response and 1 factor with 2 levels (@sec-groups-2samp-2t).
+- **Analysis of variance (ANOVA):** Continuous response and $\ge1$ factor, where each factor can have $\ge2$ levels (@sec-groups-more-anova).
+- **Analysis of covariance:** Continuous response variable with $\ge1$ continuous and $\ge1$ factor predictor (@sec-lin-ancova).
+- ...and many more.
+
+What makes all of these methods linear models is that there exists a way
+to rewrite them so that the response variable is a linear function of
+the predictors [@bolker2008ecological]. This means that the effect of each term is constant called a coefficient, and the product of each term and its coefficient are added together (see @sec-lin-lm).
+
+Many situations are, at least at first glance, amenable to linear regression. But, as we'll see later, many situations are better treated by more elaborate methods such as GLM or mixed models [@bolker2008ecological; @bolker2009; @zuur2007analysing]. When learning those more advanced methods it is easiest to think of them as extensions of the linear model, but it's actually the other way around: linear regression is a special case of the more advanced methods.
+
+In linear regression with one predictor variable, a response variable $Y$ is modeled as a linear function of some explanatory variable $X$*. The model can be written in several ways. The most common way is:
+
+$$Y=\beta_{0}+\beta_{1}X+\varepsilon$$
+
+$$\varepsilon \sim Normal(0,\sigma_{res}^2)$$
+
+In this equation:
+
+-   $Y$ is the response variable (AKA: dependent variable)
+-   $X$ is the explanatory variable (AKA: independent variable or
+    predictor variable)
+-   $\beta_{0}$ is the $Y$-intercept (i.e., the value of $Y$ when $X=0$). Called "beta zero" or "beta naught".
+-   $\beta_{1}$ is the slope or regression coefficient (i.e., the change     in $Y$ per unit change in $X$). Called "beta one".
+-   $\varepsilon$ is a random error term that describes residual variation not explained by the model. Residuals are identically and independently distributed (*i*.*i*.*d*.) according to a normal distribution with mean 0 and variance $\sigma^{2}$. Called "epsilon" or "the error term".
+-   The residual variance $\sigma_{res}^{2}$ is estimated from the data. As you might expect, larger residual variance indicates a poorer fit to the data. Called "sigma squared" or the "residual variance". Some authors might use the residual standard deviation (SD) $\sigma_{res}$ instead of residual variance $\sigma_{res}^{2}$, which is fine because $\sigma_{res}=\sqrt{\sigma_{res}^2}$. I'll typically use $\sigma_{res}$ because R parameterizes the normal distribution in terms of SD, not variance.
+
+You might recognize most of this model as the equation for the slope of
+a line that you learned in your first algebra course: $Y=mx+b$, but $b$ is now
+called $\beta_{0}$ and $m$ is now called $\beta_{1}$. The model
+intercept $\beta_{0}$ is the ***Y*****-intercept**, or the value that
+$Y$ takes when $X=0$. The model **slope** $\beta_{1}$ is the amount
+that $Y$ changes per unit increase in $X$. That is, if $X$ increases by
+1, then $Y$ increases by $\beta_{1}$.
+
+The linear regression model is sometimes written in other ways. Here are
+some other notations you might see:
+
+**Observation-wise notation**
+
+$$Y_{i}=\beta_{0}+\beta_{1}X_{i}+\varepsilon_{i}$$
+
+$$\varepsilon_{i} \sim Normal(0,\sigma_{res}^{2})$$
+
+This is very similar to the notation above, but it emphasizes that the
+residual is different for each observation $i$. More complicated models
+with additional predictors might use this form to emphasize that each
+observed $Y$ value ($Y_i$) depends on a combination of predictor values
+($X_{1,i}$, $X_{2,i}$, and so on) specific to observation $i$.
+
+**State-space notation**
+
+$$Y \sim Normal(E(Y), \sigma_{res}^{2}) $$
+
+$$E(Y) = \beta_{0}+\beta_{1}X$$
+
+The state-space notation explicitly separates the deterministic part of the model, which describes the "state" of $Y$, from the stochastic part, which has more to do with the "space" of potential observations. Thinking about statistical models in a state-space way is key to understanding many advanced statistical methods, including GLM and mixed models.
+
+The state-space form can also be written to include subscripts for each observation:
+
+$$Y \sim Normal(E(Y_i), \sigma_{res}^{2}) $$
+
+$$E(Y_i) = \beta_{0}+\beta_{1}X_i$$
+
+We're going to use that state space formulation to build up from linear models to the generalized linear model.
 
 ## GLM basics {#sec-glm1-basics}
 
+In the [previous section](@sec-glm1-prelude) we explored the structure of linear models. Linear models are appropriate when there is a **linear** relationship between a response variable and its predictors, when the predictor variables model the response variable on its **original scale**, and when the residuals of the model follow a **normal distribution**. However, the latter two conditions do not always apply in biology. There are many kinds of values for which the normal distribution is less than ideal. For example, counts are better modeled by the [Poisson distribution](@sec-dist-pois), and binary events by the [binomial distribution](@sec-dist-binom), in both cases because the normal would produce illegitimate or nonsensical values like non-integer counts or negative probabilities.
+
+So, we can define a new class of models by relaxing two of the structural features of the linear model: 
+
+1. Instead of assuming that the relationship between $Y$ and $X$ is linear on the scale of $Y$, let it be linear on another scale. 
+2. Instead of assuming a normal response distribution, allow other distributions.
+
+With those changes in mind, we have a GLM!
+
 ### Overall structure {#sec-glm1-basics-struc}
+
+The **generalized linear model (GLM)** is a framework that generalizes the linear model by relaxing two of the conditions in which linear models are used. In a GLM:
+
+- The response variable can be modeled on a different scale than its original scale. The original scale of the data is related to the scale of the linear prediction by a **link function**.
+- The values of the response variable can come from many different distributions, not just the normal distribution.
+
+The GLM was introduced by @nelder1972 and has since become a vital tool in many fields of study. Methods for fitting GLMs have been improved and expanded since the original publication, such that GLMs can be fit under many inference paradigms including least-squares, maximum likelihood, Bayesian, and machine learning frameworks.
+
+The basic form of the GLM is shown below:
+
+$$y_i \sim ResponseDistribution\left(E\left(y_i\right), \theta\right)$$
+
+$$LinkFunction\left(y_i\right)=\eta_i$$
+
+$$\eta_i=LinearFunction\left(x_i\right)$$
+
+where $y_i$ is the response, $x_i$ is the predictor, $E\left(y_i\right)$ is the expected value on the scale of the data, $\theta$ are other parameters of the response distribution, $\eta_i$ is the expected value on another scale, and $E\left(y_i\right)$ and $\eta_i$ are related by a **link function**.  
+
+In this state space formulation, we can see what the GLM is doing:
+
+1. The observed values follow some probability distribution with an expected value and usually other parameters ($\theta$). This is the $$stochastic$$ part of the model, where the uncertainty or variation manifests.
+1. The expected value on the scale of the observed values is mapped to another scale by a link function. This is done to take advantage of the properties of the linked scale, often to linearize the relationship between $E\left(y_i\right)$ and $x_i$ or ensure that $E\left(y_i\right)$ ends up in the proper domain ([more on this shortly](@sec-glm1-basics-link)).
+1. The deterministic part of the model, the **linear predictor** of $y_i|x_i$, is a linear function of the x variable or variables.
+
+Notice how the GLM describes a system in terms of its true, unobserved **state** and relates that state to the **space** of observed observations. The former part is sometimes also called the **deterministic part** of the model, while the latter is called the **stochastic part**. This framework is referred to as the **state-space** representation of a model. Thinking about your study system in state-space terms is the key to understanding GLM. This framework is useful because it allows us to think about and treat separately the deterministic part (state) and the stochastic part (space) of a statistical model.
+
+***Being able to think about and deconstruct a problem in the language of GLMs is one the main points of this course. The GLM is a powerful tool to have in your toolkit as a biologist.***
 
 ### Response distributions {#sec-glm1-basics-resp}
 
+In the classic formulation, GLMs can use any response distribution from the [exponential family](https://en.wikipedia.org/wiki/Exponential_family). In practice, there are only a few that are commonly used:
+
+- The **normal distribution** for continuous, unbounded data.
+- The **gamma distribution** for continuous, right skewed, strictly positive data.
+- The **Poisson distribution** for count data, which are discrete and non-negative.
+- The **negative binomial distribution**, also for count data, which are discrete and non-negative, but also overdispersed.
+- The **binomial distribution** for data related to binary processes and probabilities.
+
+While the $y$ values in a GLM are said to follow a given distribution, this does not necessarily mean that the set of all $y$ values will follow that distribution. It means that any individual $y$ value $y_i$ follows some distribution conditional on the predictor values. 
+
 ### Linear predictors {#sec-glm1-basics-lp}
+
+The linear predictor is basically just the linear regression model that you already know, and plays the same role as the deterministic part of the linear regression model. The key distinction is that while the linear predictor of linear regression (or linear models in general) always produce expected $y$ values on the same scale where $y$ is observed, the linear predictor in a GLM can produce an expected value on a different scale than observed $y$. This has some important and useful consequences, such as guaranteeing that the model always produces expected values that are in the proper domain. E.g., expected counts are never negative, expected probabilities are always in the interval $\left[0,1\right]$, and so on.
 
 ### Link functions {#sec-glm1-basics-link}
 
+The really clever part of a GLM is the link function. The link function maps the scale on which data are observed (the **data scale**) to a scale where the relationship between the expected value and the predictor variables is linear. In this way, link functions work a [little bit like a data transform](@sec-trans-link), but are ***not*** transforms. Recall from @sec-trans-link that while a link function changes the scale where the linear predictor operates, a transform changes the response variable itself.
+
+The three most common link functions are the **identity**, **log**, and **logit** functions.
+
+- The **identity** function is just that: it maps a value to itself. I.e., $Identity\left(x\right)=x$. This is the link function used in linear regression, if linear regression is expressed as a GLM.
+- The **log** function is the natural logarithm. It is widely used both in GLMs where overdispersion is suspected, and where response values must be non-negative or strictly positive (because $e^a$ for any real $a$ is positive). Its behavior is similar to that of the [log transform](@sec-trans-common-log). Although any base logarithm could be used in principle, by convention we always use the natural (base $e$) logarithm.
+- The **logit** link 
 
 ## Common GLMs {#sec-glm1-common}
 

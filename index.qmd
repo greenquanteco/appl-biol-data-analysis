@@ -9,7 +9,7 @@ This website accompanies a course I have developed at Kennesaw State University:
 
 If you are a returning visitor, please note that the website has been rearranged since 2024. This was done to make the modules smaller and more digestible.
 
-The Fall 2025 course syllabus can be [downloaded here](https://greenquanteco.github.io/book/202503%20biol%207410%20syllabus%202025-08-05.pdf).
+The Fall 2026 course syllabus can be [downloaded here](https://greenquanteco.github.io/files/biol-7410-syllabus-fall-2026.pdf).
 
 ## Work in progress warning! {.unnumbered}
 
@@ -50,22 +50,20 @@ This course is a survey of data analysis skills and statistical methods essentia
 
 ## Course requirements {.unnumbered}
 
--   Access to a computer or laptop capable of running [R](https://cran.r-project.org/bin/windows/base/) version 4.0 or above. This site was rendered using R version 4.4.3 and the most recent version of any package mentioned (as of August 8, 2025).
+-   Access to a computer or laptop capable of running [R](https://cran.r-project.org/bin/windows/base/) version 4.0 or above. This site was rendered using R version 4.4.3 and the most recent version of any package mentioned (as of August 2026).
 
 -   A 64-bit system is highly recommended for speed and stability.
-
 -   A separate program in which to write and edit code.
-
     -   Most people prefer to use an "integrated development environment" (IDE) or dedicated code editor for coding. I recommend some in Module 2.
     -   Most people nowadays prefer [RStudio](https://posit.co/download/rstudio-desktop/). The desktop version is free and has a lot of nice features that make working with R easier.
     -   IDEs and code editors are often subject to irrationally strong personal and organizational preferences, so just pick the one that works for you. Or, use the one your supervisor tells you to use.
-    -   My usual workflow includes two windows: the base R GUI, and [Notepad++](https://notepad-plus-plus.org/downloads/).
+    -   My usual workflow includes two windows: the base R GUI, and [Notepad++](https://notepad-plus-plus.org/downloads/), although I've been using RStudio more and more because of the ease of integrating with Github.
 
 -   It would helpful to have a dataset of your own to work with. Each course module uses numerous examples with simulated or published datasets. But, at the end of the day, you're probably here because you need to apply these methods to your own work.
 
 ## Recommended reading {.unnumbered}
 
-This course has no required textbook. If you want a textbook, then I recommend one of the following:
+This course has no required textbook. Or rather, this website is the textbook. If you want a textbook, then I recommend one of the following:
 
 -   *Ecological models and data in R* by Ben Bolker [@bolker2008ecological]. This is a general statistics textbook for biologists. The applications and examples are focused on ecology, but the statistical exposition is relevant to any area of biology.
 
@@ -185,10 +183,10 @@ Finally, [Appendix A](chapters/appa.qmd#sec-append) describes the NEON dataset t
 
 ![](images/squirrel_pic.jpg){fig-align="center"}
 
-I'm a [quantitative ecologist at Kennesaw State University](https://greenquanteco.github.io/research) who studies human impacts on animal populations. Since earning my PhD at Baylor University in 2012, I've been fortunate to have worked in a variety of government and industry roles. Those experiences have shaped my perspective on biology and education. In my courses and advising I do my best to impress upon students the variety of biological experiences and perspectives that different domains bring to the table...and the value that they all bring. Most of my [current research](https://greenquanteco.github.io/research) focuses on understanding human impacts on animal communities and how animal populations adapt to rapidly changing environments.
+I'm a [quantitative ecologist at Kennesaw State University](https://greenquanteco.github.io) who studies human impacts on animal populations. Since earning my PhD at Baylor University in 2012, I've been fortunate to have worked in a variety of government and industry roles. Those experiences have shaped my perspective on biology and education. In my courses and advising I do my best to impress upon students the variety of biological experiences and perspectives that different domains bring to the table...and the value that they all bring. Most of my [current research](https://greenquanteco.github.io/research) focuses on understanding human impacts on animal communities and how animal populations adapt to rapidly changing environments.
 
 ![](images/lab_logo_02.jpg){fig-align="center"}
 
-Why am I making this guide? I have been using R since about 2008, when I was a graduate student trying to make a multi-panel plot for a manuscript. I had seen R mentioned in publications and thought that using R would be more effective than kludging something together with Excel and Powerpoint. Needless to say, jumping straight to making plots with the `lattice` package was not the easiest way to learn R. The final result was a little clunky [@kirchner2011] but I am still really proud of it. Eventually I took some courses and did a lot of self-teaching, and am finally (March 2025) pretty decent at R. I have used R in my work pretty much continuously since 2008 for everything from Bayesian data analysis [e.g., @green2020] to simulation modeling [e.g., @green2019].
+Why am I making this guide? I have been using R since about 2008, when I was a graduate student trying to make a multi-panel plot for a manuscript. I had seen R mentioned in publications and thought that using R would be more effective than kludging something together with Excel and Powerpoint. Needless to say, jumping straight to making plots with the `lattice` package was not the easiest way to learn R. The final result was a little clunky [@kirchner2011] but I am still really proud of it. Eventually I took some courses and did a lot of self-teaching, and am finally (2026) pretty decent at R. I have used R in my work pretty much continuously since 2008 for everything from Bayesian data analysis [e.g., @green2020] to simulation modeling [e.g., @green2019].
 
 This guide is meant to be a primer for self-starting with R. In many sections the text is a bit lengthy, but that is because I wanted to provide explanations that might save someone some of the trouble I had getting started. R documentation is notoriously terse and compact--this is great for professionals who need a reminder, but not so much for newcomers who are still trying to learn. This guide also evolved out of course notes, and will continue to evolve based on feedback from students. If you have any feedback or suggestions for improvement, please [send me a message](mailto:ngreen62@kennesaw.edu)!
