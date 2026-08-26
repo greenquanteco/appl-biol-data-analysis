@@ -1,3 +1,782 @@
 # Appendix A {#sec-appenda}
 
-NEON small mammal data
+This appendix contains information on the small mammal datasets used to construct many of the data analysis examples. The original datasets were downloaded from the [National Ecological Observatory Network (NEON)](https://www.neonscience.org/). Once downloaded, the data were filtered to exclude incomplete or possibly incorrect records, and to update taxonomy to 2026 conventions. The data were then reorganized into 4 tables:
+
+1. **neon-grids.csv**: contains metadata on trapping grids.
+1. **neon-captures.csv**: contains small mammal capture data.
+1. **neon-measures.csv**: contains small mammal body mass and standard measurements.
+1. **neon-taxa.csv**: contains taxonomic definitions for each species in the capture data.
+
+## Data dictionary
+
+### `neon-grids.csv`
+
+- **domain**: sampling region or *domain* as defined by NEON.
+- **site**: unique four letter code for site name.
+- **grid**: unique grid ID, nested within site.
+- **lat**: latitude in degrees north.
+- **lon**: longitude in degrees east.
+- **elev**: elevation in m.
+- **nlcd**: dominant NLCD land cover type within grid.
+
+### `neon-captures.csv`
+
+- **grid**: unique grid ID (corresponds to `neon-grids$grid`
+- **AMHA** through **ZATR**: number of captures of each small mammal species. Four-letter species abbreviations correspond to neon-taxa.csv, column `abb`.
+
+### `neon-measures.csv`
+
+### `neon-taxa.csv`
+
+
+## Packages
+
+The following packages were used:
+
+```{r}
+#| eval: false
+
+
+library(ritis)
+library(missForest)
+```
+
+## Data download
+
+The first step was to download all small mammal data from June 2013 through December 2023. The data used were finalized, non-provisional data. The data were downloaded and unzipped to a folder, `top.dir`. 
+
+```{r}
+#| eval: false
+
+## Unzipped the resulting download into 
+top.dir <- "K:/_neon/NEON_count-small-mammals"
+```
+
+The data at this point were organized by folders, with each folder containing the data from a single site and trapping bout. 
+
+## Read data into memory
+
+```{r}
+# get folder names
+folds <- dir(top.dir)
+
+# only need the folders, which have "RELEASE-20" 
+# in their names
+folds <- folds[grep("RELEASE-20", folds)]
+n.folds <- length(folds)
+
+# which columns do we want from basic dataset?
+use.cols1 <- c("domainID", "siteID", "plotID",
+              "decimalLatitude",
+              "decimalLongitude", "elevation",
+              "nlcdClass", "tagID",
+              "scientificName", "sex", "lifeStage",
+              "pregnancyStatus", "hindfootLength",
+              "earLength",
+              "tailLength", "totalLength", "weight",
+              "tickNumber")  
+
+# mlist for measured specimens
+# spplist for species at each location
+#   (includes extra species not in basic dataset)
+spplist <- mlist <- vector("list", length=n.folds)
+i <- 1
+
+for(i in 1:n.folds){
+  ifold <- paste(top.dir, folds[i], sep="/")
+  ifile <- dir(ifold)
+  
+  # basic file--has individual captures
+  ifile <- ifile[grep("_pertrapnight", ifile)]
+  ix <- read.csv(paste(ifold, ifile, sep="/"))
+  
+  # only need captures
+  ix <- ix[which(ix$trapStatus == "5 - capture"),]
+  ispp <- character(0)
+  
+  # get basic captures, if any
+  if(nrow(ix) > 0){
+    ix <- ix[,use.cols1]
+    mlist[[i]] <- ix
+    # vector of species
+    ispp <- sort(unique(ix$scientificName))
+  }
+
+  # get vouchers, if any
+  # voucher file doesn't have any measurement data,
+  # so just inspect to get unique species
+  vfile <- dir(ifold)
+  vfile <- vfile[grep("_voucher", vfile)]
+  if(length(vfile) > 0){
+    vx <- read.csv(paste(ifold, vfile, sep="/"))
+    if(nrow(vx) > 0){
+      # unique species in vouchers ## will have to remove nonmammals
+      vspp <- sort(unique(vx$scientificName))  
+      if(length(vspp) > 0){
+        # combine with species in basic data
+        ispp <- sort(union(ispp, vspp))  
+      }#if any vspp
+    }# if any rows in vx
+    rm(vx)
+  }#if vfile exists
+
+  # save species to species list
+  spplist[[i]] <- ispp
+ 
+  rm(ix)
+  rm(ispp)
+  
+  cat("folder", i, "of", n.folds, "done!\n")
+  flush.console()
+}
+
+# compile measurement data
+res <- do.call(rbind, mlist)
+```
+
+## Data filtering
+
+```{r}
+#| eval: false
+
+
+## first filter down to species, which will
+## reduce missing measurement problems
+matrix(sort(unique(res$scientificName)))
+
+use.spp <- c(
+  "Alexandromys oeconomus",
+  "Ammospermophilus harrisii",
+  "Ammospermophilus leucurus",
+  "Baiomys taylori",
+  "Blarina brevicauda",
+  "Blarina carolinensis",
+  "Blarina hylophaga",
+  "Callospermophilus lateralis",
+  "Chaetodipus baileyi",
+  "Chaetodipus californicus",
+  "Chaetodipus eremicus",
+  "Chaetodipus hispidus",
+  "Chaetodipus intermedius",
+  "Chaetodipus penicillatus",
+  "Condylura cristata",
+  "Cryptotis parva",
+  "Dicrostonyx groenlandicus",
+  "Didelphis virginiana",
+  "Dipodomys heermanni",
+  "Dipodomys merriami",
+  "Dipodomys microps",
+  "Dipodomys ordii",
+  "Dipodomys spectabilis",
+  "Glaucomys sabrinus",
+  "Glaucomys volans",
+  "Ictidomys tridecemlineatus",
+  "Ictidomys tridecemlineatus monticola",
+  "Lemmiscus curtatus",
+  "Lemmus trimucronatus",
+  "Lepus americanus",
+  "Lepus californicus",
+  "Microtus californicus",
+  "Microtus longicaudus",
+  "Microtus miurus",
+  "Microtus montanus",
+  "Microtus ochrogaster",
+  "Microtus oregoni",
+  "Microtus pennsylvanicus",
+  "Microtus pinetorum",
+  "Microtus xanthognathus",
+  "Mus musculus",
+  "Myodes gapperi",
+  "Myodes rutilus",
+  "Napaeozapus insignis",
+  "Neotoma albigula",
+  "Neotoma cinerea",
+  "Neotoma devia",
+  "Neotoma floridana",
+  "Neotoma lepida",
+  "Neotoma macrotis",
+  "Neotoma mexicana",
+  "Neotoma micropus",
+  "Neurotrichus gibbsii",
+  "Ochotona princeps",
+  "Ochrotomys nuttalli",
+  "Onychomys arenicola",
+  "Onychomys leucogaster",
+  "Onychomys torridus",
+  "Oryzomys palustris",
+  "Perognathus amplus",
+  "Perognathus fasciatus",
+  "Perognathus flavescens",
+  "Perognathus flavus",
+  "Perognathus inornatus",
+  "Perognathus longimembris",
+  "Perognathus parvus",
+  "Peromyscus attwateri",
+  "Peromyscus boylii",
+  "Peromyscus californicus",
+  "Peromyscus crinitus",
+  "Peromyscus eremicus",
+  "Peromyscus gossypinus",
+  "Peromyscus keeni",
+  "Peromyscus leucopus",
+  "Peromyscus maniculatus",
+  "Peromyscus merriami",
+  "Peromyscus nasutus",
+  "Peromyscus polionotus",
+  "Peromyscus truei",
+  "Phenacomys intermedius",
+  "Podomys floridanus",
+  "Rattus norvegicus",
+  "Rattus rattus",
+  "Reithrodontomys fulvescens",
+  "Reithrodontomys humulis",
+  "Reithrodontomys megalotis",
+  "Reithrodontomys montanus",
+  "Sciurus carolinensis",
+  "Sigmodon arizonae",
+  "Sigmodon hispidus",
+  "Sigmodon hispidus eremicus",
+  "Sigmodon ochrognathus",
+  "Sorex arcticus",
+  "Sorex cinereus",
+  "Sorex dispar",
+  "Sorex fumeus",
+  "Sorex haydeni",
+  "Sorex hoyi",
+  "Sorex longirostris",
+  "Sorex merriami",
+  "Sorex monticolus",
+  "Sorex nanus",
+  "Sorex ornatus",
+  "Sorex palustris",
+  "Sorex preblei",
+  "Sorex trowbridgii",
+  "Sorex tundrensis",
+  "Sorex ugyunak",
+  "Sorex vagrans",
+  "Spermophilus armatus",
+  "Spermophilus beecheyi",
+  "Spermophilus franklinii",
+  "Spermophilus parryii",
+  "Spermophilus richardsonii",
+  "Spermophilus spilosoma",
+  "Spermophilus tereticaudus",
+  "Spermophilus variegatus",
+  "Sylvilagus audubonii",
+  "Sylvilagus floridanus",
+  "Sylvilagus nuttallii",
+  "Synaptomys cooperi",
+  "Tamias alpinus",
+  "Tamias amoenus",
+  "Tamias dorsalis",
+  "Tamias merriami",
+  "Tamias minimus",
+  "Tamias quadrimaculatus",
+  "Tamias quadrivittatus",
+  "Tamias rufus",
+  "Tamias speciosus",
+  "Tamias striatus",
+  "Tamias townsendii",
+  "Tamias umbrinus",
+  "Tamiasciurus douglasii",
+  "Tamiasciurus hudsonicus",
+  "Thomomys talpoides",
+  "Zapus hudsonius",
+  "Zapus princeps",
+  "Zapus trinotatus"
+)
+
+res <- res[which(res$scientificName %in% use.spp),]
+rev(sort(table(res$scientificName)))
+length(use.spp)
+
+# only want adults
+res <- res[which(res$lifeStage == "adult"),]
+res$lifeStage <- NULL
+
+# only want nonpregnant individuals--throws off weight
+res <- res[which(res$pregnancyStatus != "pregnant"),]
+res$pregnancyStatus <- NULL
+
+# only want specimens with tick counts
+# OR don't explicitly say no tick count performed
+table(res$scientificName[which(res$tickNumber == "No count performed")])
+table(is.na(res$tickNumber))
+res$tickNumber[which(is.na(res$tickNumber))] <- "0"
+res <- res[which(res$tickNumber !="No count performed"),]
+res$tickNumber[which(res$tickNumber == "")] <- "0"
+
+
+# include sexes M, F, unknown
+res$sex[which(res$sex == "FALSE")] <- "F"
+res$sex[which(res$sex == "")] <- "U"
+
+# only interested in specimens missing at most 1 or 2 measurements
+# how many have all measurements?
+meas.cols <- c("hindfootLength", "earLength",
+              "tailLength", "totalLength", "weight")
+# count how many measurements are missing
+res$check <- apply(res[,meas.cols], 1,
+  function(x){length(which(is.na(x)))})
+ftable(check~scientificName, data=res)
+```
+
+```{r}
+#| eval: false
+
+
+# how many are 0?
+apply(res[,meas.cols], 2, function(x){length(which(x == 0))})
+res[which(res$weight==0),]
+
+## 1 rattus rattus has 0 weight; replace with NA and backfill later
+res$weight[which(res$weight == 0)] <- NA
+
+# which observations are missing which measurements
+res$check.wt <- as.numeric(!is.na(res$weight))
+res$check.hf <- as.numeric(!is.na(res$hindfootLength))
+res$check.el <- as.numeric(!is.na(res$earLength))
+res$check.tl <- as.numeric(!is.na(res$tailLength))
+res$check.to <- as.numeric(!is.na(res$totalLength))
+```
+
+```{r}
+#| eval: false
+
+ftable(check.wt~scientificName, data=res)
+```
+```{r}
+#| eval: false
+ftable(check.hf~scientificName, data=res)
+```
+```{r}
+#| eval: false
+ftable(check.el~scientificName, data=res)
+```
+```{r}
+#| eval: false
+ftable(check.tl~scientificName, data=res)
+```
+```{r}
+#| eval: false
+ftable(check.to~scientificName, data=res)
+```
+
+## Update taxonomy
+
+```{r}
+#| eval: false
+
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+# need to rectify taxonomy before interpolating measurments, 
+# so we use the right animals for each interpolation
+tax <- data.frame(dbin=sort(unique(res$scientificName)))
+tax$dgen <- sapply(strsplit(tax$dbin, " "), "[", 1)
+tax$dspp <- sapply(strsplit(tax$dbin, " "), "[", 2)
+tax$tsn <- NA
+tax$valid <- NA
+for(i in 1:nrow(tax)){
+  ires <- search_scientific(tax$dbin[i])
+  if(nrow(ires) == 0) next
+  flag <- which(ires$combinedName == tax$dbin[i])
+  itsn <- ires$tsn[flag]
+  tax$tsn[i] <- itsn
+  valid <- as.data.frame(usage(itsn))$taxonUsageRating[1]
+  tax$valid[i] <- valid
+  cat("taxon", i, "of", nrow(tax), "complete!\n")
+  flush.console()
+}
+
+tax$tsn[1] <- "180298"
+tax$valid[1] <- "valid"
+
+# igen is correct genus to use when interpolating
+tax$igen <- tax$dgen
+
+tax$igen[1] <- "Microtus"
+
+tax[which(tax$valid == "invalid"),]
+#4           Blarina brevicauda      Blarina   brevicauda 179967 invalid      Blarina
+flag <- which(tax$dbin == "Blarina brevicauda")
+tax$tsn[flag] <- "1229285"
+tax$dspp[flag] <- "brevicaudus"
+
+
+#15             Cryptotis parva    Cryptotis        parva 179971 invalid    Cryptotis
+flag <- which(tax$dbin == "Cryptotis parva")
+tax$tsn[flag] <- "1229257"
+tax$dspp[flag] <- "parvus"
+
+#85  Sigmodon hispidus eremicus     Sigmodon     hispidus 973436 invalid     Sigmodon
+flag <- which(tax$dbin == "Sigmodon hispidus eremicus")
+tax$tsn[flag] <- "180349"
+tax$dspp[flag] <- "hispidus"
+
+#103       Spermophilus armatus Spermophilus      armatus 180147 invalid Spermophilus
+flag <- which(tax$dbin == "Spermophilus armatus")
+tax$tsn[flag] <- "930314"
+tax$igen[flag] <- "Urocitellus"
+
+#104      Spermophilus beecheyi Spermophilus     beecheyi 180148 invalid Spermophilus
+flag <- which(tax$dbin == "Spermophilus beecheyi")
+tax$tsn[flag] <- "930301"
+tax$igen[flag] <- "Otospermophilus"
+
+#105    Spermophilus franklinii Spermophilus   franklinii 180153 invalid Spermophilus
+flag <- which(tax$dbin == "Spermophilus franklinii")
+tax$tsn[flag] <- "930309"
+tax$igen[flag] <- "Poliocitellus"
+
+#106       Spermophilus parryii Spermophilus      parryii 180146 invalid Spermophilus
+flag <- which(tax$dbin == "Spermophilus parryii")
+tax$tsn[flag] <- "930321"
+tax$igen[flag] <- "Urocitellus"
+
+#107  Spermophilus richardsonii Spermophilus richardsonii 180157 invalid Spermophilus
+flag <- which(tax$dbin == "Spermophilus richardsonii")
+tax$tsn[flag] <- "930322"
+tax$igen[flag] <- "Urocitellus"
+
+#108     Spermophilus spilosoma Spermophilus    spilosoma 180159 invalid Spermophilus
+flag <- which(tax$dbin == "Spermophilus spilosoma")
+tax$tsn[flag] <- "930312"
+tax$igen[flag] <- "Xerospermophilus"
+
+#109  Spermophilus tereticaudus Spermophilus tereticaudus 180160 invalid Spermophilus
+flag <- which(tax$dbin == "Spermophilus tereticaudus")
+tax$tsn[flag] <- "930313"
+tax$igen[flag] <- "Xerospermophilus"
+
+#110    Spermophilus variegatus Spermophilus   variegatus 180163 invalid Spermophilus
+flag <- which(tax$dbin == "Spermophilus variegatus")
+tax$tsn[flag] <- "930302"
+tax$igen[flag] <- "Otospermophilus"
+
+## need to fix chipmunk taxonomy
+# "Tamias" was recently split, not yet reflected in ITIS
+tax$igen[which(tax$dgen == "Tamias")] <- "Neotamias"
+tax$igen[which(tax$dbin == "Tamias striatus")] <- "Tamias"
+```
+
+```{r}
+#| eval: false
+
+# data frame tax: 
+#dbin  = binomial name as in the measurement dataset 
+#dgen  = genus as in the data (except for Blarina and Cryptotis)
+#dspp  = species as in the data
+#tsn   = TSN of correct taxonomic name (as of 2025-08-01 12:39 EDT)
+#valid = validity of dbin (invalid indicates that genus or spp was invalid)
+#igen  = correct genus (all but Alexandromys) or genus to use for interpolation
+#        (Alexandromys)
+```
+
+## clean up individual IDs
+
+```{r}
+#| eval: false
+
+# how certain are we that each individual was identified consistently?
+aa <- rev(sort(table(res$tagID)))
+res[which(res$tagID == "NEON.MAM.D15.L2927"),]
+rm(aa)
+
+## how many species are associated with each tag?
+utags <- sort(unique(res$tagID))
+ntags <- length(utags)
+ind.ag <- aggregate(scientificName~tagID, data=res,
+                    function(x){length(unique(x))})
+head(ind.ag)
+# almost all (96.8%) are associated with only 1 species
+# 3.2% have 2 species; 0.05% have 3 species
+table(ind.ag$scientificName)
+#    1     2     3 
+#60466  1983    34 
+table(ind.ag$scientificName)/ntags
+
+# any way to resolve?
+spp2 <- ind.ag$tagID[which(ind.ag$scientificName == 2)]
+
+# what kinds of issues are there?
+df2 <- aggregate(scientificName~tagID, data=res[which(res$tagID %in% spp2),],
+                 function(x){paste(sort(unique(x)), collapse="__")})
+rev(sort(table(df2$scientificName)))
+
+#### conclusion: only keep individuals with consistent identity
+#### doesn't guarantee correct, just consistent
+spp1 <- ind.ag$tagID[which(ind.ag$scientificName == 1)]
+nrow(res)
+res <- res[which(res$tagID %in% spp1),]
+nrow(res)                                                 
+
+summary(res)
+
+### species in dataset
+tax$abb <- paste0(substr(tax$igen, 1, 2), substr(tax$dspp, 1, 2))
+tax$abb <- toupper(tax$abb)
+
+sort(table(tax$abb))
+#ICTR NEAL NEME NEMI NEQU PEFL SIHI
+
+tax[which(tax$abb == "ICTR"),] ## ok, combining anyway
+tax[which(tax$abb == "NEAL"),] 
+tax$abb[which(tax$tsn == "180189")] <- "NEAP"
+
+tax[which(tax$abb == "NEME"),]
+tax$abb[which(tax$tsn == "180194")] <- "NEMR"
+
+tax[which(tax$abb == "NEMI"),] 
+tax$abb[which(tax$tsn == "180195")] <- "NEMN"
+
+tax[which(tax$abb == "NEQU"),] 
+tax$abb[which(tax$tsn == "180201")] <- "NEQA"
+
+
+tax[which(tax$abb == "PEFL"),]
+tax$abb[which(tax$tsn == "180262")] <- "PEFV"
+
+tax[which(tax$abb == "SIHI"),] ## ok, combining anyway
+
+# add abbreviations to res
+res$abb <- tax$abb[match(res$scientificName, tax$dbin)]
+
+uabb <- sort(unique(tax$abb))
+nabb <- length(uabb)
+```
+
+
+
+## organize grid metadata
+
+```{r}
+#| eval: false
+
+#### make a table of grids (plots)
+ugrids <- sort(unique(res$plotID))
+ngrids <- length(ugrids)
+grd <- data.frame(grid=ugrids)
+grd$site <- sapply(strsplit(grd$grid, "_"), "[", 1)
+matchx <- match(grd$grid, res$plotID)
+grd$domain <- res$domainID[matchx]
+grd$lat <- res$decimalLatitude[matchx]
+grd$lon <- res$decimalLongitude[matchx]
+grd$elev <- res$elevation[matchx]
+grd$nlcd <- res$nlcdClass[matchx]
+grd <- grd[,c(3, 2, 1, 4:7)]
+
+doms <- c("Northeast", "Midatlantic", "Southeast", "Atlantic Neotropical",
+          "Great Lakes", "Prairie Peninsula", "Appalachians", "Ozarks",
+          "Northern Plains", "Central Plains", "Southern Plains", 
+          "Northern Rockies", "Southern Rockies", "Desert Southwest",
+          "Great Basin", "Pacific Northwest", "Pacific Southwest")
+doms <- paste0("D", formatC(1:19, width=2, flag="0"), "_", doms)
+
+names(doms) <- sapply(strsplit(doms, "_"), "[", 1)
+grd$domain <- doms[grd$domain]
+
+### export version of grids
+grd <- grd[order(grd$domain, grd$grid),]
+
+```
+
+
+## Clean up individual measurement data
+
+```{r}
+#| eval: false
+
+### finalize measurements
+met1 <- res[,c("plotID", "tagID", "abb", "sex", "hindfootLength", "earLength",
+              "tailLength", "totalLength", "weight", "tickNumber")]
+mag1 <- aggregate(weight~tagID, data=met1, mean, na.rm=TRUE)
+mag2 <- aggregate(totalLength~tagID, data=met1, mean, na.rm=TRUE)
+mag3 <- aggregate(tailLength~tagID, data=met1, mean, na.rm=TRUE)
+mag4 <- aggregate(hindfootLength~tagID, data=met1, mean, na.rm=TRUE)
+mag5 <- aggregate(earLength~tagID, data=met1, mean, na.rm=TRUE)
+
+# combine nonmissing values
+met <- data.frame(tag=sort(unique(met1$tagID)))
+met$mass   <- mag1$weight[match(met$tag, mag1$tagID)]
+met$totlen <- mag2$totalLength[match(met$tag, mag2$tagID)]
+met$tail   <- mag3$tailLength[match(met$tag, mag3$tagID)]
+met$foot   <- mag4$hindfootLength[match(met$tag, mag4$tagID)]
+met$pinna  <- mag5$earLength[match(met$tag, mag5$tagID)]
+
+# get individuals with all measurements
+met$spp <- met1$abb[match(met$tag, met1$tagID)]
+met.all <- met[complete.cases(met),]
+nrow(met.all)
+
+# what about those missing only 1 measurement?
+met$nonmiss <- apply(met[,c(2:6)], 1, function(x){length(which(!is.na(x)))})
+table(met$nonmiss)
+
+met4 <- met[which(met$nonmiss >= 4),]
+met4$miss <- as.numeric(apply(met4[,2:6], 1, function(x){which(is.na(x))}))
+met4$miss <- names(met4)[met4$miss+1]
+ftable(miss~spp, data=met4)
+
+# interpolate missing measurements
+met4$genus <- tax$dgen[match(met4$spp, tax$abb)]
+# combine a few genera to get more robust interpolations
+met4$genus[which(met4$genus == "Alexandromys")] <- "Microtus"
+met4$genus[which(met4$genus == "Ictidomys")] <- "Spermophilus"
+met4$genus[which(met4$genus == "Lemmiscus")] <- "Lemmus"
+met4$genus[which(met4$genus == "Synaptomys")] <- "Lemmus"
+met4$genus[which(met4$genus == "Dicrostonyx")] <- "Lemmus"
+met4$genus[which(met4$genus == "Phenacomys")] <- "Microtus"
+table(met4$genus)
+
+
+# install.packages("missForest")
+library(missForest)
+
+ugenera <- sort(unique(met4$genus))
+ngenera <- length(ugenera)
+for(i in 1:ngenera){
+  cat("starting genus", ugenera[i], "!\n")
+  flush.console()
+  flag <- which(met4$genus == ugenera[i])
+  ix <- met4[flag, 2:6]
+  imput <- missForest(ix)
+  met4[flag,2:6] <- round(imput$ximp,0)
+  cat("genus", i, "of", ngenera, "imputed!\n")
+  flush.console()
+}
+
+# remove unneeded variables
+met4$miss <- NULL
+met4$genus <- NULL
+met4$nonmiss <- NULL
+
+# add back in other variables
+met4$sex <- met1$sex[match(met4$tag, met1$tagID)]
+met4$plot <- met1$plotID[match(met4$tag, met1$tagID)]
+
+# rearrange
+met4 <- met4[,c(9, 1, 8, 7, 2:6)]
+names(met4)[1] <- "grid"
+##### met4 is the output ready measurement dataset
+
+## checks: must be TRUE:
+all(met4$grid %in% grd$grid)
+all(met4$spp %in% tax$abb)
+```
+
+## finalize taxonomy
+
+```{r}
+#| eval: false
+
+# finalize tax
+tax$X <- NULL
+xtax <- tax[,c(7, 5, 4, 1)]
+xtax$order <- NA
+xtax$suborder <- NA
+xtax$superfamily <- NA
+xtax$family <- NA
+xtax$subfamily <- NA
+xtax$genus <- NA
+xtax$species <- NA
+
+ntax <- nrow(xtax)
+for(i in 1:ntax){
+  itsn <- xtax$tsn[i]
+  ih <- as.data.frame(hierarchy_full(itsn))
+  xtax$order[i] <- ih$taxonname[which(ih$rankname == "Order")]
+  if("Suborder" %in% ih$rankname){
+    xtax$suborder[i] <- ih$taxonname[which(ih$rankname == "Suborder")]
+  }
+  if("Superfamily" %in% ih$rankname){
+    xtax$superfamily[i] <- ih$taxonname[which(ih$rankname == "Superfamily")]
+  }
+  xtax$family[i] <- ih$taxonname[which(ih$rankname == "Family")]
+  if("Subfamily" %in% ih$rankname){
+    xtax$subfamily[i] <- ih$taxonname[which(ih$rankname == "Subfamily")]
+  }
+  xtax$genus[i] <- ih$taxonname[which(ih$rankname == "Genus")]
+  xtax$species[i] <- ih$taxonname[which(ih$rankname == "Species")]
+  cat("taxon", i, "of", ntax, "complete!\n")
+  flush.console()
+}
+
+head(xtax)
+xtax$dbin <- NULL
+xtax <- xtax[order(xtax$abb),]
+xtax$valid <- NULL
+xtax <- xtax[,c(1, 2, 9, 3:8)]
+rownames(xtax) <- NULL
+all(table(xtax$spp) == 1)
+xtax <- xtax[-which(xtax$tsn == 931114),]
+xtax <- xtax[-which(xtax$tsn == 180349)[1],]
+all(table(xtax$spp) == 1)
+rownames(xtax) <- NULL
+
+#### xtax is export ready version of taxonomy
+```
+
+## Capture numbers
+
+```{r}
+#| eval: false
+
+## species presence matrix is grid x species matrix
+ugrid <- sort(unique(grd$grid))
+ngrid <- length(ugrid)
+
+ntax <- nrow(xtax)
+pmat <- matrix(0, nrow=ngrid, ncol=ntax)
+colnames(pmat) <- sort(xtax$abb)
+rownames(pmat) <- ugrid
+
+all(res$abb %in% colnames(pmat))
+
+i <- 1
+for(i in 1:ngrid){
+  flag <- which(res$plotID == ugrid[i])
+  ispp <- table(res$abb[flag])
+  pmat[i,names(ispp)] <- ispp
+  cat("grid", i, "of", ngrid, "complete!\n")
+  flush.console()
+}
+
+pmat <- as.data.frame(pmat)
+pmat <- cbind(data.frame(grid=rownames(pmat)), pmat)
+rownames(pmat) <- NULL
+
+
+```
+
+
+## write out final datasets
+
+```{r}
+#| eval: false
+
+# write out final datasets
+
+# grids
+out <- grd
+out.name <- "neon-grids.csv"
+out.path <- paste(data.dir, out.name, sep="/")
+write.csv(out, out.path, row.names=FALSE)
+
+# taxa
+out <- xtax
+out.name <- "neon-taxa.csv"
+out.path <- paste(data.dir, out.name, sep="/")
+write.csv(out, out.path, row.names=FALSE)
+
+# measurements
+out <- met4
+out.name <- "neon-measures.csv"
+out.path <- paste(data.dir, out.name, sep="/")
+write.csv(out, out.path, row.names=FALSE)
+
+# capture numbers
+out <- pmat
+out.name <- "neon-captures.csv"
+out.path <- paste(data.dir, out.name, sep="/")
+write.csv(out, out.path, row.names=FALSE)
+
+```

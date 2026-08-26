@@ -1620,7 +1620,7 @@ knitr::opts_knit$set(root.dir = "../datasets")
 # data file names
 name1 <- "neon_grids_2025-08-03.csv"
 name2 <- "neon_measures_2025-08-03.csv"
-name3 <- "neon_taxa_2025-08-03.csv"
+name3 <- "neon-taxa.csv"
 
 # import
 grd <- read.csv(name1, header=TRUE)

@@ -269,7 +269,7 @@ Data formatting requires thinking about what kinds of data are being entered. Fo
 
 Data for R should be stored in plain-text files. Two of the most popular options are tab-delimited files (**.txt**) and comma-delimited files (**.csv**). The "delimited" part means that some special character (like tab or comma) is used to separate values on a row of the file. Text files can be produced from Excel spreadsheets by going to **Save as**, selecting a folder, and then selecting "Text (Tab delimited)(\*.txt)" or "CSV (Comma delimited)(\*.csv)" from the dropdown menu for file type. Do ***not*** select "CSV UTF-8 (Comma delimited)(\*.csv)" as this will cause issues in R.
 
-Download the files neon_taxa_2025-08-03.txt and neon_taxa_2025-08-03.csv. Create a new folder for this exercise, save both files there, and set that folder as your R working directory before continuing.
+Download the files neon-taxa.txt and neon-taxa.csv. Create a new folder for this exercise, save both files there, and set that folder as your R working directory before continuing.
 
 Use `read.table()` to import a tab-delimited file, and save it to an object called `dx`. Notice that the filename must be spelled and capitalized correctly. Notice also that because the file is in your working directory, no folder path is needed. The argument `header=TRUE` tells R that the first row of the file contains column names, not data.
 
@@ -280,20 +280,20 @@ knitr::opts_knit$set(root.dir = "../datasets")
 ```
 
 ```{r}
-dx <- read.table("neon_taxa_2025-08-03.txt", header=TRUE)
+dx <- read.table("neon-taxa.txt", header=TRUE)
 ```
 
 Use `read.csv()` to import a comma-delimited file. Note how similar the syntax is to the first command, except that for `read.csv()` you don't need `header=TRUE` because this is the default (unlike `read.table()`).
 
 ```{r}
-dx <- read.csv("neon_taxa_2025-08-03.csv", header=TRUE)
+dx <- read.csv("neon-taxa.csv", header=TRUE)
 ```
 
 While `read.table()` imports tab-delimited files by default, it can also import other types of files by setting the `sep` argument. Below is an example of using `read.table()` to import a CSV file.
 
 ```{r}
 #| eval: FALSE
-dat <- read.table("neon_taxa_2025-08-03.csv",
+dat <- read.table("neon-taxa.csv",
     header=TRUE, sep=",")
 ```
 
@@ -350,7 +350,7 @@ The default in `read.table()` reads any white space as a delimiter. This is fine
 
 # not run:
 # file is in working directory
-in.name <- "neon_taxa_2025-08-03.txt"
+in.name <- "neon-taxa.txt"
 
 # tab-delimited (sep="\t"):
 dat <- read.table(in.name, header=TRUE, sep="\t")
