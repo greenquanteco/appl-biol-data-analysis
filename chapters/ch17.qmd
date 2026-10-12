@@ -148,6 +148,10 @@ The *G*-test should be used when sample sizes are large, because it is more comp
 
 Despite that fact that is has been recommended in literature for over 3 decades, the *G*-test is not available in the base R `stats` package. It is implemented in several add-on packages such as `AMR`.
 
+## McNemar's test for paired data {#sec-mcnemar}
+
+Sometimes we collect data on the same experimental units at two occasions, with the idea being to compare the change from one time to another. For example, a clinical trial might compare the efficacy of a vaccine in patients that 
+
 ## Contingency tests and odds ratios {#sec-indep-odds}
 
 One interesting way to express the results of a test for independence is to use the **odds ratio** of one outcome relative to another. The **odds** of some event $k$ with probability $p$ is:
