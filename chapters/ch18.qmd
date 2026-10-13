@@ -486,7 +486,7 @@ $$AIC_C=AIC+\frac{2k^2+2k}{n-k-1}$$
 
 where $n$ denotes the sample size and $k$ still denotes the number of parameters. Thus, $AIC_C$ is essentially AIC with an extra penalty term for the number of parameters. Note that as $n\rightarrow\infty$, the extra penalty term converges to 0, and thus $AIC_C$ converges to AIC
 
-### Model comparison using AIC
+### Model comparison using AIC {#sec-glm1-lik-comp}
 
 Like deviance, the magnitude of the AIC of a model doesn't tell us anything about the fit of that model. Instead, we use AIC to compare the fit of different models. We will work examples in later chapters. Briefly, given a set of $R$ candidate models, with AIC values $AIC_1$, $AIC_2$, up to $AIC_R$, we calculate for each model $i$:
 
@@ -500,23 +500,39 @@ If we normalize the relative likelihoods by dividing by their sum, we get the **
 
 $$\omega_{i}=\frac{\hat{\mathcal{L}}_{rel,i}}{\sum_{i=1}^R\hat{\mathcal{L}}_{rel,i}}$$
  
-which is constrained such that all $\omega_i$ sum to 1. The AIC weight is the essentially the probability that a model is the best-fitting model in a set of candidate models. It is *not* the probability that a model is correct, or the probability that a model is the best of all possible models. An AIC weight only has meaning within a set of nested models. Nested models are models that can be turned into one another by setting one or more coefficients to 0. For example, the following models
+which is constrained such that all $\omega_i$ sum to 1. The AIC weight is the essentially the probability that a model is the best-fitting model in a set of candidate models. It is *not* the probability that a model is correct, or the probability that a model is the best of all possible models. An AIC weight only has meaning within a set of nested models.
 
-$$E\left(y\right)=\beta_0+\beta_1 x_1+\beta_2 x_2+\beta_3 x_3$$
+**Nested models** are models in which one is a special case of another. These special cases are defined by constraining one or more parameters (usually by setting coefficients to 0).
 
-$$E\left(y\right)=\beta_0+\beta_2 x_2+\beta_3 x_3$$
+Consider the following linear predictors for different GLMs (models 1 through 5) and assume the same response distribution and link function. Models 1 and 2 are nested:
 
-$$E\left(y\right)=\beta_0+\beta_1 x_1+\beta_3 x_3$$
+$$\text{Model 1}:\eta=\beta_0+\beta_1 x_1+\beta_2 x_2$$
 
-are considered nested. The first model contains the second and third as special cases: if you set $\beta_1$ to 0, then you get the second model. If you set $\beta_2$ to 0, then you get the third model. And if you set $\beta_1$, $\beta_2$, and $\beta_3$ to 0, you get the **null model**:
+$$\text{Model 2}:\eta=\beta_0+\beta_1 x_1$$
 
-$$E\left(y\right)=\beta_0$$
+because model 1 contains model 2 as a special case: if you set $\beta_2$ in model 1 to 0, then you get model 2 which has only $\beta_1$.
 
-The null model is a useful baseline and should also be included in the candidate set when comparing GLMs by AIC.
+Models 3 and 4 are not nested:
 
-### Likelihood ratio tests
+$$\text{Model 3}:\eta=\beta_0+\beta_1 x_1$$
 
-Finally, we can compare GLM using the **likelihood ratio test (LRT)**. The LRT asks whether the improvement in fit from adding parameters is greater than we would expect by chance if the simpler model were correct. Its test statistic $G^2$ is:
+$$\text{Model 4}:\eta=\beta_0+\beta_2 x_2$$
+
+because you can't get either model from the other by setting coefficients to 0. Both models 3 and 4 are, however, nested in 
+
+$$\text{Model 5}:\eta=\beta_0+\beta_1 x_1+\beta_2 x_2$$
+
+You can compare nested models like models 4 and 5 with a likelihood ratio test (see @sec-glm1-lik-lrtest below). Models 3 and 4 are not nested, so they cannot be compared using a likelihood ratio test. However, either could be compared with model 5 or with a null model. AIC can be used to compare models 3, 4, and 5 simultaneously, regardless of how they are nested, provided that they are fitted to the same observations and their likelihoods are comparable.
+
+If you set all of the model coefficients other than the intercept to 0, you get the **null model**:
+
+$$\text{Null model}:\eta=\beta_0$$
+
+The null model is a useful baseline and is often worth including in the candidate set when comparing GLMs by AIC.
+
+### Likelihood ratio tests {#sec-glm1-lik-lrtest}
+
+Finally, we can compare nested GLMs using the **likelihood ratio test (LRT)**. The LRT asks whether the improvement in fit from adding parameters is greater than we would expect by chance if the simpler model were correct. Its test statistic $G^2$ is:
 
 $$G^2=-2\log\left(\frac{\mathcal{L}_0}{\mathcal{L}_1}\right)=2\left(\ell_1-\ell_0\right)$$
 
@@ -541,5 +557,13 @@ anova(mod0, mod1, test = "Chisq")
 ```
 
 This compares two nested Poisson GLMs fitted to the same observations. A small *p*-value indicates evidence that adding the additional predictor `x2` improves model fit beyond what would be expected under the simpler model.
+
+Alternatively, we can use a function from `lmtest`:
+
+```{r}
+#| eval: false
+
+lmtest::lrtest(mod0, mod1)
+```
 
 When should we use an LRT instead of AIC? The two methods answer different questions. AIC evaluates the relative expected predictive performance of competing models while penalizing model complexity, and can compare models that are not nested. The LRT, on the other hand, formally tests whether the additional parameters in a more complex nested model provide a statistically significant improvement in fit. Neither approach guarantees that the selected model adequately describes the data. That decision requires inspecting figures and using your biological judgement.

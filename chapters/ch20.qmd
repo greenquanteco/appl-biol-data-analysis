@@ -172,14 +172,375 @@ points(px, mn2, type="l", lwd=2, col="red")
 points(dx$precip, dx$het, pch=16)
 ```
 
-### Information theoretic analysis
-
-
 ## Negative binomial GLM for overdispersed counts {#sec-glm3-negbin}
+
+Some count data are **overdispersed**, meaning that they contain more variance than expected under a Poisson distribution. That is, $\sigma^2>\lambda$. There is no hard and fast rule for when overdispersion is a problem, but we don't need one. Rather than try to define a threshold where you should switch from a Poisson GLM to a negative binomial GLM, just fit both and see which model fits better. After all, the Poisson GLM is just a special case of the negative binomial GLM, making the two models nested.
+
+![If the negative binomial can be defined as a Poisson-gamma mixture distribution, then the Poisson distribution can be thought of as a negative binomial with no overdispersion.](../images/glm2-pointofview.jpg){fig-align="center" fig-alt="Obi-wan Kenobi reminds us that the Poisson distribution can be thought of as a negative binomial with no overdispersion, so the two models are nested."}
 
 ### Definition {#sec-glm3-negbin-def}
 
+The negative binomial GLM is defined as:
+
+$$y\sim NegBin\left(\lambda,\theta\right)$$
+
+$$\log\left(\lambda\right)=\eta$$
+
+$$\eta=\boldsymbol{\beta}\mathbf{x}$$
+
+were $\lambda$ is the expected value (mean) and $\theta$ is the overdispersion parameter:
+
+$$\sigma^2=\lambda+\frac{\lambda^2}{\theta}$$
+
+In the R functions that deal with the negative binomial, $\theta$ is referred to as the `size` parameter. As $\theta$ gets smaller, the fraction $\frac{\lambda^2}{\theta}$ gets larger, and the distribution picks up more and more variance compared to the Poisson distribution (because for a Poisson, $\sigma^2=\lambda$). Thus, as $\theta$ increases to positive infinity, the fraction gets smaller and the variance approaches that of a Poisson.
+
+$$\lim_{\theta \to \infty} \underbrace{\lambda+\frac{\lambda^2}{\theta}}_{\text{NegBin~variance}} = \underbrace{\lambda}_{\text{Poisson variance}}$$
+
 ### Example with simulated data {#sec-glm3-negbin-sim}
+
+As always, let's simulate some data so we can see how the model really works. 
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+#| fig-caption: "Simulated data using the same linear predictor with a Poisson distribution (red squares) and a negative binomial distribution (black circles). Notice how the spread of points is much larger in the negative binomial data."
+#| fig-alt: "Simulated data using the same linear predictor with a Poisson distribution (red squares) and a negative binomial distribution (black circles). Notice how the spread of points is much larger in the negative binomial data."
+
+
+
+# random number seed for reproducibility
+set.seed(42)
+
+# sample size
+n <- 100
+
+# coefficients
+beta0 <- 4     # intercept
+beta1 <- 0.15  # slope
+theta <- 3     # overdispersion
+
+# x values
+x <- runif(n, 0, 10)
+
+# linear predictor
+eta <- beta0 + beta1 * x
+
+# inverse link function
+lambda <- exp(eta)
+
+# response variable
+## negbin
+ynb <- rnbinom(n, mu=lambda, size=theta)
+## poisson for comparison
+yp <- rpois(n, lambda)
+
+# assemble into data frame
+dn <- data.frame(x=x, ynb=ynb, yp=yp)
+
+# make the plot
+par(mar=c(5.1, 5.1, 1.1, 1.1))
+plot(x,ynb, pch=19)
+points(x, yp, pch=15, col="red")
+legend("topleft", 
+       legend=c("Poisson variance",
+                "Negative binomial variance"),
+       pch=c(15, 19), col=c("red", "black"),
+       bty="n", cex=1.3)
+```
+
+There is no base R functionf for a negative binomial GLM, so we need to find an add-on package for it. The most common package for this is probably `MASS`.
+
+```{r}
+library(MASS)
+```
+
+Now let's fit the negative binomial and the Poisson GLMs.
+
+```{r}
+mod3 <- glm(ynb~x, data=dn, family=poisson)
+mod4 <- glm.nb(ynb~x, data=dn)
+```
+
+Both models give similar estimates for the intercept and slope.
+
+```{r}
+summary(mod3)
+```
+
+```{r}
+summary(mod4)
+```
+
+The main difference is that the negative binomial model has an extra term, $\theta$, to account for potential overdispersion. The estimate, $\hat{\theta}=2.918\pm0.404$, is pretty close to the truth. Does adding that term improve the model fit? Let's do a likelihood ratio test.
+
+Normally, we can use the `anova(...,test="Chisq")` method we saw in @sec-glm1-lik-lrtest. However, because Poisson and negative binomial models have the same number of terms in the model (intercept and slope), `anova()` finds a difference of zero residual degrees of freedom. The overdispersion parameter $\theta$ in the negative binomial model isn't counted in the residual degrees of freedom used by `anova()`.
+
+Instead, we have to use another method. The function `lrtest()` in package `lmtest` uses the number of estimated parameters in the likelihood, which includes the overdispersion parameter. However, there is a problem. 
+
+```{r}
+# close, but not quite correct
+# because of the boundary problem
+lmtest::lrtest(mod3, mod4)
+```
+
+Recall that as $\theta$ gets larger, the variance in the negative binomial approaches the variance of the Poisson. We saw this earlier:
+
+$$\lim_{\theta \to \infty} \underbrace{\lambda+\frac{\lambda^2}{\theta}}_{\text{NegBin~variance}} = \underbrace{\lambda}_{\text{Poisson variance}}$$
+
+If we reparameterize the negative binomial variance with $\alpha=1/\theta$, we get
+
+$$\sigma^2=\lambda+\lambda^2\alpha$$
+
+then the comparison between the Poisson and the negative binomial GLM boils down to testing the null hypothesis that 
+
+$$H_0:\alpha=0$$
+
+But because $\alpha\geq0$, the null hypothesis lies on the **boundary of the parameter space** for the negative binomial model. This violates one of the assumptions of the likelihood ratio test. So, both `anova(...,test="Chisq")` and `lmtest::lrtest()` are inappropriate. Instead, we need to calculate the LR test statistic directly:
+
+```{r}
+LR <- 2*(as.numeric(logLik(mod4))-
+             as.numeric(logLik(mod3)))
+pval <- 0.5*pchisq(LR, df=1, lower.tail=FALSE)
+c(LR=LR, pval=pval)
+```
+
+We would report this as (likelihood ratio = 3951.5, 1 d.f., *p*<0.001).
+
+Or, if we don't want to calculate a LR test manually, we could just compare the models using AIC:
+
+```{r}
+aic.df <- AIC(mod3, mod4)
+
+# delta aic
+aic.df$delta <- aic.df$AIC-min(aic.df$AIC)
+
+# relative likelihoods
+aic.df$w <- exp(aic.df$delta/2)
+
+# delta AIC is so large, can't calculate
+# AIC weight... basic number sense should
+# tell us that w>0.99999 for mod4 (negbin)
+aic.df
+```
+
+The case for the negative binomial `mod4` over the Poisson `mod3`is pretty convincing at this point, but let's plot the models and their predictions to be sure.
+
+```{r}
+#| fig.height: 6
+#| fig.width: 12
+#| fig-caption: 'Comparison of a Poisson GLM (top) and negative binomial GLM (bottom) fitted to the same data. Notice how the negative binomial GLM better captures the variation in $y$ compared to the Poisson GLM.'
+#| fig-alt: 'Comparison of a Poisson GLM (top) and negative binomial GLM (bottom) fitted to the same data. Notice how the negative binomial GLM better captures the variation in $y$ compared to the Poisson GLM.'
+px <- seq(min(dn$x), max(dn$x), length=100)
+
+# poisson model predictions
+pred3 <- predict(mod3, 
+                 newdata=data.frame(x=px),
+                 type="link", se.fit=TRUE)
+# negbin model predictions
+pred4 <- predict(mod4, 
+                 newdata=data.frame(x=px),
+                 type="link", se.fit=TRUE)
+
+# expected values
+mn3 <- exp(qnorm(0.5, pred3$fit, pred3$se.fit))
+mn4 <- exp(qnorm(0.5, pred4$fit, pred4$se.fit))
+
+# confidence intervals
+## lower
+lo3 <- exp(qnorm(0.025, pred3$fit, pred3$se.fit))
+lo4 <- exp(qnorm(0.025, pred4$fit, pred4$se.fit))
+## upper
+up3 <- exp(qnorm(0.975, pred3$fit, pred3$se.fit))
+up4 <- exp(qnorm(0.975, pred4$fit, pred4$se.fit))
+
+
+par(mfrow=c(1,2), mar=c(5.1, 5.1, 2.1, 1.1))
+plot(dn$x, dn$ynb,
+     xlab="x", ylab="y",
+     main="Poisson GLM")
+points(px, lo3, type="l",
+       lty=2, lwd=2, col="red")
+points(px, up3, type="l",
+       lty=2, lwd=2, col="red")
+points(px, mn3, type="l",
+       lty=2, lwd=2, col="red")
+plot(dn$x, dn$ynb,
+     xlab="x", ylab="y",
+     main="Negative binomial GLM")
+points(px, lo4, type="l",
+       lty=2, lwd=2, col="blue")
+points(px, up4, type="l",
+       lty=2, lwd=2, col="blue")
+points(px, mn4, type="l",
+       lty=2, lwd=2, col="blue")
+
+```
+
+At first glance, the Poisson model appears to have a better fit because the 95% confidence interval is so narrow. But, this is a mistake because the fitted negative binomial model revealed considerable overdispersion. The Poisson model does not account for this overdispersion, and consequently assumes that the observations contain more information about the expected value than they actually do. As a result, its standard errors are underestimated and the CI appears misleadingly narrow. The negative binomial model *does* account for the overdispersion, which means that it incorporates that extra uncertainty into its SE and CI calculations.
 
 ### Example with real data {#sec-glm3-negbin-real}
 
+Let's use the NEON data for a real example. If you don't already have it, download the [site-level richness and environmental dataset](..datasets/dat-neon-site-rich-env.csv) and put it in your working directory.
+
+
+```{r}
+#| include: false
+dx <- read.csv("../datasets/dat-neon-site-rich-env.csv")
+```
+
+
+```{r}
+#| eval: false
+dx <- read.csv("dat-neon-site-rich-env.csv")
+```
+
+Consider this plot of species richness vs. net primary productivity.
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+par(mar=c(5.1, 5.1, 1.1, 1.1))
+plot(dx$npp, dx$tot,
+     xlab=expression(Net~primary~productivity~(g~C~m^{-2}~yr^{-1})),
+     ylab="Small mammal species richness",
+     ylim=c(0, 30))
+
+```
+
+It looks like small mammal species richness declines with increasing net primary productivity, which is actually kind of surprising. Let's investigate with a negative binomial GLM. We will also fit a Poisson GLM for comparison, to check whether the negative binomial is handling variance appropriately.
+
+```{r}
+mod5 <- glm(tot~npp, data=dx, family=poisson)
+summary(mod5)
+```
+
+And the negative binomial:
+
+```{r}
+mod6 <- glm.nb(tot~npp, data=dx)
+summary(mod6)
+```
+
+AIC suggests that the negative binomial model is better supported than the Poisson model.
+
+```{r}
+aic.df <- AIC(mod5, mod6)
+
+# delta aic
+aic.df$delta <- aic.df$AIC-min(aic.df$AIC)
+
+# relative likelihoods
+aic.df$rel <- exp(-1*aic.df$delta/2)
+
+# aic weight
+aic.df$wt <- aic.df$rel/sum(aic.df$rel)
+
+aic.df
+```
+
+We can also perform a likelihood ratio test, confirms the significant difference in model performance.
+
+```{r}
+LR <- 2*(as.numeric(logLik(mod6))-
+             as.numeric(logLik(mod5)))
+pval <- 0.5*pchisq(LR, df=1, lower.tail=FALSE)
+c(LR=LR, pval=pval)
+```
+
+However, the deviance explained for the best supported model is quite low:
+
+```{r}
+1-mod6$deviance/mod6$null.deviance
+```
+}
+
+That should make us worry that the fitted model might not outperform the null model. Let's fit that and compare it to model 6.
+
+```{r}
+# null model
+mod0 <- glm.nb(tot~1, data=dx)
+
+# likelihood ratio test
+lmtest::lrtest(mod6, mod0)
+```
+
+The significant LR test gives us some justification for going on with model 6. How much support does it really have relative to the null?
+
+```{r}
+aic.df <- AIC(mod0, mod5, mod6)
+
+# delta aic
+aic.df$delta <- aic.df$AIC-min(aic.df$AIC)
+
+# relative likelihoods
+aic.df$rel <- exp(-1*aic.df$delta/2)
+
+# aic weight
+aic.df$wt <- aic.df$rel/sum(aic.df$rel)
+
+aic.df[order(aic.df$delta),]
+```
+
+That's an interesting finding: both the negative binomial model *and* the null model are better supported than the Poisson model. So, if we had only used the Poisson model, we would have found a "statistically significant" effect of NPP, but that model would have had less overall support than the null model because the explanatory power of NPP was not worth the cost of the extra parameter. This shows us the importance of properly accounting for variance in a GLM. This also neatly illustrates the difference between purely frequentist inference using *p*-values, and information theoretic inference using AIC (see @sec-it for a more in-depth discussion).
+
+Finally, let's make a figure to show off this relationship we found:
+
+```{r}
+#| fig.height: 6
+#| fig.width: 8
+#| fig-caption: 'Comparison of a Poisson GLM (top) and negative binomial GLM (bottom) of small mammal species richness in respose to net primary productivity (NPP). Notice how the negative binomial GLM better captures the variation in $y$ compared to the Poisson GLM.'
+#| fig-alt: 'Comparison of a Poisson GLM (top) and negative binomial GLM (bottom) of small mammal species richness in respose to net primary productivity (NPP). Notice how the negative binomial GLM better captures the variation in $y$ compared to the Poisson GLM.'
+
+
+px <- seq(min(dx$npp), max(dx$npp), length=100)
+
+# poisson model predictions
+pred5 <- predict(mod5, 
+                 newdata=data.frame(npp=px),
+                 type="link", se.fit=TRUE)
+# negbin model predictions
+pred6 <- predict(mod6, 
+                 newdata=data.frame(npp=px),
+                 type="link", se.fit=TRUE)
+
+# expected values
+mn5 <- exp(qnorm(0.5, pred5$fit, pred5$se.fit))
+mn6 <- exp(qnorm(0.5, pred6$fit, pred6$se.fit))
+
+# confidence intervals
+## lower
+lo5 <- exp(qnorm(0.025, pred5$fit, pred5$se.fit))
+lo6 <- exp(qnorm(0.025, pred6$fit, pred6$se.fit))
+## upper
+up5 <- exp(qnorm(0.975, pred5$fit, pred5$se.fit))
+up6 <- exp(qnorm(0.975, pred6$fit, pred6$se.fit))
+
+xlabel <- expression(Net~primary~productivity~(g~C~m^{-2}~yr^{-1}))
+
+par(mfrow=c(1,1), mar=c(5.1, 5.1, 2.1, 1.1))
+plot(dx$npp, dx$tot,
+     xlab=xlabel,
+     ylab="Small mammal species richness",
+     ylim=c(0, 30))
+points(px, lo5, type="l",
+       lty=2, lwd=2, col="red")
+points(px, up5, type="l",
+       lty=2, lwd=2, col="red")
+points(px, mn5, type="l",
+       lty=2, lwd=2, col="red")
+points(px, lo6, type="l",
+       lty=3, lwd=2, col="blue")
+points(px, up6, type="l",
+       lty=3, lwd=2, col="blue")
+points(px, mn6, type="l",
+       lty=3, lwd=2, col="blue")
+legend("topright",
+       legend=c("Poisson GLM", "Negative binomial GLM"),
+       lty=c(2,3), col=c("red", "blue"), lwd=2,
+       bty="n", cex=1.3)
+points(dx$npp, dx$tot, pch=19, cex=1.3)
+```
+
+### Beyond negative binomial {#sec-glm3-negbin-beyond}
+
+**Quasi-Poisson regression** is another approach to overdispersed count data. Unlike negative binomial regression, it does not specify a complete probability distribution, instead allowing the variance to be a constant multiple of the mean. This adjusts standard errors to account for overdispersion but does not provide a conventional likelihood for AIC-based model comparison. For this reason, we focus on negative binomial regression as a likelihood-based alternative to Poisson regression.
