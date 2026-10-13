@@ -35,8 +35,6 @@ The following packages were used:
 
 ```{r}
 #| eval: false
-
-
 library(ritis)
 library(missForest)
 ```
@@ -57,6 +55,9 @@ The data at this point were organized by folders, with each folder containing th
 ## Read data into memory
 
 ```{r}
+#| eval: false
+
+
 # get folder names
 folds <- dir(top.dir)
 
@@ -367,8 +368,7 @@ ftable(check.to~scientificName, data=res)
 ```{r}
 #| eval: false
 
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-# need to rectify taxonomy before interpolating measurments, 
+# need to rectify taxonomy before interpolating measurements, 
 # so we use the right animals for each interpolation
 tax <- data.frame(dbin=sort(unique(res$scientificName)))
 tax$dgen <- sapply(strsplit(tax$dbin, " "), "[", 1)

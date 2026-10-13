@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>14&nbsp; Introductory statistics with R – Applied Biological Data Analysis</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -91,14 +88,15 @@ div.csl-indent {
 <link href="../chapters/part_04.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -129,7 +127,7 @@ div.csl-indent {
 <style>html{ scroll-behavior: smooth; }</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -182,7 +180,9 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -902,7 +902,7 @@ Figure&nbsp;14.1: Comparison of the structure of data frames and matrices in R.
 <h3 data-number="14.4.1" class="anchored" data-anchor-id="sec-review-lin-def"><span class="header-section-number">14.4.1</span> What is “linear”?</h3>
 <p><strong>Linear models</strong> are called <em>linear</em> models because they can be expressed as <strong>linear combinations</strong> of a set of estimated parameters. A linear combination is an expression formed by multiplying each term by a constant, and adding the products together. For example,</p>
 <p><span class="math display">\[ax+by\]</span></p>
-<p>is a linear combination of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, where <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are constants. The <span class="math inline">\(x\)</span> and the <span class="math inline">\(y\)</span> could be single values, or, as commonly used in statistics, <strong>vectors</strong> of values. A vector in this sense is an ordered set of values. One example of a linear combination that you’re already familiar with is a <a href="sec-desc-cen-mean-wm">weighted mean</a>. The weighted mean of a set of numbers <span class="math inline">\(\left[x_1,x_2,\ldots,x_n\right]\)</span> is given by the sum</p>
+<p>is a linear combination of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, where <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are constants. The <span class="math inline">\(x\)</span> and the <span class="math inline">\(y\)</span> could be single values, or, as commonly used in statistics, <strong>vectors</strong> of values. A vector in this sense is an ordered set of values. One example of a linear combination that you’re already familiar with is a <a href="@sec-desc-cen-mean-wm">weighted mean</a>. The weighted mean of a set of numbers <span class="math inline">\(\left[x_1,x_2,\ldots,x_n\right]\)</span> is given by the sum</p>
 <p><span class="math display">\[\bar{x}_w=\sum_i^n\left(\frac{w_i}{\sum_i^nw_i}\right)x_i\]</span></p>
 <p>Because the sum of all weights must be 1, this simplifies to:</p>
 <p><span class="math display">\[\bar{x}_w=\sum_i^n\left(w_i\right)x_i\]</span></p>
@@ -1046,7 +1046,7 @@ y_i\sim Normal\left(\eta_i,\ \sigma_{res}\right)
 <h2 data-number="14.5" class="anchored" data-anchor-id="sec-review-lin-anova"><span class="header-section-number">14.5</span> Analysis of variance (ANOVA)</h2>
 <p>The term <strong>analysis of variance (ANOVA)</strong> is used in two related ways, and we need to clear them up before the next module. In introductory statistics, ANOVA usually refers to a linear model used to compare means among groups, such as comparing mean body mass among three species of frog. If someone says something like, “we compared the treatments using ANOVA”, this is the sense they mean. We will explore this sense of ANOVA in <a href="ch15.html#sec-groups-more-anova" class="quarto-xref"><span>Section 15.5.1</span></a>.</p>
 <p>More generally, ANOVA refers to a framework for evaluating how variation is attributed to different components of a statistical model. This is called “partitioning the variance” or “partitioning sums of squares”. For example, an ANOVA table can be used to test a linear regression even when the predictor is continuous and there are no groups to compare. The function of ANOVA in that case is to determine how much variation is explained by the different predictors–be they continuous or factors–in the model and how much variation is left over (residual). We will explore this sense of ANOVA in <a href="ch15.html#sec-groups-more-anova-1way" class="quarto-xref"><span>Section 15.5.1.1</span></a>.</p>
-<p>This broader usage is reflected in R’s <code>anova()</code> function, which can be applied to many kinds of models. For ordinary linear models, ANOVA tests are based on partitioning sums of squares. For generalized linear models, analogous tests are commonly based on changes in <strong>deviance</strong> rather than sums of squares. Deviance is a generalization of variance (which is calculated from sums of squares), so sums of squares are a special case of deviance (<a href="ch18.html#sec-glm1-dev" class="quarto-xref"><span>Section 18.4</span></a>). This reflects the fact that linear models based on sums of squares are a special case of generalized linear models (<a href="ch18.html" class="quarto-xref"><span>Chapter 18</span></a>).</p>
+<p>This broader usage is reflected in R’s <code>anova()</code> function, which can be applied to many kinds of models. For ordinary linear models, ANOVA tests are based on partitioning sums of squares. For generalized linear models, analogous tests are commonly based on changes in <strong>deviance</strong> rather than sums of squares. Deviance is a generalization of variance (which is calculated from sums of squares), so sums of squares are a special case of deviance (<a href="ch18.html#sec-glm1-lik-dev" class="quarto-xref"><span>Section 18.3.2</span></a>). This reflects the fact that linear models based on sums of squares are a special case of generalized linear models (<a href="ch18.html" class="quarto-xref"><span>Chapter 18</span></a>).</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list">

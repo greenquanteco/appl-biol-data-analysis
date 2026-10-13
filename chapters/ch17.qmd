@@ -150,7 +150,85 @@ Despite that fact that is has been recommended in literature for over 3 decades,
 
 ## McNemar's test for paired data {#sec-mcnemar}
 
-Sometimes we collect data on the same experimental units at two occasions, with the idea being to compare the change from one time to another. For example, a clinical trial might compare the efficacy of a vaccine in patients that 
+McNemar's test is essentially the paired-data counterpart of a chi-squared test for two samples for two binary variables. Sometimes we collect data on a categorical outcome from the same experimental units at two occasions, with the idea being to compare the change from one time to another--say, before and after some intervention. For example, imagine you are studying the prevalence of some nematode parasite in a population of 100 mice. You test each mouse for infection, administer an antihelminthic, and test the same mice again 3 weeks later. The data might look like this:
+
+|  | After: Infected | After: Not infected |Row totals|
+|:------------------|---------:|-------:|---------:|
+| Before: Infected      | 20        | 30      |50    |
+| Before: Not infected   | 10      | 40      | 50    |
+| Column totals     |30     | 70  | 100  |
+
+And you might think of trying a chi-squared test. But, an ordinary Pearson chi-squared test would be inappropriate because each mouse contributes not one, but *two* observations. So, a chi-squared test asks the question, "Is the probability of a mouse being in the "After: Not infected" group or the "After: Infected group" independent of whether that mouse was in the "Before: Not infected" or "Before: Infected" group?". McNemar's test asks, "Is the probability of changing from infected to uninfected equal to the probability of changing from uninfected to infected?"
+
+McNemar's test works by considering only the discordant pairs. For the data above, we have:
+
+- 20 mice started infected and remained infected
+- 40 mice started uninfected and remained uninfected
+- 30 mice changed from infected to uninfected
+- 10 mice changed from uninfected to infected
+
+The 60 mice that didn't change status don't tell us much about the direction of change. Consequently, they don't contribute to the test statistic. For a $2\times2$ table, we define:
+
+- $b$, the number changing from infected to uninfected
+- $c$, the number changing from uninfected to infected
+
+Then calculate the McNemar version of the $\chi^2$ statistic:
+
+$$\chi^2_{McNemar}=\frac{\left(b-c\right)^2}{b+c}$$
+
+In the example,
+
+$$\chi^2_{McNemar}=\frac{\left(30-10\right)^2}{30+10}=10$$
+
+This statistic follows a $\chi^2$ distribution with one degree of freedom, giving us $p\approx0.0016$. This test is deceptively simple: if 40 mice changed status, how unlikely was it that 30 of those 40 were in one direction?
+
+If that last question reminds you of a binomial question, then you are paying attention. That version of that question is the same as asking, "If we flip 40 fair coins, did we get a highly unlikely number of heads or tails?" We can estimate the probability of getting 10 or fewer heads, or 30 or more heads, like this:
+
+```{r}
+sum(dbinom(c(0:10, 30:40), 40, 0.5))
+```
+
+Or visually:
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+#| echo: false
+x <- 0:40
+y <- dbinom(x, 40, 0.5)
+cols <- rep("grey70", length(7))
+cols[c(1:11, 31:41)] <- "red3"
+    
+par(mar=c(5.1, 5.1, 1.1, 1.1), bty="n", lend=1, las=1, 
+    cex.axis=1.3, cex.lab=1.3)
+barplot(y, xlab="Number of heads", ylab="Probability mass", col=cols)
+
+```
+
+The exact McNemar test is just a binomial sign test applied to the discordant pairs. Under the null hypothesis that $p\left(Infected\rightarrow~Uninfected\right)=p\left(Uninfected\rightarrow~Infected\right)$, 
+
+$$b\sim~Binomial\left(n=b+c,p=0.5\right)$$
+
+So in R we can perform:
+
+```{r}
+binom.test(30, 40, p=0.5)
+```
+
+The $p$-value may differ a bit from the actual McNemar test because the latter uses a chi-square approximation. 
+
+R has a built-in fuction, `mcnemar.test()`, which accepts a $2\times2$ contingency table:
+
+```{r}
+a <- matrix(c(20, 10, 30, 40), nrow=2)
+mcnemar.test(a)
+```
+
+By default, R applies a small correction ("`continuity correction`") which makes the test more conservative.
+
+$$\chi^2_{McNemar}=\frac{\left(\left|b-c\right|-1\right)^2}{b+c}$$
+
+There are also extensions of McNemar's test for more than two categories, often called the **McNemar–Bowker test** or **Bowker's test of symmetry**.
 
 ## Contingency tests and odds ratios {#sec-indep-odds}
 

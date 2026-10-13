@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>19&nbsp; GLM for continuous response data – Applied Biological Data Analysis</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -22,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -37,14 +69,15 @@ ul.task-list li input[type="checkbox"] {
 <link href="../chapters/ch18.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -74,6 +107,35 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -99,7 +161,9 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -439,8 +503,16 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#sec-glm2-gauss" id="toc-sec-glm2-gauss" class="nav-link active" data-scroll-target="#sec-glm2-gauss"><span class="header-section-number">19.1</span> Gaussian GLM</a></li>
-  <li><a href="#sec-glm2-lognorm" id="toc-sec-glm2-lognorm" class="nav-link" data-scroll-target="#sec-glm2-lognorm"><span class="header-section-number">19.2</span> Log-normal GLM</a></li>
-  <li><a href="#sec-glm2-gamma" id="toc-sec-glm2-gamma" class="nav-link" data-scroll-target="#sec-glm2-gamma"><span class="header-section-number">19.3</span> Gamma GLM</a></li>
+  <li><a href="#sec-glm2-gausslog" id="toc-sec-glm2-gausslog" class="nav-link" data-scroll-target="#sec-glm2-gausslog"><span class="header-section-number">19.2</span> Gaussian GLM with a log link</a>
+  <ul class="collapse">
+  <li><a href="#sec-glm2-gausslog-sim" id="toc-sec-glm2-gausslog-sim" class="nav-link" data-scroll-target="#sec-glm2-gausslog-sim"><span class="header-section-number">19.2.1</span> Example with simulated data</a></li>
+  <li><a href="#sec-glm2-gausslog-real" id="toc-sec-glm2-gausslog-real" class="nav-link" data-scroll-target="#sec-glm2-gausslog-real"><span class="header-section-number">19.2.2</span> Example with real data</a></li>
+  </ul></li>
+  <li><a href="#sec-glm2-gamma" id="toc-sec-glm2-gamma" class="nav-link" data-scroll-target="#sec-glm2-gamma"><span class="header-section-number">19.3</span> Gamma GLM</a>
+  <ul class="collapse">
+  <li><a href="#sec-glm2-gamma-sim" id="toc-sec-glm2-gamma-sim" class="nav-link" data-scroll-target="#sec-glm2-gamma-sim"><span class="header-section-number">19.3.1</span> Example with simulated data</a></li>
+  <li><a href="#sec-glm2-gamma-real" id="toc-sec-glm2-gamma-real" class="nav-link" data-scroll-target="#sec-glm2-gamma-real"><span class="header-section-number">19.3.2</span> Example with real data</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch19.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -468,14 +540,615 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="sec-glm2-gauss" class="level2" data-number="19.1">
 <h2 data-number="19.1" class="anchored" data-anchor-id="sec-glm2-gauss"><span class="header-section-number">19.1</span> Gaussian GLM</h2>
+<p>The simplest case of the GLM is the one with a Gaussian response distribution and an identity link function. In state-space notation this is:</p>
+<p><span class="math display">\[y\sim Normal\left(E\left(y\right),\sigma_{res}\right)\]</span></p>
+<p><span class="math display">\[E\left(y\right)=\eta\]</span></p>
+<p><span class="math display">\[\eta=\boldsymbol{\beta}\mathbf{X}\]</span></p>
+<p><span class="math display">\[\sigma_{res}&gt;0\]</span></p>
+<p>If that looks familiar, it should. A Gaussian GLM is just another way to say, “ordinary linear regression”. We covered linear regression (and linear models in general) in <a href="ch16.html#sec-lin-lm" class="quarto-xref"><span>Section 16.2</span></a>. Refer to <a href="ch16.html#sec-lin-reg" class="quarto-xref"><span>Section 16.3</span></a> for exposition and a worked example.</p>
 </section>
-<section id="sec-glm2-lognorm" class="level2" data-number="19.2">
-<h2 data-number="19.2" class="anchored" data-anchor-id="sec-glm2-lognorm"><span class="header-section-number">19.2</span> Log-normal GLM</h2>
+<section id="sec-glm2-gausslog" class="level2" data-number="19.2">
+<h2 data-number="19.2" class="anchored" data-anchor-id="sec-glm2-gausslog"><span class="header-section-number">19.2</span> Gaussian GLM with a log link</h2>
+<p>If we add a log link function to the Gaussian GLM, we get a new model:</p>
+<p><span class="math display">\[y\sim Normal\left(\mu,\sigma_{res}\right)\]</span></p>
+<p><span class="math display">\[\log{\mu}=\boldsymbol{\beta}\mathbf{X}\]</span></p>
+<p>Just as in linear regression, the response distribution follows a normal distribution, but its expected value <span class="math inline">\(\mu\)</span> is related to the linear predictors through a log link function. This appears similar to fitting a linear regression on log-transformed <span class="math inline">\(y\)</span> variable, but it is not the same. The differences are summarized here:</p>
+<div id="tbl-log-transform-vs-link" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-log-transform-vs-link-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;19.1: Comparison of a log-transformed linear model and a Gaussian GLM with a log link. In both models, <span class="math inline">\(\eta=\beta_0+\beta_1x\)</span> is the linear predictor.
+</figcaption>
+<div aria-describedby="tbl-log-transform-vs-link-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Property</th>
+<th><code>lm(log(y) ~ x)</code></th>
+<th><code>glm(y ~ x, gaussian(link = "log"))</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Response distribution</td>
+<td>Lognormal</td>
+<td>Normal</td>
+</tr>
+<tr class="even">
+<td>What is modeled linearly?</td>
+<td><span class="math inline">\(E[\log(Y)\mid x]\)</span></td>
+<td><span class="math inline">\(\log(E[Y\mid x])\)</span></td>
+</tr>
+<tr class="odd">
+<td>Error variance</td>
+<td>Constant on log scale</td>
+<td>Constant on original scale</td>
+</tr>
+<tr class="even">
+<td>Predicted mean on original scale</td>
+<td><span class="math inline">\(\exp(\eta+\sigma^2/2)\)</span></td>
+<td><span class="math inline">\(\exp(\eta)\)</span></td>
+</tr>
+<tr class="odd">
+<td>Predicted median on original scale</td>
+<td><span class="math inline">\(\exp(\eta)\)</span></td>
+<td><span class="math inline">\(\exp(\eta)\)</span></td>
+</tr>
+<tr class="even">
+<td>Possible predicted values</td>
+<td>Positive</td>
+<td>Positive</td>
+</tr>
+<tr class="odd">
+<td>Possible observed values under model</td>
+<td>Positive only</td>
+<td>Any real number</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>That last row is very important. A log-transformed linear regression (left column) is restricted to positive observed <span class="math inline">\(y\)</span> values. The Gaussian GLM with a log link function, however, can have observed values that are negative, zero, or positive. It is only the expected value <span class="math inline">\(\exp(\eta)\)</span> that is constrained to be positive.</p>
+<section id="sec-glm2-gausslog-sim" class="level3" data-number="19.2.1">
+<h3 data-number="19.2.1" class="anchored" data-anchor-id="sec-glm2-gausslog-sim"><span class="header-section-number">19.2.1</span> Example with simulated data</h3>
+<p>Let’s explore the Gaussian GLM with log link by first simulating some data and then analyzing them.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>beta0 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">5.1</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>beta1 <span class="ot">&lt;-</span> <span class="fl">0.8</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>eta <span class="ot">&lt;-</span> beta0 <span class="sc">+</span> beta1<span class="sc">*</span>x</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="fu">exp</span>(eta), sigma)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x,y,<span class="at">pch=</span><span class="dv">16</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch19_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>At first glance, these data are a mess! A linear regression is probably inappropriate, because the pattern does not form a straight line. Worse, the variance appears to vary across the domain of <span class="math inline">\(x\)</span>. We would just log-transform these data, but this would require dropping the negative values.</p>
+<p>Instead, we apply the Gaussian GLM with log link. This model requires you to supply some starting values for the fitting algorithm. We will supply starting means (<code>mustart</code>, for the <span class="math inline">\(\mu\)</span> term above).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(y<span class="sc">~</span>x, <span class="at">family=</span><span class="fu">gaussian</span>(<span class="at">link=</span><span class="st">"log"</span>),</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">mustart=</span><span class="fu">rep</span>(<span class="dv">1</span>,n))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>and inspect the fitted values:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = y ~ x, family = gaussian(link = "log"), mustart = rep(1, 
+    n))
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  -7.4178     1.5374  -4.825 1.46e-05 ***
+x             1.0554     0.1614   6.540 3.73e-08 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for gaussian family taken to be 7.438905)
+
+    Null deviance: 1551.89  on 49  degrees of freedom
+Residual deviance:  357.13  on 48  degrees of freedom
+AIC: 246.2
+
+Number of Fisher Scoring iterations: 12</code></pre>
+</div>
+</div>
+<p>Alternatively, we can try supplying guesses at the model parameters. You can supply these as a simple vector (unlike the <code>start</code> argument in <code>nls()</code>).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mod2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(y<span class="sc">~</span>x, <span class="at">family=</span><span class="fu">gaussian</span>(<span class="at">link=</span><span class="st">"log"</span>),</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">start=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">1</span>))</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = y ~ x, family = gaussian(link = "log"), start = c(-3, 
+    1))
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  -7.4177     1.5378  -4.823 1.47e-05 ***
+x             1.0554     0.1614   6.538 3.76e-08 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for gaussian family taken to be 7.443956)
+
+    Null deviance: 1551.89  on 49  degrees of freedom
+Residual deviance:  357.13  on 48  degrees of freedom
+AIC: 246.2
+
+Number of Fisher Scoring iterations: 9</code></pre>
+</div>
+</div>
+<p>If we are satisfied with that model fit, we can plot the model predictions and their 95% confidence interval (CI).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># x values</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(x), <span class="fu">max</span>(x), <span class="at">length=</span><span class="dv">100</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate prediction</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod2, <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">x=</span>px),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">type=</span><span class="st">"link"</span>, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>invlink <span class="ot">&lt;-</span> mod2<span class="sc">$</span>family<span class="sc">$</span>linkinv</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>mn <span class="ot">&lt;-</span> <span class="fu">invlink</span>(<span class="fu">qnorm</span>(<span class="fl">0.5</span>, pred<span class="sc">$</span>fit, pred<span class="sc">$</span>se.fit))</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>lo <span class="ot">&lt;-</span> <span class="fu">invlink</span>(<span class="fu">qnorm</span>(<span class="fl">0.025</span>, pred<span class="sc">$</span>fit, pred<span class="sc">$</span>se.fit))</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>up <span class="ot">&lt;-</span> <span class="fu">invlink</span>(<span class="fu">qnorm</span>(<span class="fl">0.975</span>, pred<span class="sc">$</span>fit, pred<span class="sc">$</span>se.fit))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x,y,<span class="at">pch=</span><span class="dv">16</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, lo, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, up, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, mn, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch19_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The figure above shows the behavior of the Gaussian log-link model: it constrains the predicted response to be positive, but does not constrain the observations to be positive. It seems like the 95% CI should include negative values, but remember that the CI is a statement of uncertainty about the predicted mean <span class="math inline">\(\mu\)</span>, not about the whole distribution of response values. That would be a <strong>prediction interval</strong>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 95% prediction interval</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sigma_hat <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">summary</span>(mod2)<span class="sc">$</span>dispersion)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Approximate SE of fitted mean on response scale (delta method)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>se_mean <span class="ot">&lt;-</span> mn <span class="sc">*</span> pred<span class="sc">$</span>se.fit</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>lo_pred <span class="ot">&lt;-</span> mn <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="fu">sqrt</span>(sigma_hat<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> se_mean<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>up_pred <span class="ot">&lt;-</span> mn <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="fu">sqrt</span>(sigma_hat<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> se_mean<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x,y,<span class="at">pch=</span><span class="dv">16</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, lo, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, up, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, mn, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, up_pred, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">3</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, lo_pred, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">3</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>,</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"Confidence interval"</span>, <span class="st">"Prediction interval"</span>),</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>),</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch19_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-glm2-gausslog-real" class="level3" data-number="19.2.2">
+<h3 data-number="19.2.2" class="anchored" data-anchor-id="sec-glm2-gausslog-real"><span class="header-section-number">19.2.2</span> Example with real data</h3>
+<p>Let’s use the NEON data for a quick example. Download the <a href="..datasets/dat-neon-site-rich-env.csv">site-level richness and environmental dataset</a> and put it in your working directory.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"dat-neon-site-rich-env.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We expect that mean annual temperature (<code>dx$mat</code>) should decrease with latitude, and a scatterplot confirms that:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx<span class="sc">$</span>lat, dx<span class="sc">$</span>mat,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="fu">expression</span>(Latitude<span class="sc">~</span>(degree<span class="sc">*</span>N)),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="fu">expression</span>(Mean<span class="sc">~</span>annual<span class="sc">~</span>temp<span class="sc">~</span>(degree<span class="sc">*</span>C)),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span><span class="dv">16</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch19_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This seems pretty linear, but there might be some heteroscedasticity issues in the middle latitudes. Let’s fit an ordinary linear regression and a Guassian log-link GLM.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mat<span class="sc">~</span>lat, <span class="at">data=</span>dx)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>mod2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(mat<span class="sc">~</span>lat, <span class="at">data=</span>dx, <span class="at">family=</span><span class="fu">gaussian</span>(<span class="at">link=</span><span class="st">"log"</span>),</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">start=</span><span class="fu">c</span>(<span class="dv">5</span>, <span class="sc">-</span><span class="fl">0.05</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = mat ~ lat, data = dx)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-12.1246  -1.2153   0.4925   2.2915   4.0075 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 38.71669    1.80821   21.41   &lt;2e-16 ***
+lat         -0.69777    0.04262  -16.37   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.196 on 44 degrees of freedom
+Multiple R-squared:  0.859, Adjusted R-squared:  0.8558 
+F-statistic: 268.1 on 1 and 44 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = mat ~ lat, family = gaussian(link = "log"), data = dx, 
+    start = c(5, -0.05))
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  4.417070   0.189858  23.265  &lt; 2e-16 ***
+lat         -0.053399   0.005871  -9.096 1.14e-11 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for gaussian family taken to be 21.4084)
+
+    Null deviance: 3187.12  on 45  degrees of freedom
+Residual deviance:  942.03  on 44  degrees of freedom
+AIC: 275.43
+
+Number of Fisher Scoring iterations: 7</code></pre>
+</div>
+</div>
+<p>Compare the two model predictions:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(dx<span class="sc">$</span>lat), <span class="fu">max</span>(dx<span class="sc">$</span>lat))</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>prx <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">lat=</span>px)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>pred1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod1, <span class="at">newdata=</span>prx, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>pred2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod2, <span class="at">newdata=</span>prx, <span class="at">type=</span><span class="st">"link"</span>, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>prx<span class="sc">$</span>lo1 <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.025</span>, pred1<span class="sc">$</span>fit, pred1<span class="sc">$</span>se.fit)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>prx<span class="sc">$</span>mn1 <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.5</span>, pred1<span class="sc">$</span>fit, pred1<span class="sc">$</span>se.fit)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>prx<span class="sc">$</span>up1 <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>, pred1<span class="sc">$</span>fit, pred1<span class="sc">$</span>se.fit)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>prx<span class="sc">$</span>lo2 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.025</span>, pred2<span class="sc">$</span>fit, pred2<span class="sc">$</span>se.fit))</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>prx<span class="sc">$</span>mn2 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.5</span>, pred2<span class="sc">$</span>fit, pred2<span class="sc">$</span>se.fit))</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>prx<span class="sc">$</span>up2 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.975</span>, pred2<span class="sc">$</span>fit, pred2<span class="sc">$</span>se.fit))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx<span class="sc">$</span>lat, dx<span class="sc">$</span>mat,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="fu">expression</span>(Latitude<span class="sc">~</span>(degree<span class="sc">*</span>N)),</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="fu">expression</span>(Mean<span class="sc">~</span>annual<span class="sc">~</span>temp<span class="sc">~</span>(degree<span class="sc">*</span>C)),</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span><span class="dv">16</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prx<span class="sc">$</span>lat, prx<span class="sc">$</span>lo1, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prx<span class="sc">$</span>lat, prx<span class="sc">$</span>up1, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prx<span class="sc">$</span>lat, prx<span class="sc">$</span>mn1, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>,        <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prx<span class="sc">$</span>lat, prx<span class="sc">$</span>lo2, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">3</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prx<span class="sc">$</span>lat, prx<span class="sc">$</span>up2, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">3</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(prx<span class="sc">$</span>lat, prx<span class="sc">$</span>mn2, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>,        <span class="at">col=</span><span class="st">"blue"</span>)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>,</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"LM"</span>,</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Gaussian log-link GLM"</span>),</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>),</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch19_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 </section>
 <section id="sec-glm2-gamma" class="level2" data-number="19.3">
 <h2 data-number="19.3" class="anchored" data-anchor-id="sec-glm2-gamma"><span class="header-section-number">19.3</span> Gamma GLM</h2>
+<p>This section explores GLMs for data following a <strong>gamma distribution</strong>. Gamma-distributed data can show up in two ways in biology: waiting times, or overdispersed continuous data (i.e., data where <span class="math inline">\(\sigma &gt; \mu\)</span>). The latter case may also be well-modeled by a <a href="@sec-glm2-gausslog">Gaussian GLM with log-link</a>, but the gamma GLM offers an elegant (and under-utilized) alternative.</p>
+<p><strong>Gamma regression</strong> is a GLM where response values follow a gamma distribution. The gamma distribution usually describes one of two kinds of data: waiting times until a certain number of events occur, or right-skewed continuous data. The gamma distribution is the continuous analogue of the negative binomial distribution. The figure below shows this:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch19_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A gamma distribution with shape <em>a</em> and scale <em>s</em> is basically a continuous version of a negative binomial distribution with size <em>n</em> and probability <em>p</em> according to the following relationships:</p>
+<p><span class="math display">\[a=\frac{\mu^2}{\sigma^2}\]</span></p>
+<p><span class="math display">\[s=\frac{\mu}{a}\]</span></p>
+<p>Where <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> can be calculated from the parameters of the negative binomial distribution as:</p>
+<p><span class="math display">\[\mu=\frac{n\left(1-p\right)}{p}\]</span></p>
+<p><span class="math display">\[\sigma^2=\frac{n\left(1-p\right)}{p^2}\]</span></p>
+<p>The relationships above can be used to convert between gamma distributions and negative binomial distributions with other parameterizations. For example, ecologists often use an alternate version of the negative binomial with mean <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^{2}=\mu + (\mu^{2}/k)\)</span>.</p>
+<p>Like the negative binomial, biologists can take advantage of the numerical properties of the gamma to model phenomena for which the variance is much greater than the mean. The gamma distribution can only take on nonnegative values, so if you have negative values you may not be able to use it.</p>
+<section id="sec-glm2-gamma-sim" class="level3" data-number="19.3.1">
+<h3 data-number="19.3.1" class="anchored" data-anchor-id="sec-glm2-gamma-sim"><span class="header-section-number">19.3.1</span> Example with simulated data</h3>
+<p>As always, we will start with analysis of simulated data. Notice that we are using <strong>log link function</strong>. The canonical link for the gamma distribution is the <strong>reciprocal function</strong> (<span class="math inline">\(f(x)=1/x\)</span>). However, the reciprocal function is more applicable for the “waiting time” interpretation of the distribution. For the “right-skewed non-negative distribution” interpretation, the log or identity links can be appropriate. However, the log-link cannot be used if your data contain 0s.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">runif</span>(n, <span class="dv">0</span>, <span class="dv">4</span>), <span class="dv">1</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># coefficients</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>beta0 <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>beta1 <span class="ot">&lt;-</span> <span class="fl">1.2</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># linear predictor</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>eta <span class="ot">&lt;-</span> beta0 <span class="sc">+</span> beta1 <span class="sc">*</span> x</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co"># inverse link</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">exp</span>(eta)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co"># gamma parameter</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>shape <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="co"># draw y values (stochastic part)</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(n, <span class="at">rate=</span>shape<span class="sc">/</span>y, <span class="at">shape=</span>shape)</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="co"># assemble dataset</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x=</span>x, <span class="at">y=</span>y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now, take a look at the data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x,y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch19_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The relationship looks like it might be log-linear—i.e., linear on a logarithmic scale. We can check that with another scatterplot:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, <span class="fu">log</span>(y))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch19_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>When <em>y</em> is log-transformed, things look linear. We will try a Gaussian GLM with log link function. Because the variance looks like it increases at larger <em>X</em> values, we will also try a gamma GLM. One characteristic of the gamma distribution is that the variance is proportional to the mean squared, which might be the case here.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(y<span class="sc">~</span>x, <span class="at">data=</span>dat, <span class="at">family=</span><span class="fu">gaussian</span>(<span class="at">link=</span><span class="st">"log"</span>))</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = y ~ x, family = gaussian(link = "log"), data = dat)
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   1.8969     0.6141   3.089   0.0045 ** 
+x             0.8122     0.1725   4.708 6.16e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for gaussian family taken to be 1650.88)
+
+    Null deviance: 128445  on 29  degrees of freedom
+Residual deviance:  46225  on 28  degrees of freedom
+AIC: 311.34
+
+Number of Fisher Scoring iterations: 6</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>mod2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(y<span class="sc">~</span>x, <span class="at">data=</span>dat, <span class="at">family=</span><span class="fu">Gamma</span>(<span class="at">link=</span><span class="st">"log"</span>))</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = y ~ x, family = Gamma(link = "log"), data = dat)
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.99844    0.17787   5.613 5.21e-06 ***
+x            1.08949    0.06932  15.717 2.02e-15 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for Gamma family taken to be 0.1887889)
+
+    Null deviance: 41.3449  on 29  degrees of freedom
+Residual deviance:  5.4667  on 28  degrees of freedom
+AIC: 245.54
+
+Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+</div>
+<p>Notice that the parameter estimates from the gamma GLM were much closer to “reality” than those of the Gaussian GLM. Which model performed better? The pseudo-<em>R</em><sup>2</sup> suggests the gamma:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span>mod1<span class="sc">$</span>deviance<span class="sc">/</span>mod1<span class="sc">$</span>null.deviance</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6401217</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span>mod2<span class="sc">$</span>deviance<span class="sc">/</span>mod2<span class="sc">$</span>null.deviance</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8677773</code></pre>
+</div>
+</div>
+<p>The best test is to plot the predicted values against the actual values and compare the models.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># values for prediction</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>use.n <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(x), <span class="fu">max</span>(x), <span class="at">length=</span>use.n)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate predictions and CI</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>pred1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod1, <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">x=</span>px),</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">type=</span><span class="st">"link"</span>, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>mn1 <span class="ot">&lt;-</span> pred1<span class="sc">$</span>fit</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>lo1 <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.025</span>, mn1, pred1<span class="sc">$</span>se.fit)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>up1 <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>, mn1, pred1<span class="sc">$</span>se.fit)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="co"># inverse link function</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>mn1 <span class="ot">&lt;-</span> mod1<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(mn1)</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>lo1 <span class="ot">&lt;-</span> mod1<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(lo1)</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>up1 <span class="ot">&lt;-</span> mod1<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(up1)</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate predictions and CI for gamma model</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>pred2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod2, <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">x=</span>px),</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>                 <span class="at">type=</span><span class="st">"link"</span>, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>mn2 <span class="ot">&lt;-</span> pred1<span class="sc">$</span>fit</span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>lo2 <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.025</span>, mn2, pred2<span class="sc">$</span>se.fit)</span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>up2 <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>, mn2, pred2<span class="sc">$</span>se.fit)</span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a><span class="co"># inverse link function</span></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>mn2 <span class="ot">&lt;-</span> mod1<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(mn2)</span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>lo2 <span class="ot">&lt;-</span> mod1<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(lo2)</span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>up2 <span class="ot">&lt;-</span> mod1<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(up2)</span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a><span class="co"># make plot</span></span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x,y, <span class="at">main=</span><span class="st">"Normal GLM"</span>)</span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(<span class="at">x=</span><span class="fu">c</span>(px, <span class="fu">rev</span>(px)), <span class="at">y=</span><span class="fu">c</span>(lo1, <span class="fu">rev</span>(up1)),</span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">border=</span><span class="cn">NA</span>, <span class="at">col=</span><span class="st">"grey80"</span>)</span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, mn1, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(x, y)</span>
+<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x,y, <span class="at">main=</span><span class="st">"Gamma GLM"</span>)</span>
+<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(<span class="at">x=</span><span class="fu">c</span>(px, <span class="fu">rev</span>(px)), <span class="at">y=</span><span class="fu">c</span>(lo2, <span class="fu">rev</span>(up2)),</span>
+<span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a>        <span class="at">border=</span><span class="cn">NA</span>, <span class="at">col=</span><span class="st">"grey80"</span>)</span>
+<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, mn2, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(x, y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch19_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The gamma GLM captured the heteroscedasticity in the data (non-constant variance) better than the Gaussian (normal) GLM. We should conclude that the gamma GLM better represents the data. If you have a heteroscedastic relationship that isn’t well-modeled by other GLMs, the gamma GLM might be worth a try.</p>
+</section>
+<section id="sec-glm2-gamma-real" class="level3" data-number="19.3.2">
+<h3 data-number="19.3.2" class="anchored" data-anchor-id="sec-glm2-gamma-real"><span class="header-section-number">19.3.2</span> Example with real data</h3>
+<p>Returning to the NEON data, consider this plot of net primary productivity vs.&nbsp;latitude. If you don’t already have it, download the <a href="..datasets/dat-neon-site-rich-env.csv">site-level richness and environmental dataset</a> and put it in your working directory.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx<span class="sc">$</span>lat, dx<span class="sc">$</span>npp,</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="fu">expression</span>(Latitude<span class="sc">~</span>(degree<span class="sc">*</span>N)),</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="fu">expression</span>(g<span class="sc">~</span>C<span class="sc">~</span>m<span class="sc">^</span>{<span class="sc">-</span><span class="dv">2</span>}<span class="sc">~</span>yr<span class="sc">^</span>{<span class="sc">-</span><span class="dv">1</span>}))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch19_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>There is clearly a negative trend, but a linear model might be inappropriate because of how much variance there is around the middle latitudes. This is a sampling bias: most NEON sites are in the continental US, which is largely between 30 and 50 degrees north latitude. Still, the heteroscedasticity is there and need to account for it. Let’s try a gamma GLM.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>mod3 <span class="ot">&lt;-</span> <span class="fu">glm</span>(npp<span class="sc">~</span>lat, <span class="at">data=</span>dx, <span class="at">family=</span><span class="fu">Gamma</span>(<span class="at">link=</span><span class="st">"log"</span>))</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = npp ~ lat, family = Gamma(link = "log"), data = dx)
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  8.445877   0.174237  48.473  &lt; 2e-16 ***
+lat         -0.036232   0.004107  -8.823 2.74e-11 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for Gamma family taken to be 0.09483091)
+
+    Null deviance: 10.8370  on 45  degrees of freedom
+Residual deviance:  5.2205  on 44  degrees of freedom
+AIC: 672.57
+
+Number of Fisher Scoring iterations: 5</code></pre>
+</div>
+</div>
+<p>The pseudo-<span class="math inline">\(R^2\)</span> is encouraging:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span>mod3<span class="sc">$</span>deviance<span class="sc">/</span>mod3<span class="sc">$</span>null.deviance</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5182766</code></pre>
+</div>
+</div>
+<p>Let’s check the model predictions:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># values for prediction</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>use.n <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(dx<span class="sc">$</span>lat), <span class="fu">max</span>(dx<span class="sc">$</span>lat), <span class="at">length=</span>use.n)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate predictions and CI</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod3, <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">lat=</span>px),</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">type=</span><span class="st">"link"</span>, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>mn <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.5</span>, pred<span class="sc">$</span>fit, pred<span class="sc">$</span>se.fit)</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>lo <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.025</span>, pred<span class="sc">$</span>fit, pred<span class="sc">$</span>se.fit)</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>up <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>, pred<span class="sc">$</span>fit, pred<span class="sc">$</span>se.fit)</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="co"># inverse link function</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>mn <span class="ot">&lt;-</span> mod3<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(mn)</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>lo <span class="ot">&lt;-</span> mod3<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(lo)</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>up <span class="ot">&lt;-</span> mod3<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(up)</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a><span class="co"># make plot</span></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx<span class="sc">$</span>lat, dx<span class="sc">$</span>npp,</span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="fu">expression</span>(Latitude<span class="sc">~</span>(degree<span class="sc">*</span>N)),</span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="fu">expression</span>(NPP<span class="sc">~</span>(g<span class="sc">~</span>C<span class="sc">~</span>m<span class="sc">^</span>{<span class="sc">-</span><span class="dv">2</span>}<span class="sc">~</span>yr<span class="sc">^</span>{<span class="sc">-</span><span class="dv">1</span>})),</span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3000</span>))</span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(<span class="at">x=</span><span class="fu">c</span>(px, <span class="fu">rev</span>(px)),</span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">y=</span><span class="fu">c</span>(lo, <span class="fu">rev</span>(up)),</span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">border=</span><span class="cn">NA</span>, <span class="at">col=</span><span class="st">"grey80"</span>)</span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, mn, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(dx<span class="sc">$</span>lat, dx<span class="sc">$</span>npp, <span class="at">pch=</span><span class="dv">16</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch19_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Compare the gamma GLM fit to a Gaussian log-link GLM:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch19_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

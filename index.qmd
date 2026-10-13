@@ -23,7 +23,7 @@ However, it turns out that it's hard to do everything with a single dataset. So,
 
 1.  The famous `iris` dataset included with R. This will be used primarily in early modules covering data manipulation and data frame management, as well as the review of basic statistics in Modules 14 to 17.
 2.  Datasets simulated *ad hoc* to demonstrate simple concepts with no underlying biological reality (e.g., numbers to demonstrate the properties of a probability distribution).
-3.  Small mammal trapping and measurement data from the [National Ecological Observatory Network (NEON)](https://www.neonscience.org/data-collection/small-mammals)[@neon2025]. The details of which data I used and how I packaged them for this website can be found in Appendix A.
+3.  Small mammal trapping and measurement data from the [National Ecological Observatory Network (NEON)](https://www.neonscience.org/data-collection/small-mammals)[@neon2025]. The details of which data I used and how I packaged them for this website can be found in [Appendix A](@sec-appenda).
 
 ## License and permissions {.unnumbered}
 
@@ -139,7 +139,7 @@ This work is roughly organized into 9 parts. The links below will take you strai
 
 [Module 18](chapters/ch18.qmd#sec-glm1) introduces generalized linear models (GLM), an extremely general and powerful framework for analyzing biological data.
 
-[Module 19](chapters/ch19.qmd#sec-glm2) demonstrates GLMs for continuous data: Gaussian, log-normal, and Gamma GLMs.
+[Module 19](chapters/ch19.qmd#sec-glm2) demonstrates GLMs for continuous data: Gaussian, Gaussian log-link, and Gamma GLMs.
 
 [Module 20](chapters/ch20.qmd#sec-glm3) covers GLMs for count data: Poisson and negative binomial GLMs.
 

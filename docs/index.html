@@ -2,18 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Nick Green">
-<meta name="dcterms.date" content="2026-08-15">
+<meta name="dcterms.date" content="2026-10-12">
 
 <title>Applied Biological Data Analysis</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -57,14 +54,15 @@ div.csl-indent {
 <link href="./chapters/part_01.html" rel="next">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -95,7 +93,7 @@ div.csl-indent {
 <style>html{ scroll-behavior: smooth; }</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -148,7 +146,9 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -533,7 +533,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">August 15, 2026</p>
+      <p class="date">October 12, 2026</p>
     </div>
   </div>
   
@@ -550,7 +550,7 @@ window.Quarto = {
 <h1 class="unnumbered">Preface</h1><p><img src="images/lab_logo_02.jpg" title="Applied Biological Data Analysis" class="quarto-cover-image nolightbox img-fluid"></p>
 <p>This website accompanies a course I have developed at Kennesaw State University: <strong>BIOL 7410: Applied Biological Data Analysis</strong>. The target audience is biologists who need to analyze data for their research projects. If you find the material here helpful, please let me know! Likewise, if you have comments for improvement, I’d love to hear from you: send all comments to <a href="mailto:ngreen62@kennesaw.edu">ngreen62@kennesaw.edu</a>!</p>
 <p>If you are a returning visitor, please note that the website has been rearranged since 2024. This was done to make the modules smaller and more digestible.</p>
-<p>The Fall 2025 course syllabus can be <a href="https://greenquanteco.github.io/book/202503%20biol%207410%20syllabus%202025-08-05.pdf">downloaded here</a>.</p>
+<p>The Fall 2026 course syllabus can be <a href="https://greenquanteco.github.io/files/biol-7410-syllabus-fall-2026.pdf">downloaded here</a>.</p>
 <section id="work-in-progress-warning" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="work-in-progress-warning">Work in progress warning!</h2>
 <p>I am actively updating this site throughout the Fall 2026 semester. This means that many cross-references may be broken, pictures missing, etc. Please be patient with me as I get things back into working order.</p>
@@ -593,21 +593,21 @@ window.Quarto = {
 <section id="course-requirements" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="course-requirements">Course requirements</h2>
 <ul>
-<li><p>Access to a computer or laptop capable of running <a href="https://cran.r-project.org/bin/windows/base/">R</a> version 4.0 or above. This site was rendered using R version 4.4.3 and the most recent version of any package mentioned (as of August 8, 2025).</p></li>
+<li><p>Access to a computer or laptop capable of running <a href="https://cran.r-project.org/bin/windows/base/">R</a> version 4.0 or above. This site was rendered using R version 4.4.3 and the most recent version of any package mentioned (as of August 2026).</p></li>
 <li><p>A 64-bit system is highly recommended for speed and stability.</p></li>
 <li><p>A separate program in which to write and edit code.</p>
 <ul>
 <li>Most people prefer to use an “integrated development environment” (IDE) or dedicated code editor for coding. I recommend some in Module 2.</li>
 <li>Most people nowadays prefer <a href="https://posit.co/download/rstudio-desktop/">RStudio</a>. The desktop version is free and has a lot of nice features that make working with R easier.</li>
 <li>IDEs and code editors are often subject to irrationally strong personal and organizational preferences, so just pick the one that works for you. Or, use the one your supervisor tells you to use.</li>
-<li>My usual workflow includes two windows: the base R GUI, and <a href="https://notepad-plus-plus.org/downloads/">Notepad++</a>.</li>
+<li>My usual workflow includes two windows: the base R GUI, and <a href="https://notepad-plus-plus.org/downloads/">Notepad++</a>, although I’ve been using RStudio more and more because of the ease of integrating with Github.</li>
 </ul></li>
 <li><p>It would helpful to have a dataset of your own to work with. Each course module uses numerous examples with simulated or published datasets. But, at the end of the day, you’re probably here because you need to apply these methods to your own work.</p></li>
 </ul>
 </section>
 <section id="recommended-reading" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="recommended-reading">Recommended reading</h2>
-<p>This course has no required textbook. If you want a textbook, then I recommend one of the following:</p>
+<p>This course has no required textbook. Or rather, this website is the textbook. If you want a textbook, then I recommend one of the following:</p>
 <ul>
 <li><p><em>Ecological models and data in R</em> by Ben Bolker <span class="citation" data-cites="bolker2008ecological">(<a href="#ref-bolker2008ecological" role="doc-biblioref">Bolker 2008</a>)</span>. This is a general statistics textbook for biologists. The applications and examples are focused on ecology, but the statistical exposition is relevant to any area of biology.</p></li>
 <li><p><em>Introductory statistics with R</em> by Peter Dalgaard <span class="citation" data-cites="dalgaard2002">(<a href="#ref-dalgaard2002" role="doc-biblioref">Dalgaard 2002</a>)</span>. This is a general statistics textbook and introduction to R programming.</p></li>
@@ -616,7 +616,7 @@ window.Quarto = {
 </ul>
 <p>Parts of the course also lean heavily on some more specialized textbooks:</p>
 <ul>
-<li><p><em>Analysing ecological data</em> <span class="citation" data-cites="zuur2007analysing">(<a href="#ref-zuur2007analysing" role="doc-biblioref">Zuur <em>et al.</em> 2007</a>)</span> and <em>Mixed effects models and extensions in ecology with R</em> <span class="citation" data-cites="zuur2009mixed">(<a href="#ref-zuur2009mixed" role="doc-biblioref"><span class="nocase">Zuur <em>et al.</em></span> 2009a</a>)</span> by Alain Zuur and others. These are advanced textbooks aimed at ecologists which introduce GLMs, mixed models, and other topics we will explore in this course.</p></li>
+<li><p><em>Analysing ecological data</em> <span class="citation" data-cites="zuur2007analysing">(<a href="#ref-zuur2007analysing" role="doc-biblioref">Zuur <em>et al.</em> 2007</a>)</span> and <em>Mixed effects models and extensions in ecology with R</em> <span class="citation" data-cites="zuur2009mixed">(<a href="#ref-zuur2009mixed" role="doc-biblioref">Zuur <em>et al.</em> 2009a</a>)</span> by Alain Zuur and others. These are advanced textbooks aimed at ecologists which introduce GLMs, mixed models, and other topics we will explore in this course.</p></li>
 <li><p><em>Analysis of ecological communities</em> by Bruce McCune and James Grace <span class="citation" data-cites="mccune2002analysis">(<a href="#ref-mccune2002analysis" role="doc-biblioref">McCune <em>et al.</em> 2002</a>)</span> and <em>Numerical ecology</em> by Pierre and Louis Legendre <span class="citation" data-cites="legendre2012numerical">(<a href="#ref-legendre2012numerical" role="doc-biblioref">Legendre and Legendre 2012</a>)</span> are introductions to ordination and other multivariate methods. <span class="citation" data-cites="mccune2002analysis">McCune <em>et al.</em> (<a href="#ref-mccune2002analysis" role="doc-biblioref">2002</a>)</span> is a gentler introduction but depends on <a href="https://www.wildblueberrymedia.net/pcord">proprietary software</a>. <span class="citation" data-cites="legendre2012numerical">Legendre and Legendre (<a href="#ref-legendre2012numerical" role="doc-biblioref">2012</a>)</span> is a little more technical (but still relatively easy to understand) and uses R throughout.</p></li>
 <li><p><em>An introduction to WinBUGS for ecologists</em> by Marc Kéry <span class="citation" data-cites="kery2010">(<a href="#ref-kery2010" role="doc-biblioref">Kéry 2010</a>)</span>. This book introduces Bayesian inference using the free programs WinBUGS or JAGS, which can be accessed from R.</p></li>
 </ul>
@@ -648,7 +648,7 @@ window.Quarto = {
 <p><a href="./chapters/ch17.html#sec-indep">Module 17</a> reviews tests for contingency and independence such as Fisher’s exact test, the <span class="math inline">\(\chi^2\)</span> test, and the <em>G</em>-test.</p>
 <p><strong>Part 5</strong> introduces the powerful framework of the generalized linear model (GLM) for modeling for modeling data with a single response variable.</p>
 <p><a href="./chapters/ch18.html#sec-glm1">Module 18</a> introduces generalized linear models (GLM), an extremely general and powerful framework for analyzing biological data.</p>
-<p><a href="./chapters/ch19.html#sec-glm2">Module 19</a> demonstrates GLMs for continuous data: Gaussian, log-normal, and Gamma GLMs.</p>
+<p><a href="./chapters/ch19.html#sec-glm2">Module 19</a> demonstrates GLMs for continuous data: Gaussian, Gaussian log-link, and Gamma GLMs.</p>
 <p><a href="./chapters/ch20.html#sec-glm3">Module 20</a> covers GLMs for count data: Poisson and negative binomial GLMs.</p>
 <p><a href="./chapters/ch21.html#sec-glm4">Module 21</a> covers GLMs for binomial data and proportional: logistic regression and binomial GLM.</p>
 <p><strong>Part 6</strong> builds upon the GLM framework to introduce nonlinear models and mixed models, which can accomodate many situations where GLMs are inadequate.</p>
@@ -676,13 +676,13 @@ window.Quarto = {
 <p><img src="images/squirrel_pic.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
-<p>I’m a <a href="https://greenquanteco.github.io/research">quantitative ecologist at Kennesaw State University</a> who studies human impacts on animal populations. Since earning my PhD at Baylor University in 2012, I’ve been fortunate to have worked in a variety of government and industry roles. Those experiences have shaped my perspective on biology and education. In my courses and advising I do my best to impress upon students the variety of biological experiences and perspectives that different domains bring to the table…and the value that they all bring. Most of my <a href="https://greenquanteco.github.io/research">current research</a> focuses on understanding human impacts on animal communities and how animal populations adapt to rapidly changing environments.</p>
+<p>I’m a <a href="https://greenquanteco.github.io">quantitative ecologist at Kennesaw State University</a> who studies human impacts on animal populations. Since earning my PhD at Baylor University in 2012, I’ve been fortunate to have worked in a variety of government and industry roles. Those experiences have shaped my perspective on biology and education. In my courses and advising I do my best to impress upon students the variety of biological experiences and perspectives that different domains bring to the table…and the value that they all bring. Most of my <a href="https://greenquanteco.github.io/research">current research</a> focuses on understanding human impacts on animal communities and how animal populations adapt to rapidly changing environments.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/lab_logo_02.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
-<p>Why am I making this guide? I have been using R since about 2008, when I was a graduate student trying to make a multi-panel plot for a manuscript. I had seen R mentioned in publications and thought that using R would be more effective than kludging something together with Excel and Powerpoint. Needless to say, jumping straight to making plots with the <code>lattice</code> package was not the easiest way to learn R. The final result was a little clunky <span class="citation" data-cites="kirchner2011">(<a href="#ref-kirchner2011" role="doc-biblioref">Kirchner <em>et al.</em> 2011</a>)</span> but I am still really proud of it. Eventually I took some courses and did a lot of self-teaching, and am finally (March 2025) pretty decent at R. I have used R in my work pretty much continuously since 2008 for everything from Bayesian data analysis <span class="citation" data-cites="green2020">(e.g., <a href="#ref-green2020" role="doc-biblioref">Green <em>et al.</em> 2020</a>)</span> to simulation modeling <span class="citation" data-cites="green2019">(e.g., <a href="#ref-green2019" role="doc-biblioref">Green <em>et al.</em> 2019</a>)</span>.</p>
+<p>Why am I making this guide? I have been using R since about 2008, when I was a graduate student trying to make a multi-panel plot for a manuscript. I had seen R mentioned in publications and thought that using R would be more effective than kludging something together with Excel and Powerpoint. Needless to say, jumping straight to making plots with the <code>lattice</code> package was not the easiest way to learn R. The final result was a little clunky <span class="citation" data-cites="kirchner2011">(<a href="#ref-kirchner2011" role="doc-biblioref">Kirchner <em>et al.</em> 2011</a>)</span> but I am still really proud of it. Eventually I took some courses and did a lot of self-teaching, and am finally (2026) pretty decent at R. I have used R in my work pretty much continuously since 2008 for everything from Bayesian data analysis <span class="citation" data-cites="green2020">(e.g., <a href="#ref-green2020" role="doc-biblioref">Green <em>et al.</em> 2020</a>)</span> to simulation modeling <span class="citation" data-cites="green2019">(e.g., <a href="#ref-green2019" role="doc-biblioref">Green <em>et al.</em> 2019</a>)</span>.</p>
 <p>This guide is meant to be a primer for self-starting with R. In many sections the text is a bit lengthy, but that is because I wanted to provide explanations that might save someone some of the trouble I had getting started. R documentation is notoriously terse and compact–this is great for professionals who need a reminder, but not so much for newcomers who are still trying to learn. This guide also evolved out of course notes, and will continue to evolve based on feedback from students. If you have any feedback or suggestions for improvement, please <a href="mailto:ngreen62@kennesaw.edu">send me a message</a>!</p>
 
 
@@ -721,7 +721,7 @@ National Ecological Observatory Network (NEON). 2025. Small mammal box trapping 
 Zuur AF, Ieno EN, Smith GM. 2007. Analysing ecological data. New York: Springer Science+Business Media.
 </div>
 <div id="ref-zuur2009mixed" class="csl-entry" role="listitem">
-<span class="nocase">Zuur AF, Ieno EN, Walker NJ, Saveliev AA, Smith GM <em>et al.</em></span> 2009a. Mixed effects models and extensions in ecology with <span>R</span>. Vol. 574. New York: Springer.
+Zuur AF, Ieno EN, Walker NJ, Saveliev AA, Smith GM <em>et al.</em> 2009a. Mixed effects models and extensions in ecology with <span>R</span>. Vol. 574. New York: Springer.
 </div>
 <div id="ref-zuur2009" class="csl-entry" role="listitem">
 Zuur A, Ieno EN, Meesters E. 2009b. A beginner’s guide to <span>R</span>. New York: Springer Science+Business Media.

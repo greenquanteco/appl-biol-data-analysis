@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>18&nbsp; Introduction to generalized linear models (GLM) – Applied Biological Data Analysis</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -23,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -37,14 +88,15 @@ ul.task-list li input[type="checkbox"] {
 <link href="../chapters/part_05.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -74,6 +126,35 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -99,7 +180,9 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -446,17 +529,14 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#sec-glm1-basics-lp" id="toc-sec-glm1-basics-lp" class="nav-link" data-scroll-target="#sec-glm1-basics-lp"><span class="header-section-number">18.2.3</span> Linear predictors</a></li>
   <li><a href="#sec-glm1-basics-link" id="toc-sec-glm1-basics-link" class="nav-link" data-scroll-target="#sec-glm1-basics-link"><span class="header-section-number">18.2.4</span> Link functions</a></li>
   </ul></li>
-  <li><a href="#sec-glm1-common" id="toc-sec-glm1-common" class="nav-link" data-scroll-target="#sec-glm1-common"><span class="header-section-number">18.3</span> Common GLMs</a>
+  <li><a href="#sec-glm1-lik" id="toc-sec-glm1-lik" class="nav-link" data-scroll-target="#sec-glm1-lik"><span class="header-section-number">18.3</span> Likelihood functions and GLM diagnostics</a>
   <ul class="collapse">
-  <li><a href="#sec-glm1-common-cont" id="toc-sec-glm1-common-cont" class="nav-link" data-scroll-target="#sec-glm1-common-cont"><span class="header-section-number">18.3.1</span> GLMs for continuous data</a></li>
-  <li><a href="#sec-glm1-common-count" id="toc-sec-glm1-common-count" class="nav-link" data-scroll-target="#sec-glm1-common-count"><span class="header-section-number">18.3.2</span> GLMs for count data</a></li>
-  <li><a href="#sec-glm1-common-binom" id="toc-sec-glm1-common-binom" class="nav-link" data-scroll-target="#sec-glm1-common-binom"><span class="header-section-number">18.3.3</span> GLMs for binary and proportional data</a></li>
-  </ul></li>
-  <li><a href="#sec-glm1-dev" id="toc-sec-glm1-dev" class="nav-link" data-scroll-target="#sec-glm1-dev"><span class="header-section-number">18.4</span> Deviance and other GLM diagnostics</a>
-  <ul class="collapse">
-  <li><a href="#sec-glm1-dev-defin" id="toc-sec-glm1-dev-defin" class="nav-link" data-scroll-target="#sec-glm1-dev-defin"><span class="header-section-number">18.4.1</span> Deviance</a></li>
-  <li><a href="#sec-glm1-dev-pseudo" id="toc-sec-glm1-dev-pseudo" class="nav-link" data-scroll-target="#sec-glm1-dev-pseudo"><span class="header-section-number">18.4.2</span> Pseudo-<em>R</em>^2 or not?</a></li>
-  <li><a href="#sec-glm1-dev-aic" id="toc-sec-glm1-dev-aic" class="nav-link" data-scroll-target="#sec-glm1-dev-aic"><span class="header-section-number">18.4.3</span> AIC and likelihood functions</a></li>
+  <li><a href="#likelihood-function-example-sec-glm1-lik-example" id="toc-likelihood-function-example-sec-glm1-lik-example" class="nav-link" data-scroll-target="#likelihood-function-example-sec-glm1-lik-example"><span class="header-section-number">18.3.1</span> Likelihood function example {<span class="quarto-unresolved-ref">sec-glm1-lik-example</span>}</a></li>
+  <li><a href="#sec-glm1-lik-dev" id="toc-sec-glm1-lik-dev" class="nav-link" data-scroll-target="#sec-glm1-lik-dev"><span class="header-section-number">18.3.2</span> Deviance</a></li>
+  <li><a href="#sec-glm1-lik-pseudo" id="toc-sec-glm1-lik-pseudo" class="nav-link" data-scroll-target="#sec-glm1-lik-pseudo"><span class="header-section-number">18.3.3</span> Deviance explained: the pseudo-<span class="math inline">\(R^2\)</span></a></li>
+  <li><a href="#sec-glm1-lik-aic" id="toc-sec-glm1-lik-aic" class="nav-link" data-scroll-target="#sec-glm1-lik-aic"><span class="header-section-number">18.3.4</span> AIC and likelihood functions</a></li>
+  <li><a href="#model-comparison-using-aic" id="toc-model-comparison-using-aic" class="nav-link" data-scroll-target="#model-comparison-using-aic"><span class="header-section-number">18.3.5</span> Model comparison using AIC</a></li>
+  <li><a href="#likelihood-ratio-tests" id="toc-likelihood-ratio-tests" class="nav-link" data-scroll-target="#likelihood-ratio-tests"><span class="header-section-number">18.3.6</span> Likelihood ratio tests</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch18.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -483,55 +563,515 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>A link function to the past.</p>
 <section id="sec-glm1-prelude" class="level2" data-number="18.1">
 <h2 data-number="18.1" class="anchored" data-anchor-id="sec-glm1-prelude"><span class="header-section-number">18.1</span> Prelude with linear models</h2>
+<p>If you’ve every right-clicked on a figure in Excel and clicked “Add Trendline”, or if you’ve made it this far in BIOL 7410, then you are probably familiar with the <strong>linear regression</strong> model (<a href="ch16.html#sec-lin-reg" class="quarto-xref"><span>Section 16.3</span></a>). Ordinary linear regression, or simple linear regression, is a special case of <a href="@sec-review-lin-def">linear models</a>, which analyze continuous response variables as predicted by continuous or categorical predictors. Several models that you’ve probably heard of are actually all special cases of the linear model:</p>
+<ul>
+<li><strong>Linear regression:</strong> Continuous response and continuous one predictor (<a href="ch16.html#sec-lin-lm" class="quarto-xref"><span>Section 16.2</span></a>).</li>
+<li><strong>Multiple linear regression:</strong> Continuous response and more than 1 continuous predictor (<a href="ch16.html#sec-lin-mult" class="quarto-xref"><span>Section 16.4</span></a>).</li>
+<li><strong>Two-sample <em>t</em>-test:</strong> Continuous response and 1 factor with 2 levels (<a href="ch15.html#sec-groups-2samp-2t" class="quarto-xref"><span>Section 15.2.1</span></a>).</li>
+<li><strong>Analysis of variance (ANOVA):</strong> Continuous response and <span class="math inline">\(\ge1\)</span> factor, where each factor can have <span class="math inline">\(\ge2\)</span> levels (<a href="ch15.html#sec-groups-more-anova" class="quarto-xref"><span>Section 15.5.1</span></a>).</li>
+<li><strong>Analysis of covariance:</strong> Continuous response variable with <span class="math inline">\(\ge1\)</span> continuous and <span class="math inline">\(\ge1\)</span> factor predictor (<a href="ch16.html#sec-lin-ancova" class="quarto-xref"><span>Section 16.5</span></a>).</li>
+<li>…and many more.</li>
+</ul>
+<p>What makes all of these methods linear models is that there exists a way to rewrite them so that the response variable is a linear combination of the predictors <span class="citation" data-cites="bolker2008ecological">(<a href="#ref-bolker2008ecological" role="doc-biblioref">Bolker 2008</a>)</span>. This means that the model is an expression formed by multiplying each term by a constant, and adding the products together. For example,</p>
+<p><span class="math display">\[ax+by\]</span></p>
+<p>is a linear combination of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, where <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are constants. The <span class="math inline">\(x\)</span> and the <span class="math inline">\(y\)</span> could be single values, or, as commonly used in statistics, <strong>vectors</strong> of values. A vector in this sense is an ordered set of values. Consider this more biological example:</p>
+<p><span class="math display">\[E\left(SpeciesRichness\right)=\beta_0+\beta_1 Temperature+\beta_2 Rainfall+\beta_3 Elevation\]</span></p>
+<p>In this case, the expected value of the response variable (<span class="math inline">\(SpeciesRichness\)</span>) is equal to the sum of the effect of temperature (<span class="math inline">\(\beta_1\)</span>) times temperature, the effect of precipitation (<span class="math inline">\(\beta_2\)</span>) times precipitation, and the effect of elevation (<span class="math inline">\(\beta_3\)</span>) times elevation, plus a constant <span class="math inline">\(\beta_0\)</span> to set the <span class="math inline">\(y\)</span>-intercept.</p>
+<p>Importantly, a linear model must be <em>linear in its parameters</em>, not necessarily in the predictor variables themselves. For example, the model <span class="math inline">\(y=\beta_0+\beta_1x+\beta_2x^2\)</span> is nonlinear in <span class="math inline">\(x\)</span> because the <span class="math inline">\(x^2\)</span> forces a curved graph. But, if <span class="math inline">\(x^2\)</span> increases by 1, then <span class="math inline">\(y\)</span> will increase by <span class="math inline">\(\beta_2\)</span>. This is what it means to be “linear in its parameters”.</p>
+<p>Many situations are, at least at first glance, amenable to linear regression. But, as we’ll see later, many situations are better treated by more sophisticated methods such as GLM or mixed models <span class="citation" data-cites="bolker2008ecological bolker2009 zuur2007analysing">(<a href="#ref-zuur2007analysing" role="doc-biblioref">Zuur <em>et al.</em> 2007</a>; <a href="#ref-bolker2008ecological" role="doc-biblioref">Bolker 2008</a>; <a href="#ref-bolker2009" role="doc-biblioref">Bolker <em>et al.</em> 2009</a>)</span>. When learning those more advanced methods it is easiest to think of them as extensions of the linear model, but it’s actually the other way around: linear regression is a special case of the more advanced methods.</p>
+<p>To build up to GLMs, we are going to rewrite the linear model in a <strong>state-space formulation</strong>. Here, one component (the “linear predictor” or “deterministic part”) defines the expected value of <span class="math inline">\(y\)</span>, <span class="math inline">\(E\left(y\right)\)</span>–the “state” of the system. Then, the <strong>stochastic part</strong> expresses how variation arises in the observed values of <span class="math inline">\(y\)</span>. This is the “space” part. Here is the formulation for a linear regression with one predictor variable, <span class="math inline">\(x\)</span>:</p>
+<p><span class="math display">\[E\left(y\right)=\beta_{0}+\beta_{1}x\]</span></p>
+<p><span class="math display">\[y\sim Normal\left(E\left(y\right),\sigma^2_{res}\right)\]</span></p>
+<p>Some people will split up the stochastic part like this, to make it the i.i.d. assumption more explicit:</p>
+<p><span class="math display">\[y=E\left(y\right)+\varepsilon; \varepsilon\sim Normal\left(0,\sigma^2_{res}\right)\]</span></p>
+<p>In these equations:</p>
+<ul>
+<li><span class="math inline">\(y\)</span> is the response variable (AKA: dependent variable)</li>
+<li><span class="math inline">\(x\)</span> is the explanatory variable (AKA: independent variable or predictor variable)</li>
+<li><span class="math inline">\(\beta_{0}\)</span> is the <span class="math inline">\(y\)</span>-intercept (i.e., the value of <span class="math inline">\(y\)</span> when <span class="math inline">\(x=0\)</span>). Called “beta zero” or “beta naught”.</li>
+<li><span class="math inline">\(\beta_{1}\)</span> is the slope or regression coefficient (i.e., the change in <span class="math inline">\(y\)</span> per unit change in <span class="math inline">\(x\)</span>). Called “beta one”.</li>
+<li><span class="math inline">\(\varepsilon\)</span> is a random error term that describes residual variation not explained by the model. Residuals are identically and independently distributed (<em>i</em>.<em>i</em>.<em>d</em>.) according to a normal distribution with mean 0 and variance <span class="math inline">\(\sigma^{2}\)</span>. Called “epsilon” or “the error term”.</li>
+<li>The residual variance <span class="math inline">\(\sigma_{res}^{2}\)</span> is estimated from the data. As you might expect, larger residual variance indicates a poorer fit to the data. Called “sigma squared” or the “residual variance”. Some authors might use the residual standard deviation (SD) <span class="math inline">\(\sigma_{res}\)</span> instead of residual variance <span class="math inline">\(\sigma_{res}^{2}\)</span>, which is fine because <span class="math inline">\(\sigma_{res}=\sqrt{\sigma_{res}^2}\)</span>. I typically use <span class="math inline">\(\sigma_{res}\)</span> because R parameterizes the normal distribution in terms of SD, not variance.</li>
+</ul>
+<p>The linear regression model is sometimes written in other ways. Here are some other notations you might see:</p>
+<p><strong>Observation-wise notation</strong></p>
+<p><span class="math display">\[y_{i}=\beta_{0}+\beta_{1}x_{i}+\varepsilon_{i}\]</span></p>
+<p><span class="math display">\[\varepsilon_{i} \sim Normal(0,\sigma_{res}^{2})\]</span></p>
+<p>This is very similar to the notation above, but it emphasizes that the residual is different for each observation <span class="math inline">\(i\)</span>. More complicated models with additional predictors might use this form to emphasize that each observed <span class="math inline">\(y\)</span> value (<span class="math inline">\(y_i\)</span>) depends on a combination of predictor values (<span class="math inline">\(x_{1,i}\)</span>, <span class="math inline">\(x_{2,i}\)</span>, and so on) specific to observation <span class="math inline">\(i\)</span>.</p>
 </section>
 <section id="sec-glm1-basics" class="level2" data-number="18.2">
 <h2 data-number="18.2" class="anchored" data-anchor-id="sec-glm1-basics"><span class="header-section-number">18.2</span> GLM basics</h2>
+<p>In the <a href="@sec-glm1-prelude">previous section</a> we explored the structure of linear models. Linear models are appropriate when there is a <strong>linear</strong> relationship between a response variable and its predictors, when the predictor variables model the response variable on its <strong>original scale</strong>, and when the residuals of the model follow a <strong>normal distribution</strong>. However, the latter two conditions do not always apply in biology. There are many kinds of values for which the normal distribution is less than ideal. For example, counts are better modeled by the <a href="@sec-dist-pois">Poisson distribution</a>, and binary events by the <a href="@sec-dist-binom">binomial distribution</a>, in both cases because the normal would produce illegitimate or nonsensical values like non-integer counts or negative probabilities.</p>
+<p>So, we can define a new class of models by relaxing two of the structural features of the linear model:</p>
+<ol type="1">
+<li>Instead of assuming that the relationship between <span class="math inline">\(y\)</span> and <span class="math inline">\(y\)</span> is linear on the scale of <span class="math inline">\(y\)</span>, let it be linear on another scale.</li>
+<li>Instead of assuming a normal response distribution, allow other distributions.</li>
+</ol>
+<p>And add:</p>
+<ol start="3" type="1">
+<li>A function to relate or <strong>link</strong> the scale of <span class="math inline">\(y\)</span> to the scale of the linear predictor.</li>
+</ol>
+<p>In other words, we relax or <strong>generalize</strong> the definition of a linear model to:</p>
+<p><span class="math display">\[y\sim SomeDistribution\left(E\left(y\right)\right)\]</span></p>
+<p><span class="math display">\[LinkFunction\left(E\left(y\right)\right)=\eta\]</span></p>
+<p><span class="math display">\[\eta=\beta_0+\beta_1 x\]</span></p>
+<p>With those changes in place, we have a GLM!</p>
 <section id="sec-glm1-basics-struc" class="level3" data-number="18.2.1">
 <h3 data-number="18.2.1" class="anchored" data-anchor-id="sec-glm1-basics-struc"><span class="header-section-number">18.2.1</span> Overall structure</h3>
+<p>The <strong>generalized linear model (GLM)</strong> is a framework that generalizes the linear model by relaxing two of the conditions in which linear models are used. In a GLM:</p>
+<ul>
+<li>The response variable can be modeled on a different scale than its original scale. The original scale of the data is related to the scale of the linear prediction by a <strong>link function</strong>.</li>
+<li>The values of the response variable can come from many different distributions, not just the normal distribution.</li>
+</ul>
+<p>The GLM was introduced by <span class="citation" data-cites="nelder1972">Nelder and Wedderburn (<a href="#ref-nelder1972" role="doc-biblioref">1972</a>)</span> and has since become a vital tool in many fields of study. Methods for fitting GLMs have been improved and expanded since the original publication, such that GLMs can be fit under many inference paradigms including least-squares, maximum likelihood, Bayesian, and machine learning frameworks.</p>
+<p>The basic form of the GLM is shown below:</p>
+<p><span class="math display">\[y \sim ResponseDistribution\left(E\left(y\right), \theta\right)\]</span></p>
+<p><span class="math display">\[LinkFunction\left(E\left(y\right)\right)=\eta\]</span></p>
+<p><span class="math display">\[\eta=LinearFunction\left(x\right)\]</span></p>
+<p>where <span class="math inline">\(y\)</span> is the response, <span class="math inline">\(x\)</span> is the predictor, <span class="math inline">\(E\left(y\right)\)</span> is the expected value on the scale of the data, <span class="math inline">\(\theta\)</span> are other parameters of the response distribution, <span class="math inline">\(\eta\)</span> is the expected value on another scale, and <span class="math inline">\(E\left(y\right)\)</span> and <span class="math inline">\(\eta\)</span> are related by a <strong>link function</strong>.</p>
+<p>Here we can see what the GLM is doing:</p>
+<ol type="1">
+<li>The observed values follow some probability distribution with an expected value and usually other parameters (<span class="math inline">\(\theta\)</span>). This is the <span class="math display">\[stochastic\]</span> part of the model, where the uncertainty or variation manifests.</li>
+<li>The expected value on the scale of the observed values is mapped to another scale by a link function. This is done to take advantage of the properties of the linked scale, often to linearize the relationship between <span class="math inline">\(E\left(y\right)\)</span> and <span class="math inline">\(x\)</span> or ensure that <span class="math inline">\(E\left(y\right)\)</span> ends up in the proper domain (<a href="@sec-glm1-basics-link">more on this shortly</a>).</li>
+<li>The deterministic part of the model, the <strong>linear predictor</strong> of <span class="math inline">\(y|x\)</span>, is a linear function of the x variable or variables.</li>
+</ol>
+<p>Notice how the GLM describes a system in terms of its true, unobserved <strong>state</strong> and relates that state to the <strong>space</strong> of observed observations. The former part is sometimes also called the <strong>deterministic part</strong> of the model, while the latter is called the <strong>stochastic part</strong>. This framework is referred to as the <strong>state-space</strong> representation of a model. Thinking about your study system in state-space terms is the key to understanding GLM. This framework is useful because it allows us to think about and treat separately the deterministic part (state) and the stochastic part (space) of a statistical model.</p>
+<p><strong><em>Being able to think about and deconstruct a problem in the language of GLMs is one the main points of this course. The GLM is a powerful tool to have in your toolkit as a biologist.</em></strong></p>
 </section>
 <section id="sec-glm1-basics-resp" class="level3" data-number="18.2.2">
 <h3 data-number="18.2.2" class="anchored" data-anchor-id="sec-glm1-basics-resp"><span class="header-section-number">18.2.2</span> Response distributions</h3>
+<p>In the classic formulation, GLMs can use any response distribution from the <a href="https://en.wikipedia.org/wiki/Exponential_family">exponential family</a>. In practice, there are only a few that are commonly used:</p>
+<ul>
+<li>The <strong>normal distribution</strong> for continuous, unbounded data.</li>
+<li>The <strong>gamma distribution</strong> for continuous, right skewed, strictly positive data or for waiting times in continuous time.</li>
+<li>The <strong>Poisson distribution</strong> for count data, which are discrete and non-negative.</li>
+<li>The <strong>negative binomial distribution</strong>, also for count data, which are discrete and non-negative, but also overdispersed; or, for waiting times in discrete times.</li>
+<li>The <strong>binomial distribution</strong> for data related to binary outcomes and probabilities.</li>
+</ul>
+<p>While the <span class="math inline">\(y\)</span> values in a GLM are said to follow a given distribution, this does not necessarily mean that the set of all <span class="math inline">\(y\)</span> values will follow that distribution. It means that any individual <span class="math inline">\(y\)</span> value <span class="math inline">\(y\)</span> follows some distribution conditional on the predictor values.</p>
 </section>
 <section id="sec-glm1-basics-lp" class="level3" data-number="18.2.3">
 <h3 data-number="18.2.3" class="anchored" data-anchor-id="sec-glm1-basics-lp"><span class="header-section-number">18.2.3</span> Linear predictors</h3>
+<p>The linear predictor is basically just the linear regression model that you already know, and plays the same role as the deterministic part of the linear regression model. The key distinction is that while the linear predictor of linear regression (or linear models in general) always produce expected <span class="math inline">\(y\)</span> values on the same scale where <span class="math inline">\(y\)</span> is observed, the linear predictor in a GLM can produce an expected value on a different scale than observed <span class="math inline">\(y\)</span>. This has some important and useful consequences, such as guaranteeing that the model always produces expected values that are in the proper domain. E.g., expected counts are never negative, expected probabilities are always in the interval <span class="math inline">\(\left[0,1\right]\)</span>, and so on.</p>
 </section>
 <section id="sec-glm1-basics-link" class="level3" data-number="18.2.4">
 <h3 data-number="18.2.4" class="anchored" data-anchor-id="sec-glm1-basics-link"><span class="header-section-number">18.2.4</span> Link functions</h3>
+<p>The really clever part of a GLM is the <strong>link function</strong>, which maps the scale on which data are observed (the <strong>data scale</strong>) to a scale where the relationship between the expected value and the predictor variables is linear (the <strong>linear scale</strong>). In this way, link functions work a <a href="@sec-trans-link">little bit like a data transform</a>, but are <strong><em>not</em></strong> transforms. The difference is that a transform changes the data before fitting a model, whereas a link function is part of the model itself.</p>
+<p>The three most common link functions are the <strong>identity</strong>, <strong>log</strong>, and <strong>logit</strong> functions.</p>
+<ul>
+<li>The <strong>identity</strong> link function is just that: it maps a value to itself. I.e., <span class="math inline">\(Identity\left(x\right)=x\)</span>. This is the link function used in linear regression.</li>
+<li>The <a href="@sec-trans-common-log"><strong>log</strong> link function</a> is the <strong>natural logarithm</strong>. It is widely used both in GLMs where overdispersion is suspected, and where response values must be non-negative or strictly positive (because <span class="math inline">\(e^a\)</span> for any real <span class="math inline">\(a\)</span> is positive). Its behavior is similar to that of the <a href="@sec-trans-common-log">log transform</a>. Although any base logarithm could be used in principle, by convention we always use the natural (base <span class="math inline">\(e\)</span>) logarithm.</li>
+<li>The <a href="@sec-trans-common-lp-logit"><strong>logit</strong> link function</a> maps probabilities from <span class="math inline">\(\left(0,1\right)\)</span> to the real number line. This is used in GLMs that address probability, such as <a href="@sec-glm4-logistic"><strong>logistic regression</strong></a> and <a href="@sec-glm4-binom"><strong>binomial regression</strong></a>.</li>
+</ul>
 </section>
 </section>
-<section id="sec-glm1-common" class="level2" data-number="18.3">
-<h2 data-number="18.3" class="anchored" data-anchor-id="sec-glm1-common"><span class="header-section-number">18.3</span> Common GLMs</h2>
-<section id="sec-glm1-common-cont" class="level3" data-number="18.3.1">
-<h3 data-number="18.3.1" class="anchored" data-anchor-id="sec-glm1-common-cont"><span class="header-section-number">18.3.1</span> GLMs for continuous data</h3>
-<section id="sec-glm1-common-cont-lr" class="level4" data-number="18.3.1.1">
-<h4 data-number="18.3.1.1" class="anchored" data-anchor-id="sec-glm1-common-cont-lr"><span class="header-section-number">18.3.1.1</span> Linear regression as a GLM</h4>
+<section id="sec-glm1-lik" class="level2" data-number="18.3">
+<h2 data-number="18.3" class="anchored" data-anchor-id="sec-glm1-lik"><span class="header-section-number">18.3</span> Likelihood functions and GLM diagnostics</h2>
+<p>In ordinary linear models, we can summarize goodness of fit by measures such as the <strong>sum of squared residuals</strong> or the coefficient of determination <span class="math inline">\(R^2\)</span>. For GLMs, however, squared residuals are not always an appropriate measure of fit because different response distributions have different variance structures. Instead, we evaluate GLM fit by quantities derived from the <strong>likelihood function</strong>.</p>
+<p>The likelihood describes how well different possible parameter values are supported by the observed data under a particular statistical model. A statistical model specifies the mathematical relationships among variables and the probability distribution of the observations; examples include a linear regression model or a Poisson GLM. In general, we can write the likelihood function as:</p>
+<p><span class="math display">\[\mathcal{L}\left(\theta|x\right)=p\left(x|\theta\right)\]</span></p>
+<p>where <span class="math inline">\(x\)</span> represents the observed data and <span class="math inline">\(\theta\)</span> represents one or more unobserved parameters. For the data we actually observed, the likelihood function asks: which possible values of <span class="math inline">\(\theta\)</span> would make these data more or less plausible? Much of modern statistics is based on fitting models by <strong>maximum likelihood estimation</strong> or <strong>MLE</strong>. This revolves around finding model parameters that maximize the likelihood function of the model given the data.</p>
+<p>Importantly, the likelihood is <strong><em>not</em></strong> the probability that a particular parameter value or model is correct. Although <span class="math inline">\(\mathcal{L}\left(\theta|x\right)\)</span> is written with the parameters to the left of the vertical bar, it is based on the probability of the data given the parameters, <span class="math inline">\(p\left(x|\theta\right)\)</span>, not the probability of the parameters given the data, <span class="math inline">\(p\left(\theta|x\right)\)</span>. The latter is a Bayesian posterior probability density (which you can learn about in my <a href="https://greenquanteco.github.io/bayesian-inference-biologists/">other class</a>!).</p>
+<p>One slightly counterintuitive aspect of likelihood functions is that unlike familiar test statistics like <em>t</em> or <em>F</em> or <em>^2</em>, the likelihood does not follow a standard reference distribution defined by degrees of freedom. Consequently, the absolute value of a likelihood doesn’t really tell you much on its own. Instead, model likelihoods are most useful when comparing models with different parameters, or different parameter values. That’s not to say that likelihood functions are completely divorced from <em>p</em>-values. In fact, several frequentist methods use comparisons of likelihoods to construct test statistics and calculate <em>p</em>-values. We’ll explore this in <a href="#sec-glm1-lik-aic" class="quarto-xref"><span>Section 18.3.4</span></a>.</p>
+<p>The takeaway is that probability asks how plausible different observations are under a specified model and its parameters, while likelihood asks which parameter values make the data we actually observed more plausible.</p>
+<section id="likelihood-function-example-sec-glm1-lik-example" class="level3" data-number="18.3.1">
+<h3 data-number="18.3.1" class="anchored" data-anchor-id="likelihood-function-example-sec-glm1-lik-example"><span class="header-section-number">18.3.1</span> Likelihood function example {<span class="quarto-unresolved-ref">?sec-glm1-lik-example</span>}</h3>
+<section id="calculating-the-likelihood-function-sec-glm1-lik-example-calc" class="level4" data-number="18.3.1.1">
+<h4 data-number="18.3.1.1" class="anchored" data-anchor-id="calculating-the-likelihood-function-sec-glm1-lik-example-calc"><span class="header-section-number">18.3.1.1</span> Calculating the likelihood function {<span class="quarto-unresolved-ref">?sec-glm1-lik-example-calc</span>}</h4>
+<p>Here’s a quick example: imagine you have measured 5 squirrel femurs and found lengths of 63.6, 66.5, 64.2, 67.6, and 68.3 mm, yielding an observed sample mean and SD of <span class="math inline">\(66.0\pm2.1\)</span> mm. What estimate of the population mean <span class="math inline">\(\mu\)</span> that makes this set of measurements most plausible?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">63.6</span>, <span class="fl">66.5</span>, <span class="fl">64.2</span>, <span class="fl">67.6</span>, <span class="fl">68.3</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 66.04</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.067124</code></pre>
+</div>
+</div>
+<p>Consider 3 candidates for <span class="math inline">\(\mu\)</span>: 64, 66, and 68. For any proposed value of <span class="math inline">\(\mu\)</span>, <code>dnorm()</code> tells us the probability density of observing each femur length under a normal distribution with that mean:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>samp.sd <span class="ot">&lt;-</span> <span class="fl">2.1</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dnorm</span>(a, <span class="at">mean=</span><span class="dv">64</span>, <span class="at">sd=</span>samp.sd)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.18655737 0.09352817 0.18911291 0.04370627 0.02334791</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dnorm</span>(a, <span class="at">mean=</span><span class="dv">66</span>, <span class="at">sd=</span>samp.sd)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.09887122 0.18466340 0.13156914 0.14211406 0.10428277</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dnorm</span>(a, <span class="at">mean=</span><span class="dv">68</span>, <span class="at">sd=</span>samp.sd)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02115483 0.14719781 0.03695464 0.18655737 0.18804388</code></pre>
+</div>
+</div>
+<p>Because we observed more than 1 measurement, and assume that they are independent, the joint likelihood is the product of their densities:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prod</span>(<span class="fu">dnorm</span>(a, <span class="at">mean=</span><span class="dv">64</span>, <span class="at">sd=</span>samp.sd))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.367191e-06</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prod</span>(<span class="fu">dnorm</span>(a, <span class="at">mean=</span><span class="dv">66</span>, <span class="at">sd=</span>samp.sd))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.560036e-05</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prod</span>(<span class="fu">dnorm</span>(a, <span class="at">mean=</span><span class="dv">68</span>, <span class="at">sd=</span>samp.sd))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.036932e-06</code></pre>
+</div>
+</div>
+<p>It looks like 66 has the greatest joint likelihood across all observed data.</p>
 </section>
-<section id="sec-glm1-common-cont-over" class="level4" data-number="18.3.1.2">
-<h4 data-number="18.3.1.2" class="anchored" data-anchor-id="sec-glm1-common-cont-over"><span class="header-section-number">18.3.1.2</span> GLMs for overdispersed data</h4>
+<section id="profiling-the-likelihood-sec-glm1-lik-example-prof" class="level4" data-number="18.3.1.2">
+<h4 data-number="18.3.1.2" class="anchored" data-anchor-id="profiling-the-likelihood-sec-glm1-lik-example-prof"><span class="header-section-number">18.3.1.2</span> Profiling the likelihood {<span class="quarto-unresolved-ref">?sec-glm1-lik-example-prof</span>}</h4>
+<p>We can get a fuller picture if we test more values and plot how the model likelihood varies across different values of <span class="math inline">\(\mu\)</span>. This is called <strong>profiling</strong> the likelihood.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># series of possible mu to test</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>test.mu <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">60</span>, <span class="dv">72</span>, <span class="at">by=</span><span class="fl">0.01</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># number of possible mu</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(test.mu)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co"># set up vector to hold likelihood</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co"># function of each candidate mu</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>lik <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate likelihoods of mu's in a loop</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n){lik[i] <span class="ot">&lt;-</span> <span class="fu">prod</span>(<span class="fu">dnorm</span>(a, test.mu[i], <span class="at">sd=</span>samp.sd))}<span class="co">#i</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co"># now plot the likelihood function vs. mu</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(test.mu, lik, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">3</span>,</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="fu">expression</span>(mu),</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Likelihood"</span>)</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">mean</span>(a), <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fl">66.2</span>, <span class="fl">0.5e-5</span>, <span class="fu">expression</span>(<span class="fu">bar</span>(x)<span class="sc">==</span><span class="fl">66.04</span>), <span class="at">adj=</span><span class="dv">0</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span>lik[<span class="fu">which.max</span>(lik)], <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fl">67.5</span>, <span class="fl">3.4e-5</span>, <span class="fu">expression</span>(<span class="fu">hat</span>(mu)<span class="sc">==</span><span class="fl">66.04</span>), <span class="at">adj=</span><span class="dv">0</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-likelihood1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The likelihood profile for the population mean $\mu$ given five observed values with sample mean $\bar{x}=66.04$ and sample SD $s=2.07$.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-likelihood1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18.1: The likelihood profile for the population mean <span class="math inline">\(\mu\)</span> given five observed values with sample mean <span class="math inline">\(\bar{x}=66.04\)</span> and sample SD <span class="math inline">\(s=2.07\)</span>.
+</figcaption>
+<div aria-describedby="fig-likelihood1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch18_files/figure-html/fig-likelihood1-1.png" class="img-fluid figure-img" alt="The likelihood profile for the population mean $\mu$ given five observed values with sample mean $\bar{x}=66.04$ and sample SD $s=2.07$." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>In this case, the sample mean <span class="math inline">\(\bar{x}=66.04\)</span> (<code>mean(a)</code>) is the same as the <span class="math inline">\(\mu\)</span> value that maximized the joint likelihood of the 5 observed values, <span class="math inline">\(\hat{\mu}=66.04\)</span> (<code>test.mu[which.max(lik)]</code>). But, the code above only worked because we held the SD to be known and the same as the sample SD. If we didn’t, we would have to search over a range of possible SD values, and find the combination of <span class="math inline">\(\hat{\mu}\)</span> and <span class="math inline">\(\hat{\sigma}\)</span> that maximized the likelihood. In that case, the profile of likelihoods would have been a surface, not a line.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># range of population means to test</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>test.mu <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">62</span>, <span class="dv">70</span>, <span class="at">length=</span><span class="dv">100</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># range of population SDs to test</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>test.sigma <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="at">length=</span><span class="dv">100</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># matrix to hold likelihood values</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>Lmat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow=</span><span class="dv">100</span>, <span class="at">ncol=</span><span class="dv">100</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># fill LMat in a loop</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>){</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  mu.i <span class="ot">&lt;-</span> test.mu[i]</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>){</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    sigma.j <span class="ot">&lt;-</span> test.sigma[j]</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    Lmat[i,j] <span class="ot">&lt;-</span> <span class="fu">prod</span>(<span class="fu">dnorm</span>(a, <span class="at">mean=</span>mu.i, <span class="at">sd=</span>sigma.j))</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  }<span class="co">#j</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>}<span class="co">#i</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make the heatmap</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="do">## sequence of breaks</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>brks <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(Lmat), <span class="fu">max</span>(Lmat), <span class="at">length=</span><span class="dv">21</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="do">## colors (length of brks - 1)</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">topo.colors</span>(<span class="dv">20</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># wide panel for plot, narrow panel for legend</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="fu">layout</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">nrow=</span><span class="dv">1</span>), <span class="at">widths=</span><span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>))</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co"># likelihood surface</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">4.1</span>, <span class="fl">4.1</span>, <span class="fl">1.1</span>, <span class="fl">0.1</span>))</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="fu">image</span>(<span class="at">x=</span>test.sigma, <span class="at">y=</span>test.mu, <span class="at">z=</span><span class="fu">t</span>(Lmat),</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">breaks=</span>brks, <span class="at">col=</span>cols,</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">xlab=</span><span class="fu">expression</span>(sigma),</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">ylab=</span><span class="fu">expression</span>(mu))</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="co"># color legend</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="dv">4</span>))</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="fu">image</span>(</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">x=</span><span class="dv">1</span>,</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">y=</span>brks,</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">z=</span><span class="fu">matrix</span>(brks[<span class="sc">-</span><span class="dv">1</span>], <span class="at">nrow=</span><span class="dv">1</span>),</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">breaks=</span>brks,</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">col=</span>cols,</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">xaxt=</span><span class="st">"n"</span>, <span class="at">yaxt=</span><span class="st">"n"</span>,</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab=</span><span class="st">""</span>,</span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab=</span><span class="st">"Likelihood"</span></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">4</span>, <span class="at">las=</span><span class="dv">1</span>)</span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(<span class="st">"Likelihood"</span>, <span class="at">side=</span><span class="dv">4</span>, <span class="at">line=</span><span class="fl">2.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-heat1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The likelihood surface of a model with 2 parameters, $\mu$ and $\sigma$ resulting from a wide parameter search space,  shown as a heatmap with `image()`.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-heat1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18.2: The likelihood surface of a model with 2 parameters, <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> resulting from a wide parameter search space, shown as a heatmap with <code>image()</code>.
+</figcaption>
+<div aria-describedby="fig-heat1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch18_files/figure-html/fig-heat1-1.png" class="img-fluid figure-img" alt="The likelihood surface of a model with 2 parameters, $\mu$ and $\sigma$ resulting from a wide parameter search space,  shown as a heatmap with `image()`." width="672">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>The surface above shows that the joint likelihood peaks at around <span class="math inline">\(\hat{\mu}=66\)</span> and <span class="math inline">\(\hat{\sigma}=2\)</span>. We can zoom in a bit and narrow our search:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># range of population means to test</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>test.mu2 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">65.8</span>, <span class="fl">66.2</span>, <span class="at">length=</span><span class="dv">100</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># range of population SDs to test</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>test.sigma2 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">1.8</span>, <span class="fl">2.2</span>, <span class="at">length=</span><span class="dv">100</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># matrix to hold likelihood values</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>Lmat2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow=</span><span class="dv">100</span>, <span class="at">ncol=</span><span class="dv">100</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co"># fill LMat in a loop</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>){</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  mu.i <span class="ot">&lt;-</span> test.mu2[i]</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>){</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    sigma.j <span class="ot">&lt;-</span> test.sigma2[j]</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    Lmat2[i,j] <span class="ot">&lt;-</span> <span class="fu">prod</span>(<span class="fu">dnorm</span>(a, <span class="at">mean=</span>mu.i, <span class="at">sd=</span>sigma.j))</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>  }<span class="co">#j</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>}<span class="co">#i</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="co"># make the heatmap</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="do">## sequence of breaks</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>brks2 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(Lmat2), <span class="fu">max</span>(Lmat2), <span class="at">length=</span><span class="dv">21</span>)</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="do">## colors (length of brks - 1)</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">topo.colors</span>(<span class="dv">20</span>)</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a><span class="co"># wide panel for plot, narrow panel for legend</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a><span class="fu">layout</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">nrow=</span><span class="dv">1</span>), <span class="at">widths=</span><span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>))</span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a><span class="co"># likelihood surface</span></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">4.1</span>, <span class="fl">4.1</span>, <span class="fl">1.1</span>, <span class="fl">0.1</span>))</span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a><span class="fu">image</span>(<span class="at">x=</span>test.sigma2, <span class="at">y=</span>test.mu2, <span class="at">z=</span><span class="fu">t</span>(Lmat2),</span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>      <span class="at">breaks=</span>brks2, <span class="at">col=</span>cols,</span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>      <span class="at">xlab=</span><span class="fu">expression</span>(sigma),</span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">ylab=</span><span class="fu">expression</span>(mu))</span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a><span class="co"># color legend</span></span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="dv">4</span>))</span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a><span class="fu">image</span>(</span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">x=</span><span class="dv">1</span>,</span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">y=</span>brks,</span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">z=</span><span class="fu">matrix</span>(brks2[<span class="sc">-</span><span class="dv">1</span>], <span class="at">nrow=</span><span class="dv">1</span>),</span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">breaks=</span>brks2,</span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">col=</span>cols,</span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">xaxt=</span><span class="st">"n"</span>, <span class="at">yaxt=</span><span class="st">"n"</span>,</span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab=</span><span class="st">""</span>,</span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab=</span><span class="st">"Likelihood"</span></span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">4</span>, <span class="at">las=</span><span class="dv">1</span>)</span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(<span class="st">"Likelihood"</span>, <span class="at">side=</span><span class="dv">4</span>, <span class="at">line=</span><span class="fl">2.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-heat2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The likelihood surface of a model with 2 parameters, $\mu$ and $\sigma$, with a narrowed parameter search space, shhown as a heatmap with `image()`.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-heat2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18.3: The likelihood surface of a model with 2 parameters, <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>, with a narrowed parameter search space, shhown as a heatmap with <code>image()</code>.
+</figcaption>
+<div aria-describedby="fig-heat2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch18_files/figure-html/fig-heat2-1.png" class="img-fluid figure-img" alt="The likelihood surface of a model with 2 parameters, $\mu$ and $\sigma$, with a narrowed parameter search space, shhown as a heatmap with `image()`." width="672">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>And we could keep going until we get a region we are happy with. Just as with the 1-d example, we would want the point where the likelihood surface <em>peaks</em>, and we could express the 95% confidence interval for the parameters as the ranges of <span class="math inline">\(\hat{\mu}\)</span> and <span class="math inline">\(\hat{\sigma}\)</span> where 95% of the volume under the surface is found.</p>
+<p>Here is the likelihood <em>surface</em>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">persp</span>(</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  test.sigma, test.mu, <span class="fu">t</span>(Lmat),</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab=</span><span class="fu">expression</span>(sigma),</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab=</span><span class="fu">expression</span>(mu),</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">zlab=</span><span class="st">"Likelihood"</span>,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">theta=</span><span class="dv">35</span>,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">phi=</span><span class="dv">30</span>,</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">expand=</span><span class="fl">0.8</span>,</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">ticktype=</span><span class="st">"detailed"</span>,</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">shade=</span><span class="fl">0.4</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-surface1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The joint likelihood surface for a model with 2 parameters, $\mu$ and $\sigma$, given five observed values with sample mean $\bar{x}=66.04$ and sample SD $s=2.07$.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-surface1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18.4: The joint likelihood surface for a model with 2 parameters, <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>, given five observed values with sample mean <span class="math inline">\(\bar{x}=66.04\)</span> and sample SD <span class="math inline">\(s=2.07\)</span>.
+</figcaption>
+<div aria-describedby="fig-surface1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch18_files/figure-html/fig-surface1-1.png" class="img-fluid figure-img" alt="The joint likelihood surface for a model with 2 parameters, $\mu$ and $\sigma$, given five observed values with sample mean $\bar{x}=66.04$ and sample SD $s=2.07$." width="672">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>The maximum likelihood estimates for something like a linear regression model, or a Poisson GLM, are found by similar procedure, but with more than 2 parameters the resulting surface is 3-dimensional, or 4-dimensional, making the profiling a bit more complicated.</p>
+</section>
+<section id="negative-log-likelihood-sec-glm1-lik-example-nll" class="level4" data-number="18.3.1.3">
+<h4 data-number="18.3.1.3" class="anchored" data-anchor-id="negative-log-likelihood-sec-glm1-lik-example-nll"><span class="header-section-number">18.3.1.3</span> Negative log-likelihood {<span class="quarto-unresolved-ref">?sec-glm1-lik-example-nll</span>}</h4>
+<p>In practice, modern MLE seeks not to maximize the likelihood but to minimize the negative log-likelihood. That turns the surface in the previous figure into this:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>NLL <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">*</span> <span class="fu">log</span>(<span class="fu">t</span>(Lmat))</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">persp</span>(</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  test.sigma, test.mu, NLL,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab=</span><span class="fu">expression</span>(sigma),</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab=</span><span class="fu">expression</span>(mu),</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">zlab=</span><span class="st">"Likelihood"</span>,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">theta=</span><span class="sc">-</span><span class="dv">45</span>,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">phi=</span><span class="sc">-</span><span class="dv">10</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">expand=</span><span class="fl">0.8</span>,</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">ticktype=</span><span class="st">"detailed"</span>,</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">shade=</span><span class="fl">0.4</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-surface2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-surface2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18.5: The log-likelihood surface for a model with 2 parameters, <span class="math inline">\(mu\)</span> and <span class="math inline">\(sigma\)</span>.
+</figcaption>
+<div aria-describedby="fig-surface2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch18_files/figure-html/fig-surface2-1.png" class="img-fluid figure-img" width="672">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>Why the negative log-likelihood? First, taking the logarithm makes likelihood calculations computationally easier: products become sums, and very small likelihoods are less likely to cause numerical problems (i.e., very small values won’t unexpectedly round to 0). Because the logarithm is a strictly increasing function, the parameter values that maximize the likelihood also maximize the log-likelihood.</p>
+<p>Second, multiplying by <span class="math inline">\(-1\)</span> then turns this into an equivalent <strong>minimization</strong> problem. For reasons outside the scope of this course, minimization problems are more convenient to solve numerically than maximization problems. At a smooth minimum, the slope of the negative log-likelihood function is 0, so finding the minimum can be approached as finding a root of its derivative (i.e., a place in the parameter space where the derivative of the negative log-likelihood function is 0). One classic approach is the <a href="https://en.wikipedia.org/wiki/Newton%27s_method">Newton-Raphson algorithm</a>, which iteratively uses derivatives to move toward such a point. Modern software has many optimization algorithms, but the basic goal is the same: find the parameter values that produce the smallest negative log-likelihood, and therefore the largest likelihood.</p>
 </section>
 </section>
-<section id="sec-glm1-common-count" class="level3" data-number="18.3.2">
-<h3 data-number="18.3.2" class="anchored" data-anchor-id="sec-glm1-common-count"><span class="header-section-number">18.3.2</span> GLMs for count data</h3>
+<section id="sec-glm1-lik-dev" class="level3" data-number="18.3.2">
+<h3 data-number="18.3.2" class="anchored" data-anchor-id="sec-glm1-lik-dev"><span class="header-section-number">18.3.2</span> Deviance</h3>
+<p>For GLMs dealing with data that do not follow a normal response distribution, we need a measure of goodness of fit that does not depend on sums of squared residuals (SSR). Although minimizing SSR is equivalent to maximizing the likelihood under a normal error model, it is not generally appropriate for other response distributions. A more general measure of goodness of fit is the <strong>deviance</strong>, which is calculated from the <a href="@sec-glm1-lik">likelihood function</a>.</p>
+<p>The deviance <span class="math inline">\(D\)</span> of a model <span class="math inline">\(M\)</span> is calculatd by:</p>
+<p><span class="math display">\[D\left(M\right)=2\left(\mathcal{L}\left(S\right)-\mathcal{L}\left(M\right)\right)\]</span></p>
+<p>where <span class="math inline">\(\mathcal{L}\left(S\right)\)</span> is the likelihood the <strong>saturated model</strong> <span class="math inline">\(S\)</span> and <span class="math inline">\(\mathcal{L}\left(M\right)\)</span> is the likelihood of the model <span class="math inline">\(M\)</span>. The saturated model is a model with a parameter for every observation so that the data are fitted exactly. Basically, this expression tells us how much likelihood we <em>lose</em> by using our fitted model instead of a model that fits the observations perfectly.</p>
+<p>Because of how logarithms work, we can also write <span class="math inline">\(D\)</span> as:</p>
+<p><span class="math display">\[D\left(M\right)=-2\log{\left(\frac{\mathcal{L}\left(M\right)}{\mathcal{L}\left(S\right)}\right)}\]</span></p>
+<p>because the difference of two logarithms is the logarithm of the ratio.</p>
+<p>To understand the deviance, remember:</p>
+<ul>
+<li>The difference of two logarithms is the same as the <em>ratio</em> of those values.</li>
+<li>The saturated model is one that fits the data exactly. So, it has no residual variation.</li>
+<li>The saturated model has the highest possible likelihood. Therefore, its log-likelihood must be <span class="math inline">\(\geq\)</span> the log-likelihood of the fitted model, and this difference must be non-negative.</li>
+<li>Models that fit the observed data better should have log-likelihoods closer to that of the saturated model. I.e., the difference is closer to 0.</li>
+<li>Therefore, the deviance <span class="math inline">\(D\)</span> is larger when models fit poorly, and smaller when models fit better.</li>
+</ul>
+<p>The last point is worth remembering. Unlike <span class="math inline">\(R^2\)</span> or Pearson’s <span class="math inline">\(r\)</span>, deviance does not have an absolute scale and so a model deviance by itself doesn’t tell you much. For example, a model deviance of 20 isn’t necessarily good or bad.</p>
 </section>
-<section id="sec-glm1-common-binom" class="level3" data-number="18.3.3">
-<h3 data-number="18.3.3" class="anchored" data-anchor-id="sec-glm1-common-binom"><span class="header-section-number">18.3.3</span> GLMs for binary and proportional data</h3>
+<section id="sec-glm1-lik-pseudo" class="level3" data-number="18.3.3">
+<h3 data-number="18.3.3" class="anchored" data-anchor-id="sec-glm1-lik-pseudo"><span class="header-section-number">18.3.3</span> Deviance explained: the pseudo-<span class="math inline">\(R^2\)</span></h3>
+<p>To interpret deviance it’s best to have a benchmark. One benchmark is the deviance of the <strong>null model</strong>, or the model with only the mean of the response variable as a predictor. We consider the null model to be basically the opposite of the saturated model: while the saturated model has a parameter for every observation and predicts the observed data exactly, the null model has only one parameter and thus should be the worst possible fit.</p>
+<p>In a linear model, we can get a good sense of the explanatory power of a model with the <strong>coefficient of determination</strong>, usually called <span class="math inline">\(R^2\)</span>. It is calculated as:</p>
+<p><span class="math display">\[R^2=1-\frac{SS_{res}}{SS_{tot}}=1-\frac{\sum_i^n \left(y_i - E\left(y_i\right)\right)^2}{\sum_i^n \left(y_i - \bar{y}\right)^2}\]</span></p>
+<p>where <span class="math inline">\(SS_{res}\)</span> is the residual sum of squares and <span class="math inline">\(SS_{tot}\)</span> is the total sum of squares. When the <span class="math inline">\(SS_{res}\)</span> is small, the fraction is small and one minus the fraction gets larger.</p>
+<p>The GLM equivalent is to compare the residual deviance to the deviance of a null model. Just as <span class="math inline">\(R^2\)</span> is the reduction in sums of squares by a linear model, the deviance explained is the reduction in deviance by a fitted GLM:</p>
+<p><span class="math display">\[D_{explained}=1-\frac{D_{residual}}{D_{null}}\]</span></p>
+<p>In fact, for a linear regression, <span class="math inline">\(R^2\)</span> <em>is</em> the deviance explained, because squared residuals are the deviance function for ordinary linear models. GLMs of different families have different expressions for their residual deviance. For Gaussian GLMs (i.e., linear models):</p>
+<p><span class="math display">\[D_{Gaussian}=\sum_{i=1}^n \left(y_i - E\left(y_i\right)\right)^2=SS_{res}\]</span></p>
+<p>For Poisson GLMs, we don’t count squared residuals but rather discrepancies between observed and predicted counts.</p>
+<p><span class="math display">\[D_{Poisson}=2\sum_{i=1}^n \left[y_i \log{\left(\frac{y_i}{E\left(y_i\right)}\right)}-\left(y_i-E\left(y_i\right)\right)\right]\]</span></p>
+<p>with the caveat that the first term <span class="math inline">\(y_i \log{\left(\frac{y_i}{E\left(y_i\right)}\right)\)</span> is zero when <span class="math inline">\(y_i=0\)</span>.</p>
+<p>For binomial GLMs with binary outcomes (i.e., logistic regression), the deviance is:</p>
+<p><span class="math display">\[D_{binomial}=-2\sum_{i=1}^n \left[y_i \log{\left(\hat{p_i}\right)}+\left(1-y_i\right)\log\left(1-\hat{p_i}\right)\right]\]</span></p>
+<p>where <span class="math inline">\(\hat{p_i}\)</span> is the predicted probability that <span class="math inline">\(y=1\)</span>.</p>
+<p>Other GLMs that we will encounter, like the negative binomial, gamma, and binomial for proportion data have their own deviance expressions. The purpose here is not to give an accounting of all the possible GLM deviance formulae, but rather to convey that deviance summarizes model fit in terms that are relevant for that GLM’s variance function.</p>
 </section>
+<section id="sec-glm1-lik-aic" class="level3" data-number="18.3.4">
+<h3 data-number="18.3.4" class="anchored" data-anchor-id="sec-glm1-lik-aic"><span class="header-section-number">18.3.4</span> AIC and likelihood functions</h3>
+<p>One of the most common applications of likelihood functions, aside from the model fitting process itself, is model selection using information criteria like <strong>AIC (Akaike’s information criterion)</strong>. Briefly, AIC summarizes two things:</p>
+<ol type="1">
+<li>The goodness of fit of the model, measured as the magnitude of its likelihood function <span class="math inline">\(\hat{\mathcal{L}}\)</span>, balanced against</li>
+<li>the complexity of the model, measured as <span class="math inline">\(k\)</span>, the number of parameters in the model.</li>
+</ol>
+<p>AIC is calculated as:</p>
+<p><span class="math display">\[AIC=2k-2\log{\left(\hat{\mathcal{L}}\right)}\]</span></p>
+<p>The multiplier of 2 on <span class="math inline">\(k\)</span> penalizes model complexity by increasing AIC by 2 for every additional parameter. The complexity penalty compensates for the fact that adding parameters will always improve the fit (refer to the explanation of saturated models <a href="@sec-glm1-lik-defin">above</a>). The multiplier of -2 on the log-likelihood means that better models will <em>minimize</em> AIC, rather than maximize it.</p>
+<p>For models with small sample sizes, we use a modified version, <span class="math inline">\(AIC_C\)</span>:</p>
+<p><span class="math display">\[AIC_C=AIC+\frac{2k^2+2k}{n-k-1}\]</span></p>
+<p>where <span class="math inline">\(n\)</span> denotes the sample size and <span class="math inline">\(k\)</span> still denotes the number of parameters. Thus, <span class="math inline">\(AIC_C\)</span> is essentially AIC with an extra penalty term for the number of parameters. Note that as <span class="math inline">\(n\rightarrow\infty\)</span>, the extra penalty term converges to 0, and thus <span class="math inline">\(AIC_C\)</span> converges to AIC</p>
 </section>
-<section id="sec-glm1-dev" class="level2" data-number="18.4">
-<h2 data-number="18.4" class="anchored" data-anchor-id="sec-glm1-dev"><span class="header-section-number">18.4</span> Deviance and other GLM diagnostics</h2>
-<section id="sec-glm1-dev-defin" class="level3" data-number="18.4.1">
-<h3 data-number="18.4.1" class="anchored" data-anchor-id="sec-glm1-dev-defin"><span class="header-section-number">18.4.1</span> Deviance</h3>
+<section id="model-comparison-using-aic" class="level3" data-number="18.3.5">
+<h3 data-number="18.3.5" class="anchored" data-anchor-id="model-comparison-using-aic"><span class="header-section-number">18.3.5</span> Model comparison using AIC</h3>
+<p>Like deviance, the magnitude of the AIC of a model doesn’t tell us anything about the fit of that model. Instead, we use AIC to compare the fit of different models. We will work examples in later chapters. Briefly, given a set of <span class="math inline">\(R\)</span> candidate models, with AIC values <span class="math inline">\(AIC_1\)</span>, <span class="math inline">\(AIC_2\)</span>, up to <span class="math inline">\(AIC_R\)</span>, we calculate for each model <span class="math inline">\(i\)</span>:</p>
+<p><span class="math display">\[\Delta AIC_i=AIC_i-\min{\left(AIC\right)}\]</span></p>
+<p>We then use these values, called “Delta AICs”, to calculate the relative likelihood of each model as</p>
+<p><span class="math display">\[\hat{\mathcal{L}}_{rel,i}=\exp{\left(\frac{\Delta AIC_i}{2}\right)}\]</span></p>
+<p>If we normalize the relative likelihoods by dividing by their sum, we get the <strong>AIC weight</strong> <span class="math inline">\(\omega\)</span>:</p>
+<p><span class="math display">\[\omega_{i}=\frac{\hat{\mathcal{L}}_{rel,i}}{\sum_{i=1}^R\hat{\mathcal{L}}_{rel,i}}\]</span></p>
+<p>which is constrained such that all <span class="math inline">\(\omega_i\)</span> sum to 1. The AIC weight is the essentially the probability that a model is the best-fitting model in a set of candidate models. It is <em>not</em> the probability that a model is correct, or the probability that a model is the best of all possible models. An AIC weight only has meaning within a set of nested models. Nested models are models that can be turned into one another by setting one or more coefficients to 0. For example, the following models</p>
+<p><span class="math display">\[E\left(y\right)=\beta_0+\beta_1 x_1+\beta_2 x_2+\beta_3 x_3\]</span></p>
+<p><span class="math display">\[E\left(y\right)=\beta_0+\beta_2 x_2+\beta_3 x_3\]</span></p>
+<p><span class="math display">\[E\left(y\right)=\beta_0+\beta_1 x_1+\beta_3 x_3\]</span></p>
+<p>are considered nested. The first model contains the second and third as special cases: if you set <span class="math inline">\(\beta_1\)</span> to 0, then you get the second model. If you set <span class="math inline">\(\beta_2\)</span> to 0, then you get the third model. And if you set <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, and <span class="math inline">\(\beta_3\)</span> to 0, you get the <strong>null model</strong>:</p>
+<p><span class="math display">\[E\left(y\right)=\beta_0\]</span></p>
+<p>The null model is a useful baseline and should also be included in the candidate set when comparing GLMs by AIC.</p>
 </section>
-<section id="sec-glm1-dev-pseudo" class="level3" data-number="18.4.2">
-<h3 data-number="18.4.2" class="anchored" data-anchor-id="sec-glm1-dev-pseudo"><span class="header-section-number">18.4.2</span> Pseudo-<em>R</em>^2 or not?</h3>
-</section>
-<section id="sec-glm1-dev-aic" class="level3" data-number="18.4.3">
-<h3 data-number="18.4.3" class="anchored" data-anchor-id="sec-glm1-dev-aic"><span class="header-section-number">18.4.3</span> AIC and likelihood functions</h3>
+<section id="likelihood-ratio-tests" class="level3" data-number="18.3.6">
+<h3 data-number="18.3.6" class="anchored" data-anchor-id="likelihood-ratio-tests"><span class="header-section-number">18.3.6</span> Likelihood ratio tests</h3>
+<p>Finally, we can compare GLM using the <strong>likelihood ratio test (LRT)</strong>. The LRT asks whether the improvement in fit from adding parameters is greater than we would expect by chance if the simpler model were correct. Its test statistic <span class="math inline">\(G^2\)</span> is:</p>
+<p><span class="math display">\[G^2=-2\log\left(\frac{\mathcal{L}_0}{\mathcal{L}_1}\right)=2\left(\ell_1-\ell_0\right)\]</span></p>
+<p>where <span class="math inline">\(\mathcal{L}_0\)</span> and <span class="math inline">\(\mathcal{L}_1\)</span> are the maximized likelihoods of the simpler and more complex models, respectively, and <span class="math inline">\(\ell_0\)</span> and <span class="math inline">\(\ell_1\)</span> are their log-likelihoods. If the simpler model corresponding to <span class="math inline">\(\mathcal{L}_0\)</span> is the null model, then the LRT on a GLM is analogous to the omnibus ANOVA test for a linear model.</p>
+<p>Notice that this is closely related to the definition of deviance. In fact, for nested GLMs with the same response distribution and fixed dispersion, the likelihood-ratio test statistic is simply the difference between their residual deviances:</p>
+<p><span class="math display">\[G^2=D_0-D_1\]</span></p>
+<p>Because adding parameters cannot decrease the maximized likelihood, <span class="math inline">\(G^2\)</span> is nonnegative. Larger values indicate greater improvements in fit from the additional parameters.</p>
+<p>Under suitable conditions, <span class="math inline">\(G^2\)</span> approximately follows a <span class="math inline">\(\chi^2\)</span> distribution, with degrees of freedom equal to the difference in the number of estimated parameters between the two models. We can therefore calculate a <em>p</em>-value to test the null hypothesis that the additional parameters do not improve the model.</p>
+<p>In R, we can perform an LRT using <code>anova()</code> with the argument <code>test = "Chisq"</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>mod0 <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> x1, <span class="at">family =</span> poisson, <span class="at">data =</span> dat)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> x1 <span class="sc">+</span> x2, <span class="at">family =</span> poisson, <span class="at">data =</span> dat)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod0, mod1, <span class="at">test =</span> <span class="st">"Chisq"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This compares two nested Poisson GLMs fitted to the same observations. A small <em>p</em>-value indicates evidence that adding the additional predictor <code>x2</code> improves model fit beyond what would be expected under the simpler model.</p>
+<p>When should we use an LRT instead of AIC? The two methods answer different questions. AIC evaluates the relative expected predictive performance of competing models while penalizing model complexity, and can compare models that are not nested. The LRT, on the other hand, formally tests whether the additional parameters in a more complex nested model provide a statistically significant improvement in fit. Neither approach guarantees that the selected model adequately describes the data. That decision requires inspecting figures and using your biological judgement.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-bolker2008ecological" class="csl-entry" role="listitem">
+Bolker BM. 2008. Ecological models and data in <span>R</span>. Princeton, New Jersey, USA: Princeton University Press.
+</div>
+<div id="ref-bolker2009" class="csl-entry" role="listitem">
+Bolker BM, Brooks ME, Clark CJ, Geange SW, Poulsen JR, Stevens MHH, White J-SS. 2009. Generalized linear mixed models: A practical guide for ecology and evolution. Trends in Ecology &amp; Evolution 24(3):127–135. <a href="https://doi.org/10.1016/j.tree.2008.10.008">https://doi.org/10.1016/j.tree.2008.10.008</a>
+</div>
+<div id="ref-nelder1972" class="csl-entry" role="listitem">
+Nelder JA, Wedderburn RWM. 1972. Generalized linear models. Journal of the Royal Statistical Society: Series A (General) 135(3):370. <a href="https://doi.org/10.2307/2344614">https://doi.org/10.2307/2344614</a>
+</div>
+<div id="ref-zuur2007analysing" class="csl-entry" role="listitem">
+Zuur AF, Ieno EN, Smith GM. 2007. Analysing ecological data. New York: Springer Science+Business Media.
+</div>
+</div>
 </section>
 </section>
 

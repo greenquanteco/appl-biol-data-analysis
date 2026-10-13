@@ -1616,10 +1616,9 @@ knitr::opts_knit$set(root.dir = "../datasets")
 ```
 
 ```{r}
-
 # data file names
-name1 <- "neon_grids_2025-08-03.csv"
-name2 <- "neon_measures_2025-08-03.csv"
+name1 <- "neon-grids.csv"
+name2 <- "neon-measures.csv"
 name3 <- "neon-taxa.csv"
 
 # import
@@ -1736,7 +1735,7 @@ Base R has some functions for reshaping data, but most sources recommend using t
 #| collapse: true
 
 library(reshape2)
-in.name <- "reshape_example_2025-08-12.csv"
+in.name <- "reshape-example.csv"
 x <- read.csv(in.name)
 head(x)
 class(x$value)

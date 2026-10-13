@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>17&nbsp; Tests for contingency – Applied Biological Data Analysis</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -72,14 +69,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../chapters/ch16.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -110,7 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <style>html{ scroll-behavior: smooth; }</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -163,7 +161,9 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -505,7 +505,8 @@ window.Quarto = {
   <li><a href="#sec-indep-fisher" id="toc-sec-indep-fisher" class="nav-link active" data-scroll-target="#sec-indep-fisher"><span class="header-section-number">17.1</span> Fisher’s exact test</a></li>
   <li><a href="#sec-indep-chisq" id="toc-sec-indep-chisq" class="nav-link" data-scroll-target="#sec-indep-chisq"><span class="header-section-number">17.2</span> Chi-squared test</a></li>
   <li><a href="#sec-indep-gtest" id="toc-sec-indep-gtest" class="nav-link" data-scroll-target="#sec-indep-gtest"><span class="header-section-number">17.3</span> G-test</a></li>
-  <li><a href="#sec-indep-odds" id="toc-sec-indep-odds" class="nav-link" data-scroll-target="#sec-indep-odds"><span class="header-section-number">17.4</span> Contingency tests and odds ratios</a></li>
+  <li><a href="#sec-mcnemar" id="toc-sec-mcnemar" class="nav-link" data-scroll-target="#sec-mcnemar"><span class="header-section-number">17.4</span> McNemar’s test for paired data</a></li>
+  <li><a href="#sec-indep-odds" id="toc-sec-indep-odds" class="nav-link" data-scroll-target="#sec-indep-odds"><span class="header-section-number">17.5</span> Contingency tests and odds ratios</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch17.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -796,8 +797,112 @@ G=2\sum_{i}^{n}{O_ilog{\left(\frac{O_i}{E_i}\right)}}
 <p>The <em>G</em>-test should be used when sample sizes are large, because it is more computationally efficient than <span class="math inline">\(\chi^2\)</span>, and in situations where <span class="math inline">\(O_i&gt;2E_i\)</span> for at least some cells.</p>
 <p>Despite that fact that is has been recommended in literature for over 3 decades, the <em>G</em>-test is not available in the base R <code>stats</code> package. It is implemented in several add-on packages such as <code>AMR</code>.</p>
 </section>
-<section id="sec-indep-odds" class="level2" data-number="17.4">
-<h2 data-number="17.4" class="anchored" data-anchor-id="sec-indep-odds"><span class="header-section-number">17.4</span> Contingency tests and odds ratios</h2>
+<section id="sec-mcnemar" class="level2" data-number="17.4">
+<h2 data-number="17.4" class="anchored" data-anchor-id="sec-mcnemar"><span class="header-section-number">17.4</span> McNemar’s test for paired data</h2>
+<p>McNemar’s test is essentially the paired-data counterpart of a chi-squared test for two samples for two binary variables. Sometimes we collect data on a categorical outcome from the same experimental units at two occasions, with the idea being to compare the change from one time to another–say, before and after some intervention. For example, imagine you are studying the prevalence of some nematode parasite in a population of 100 mice. You test each mouse for infection, administer an antihelminthic, and test the same mice again 3 weeks later. The data might look like this:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">After: Infected</th>
+<th style="text-align: right;">After: Not infected</th>
+<th style="text-align: right;">Row totals</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Before: Infected</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Before: Not infected</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column totals</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">100</td>
+</tr>
+</tbody>
+</table>
+<p>And you might think of trying a chi-squared test. But, an ordinary Pearson chi-squared test would be inappropriate because each mouse contributes not one, but <em>two</em> observations. So, a chi-squared test asks the question, “Is the probability of a mouse being in the”After: Not infected” group or the “After: Infected group” independent of whether that mouse was in the “Before: Not infected” or “Before: Infected” group?“. McNemar’s test asks,”Is the probability of changing from infected to uninfected equal to the probability of changing from uninfected to infected?”</p>
+<p>McNemar’s test works by considering only the discordant pairs. For the data above, we have:</p>
+<ul>
+<li>20 mice started infected and remained infected</li>
+<li>40 mice started uninfected and remained uninfected</li>
+<li>30 mice changed from infected to uninfected</li>
+<li>10 mice changed from uninfected to infected</li>
+</ul>
+<p>The 60 mice that didn’t change status don’t tell us much about the direction of change. Consequently, they don’t contribute to the test statistic. For a <span class="math inline">\(2\times2\)</span> table, we define:</p>
+<ul>
+<li><span class="math inline">\(b\)</span>, the number changing from infected to uninfected</li>
+<li><span class="math inline">\(c\)</span>, the number changing from uninfected to infected</li>
+</ul>
+<p>Then calculate the McNemar version of the <span class="math inline">\(\chi^2\)</span> statistic:</p>
+<p><span class="math display">\[\chi^2_{McNemar}=\frac{\left(b-c\right)^2}{b+c}\]</span></p>
+<p>In the example,</p>
+<p><span class="math display">\[\chi^2_{McNemar}=\frac{\left(30-10\right)^2}{30+10}=10\]</span></p>
+<p>This statistic follows a <span class="math inline">\(\chi^2\)</span> distribution with one degree of freedom, giving us <span class="math inline">\(p\approx0.0016\)</span>. This test is deceptively simple: if 40 mice changed status, how unlikely was it that 30 of those 40 were in one direction?</p>
+<p>If that last question reminds you of a binomial question, then you are paying attention. That version of that question is the same as asking, “If we flip 40 fair coins, did we get a highly unlikely number of heads or tails?” We can estimate the probability of getting 10 or fewer heads, or 30 or more heads, like this:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">dbinom</span>(<span class="fu">c</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">30</span><span class="sc">:</span><span class="dv">40</span>), <span class="dv">40</span>, <span class="fl">0.5</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.002221434</code></pre>
+</div>
+</div>
+<p>Or visually:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch17_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The exact McNemar test is just a binomial sign test applied to the discordant pairs. Under the null hypothesis that <span class="math inline">\(p\left(Infected\rightarrow~Uninfected\right)=p\left(Uninfected\rightarrow~Infected\right)\)</span>,</p>
+<p><span class="math display">\[b\sim~Binomial\left(n=b+c,p=0.5\right)\]</span></p>
+<p>So in R we can perform:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">binom.test</span>(<span class="dv">30</span>, <span class="dv">40</span>, <span class="at">p=</span><span class="fl">0.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Exact binomial test
+
+data:  30 and 40
+number of successes = 30, number of trials = 40, p-value = 0.002221
+alternative hypothesis: true probability of success is not equal to 0.5
+95 percent confidence interval:
+ 0.5880380 0.8730852
+sample estimates:
+probability of success 
+                  0.75 </code></pre>
+</div>
+</div>
+<p>The <span class="math inline">\(p\)</span>-value may differ a bit from the actual McNemar test because the latter uses a chi-square approximation.</p>
+<p>R has a built-in fuction, <code>mcnemar.test()</code>, which accepts a <span class="math inline">\(2\times2\)</span> contingency table:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">10</span>, <span class="dv">30</span>, <span class="dv">40</span>), <span class="at">nrow=</span><span class="dv">2</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mcnemar.test</span>(a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    McNemar's Chi-squared test with continuity correction
+
+data:  a
+McNemar's chi-squared = 9.025, df = 1, p-value = 0.002663</code></pre>
+</div>
+</div>
+<p>By default, R applies a small correction (“<code>continuity correction</code>”) which makes the test more conservative.</p>
+<p><span class="math display">\[\chi^2_{McNemar}=\frac{\left(\left|b-c\right|-1\right)^2}{b+c}\]</span></p>
+<p>There are also extensions of McNemar’s test for more than two categories, often called the <strong>McNemar–Bowker test</strong> or <strong>Bowker’s test of symmetry</strong>.</p>
+</section>
+<section id="sec-indep-odds" class="level2" data-number="17.5">
+<h2 data-number="17.5" class="anchored" data-anchor-id="sec-indep-odds"><span class="header-section-number">17.5</span> Contingency tests and odds ratios</h2>
 <p>One interesting way to express the results of a test for independence is to use the <strong>odds ratio</strong> of one outcome relative to another. The <strong>odds</strong> of some event <span class="math inline">\(k\)</span> with probability <span class="math inline">\(p\)</span> is:</p>
 <p><span class="math display">\[Odds\left(k\right)=\frac{p\left(k\right)}{1-p\left(k\right)}\]</span></p>
 <p>So the odds ratio of two events <span class="math inline">\(k\)</span> and <span class="math inline">\(m\)</span> is simply the odds of <span class="math inline">\(k\)</span> divided by the odds of <span class="math inline">\(\neg k\)</span>.</p>

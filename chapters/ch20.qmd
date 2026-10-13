@@ -1,10 +1,185 @@
 # GLM for count data {#sec-glm3}
 
-1! Hah ha ha
-
-2! Hah ha ha
+This module explores GLMs for **count** data. Count data are exactly
+what they sound like: values resulting from counting things. Count data
+take the form of non-negative integers. Non-negative integers, however,
+are not necessarily count data. For example, summer temperatures in Georgia can be rounded to
+the nearest integer, but they will not be counts.
 
 ## Poisson GLM for counts {#sec-glm3-poisson}
 
+Count data are usually well-modeled by a kind of GLM called **Poisson regression**. The "Poisson" part comes from the **Poisson distribution**, which describes counts and events that occur at a constant rate. The "regression" part of the name comes from the fact that the technique involves a linear relationship between the predictors and some function of the response.
+
+### Definition {#sec-glm3-poisson-def}
+
+The Poisson GLM uses a log link function and Poisson response distribution to model counts $y$ as:
+
+$$y\sim Poisson\left(\lambda\right)$$
+
+$$\log\left(\lambda\right)=\eta$$
+
+$$\eta=\boldsymbol{\beta}\mathbf{x}$$
+
+Notice that the Poisson distribution has only one parameter, $\lambda$ ("lambda"), which is both the mean and variance of the distribution. This means that we should not be surprised or concerned if a scatterplot suggests heteroscedasticity with variance increasing with the expected value.
+
+### Example with simulated data {#sec-glm3-poisson-sim}
+
+Let's simulate a dataset and analyze it.
+
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+
+
+# random number seed for reproducibility
+set.seed(42)
+
+# sample size
+n <- 50
+
+# coefficients
+beta0 <- 0.9
+beta1 <- 0.2
+
+# x values
+x <- runif(n, 0, 10)
+
+# linear predictor
+eta <- beta0 + beta1 * x
+
+# inverse link function
+lambda <- exp(eta)
+
+# response variable
+y <- rpois(n, lambda)
+
+# make the plot
+par(mar=c(5.1, 5.1, 1.1, 1.1))
+dat <- data.frame(x=x, y=y)
+plot(x,y, ylim=c(0, 30))
+```
+
+The relationship between $y$ and $x$ looks linear, but because we are
+clever biologists, we know that linear models are not appropriate for
+two reasons. First, linear models predict continuous responses, and
+counts are not continuous (they are discrete). Second, linear models can
+predict negative responses, and counts cannot be negative. So, we will
+try Poisson regression because the Poisson distribution is so good at
+handling counts.
+
+```{r}
+mod1 <- glm(y~x, data=dat, family=poisson)
+summary(mod1)
+```
+
+The estimated parameters are very close to the correct values! The model
+also explains a lot of the variation in $y$, as seen by the
+pseudo-$R^2$ of $>0.8$.
+
+```{r}
+1-mod1$deviance/mod1$null.deviance
+```
+
+The next step is to plot predicted values and the original data. If you
+have visited any of the other modules in this course, you should be
+familiar with the process by now. 
+
+```{r}
+px <- seq(min(x), max(x), length=100)
+pred1 <- predict(mod1, 
+                 newdata=data.frame(x=px),
+                 type="link", se.fit=TRUE)
+mn1 <- exp(qnorm(0.5, pred1$fit, pred1$se.fit))
+lo1 <- exp(qnorm(0.025, pred1$fit, pred1$se.fit))
+up1 <- exp(qnorm(0.975, pred1$fit, pred1$se.fit))
+
+par(mar=c(5.1, 5.1, 1.1, 1.1))
+plot(x, y,  ylim=c(0, 30))
+points(px, lo1, type="l", lty=2, lwd=2, col="red")
+points(px, up1, type="l", lty=2, lwd=2, col="red")
+points(px, mn1, type="l", lwd=2, col="red")
+points(x, y, pch=16)
+```
+
+
+### Example with real data {#sec-glm3-poisson-real}
+
+Let's use the NEON data for a real example. If you don't already have it, download the [site-level richness and environmental dataset](..datasets/dat-neon-site-rich-env.csv) and put it in your working directory.
+
+
+```{r}
+#| include: false
+dx <- read.csv("../datasets/dat-neon-site-rich-env.csv")
+```
+
+
+```{r}
+#| eval: false
+dx <- read.csv("dat-neon-site-rich-env.csv")
+```
+
+Consider this plot of heteromyid species richness vs. precipitation:
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+
+
+par(mar=c(5.1, 5.1, 1.1, 1.1))
+plot(dx$precip, dx$het,
+     xlab=expression(Precipitation~(mm~yr^{-1})),
+     ylab="Heteromyid species richness")
+```
+
+It looks like heteromyid species richness declines with increasing precipitation. Before we go on, though, we should exclude the two sites in Puerto Rico because there is no sensible biogeographic reason for any heteromyids to be there. These sites are Guánica Forest (GUAN) and Lajas Experimental Station (LAJA), both in southwestern Puerto Rico. We will drop those sites from this analysis because Puerto Rico has a distinct biogeographic history, and its absence of native heteromyid rodents reflects geographic isolation rather than the same ecological processes influencing species richness across continental North America. Note that we are *not* dropping these sites merely because they have zero richness, nor because they are oddballs on the scatterplot. There is an *a priori* biological reason to exclude them because they differ in some fundamental way from the other observations. We would exclude a site in Europe or a zoo for the same reason.
+
+```{r}
+dz <- dx[which(!dx %in% c("GUAN", "LAJA")),]
+```
+
+Now we can fit a Poisson GLM:
+
+```{r}
+mod2 <- glm(het~precip, data=dz, family=poisson)
+summary(mod2)
+```
+
+And check the deviance explained:
+
+```{r}
+1-mod2$deviance/mod2$null.deviance
+```
+
+Not bad. We still need to check the predicted values though.
+
+```{r}
+px <- seq(min(dx$precip), max(dx$precip), length=100)
+pred2 <- predict(mod2, 
+                 newdata=data.frame(precip=px),
+                 type="link", se.fit=TRUE)
+mn2 <- exp(qnorm(0.5, pred2$fit, pred2$se.fit))
+lo2 <- exp(qnorm(0.025, pred2$fit, pred2$se.fit))
+up2 <- exp(qnorm(0.975, pred2$fit, pred2$se.fit))
+
+par(mar=c(5.1, 5.1, 1.1, 1.1))
+plot(dx$precip, dx$het,
+     xlab=expression(Precipitation~(mm~yr^{-1})),
+     ylab="Heteromyid species richness")
+points(px, lo2, type="l", lty=2, lwd=2, col="red")
+points(px, up2, type="l", lty=2, lwd=2, col="red")
+points(px, mn2, type="l", lwd=2, col="red")
+points(dx$precip, dx$het, pch=16)
+```
+
+### Information theoretic analysis
+
+
 ## Negative binomial GLM for overdispersed counts {#sec-glm3-negbin}
+
+### Definition {#sec-glm3-negbin-def}
+
+### Example with simulated data {#sec-glm3-negbin-sim}
+
+### Example with real data {#sec-glm3-negbin-real}
 

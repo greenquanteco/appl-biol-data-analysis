@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Appendix A — Appendix A – Applied Biological Data Analysis</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -22,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -36,14 +68,15 @@ ul.task-list li input[type="checkbox"] {
 <link href="../chapters/ch32.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -98,7 +131,9 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -432,8 +467,31 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#data-dictionary" id="toc-data-dictionary" class="nav-link active" data-scroll-target="#data-dictionary"><span class="header-section-number">A.1</span> Data dictionary</a>
+  <ul class="collapse">
+  <li><a href="#neon-grids.csv" id="toc-neon-grids.csv" class="nav-link" data-scroll-target="#neon-grids.csv"><span class="header-section-number">A.1.1</span> <code>neon-grids.csv</code></a></li>
+  <li><a href="#neon-captures.csv" id="toc-neon-captures.csv" class="nav-link" data-scroll-target="#neon-captures.csv"><span class="header-section-number">A.1.2</span> <code>neon-captures.csv</code></a></li>
+  <li><a href="#neon-measures.csv" id="toc-neon-measures.csv" class="nav-link" data-scroll-target="#neon-measures.csv"><span class="header-section-number">A.1.3</span> <code>neon-measures.csv</code></a></li>
+  <li><a href="#neon-taxa.csv" id="toc-neon-taxa.csv" class="nav-link" data-scroll-target="#neon-taxa.csv"><span class="header-section-number">A.1.4</span> <code>neon-taxa.csv</code></a></li>
+  </ul></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages"><span class="header-section-number">A.2</span> Packages</a></li>
+  <li><a href="#data-download" id="toc-data-download" class="nav-link" data-scroll-target="#data-download"><span class="header-section-number">A.3</span> Data download</a></li>
+  <li><a href="#read-data-into-memory" id="toc-read-data-into-memory" class="nav-link" data-scroll-target="#read-data-into-memory"><span class="header-section-number">A.4</span> Read data into memory</a></li>
+  <li><a href="#data-filtering" id="toc-data-filtering" class="nav-link" data-scroll-target="#data-filtering"><span class="header-section-number">A.5</span> Data filtering</a></li>
+  <li><a href="#update-taxonomy" id="toc-update-taxonomy" class="nav-link" data-scroll-target="#update-taxonomy"><span class="header-section-number">A.6</span> Update taxonomy</a></li>
+  <li><a href="#clean-up-individual-ids" id="toc-clean-up-individual-ids" class="nav-link" data-scroll-target="#clean-up-individual-ids"><span class="header-section-number">A.7</span> clean up individual IDs</a></li>
+  <li><a href="#organize-grid-metadata" id="toc-organize-grid-metadata" class="nav-link" data-scroll-target="#organize-grid-metadata"><span class="header-section-number">A.8</span> organize grid metadata</a></li>
+  <li><a href="#clean-up-individual-measurement-data" id="toc-clean-up-individual-measurement-data" class="nav-link" data-scroll-target="#clean-up-individual-measurement-data"><span class="header-section-number">A.9</span> Clean up individual measurement data</a></li>
+  <li><a href="#finalize-taxonomy" id="toc-finalize-taxonomy" class="nav-link" data-scroll-target="#finalize-taxonomy"><span class="header-section-number">A.10</span> finalize taxonomy</a></li>
+  <li><a href="#capture-numbers" id="toc-capture-numbers" class="nav-link" data-scroll-target="#capture-numbers"><span class="header-section-number">A.11</span> Capture numbers</a></li>
+  <li><a href="#write-out-final-datasets" id="toc-write-out-final-datasets" class="nav-link" data-scroll-target="#write-out-final-datasets"><span class="header-section-number">A.12</span> write out final datasets</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/appa.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -457,9 +515,747 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>NEON small mammal data</p>
+<p>This appendix contains information on the small mammal datasets used to construct many of the data analysis examples. The original datasets were downloaded from the <a href="https://www.neonscience.org/">National Ecological Observatory Network (NEON)</a>. Once downloaded, the data were filtered to exclude incomplete or possibly incorrect records, and to update taxonomy to 2026 conventions. The data were then reorganized into 4 tables:</p>
+<ol type="1">
+<li><strong>neon-grids.csv</strong>: contains metadata on trapping grids.</li>
+<li><strong>neon-captures.csv</strong>: contains small mammal capture data.</li>
+<li><strong>neon-measures.csv</strong>: contains small mammal body mass and standard measurements.</li>
+<li><strong>neon-taxa.csv</strong>: contains taxonomic definitions for each species in the capture data.</li>
+</ol>
+<section id="data-dictionary" class="level2" data-number="A.1">
+<h2 data-number="A.1" class="anchored" data-anchor-id="data-dictionary"><span class="header-section-number">A.1</span> Data dictionary</h2>
+<section id="neon-grids.csv" class="level3" data-number="A.1.1">
+<h3 data-number="A.1.1" class="anchored" data-anchor-id="neon-grids.csv"><span class="header-section-number">A.1.1</span> <code>neon-grids.csv</code></h3>
+<ul>
+<li><strong>domain</strong>: sampling region or <em>domain</em> as defined by NEON.</li>
+<li><strong>site</strong>: unique four letter code for site name.</li>
+<li><strong>grid</strong>: unique grid ID, nested within site.</li>
+<li><strong>lat</strong>: latitude in degrees north.</li>
+<li><strong>lon</strong>: longitude in degrees east.</li>
+<li><strong>elev</strong>: elevation in m.</li>
+<li><strong>nlcd</strong>: dominant NLCD land cover type within grid.</li>
+</ul>
+</section>
+<section id="neon-captures.csv" class="level3" data-number="A.1.2">
+<h3 data-number="A.1.2" class="anchored" data-anchor-id="neon-captures.csv"><span class="header-section-number">A.1.2</span> <code>neon-captures.csv</code></h3>
+<ul>
+<li><strong>grid</strong>: unique grid ID (corresponds to <code>neon-grids$grid</code></li>
+<li><strong>AMHA</strong> through <strong>ZATR</strong>: number of captures of each small mammal species. Four-letter species abbreviations correspond to neon-taxa.csv, column <code>abb</code>.</li>
+</ul>
+</section>
+<section id="neon-measures.csv" class="level3" data-number="A.1.3">
+<h3 data-number="A.1.3" class="anchored" data-anchor-id="neon-measures.csv"><span class="header-section-number">A.1.3</span> <code>neon-measures.csv</code></h3>
+</section>
+<section id="neon-taxa.csv" class="level3" data-number="A.1.4">
+<h3 data-number="A.1.4" class="anchored" data-anchor-id="neon-taxa.csv"><span class="header-section-number">A.1.4</span> <code>neon-taxa.csv</code></h3>
+</section>
+</section>
+<section id="packages" class="level2" data-number="A.2">
+<h2 data-number="A.2" class="anchored" data-anchor-id="packages"><span class="header-section-number">A.2</span> Packages</h2>
+<p>The following packages were used:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ritis)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(missForest)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="data-download" class="level2" data-number="A.3">
+<h2 data-number="A.3" class="anchored" data-anchor-id="data-download"><span class="header-section-number">A.3</span> Data download</h2>
+<p>The first step was to download all small mammal data from June 2013 through December 2023. The data used were finalized, non-provisional data. The data were downloaded and unzipped to a folder, <code>top.dir</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Unzipped the resulting download into </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>top.dir <span class="ot">&lt;-</span> <span class="st">"K:/_neon/NEON_count-small-mammals"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The data at this point were organized by folders, with each folder containing the data from a single site and trapping bout.</p>
+</section>
+<section id="read-data-into-memory" class="level2" data-number="A.4">
+<h2 data-number="A.4" class="anchored" data-anchor-id="read-data-into-memory"><span class="header-section-number">A.4</span> Read data into memory</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get folder names</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>folds <span class="ot">&lt;-</span> <span class="fu">dir</span>(top.dir)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># only need the folders, which have "RELEASE-20" </span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># in their names</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>folds <span class="ot">&lt;-</span> folds[<span class="fu">grep</span>(<span class="st">"RELEASE-20"</span>, folds)]</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>n.folds <span class="ot">&lt;-</span> <span class="fu">length</span>(folds)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># which columns do we want from basic dataset?</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>use.cols1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"domainID"</span>, <span class="st">"siteID"</span>, <span class="st">"plotID"</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>              <span class="st">"decimalLatitude"</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>              <span class="st">"decimalLongitude"</span>, <span class="st">"elevation"</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>              <span class="st">"nlcdClass"</span>, <span class="st">"tagID"</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>              <span class="st">"scientificName"</span>, <span class="st">"sex"</span>, <span class="st">"lifeStage"</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>              <span class="st">"pregnancyStatus"</span>, <span class="st">"hindfootLength"</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>              <span class="st">"earLength"</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>              <span class="st">"tailLength"</span>, <span class="st">"totalLength"</span>, <span class="st">"weight"</span>,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>              <span class="st">"tickNumber"</span>)  </span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># mlist for measured specimens</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co"># spplist for species at each location</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co">#   (includes extra species not in basic dataset)</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>spplist <span class="ot">&lt;-</span> mlist <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"list"</span>, <span class="at">length=</span>n.folds)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>i <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.folds){</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  ifold <span class="ot">&lt;-</span> <span class="fu">paste</span>(top.dir, folds[i], <span class="at">sep=</span><span class="st">"/"</span>)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  ifile <span class="ot">&lt;-</span> <span class="fu">dir</span>(ifold)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># basic file--has individual captures</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  ifile <span class="ot">&lt;-</span> ifile[<span class="fu">grep</span>(<span class="st">"_pertrapnight"</span>, ifile)]</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  ix <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">paste</span>(ifold, ifile, <span class="at">sep=</span><span class="st">"/"</span>))</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  <span class="co"># only need captures</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  ix <span class="ot">&lt;-</span> ix[<span class="fu">which</span>(ix<span class="sc">$</span>trapStatus <span class="sc">==</span> <span class="st">"5 - capture"</span>),]</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>  ispp <span class="ot">&lt;-</span> <span class="fu">character</span>(<span class="dv">0</span>)</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>  <span class="co"># get basic captures, if any</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">nrow</span>(ix) <span class="sc">&gt;</span> <span class="dv">0</span>){</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    ix <span class="ot">&lt;-</span> ix[,use.cols1]</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    mlist[[i]] <span class="ot">&lt;-</span> ix</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># vector of species</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    ispp <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(ix<span class="sc">$</span>scientificName))</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>  <span class="co"># get vouchers, if any</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>  <span class="co"># voucher file doesn't have any measurement data,</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>  <span class="co"># so just inspect to get unique species</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>  vfile <span class="ot">&lt;-</span> <span class="fu">dir</span>(ifold)</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>  vfile <span class="ot">&lt;-</span> vfile[<span class="fu">grep</span>(<span class="st">"_voucher"</span>, vfile)]</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">length</span>(vfile) <span class="sc">&gt;</span> <span class="dv">0</span>){</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>    vx <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">paste</span>(ifold, vfile, <span class="at">sep=</span><span class="st">"/"</span>))</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">nrow</span>(vx) <span class="sc">&gt;</span> <span class="dv">0</span>){</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>      <span class="co"># unique species in vouchers ## will have to remove nonmammals</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>      vspp <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(vx<span class="sc">$</span>scientificName))  </span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span>(<span class="fu">length</span>(vspp) <span class="sc">&gt;</span> <span class="dv">0</span>){</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>        <span class="co"># combine with species in basic data</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>        ispp <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">union</span>(ispp, vspp))  </span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>      }<span class="co">#if any vspp</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    }<span class="co"># if any rows in vx</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rm</span>(vx)</span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>  }<span class="co">#if vfile exists</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>  <span class="co"># save species to species list</span></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>  spplist[[i]] <span class="ot">&lt;-</span> ispp</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rm</span>(ix)</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rm</span>(ispp)</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"folder"</span>, i, <span class="st">"of"</span>, n.folds, <span class="st">"done!</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">flush.console</span>()</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a><span class="co"># compile measurement data</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, mlist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="data-filtering" class="level2" data-number="A.5">
+<h2 data-number="A.5" class="anchored" data-anchor-id="data-filtering"><span class="header-section-number">A.5</span> Data filtering</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## first filter down to species, which will</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="do">## reduce missing measurement problems</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">matrix</span>(<span class="fu">sort</span>(<span class="fu">unique</span>(res<span class="sc">$</span>scientificName)))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>use.spp <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Alexandromys oeconomus"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Ammospermophilus harrisii"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Ammospermophilus leucurus"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Baiomys taylori"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Blarina brevicauda"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Blarina carolinensis"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Blarina hylophaga"</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Callospermophilus lateralis"</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Chaetodipus baileyi"</span>,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Chaetodipus californicus"</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Chaetodipus eremicus"</span>,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Chaetodipus hispidus"</span>,</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Chaetodipus intermedius"</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Chaetodipus penicillatus"</span>,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Condylura cristata"</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Cryptotis parva"</span>,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Dicrostonyx groenlandicus"</span>,</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Didelphis virginiana"</span>,</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Dipodomys heermanni"</span>,</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Dipodomys merriami"</span>,</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Dipodomys microps"</span>,</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Dipodomys ordii"</span>,</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Dipodomys spectabilis"</span>,</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Glaucomys sabrinus"</span>,</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Glaucomys volans"</span>,</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Ictidomys tridecemlineatus"</span>,</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Ictidomys tridecemlineatus monticola"</span>,</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Lemmiscus curtatus"</span>,</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Lemmus trimucronatus"</span>,</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Lepus americanus"</span>,</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Lepus californicus"</span>,</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Microtus californicus"</span>,</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Microtus longicaudus"</span>,</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Microtus miurus"</span>,</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Microtus montanus"</span>,</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Microtus ochrogaster"</span>,</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Microtus oregoni"</span>,</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Microtus pennsylvanicus"</span>,</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Microtus pinetorum"</span>,</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Microtus xanthognathus"</span>,</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Mus musculus"</span>,</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Myodes gapperi"</span>,</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Myodes rutilus"</span>,</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Napaeozapus insignis"</span>,</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Neotoma albigula"</span>,</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Neotoma cinerea"</span>,</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Neotoma devia"</span>,</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Neotoma floridana"</span>,</span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Neotoma lepida"</span>,</span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Neotoma macrotis"</span>,</span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Neotoma mexicana"</span>,</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Neotoma micropus"</span>,</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Neurotrichus gibbsii"</span>,</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Ochotona princeps"</span>,</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Ochrotomys nuttalli"</span>,</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Onychomys arenicola"</span>,</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Onychomys leucogaster"</span>,</span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Onychomys torridus"</span>,</span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Oryzomys palustris"</span>,</span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Perognathus amplus"</span>,</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Perognathus fasciatus"</span>,</span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Perognathus flavescens"</span>,</span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Perognathus flavus"</span>,</span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Perognathus inornatus"</span>,</span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Perognathus longimembris"</span>,</span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Perognathus parvus"</span>,</span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Peromyscus attwateri"</span>,</span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Peromyscus boylii"</span>,</span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Peromyscus californicus"</span>,</span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Peromyscus crinitus"</span>,</span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Peromyscus eremicus"</span>,</span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Peromyscus gossypinus"</span>,</span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Peromyscus keeni"</span>,</span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Peromyscus leucopus"</span>,</span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Peromyscus maniculatus"</span>,</span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Peromyscus merriami"</span>,</span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Peromyscus nasutus"</span>,</span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Peromyscus polionotus"</span>,</span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Peromyscus truei"</span>,</span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Phenacomys intermedius"</span>,</span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Podomys floridanus"</span>,</span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Rattus norvegicus"</span>,</span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Rattus rattus"</span>,</span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Reithrodontomys fulvescens"</span>,</span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Reithrodontomys humulis"</span>,</span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Reithrodontomys megalotis"</span>,</span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Reithrodontomys montanus"</span>,</span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sciurus carolinensis"</span>,</span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sigmodon arizonae"</span>,</span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sigmodon hispidus"</span>,</span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sigmodon hispidus eremicus"</span>,</span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sigmodon ochrognathus"</span>,</span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sorex arcticus"</span>,</span>
+<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sorex cinereus"</span>,</span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sorex dispar"</span>,</span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sorex fumeus"</span>,</span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sorex haydeni"</span>,</span>
+<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sorex hoyi"</span>,</span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sorex longirostris"</span>,</span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sorex merriami"</span>,</span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sorex monticolus"</span>,</span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sorex nanus"</span>,</span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sorex ornatus"</span>,</span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sorex palustris"</span>,</span>
+<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sorex preblei"</span>,</span>
+<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sorex trowbridgii"</span>,</span>
+<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sorex tundrensis"</span>,</span>
+<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sorex ugyunak"</span>,</span>
+<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sorex vagrans"</span>,</span>
+<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Spermophilus armatus"</span>,</span>
+<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Spermophilus beecheyi"</span>,</span>
+<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Spermophilus franklinii"</span>,</span>
+<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Spermophilus parryii"</span>,</span>
+<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Spermophilus richardsonii"</span>,</span>
+<span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Spermophilus spilosoma"</span>,</span>
+<span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Spermophilus tereticaudus"</span>,</span>
+<span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Spermophilus variegatus"</span>,</span>
+<span id="cb4-123"><a href="#cb4-123" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sylvilagus audubonii"</span>,</span>
+<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sylvilagus floridanus"</span>,</span>
+<span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sylvilagus nuttallii"</span>,</span>
+<span id="cb4-126"><a href="#cb4-126" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Synaptomys cooperi"</span>,</span>
+<span id="cb4-127"><a href="#cb4-127" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tamias alpinus"</span>,</span>
+<span id="cb4-128"><a href="#cb4-128" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tamias amoenus"</span>,</span>
+<span id="cb4-129"><a href="#cb4-129" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tamias dorsalis"</span>,</span>
+<span id="cb4-130"><a href="#cb4-130" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tamias merriami"</span>,</span>
+<span id="cb4-131"><a href="#cb4-131" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tamias minimus"</span>,</span>
+<span id="cb4-132"><a href="#cb4-132" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tamias quadrimaculatus"</span>,</span>
+<span id="cb4-133"><a href="#cb4-133" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tamias quadrivittatus"</span>,</span>
+<span id="cb4-134"><a href="#cb4-134" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tamias rufus"</span>,</span>
+<span id="cb4-135"><a href="#cb4-135" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tamias speciosus"</span>,</span>
+<span id="cb4-136"><a href="#cb4-136" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tamias striatus"</span>,</span>
+<span id="cb4-137"><a href="#cb4-137" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tamias townsendii"</span>,</span>
+<span id="cb4-138"><a href="#cb4-138" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tamias umbrinus"</span>,</span>
+<span id="cb4-139"><a href="#cb4-139" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tamiasciurus douglasii"</span>,</span>
+<span id="cb4-140"><a href="#cb4-140" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tamiasciurus hudsonicus"</span>,</span>
+<span id="cb4-141"><a href="#cb4-141" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Thomomys talpoides"</span>,</span>
+<span id="cb4-142"><a href="#cb4-142" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Zapus hudsonius"</span>,</span>
+<span id="cb4-143"><a href="#cb4-143" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Zapus princeps"</span>,</span>
+<span id="cb4-144"><a href="#cb4-144" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Zapus trinotatus"</span></span>
+<span id="cb4-145"><a href="#cb4-145" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-146"><a href="#cb4-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-147"><a href="#cb4-147" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> res[<span class="fu">which</span>(res<span class="sc">$</span>scientificName <span class="sc">%in%</span> use.spp),]</span>
+<span id="cb4-148"><a href="#cb4-148" aria-hidden="true" tabindex="-1"></a><span class="fu">rev</span>(<span class="fu">sort</span>(<span class="fu">table</span>(res<span class="sc">$</span>scientificName)))</span>
+<span id="cb4-149"><a href="#cb4-149" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(use.spp)</span>
+<span id="cb4-150"><a href="#cb4-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-151"><a href="#cb4-151" aria-hidden="true" tabindex="-1"></a><span class="co"># only want adults</span></span>
+<span id="cb4-152"><a href="#cb4-152" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> res[<span class="fu">which</span>(res<span class="sc">$</span>lifeStage <span class="sc">==</span> <span class="st">"adult"</span>),]</span>
+<span id="cb4-153"><a href="#cb4-153" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>lifeStage <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb4-154"><a href="#cb4-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-155"><a href="#cb4-155" aria-hidden="true" tabindex="-1"></a><span class="co"># only want nonpregnant individuals--throws off weight</span></span>
+<span id="cb4-156"><a href="#cb4-156" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> res[<span class="fu">which</span>(res<span class="sc">$</span>pregnancyStatus <span class="sc">!=</span> <span class="st">"pregnant"</span>),]</span>
+<span id="cb4-157"><a href="#cb4-157" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>pregnancyStatus <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb4-158"><a href="#cb4-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-159"><a href="#cb4-159" aria-hidden="true" tabindex="-1"></a><span class="co"># only want specimens with tick counts</span></span>
+<span id="cb4-160"><a href="#cb4-160" aria-hidden="true" tabindex="-1"></a><span class="co"># OR don't explicitly say no tick count performed</span></span>
+<span id="cb4-161"><a href="#cb4-161" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(res<span class="sc">$</span>scientificName[<span class="fu">which</span>(res<span class="sc">$</span>tickNumber <span class="sc">==</span> <span class="st">"No count performed"</span>)])</span>
+<span id="cb4-162"><a href="#cb4-162" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">is.na</span>(res<span class="sc">$</span>tickNumber))</span>
+<span id="cb4-163"><a href="#cb4-163" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>tickNumber[<span class="fu">which</span>(<span class="fu">is.na</span>(res<span class="sc">$</span>tickNumber))] <span class="ot">&lt;-</span> <span class="st">"0"</span></span>
+<span id="cb4-164"><a href="#cb4-164" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> res[<span class="fu">which</span>(res<span class="sc">$</span>tickNumber <span class="sc">!=</span><span class="st">"No count performed"</span>),]</span>
+<span id="cb4-165"><a href="#cb4-165" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>tickNumber[<span class="fu">which</span>(res<span class="sc">$</span>tickNumber <span class="sc">==</span> <span class="st">""</span>)] <span class="ot">&lt;-</span> <span class="st">"0"</span></span>
+<span id="cb4-166"><a href="#cb4-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-167"><a href="#cb4-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-168"><a href="#cb4-168" aria-hidden="true" tabindex="-1"></a><span class="co"># include sexes M, F, unknown</span></span>
+<span id="cb4-169"><a href="#cb4-169" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>sex[<span class="fu">which</span>(res<span class="sc">$</span>sex <span class="sc">==</span> <span class="st">"FALSE"</span>)] <span class="ot">&lt;-</span> <span class="st">"F"</span></span>
+<span id="cb4-170"><a href="#cb4-170" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>sex[<span class="fu">which</span>(res<span class="sc">$</span>sex <span class="sc">==</span> <span class="st">""</span>)] <span class="ot">&lt;-</span> <span class="st">"U"</span></span>
+<span id="cb4-171"><a href="#cb4-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-172"><a href="#cb4-172" aria-hidden="true" tabindex="-1"></a><span class="co"># only interested in specimens missing at most 1 or 2 measurements</span></span>
+<span id="cb4-173"><a href="#cb4-173" aria-hidden="true" tabindex="-1"></a><span class="co"># how many have all measurements?</span></span>
+<span id="cb4-174"><a href="#cb4-174" aria-hidden="true" tabindex="-1"></a>meas.cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"hindfootLength"</span>, <span class="st">"earLength"</span>,</span>
+<span id="cb4-175"><a href="#cb4-175" aria-hidden="true" tabindex="-1"></a>              <span class="st">"tailLength"</span>, <span class="st">"totalLength"</span>, <span class="st">"weight"</span>)</span>
+<span id="cb4-176"><a href="#cb4-176" aria-hidden="true" tabindex="-1"></a><span class="co"># count how many measurements are missing</span></span>
+<span id="cb4-177"><a href="#cb4-177" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>check <span class="ot">&lt;-</span> <span class="fu">apply</span>(res[,meas.cols], <span class="dv">1</span>,</span>
+<span id="cb4-178"><a href="#cb4-178" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x){<span class="fu">length</span>(<span class="fu">which</span>(<span class="fu">is.na</span>(x)))})</span>
+<span id="cb4-179"><a href="#cb4-179" aria-hidden="true" tabindex="-1"></a><span class="fu">ftable</span>(check<span class="sc">~</span>scientificName, <span class="at">data=</span>res)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># how many are 0?</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(res[,meas.cols], <span class="dv">2</span>, <span class="cf">function</span>(x){<span class="fu">length</span>(<span class="fu">which</span>(x <span class="sc">==</span> <span class="dv">0</span>))})</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>res[<span class="fu">which</span>(res<span class="sc">$</span>weight<span class="sc">==</span><span class="dv">0</span>),]</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 rattus rattus has 0 weight; replace with NA and backfill later</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>weight[<span class="fu">which</span>(res<span class="sc">$</span>weight <span class="sc">==</span> <span class="dv">0</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># which observations are missing which measurements</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>check.wt <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="sc">!</span><span class="fu">is.na</span>(res<span class="sc">$</span>weight))</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>check.hf <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="sc">!</span><span class="fu">is.na</span>(res<span class="sc">$</span>hindfootLength))</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>check.el <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="sc">!</span><span class="fu">is.na</span>(res<span class="sc">$</span>earLength))</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>check.tl <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="sc">!</span><span class="fu">is.na</span>(res<span class="sc">$</span>tailLength))</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>check.to <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="sc">!</span><span class="fu">is.na</span>(res<span class="sc">$</span>totalLength))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ftable</span>(check.wt<span class="sc">~</span>scientificName, <span class="at">data=</span>res)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ftable</span>(check.hf<span class="sc">~</span>scientificName, <span class="at">data=</span>res)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ftable</span>(check.el<span class="sc">~</span>scientificName, <span class="at">data=</span>res)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ftable</span>(check.tl<span class="sc">~</span>scientificName, <span class="at">data=</span>res)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ftable</span>(check.to<span class="sc">~</span>scientificName, <span class="at">data=</span>res)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="update-taxonomy" class="level2" data-number="A.6">
+<h2 data-number="A.6" class="anchored" data-anchor-id="update-taxonomy"><span class="header-section-number">A.6</span> Update taxonomy</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># need to rectify taxonomy before interpolating measurements, </span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># so we use the right animals for each interpolation</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>tax <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">dbin=</span><span class="fu">sort</span>(<span class="fu">unique</span>(res<span class="sc">$</span>scientificName)))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>dgen <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">strsplit</span>(tax<span class="sc">$</span>dbin, <span class="st">" "</span>), <span class="st">"["</span>, <span class="dv">1</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>dspp <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">strsplit</span>(tax<span class="sc">$</span>dbin, <span class="st">" "</span>), <span class="st">"["</span>, <span class="dv">2</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>tsn <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>valid <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(tax)){</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  ires <span class="ot">&lt;-</span> <span class="fu">search_scientific</span>(tax<span class="sc">$</span>dbin[i])</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">nrow</span>(ires) <span class="sc">==</span> <span class="dv">0</span>) <span class="cf">next</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  flag <span class="ot">&lt;-</span> <span class="fu">which</span>(ires<span class="sc">$</span>combinedName <span class="sc">==</span> tax<span class="sc">$</span>dbin[i])</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  itsn <span class="ot">&lt;-</span> ires<span class="sc">$</span>tsn[flag]</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  tax<span class="sc">$</span>tsn[i] <span class="ot">&lt;-</span> itsn</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  valid <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">usage</span>(itsn))<span class="sc">$</span>taxonUsageRating[<span class="dv">1</span>]</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  tax<span class="sc">$</span>valid[i] <span class="ot">&lt;-</span> valid</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"taxon"</span>, i, <span class="st">"of"</span>, <span class="fu">nrow</span>(tax), <span class="st">"complete!</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">flush.console</span>()</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>tsn[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"180298"</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>valid[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"valid"</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="co"># igen is correct genus to use when interpolating</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>igen <span class="ot">&lt;-</span> tax<span class="sc">$</span>dgen</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>igen[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"Microtus"</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>tax[<span class="fu">which</span>(tax<span class="sc">$</span>valid <span class="sc">==</span> <span class="st">"invalid"</span>),]</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="co">#4           Blarina brevicauda      Blarina   brevicauda 179967 invalid      Blarina</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">which</span>(tax<span class="sc">$</span>dbin <span class="sc">==</span> <span class="st">"Blarina brevicauda"</span>)</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>tsn[flag] <span class="ot">&lt;-</span> <span class="st">"1229285"</span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>dspp[flag] <span class="ot">&lt;-</span> <span class="st">"brevicaudus"</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a><span class="co">#15             Cryptotis parva    Cryptotis        parva 179971 invalid    Cryptotis</span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">which</span>(tax<span class="sc">$</span>dbin <span class="sc">==</span> <span class="st">"Cryptotis parva"</span>)</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>tsn[flag] <span class="ot">&lt;-</span> <span class="st">"1229257"</span></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>dspp[flag] <span class="ot">&lt;-</span> <span class="st">"parvus"</span></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a><span class="co">#85  Sigmodon hispidus eremicus     Sigmodon     hispidus 973436 invalid     Sigmodon</span></span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">which</span>(tax<span class="sc">$</span>dbin <span class="sc">==</span> <span class="st">"Sigmodon hispidus eremicus"</span>)</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>tsn[flag] <span class="ot">&lt;-</span> <span class="st">"180349"</span></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>dspp[flag] <span class="ot">&lt;-</span> <span class="st">"hispidus"</span></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="co">#103       Spermophilus armatus Spermophilus      armatus 180147 invalid Spermophilus</span></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">which</span>(tax<span class="sc">$</span>dbin <span class="sc">==</span> <span class="st">"Spermophilus armatus"</span>)</span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>tsn[flag] <span class="ot">&lt;-</span> <span class="st">"930314"</span></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>igen[flag] <span class="ot">&lt;-</span> <span class="st">"Urocitellus"</span></span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a><span class="co">#104      Spermophilus beecheyi Spermophilus     beecheyi 180148 invalid Spermophilus</span></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">which</span>(tax<span class="sc">$</span>dbin <span class="sc">==</span> <span class="st">"Spermophilus beecheyi"</span>)</span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>tsn[flag] <span class="ot">&lt;-</span> <span class="st">"930301"</span></span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>igen[flag] <span class="ot">&lt;-</span> <span class="st">"Otospermophilus"</span></span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a><span class="co">#105    Spermophilus franklinii Spermophilus   franklinii 180153 invalid Spermophilus</span></span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">which</span>(tax<span class="sc">$</span>dbin <span class="sc">==</span> <span class="st">"Spermophilus franklinii"</span>)</span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>tsn[flag] <span class="ot">&lt;-</span> <span class="st">"930309"</span></span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>igen[flag] <span class="ot">&lt;-</span> <span class="st">"Poliocitellus"</span></span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a><span class="co">#106       Spermophilus parryii Spermophilus      parryii 180146 invalid Spermophilus</span></span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">which</span>(tax<span class="sc">$</span>dbin <span class="sc">==</span> <span class="st">"Spermophilus parryii"</span>)</span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>tsn[flag] <span class="ot">&lt;-</span> <span class="st">"930321"</span></span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>igen[flag] <span class="ot">&lt;-</span> <span class="st">"Urocitellus"</span></span>
+<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a><span class="co">#107  Spermophilus richardsonii Spermophilus richardsonii 180157 invalid Spermophilus</span></span>
+<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">which</span>(tax<span class="sc">$</span>dbin <span class="sc">==</span> <span class="st">"Spermophilus richardsonii"</span>)</span>
+<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>tsn[flag] <span class="ot">&lt;-</span> <span class="st">"930322"</span></span>
+<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>igen[flag] <span class="ot">&lt;-</span> <span class="st">"Urocitellus"</span></span>
+<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a><span class="co">#108     Spermophilus spilosoma Spermophilus    spilosoma 180159 invalid Spermophilus</span></span>
+<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">which</span>(tax<span class="sc">$</span>dbin <span class="sc">==</span> <span class="st">"Spermophilus spilosoma"</span>)</span>
+<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>tsn[flag] <span class="ot">&lt;-</span> <span class="st">"930312"</span></span>
+<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>igen[flag] <span class="ot">&lt;-</span> <span class="st">"Xerospermophilus"</span></span>
+<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a><span class="co">#109  Spermophilus tereticaudus Spermophilus tereticaudus 180160 invalid Spermophilus</span></span>
+<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">which</span>(tax<span class="sc">$</span>dbin <span class="sc">==</span> <span class="st">"Spermophilus tereticaudus"</span>)</span>
+<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>tsn[flag] <span class="ot">&lt;-</span> <span class="st">"930313"</span></span>
+<span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>igen[flag] <span class="ot">&lt;-</span> <span class="st">"Xerospermophilus"</span></span>
+<span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-80"><a href="#cb11-80" aria-hidden="true" tabindex="-1"></a><span class="co">#110    Spermophilus variegatus Spermophilus   variegatus 180163 invalid Spermophilus</span></span>
+<span id="cb11-81"><a href="#cb11-81" aria-hidden="true" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">which</span>(tax<span class="sc">$</span>dbin <span class="sc">==</span> <span class="st">"Spermophilus variegatus"</span>)</span>
+<span id="cb11-82"><a href="#cb11-82" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>tsn[flag] <span class="ot">&lt;-</span> <span class="st">"930302"</span></span>
+<span id="cb11-83"><a href="#cb11-83" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>igen[flag] <span class="ot">&lt;-</span> <span class="st">"Otospermophilus"</span></span>
+<span id="cb11-84"><a href="#cb11-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-85"><a href="#cb11-85" aria-hidden="true" tabindex="-1"></a><span class="do">## need to fix chipmunk taxonomy</span></span>
+<span id="cb11-86"><a href="#cb11-86" aria-hidden="true" tabindex="-1"></a><span class="co"># "Tamias" was recently split, not yet reflected in ITIS</span></span>
+<span id="cb11-87"><a href="#cb11-87" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>igen[<span class="fu">which</span>(tax<span class="sc">$</span>dgen <span class="sc">==</span> <span class="st">"Tamias"</span>)] <span class="ot">&lt;-</span> <span class="st">"Neotamias"</span></span>
+<span id="cb11-88"><a href="#cb11-88" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>igen[<span class="fu">which</span>(tax<span class="sc">$</span>dbin <span class="sc">==</span> <span class="st">"Tamias striatus"</span>)] <span class="ot">&lt;-</span> <span class="st">"Tamias"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># data frame tax: </span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#dbin  = binomial name as in the measurement dataset </span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#dgen  = genus as in the data (except for Blarina and Cryptotis)</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#dspp  = species as in the data</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#tsn   = TSN of correct taxonomic name (as of 2025-08-01 12:39 EDT)</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#valid = validity of dbin (invalid indicates that genus or spp was invalid)</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#igen  = correct genus (all but Alexandromys) or genus to use for interpolation</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#        (Alexandromys)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="clean-up-individual-ids" class="level2" data-number="A.7">
+<h2 data-number="A.7" class="anchored" data-anchor-id="clean-up-individual-ids"><span class="header-section-number">A.7</span> clean up individual IDs</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># how certain are we that each individual was identified consistently?</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>aa <span class="ot">&lt;-</span> <span class="fu">rev</span>(<span class="fu">sort</span>(<span class="fu">table</span>(res<span class="sc">$</span>tagID)))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>res[<span class="fu">which</span>(res<span class="sc">$</span>tagID <span class="sc">==</span> <span class="st">"NEON.MAM.D15.L2927"</span>),]</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(aa)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="do">## how many species are associated with each tag?</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>utags <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(res<span class="sc">$</span>tagID))</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>ntags <span class="ot">&lt;-</span> <span class="fu">length</span>(utags)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>ind.ag <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(scientificName<span class="sc">~</span>tagID, <span class="at">data=</span>res,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">function</span>(x){<span class="fu">length</span>(<span class="fu">unique</span>(x))})</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ind.ag)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co"># almost all (96.8%) are associated with only 1 species</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 3.2% have 2 species; 0.05% have 3 species</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ind.ag<span class="sc">$</span>scientificName)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co">#    1     2     3 </span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co">#60466  1983    34 </span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ind.ag<span class="sc">$</span>scientificName)<span class="sc">/</span>ntags</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="co"># any way to resolve?</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>spp2 <span class="ot">&lt;-</span> ind.ag<span class="sc">$</span>tagID[<span class="fu">which</span>(ind.ag<span class="sc">$</span>scientificName <span class="sc">==</span> <span class="dv">2</span>)]</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="co"># what kinds of issues are there?</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(scientificName<span class="sc">~</span>tagID, <span class="at">data=</span>res[<span class="fu">which</span>(res<span class="sc">$</span>tagID <span class="sc">%in%</span> spp2),],</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>                 <span class="cf">function</span>(x){<span class="fu">paste</span>(<span class="fu">sort</span>(<span class="fu">unique</span>(x)), <span class="at">collapse=</span><span class="st">"__"</span>)})</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="fu">rev</span>(<span class="fu">sort</span>(<span class="fu">table</span>(df2<span class="sc">$</span>scientificName)))</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a><span class="do">#### conclusion: only keep individuals with consistent identity</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="do">#### doesn't guarantee correct, just consistent</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>spp1 <span class="ot">&lt;-</span> ind.ag<span class="sc">$</span>tagID[<span class="fu">which</span>(ind.ag<span class="sc">$</span>scientificName <span class="sc">==</span> <span class="dv">1</span>)]</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(res)</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> res[<span class="fu">which</span>(res<span class="sc">$</span>tagID <span class="sc">%in%</span> spp1),]</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(res)                                                 </span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res)</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a><span class="do">### species in dataset</span></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>abb <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">substr</span>(tax<span class="sc">$</span>igen, <span class="dv">1</span>, <span class="dv">2</span>), <span class="fu">substr</span>(tax<span class="sc">$</span>dspp, <span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>abb <span class="ot">&lt;-</span> <span class="fu">toupper</span>(tax<span class="sc">$</span>abb)</span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(<span class="fu">table</span>(tax<span class="sc">$</span>abb))</span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a><span class="co">#ICTR NEAL NEME NEMI NEQU PEFL SIHI</span></span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>tax[<span class="fu">which</span>(tax<span class="sc">$</span>abb <span class="sc">==</span> <span class="st">"ICTR"</span>),] <span class="do">## ok, combining anyway</span></span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>tax[<span class="fu">which</span>(tax<span class="sc">$</span>abb <span class="sc">==</span> <span class="st">"NEAL"</span>),] </span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>abb[<span class="fu">which</span>(tax<span class="sc">$</span>tsn <span class="sc">==</span> <span class="st">"180189"</span>)] <span class="ot">&lt;-</span> <span class="st">"NEAP"</span></span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>tax[<span class="fu">which</span>(tax<span class="sc">$</span>abb <span class="sc">==</span> <span class="st">"NEME"</span>),]</span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>abb[<span class="fu">which</span>(tax<span class="sc">$</span>tsn <span class="sc">==</span> <span class="st">"180194"</span>)] <span class="ot">&lt;-</span> <span class="st">"NEMR"</span></span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>tax[<span class="fu">which</span>(tax<span class="sc">$</span>abb <span class="sc">==</span> <span class="st">"NEMI"</span>),] </span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>abb[<span class="fu">which</span>(tax<span class="sc">$</span>tsn <span class="sc">==</span> <span class="st">"180195"</span>)] <span class="ot">&lt;-</span> <span class="st">"NEMN"</span></span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>tax[<span class="fu">which</span>(tax<span class="sc">$</span>abb <span class="sc">==</span> <span class="st">"NEQU"</span>),] </span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>abb[<span class="fu">which</span>(tax<span class="sc">$</span>tsn <span class="sc">==</span> <span class="st">"180201"</span>)] <span class="ot">&lt;-</span> <span class="st">"NEQA"</span></span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>tax[<span class="fu">which</span>(tax<span class="sc">$</span>abb <span class="sc">==</span> <span class="st">"PEFL"</span>),]</span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>abb[<span class="fu">which</span>(tax<span class="sc">$</span>tsn <span class="sc">==</span> <span class="st">"180262"</span>)] <span class="ot">&lt;-</span> <span class="st">"PEFV"</span></span>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>tax[<span class="fu">which</span>(tax<span class="sc">$</span>abb <span class="sc">==</span> <span class="st">"SIHI"</span>),] <span class="do">## ok, combining anyway</span></span>
+<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a><span class="co"># add abbreviations to res</span></span>
+<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>abb <span class="ot">&lt;-</span> tax<span class="sc">$</span>abb[<span class="fu">match</span>(res<span class="sc">$</span>scientificName, tax<span class="sc">$</span>dbin)]</span>
+<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>uabb <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(tax<span class="sc">$</span>abb))</span>
+<span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a>nabb <span class="ot">&lt;-</span> <span class="fu">length</span>(uabb)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="organize-grid-metadata" class="level2" data-number="A.8">
+<h2 data-number="A.8" class="anchored" data-anchor-id="organize-grid-metadata"><span class="header-section-number">A.8</span> organize grid metadata</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="do">#### make a table of grids (plots)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>ugrids <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(res<span class="sc">$</span>plotID))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>ngrids <span class="ot">&lt;-</span> <span class="fu">length</span>(ugrids)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>grd <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">grid=</span>ugrids)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>grd<span class="sc">$</span>site <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">strsplit</span>(grd<span class="sc">$</span>grid, <span class="st">"_"</span>), <span class="st">"["</span>, <span class="dv">1</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>matchx <span class="ot">&lt;-</span> <span class="fu">match</span>(grd<span class="sc">$</span>grid, res<span class="sc">$</span>plotID)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>grd<span class="sc">$</span>domain <span class="ot">&lt;-</span> res<span class="sc">$</span>domainID[matchx]</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>grd<span class="sc">$</span>lat <span class="ot">&lt;-</span> res<span class="sc">$</span>decimalLatitude[matchx]</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>grd<span class="sc">$</span>lon <span class="ot">&lt;-</span> res<span class="sc">$</span>decimalLongitude[matchx]</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>grd<span class="sc">$</span>elev <span class="ot">&lt;-</span> res<span class="sc">$</span>elevation[matchx]</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>grd<span class="sc">$</span>nlcd <span class="ot">&lt;-</span> res<span class="sc">$</span>nlcdClass[matchx]</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>grd <span class="ot">&lt;-</span> grd[,<span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">7</span>)]</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>doms <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Northeast"</span>, <span class="st">"Midatlantic"</span>, <span class="st">"Southeast"</span>, <span class="st">"Atlantic Neotropical"</span>,</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>          <span class="st">"Great Lakes"</span>, <span class="st">"Prairie Peninsula"</span>, <span class="st">"Appalachians"</span>, <span class="st">"Ozarks"</span>,</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>          <span class="st">"Northern Plains"</span>, <span class="st">"Central Plains"</span>, <span class="st">"Southern Plains"</span>, </span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>          <span class="st">"Northern Rockies"</span>, <span class="st">"Southern Rockies"</span>, <span class="st">"Desert Southwest"</span>,</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>          <span class="st">"Great Basin"</span>, <span class="st">"Pacific Northwest"</span>, <span class="st">"Pacific Southwest"</span>)</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>doms <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"D"</span>, <span class="fu">formatC</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">19</span>, <span class="at">width=</span><span class="dv">2</span>, <span class="at">flag=</span><span class="st">"0"</span>), <span class="st">"_"</span>, doms)</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(doms) <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">strsplit</span>(doms, <span class="st">"_"</span>), <span class="st">"["</span>, <span class="dv">1</span>)</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>grd<span class="sc">$</span>domain <span class="ot">&lt;-</span> doms[grd<span class="sc">$</span>domain]</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="do">### export version of grids</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>grd <span class="ot">&lt;-</span> grd[<span class="fu">order</span>(grd<span class="sc">$</span>domain, grd<span class="sc">$</span>grid),]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="clean-up-individual-measurement-data" class="level2" data-number="A.9">
+<h2 data-number="A.9" class="anchored" data-anchor-id="clean-up-individual-measurement-data"><span class="header-section-number">A.9</span> Clean up individual measurement data</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">### finalize measurements</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>met1 <span class="ot">&lt;-</span> res[,<span class="fu">c</span>(<span class="st">"plotID"</span>, <span class="st">"tagID"</span>, <span class="st">"abb"</span>, <span class="st">"sex"</span>, <span class="st">"hindfootLength"</span>, <span class="st">"earLength"</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>              <span class="st">"tailLength"</span>, <span class="st">"totalLength"</span>, <span class="st">"weight"</span>, <span class="st">"tickNumber"</span>)]</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>mag1 <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(weight<span class="sc">~</span>tagID, <span class="at">data=</span>met1, mean, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>mag2 <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(totalLength<span class="sc">~</span>tagID, <span class="at">data=</span>met1, mean, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>mag3 <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(tailLength<span class="sc">~</span>tagID, <span class="at">data=</span>met1, mean, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>mag4 <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(hindfootLength<span class="sc">~</span>tagID, <span class="at">data=</span>met1, mean, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>mag5 <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(earLength<span class="sc">~</span>tagID, <span class="at">data=</span>met1, mean, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># combine nonmissing values</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>met <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">tag=</span><span class="fu">sort</span>(<span class="fu">unique</span>(met1<span class="sc">$</span>tagID)))</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>met<span class="sc">$</span>mass   <span class="ot">&lt;-</span> mag1<span class="sc">$</span>weight[<span class="fu">match</span>(met<span class="sc">$</span>tag, mag1<span class="sc">$</span>tagID)]</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>met<span class="sc">$</span>totlen <span class="ot">&lt;-</span> mag2<span class="sc">$</span>totalLength[<span class="fu">match</span>(met<span class="sc">$</span>tag, mag2<span class="sc">$</span>tagID)]</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>met<span class="sc">$</span>tail   <span class="ot">&lt;-</span> mag3<span class="sc">$</span>tailLength[<span class="fu">match</span>(met<span class="sc">$</span>tag, mag3<span class="sc">$</span>tagID)]</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>met<span class="sc">$</span>foot   <span class="ot">&lt;-</span> mag4<span class="sc">$</span>hindfootLength[<span class="fu">match</span>(met<span class="sc">$</span>tag, mag4<span class="sc">$</span>tagID)]</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>met<span class="sc">$</span>pinna  <span class="ot">&lt;-</span> mag5<span class="sc">$</span>earLength[<span class="fu">match</span>(met<span class="sc">$</span>tag, mag5<span class="sc">$</span>tagID)]</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="co"># get individuals with all measurements</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>met<span class="sc">$</span>spp <span class="ot">&lt;-</span> met1<span class="sc">$</span>abb[<span class="fu">match</span>(met<span class="sc">$</span>tag, met1<span class="sc">$</span>tagID)]</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>met.all <span class="ot">&lt;-</span> met[<span class="fu">complete.cases</span>(met),]</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(met.all)</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="co"># what about those missing only 1 measurement?</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>met<span class="sc">$</span>nonmiss <span class="ot">&lt;-</span> <span class="fu">apply</span>(met[,<span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>)], <span class="dv">1</span>, <span class="cf">function</span>(x){<span class="fu">length</span>(<span class="fu">which</span>(<span class="sc">!</span><span class="fu">is.na</span>(x)))})</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(met<span class="sc">$</span>nonmiss)</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>met4 <span class="ot">&lt;-</span> met[<span class="fu">which</span>(met<span class="sc">$</span>nonmiss <span class="sc">&gt;=</span> <span class="dv">4</span>),]</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>met4<span class="sc">$</span>miss <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">apply</span>(met4[,<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>], <span class="dv">1</span>, <span class="cf">function</span>(x){<span class="fu">which</span>(<span class="fu">is.na</span>(x))}))</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>met4<span class="sc">$</span>miss <span class="ot">&lt;-</span> <span class="fu">names</span>(met4)[met4<span class="sc">$</span>miss<span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="fu">ftable</span>(miss<span class="sc">~</span>spp, <span class="at">data=</span>met4)</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="co"># interpolate missing measurements</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>met4<span class="sc">$</span>genus <span class="ot">&lt;-</span> tax<span class="sc">$</span>dgen[<span class="fu">match</span>(met4<span class="sc">$</span>spp, tax<span class="sc">$</span>abb)]</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a><span class="co"># combine a few genera to get more robust interpolations</span></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>met4<span class="sc">$</span>genus[<span class="fu">which</span>(met4<span class="sc">$</span>genus <span class="sc">==</span> <span class="st">"Alexandromys"</span>)] <span class="ot">&lt;-</span> <span class="st">"Microtus"</span></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>met4<span class="sc">$</span>genus[<span class="fu">which</span>(met4<span class="sc">$</span>genus <span class="sc">==</span> <span class="st">"Ictidomys"</span>)] <span class="ot">&lt;-</span> <span class="st">"Spermophilus"</span></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>met4<span class="sc">$</span>genus[<span class="fu">which</span>(met4<span class="sc">$</span>genus <span class="sc">==</span> <span class="st">"Lemmiscus"</span>)] <span class="ot">&lt;-</span> <span class="st">"Lemmus"</span></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>met4<span class="sc">$</span>genus[<span class="fu">which</span>(met4<span class="sc">$</span>genus <span class="sc">==</span> <span class="st">"Synaptomys"</span>)] <span class="ot">&lt;-</span> <span class="st">"Lemmus"</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>met4<span class="sc">$</span>genus[<span class="fu">which</span>(met4<span class="sc">$</span>genus <span class="sc">==</span> <span class="st">"Dicrostonyx"</span>)] <span class="ot">&lt;-</span> <span class="st">"Lemmus"</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>met4<span class="sc">$</span>genus[<span class="fu">which</span>(met4<span class="sc">$</span>genus <span class="sc">==</span> <span class="st">"Phenacomys"</span>)] <span class="ot">&lt;-</span> <span class="st">"Microtus"</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(met4<span class="sc">$</span>genus)</span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("missForest")</span></span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(missForest)</span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a>ugenera <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(met4<span class="sc">$</span>genus))</span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>ngenera <span class="ot">&lt;-</span> <span class="fu">length</span>(ugenera)</span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>ngenera){</span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"starting genus"</span>, ugenera[i], <span class="st">"!</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">flush.console</span>()</span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>  flag <span class="ot">&lt;-</span> <span class="fu">which</span>(met4<span class="sc">$</span>genus <span class="sc">==</span> ugenera[i])</span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>  ix <span class="ot">&lt;-</span> met4[flag, <span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>]</span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a>  imput <span class="ot">&lt;-</span> <span class="fu">missForest</span>(ix)</span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a>  met4[flag,<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(imput<span class="sc">$</span>ximp,<span class="dv">0</span>)</span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"genus"</span>, i, <span class="st">"of"</span>, ngenera, <span class="st">"imputed!</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">flush.console</span>()</span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a><span class="co"># remove unneeded variables</span></span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a>met4<span class="sc">$</span>miss <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a>met4<span class="sc">$</span>genus <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a>met4<span class="sc">$</span>nonmiss <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a><span class="co"># add back in other variables</span></span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a>met4<span class="sc">$</span>sex <span class="ot">&lt;-</span> met1<span class="sc">$</span>sex[<span class="fu">match</span>(met4<span class="sc">$</span>tag, met1<span class="sc">$</span>tagID)]</span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a>met4<span class="sc">$</span>plot <span class="ot">&lt;-</span> met1<span class="sc">$</span>plotID[<span class="fu">match</span>(met4<span class="sc">$</span>tag, met1<span class="sc">$</span>tagID)]</span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a><span class="co"># rearrange</span></span>
+<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a>met4 <span class="ot">&lt;-</span> met4[,<span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">1</span>, <span class="dv">8</span>, <span class="dv">7</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>)]</span>
+<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(met4)[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"grid"</span></span>
+<span id="cb15-72"><a href="#cb15-72" aria-hidden="true" tabindex="-1"></a><span class="do">##### met4 is the output ready measurement dataset</span></span>
+<span id="cb15-73"><a href="#cb15-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-74"><a href="#cb15-74" aria-hidden="true" tabindex="-1"></a><span class="do">## checks: must be TRUE:</span></span>
+<span id="cb15-75"><a href="#cb15-75" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(met4<span class="sc">$</span>grid <span class="sc">%in%</span> grd<span class="sc">$</span>grid)</span>
+<span id="cb15-76"><a href="#cb15-76" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(met4<span class="sc">$</span>spp <span class="sc">%in%</span> tax<span class="sc">$</span>abb)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="finalize-taxonomy" class="level2" data-number="A.10">
+<h2 data-number="A.10" class="anchored" data-anchor-id="finalize-taxonomy"><span class="header-section-number">A.10</span> finalize taxonomy</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># finalize tax</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>tax<span class="sc">$</span>X <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>xtax <span class="ot">&lt;-</span> tax[,<span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">1</span>)]</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>xtax<span class="sc">$</span>order <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>xtax<span class="sc">$</span>suborder <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>xtax<span class="sc">$</span>superfamily <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>xtax<span class="sc">$</span>family <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>xtax<span class="sc">$</span>subfamily <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>xtax<span class="sc">$</span>genus <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>xtax<span class="sc">$</span>species <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>ntax <span class="ot">&lt;-</span> <span class="fu">nrow</span>(xtax)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>ntax){</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  itsn <span class="ot">&lt;-</span> xtax<span class="sc">$</span>tsn[i]</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  ih <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">hierarchy_full</span>(itsn))</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  xtax<span class="sc">$</span>order[i] <span class="ot">&lt;-</span> ih<span class="sc">$</span>taxonname[<span class="fu">which</span>(ih<span class="sc">$</span>rankname <span class="sc">==</span> <span class="st">"Order"</span>)]</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="st">"Suborder"</span> <span class="sc">%in%</span> ih<span class="sc">$</span>rankname){</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    xtax<span class="sc">$</span>suborder[i] <span class="ot">&lt;-</span> ih<span class="sc">$</span>taxonname[<span class="fu">which</span>(ih<span class="sc">$</span>rankname <span class="sc">==</span> <span class="st">"Suborder"</span>)]</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="st">"Superfamily"</span> <span class="sc">%in%</span> ih<span class="sc">$</span>rankname){</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    xtax<span class="sc">$</span>superfamily[i] <span class="ot">&lt;-</span> ih<span class="sc">$</span>taxonname[<span class="fu">which</span>(ih<span class="sc">$</span>rankname <span class="sc">==</span> <span class="st">"Superfamily"</span>)]</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  xtax<span class="sc">$</span>family[i] <span class="ot">&lt;-</span> ih<span class="sc">$</span>taxonname[<span class="fu">which</span>(ih<span class="sc">$</span>rankname <span class="sc">==</span> <span class="st">"Family"</span>)]</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="st">"Subfamily"</span> <span class="sc">%in%</span> ih<span class="sc">$</span>rankname){</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    xtax<span class="sc">$</span>subfamily[i] <span class="ot">&lt;-</span> ih<span class="sc">$</span>taxonname[<span class="fu">which</span>(ih<span class="sc">$</span>rankname <span class="sc">==</span> <span class="st">"Subfamily"</span>)]</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>  xtax<span class="sc">$</span>genus[i] <span class="ot">&lt;-</span> ih<span class="sc">$</span>taxonname[<span class="fu">which</span>(ih<span class="sc">$</span>rankname <span class="sc">==</span> <span class="st">"Genus"</span>)]</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>  xtax<span class="sc">$</span>species[i] <span class="ot">&lt;-</span> ih<span class="sc">$</span>taxonname[<span class="fu">which</span>(ih<span class="sc">$</span>rankname <span class="sc">==</span> <span class="st">"Species"</span>)]</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"taxon"</span>, i, <span class="st">"of"</span>, ntax, <span class="st">"complete!</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">flush.console</span>()</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(xtax)</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>xtax<span class="sc">$</span>dbin <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>xtax <span class="ot">&lt;-</span> xtax[<span class="fu">order</span>(xtax<span class="sc">$</span>abb),]</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>xtax<span class="sc">$</span>valid <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>xtax <span class="ot">&lt;-</span> xtax[,<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">9</span>, <span class="dv">3</span><span class="sc">:</span><span class="dv">8</span>)]</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(xtax) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(<span class="fu">table</span>(xtax<span class="sc">$</span>spp) <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>xtax <span class="ot">&lt;-</span> xtax[<span class="sc">-</span><span class="fu">which</span>(xtax<span class="sc">$</span>tsn <span class="sc">==</span> <span class="dv">931114</span>),]</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>xtax <span class="ot">&lt;-</span> xtax[<span class="sc">-</span><span class="fu">which</span>(xtax<span class="sc">$</span>tsn <span class="sc">==</span> <span class="dv">180349</span>)[<span class="dv">1</span>],]</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(<span class="fu">table</span>(xtax<span class="sc">$</span>spp) <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(xtax) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a><span class="do">#### xtax is export ready version of taxonomy</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="capture-numbers" class="level2" data-number="A.11">
+<h2 data-number="A.11" class="anchored" data-anchor-id="capture-numbers"><span class="header-section-number">A.11</span> Capture numbers</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">## species presence matrix is grid x species matrix</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>ugrid <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(grd<span class="sc">$</span>grid))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>ngrid <span class="ot">&lt;-</span> <span class="fu">length</span>(ugrid)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>ntax <span class="ot">&lt;-</span> <span class="fu">nrow</span>(xtax)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>pmat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow=</span>ngrid, <span class="at">ncol=</span>ntax)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(pmat) <span class="ot">&lt;-</span> <span class="fu">sort</span>(xtax<span class="sc">$</span>abb)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(pmat) <span class="ot">&lt;-</span> ugrid</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(res<span class="sc">$</span>abb <span class="sc">%in%</span> <span class="fu">colnames</span>(pmat))</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>i <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>ngrid){</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  flag <span class="ot">&lt;-</span> <span class="fu">which</span>(res<span class="sc">$</span>plotID <span class="sc">==</span> ugrid[i])</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  ispp <span class="ot">&lt;-</span> <span class="fu">table</span>(res<span class="sc">$</span>abb[flag])</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  pmat[i,<span class="fu">names</span>(ispp)] <span class="ot">&lt;-</span> ispp</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"grid"</span>, i, <span class="st">"of"</span>, ngrid, <span class="st">"complete!</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">flush.console</span>()</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>pmat <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(pmat)</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>pmat <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">data.frame</span>(<span class="at">grid=</span><span class="fu">rownames</span>(pmat)), pmat)</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(pmat) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="write-out-final-datasets" class="level2" data-number="A.12">
+<h2 data-number="A.12" class="anchored" data-anchor-id="write-out-final-datasets"><span class="header-section-number">A.12</span> write out final datasets</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># write out final datasets</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># grids</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> grd</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>out.name <span class="ot">&lt;-</span> <span class="st">"neon-grids.csv"</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>out.path <span class="ot">&lt;-</span> <span class="fu">paste</span>(data.dir, out.name, <span class="at">sep=</span><span class="st">"/"</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(out, out.path, <span class="at">row.names=</span><span class="cn">FALSE</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co"># taxa</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> xtax</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>out.name <span class="ot">&lt;-</span> <span class="st">"neon-taxa.csv"</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>out.path <span class="ot">&lt;-</span> <span class="fu">paste</span>(data.dir, out.name, <span class="at">sep=</span><span class="st">"/"</span>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(out, out.path, <span class="at">row.names=</span><span class="cn">FALSE</span>)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="co"># measurements</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> met4</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>out.name <span class="ot">&lt;-</span> <span class="st">"neon-measures.csv"</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>out.path <span class="ot">&lt;-</span> <span class="fu">paste</span>(data.dir, out.name, <span class="at">sep=</span><span class="st">"/"</span>)</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(out, out.path, <span class="at">row.names=</span><span class="cn">FALSE</span>)</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="co"># capture numbers</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> pmat</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>out.name <span class="ot">&lt;-</span> <span class="st">"neon-captures.csv"</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>out.path <span class="ot">&lt;-</span> <span class="fu">paste</span>(data.dir, out.name, <span class="at">sep=</span><span class="st">"/"</span>)</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(out, out.path, <span class="at">row.names=</span><span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -876,5 +1672,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/appa.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/appa.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

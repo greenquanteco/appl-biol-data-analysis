@@ -451,7 +451,7 @@ Bayesian inference is beyond the scope of this course, but if you're interested 
 
 $$ax+by$$
 
-is a linear combination of $x$ and $y$, where $a$ and $b$ are constants. The $x$ and the $y$ could be single values, or, as commonly used in statistics, **vectors** of values. A vector in this sense is an ordered set of values. One example of a linear combination that you're already familiar with is a [weighted mean](sec-desc-cen-mean-wm). The weighted mean of a set of numbers $\left[x_1,x_2,\ldots,x_n\right]$ is given by the sum
+is a linear combination of $x$ and $y$, where $a$ and $b$ are constants. The $x$ and the $y$ could be single values, or, as commonly used in statistics, **vectors** of values. A vector in this sense is an ordered set of values. One example of a linear combination that you're already familiar with is a [weighted mean](@sec-desc-cen-mean-wm). The weighted mean of a set of numbers $\left[x_1,x_2,\ldots,x_n\right]$ is given by the sum
 
 $$\bar{x}_w=\sum_i^n\left(\frac{w_i}{\sum_i^nw_i}\right)x_i$$
 
@@ -658,4 +658,4 @@ The term **analysis of variance (ANOVA)** is used in two related ways, and we ne
 
 More generally, ANOVA refers to a framework for evaluating how variation is attributed to different components of a statistical model. This is called "partitioning the variance" or "partitioning sums of squares". For example, an ANOVA table can be used to test a linear regression even when the predictor is continuous and there are no groups to compare. The function of ANOVA in that case is to determine how much variation is explained by the different predictors--be they continuous or factors--in the model and how much variation is left over (residual). We will explore this sense of ANOVA in @sec-groups-more-anova-1way.
 
-This broader usage is reflected in R's `anova()` function, which can be applied to many kinds of models. For ordinary linear models, ANOVA tests are based on partitioning sums of squares. For generalized linear models, analogous tests are commonly based on changes in **deviance** rather than sums of squares. Deviance is a generalization of variance (which is calculated from sums of squares), so sums of squares are a special case of deviance (@sec-glm1-dev). This reflects the fact that linear models based on sums of squares are a special case of generalized linear models (@sec-glm1).
+This broader usage is reflected in R's `anova()` function, which can be applied to many kinds of models. For ordinary linear models, ANOVA tests are based on partitioning sums of squares. For generalized linear models, analogous tests are commonly based on changes in **deviance** rather than sums of squares. Deviance is a generalization of variance (which is calculated from sums of squares), so sums of squares are a special case of deviance (@sec-glm1-lik-dev). This reflects the fact that linear models based on sums of squares are a special case of generalized linear models (@sec-glm1).

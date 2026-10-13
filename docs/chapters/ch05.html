@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>5&nbsp; Data manipulation with R – Applied Biological Data Analysis</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -91,14 +88,15 @@ div.csl-indent {
 <link href="../chapters/ch04.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -129,7 +127,7 @@ div.csl-indent {
 <style>html{ scroll-behavior: smooth; }</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -182,7 +180,9 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -787,19 +787,19 @@ window.Quarto = {
 <span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>my.df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>    x x3 x4         x2
-1   1  1  1 0.07763532
-2   2  2  2 0.69558803
-3   3  3  3 0.07763532
-4   4  1  4 0.69558803
-5   5  2  1 0.07763532
-6   6  3  2 0.69558803
-7   7  1  3 0.07763532
-8   8  2  4 0.69558803
-9   9  3  1 0.07763532
-10 10  1  2 0.69558803
-11 11  2  3 0.07763532
-12 12  3  4 0.69558803</code></pre>
+<pre><code>    x x3 x4        x2
+1   1  1  1 0.6553689
+2   2  2  2 0.7322782
+3   3  3  3 0.6553689
+4   4  1  4 0.7322782
+5   5  2  1 0.6553689
+6   6  3  2 0.7322782
+7   7  1  3 0.6553689
+8   8  2  4 0.7322782
+9   9  3  1 0.6553689
+10 10  1  2 0.7322782
+11 11  2  3 0.6553689
+12 12  3  4 0.7322782</code></pre>
 </div>
 </div>
 <p>Trying to add a variable to <code>my.df</code> with a number of values that is not a factor of 12–like 5, 7, 8, 9, 10, or 11–will usually return an error.</p>
@@ -819,11 +819,11 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="co"># different results each time:</span></span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">3</span>)</span>
-<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.5068406 0.1256690 0.5980945</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.2555848 0.4992359 0.8341668</span></span>
 <span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">3</span>)</span>
-<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.6877406 0.1892239 0.3091972</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.6553913 0.5008041 0.8640480</span></span>
 <span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">3</span>)</span>
-<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.0564516 0.4359968 0.2217616</span></span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.9490826 0.1025070 0.8226109</span></span>
 <span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a><span class="co"># same results each time:</span></span>
 <span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
@@ -1526,11 +1526,11 @@ $e2
 <span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a><span class="co"># time with seconds</span></span>
 <span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a><span class="fu">strptime</span>(a, <span class="at">format=</span><span class="st">"%H:%M:%S"</span>)</span>
-<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-08-07 01:15:03 EDT" "2026-08-07 14:28:21 EDT"</span></span>
+<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-10-12 01:15:03 EDT" "2026-10-12 14:28:21 EDT"</span></span>
 <span id="cb97-8"><a href="#cb97-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb97-9"><a href="#cb97-9" aria-hidden="true" tabindex="-1"></a><span class="co"># time with seconds dropped</span></span>
 <span id="cb97-10"><a href="#cb97-10" aria-hidden="true" tabindex="-1"></a><span class="fu">strptime</span>(a, <span class="at">format=</span><span class="st">"%H:%M"</span>)    <span class="co"># seconds dropped</span></span>
-<span id="cb97-11"><a href="#cb97-11" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-08-07 01:15:00 EDT" "2026-08-07 14:28:00 EDT"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb97-11"><a href="#cb97-11" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-10-12 01:15:00 EDT" "2026-10-12 14:28:00 EDT"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Notice that the current date was included in the result of <code>strptime()</code> (at least, the date when I rendered the document).</p>
 <p>Time zones should be specified when working with data that contain dates and times. Remember that R will assume the time is in the current user’s time zone. This almost always means the time zone used by the operating system in which R is running. If you did something silly like record data in one time zone and analyze it in another, you have to be careful. For example, I once ran a field study in Indiana where data were recorded in Eastern time. But, the office where I analyzed the data was in Missouri (Central time). R kept converting the time-stamped data to Central time, which interfered with the analysis until I learned how to work with time zones in R. To make things worse, data were recorded in the summer (Eastern daylight time) but analyzed in both early fall (Central daylight time) and late fall (Central standard time).</p>
@@ -1546,7 +1546,7 @@ $e2
 <span id="cb98-9"><a href="#cb98-9" aria-hidden="true" tabindex="-1"></a>a2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"13:21"</span>, <span class="st">"09:15"</span>)</span>
 <span id="cb98-10"><a href="#cb98-10" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">strptime</span>(a2, <span class="st">"%H:%M"</span>)</span>
 <span id="cb98-11"><a href="#cb98-11" aria-hidden="true" tabindex="-1"></a>x2</span>
-<span id="cb98-12"><a href="#cb98-12" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-08-07 13:21:00 EDT" "2026-08-07 09:15:00 EDT"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb98-12"><a href="#cb98-12" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "2026-10-12 13:21:00 EDT" "2026-10-12 09:15:00 EDT"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Time zone names are not always portable across systems. R has a list of built-in time zones that it can handle, and these should work, but be careful and <strong><em>always</em></strong> validate any code that depends on time zones. The list of time zones R can use can be printed to the console with the command <code>OlsonNames()</code>.</p>
 <div class="cell">
@@ -1623,13 +1623,13 @@ $e2
 <span id="cb104-13"><a href="#cb104-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb104-14"><a href="#cb104-14" aria-hidden="true" tabindex="-1"></a><span class="do">## calculate time in different units:</span></span>
 <span id="cb104-15"><a href="#cb104-15" aria-hidden="true" tabindex="-1"></a><span class="fu">difftime</span>(y,x, <span class="at">units=</span><span class="st">"days"</span>)</span>
-<span id="cb104-16"><a href="#cb104-16" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 7998.398 days</span></span>
+<span id="cb104-16"><a href="#cb104-16" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 7932.09 days</span></span>
 <span id="cb104-17"><a href="#cb104-17" aria-hidden="true" tabindex="-1"></a><span class="fu">difftime</span>(y,x, <span class="at">units=</span><span class="st">"hours"</span>)</span>
-<span id="cb104-18"><a href="#cb104-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 191961.5 hours</span></span>
+<span id="cb104-18"><a href="#cb104-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 190370.2 hours</span></span>
 <span id="cb104-19"><a href="#cb104-19" aria-hidden="true" tabindex="-1"></a><span class="fu">difftime</span>(y,x, <span class="at">units=</span><span class="st">"mins"</span>)</span>
-<span id="cb104-20"><a href="#cb104-20" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 11517693 mins</span></span>
+<span id="cb104-20"><a href="#cb104-20" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 11422210 mins</span></span>
 <span id="cb104-21"><a href="#cb104-21" aria-hidden="true" tabindex="-1"></a>y<span class="sc">-</span>x</span>
-<span id="cb104-22"><a href="#cb104-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 7998.398 days</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb104-22"><a href="#cb104-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Time difference of 7932.09 days</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Another application: what is the time difference between Chicago and Honolulu?</p>
 <div class="cell">
@@ -2548,9 +2548,9 @@ $e2
 <p>Data frames can be combined by manually matching records between tables, using the function <code>match()</code>. The example below uses three interrelated tables from a stream dataset I work with. You need the datasets <a href="../datasets/neon_grids_2025-08-03.csv">neon_grids_2025-08-03.csv</a>, <a href="../datasets/neon_measures_2025-08-03.csv">neon_measures_2025-08-03.csv</a>, and <a href="../datasets/neon_measures_2025-08-03.csv">neon_measures_2025-08-03.csv</a>. Download them, put them in a folder, and make that folder your R working directory.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb153"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb153-1"><a href="#cb153-1" aria-hidden="true" tabindex="-1"></a><span class="co"># data file names</span></span>
-<span id="cb153-2"><a href="#cb153-2" aria-hidden="true" tabindex="-1"></a>name1 <span class="ot">&lt;-</span> <span class="st">"neon_grids_2025-08-03.csv"</span></span>
-<span id="cb153-3"><a href="#cb153-3" aria-hidden="true" tabindex="-1"></a>name2 <span class="ot">&lt;-</span> <span class="st">"neon_measures_2025-08-03.csv"</span></span>
-<span id="cb153-4"><a href="#cb153-4" aria-hidden="true" tabindex="-1"></a>name3 <span class="ot">&lt;-</span> <span class="st">"neon_taxa_2025-08-03.csv"</span></span>
+<span id="cb153-2"><a href="#cb153-2" aria-hidden="true" tabindex="-1"></a>name1 <span class="ot">&lt;-</span> <span class="st">"neon-grids.csv"</span></span>
+<span id="cb153-3"><a href="#cb153-3" aria-hidden="true" tabindex="-1"></a>name2 <span class="ot">&lt;-</span> <span class="st">"neon-measures.csv"</span></span>
+<span id="cb153-4"><a href="#cb153-4" aria-hidden="true" tabindex="-1"></a>name3 <span class="ot">&lt;-</span> <span class="st">"neon-taxa.csv"</span></span>
 <span id="cb153-5"><a href="#cb153-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb153-6"><a href="#cb153-6" aria-hidden="true" tabindex="-1"></a><span class="co"># import</span></span>
 <span id="cb153-7"><a href="#cb153-7" aria-hidden="true" tabindex="-1"></a>grd <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(name1, <span class="at">header=</span><span class="cn">TRUE</span>)</span>
@@ -2708,7 +2708,7 @@ $e2
 <p>Base R has some functions for reshaping data, but most sources recommend using the <code>reshape2</code> package or the <code>tidyverse</code>. The examples below demonstrate reshaping a dataset from a typical long format to a more useful wide format. You will need the file <a href="https://greenquanteco.github.io/reshape_example_2025-08-12.csv">reshape_example_2025-08-12.csv</a> in your R home directory and package <code>reshape2</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb157"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb157-1"><a href="#cb157-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span>
-<span id="cb157-2"><a href="#cb157-2" aria-hidden="true" tabindex="-1"></a>in.name <span class="ot">&lt;-</span> <span class="st">"reshape_example_2025-08-12.csv"</span></span>
+<span id="cb157-2"><a href="#cb157-2" aria-hidden="true" tabindex="-1"></a>in.name <span class="ot">&lt;-</span> <span class="st">"reshape-example.csv"</span></span>
 <span id="cb157-3"><a href="#cb157-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(in.name)</span>
 <span id="cb157-4"><a href="#cb157-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(x)</span>
 <span id="cb157-5"><a href="#cb157-5" aria-hidden="true" tabindex="-1"></a><span class="do">##       grid attribute      value</span></span>
