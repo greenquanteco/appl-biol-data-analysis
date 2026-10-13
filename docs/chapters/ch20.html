@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>20&nbsp; GLM for count data – Applied Biological Data Analysis</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -19,6 +22,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -34,15 +72,14 @@ ul.task-list li input[type="checkbox"] {
 <link href="../chapters/ch19.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -72,6 +109,35 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -97,9 +163,7 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -438,8 +502,19 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-glm3-poisson" id="toc-sec-glm3-poisson" class="nav-link active" data-scroll-target="#sec-glm3-poisson"><span class="header-section-number">20.1</span> Poisson GLM for counts</a></li>
-  <li><a href="#sec-glm3-negbin" id="toc-sec-glm3-negbin" class="nav-link" data-scroll-target="#sec-glm3-negbin"><span class="header-section-number">20.2</span> Negative binomial GLM for overdispersed counts</a></li>
+  <li><a href="#sec-glm3-poisson" id="toc-sec-glm3-poisson" class="nav-link active" data-scroll-target="#sec-glm3-poisson"><span class="header-section-number">20.1</span> Poisson GLM for counts</a>
+  <ul class="collapse">
+  <li><a href="#sec-glm3-poisson-def" id="toc-sec-glm3-poisson-def" class="nav-link" data-scroll-target="#sec-glm3-poisson-def"><span class="header-section-number">20.1.1</span> Definition</a></li>
+  <li><a href="#sec-glm3-poisson-sim" id="toc-sec-glm3-poisson-sim" class="nav-link" data-scroll-target="#sec-glm3-poisson-sim"><span class="header-section-number">20.1.2</span> Example with simulated data</a></li>
+  <li><a href="#sec-glm3-poisson-real" id="toc-sec-glm3-poisson-real" class="nav-link" data-scroll-target="#sec-glm3-poisson-real"><span class="header-section-number">20.1.3</span> Example with real data</a></li>
+  </ul></li>
+  <li><a href="#sec-glm3-negbin" id="toc-sec-glm3-negbin" class="nav-link" data-scroll-target="#sec-glm3-negbin"><span class="header-section-number">20.2</span> Negative binomial GLM for overdispersed counts</a>
+  <ul class="collapse">
+  <li><a href="#sec-glm3-negbin-def" id="toc-sec-glm3-negbin-def" class="nav-link" data-scroll-target="#sec-glm3-negbin-def"><span class="header-section-number">20.2.1</span> Definition</a></li>
+  <li><a href="#sec-glm3-negbin-sim" id="toc-sec-glm3-negbin-sim" class="nav-link" data-scroll-target="#sec-glm3-negbin-sim"><span class="header-section-number">20.2.2</span> Example with simulated data</a></li>
+  <li><a href="#sec-glm3-negbin-real" id="toc-sec-glm3-negbin-real" class="nav-link" data-scroll-target="#sec-glm3-negbin-real"><span class="header-section-number">20.2.3</span> Example with real data</a></li>
+  <li><a href="#sec-glm3-negbin-beyond" id="toc-sec-glm3-negbin-beyond" class="nav-link" data-scroll-target="#sec-glm3-negbin-beyond"><span class="header-section-number">20.2.4</span> Beyond negative binomial</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch20.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -465,15 +540,662 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>1! Hah ha ha</p>
-<p>2! Hah ha ha</p>
+<p>This module explores GLMs for <strong>count</strong> data. Count data are exactly what they sound like: values resulting from counting things. Count data take the form of non-negative integers. Non-negative integers, however, are not necessarily count data. For example, summer temperatures in Georgia can be rounded to the nearest integer, but they will not be counts.</p>
 <section id="sec-glm3-poisson" class="level2" data-number="20.1">
 <h2 data-number="20.1" class="anchored" data-anchor-id="sec-glm3-poisson"><span class="header-section-number">20.1</span> Poisson GLM for counts</h2>
+<p>Count data are usually well-modeled by a kind of GLM called <strong>Poisson regression</strong>. The “Poisson” part comes from the <strong>Poisson distribution</strong>, which describes counts and events that occur at a constant rate. The “regression” part of the name comes from the fact that the technique involves a linear relationship between the predictors and some function of the response.</p>
+<section id="sec-glm3-poisson-def" class="level3" data-number="20.1.1">
+<h3 data-number="20.1.1" class="anchored" data-anchor-id="sec-glm3-poisson-def"><span class="header-section-number">20.1.1</span> Definition</h3>
+<p>The Poisson GLM uses a log link function and Poisson response distribution to model counts <span class="math inline">\(y\)</span> as:</p>
+<p><span class="math display">\[y\sim Poisson\left(\lambda\right)\]</span></p>
+<p><span class="math display">\[\log\left(\lambda\right)=\eta\]</span></p>
+<p><span class="math display">\[\eta=\boldsymbol{\beta}\mathbf{x}\]</span></p>
+<p>Notice that the Poisson distribution has only one parameter, <span class="math inline">\(\lambda\)</span> (“lambda”), which is both the mean and variance of the distribution. This means that we should not be surprised or concerned if a scatterplot suggests heteroscedasticity with variance increasing with the expected value.</p>
+</section>
+<section id="sec-glm3-poisson-sim" class="level3" data-number="20.1.2">
+<h3 data-number="20.1.2" class="anchored" data-anchor-id="sec-glm3-poisson-sim"><span class="header-section-number">20.1.2</span> Example with simulated data</h3>
+<p>Let’s simulate a dataset and analyze it.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># random number seed for reproducibility</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># sample size</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># coefficients</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>beta0 <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>beta1 <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># x values</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># linear predictor</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>eta <span class="ot">&lt;-</span> beta0 <span class="sc">+</span> beta1 <span class="sc">*</span> x</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># inverse link function</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="fu">exp</span>(eta)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># response variable</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, lambda)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co"># make the plot</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x=</span>x, <span class="at">y=</span>y)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x,y, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">30</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch20_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The relationship between <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> looks linear, but because we are clever biologists, we know that linear models are not appropriate for two reasons. First, linear models predict continuous responses, and counts are not continuous (they are discrete). Second, linear models can predict negative responses, and counts cannot be negative. So, we will try Poisson regression because the Poisson distribution is so good at handling counts.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(y<span class="sc">~</span>x, <span class="at">data=</span>dat, <span class="at">family=</span>poisson)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = y ~ x, family = poisson, data = dat)
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)   0.9258     0.1447   6.397 1.59e-10 ***
+x             0.2089     0.0183  11.415  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 194.34  on 49  degrees of freedom
+Residual deviance:  37.16  on 48  degrees of freedom
+AIC: 241.37
+
+Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+</div>
+<p>The estimated parameters are very close to the correct values! The model also explains a lot of the variation in <span class="math inline">\(y\)</span>, as seen by the pseudo-<span class="math inline">\(R^2\)</span> of <span class="math inline">\(&gt;0.8\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span>mod1<span class="sc">$</span>deviance<span class="sc">/</span>mod1<span class="sc">$</span>null.deviance</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8087827</code></pre>
+</div>
+</div>
+<p>The next step is to plot predicted values and the original data. If you have visited any of the other modules in this course, you should be familiar with the process by now.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(x), <span class="fu">max</span>(x), <span class="at">length=</span><span class="dv">100</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>pred1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod1, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">x=</span>px),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">type=</span><span class="st">"link"</span>, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>mn1 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.5</span>, pred1<span class="sc">$</span>fit, pred1<span class="sc">$</span>se.fit))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>lo1 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.025</span>, pred1<span class="sc">$</span>fit, pred1<span class="sc">$</span>se.fit))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>up1 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.975</span>, pred1<span class="sc">$</span>fit, pred1<span class="sc">$</span>se.fit))</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y,  <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">30</span>))</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, lo1, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, up1, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, mn1, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(x, y, <span class="at">pch=</span><span class="dv">16</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch20_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-glm3-poisson-real" class="level3" data-number="20.1.3">
+<h3 data-number="20.1.3" class="anchored" data-anchor-id="sec-glm3-poisson-real"><span class="header-section-number">20.1.3</span> Example with real data</h3>
+<p>Let’s use the NEON data for a real example. If you don’t already have it, download the <a href="..datasets/dat-neon-site-rich-env.csv">site-level richness and environmental dataset</a> and put it in your working directory.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"dat-neon-site-rich-env.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Consider this plot of heteromyid species richness vs.&nbsp;precipitation:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx<span class="sc">$</span>precip, dx<span class="sc">$</span>het,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="fu">expression</span>(Precipitation<span class="sc">~</span>(mm<span class="sc">~</span>yr<span class="sc">^</span>{<span class="sc">-</span><span class="dv">1</span>})),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Heteromyid species richness"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch20_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It looks like heteromyid species richness declines with increasing precipitation. Before we go on, though, we should exclude the two sites in Puerto Rico because there is no sensible biogeographic reason for any heteromyids to be there. These sites are Guánica Forest (GUAN) and Lajas Experimental Station (LAJA), both in southwestern Puerto Rico. We will drop those sites from this analysis because Puerto Rico has a distinct biogeographic history, and its absence of native heteromyid rodents reflects geographic isolation rather than the same ecological processes influencing species richness across continental North America. Note that we are <em>not</em> dropping these sites merely because they have zero richness, nor because they are oddballs on the scatterplot. There is an <em>a priori</em> biological reason to exclude them because they differ in some fundamental way from the other observations. We would exclude a site in Europe or a zoo for the same reason.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dz <span class="ot">&lt;-</span> dx[<span class="fu">which</span>(<span class="sc">!</span>dx <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"GUAN"</span>, <span class="st">"LAJA"</span>)),]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now we can fit a Poisson GLM:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mod2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(het<span class="sc">~</span>precip, <span class="at">data=</span>dz, <span class="at">family=</span>poisson)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = het ~ precip, family = poisson, data = dz)
+
+Coefficients:
+             Estimate Std. Error z value Pr(&gt;|z|)  
+(Intercept)  1.644682   0.854265   1.925   0.0542 .
+precip      -0.003843   0.001620  -2.373   0.0176 *
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 27.864  on 15  degrees of freedom
+Residual deviance: 17.727  on 14  degrees of freedom
+AIC: 27.207
+
+Number of Fisher Scoring iterations: 6</code></pre>
+</div>
+</div>
+<p>And check the deviance explained:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span>mod2<span class="sc">$</span>deviance<span class="sc">/</span>mod2<span class="sc">$</span>null.deviance</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3638219</code></pre>
+</div>
+</div>
+<p>Not bad. We still need to check the predicted values though.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(dx<span class="sc">$</span>precip), <span class="fu">max</span>(dx<span class="sc">$</span>precip), <span class="at">length=</span><span class="dv">100</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>pred2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod2, </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">precip=</span>px),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">type=</span><span class="st">"link"</span>, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>mn2 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.5</span>, pred2<span class="sc">$</span>fit, pred2<span class="sc">$</span>se.fit))</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>lo2 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.025</span>, pred2<span class="sc">$</span>fit, pred2<span class="sc">$</span>se.fit))</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>up2 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.975</span>, pred2<span class="sc">$</span>fit, pred2<span class="sc">$</span>se.fit))</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx<span class="sc">$</span>precip, dx<span class="sc">$</span>het,</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="fu">expression</span>(Precipitation<span class="sc">~</span>(mm<span class="sc">~</span>yr<span class="sc">^</span>{<span class="sc">-</span><span class="dv">1</span>})),</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Heteromyid species richness"</span>)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, lo2, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, up2, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, mn2, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(dx<span class="sc">$</span>precip, dx<span class="sc">$</span>het, <span class="at">pch=</span><span class="dv">16</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch20_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 </section>
 <section id="sec-glm3-negbin" class="level2" data-number="20.2">
 <h2 data-number="20.2" class="anchored" data-anchor-id="sec-glm3-negbin"><span class="header-section-number">20.2</span> Negative binomial GLM for overdispersed counts</h2>
+<p>Some count data are <strong>overdispersed</strong>, meaning that they contain more variance than expected under a Poisson distribution. That is, <span class="math inline">\(\sigma^2&gt;\lambda\)</span>. There is no hard and fast rule for when overdispersion is a problem, but we don’t need one. Rather than try to define a threshold where you should switch from a Poisson GLM to a negative binomial GLM, just fit both and see which model fits better. After all, the Poisson GLM is just a special case of the negative binomial GLM, making the two models nested.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<figcaption>If the negative binomial can be defined as a Poisson-gamma mixture distribution, then the Poisson distribution can be thought of as a negative binomial with no overdispersion.</figcaption>
+<p><img src="../images/glm2-pointofview.jpg" class="img-fluid figure-img" alt="Obi-wan Kenobi reminds us that the Poisson distribution can be thought of as a negative binomial with no overdispersion, so the two models are nested."></p>
+</figure>
+</div>
+<section id="sec-glm3-negbin-def" class="level3" data-number="20.2.1">
+<h3 data-number="20.2.1" class="anchored" data-anchor-id="sec-glm3-negbin-def"><span class="header-section-number">20.2.1</span> Definition</h3>
+<p>The negative binomial GLM is defined as:</p>
+<p><span class="math display">\[y\sim NegBin\left(\lambda,\theta\right)\]</span></p>
+<p><span class="math display">\[\log\left(\lambda\right)=\eta\]</span></p>
+<p><span class="math display">\[\eta=\boldsymbol{\beta}\mathbf{x}\]</span></p>
+<p>were <span class="math inline">\(\lambda\)</span> is the expected value (mean) and <span class="math inline">\(\theta\)</span> is the overdispersion parameter:</p>
+<p><span class="math display">\[\sigma^2=\lambda+\frac{\lambda^2}{\theta}\]</span></p>
+<p>In the R functions that deal with the negative binomial, <span class="math inline">\(\theta\)</span> is referred to as the <code>size</code> parameter. As <span class="math inline">\(\theta\)</span> gets smaller, the fraction <span class="math inline">\(\frac{\lambda^2}{\theta}\)</span> gets larger, and the distribution picks up more and more variance compared to the Poisson distribution (because for a Poisson, <span class="math inline">\(\sigma^2=\lambda\)</span>). Thus, as <span class="math inline">\(\theta\)</span> increases to positive infinity, the fraction gets smaller and the variance approaches that of a Poisson.</p>
+<p><span class="math display">\[\lim_{\theta \to \infty} \underbrace{\lambda+\frac{\lambda^2}{\theta}}_{\text{NegBin~variance}} = \underbrace{\lambda}_{\text{Poisson variance}}\]</span></p>
+</section>
+<section id="sec-glm3-negbin-sim" class="level3" data-number="20.2.2">
+<h3 data-number="20.2.2" class="anchored" data-anchor-id="sec-glm3-negbin-sim"><span class="header-section-number">20.2.2</span> Example with simulated data</h3>
+<p>As always, let’s simulate some data so we can see how the model really works.</p>
+<div class="cell" data-fig-caption="Simulated data using the same linear predictor with a Poisson distribution (red squares) and a negative binomial distribution (black circles). Notice how the spread of points is much larger in the negative binomial data.">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># random number seed for reproducibility</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># sample size</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># coefficients</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>beta0 <span class="ot">&lt;-</span> <span class="dv">4</span>     <span class="co"># intercept</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>beta1 <span class="ot">&lt;-</span> <span class="fl">0.15</span>  <span class="co"># slope</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="dv">3</span>     <span class="co"># overdispersion</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># x values</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="co"># linear predictor</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>eta <span class="ot">&lt;-</span> beta0 <span class="sc">+</span> beta1 <span class="sc">*</span> x</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="co"># inverse link function</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="fu">exp</span>(eta)</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="co"># response variable</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="do">## negbin</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>ynb <span class="ot">&lt;-</span> <span class="fu">rnbinom</span>(n, <span class="at">mu=</span>lambda, <span class="at">size=</span>theta)</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="do">## poisson for comparison</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>yp <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, lambda)</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="co"># assemble into data frame</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>dn <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x=</span>x, <span class="at">ynb=</span>ynb, <span class="at">yp=</span>yp)</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="co"># make the plot</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x,ynb, <span class="at">pch=</span><span class="dv">19</span>)</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(x, yp, <span class="at">pch=</span><span class="dv">15</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, </span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"Poisson variance"</span>,</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Negative binomial variance"</span>),</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span><span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">19</span>), <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"black"</span>),</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>       <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">cex=</span><span class="fl">1.3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch20_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" alt="Simulated data using the same linear predictor with a Poisson distribution (red squares) and a negative binomial distribution (black circles). Notice how the spread of points is much larger in the negative binomial data." width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>There is no base R function for a negative binomial GLM, so we need to find an add-on package for it. The most common package for this is probably <code>MASS</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now let’s fit the negative binomial and the Poisson GLMs.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>mod3 <span class="ot">&lt;-</span> <span class="fu">glm</span>(ynb<span class="sc">~</span>x, <span class="at">data=</span>dn, <span class="at">family=</span>poisson)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>mod4 <span class="ot">&lt;-</span> <span class="fu">glm.nb</span>(ynb<span class="sc">~</span>x, <span class="at">data=</span>dn)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Both models give similar estimates for the intercept and slope.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = ynb ~ x, family = poisson, data = dn)
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept) 3.939453   0.023017  171.15   &lt;2e-16 ***
+x           0.151421   0.003256   46.51   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 6757.6  on 99  degrees of freedom
+Residual deviance: 4413.0  on 98  degrees of freedom
+AIC: 5055
+
+Number of Fisher Scoring iterations: 5</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod4)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm.nb(formula = ynb ~ x, data = dn, init.theta = 2.918119928, 
+    link = log)
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  3.87407    0.12037  32.184  &lt; 2e-16 ***
+x            0.16249    0.01981   8.202 2.36e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for Negative Binomial(2.9181) family taken to be 1)
+
+    Null deviance: 165.74  on 99  degrees of freedom
+Residual deviance: 105.15  on 98  degrees of freedom
+AIC: 1105.6
+
+Number of Fisher Scoring iterations: 1
+
+              Theta:  2.918 
+          Std. Err.:  0.404 
+
+ 2 x log-likelihood:  -1099.579 </code></pre>
+</div>
+</div>
+<p>The main difference is that the negative binomial model has an extra term, <span class="math inline">\(\theta\)</span>, to account for potential overdispersion. The estimate, <span class="math inline">\(\hat{\theta}=2.918\pm0.404\)</span>, is pretty close to the truth. Does adding that term improve the model fit? Let’s do a likelihood ratio test.</p>
+<p>Normally, we can use the <code>anova(...,test="Chisq")</code> method we saw in <a href="ch18.html#sec-glm1-lik-lrtest" class="quarto-xref"><span>Section 18.3.6</span></a>. However, because Poisson and negative binomial models have the same number of terms in the model (intercept and slope), <code>anova()</code> finds a difference of zero residual degrees of freedom. The overdispersion parameter <span class="math inline">\(\theta\)</span> in the negative binomial model isn’t counted in the residual degrees of freedom used by <code>anova()</code>.</p>
+<p>Instead, we have to use another method. The function <code>lrtest()</code> in package <code>lmtest</code> uses the number of estimated parameters in the likelihood, which includes the overdispersion parameter. However, there is a problem.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># close, but not quite correct</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># because of the boundary problem</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">lrtest</span>(mod3, mod4)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Likelihood ratio test
+
+Model 1: ynb ~ x
+Model 2: ynb ~ x
+  #Df   LogLik Df  Chisq Pr(&gt;Chisq)    
+1   2 -2525.52                         
+2   3  -549.79  1 3951.5  &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Recall that as <span class="math inline">\(\theta\)</span> gets larger, the variance in the negative binomial approaches the variance of the Poisson. We saw this earlier:</p>
+<p><span class="math display">\[\lim_{\theta \to \infty} \underbrace{\lambda+\frac{\lambda^2}{\theta}}_{\text{NegBin~variance}} = \underbrace{\lambda}_{\text{Poisson variance}}\]</span></p>
+<p>If we reparameterize the negative binomial variance with <span class="math inline">\(\alpha=1/\theta\)</span>, we get</p>
+<p><span class="math display">\[\sigma^2=\lambda+\lambda^2\alpha\]</span></p>
+<p>then the comparison between the Poisson and the negative binomial GLM boils down to testing the null hypothesis that</p>
+<p><span class="math display">\[H_0:\alpha=0\]</span></p>
+<p>But because <span class="math inline">\(\alpha\geq0\)</span>, the null hypothesis lies on the <strong>boundary of the parameter space</strong> for the negative binomial model. This violates one of the assumptions of the likelihood ratio test. So, both <code>anova(...,test="Chisq")</code> and <code>lmtest::lrtest()</code> are inappropriate. Instead, we need to calculate the LR test statistic directly:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>LR <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>(<span class="fu">as.numeric</span>(<span class="fu">logLik</span>(mod4))<span class="sc">-</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>             <span class="fu">as.numeric</span>(<span class="fu">logLik</span>(mod3)))</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>pval <span class="ot">&lt;-</span> <span class="fl">0.5</span><span class="sc">*</span><span class="fu">pchisq</span>(LR, <span class="at">df=</span><span class="dv">1</span>, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">LR=</span>LR, <span class="at">pval=</span>pval)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      LR     pval 
+3951.456    0.000 </code></pre>
+</div>
+</div>
+<p>We would report this as (likelihood ratio = 3951.5, 1 d.f., <em>p</em> &lt; 0.001).</p>
+<p>Or, if we don’t want to calculate a LR test manually, we could just compare the models using AIC:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>aic.df <span class="ot">&lt;-</span> <span class="fu">AIC</span>(mod3, mod4)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># delta aic</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>aic.df<span class="sc">$</span>delta <span class="ot">&lt;-</span> aic.df<span class="sc">$</span>AIC<span class="sc">-</span><span class="fu">min</span>(aic.df<span class="sc">$</span>AIC)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co"># relative likelihoods</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>aic.df<span class="sc">$</span>w <span class="ot">&lt;-</span> <span class="fu">exp</span>(aic.df<span class="sc">$</span>delta<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co"># delta AIC is so large, can't calculate</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co"># AIC weight... basic number sense should</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="co"># tell us that w&gt;0.99999 for mod4 (negbin)</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>aic.df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     df      AIC    delta   w
+mod3  2 5055.035 3949.456 Inf
+mod4  3 1105.579    0.000   1</code></pre>
+</div>
+</div>
+<p>The case for the negative binomial <code>mod4</code> over the Poisson <code>mod3</code>is pretty convincing at this point, but let’s plot the models and their predictions to be sure.</p>
+<div class="cell" data-fig-caption="Comparison of a Poisson GLM (top) and negative binomial GLM (bottom) fitted to the same data. Notice how the negative binomial GLM better captures the variation in $y$ compared to the Poisson GLM.">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(dn<span class="sc">$</span>x), <span class="fu">max</span>(dn<span class="sc">$</span>x), <span class="at">length=</span><span class="dv">100</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># poisson model predictions</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>pred3 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod3, </span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">x=</span>px),</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">type=</span><span class="st">"link"</span>, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># negbin model predictions</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>pred4 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod4, </span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">x=</span>px),</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">type=</span><span class="st">"link"</span>, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="co"># expected values</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>mn3 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.5</span>, pred3<span class="sc">$</span>fit, pred3<span class="sc">$</span>se.fit))</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>mn4 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.5</span>, pred4<span class="sc">$</span>fit, pred4<span class="sc">$</span>se.fit))</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a><span class="co"># confidence intervals</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="do">## lower</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>lo3 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.025</span>, pred3<span class="sc">$</span>fit, pred3<span class="sc">$</span>se.fit))</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>lo4 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.025</span>, pred4<span class="sc">$</span>fit, pred4<span class="sc">$</span>se.fit))</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a><span class="do">## upper</span></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>up3 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.975</span>, pred3<span class="sc">$</span>fit, pred3<span class="sc">$</span>se.fit))</span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>up4 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.975</span>, pred4<span class="sc">$</span>fit, pred4<span class="sc">$</span>se.fit))</span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">2.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dn<span class="sc">$</span>x, dn<span class="sc">$</span>ynb,</span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"x"</span>, <span class="at">ylab=</span><span class="st">"y"</span>,</span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Poisson GLM"</span>)</span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, lo3, <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, up3, <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, mn3, <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dn<span class="sc">$</span>x, dn<span class="sc">$</span>ynb,</span>
+<span id="cb28-36"><a href="#cb28-36" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"x"</span>, <span class="at">ylab=</span><span class="st">"y"</span>,</span>
+<span id="cb28-37"><a href="#cb28-37" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Negative binomial GLM"</span>)</span>
+<span id="cb28-38"><a href="#cb28-38" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, lo4, <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb28-39"><a href="#cb28-39" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span>
+<span id="cb28-40"><a href="#cb28-40" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, up4, <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb28-41"><a href="#cb28-41" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span>
+<span id="cb28-42"><a href="#cb28-42" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, mn4, <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb28-43"><a href="#cb28-43" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch20_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" alt="Comparison of a Poisson GLM (top) and negative binomial GLM (bottom) fitted to the same data. Notice how the negative binomial GLM better captures the variation in $y$ compared to the Poisson GLM." width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>At first glance, the Poisson model appears to have a better fit because the 95% confidence interval is so narrow. But, this is a mistake because the fitted negative binomial model revealed considerable overdispersion. The Poisson model does not account for this overdispersion, and consequently assumes that the observations contain more information about the expected value than they actually do. As a result, its standard errors are underestimated and the CI appears misleadingly narrow. The negative binomial model <em>does</em> account for the overdispersion, which means that it incorporates that extra uncertainty into its SE and CI calculations.</p>
+</section>
+<section id="sec-glm3-negbin-real" class="level3" data-number="20.2.3">
+<h3 data-number="20.2.3" class="anchored" data-anchor-id="sec-glm3-negbin-real"><span class="header-section-number">20.2.3</span> Example with real data</h3>
+<p>Let’s use the NEON data for a real example. If you don’t already have it, download the <a href="..datasets/dat-neon-site-rich-env.csv">site-level richness and environmental dataset</a> and put it in your working directory.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"dat-neon-site-rich-env.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Consider this plot of species richness vs.&nbsp;net primary productivity.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx<span class="sc">$</span>npp, dx<span class="sc">$</span>tot,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="fu">expression</span>(Net<span class="sc">~</span>primary<span class="sc">~</span>productivity<span class="sc">~</span>(g<span class="sc">~</span>C<span class="sc">~</span>m<span class="sc">^</span>{<span class="sc">-</span><span class="dv">2</span>}<span class="sc">~</span>yr<span class="sc">^</span>{<span class="sc">-</span><span class="dv">1</span>})),</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Small mammal species richness"</span>,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">30</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch20_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It looks like small mammal species richness declines with increasing net primary productivity, which is actually kind of surprising. Let’s investigate with a negative binomial GLM. We will also fit a Poisson GLM for comparison, to check whether the negative binomial is handling variance appropriately.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>mod5 <span class="ot">&lt;-</span> <span class="fu">glm</span>(tot<span class="sc">~</span>npp, <span class="at">data=</span>dx, <span class="at">family=</span>poisson)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod5)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = tot ~ npp, family = poisson, data = dx)
+
+Coefficients:
+              Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  2.6650178  0.1104849  24.121  &lt; 2e-16 ***
+npp         -0.0002533  0.0000948  -2.671  0.00755 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 87.775  on 45  degrees of freedom
+Residual deviance: 80.661  on 44  degrees of freedom
+AIC: 274.94
+
+Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+</div>
+<p>And the negative binomial:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>mod6 <span class="ot">&lt;-</span> <span class="fu">glm.nb</span>(tot<span class="sc">~</span>npp, <span class="at">data=</span>dx)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod6)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm.nb(formula = tot ~ npp, data = dx, init.theta = 15.54633293, 
+    link = log)
+
+Coefficients:
+              Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  2.6902618  0.1469308  18.310   &lt;2e-16 ***
+npp         -0.0002763  0.0001241  -2.226    0.026 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for Negative Binomial(15.5463) family taken to be 1)
+
+    Null deviance: 54.118  on 45  degrees of freedom
+Residual deviance: 49.567  on 44  degrees of freedom
+AIC: 269.82
+
+Number of Fisher Scoring iterations: 1
+
+              Theta:  15.55 
+          Std. Err.:  8.27 
+
+ 2 x log-likelihood:  -263.819 </code></pre>
+</div>
+</div>
+<p>AIC suggests that the negative binomial model is better supported than the Poisson model.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>aic.df <span class="ot">&lt;-</span> <span class="fu">AIC</span>(mod5, mod6)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># delta aic</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>aic.df<span class="sc">$</span>delta <span class="ot">&lt;-</span> aic.df<span class="sc">$</span>AIC<span class="sc">-</span><span class="fu">min</span>(aic.df<span class="sc">$</span>AIC)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="co"># relative likelihoods</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>aic.df<span class="sc">$</span>rel <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">*</span>aic.df<span class="sc">$</span>delta<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="co"># aic weight</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>aic.df<span class="sc">$</span>wt <span class="ot">&lt;-</span> aic.df<span class="sc">$</span>rel<span class="sc">/</span><span class="fu">sum</span>(aic.df<span class="sc">$</span>rel)</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>aic.df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     df      AIC    delta        rel         wt
+mod5  2 274.9404 5.121084 0.07726287 0.07172146
+mod6  3 269.8193 0.000000 1.00000000 0.92827854</code></pre>
+</div>
+</div>
+<p>We can also perform a likelihood ratio test, confirms the significant difference in model performance.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>LR <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>(<span class="fu">as.numeric</span>(<span class="fu">logLik</span>(mod6))<span class="sc">-</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>             <span class="fu">as.numeric</span>(<span class="fu">logLik</span>(mod5)))</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>pval <span class="ot">&lt;-</span> <span class="fl">0.5</span><span class="sc">*</span><span class="fu">pchisq</span>(LR, <span class="at">df=</span><span class="dv">1</span>, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">LR=</span>LR, <span class="at">pval=</span>pval)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         LR        pval 
+7.121083658 0.003809132 </code></pre>
+</div>
+</div>
+<p>However, the deviance explained for the best supported model is quite low:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span>mod6<span class="sc">$</span>deviance<span class="sc">/</span>mod6<span class="sc">$</span>null.deviance</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.08408354</code></pre>
+</div>
+</div>
+<p>}</p>
+<p>That should make us worry that the fitted model might not outperform the null model. Let’s fit that and compare it to model 6.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># null model</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>mod0 <span class="ot">&lt;-</span> <span class="fu">glm.nb</span>(tot<span class="sc">~</span><span class="dv">1</span>, <span class="at">data=</span>dx)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># likelihood ratio test</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">lrtest</span>(mod6, mod0)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Likelihood ratio test
+
+Model 1: tot ~ npp
+Model 2: tot ~ 1
+  #Df  LogLik Df  Chisq Pr(&gt;Chisq)  
+1   3 -131.91                       
+2   2 -134.09 -1 4.3664    0.03665 *
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>The significant LR test gives us some justification for going on with model 6. How much support does it really have relative to the null?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>aic.df <span class="ot">&lt;-</span> <span class="fu">AIC</span>(mod0, mod5, mod6)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co"># delta aic</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>aic.df<span class="sc">$</span>delta <span class="ot">&lt;-</span> aic.df<span class="sc">$</span>AIC<span class="sc">-</span><span class="fu">min</span>(aic.df<span class="sc">$</span>AIC)</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="co"># relative likelihoods</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>aic.df<span class="sc">$</span>rel <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">*</span>aic.df<span class="sc">$</span>delta<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a><span class="co"># aic weight</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>aic.df<span class="sc">$</span>wt <span class="ot">&lt;-</span> aic.df<span class="sc">$</span>rel<span class="sc">/</span><span class="fu">sum</span>(aic.df<span class="sc">$</span>rel)</span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>aic.df[<span class="fu">order</span>(aic.df<span class="sc">$</span>delta),]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     df      AIC    delta        rel         wt
+mod6  3 269.8193 0.000000 1.00000000 0.72277713
+mod0  2 272.1857 2.366449 0.30628949 0.22137904
+mod5  2 274.9404 5.121084 0.07726287 0.05584383</code></pre>
+</div>
+</div>
+<p>That’s an interesting finding: both the negative binomial model <em>and</em> the null model are better supported than the Poisson model. So, if we had only used the Poisson model, we would have found a “statistically significant” effect of NPP, but that model would have had less overall support than the null model because the explanatory power of NPP was not worth the cost of the extra parameter. This shows us the importance of properly accounting for variance in a GLM. This also neatly illustrates the difference between purely frequentist inference using <em>p</em>-values, and information theoretic inference using AIC (see <a href="ch29.html" class="quarto-xref"><span>Chapter 29</span></a> for a more in-depth discussion).</p>
+<p>Finally, let’s make a figure to show off this relationship we found:</p>
+<div class="cell" data-fig-caption="Comparison of a Poisson GLM (top) and negative binomial GLM (bottom) of small mammal species richness in respose to net primary productivity (NPP). Notice how the negative binomial GLM better captures the variation in $y$ compared to the Poisson GLM.">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(dx<span class="sc">$</span>npp), <span class="fu">max</span>(dx<span class="sc">$</span>npp), <span class="at">length=</span><span class="dv">100</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co"># poisson model predictions</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>pred5 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod5, </span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">npp=</span>px),</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">type=</span><span class="st">"link"</span>, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="co"># negbin model predictions</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>pred6 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod6, </span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">npp=</span>px),</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">type=</span><span class="st">"link"</span>, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a><span class="co"># expected values</span></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>mn5 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.5</span>, pred5<span class="sc">$</span>fit, pred5<span class="sc">$</span>se.fit))</span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>mn6 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.5</span>, pred6<span class="sc">$</span>fit, pred6<span class="sc">$</span>se.fit))</span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a><span class="co"># confidence intervals</span></span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a><span class="do">## lower</span></span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>lo5 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.025</span>, pred5<span class="sc">$</span>fit, pred5<span class="sc">$</span>se.fit))</span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>lo6 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.025</span>, pred6<span class="sc">$</span>fit, pred6<span class="sc">$</span>se.fit))</span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a><span class="do">## upper</span></span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>up5 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.975</span>, pred5<span class="sc">$</span>fit, pred5<span class="sc">$</span>se.fit))</span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>up6 <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(<span class="fl">0.975</span>, pred6<span class="sc">$</span>fit, pred6<span class="sc">$</span>se.fit))</span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a>xlabel <span class="ot">&lt;-</span> <span class="fu">expression</span>(Net<span class="sc">~</span>primary<span class="sc">~</span>productivity<span class="sc">~</span>(g<span class="sc">~</span>C<span class="sc">~</span>m<span class="sc">^</span>{<span class="sc">-</span><span class="dv">2</span>}<span class="sc">~</span>yr<span class="sc">^</span>{<span class="sc">-</span><span class="dv">1</span>}))</span>
+<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">2.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx<span class="sc">$</span>npp, dx<span class="sc">$</span>tot,</span>
+<span id="cb45-28"><a href="#cb45-28" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span>xlabel,</span>
+<span id="cb45-29"><a href="#cb45-29" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Small mammal species richness"</span>,</span>
+<span id="cb45-30"><a href="#cb45-30" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">30</span>))</span>
+<span id="cb45-31"><a href="#cb45-31" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, lo5, <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb45-32"><a href="#cb45-32" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb45-33"><a href="#cb45-33" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, up5, <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb45-34"><a href="#cb45-34" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb45-35"><a href="#cb45-35" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, mn5, <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb45-36"><a href="#cb45-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb45-37"><a href="#cb45-37" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, lo6, <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb45-38"><a href="#cb45-38" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="dv">3</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span>
+<span id="cb45-39"><a href="#cb45-39" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, up6, <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb45-40"><a href="#cb45-40" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="dv">3</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span>
+<span id="cb45-41"><a href="#cb45-41" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, mn6, <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb45-42"><a href="#cb45-42" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="dv">3</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span>
+<span id="cb45-43"><a href="#cb45-43" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>,</span>
+<span id="cb45-44"><a href="#cb45-44" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"Poisson GLM"</span>, <span class="st">"Negative binomial GLM"</span>),</span>
+<span id="cb45-45"><a href="#cb45-45" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>), <span class="at">lwd=</span><span class="dv">2</span>,</span>
+<span id="cb45-46"><a href="#cb45-46" aria-hidden="true" tabindex="-1"></a>       <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">cex=</span><span class="fl">1.3</span>)</span>
+<span id="cb45-47"><a href="#cb45-47" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(dx<span class="sc">$</span>npp, dx<span class="sc">$</span>tot, <span class="at">pch=</span><span class="dv">19</span>, <span class="at">cex=</span><span class="fl">1.3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch20_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" alt="Comparison of a Poisson GLM (top) and negative binomial GLM (bottom) of small mammal species richness in respose to net primary productivity (NPP). Notice how the negative binomial GLM better captures the variation in $y$ compared to the Poisson GLM." width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-glm3-negbin-beyond" class="level3" data-number="20.2.4">
+<h3 data-number="20.2.4" class="anchored" data-anchor-id="sec-glm3-negbin-beyond"><span class="header-section-number">20.2.4</span> Beyond negative binomial</h3>
+<p><strong>Quasi-Poisson regression</strong> is another approach to overdispersed count data. Unlike negative binomial regression, it does not specify a complete probability distribution, instead allowing the variance to be a constant multiple of the mean. This adjusts standard errors to account for overdispersion but does not provide a conventional likelihood for AIC-based model comparison. For this reason, we focus on negative binomial regression as a likelihood-based alternative to Poisson regression.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

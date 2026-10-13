@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>18&nbsp; Introduction to generalized linear models (GLM) – Applied Biological Data Analysis</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -88,15 +91,14 @@ div.csl-indent {
 <link href="../chapters/part_05.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -127,7 +129,7 @@ div.csl-indent {
 <style>html{ scroll-behavior: smooth; }</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -180,9 +182,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -531,12 +531,12 @@ window.Quarto = {
   </ul></li>
   <li><a href="#sec-glm1-lik" id="toc-sec-glm1-lik" class="nav-link" data-scroll-target="#sec-glm1-lik"><span class="header-section-number">18.3</span> Likelihood functions and GLM diagnostics</a>
   <ul class="collapse">
-  <li><a href="#likelihood-function-example-sec-glm1-lik-example" id="toc-likelihood-function-example-sec-glm1-lik-example" class="nav-link" data-scroll-target="#likelihood-function-example-sec-glm1-lik-example"><span class="header-section-number">18.3.1</span> Likelihood function example {<span class="quarto-unresolved-ref">sec-glm1-lik-example</span>}</a></li>
+  <li><a href="#sec-glm1-lik-example" id="toc-sec-glm1-lik-example" class="nav-link" data-scroll-target="#sec-glm1-lik-example"><span class="header-section-number">18.3.1</span> Likelihood function example</a></li>
   <li><a href="#sec-glm1-lik-dev" id="toc-sec-glm1-lik-dev" class="nav-link" data-scroll-target="#sec-glm1-lik-dev"><span class="header-section-number">18.3.2</span> Deviance</a></li>
   <li><a href="#sec-glm1-lik-pseudo" id="toc-sec-glm1-lik-pseudo" class="nav-link" data-scroll-target="#sec-glm1-lik-pseudo"><span class="header-section-number">18.3.3</span> Deviance explained: the pseudo-<span class="math inline">\(R^2\)</span></a></li>
   <li><a href="#sec-glm1-lik-aic" id="toc-sec-glm1-lik-aic" class="nav-link" data-scroll-target="#sec-glm1-lik-aic"><span class="header-section-number">18.3.4</span> AIC and likelihood functions</a></li>
-  <li><a href="#model-comparison-using-aic" id="toc-model-comparison-using-aic" class="nav-link" data-scroll-target="#model-comparison-using-aic"><span class="header-section-number">18.3.5</span> Model comparison using AIC</a></li>
-  <li><a href="#likelihood-ratio-tests" id="toc-likelihood-ratio-tests" class="nav-link" data-scroll-target="#likelihood-ratio-tests"><span class="header-section-number">18.3.6</span> Likelihood ratio tests</a></li>
+  <li><a href="#sec-glm1-lik-comp" id="toc-sec-glm1-lik-comp" class="nav-link" data-scroll-target="#sec-glm1-lik-comp"><span class="header-section-number">18.3.5</span> Model comparison using AIC</a></li>
+  <li><a href="#sec-glm1-lik-lrtest" id="toc-sec-glm1-lik-lrtest" class="nav-link" data-scroll-target="#sec-glm1-lik-lrtest"><span class="header-section-number">18.3.6</span> Likelihood ratio tests</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch18.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -633,7 +633,7 @@ window.Quarto = {
 <p>where <span class="math inline">\(y\)</span> is the response, <span class="math inline">\(x\)</span> is the predictor, <span class="math inline">\(E\left(y\right)\)</span> is the expected value on the scale of the data, <span class="math inline">\(\theta\)</span> are other parameters of the response distribution, <span class="math inline">\(\eta\)</span> is the expected value on another scale, and <span class="math inline">\(E\left(y\right)\)</span> and <span class="math inline">\(\eta\)</span> are related by a <strong>link function</strong>.</p>
 <p>Here we can see what the GLM is doing:</p>
 <ol type="1">
-<li>The observed values follow some probability distribution with an expected value and usually other parameters (<span class="math inline">\(\theta\)</span>). This is the <span class="math display">\[stochastic\]</span> part of the model, where the uncertainty or variation manifests.</li>
+<li>The observed values follow some probability distribution with an expected value and usually other parameters (<span class="math inline">\(\theta\)</span>). This is the <strong>stochastic</strong> part of the model, where the uncertainty or variation manifests.</li>
 <li>The expected value on the scale of the observed values is mapped to another scale by a link function. This is done to take advantage of the properties of the linked scale, often to linearize the relationship between <span class="math inline">\(E\left(y\right)\)</span> and <span class="math inline">\(x\)</span> or ensure that <span class="math inline">\(E\left(y\right)\)</span> ends up in the proper domain (<a href="@sec-glm1-basics-link">more on this shortly</a>).</li>
 <li>The deterministic part of the model, the <strong>linear predictor</strong> of <span class="math inline">\(y|x\)</span>, is a linear function of the x variable or variables.</li>
 </ol>
@@ -676,10 +676,10 @@ window.Quarto = {
 <p>Importantly, the likelihood is <strong><em>not</em></strong> the probability that a particular parameter value or model is correct. Although <span class="math inline">\(\mathcal{L}\left(\theta|x\right)\)</span> is written with the parameters to the left of the vertical bar, it is based on the probability of the data given the parameters, <span class="math inline">\(p\left(x|\theta\right)\)</span>, not the probability of the parameters given the data, <span class="math inline">\(p\left(\theta|x\right)\)</span>. The latter is a Bayesian posterior probability density (which you can learn about in my <a href="https://greenquanteco.github.io/bayesian-inference-biologists/">other class</a>!).</p>
 <p>One slightly counterintuitive aspect of likelihood functions is that unlike familiar test statistics like <em>t</em> or <em>F</em> or <em>^2</em>, the likelihood does not follow a standard reference distribution defined by degrees of freedom. Consequently, the absolute value of a likelihood doesn’t really tell you much on its own. Instead, model likelihoods are most useful when comparing models with different parameters, or different parameter values. That’s not to say that likelihood functions are completely divorced from <em>p</em>-values. In fact, several frequentist methods use comparisons of likelihoods to construct test statistics and calculate <em>p</em>-values. We’ll explore this in <a href="#sec-glm1-lik-aic" class="quarto-xref"><span>Section 18.3.4</span></a>.</p>
 <p>The takeaway is that probability asks how plausible different observations are under a specified model and its parameters, while likelihood asks which parameter values make the data we actually observed more plausible.</p>
-<section id="likelihood-function-example-sec-glm1-lik-example" class="level3" data-number="18.3.1">
-<h3 data-number="18.3.1" class="anchored" data-anchor-id="likelihood-function-example-sec-glm1-lik-example"><span class="header-section-number">18.3.1</span> Likelihood function example {<span class="quarto-unresolved-ref">?sec-glm1-lik-example</span>}</h3>
-<section id="calculating-the-likelihood-function-sec-glm1-lik-example-calc" class="level4" data-number="18.3.1.1">
-<h4 data-number="18.3.1.1" class="anchored" data-anchor-id="calculating-the-likelihood-function-sec-glm1-lik-example-calc"><span class="header-section-number">18.3.1.1</span> Calculating the likelihood function {<span class="quarto-unresolved-ref">?sec-glm1-lik-example-calc</span>}</h4>
+<section id="sec-glm1-lik-example" class="level3" data-number="18.3.1">
+<h3 data-number="18.3.1" class="anchored" data-anchor-id="sec-glm1-lik-example"><span class="header-section-number">18.3.1</span> Likelihood function example</h3>
+<section id="sec-glm1-lik-example-calc" class="level4" data-number="18.3.1.1">
+<h4 data-number="18.3.1.1" class="anchored" data-anchor-id="sec-glm1-lik-example-calc"><span class="header-section-number">18.3.1.1</span> Calculating the likelihood function</h4>
 <p>Here’s a quick example: imagine you have measured 5 squirrel femurs and found lengths of 63.6, 66.5, 64.2, 67.6, and 68.3 mm, yielding an observed sample mean and SD of <span class="math inline">\(66.0\pm2.1\)</span> mm. What estimate of the population mean <span class="math inline">\(\mu\)</span> that makes this set of measurements most plausible?</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">63.6</span>, <span class="fl">66.5</span>, <span class="fl">64.2</span>, <span class="fl">67.6</span>, <span class="fl">68.3</span>)</span>
@@ -735,8 +735,8 @@ window.Quarto = {
 </div>
 <p>It looks like 66 has the greatest joint likelihood across all observed data.</p>
 </section>
-<section id="profiling-the-likelihood-sec-glm1-lik-example-prof" class="level4" data-number="18.3.1.2">
-<h4 data-number="18.3.1.2" class="anchored" data-anchor-id="profiling-the-likelihood-sec-glm1-lik-example-prof"><span class="header-section-number">18.3.1.2</span> Profiling the likelihood {<span class="quarto-unresolved-ref">?sec-glm1-lik-example-prof</span>}</h4>
+<section id="sec-glm1-lik-example-prof" class="level4" data-number="18.3.1.2">
+<h4 data-number="18.3.1.2" class="anchored" data-anchor-id="sec-glm1-lik-example-prof"><span class="header-section-number">18.3.1.2</span> Profiling the likelihood</h4>
 <p>We can get a fuller picture if we test more values and plot how the model likelihood varies across different values of <span class="math inline">\(\mu\)</span>. This is called <strong>profiling</strong> the likelihood.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
@@ -937,8 +937,8 @@ Figure&nbsp;18.4: The joint likelihood surface for a model with 2 parameters, <s
 </div>
 <p>The maximum likelihood estimates for something like a linear regression model, or a Poisson GLM, are found by similar procedure, but with more than 2 parameters the resulting surface is 3-dimensional, or 4-dimensional, making the profiling a bit more complicated.</p>
 </section>
-<section id="negative-log-likelihood-sec-glm1-lik-example-nll" class="level4" data-number="18.3.1.3">
-<h4 data-number="18.3.1.3" class="anchored" data-anchor-id="negative-log-likelihood-sec-glm1-lik-example-nll"><span class="header-section-number">18.3.1.3</span> Negative log-likelihood {<span class="quarto-unresolved-ref">?sec-glm1-lik-example-nll</span>}</h4>
+<section id="sec-glm1-lik-example-nll" class="level4" data-number="18.3.1.3">
+<h4 data-number="18.3.1.3" class="anchored" data-anchor-id="sec-glm1-lik-example-nll"><span class="header-section-number">18.3.1.3</span> Negative log-likelihood</h4>
 <p>In practice, modern MLE seeks not to maximize the likelihood but to minimize the negative log-likelihood. That turns the surface in the previous figure into this:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>NLL <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">*</span> <span class="fu">log</span>(<span class="fu">t</span>(Lmat))</span>
@@ -1002,7 +1002,7 @@ Figure&nbsp;18.5: The log-likelihood surface for a model with 2 parameters, <spa
 <p><span class="math display">\[D_{Gaussian}=\sum_{i=1}^n \left(y_i - E\left(y_i\right)\right)^2=SS_{res}\]</span></p>
 <p>For Poisson GLMs, we don’t count squared residuals but rather discrepancies between observed and predicted counts.</p>
 <p><span class="math display">\[D_{Poisson}=2\sum_{i=1}^n \left[y_i \log{\left(\frac{y_i}{E\left(y_i\right)}\right)}-\left(y_i-E\left(y_i\right)\right)\right]\]</span></p>
-<p>with the caveat that the first term <span class="math inline">\(y_i \log{\left(\frac{y_i}{E\left(y_i\right)}\right)\)</span> is zero when <span class="math inline">\(y_i=0\)</span>.</p>
+<p>with the caveat that the first term <span class="math inline">\(y_i \log{\left(\frac{y_i}{E\left(y_i\right)}\right)}\)</span> is zero when <span class="math inline">\(y_i=0\)</span>.</p>
 <p>For binomial GLMs with binary outcomes (i.e., logistic regression), the deviance is:</p>
 <p><span class="math display">\[D_{binomial}=-2\sum_{i=1}^n \left[y_i \log{\left(\hat{p_i}\right)}+\left(1-y_i\right)\log\left(1-\hat{p_i}\right)\right]\]</span></p>
 <p>where <span class="math inline">\(\hat{p_i}\)</span> is the predicted probability that <span class="math inline">\(y=1\)</span>.</p>
@@ -1022,25 +1022,33 @@ Figure&nbsp;18.5: The log-likelihood surface for a model with 2 parameters, <spa
 <p><span class="math display">\[AIC_C=AIC+\frac{2k^2+2k}{n-k-1}\]</span></p>
 <p>where <span class="math inline">\(n\)</span> denotes the sample size and <span class="math inline">\(k\)</span> still denotes the number of parameters. Thus, <span class="math inline">\(AIC_C\)</span> is essentially AIC with an extra penalty term for the number of parameters. Note that as <span class="math inline">\(n\rightarrow\infty\)</span>, the extra penalty term converges to 0, and thus <span class="math inline">\(AIC_C\)</span> converges to AIC</p>
 </section>
-<section id="model-comparison-using-aic" class="level3" data-number="18.3.5">
-<h3 data-number="18.3.5" class="anchored" data-anchor-id="model-comparison-using-aic"><span class="header-section-number">18.3.5</span> Model comparison using AIC</h3>
+<section id="sec-glm1-lik-comp" class="level3" data-number="18.3.5">
+<h3 data-number="18.3.5" class="anchored" data-anchor-id="sec-glm1-lik-comp"><span class="header-section-number">18.3.5</span> Model comparison using AIC</h3>
 <p>Like deviance, the magnitude of the AIC of a model doesn’t tell us anything about the fit of that model. Instead, we use AIC to compare the fit of different models. We will work examples in later chapters. Briefly, given a set of <span class="math inline">\(R\)</span> candidate models, with AIC values <span class="math inline">\(AIC_1\)</span>, <span class="math inline">\(AIC_2\)</span>, up to <span class="math inline">\(AIC_R\)</span>, we calculate for each model <span class="math inline">\(i\)</span>:</p>
 <p><span class="math display">\[\Delta AIC_i=AIC_i-\min{\left(AIC\right)}\]</span></p>
 <p>We then use these values, called “Delta AICs”, to calculate the relative likelihood of each model as</p>
 <p><span class="math display">\[\hat{\mathcal{L}}_{rel,i}=\exp{\left(\frac{\Delta AIC_i}{2}\right)}\]</span></p>
 <p>If we normalize the relative likelihoods by dividing by their sum, we get the <strong>AIC weight</strong> <span class="math inline">\(\omega\)</span>:</p>
 <p><span class="math display">\[\omega_{i}=\frac{\hat{\mathcal{L}}_{rel,i}}{\sum_{i=1}^R\hat{\mathcal{L}}_{rel,i}}\]</span></p>
-<p>which is constrained such that all <span class="math inline">\(\omega_i\)</span> sum to 1. The AIC weight is the essentially the probability that a model is the best-fitting model in a set of candidate models. It is <em>not</em> the probability that a model is correct, or the probability that a model is the best of all possible models. An AIC weight only has meaning within a set of nested models. Nested models are models that can be turned into one another by setting one or more coefficients to 0. For example, the following models</p>
-<p><span class="math display">\[E\left(y\right)=\beta_0+\beta_1 x_1+\beta_2 x_2+\beta_3 x_3\]</span></p>
-<p><span class="math display">\[E\left(y\right)=\beta_0+\beta_2 x_2+\beta_3 x_3\]</span></p>
-<p><span class="math display">\[E\left(y\right)=\beta_0+\beta_1 x_1+\beta_3 x_3\]</span></p>
-<p>are considered nested. The first model contains the second and third as special cases: if you set <span class="math inline">\(\beta_1\)</span> to 0, then you get the second model. If you set <span class="math inline">\(\beta_2\)</span> to 0, then you get the third model. And if you set <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, and <span class="math inline">\(\beta_3\)</span> to 0, you get the <strong>null model</strong>:</p>
-<p><span class="math display">\[E\left(y\right)=\beta_0\]</span></p>
-<p>The null model is a useful baseline and should also be included in the candidate set when comparing GLMs by AIC.</p>
+<p>which is constrained such that all <span class="math inline">\(\omega_i\)</span> sum to 1. The AIC weight is the essentially the probability that a model is the best-fitting model in a set of candidate models. It is <em>not</em> the probability that a model is correct, or the probability that a model is the best of all possible models. An AIC weight only has meaning within a set of nested models.</p>
+<p><strong>Nested models</strong> are models in which one is a special case of another. These special cases are defined by constraining one or more parameters (usually by setting coefficients to 0).</p>
+<p>Consider the following linear predictors for different GLMs (models 1 through 5) and assume the same response distribution and link function. Models 1 and 2 are nested:</p>
+<p><span class="math display">\[\text{Model 1}:\eta=\beta_0+\beta_1 x_1+\beta_2 x_2\]</span></p>
+<p><span class="math display">\[\text{Model 2}:\eta=\beta_0+\beta_1 x_1\]</span></p>
+<p>because model 1 contains model 2 as a special case: if you set <span class="math inline">\(\beta_2\)</span> in model 1 to 0, then you get model 2 which has only <span class="math inline">\(\beta_1\)</span>.</p>
+<p>Models 3 and 4 are not nested:</p>
+<p><span class="math display">\[\text{Model 3}:\eta=\beta_0+\beta_1 x_1\]</span></p>
+<p><span class="math display">\[\text{Model 4}:\eta=\beta_0+\beta_2 x_2\]</span></p>
+<p>because you can’t get either model from the other by setting coefficients to 0. Both models 3 and 4 are, however, nested in</p>
+<p><span class="math display">\[\text{Model 5}:\eta=\beta_0+\beta_1 x_1+\beta_2 x_2\]</span></p>
+<p>You can compare nested models like models 4 and 5 with a likelihood ratio test (see <a href="#sec-glm1-lik-lrtest" class="quarto-xref"><span>Section 18.3.6</span></a> below). Models 3 and 4 are not nested, so they cannot be compared using a likelihood ratio test. However, either could be compared with model 5 or with a null model. AIC can be used to compare models 3, 4, and 5 simultaneously, regardless of how they are nested, provided that they are fitted to the same observations and their likelihoods are comparable.</p>
+<p>If you set all of the model coefficients other than the intercept to 0, you get the <strong>null model</strong>:</p>
+<p><span class="math display">\[\text{Null model}:\eta=\beta_0\]</span></p>
+<p>The null model is a useful baseline and is often worth including in the candidate set when comparing GLMs by AIC.</p>
 </section>
-<section id="likelihood-ratio-tests" class="level3" data-number="18.3.6">
-<h3 data-number="18.3.6" class="anchored" data-anchor-id="likelihood-ratio-tests"><span class="header-section-number">18.3.6</span> Likelihood ratio tests</h3>
-<p>Finally, we can compare GLM using the <strong>likelihood ratio test (LRT)</strong>. The LRT asks whether the improvement in fit from adding parameters is greater than we would expect by chance if the simpler model were correct. Its test statistic <span class="math inline">\(G^2\)</span> is:</p>
+<section id="sec-glm1-lik-lrtest" class="level3" data-number="18.3.6">
+<h3 data-number="18.3.6" class="anchored" data-anchor-id="sec-glm1-lik-lrtest"><span class="header-section-number">18.3.6</span> Likelihood ratio tests</h3>
+<p>Finally, we can compare nested GLMs using the <strong>likelihood ratio test (LRT)</strong>. The LRT asks whether the improvement in fit from adding parameters is greater than we would expect by chance if the simpler model were correct. Its test statistic <span class="math inline">\(G^2\)</span> is:</p>
 <p><span class="math display">\[G^2=-2\log\left(\frac{\mathcal{L}_0}{\mathcal{L}_1}\right)=2\left(\ell_1-\ell_0\right)\]</span></p>
 <p>where <span class="math inline">\(\mathcal{L}_0\)</span> and <span class="math inline">\(\mathcal{L}_1\)</span> are the maximized likelihoods of the simpler and more complex models, respectively, and <span class="math inline">\(\ell_0\)</span> and <span class="math inline">\(\ell_1\)</span> are their log-likelihoods. If the simpler model corresponding to <span class="math inline">\(\mathcal{L}_0\)</span> is the null model, then the LRT on a GLM is analogous to the omnibus ANOVA test for a linear model.</p>
 <p>Notice that this is closely related to the definition of deviance. In fact, for nested GLMs with the same response distribution and fixed dispersion, the likelihood-ratio test statistic is simply the difference between their residual deviances:</p>
@@ -1055,6 +1063,10 @@ Figure&nbsp;18.5: The log-likelihood surface for a model with 2 parameters, <spa
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod0, mod1, <span class="at">test =</span> <span class="st">"Chisq"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This compares two nested Poisson GLMs fitted to the same observations. A small <em>p</em>-value indicates evidence that adding the additional predictor <code>x2</code> improves model fit beyond what would be expected under the simpler model.</p>
+<p>Alternatively, we can use a function from <code>lmtest</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">lrtest</span>(mod0, mod1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <p>When should we use an LRT instead of AIC? The two methods answer different questions. AIC evaluates the relative expected predictive performance of competing models while penalizing model complexity, and can compare models that are not nested. The LRT, on the other hand, formally tests whether the additional parameters in a more complex nested model provide a statistically significant improvement in fit. Neither approach guarantees that the selected model adequately describes the data. That decision requires inspecting figures and using your biological judgement.</p>
 
 
