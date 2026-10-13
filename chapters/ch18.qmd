@@ -105,7 +105,7 @@ where $y$ is the response, $x$ is the predictor, $E\left(y\right)$ is the expect
 
 Here we can see what the GLM is doing:
 
-1. The observed values follow some probability distribution with an expected value and usually other parameters ($\theta$). This is the $$stochastic$$ part of the model, where the uncertainty or variation manifests.
+1. The observed values follow some probability distribution with an expected value and usually other parameters ($\theta$). This is the **stochastic** part of the model, where the uncertainty or variation manifests.
 1. The expected value on the scale of the observed values is mapped to another scale by a link function. This is done to take advantage of the properties of the linked scale, often to linearize the relationship between $E\left(y\right)$ and $x$ or ensure that $E\left(y\right)$ ends up in the proper domain ([more on this shortly](@sec-glm1-basics-link)).
 1. The deterministic part of the model, the **linear predictor** of $y|x$, is a linear function of the x variable or variables.
 
@@ -457,7 +457,7 @@ For Poisson GLMs, we don't count squared residuals but rather discrepancies betw
 
 $$D_{Poisson}=2\sum_{i=1}^n \left[y_i \log{\left(\frac{y_i}{E\left(y_i\right)}\right)}-\left(y_i-E\left(y_i\right)\right)\right]$$
 
-with the caveat that the first term $y_i \log{\left(\frac{y_i}{E\left(y_i\right)}\right)$ is zero when $y_i=0$.
+with the caveat that the first term $y_i \log{\left(\frac{y_i}{E\left(y_i\right)}\right)}$ is zero when $y_i=0$.
 
 For binomial GLMs with binary outcomes (i.e., logistic regression), the deviance is:
 
