@@ -269,7 +269,7 @@
 
 \title{Applied Biological Data Analysis}
 \author{Nick Green}
-\date{October 13, 2026}
+\date{October 14, 2026}
 \begin{document}
 \maketitle
 
@@ -17632,8 +17632,8 @@ In practice, logit and probit links or transforms usually produce very
 similar fitted probabilities, and the choice between them often has
 little effect on the biological conclusions. The logit is particularly
 convenient because its coefficients can be interpreted using odds ratios
-(see Section~\ref{sec-glm4-logistics-or}). The probit can be useful when
-there is a reason to imagine an underlying normally distributed
+(see Section~\ref{sec-glm4-logistic-real-or}). The probit can be useful
+when there is a reason to imagine an underlying normally distributed
 continuous variable that produces a binary outcome when it crosses a
 threshold. For example, an organism might die when an unobserved
 physiological stress exceeds some threshold, or an animal might choose
@@ -26595,17 +26595,703 @@ regression.
 
 \chapter{GLM for categorical and proportional responses}\label{sec-glm4}
 
-Even our curves have curves.
+This section explores GLMs for \textbf{binary outcomes} and
+\textbf{proportions}. Binary outcomes are results that take one of two
+values such as survival vs.~non-survival, presence vs.~absence,
+reproduction vs.~not-reproducing, and so on. These data are usually
+coded as 1 and 0: 1 when the event occurs, and 0 when the event does
+not. No other values are allowed. The standard technique for modeling
+binary outcomes is \textbf{logistic regression}. This name refers to a
+GLM with a binomial family and logit link function.
 
-It's what's under the curve that counts.
+Proportions are values between 0 and 1 that express how often an event
+occurs out of some number of trials. For example, 45 out of 50 fish
+survive, or 13 out of 20 flies express a mutant phenotype. Proportions
+may be expressed as decimals between 0 and 1, or as percentages, or even
+as counts if the denominator is known. Proportions are modeled by
+\textbf{binomial GLM}, which is a GLM with a binomial family, logit link
+function, and a \texttt{weights} argument that defines the denominator
+of each observation.
 
 \section{Logistic GLM for binary responses}\label{sec-glm4-logistic}
 
-\subsection{Odds ratios}\label{sec-glm4-logistics-or}
+\textbf{Logistic regression} is a technique for modeling the probability
+of a binary outcome: survival vs.~death, reproductive vs.~not
+reproductive, present vs.~absent, etc. The response variable \emph{Y}
+takes value 1 when the event occurs, and value 0 when the event does not
+occur. For each observation \emph{i}, success occurs as the outcome of a
+Bernoulli trial with probability \(p_i\). The logit of \(p_i\) (i.e.,
+the logarithm of the odds that \(y_i=1\)) is modeled as a linear
+function of the predictor variables.
+
+\[y_i\sim Binomial\left(p=p_i,n=1\right)\]
+
+\[\text{logit}\left(p_i\right)=\log{\left(\frac{p_i}{1-p_i}\right)}=\boldsymbol{\beta}\mathbf{x}\]
+
+The logit link function is available in R as \texttt{qlogis()}. The
+inverse of the logit function is the \textbf{logistic function}:
+
+\[logistic\left(x\right)=\frac{e^x}{1+e^x}\]
+
+and is available in R as \texttt{plogis()}.
+
+The linear predictor in logistic regression predicts the ``log-odds'' of
+an event occurring. The unit of the log-odds scale is the
+\textbf{logistic unit}, or \textbf{logit}. The logit link function is
+useful because it allows the outcome of a linear function--which can
+take on any real value--to be mapped smoothly to the natural domain of
+probabilities, the open interval \(\left(0,1\right)\). A key consequence
+of this link function is that increasing the value of one of the
+predictor variables by 1 will scale the log-odds by a constant. That
+constant is the coefficient estimated for the predictor.
+
+The logistic regression model was developed in the 1940s, decades before
+the GLM was first proposed. Part of the development of the idea of the
+GLM was recognizing that many previously known models were actually
+special cases of a more general model. In GLM terms, we say that
+logistic regression is a GLM with a binomial family and logit link
+function.
+
+\subsection{Example using simulated data}\label{sec-glm4-logistic-sim}
+
+As with the other GLM applications, we'll start by simulating a suitable
+dataset and analyzing it. The code below will execute the simulation.
+Remember to set the random number seed for reproducibility.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{100}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{runif}\NormalTok{(n, }\DecValTok{0}\NormalTok{, }\DecValTok{12}\NormalTok{), }\DecValTok{1}\NormalTok{)}
+
+\CommentTok{\# coefficients}
+\NormalTok{beta0 }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\DecValTok{4}
+\NormalTok{beta1 }\OtherTok{\textless{}{-}} \FloatTok{0.8}
+
+\CommentTok{\# linear predictor}
+\NormalTok{eta }\OtherTok{\textless{}{-}}\NormalTok{ beta0 }\SpecialCharTok{+}\NormalTok{ beta1 }\SpecialCharTok{*}\NormalTok{ x}
+
+\CommentTok{\# logistic function (inverse link)}
+\NormalTok{prob }\OtherTok{\textless{}{-}} \FunctionTok{plogis}\NormalTok{(eta)}
+
+\CommentTok{\# draw y values (stochastic part)}
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{rbinom}\NormalTok{(n, }\DecValTok{1}\NormalTok{, prob)}
+
+\CommentTok{\# assemble dataset}
+\NormalTok{db }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{x=}\NormalTok{x, }\AttributeTok{y=}\NormalTok{y)}
+\end{Highlighting}
+\end{Shaded}
+
+Unlike other sorts of regression problems, plotting \(y\) vs.~\(x\)
+isn't very illuminating.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\FloatTok{5.1}\NormalTok{, }\FloatTok{5.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(db}\SpecialCharTok{$}\NormalTok{x, db}\SpecialCharTok{$}\NormalTok{y)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-2-1.pdf}}
+
+If you have a lot of duplicate coordinates, it can be hard to get a
+sense of how many 0s and 1s are in the dataset. The scatterplot above is
+also a little silly because most of the \emph{Y}-axis range is not
+occupied. We can use function \texttt{jitter()} to add some random noise
+to the \(y\)-values; this will help us see what is going on.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\FloatTok{5.1}\NormalTok{, }\FloatTok{5.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(x, }\FunctionTok{jitter}\NormalTok{(y, }\AttributeTok{amount=}\FloatTok{0.05}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-3-1.pdf}}
+
+Another way to explore binary data is with a boxplot. A boxplot can show
+whether \(x\) tends to be smaller or greater when \(y\) = 1; this is
+sort of the reverse of the question we are really asking, but it helps
+us make sense of the data as we explore.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\FloatTok{5.1}\NormalTok{, }\FloatTok{5.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{))}
+\FunctionTok{boxplot}\NormalTok{(x}\SpecialCharTok{\textasciitilde{}}\NormalTok{y)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-4-1.pdf}}
+
+The boxplot agrees with the scatterplot: \(y\) seems more likely to
+occur at greater values of \(x\). Making the boxplot horizontal makes
+the pattern easier to see:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\FloatTok{5.1}\NormalTok{, }\FloatTok{5.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{))}
+\FunctionTok{boxplot}\NormalTok{(x}\SpecialCharTok{\textasciitilde{}}\NormalTok{y, }\AttributeTok{horizontal=}\ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-5-1.pdf}}
+
+Logistic regression is fit using the \texttt{glm()} function with
+\texttt{family=binomial}. You don't need to specify the link function in
+R, as the binomial family uses the logit link function by default.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mod1 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(y}\SpecialCharTok{\textasciitilde{}}\NormalTok{x, }\AttributeTok{data=}\NormalTok{db, }\AttributeTok{family=}\NormalTok{binomial)}
+\FunctionTok{summary}\NormalTok{(mod1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+glm(formula = y ~ x, family = binomial, data = db)
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  -5.0036     1.0757  -4.652 3.29e-06 ***
+x             1.0059     0.2059   4.886 1.03e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 136.058  on 99  degrees of freedom
+Residual deviance:  55.611  on 98  degrees of freedom
+AIC: 59.611
+
+Number of Fisher Scoring iterations: 6
+\end{verbatim}
+
+The parameter estimates are pretty close to the correct values. We can
+calculate the deviance explained:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{mod1}\SpecialCharTok{$}\NormalTok{deviance}\SpecialCharTok{/}\NormalTok{mod1}\SpecialCharTok{$}\NormalTok{null.deviance}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.5912742
+\end{verbatim}
+
+The deviance explained is pretty good. In the next example we will
+explore another diagnostic for logistic regression models, the area
+under the receiver operating characteristic curve (AUC). Although both
+deviance explained and AUC measure the fit of logistic regression
+models, they answer different questions
+(Section~\ref{sec-glm4-logistic-real-auc}).
+
+The next step is to generate and plot the model predictions. For
+logistic regression models, as for other GLMs, predictions should be
+calculated on the link scale and back-transformed to get probabilities.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# values for prediction}
+\NormalTok{use.n }\OtherTok{\textless{}{-}} \DecValTok{100}
+\NormalTok{px }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(db}\SpecialCharTok{$}\NormalTok{x), }\FunctionTok{max}\NormalTok{(db}\SpecialCharTok{$}\NormalTok{x), }\AttributeTok{length=}\NormalTok{use.n)}
+
+\CommentTok{\# calculate predictions and 95\% CI (link scale)}
+\NormalTok{pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod1, }\AttributeTok{newdata=}\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{x=}\NormalTok{px),}
+                \AttributeTok{type=}\StringTok{"link"}\NormalTok{, }\AttributeTok{se.fit=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{mn }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.5}\NormalTok{, pred}\SpecialCharTok{$}\NormalTok{fit, pred}\SpecialCharTok{$}\NormalTok{se.fit)}
+\NormalTok{lo }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.025}\NormalTok{, pred}\SpecialCharTok{$}\NormalTok{fit, pred}\SpecialCharTok{$}\NormalTok{se.fit)}
+\NormalTok{up }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.975}\NormalTok{, pred}\SpecialCharTok{$}\NormalTok{fit, pred}\SpecialCharTok{$}\NormalTok{se.fit)}
+
+\CommentTok{\# inverse link function to get probabilities}
+\NormalTok{mn }\OtherTok{\textless{}{-}}\NormalTok{ mod1}\SpecialCharTok{$}\NormalTok{family}\SpecialCharTok{$}\FunctionTok{linkinv}\NormalTok{(mn)}
+\NormalTok{lo }\OtherTok{\textless{}{-}}\NormalTok{ mod1}\SpecialCharTok{$}\NormalTok{family}\SpecialCharTok{$}\FunctionTok{linkinv}\NormalTok{(lo)}
+\NormalTok{up }\OtherTok{\textless{}{-}}\NormalTok{ mod1}\SpecialCharTok{$}\NormalTok{family}\SpecialCharTok{$}\FunctionTok{linkinv}\NormalTok{(up)}
+\end{Highlighting}
+\end{Shaded}
+
+Now make the plot. The argument \texttt{xpd=NA} to \texttt{points()}
+makes sure that all points are plotted, even those that fall outside of
+the plot area. This is needed because \texttt{plot()} defines the plot
+area using the range of \(y\) values (0 and 1), but some of the jittered
+\(y\) values will be \textless0 or \textgreater1 and thus won't get
+plotted. We'll use a polygon instead of the usual lines to show the 95\%
+CI of the predicted probability.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\FloatTok{5.1}\NormalTok{, }\FloatTok{5.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(db}\SpecialCharTok{$}\NormalTok{x, db}\SpecialCharTok{$}\NormalTok{y, }\AttributeTok{type=}\StringTok{"n"}\NormalTok{, }\AttributeTok{xlab=}\StringTok{"x"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"y"}\NormalTok{)}
+\FunctionTok{polygon}\NormalTok{(}\AttributeTok{x=}\FunctionTok{c}\NormalTok{(px, }\FunctionTok{rev}\NormalTok{(px)), }
+        \AttributeTok{y=}\FunctionTok{c}\NormalTok{(lo, }\FunctionTok{rev}\NormalTok{(up)), }\CommentTok{\# REVerse either upper or lower}
+        \AttributeTok{border=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{col=}\StringTok{"grey80"}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(px, mn, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(db}\SpecialCharTok{$}\NormalTok{x, }\FunctionTok{jitter}\NormalTok{(db}\SpecialCharTok{$}\NormalTok{y, }\AttributeTok{amount=}\FloatTok{0.05}\NormalTok{),}
+       \AttributeTok{cex=}\FloatTok{1.1}\NormalTok{, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-9-1.pdf}}
+
+\subsection{Example using real data}\label{sec-glm4-logistic-real}
+
+Let's use the NEON data for a real example. If you don't already have
+it, download the \href{..datasets/dat-neon-site-rich-env.csv}{site-level
+richness and environmental dataset} and put it in your working
+directory.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dx }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"dat{-}neon{-}site{-}rich{-}env.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Consider this plot of lemming species richness vs.~mean annual
+temperature:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\FloatTok{5.1}\NormalTok{, }\FloatTok{5.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{mat, dx}\SpecialCharTok{$}\NormalTok{lem, }
+     \AttributeTok{xlab=}\FunctionTok{expression}\NormalTok{(Mean}\SpecialCharTok{\textasciitilde{}}\NormalTok{annual}\SpecialCharTok{\textasciitilde{}}\NormalTok{temperature}\SpecialCharTok{\textasciitilde{}}\NormalTok{(degree}\SpecialCharTok{*}\NormalTok{C)),}
+     \AttributeTok{ylab=}\StringTok{"Lemming species richness"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-12-1.pdf}}
+
+It looks like lemming species richness decreases with increasing
+temperature, but we should pump the brakes. The maximum richness is 2.
+Trying to model richness when it only varies between 0, 1, and 2 is
+going to be tough because there just isn't very much information in the
+dataset. If we modeled whether there were \emph{any} lemming species
+present, we don't lose much information:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{table}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{lem)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+ 0  1  2 
+38  7  1 
+\end{verbatim}
+
+Let's convert lemming species richness to lemming presence-absence (1
+and 0):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{lem.pr }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{*}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{lem }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Now compare mean annual temperature at sites with lemmings vs.~those
+without.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# save this expression for plots}
+\NormalTok{mat.expr }\OtherTok{\textless{}{-}} \FunctionTok{expression}\NormalTok{(Mean}\SpecialCharTok{\textasciitilde{}}\NormalTok{annual}\SpecialCharTok{\textasciitilde{}}\NormalTok{temperature}\SpecialCharTok{\textasciitilde{}}\NormalTok{(degree}\SpecialCharTok{*}\NormalTok{C))}
+
+\FunctionTok{boxplot}\NormalTok{(mat}\SpecialCharTok{\textasciitilde{}}\NormalTok{lem.pr, }\AttributeTok{data=}\NormalTok{dx, }\AttributeTok{xlab=}\NormalTok{mat.expr, }\AttributeTok{horizontal =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-15-1.pdf}}
+
+Looks like sites with lemmings (\(y=1\)) tend to be colder than sites
+without lemmings. Let's test this relationship with logistic regression.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mod2 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(lem.pr}\SpecialCharTok{\textasciitilde{}}\NormalTok{mat, }\AttributeTok{data=}\NormalTok{dx, }\AttributeTok{family=}\NormalTok{binomial)}
+\FunctionTok{summary}\NormalTok{(mod2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+glm(formula = lem.pr ~ mat, family = binomial, data = dx)
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)   
+(Intercept) -0.23038    0.57768  -0.399  0.69003   
+mat         -0.19668    0.06988  -2.815  0.00489 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 42.507  on 45  degrees of freedom
+Residual deviance: 29.807  on 44  degrees of freedom
+AIC: 33.807
+
+Number of Fisher Scoring iterations: 6
+\end{verbatim}
+
+The significant slope on \texttt{mat} confirms our suspicion that
+lemming presence is negatively correlated with temperature. The
+nonsignificant intercept is not a problem; it just means that the
+intercept is not significantly different from 0. Remember that 0 on the
+link scale--the logit scale--corresponds to a probability of 0.5. The
+model reduces the deviance by about 29.9\%, which is okay for for this
+small of a sample size.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{mod2}\SpecialCharTok{$}\NormalTok{deviance}\SpecialCharTok{/}\NormalTok{mod2}\SpecialCharTok{$}\NormalTok{null.deviance}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.2987701
+\end{verbatim}
+
+\subsubsection{Odds ratios}\label{sec-glm4-logistic-real-or}
+
+What does the slope in our fitted model, \(-0.20\pm0.07\), really mean?
+In a linear regression model, the slope is the change in expected \(y\)
+for a unit increase in \(x\). In logistic regression, the slope is often
+expressed as the \textbf{odds ratio}, which is just the slope
+exponentiated.
+
+\[OR=e^{\beta_1}=\text{exp}\left(\beta_1\right)\]
+
+The odds ratio, calculated as \texttt{exp(coef(mod2){[}2{]})\ =\ 0.821},
+indicates that each 1 °C increase in mean annual temperature multiplies
+the odds of lemming presence (\(y=1\)) by 0.821. In other words, the
+odds of lemming presence decrease by approximately 17.9\% for each
+additional degree Celsius.
+
+Note that we express effects in terms of the \emph{odds} that \(y=1\),
+not the probability. This is because odds gives us more flexibility to
+express changes in the relative likelihood of an event occurring than
+probability would. For example, if \(p\left(y=1\right)\) increases from
+0.95 to 0.99, did \(y=1\) become \(0.99/0.95=1.04\) times more likely (a
+4\% increase in probability)? No, because an event with a probability of
+0.95 is over 5 times less likely to occur. Express those probabilities
+as odds:
+
+\[\text{Odds}\left(a\right)=\frac{0.95}{1-0.95}=\frac{0.95}{0.05}=19\]
+
+\[\text{Odds}\left(b\right)=\frac{0.99}{1-0.99}=\frac{0.99}{0.01}=99\]
+
+So the odds ratio is, or relative likelihood of \(a\) and \(b\) are
+
+\[\text{OR}\left(a,b\right)=\frac{\text{Odds}\left(a\right)}{\text{Odds}\left(b\right)}=\frac{19}{99}\approx0.192\]
+
+Event \(a\) is only about one-fifth as likely to happen as event \(b\)
+despite their probabilities being different by only 0.04.
+
+\subsubsection{Area under the curve
+(AUC)}\label{sec-glm4-logistic-real-auc}
+
+Logistic regression is one way of solving what statisticians sometimes
+call a \textbf{classification problem}, where we want to use some set of
+predictor variables to classify observations into one category or
+another. The binary case is the simplest classification problem. The
+predictions of a logistic regression model will predict each observation
+to either be 0 or 1. We can use those predictions, and how often they
+are correct, to evaluate the efficacy of a logistic regression model.
+
+We can evaluate a logistic regression model by the accuracy of its
+predictions. Such a model can predict a 1 or a 0 for every observation,
+and each prediction can be correct or incorrect:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\caption{The four possible outcomes of a binary classifier, based on the
+actual and predicted
+classifications.}\label{tbl-confusion-matrix}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Actual outcome
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Predicted positive (\(\hat{y}=1\))
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Predicted negative (\(\hat{y}=0\))
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Actual outcome
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Predicted positive (\(\hat{y}=1\))
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Predicted negative (\(\hat{y}=0\))
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Positive (\(y=1\)) & \textbf{True positive (TP)} & \textbf{False
+negative (FN)} \\
+Negative (\(y=0\)) & \textbf{False positive (FP)} & \textbf{True
+negative (TN)} \\
+\end{longtable}
+
+The table is often summarized as the \textbf{true positive rate
+(sensitivity)} and \textbf{true negative rate (specificity)}.
+
+The model sensitivity, or true positive rate, is the proportion of
+positive observations (\(y=1\)) that the model predicts to be positive
+(\(\hat{y}=1\)). It is calculated as:
+
+\[\text{True positive rate (sensitivity)}:p\left(\hat{y}=1|y=1\right)=\frac{\text{True positives}}{\text{True positives}+\text{False negatives}}\]
+
+The model specificity, or true negative rate, is the proportion of
+negative observations (\(y=0\)) that the model predicts to be negative
+(\(\hat{y}=0\)).
+
+\[\text{True negative rate (specificity)}:p\left(\hat{y}=0|y=0\right)=\frac{\text{True negatives}}{\text{True negatives}+\text{False positives}}\]
+
+\begin{itemize}
+\tightlist
+\item
+  The \textbf{sensitivity} is the probability of a positive test given
+  that the observation is positive.
+\item
+  The \textbf{specificity} is the probability of a negative test given
+  that the observation is negative.
+\end{itemize}
+
+For our fitted model of lemming presence, let's define a function that
+returns whether the model predicts 1 or 0. The model actually predicts a
+probability, so we need to specify a cutoff to distinguish predicted 1s
+from predicted 0s. Let's use 0.5.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pred.fun }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(mod, cutoff)\{}
+    \DecValTok{1}\SpecialCharTok{*}\NormalTok{ (}\FunctionTok{predict}\NormalTok{(mod, }\AttributeTok{type=}\StringTok{"response"}\NormalTok{) }\SpecialCharTok{\textgreater{}=}\NormalTok{ cutoff)}
+\NormalTok{\}}\CommentTok{\#function}
+\end{Highlighting}
+\end{Shaded}
+
+Now try it out:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pred.y }\OtherTok{\textless{}{-}} \FunctionTok{pred.fun}\NormalTok{(mod2, }\FloatTok{0.5}\NormalTok{)}
+\FunctionTok{ftable}\NormalTok{(pred.y}\SpecialCharTok{\textasciitilde{}}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{lem.p)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+         pred.y  0  1
+dx$lem.p             
+0               36  2
+1                4  4
+\end{verbatim}
+
+This means that the model sensitivity is \(4/\left(4+4\right)=0.5\), and
+the specificity is \(36/\left(2+36\right)=0.947\).
+
+We don't have to use a cutoff of 0.5. In fact, that choice is rather
+arbitrary. As a general rule, any time you make an arbitrary choice you
+should check some of the alternatives to see how your choice affected
+the outcome. Let's test a range of cutoffs to see how our choice of
+cutoff affects the sensitivity and specificity. We can do that in a
+\texttt{for()} loop.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# vector of cutoffs to test}
+\NormalTok{cutoffs }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FloatTok{0.01}\NormalTok{, }\FloatTok{0.99}\NormalTok{, }\AttributeTok{by=}\FloatTok{0.01}\NormalTok{)}
+\NormalTok{ncutoffs }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(cutoffs)}
+
+\CommentTok{\# data frame to hold results}
+\NormalTok{sens.df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{cutoff=}\NormalTok{cutoffs,}
+                      \AttributeTok{spec=}\ConstantTok{NA}\NormalTok{,}
+                      \AttributeTok{sens=}\ConstantTok{NA}\NormalTok{)}
+
+\CommentTok{\# function to tally true positives and negatives}
+\CommentTok{\# can\textquotesingle{}t use ftable because there won\textquotesingle{}t always be}
+\CommentTok{\# a 2 x 2 result}
+\NormalTok{tally }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(pr, oy)\{}
+\NormalTok{    tp }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(}\FunctionTok{intersect}\NormalTok{(}\FunctionTok{which}\NormalTok{(pr}\SpecialCharTok{==}\DecValTok{1}\NormalTok{), }\FunctionTok{which}\NormalTok{(oy}\SpecialCharTok{==}\DecValTok{1}\NormalTok{)))}
+\NormalTok{    fn }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(}\FunctionTok{intersect}\NormalTok{(}\FunctionTok{which}\NormalTok{(pr}\SpecialCharTok{==}\DecValTok{0}\NormalTok{), }\FunctionTok{which}\NormalTok{(oy}\SpecialCharTok{==}\DecValTok{1}\NormalTok{)))}
+\NormalTok{    fp }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(}\FunctionTok{intersect}\NormalTok{(}\FunctionTok{which}\NormalTok{(pr}\SpecialCharTok{==}\DecValTok{1}\NormalTok{), }\FunctionTok{which}\NormalTok{(oy}\SpecialCharTok{==}\DecValTok{0}\NormalTok{)))}
+\NormalTok{    tn }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(}\FunctionTok{intersect}\NormalTok{(}\FunctionTok{which}\NormalTok{(pr}\SpecialCharTok{==}\DecValTok{0}\NormalTok{), }\FunctionTok{which}\NormalTok{(oy}\SpecialCharTok{==}\DecValTok{0}\NormalTok{)))}
+\NormalTok{    res }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\AttributeTok{tp=}\NormalTok{tp, }\AttributeTok{fn=}\NormalTok{fn, }\AttributeTok{fp=}\NormalTok{fp, }\AttributeTok{tn=}\NormalTok{tn)}
+    \FunctionTok{return}\NormalTok{(res)}
+\NormalTok{\}}
+
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{ncutoffs)\{}
+\NormalTok{    pred.y }\OtherTok{\textless{}{-}} \FunctionTok{pred.fun}\NormalTok{(mod2, cutoffs[i])}
+\NormalTok{    result }\OtherTok{\textless{}{-}} \FunctionTok{tally}\NormalTok{(pred.y, dx}\SpecialCharTok{$}\NormalTok{lem.pr)}
+\NormalTok{    sens.df}\SpecialCharTok{$}\NormalTok{sens[i] }\OtherTok{\textless{}{-}}\NormalTok{ result[}\StringTok{"tp"}\NormalTok{]}\SpecialCharTok{/}\NormalTok{(result[}\StringTok{"tp"}\NormalTok{]}\SpecialCharTok{+}\NormalTok{result[}\StringTok{"fn"}\NormalTok{])}
+\NormalTok{    sens.df}\SpecialCharTok{$}\NormalTok{spec[i] }\OtherTok{\textless{}{-}}\NormalTok{ result[}\StringTok{"tn"}\NormalTok{]}\SpecialCharTok{/}\NormalTok{(result[}\StringTok{"tn"}\NormalTok{]}\SpecialCharTok{+}\NormalTok{result[}\StringTok{"fp"}\NormalTok{])}
+\NormalTok{\}}\CommentTok{\#i}
+\end{Highlighting}
+\end{Shaded}
+
+If we plot the sensitivity against one minus the specificity, we get the
+\textbf{receiver operating characteristic curve (ROC)}. One minus the
+specificity is also known as the \textbf{false positive rate}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sens.df}\SpecialCharTok{$}\NormalTok{fpr }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ sens.df}\SpecialCharTok{$}\NormalTok{spec}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\FloatTok{5.1}\NormalTok{, }\FloatTok{5.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(sens.df}\SpecialCharTok{$}\NormalTok{fpr, sens.df}\SpecialCharTok{$}\NormalTok{sens,}
+     \AttributeTok{type=}\StringTok{"s"}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"False positive rate"}\NormalTok{,}
+     \AttributeTok{ylab=}\StringTok{"Sensitivity"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-21-1.pdf}}
+
+One interesting property of this curve is that a null model, where
+\(p(y=1)=0.5\), is a diagonal line.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\FloatTok{5.1}\NormalTok{, }\FloatTok{5.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\FloatTok{1.1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(sens.df}\SpecialCharTok{$}\NormalTok{fpr, sens.df}\SpecialCharTok{$}\NormalTok{sens,}
+     \AttributeTok{type=}\StringTok{"s"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"False positive rate"}\NormalTok{,}
+     \AttributeTok{ylab=}\StringTok{"Sensitivity"}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{col=}\StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-22-1.pdf}}
+
+The area under the red curve, representing the model where
+\(p\left(y=1\right)=0.5\), or a coin flip, is 0.5. As a model's
+performance improves, the true positive rate (sensitivity) must go up,
+and the false positive rate (\(1-\text{specificity}\)) must go down.
+This forces the model's ROC curve up and to the left. In the limit, the
+area under that curve will be 1:
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-23-1.pdf}}
+
+The area under the ROC curve (AUC) measures how well a logistic
+regression model distinguishes positive (\(y=1\)) from negative
+(\(y=0\)) observations. Although we derived AUC from the proportions of
+correct and incorrect classifications at different thresholds, it has a
+useful probabilistic interpretation: AUC is the probability that a
+randomly selected positive observation receives a higher predicted
+probability than a randomly selected negative observation, with ties
+counted as half a success. Thus, AUC is also defined as
+
+\[AUC=p\left(\hat{p}_{y=1}>\hat{p}_{y=0}\right)\]
+
+It is important to note that although AUC measures a model's ability to
+discriminate between outcomes, it does not tell us whether the predicted
+probabilities are accurate (i.e., whether the model is well calibrated).
+
+We can calculate the AUC of our fitted model as a series of rectangles:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Sort by increasing false positive rate}
+\NormalTok{roc.df }\OtherTok{\textless{}{-}}\NormalTok{ sens.df[}\FunctionTok{order}\NormalTok{(sens.df}\SpecialCharTok{$}\NormalTok{fpr, sens.df}\SpecialCharTok{$}\NormalTok{sens), ]}
+\NormalTok{roc.df }\OtherTok{\textless{}{-}}\NormalTok{ roc.df[,}\FunctionTok{c}\NormalTok{(}\StringTok{"fpr"}\NormalTok{, }\StringTok{"sens"}\NormalTok{)]}
+
+\CommentTok{\# Add endpoints if missing}
+\NormalTok{roc.df }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(}
+  \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{fpr =} \DecValTok{0}\NormalTok{, }\AttributeTok{sens =} \DecValTok{0}\NormalTok{),}
+\NormalTok{  roc.df,}
+  \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{fpr =} \DecValTok{1}\NormalTok{, }\AttributeTok{sens =} \DecValTok{1}\NormalTok{)}
+\NormalTok{)}
+
+\CommentTok{\# Calculate trapezoid widths and average heights}
+\NormalTok{widths }\OtherTok{\textless{}{-}} \FunctionTok{diff}\NormalTok{(roc.df}\SpecialCharTok{$}\NormalTok{fpr)}
+\NormalTok{heights }\OtherTok{\textless{}{-}} \FunctionTok{head}\NormalTok{(roc.df}\SpecialCharTok{$}\NormalTok{sens, }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
+
+\FunctionTok{sum}\NormalTok{(widths }\SpecialCharTok{*}\NormalTok{ heights)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.8421053
+\end{verbatim}
+
+Or visually:
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-25-1.pdf}}
+
+As much fun as it is to manually calculate ROC curves and definite
+integrals, we can get the ROC and AUC much more quickly using the
+functions in package \texttt{pROC}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(pROC)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# generate predictions (probabilities)}
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod2, }\AttributeTok{type=}\StringTok{"response"}\NormalTok{)}
+\NormalTok{roc2 }\OtherTok{\textless{}{-}} \FunctionTok{roc}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{lem.pr }\SpecialCharTok{\textasciitilde{}}\NormalTok{ p2, }\AttributeTok{plot =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{print.auc =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(roc2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+roc.formula(formula = dx$lem.pr ~ p2, plot = FALSE, print.auc = FALSE)
+
+Data: p2 in 38 controls (dx$lem.pr 0) < 8 cases (dx$lem.pr 1).
+Area under the curve: 0.8454
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(roc2)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-29-1.pdf}}
+
+The AUC calculated by package \texttt{pROC} (0.854) is close to the
+value we calculated by hand. If you don't like the default figure
+produced by \texttt{roc()}, you can extract the sensitivity and
+sensitivity scores and make your own plot.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# 1{-} to orient axis correct way:}
+\NormalTok{xspec }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{{-}}\NormalTok{roc2}\SpecialCharTok{$}\NormalTok{specificities}
+\NormalTok{ysens }\OtherTok{\textless{}{-}}\NormalTok{ roc2}\SpecialCharTok{$}\NormalTok{sensitivities}
+\FunctionTok{plot}\NormalTok{(xspec,ysens, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-30-1.pdf}}
 
 \section{Binomial GLM for proportions}\label{sec-glm4-binom}
 
+\subsection{Example using simulated data}\label{sec-glm4-binom-sim}
+
+\subsection{Example using real data}\label{sec-glm4-binom-real}
+
 \section{Ordinal logistic regression}\label{sec-glm4-ord}
+
+\subsection{Example using simulated data}\label{sec-glm4-ord-sim}
+
+\subsection{Example using real data}\label{sec-glm4-ord-real}
 
 \part{Extensions of GLMs: nonlinear and mixed models}
 

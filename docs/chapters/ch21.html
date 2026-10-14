@@ -838,10 +838,8 @@ Table&nbsp;21.1: The four possible outcomes of a binary classifier, based on the
 <p>For our fitted model of lemming presence, let’s define a function that returns whether the model predicts 1 or 0. The model actually predicts a probability, so we need to specify a cutoff to distinguish predicted 1s from predicted 0s. Let’s use 0.5.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>pred.fun <span class="ot">&lt;-</span> <span class="cf">function</span>(mod, cutoff){</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    pre <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod, <span class="at">type=</span><span class="st">"response"</span>)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    pre10 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">*</span> (pre <span class="sc">&gt;=</span> cutoff)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(pre10)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>}<span class="co">#function</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span><span class="sc">*</span> (<span class="fu">predict</span>(mod, <span class="at">type=</span><span class="st">"response"</span>) <span class="sc">&gt;=</span> cutoff)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>}<span class="co">#function</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now try it out:</p>
 <div class="cell">
@@ -855,7 +853,7 @@ dx$lem.p
 </div>
 </div>
 <p>This means that the model sensitivity is <span class="math inline">\(4/\left(4+4\right)=0.5\)</span>, and the specificity is <span class="math inline">\(36/\left(2+36\right)=0.947\)</span>.</p>
-<p>We don’t have to use a cutoff of 0.5. In fact, that choice is rather arbitrary. It might be useful to see how our choice of cutoff affects the sensitivity and specificity. We can calculated that in a loop.</p>
+<p>We don’t have to use a cutoff of 0.5. In fact, that choice is rather arbitrary. As a general rule, any time you make an arbitrary choice you should check some of the alternatives to see how your choice affected the outcome. Let’s test a range of cutoffs to see how our choice of cutoff affects the sensitivity and specificity. We can do that in a <code>for()</code> loop.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># vector of cutoffs to test</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>cutoffs <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.01</span>, <span class="fl">0.99</span>, <span class="at">by=</span><span class="fl">0.01</span>)</span>
@@ -890,9 +888,10 @@ dx$lem.p
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>sens.df<span class="sc">$</span>fpr <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> sens.df<span class="sc">$</span>spec</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sens.df<span class="sc">$</span>fpr, sens.df<span class="sc">$</span>sens, <span class="at">type=</span><span class="st">"s"</span>,</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"False positive rate"</span>,</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Sensitivity"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sens.df<span class="sc">$</span>fpr, sens.df<span class="sc">$</span>sens,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"s"</span>,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"False positive rate"</span>,</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Sensitivity"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -917,7 +916,7 @@ dx$lem.p
 </div>
 </div>
 </div>
-<p>The area under the red curve, representing the model where <span class="math inline">\(p\left(y=1\right)=0.5\)</span>, or a coin flip, is 0.5. As a model’s performance improves, the true positive rate (sensivity) must go up, and the false positive rate (<span class="math inline">\(1-specificity\)</span>) must go down. This forces the model’s ROC curve up and to the left. In the limit, the area under that curve will be 1:</p>
+<p>The area under the red curve, representing the model where <span class="math inline">\(p\left(y=1\right)=0.5\)</span>, or a coin flip, is 0.5. As a model’s performance improves, the true positive rate (sensitivity) must go up, and the false positive rate (<span class="math inline">\(1-\text{specificity}\)</span>) must go down. This forces the model’s ROC curve up and to the left. In the limit, the area under that curve will be 1:</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -930,17 +929,49 @@ dx$lem.p
 <p>The area under the ROC curve (AUC) measures how well a logistic regression model distinguishes positive (<span class="math inline">\(y=1\)</span>) from negative (<span class="math inline">\(y=0\)</span>) observations. Although we derived AUC from the proportions of correct and incorrect classifications at different thresholds, it has a useful probabilistic interpretation: AUC is the probability that a randomly selected positive observation receives a higher predicted probability than a randomly selected negative observation, with ties counted as half a success. Thus, AUC is also defined as</p>
 <p><span class="math display">\[AUC=p\left(\hat{p}_{y=1}&gt;\hat{p}_{y=0}\right)\]</span></p>
 <p>It is important to note that although AUC measures a model’s ability to discriminate between outcomes, it does not tell us whether the predicted probabilities are accurate (i.e., whether the model is well calibrated).</p>
+<p>We can calculate the AUC of our fitted model as a series of rectangles:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort by increasing false positive rate</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>roc.df <span class="ot">&lt;-</span> sens.df[<span class="fu">order</span>(sens.df<span class="sc">$</span>fpr, sens.df<span class="sc">$</span>sens), ]</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>roc.df <span class="ot">&lt;-</span> roc.df[,<span class="fu">c</span>(<span class="st">"fpr"</span>, <span class="st">"sens"</span>)]</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Add endpoints if missing</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>roc.df <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">fpr =</span> <span class="dv">0</span>, <span class="at">sens =</span> <span class="dv">0</span>),</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  roc.df,</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">fpr =</span> <span class="dv">1</span>, <span class="at">sens =</span> <span class="dv">1</span>)</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate trapezoid widths and average heights</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>widths <span class="ot">&lt;-</span> <span class="fu">diff</span>(roc.df<span class="sc">$</span>fpr)</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>heights <span class="ot">&lt;-</span> <span class="fu">head</span>(roc.df<span class="sc">$</span>sens, <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(widths <span class="sc">*</span> heights)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8421053</code></pre>
+</div>
+</div>
+<p>Or visually:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 <p>As much fun as it is to manually calculate ROC curves and definite integrals, we can get the ROC and AUC much more quickly using the functions in package <code>pROC</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pROC)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pROC)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate predictions (probabilities)</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod2, <span class="at">type=</span><span class="st">"response"</span>)</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>roc2 <span class="ot">&lt;-</span> <span class="fu">roc</span>(dx<span class="sc">$</span>lem.pr <span class="sc">~</span> p2, <span class="at">plot =</span> <span class="cn">FALSE</span>, <span class="at">print.auc =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate predictions (probabilities)</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod2, <span class="at">type=</span><span class="st">"response"</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>roc2 <span class="ot">&lt;-</span> <span class="fu">roc</span>(dx<span class="sc">$</span>lem.pr <span class="sc">~</span> p2, <span class="at">plot =</span> <span class="cn">FALSE</span>, <span class="at">print.auc =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(roc2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(roc2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -951,16 +982,29 @@ Area under the curve: 0.8454</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(roc2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(roc2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch21_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="768"></p>
+<p><img src="ch21_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The AUC calculated by package <code>pROC</code> (0.854) is close to the value we calculated by hand. If you don’t like the default figure produced by <code>roc()</code>, you can extract the sensitivity and sensitivity scores and make your own plot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1- to orient axis correct way:</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>xspec <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">-</span>roc2<span class="sc">$</span>specificities</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>ysens <span class="ot">&lt;-</span> roc2<span class="sc">$</span>sensitivities</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xspec,ysens, <span class="at">type=</span><span class="st">"l"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 </section>
 </section>
