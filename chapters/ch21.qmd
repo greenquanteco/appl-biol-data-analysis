@@ -1,14 +1,415 @@
 # GLM for categorical and proportional responses {#sec-glm4}
 
-Even our curves have curves.
+This section explores GLMs for **binary outcomes** and **proportions**. Binary outcomes are results that take one of two values such as survival vs. non-survival, presence vs. absence, reproduction vs. not-reproducing, and so on. These data are usually coded as 1 and 0: 1 when the event occurs, and 0 when the event does not. No other values are allowed. The standard technique for modeling binary outcomes is **logistic regression**. This name refers to a GLM with a binomial family and logit link function.
 
-It's what's under the curve that counts.
+Proportions are values between 0 and 1 that express how often an event occurs out of some number of trials. For example, 45 out of 50 fish survive, or 13 out of 20 flies express a mutant phenotype. Proportions may be expressed as decimals between 0 and 1, or as percentages, or even as counts if the denominator is known. Proportions are modeled by **binomial GLM**, which is a GLM with a binomial family, logit link function, and a `weights` argument that defines the denominator of each observation.
 
 ## Logistic GLM for binary responses {#sec-glm4-logistic}
 
-### Odds ratios {#sec-glm4-logistics-or}
+**Logistic regression** is a technique for modeling the probability of a binary outcome: survival vs. death, reproductive vs. not reproductive, present vs. absent, etc. The response variable *Y* takes value 1 when the event occurs, and value 0 when the event does not occur. For each observation *i*, success occurs as the outcome of a Bernoulli trial with probability $p_i$. The logit of $p_i$ (i.e., the logarithm of the odds that $y_i=1$) is modeled as a linear function of the predictor variables.
+
+$$y_i\sim Binomial\left(p=p_i,n=1\right)$$
+
+$$\text{logit}\left(p_i\right)=\log{\left(\frac{p_i}{1-p_i}\right)}=\boldsymbol{\beta}\mathbf{x}$$
+
+The logit link function is available in R as `qlogis()`. The inverse of the logit function is the **logistic function**:
+
+$$logistic\left(x\right)=\frac{e^x}{1+e^x}$$
+
+and is available in R as `plogis()`.
+
+The linear predictor in logistic regression predicts the "log-odds" of an event occurring. The unit of the log-odds scale is the **logistic unit**, or **logit**. The logit link function is useful because it allows the outcome of a linear function--which can take on any real value--to be mapped smoothly to the natural domain of probabilities, the open interval $\left(0,1\right)$. A key consequence of this link function is that increasing the value of one of the predictor variables by 1 will scale the log-odds by a constant. That constant is the coefficient estimated for the predictor.
+
+The logistic regression model was developed in the 1940s, decades before the GLM was first proposed. Part of the development of the idea of the GLM was recognizing that many previously known models were actually special cases of a more general model. In GLM terms, we say that logistic regression is a GLM with a binomial family and logit link function.
+
+### Example using simulated data {#sec-glm4-logistic-sim}
+
+As with the other GLM applications, we'll start by simulating a suitable
+dataset and analyzing it. The code below will execute the simulation.
+Remember to set the random number seed for reproducibility.
+
+```{r}
+set.seed(123)
+n <- 100
+x <- round(runif(n, 0, 12), 1)
+
+# coefficients
+beta0 <- -4
+beta1 <- 0.8
+
+# linear predictor
+eta <- beta0 + beta1 * x
+
+# logistic function (inverse link)
+prob <- plogis(eta)
+
+# draw y values (stochastic part)
+y <- rbinom(n, 1, prob)
+
+# assemble dataset
+db <- data.frame(x=x, y=y)
+```
+
+Unlike other sorts of regression problems, plotting $y$ vs. $x$ isn't
+very illuminating.
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+
+par(mar=c(5.1, 5.1, 1.1, 1.1))
+plot(db$x, db$y)
+```
+
+If you have a lot of duplicate coordinates, it can be hard to get a
+sense of how many 0s and 1s are in the dataset. The scatterplot above is
+also a little silly because most of the *Y*-axis range is not occupied.
+We can use function `jitter()` to add some random noise to the
+$y$-values; this will help us see what is going on.
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+
+par(mar=c(5.1, 5.1, 1.1, 1.1))
+plot(x, jitter(y, amount=0.05))
+```
+
+Another way to explore binary data is with a boxplot. A boxplot can show
+whether $x$ tends to be smaller or greater when $y$ = 1; this is sort of
+the reverse of the question we are really asking, but it helps us make
+sense of the data as we explore.
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+
+par(mar=c(5.1, 5.1, 1.1, 1.1))
+boxplot(x~y)
+```
+
+The boxplot agrees with the scatterplot: $y$ seems more likely to occur
+at greater values of $x$. Making the boxplot horizontal makes the
+pattern easier to see:
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+
+par(mar=c(5.1, 5.1, 1.1, 1.1))
+boxplot(x~y, horizontal=TRUE)
+```
+
+Logistic regression is fit using the `glm()` function with `family=binomial`. You don't need to specify the link function in R, as the binomial family uses the logit link function by default.
+
+```{r}
+mod1 <- glm(y~x, data=db, family=binomial)
+summary(mod1)
+```
+
+The parameter estimates are pretty close to the correct values. We can
+calculate the deviance explained:
+
+```{r}
+1-mod1$deviance/mod1$null.deviance
+```
+
+The deviance explained is pretty good. In the next example we will explore another diagnostic for logistic regression models, the area under the receiver operating characteristic curve (AUC). Although both deviance explained and AUC measure the fit of logistic regression models, they answer different questions (@sec-glm4-logistic-real-auc).
+
+The next step is to generate and plot the model predictions. For logistic regression models, as for other GLMs, predictions should be calculated on the link scale and back-transformed to get probabilities.
+
+```{r}
+# values for prediction
+use.n <- 100
+px <- seq(min(db$x), max(db$x), length=use.n)
+
+# calculate predictions and 95% CI (link scale)
+pred <- predict(mod1, newdata=data.frame(x=px),
+                type="link", se.fit=TRUE)
+mn <- qnorm(0.5, pred$fit, pred$se.fit)
+lo <- qnorm(0.025, pred$fit, pred$se.fit)
+up <- qnorm(0.975, pred$fit, pred$se.fit)
+
+# inverse link function to get probabilities
+mn <- mod1$family$linkinv(mn)
+lo <- mod1$family$linkinv(lo)
+up <- mod1$family$linkinv(up)
+```
+
+Now make the plot. The argument `xpd=NA` to `points()` makes sure that all points are plotted, even those that fall outside of the plot area. This is needed because `plot()` defines the plot area using the range of $y$ values (0 and 1), but some of the jittered $y$ values will be <0 or >1 and thus won't get plotted. We'll use a polygon instead of the usual lines to show the 95% CI of the predicted probability.
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+
+par(mar=c(5.1, 5.1, 1.1, 1.1))
+plot(db$x, db$y, type="n", xlab="x", ylab="y")
+polygon(x=c(px, rev(px)), 
+        y=c(lo, rev(up)), # REVerse either upper or lower
+        border=NA, col="grey80")
+points(px, mn, type="l", lwd=3)
+points(db$x, jitter(db$y, amount=0.05),
+       cex=1.1, xpd=NA)
+```
+
+### Example using real data {#sec-glm4-logistic-real}
+
+Let's use the NEON data for a real example. If you don't already have it, download the [site-level richness and environmental dataset](..datasets/dat-neon-site-rich-env.csv) and put it in your working directory.
+
+
+```{r}
+#| include: false
+dx <- read.csv("../datasets/dat-neon-site-rich-env.csv")
+```
+
+
+```{r}
+#| eval: false
+dx <- read.csv("dat-neon-site-rich-env.csv")
+```
+
+Consider this plot of lemming species richness vs. mean annual temperature:
+
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+
+par(mar=c(5.1, 5.1, 1.1, 1.1))
+plot(dx$mat, dx$lem, 
+     xlab=expression(Mean~annual~temperature~(degree*C)),
+     ylab="Lemming species richness")
+```
+
+It looks like lemming species richness decreases with increasing temperature, but we should pump the brakes. The maximum richness is 2. Trying to model richness when it only varies between 0, 1, and 2 is going to be tough because there just isn't very much information in the dataset. If we modeled whether there were *any* lemming species present, we don't lose much information:
+
+```{r}
+table(dx$lem)
+```
+
+Let's convert lemming species richness to lemming presence-absence (1 and 0):
+
+```{r}
+dx$lem.pr <- 1*(dx$lem > 0)
+```
+
+Now compare mean annual temperature at sites with lemmings vs. those without.
+
+```{r}
+# save this expression for plots
+mat.expr <- expression(Mean~annual~temperature~(degree*C))
+
+boxplot(mat~lem.pr, data=dx, xlab=mat.expr, horizontal = TRUE)
+```
+
+Looks like sites with lemmings ($y=1$) tend to be colder than sites without lemmings. Let's test this relationship with logistic regression.
+
+```{r}
+mod2 <- glm(lem.pr~mat, data=dx, family=binomial)
+summary(mod2)
+```
+
+The significant slope on `mat` confirms our suspicion that lemming presence is negatively correlated with temperature. The nonsignificant intercept is not a problem; it just means that the intercept is not significantly different from 0. Remember that 0 on the link scale--the logit scale--corresponds to a probability of 0.5. The model reduces the deviance by about 29.9%, which is okay for for this small of a sample size.
+
+```{r}
+1-mod2$deviance/mod2$null.deviance
+```
+
+#### Odds ratios  {#sec-glm4-logistic-real-or}
+
+What does the slope in our fitted model, $-0.20\pm0.07$, really mean? In a linear regression model, the slope is the change in expected $y$ for a unit increase in $x$. In logistic regression, the slope is often expressed as the **odds ratio**, which is just the slope exponentiated.
+
+$$OR=e^{\beta_1}=\text{exp}\left(\beta_1\right)$$
+
+The odds ratio, calculated as `exp(coef(mod2)[2]) = 0.821`, indicates that each 1 °C increase in mean annual temperature multiplies the odds of lemming presence ($y=1$) by 0.821. In other words, the odds of lemming presence decrease by approximately 17.9% for each additional degree Celsius.
+
+Note that we express effects in terms of the *odds* that $y=1$, not the probability. This is because odds gives us more flexibility to express changes in the relative likelihood of an event occurring than probability would. For example, if $p\left(y=1\right)$ increases from 0.95 to 0.99, did $y=1$ become $0.99/0.95=1.04$ times more likely (a 4% increase in probability)? No, because an event with a probability of 0.95 is over 5 times less likely to occur. Express those probabilities as odds:
+
+$$\text{Odds}\left(a\right)=\frac{0.95}{1-0.95}=\frac{0.95}{0.05}=19$$
+
+$$\text{Odds}\left(b\right)=\frac{0.99}{1-0.99}=\frac{0.99}{0.01}=99$$
+
+So the odds ratio is, or relative likelihood of $a$ and $b$ are
+
+$$\text{OR}\left(a,b\right)=\frac{\text{Odds}\left(a\right)}{\text{Odds}\left(b\right)}=\frac{19}{99}\approx0.192$$
+
+Event $a$ is only about one-fifth as likely to happen as event $b$ despite their probabilities being different by only 0.04.
+
+#### Area under the curve (AUC) {#sec-glm4-logistic-real-auc}
+
+Logistic regression is one way of solving what statisticians sometimes call a **classification problem**, where we want to use some set of predictor variables to classify observations into one category or another. The binary case is the simplest classification problem. The predictions of a logistic regression model will predict each observation to either be 0 or 1. We can use those predictions, and how often they are correct, to evaluate the efficacy of a logistic regression model.
+
+First let's define a function to get the predictions for a logistic regression model for its input data, with user-specified "cut-off" value that determines how great the predicted probability needs to be before declaring the prediction a 1 instead of a 0. The default, 0.5, means that any observation with a predicted probability 0.5 or greater will be counted as 1.
+
+```{r}
+# function to get prediction:
+pred.fun <- function(mod, data, res = "y", 
+                     pos = 1, neg = 0, cut = 0.5) {
+    probs <- predict(mod, newdata = data, type = "response")
+    ifelse(probs > cut, pos, neg)
+}
+
+# test it out:
+p2 <- pred.fun(mod2)
+ftable(p2~dx$lem.pr) 
+```
+
+This contingency table is called a **confusion matrix** and it summarizes how often the model is correct for a given cutoff value. Here, when the model predicts a success ($y = 1$), it is correct for 4 out of 6 observations. Confusion matrices are usually summarized by two measures, sensitivity and specificity.
+
+**Sensitivity** measures what proportion of successes were correctly identified. This is also called the **true positive rate**. Sensitivity answer the question, "What proportion of observations predicted to have y = 1 were actually 1? Sensitivity is calculated as:
+
+$$Sensitivity=\frac{n(true\ positives)}{n(true\ positives)+n(false\ negatives)}$$
+
+In our example, the sensitivity is $4/\left(4+4\right)=0.5$.
+
+**Specificity** measures what proportion of failures (y = 0) were
+correctly identified. It is also called the **true negative rate**. It
+is calculated as:
+
+$$Specificity=\frac{n(true\ negatives)}{n(true\ negatives)+n(false\ positives)}$$
+
+In our example, the specificity was $36/\left(36+2\right)=0.947$.
+
+The characteristics of the study system, the dataset, and the analysis can affect the sensitivity and the specificity of a model. If correctly identifying true positives is important (e.g., in disease screenings), then a model with greater sensitivity is preferred. If correctly identifying true negatives is important, then a model with greater specificity is preferred. The sensitivity and specificity can be varied by changing the threshold for 1 vs. 0.
+
+A **receiver operating characteristic (ROC) curve** shows how sensitivity and specificity covary at different cut-off thresholds. We can construct an ROC curve by summarizing the confusion matrix at different cut-offs. The code below shows how to do this manually, so you can see for yourself how AUC is calculated. Afterwards, we'll use functions from an add-on package to save some work.
+
+```{r}
+# vector of cut offs to test
+co <- seq(0, 1, by=0.01)
+
+# vectors to hold specificity and sensitivity
+sen <- spe <- numeric(length(co))
+
+# calculate sensitivity and specificity in a loop
+for(i in 1:length(co)){
+    # predictions for current cutoff value
+	pred <- pred.fun(mod2, cut=co[i])
+	
+	# rearrange to data frame
+    con.mat <- data.frame(ftable(dx$lem.pr~pred))
+    con.mat$pred <- as.numeric(as.character(con.mat$pred))
+    con.mat$dx.lem.pr <- as.numeric(as.character(con.mat$dx.lem.pr))
+
+    # special case: no predicted 1s
+    if(! 1 %in% con.mat$pred){
+        add.df <- data.frame(pred=1, dx.lem.pr=0:1, Freq=0)        
+        con.mat <- rbind(con.mat, add.df)                         
+    }
+	
+    # special case: no predicted 0s
+    if(! 0 %in% con.mat$pred){
+        add.df <- data.frame(pred=0, dx.lem.pr=0:1, Freq=0)        
+        con.mat <- rbind(con.mat, add.df)                         
+    }
+
+    # sensitivity:
+    tp <- which(con.mat$pred == 1 & con.mat$dx.lem.pr == 1)
+    fn <- which(con.mat$pred == 0 & con.mat$dx.lem.pr == 1)
+    sen[i] <- con.mat$Freq[tp] / (
+                  con.mat$Freq[tp] + con.mat$Freq[fn])
+
+    # specificity:
+	tn <- which(con.mat$pred == 0 & con.mat$dx.lem.pr == 0)
+    fp <- which(con.mat$pred == 1 & con.mat$dx.lem.pr == 0)
+    spe[i] <- 1-con.mat$Freq[tn] /
+                  (con.mat$Freq[tn] + con.mat$Freq[fp])
+}
+```
+
+And now plot:
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+
+par(mar=c(5.1, 5.1, 1.1, 1.1))
+plot(spe, sen, type="l", lwd=2,
+     xlim=c(0,1), ylim=c(0,1),
+     xlab="False positive rate",
+     yla="True positive rate")
+segments(0, 0, 1, 1, col="red", lwd=2)
+```
+
+The diagonal red line shows the case of a model where predictions of 1
+are just a likely to be true positives as false positives. Obviously,
+the curve for your model should fall above this line! The curve for a
+well-fitting model should increase quickly as false positive rate
+increases from 0, and reach a y value of 1 very quickly. A model that
+perfectly classifies observations should have an area under the curve
+(AUC) of 1 (can you see why?). A model that predicts an equal number of
+true positives and false positives has an AUC of 0.5. This represents a
+model that is no better than random chance at being correct, and is the
+"worst case scenario" for a classification model like logistic
+regression. We can approximate the AUC using rectangles:
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+
+par(mar=c(5.1, 5.1, 1.1, 1.1))
+plot(spe, sen, type="l", lwd=2,
+     xlim=c(0,1), ylim=c(0,1),
+     xlab="False positive rate",
+     yla="True positive rate")
+segments(0, 0, 1, 1, col="red", lwd=2)
+
+# add to previous plot:
+rect(spe[-length(spe)], 0,
+     spe[-1], sen, border="black",
+     col="#0000FF20")
+```
+
+And the numerical integration (lazy way):
+
+```{r}
+auc1 <- sum((diff(spe)*-1) * sen[-1])
+auc2 <- sum((diff(spe)*-1) * sen[-length(sen)])
+(auc1+auc2)/2
+```
+
+
+The AUC of 0.844 is pretty good. Remember that 0.5 is model no better than a coin flip, and 1 is perfect. 
+
+As much fun as it is to manually calculate ROC curves and definite integrals, we can get the ROC and AUC much more quickly using the functions in package `pROC`.
+
+```{r}
+#| output: false
+library(pROC)
+```
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+
+# generate predictions (probabilities)
+p2 <- predict(mod2, type="response")
+roc2 <- roc(dx$lem.pr ~ p2, plot = TRUE, print.auc = TRUE)
+roc2
+```
+
+The AUC calculated by package `pROC` (0.6173) is close to the value we
+calculated by hand. If you don't like the default figure produced by
+`roc()`, you can extract the sensitivity and sensitivity scores and make
+your own plot.
+
+```{r, fig.width=5, fig.height=5}
+# 1- to orient axis correct way:
+x <- 1-roc1$specificities
+y <- roc1$sensitivities
+plot(x,y, type="l")
+```
+
 
 ## Binomial GLM for proportions {#sec-glm4-binom}
 
+### Example using simulated data {#sec-glm4-binom-sim}
+
+### Example using real data {#sec-glm4-binom-real}
+
 ## Ordinal logistic regression {#sec-glm4-ord}
+
+### Example using simulated data {#sec-glm4-ord-sim}
+
+### Example using real data {#sec-glm4-ord-real}
 
