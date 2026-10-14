@@ -4,11 +4,49 @@ This section explores GLMs for **binary outcomes** and **proportions**. Binary o
 
 Proportions are values between 0 and 1 that express how often an event occurs out of some number of trials. For example, 45 out of 50 fish survive, or 13 out of 20 flies express a mutant phenotype. Proportions may be expressed as decimals between 0 and 1, or as percentages, or even as counts if the denominator is known. Proportions are modeled by **binomial GLM**, which is a GLM with a binomial family, logit link function, and a `weights` argument that defines the denominator of each observation.
 
+:::{.callout-tip title="The Bernoulli and the Binomial"}
+The **binomial distribution** describes the number of successes in a series of $n$ trials, where each trial must see one of two outcomes with probability $p$. By convention, we denote successes as 1 and other outcomes as 0. 
+
+For example, if you flip a fair coin one time, that is one trial. The coin will come up heads with probability 0.5. If you flip the coin 10 times and get heads 4 times, then your observation (10 coin flips) had 10 trials (each flip) and 4 successes (times that heads came up). The long run frequency of numbers of heads in different sets of 10 trials is described by a binomial distribution:
+
+$$n_{heads}\sim Binomial\left(p=0.5, n=10\right) $$
+
+The distribution of outcomes is shown below:
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+#| echo: false
+x <- 0:10
+y <- dbinom(x, 10, 0.5)
+
+par(mfrow=c(1,1), mar=c(5.1, 5.1, 1.1, 1.1),
+    las=1, lend=1, cex.axis=1.2, cex.lab=1.2, 
+    bty="n")
+plot(x, y, type="h", lwd=4,
+    xlab="Number of heads",
+    ylab="")
+title(ylab="Probability mass function", line=3.5)
+```
+
+The **Bernoulli** distribution is the special case of the binomial distribution where $n=1$. This is why the stochastic part of logistic regression is
+
+$$y_i\sim \text{Bernoulli}\left(p=p_i\right)$$
+
+or equivalently 
+
+$$y_i\sim \text{Binomial}\left(p=p_i, n=1\right)$$
+
+while the stochastic part of [binomial regression](@sec-glm4-binom) is
+
+$$y_i\sim \text{Binomial}\left(p=p_i, n=n_i\right)$$
+:::
+
 ## Logistic GLM for binary responses {#sec-glm4-logistic}
 
 **Logistic regression** is a technique for modeling the probability of a binary outcome: survival vs. death, reproductive vs. not reproductive, present vs. absent, etc. The response variable *Y* takes value 1 when the event occurs, and value 0 when the event does not occur. For each observation *i*, success occurs as the outcome of a Bernoulli trial with probability $p_i$. The logit of $p_i$ (i.e., the logarithm of the odds that $y_i=1$) is modeled as a linear function of the predictor variables.
 
-$$y_i\sim Binomial\left(p=p_i,n=1\right)$$
+$$y_i\sim \text{Bernoulli}\left(p=p_i\right)$$
 
 $$\text{logit}\left(p_i\right)=\log{\left(\frac{p_i}{1-p_i}\right)}=\boldsymbol{\beta}\mathbf{x}$$
 
@@ -411,10 +449,14 @@ As much fun as it is to manually calculate ROC curves and definite integrals, we
 
 ```{r}
 #| output: false
+#| message: false
 library(pROC)
 ```
 
 ```{r}
+#| message: false
+
+
 # generate predictions (probabilities)
 p2 <- predict(mod2, type="response")
 roc2 <- roc(dx$lem.pr ~ p2, plot = FALSE, print.auc = FALSE)
@@ -430,7 +472,9 @@ print(roc2)
 plot(roc2)
 ```
 
-The AUC calculated by package `pROC` (0.854) is close to the value we calculated by hand. If you don't like the default figure produced by `roc()`, you can extract the sensitivity and sensitivity scores and make your own plot.
+The AUC calculated by package `pROC` (0.854) is close to the value we calculated by hand. You should use the `pROC` version though, because our hand calculation was only an approximation. 
+
+If you don't like the default figure produced by `roc()`, you can extract the sensitivity and sensitivity scores and make your own plot.
 
 ```{r}
 #| fig.width: 8
@@ -442,12 +486,159 @@ ysens <- roc2$sensitivities
 plot(xspec,ysens, type="l")
 ```
 
+:::{.callout title="Probabilistic definition of AUC"}
+
+
+```{r}
+# vector of observed 1s and 0s
+y.obs <- dx$lem.pr
+
+# vector of predicted p(y=1)
+y.pre <- predict(mod2, type="response")
+
+# identify which observations are 1 and 0
+# (i.e., positives and negatives)
+y.pos <- which(y.obs==1)
+y.neg <- which(y.obs==0)
+
+# number of simulations
+sims <- 1e5
+
+# set random number seed for reproducibility
+set.seed(42)
+
+# pick predicted probabilities for lots of 
+# pairs of postives and negatives
+draw.pos <- y.pre[sample(y.pos, sims, replace=TRUE)]
+draw.neg <- y.pre[sample(y.neg, sims, replace=TRUE)]
+
+# check whether the positives have larger
+# predictive probabilities than the negatives
+# tied probabilities get "half credit"
+check <- (draw.pos > draw.neg) +
+    0.5 * (draw.pos == draw.neg)
+
+# proportion of TRUEs should match
+# AUC calculation above
+mean(check)
+```
+
+This simulated AUC matches the calculated AUC out to 2 decimal places (3 if we round both to 0.845). 
+
 ## Binomial GLM for proportions {#sec-glm4-binom}
+
+Proportional data describe the number of times that some event occurs, relative to the total number of times it could occur. Many phenomena that biologists study are expressed as proportions: proportion of individuals surviving, proportion of individuals with trait *A*, proportion of area covered by species *X*, and so on. Analyzing proportions is a lot like [analyzing binary outcomes](#mod-09-logistic); i.e., logistic regression. In fact, they are both GLMs with a binomial family. All that differs is the *n* term.
+
+Binomial regression is defined as
+
+$$y_i=\frac{z_i}{n_i}$$
+$$z_i\sim Binomial\left(p=p_i,n=n_i\right)$$
+
+$$\text{logit}\left(p_i\right)=\log{\left(\frac{p_i}{1-p_i}\right)}=\boldsymbol{\beta}\mathbf{x}$$
+
+The only real differences between this and logistic regression above () are the $n$ term in the binomial distribution, and the fact that in binomial regression we are analyzing the ratio of $z_i$ to $n_i$. If we set $n_i$ to one, then binomial regression becomes logistic regression.
+
+###When should you use binomial regression? {#sec-glm4-binom-when}
+
+In logistic regression the interest is in predicting the outcomes of single trials, while in binomial regression the interest is in predicting the **proportion** of observations in a certain state. How you should analyze your data depends on your question:
+
+- If the question is about outcomes at the individual observation level, then use logistic regression.
+- If the question is about rates or probabilities of an event occurring, then use binomial regression.
+
+One good clue is to consider the level at which predictor variables are measured. If many observations share the same value of a predictor variable (or the same values of many predictor variables), then binomial regression might be the right approach because the sample unit is really the group. For example, if you want to model nestling survival in birds, all of the chicks within a nest would have the same values of any predictor variable that applied to the nest. Thus, binomial regression would be appropriate. If, however, there were chick-level predictors, then logistic regression would be appropriate. Think about what level of organization your  predictor and response variables occur at, and what question you are really asking.
+
+**What if the number of trials is unknown?**
+
+This section assumes that you know how many trials each proportion represents. If you want to analyze proportions for which the number of trials is unknown, a binomial GLM is probably not the right tool. One option you can try instead is to apply a [logit transform](@sec-trans-common-lp) to the proportions, then fit a linear regression to the transformed values.
 
 ### Example using simulated data {#sec-glm4-binom-sim}
 
+Let's explore binomial regression by simulating some data.
+
+```{r}
+
+# random number seed
+set.seed(123)
+
+# sample size
+n <- 100
+
+# x values
+x <- runif(n, 0.001, 10)
+
+# intercept and slope
+beta0 <- 3
+beta1 <- -0.75
+
+# linear predictor
+logit.eta <- beta0 + beta1*x
+
+# inverse logit to convert to
+# probability scale
+eta <- round(plogis(logit.eta), 3)
+
+# weights = sample sizes
+# use same size for each observation for simplicity
+wts <- rep(20, n)
+
+# draw observed values
+y <- rbinom(n, prob=eta, size=wts)/wts
+
+# assemble to data frame
+dr <- data.frame(x=x, y=y, w=wts)
+```
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+
+par(mar=c(5,5,1,1))
+plot(x,y, ylim=c(0, 1))
+```
+
+Linear regression would be inappropriate, because the predicted outcome of a linear model is not bounded to the domain of $y$. Instead, we fit a binomial GLM using the `weights` argument to define the denominator of each observation.
+
+```{r}
+mod3 <- glm(y~x, data=dr,
+            family=binomial, weights=dr$w)
+summary(mod3)
+```
+
+The slope and intercept estimates are very close to the truth. At this point, we can evalulate model fit with deviance explained, use AIC model selection, or whatever other interpretive post hoc analyses we need to. Just as with logistic regression, the odds ratio $e^{\beta_1}$ or `exp(coef(mod2)[2])` describes the multiplicative change in the odds that an individual "succeeds". Remember that the $p$ in the binomial part really refer to success probability in a trial. If our proportions here represent female sex ratio in experimental clutches of guppies, then the odds ratio 
+
+```{r}
+exp(coef(mod3)[2])
+```
+
+means that for every additional unit of $x$, the probability that an individual within a clutch is female is reduced by about 53%.
+
+Unlike binary logistic regression, we generally do not use AUC to evaluate binomial regression fitted to proportions. Although AUC can still be calculated and retains the same mathematical interpretation, it measures the model's ability to distinguish individual successes from failures. In grouped binomial regression, however, the observations represent groups of trials, and our primary interest is usually in how accurately the model estimates the proportion of successes within each group. Consequently, AUC is generally less informative than measures such as deviance explained and comparisons of observed and predicted proportions.
+
 ### Example using real data {#sec-glm4-binom-real}
 
+
+MAKE A NEW DATASET SO WE CAN ANALYZE PROPORTION FEMALE
+
+Let's use the NEON data for a real example. If you don't already have it, download the [site-level richness and environmental dataset](..datasets/dat-neon-site-rich-env.csv) and put it in your working directory.
+
+
+```{r}
+#| include: false
+dx <- read.csv("../datasets/dat-neon-site-rich-env.csv")
+```
+
+
+```{r}
+#| eval: false
+dx <- read.csv("dat-neon-site-rich-env.csv")
+```
+
+Consider this plot of the proportion of species present which are sciurids (`psci`) varies with mean annual temperature.
+
+```{r}
+# proportion of species which are squirrels
+dx$psci <- dx$sci / dx$tot
+```
 ## Ordinal logistic regression {#sec-glm4-ord}
 
 ### Example using simulated data {#sec-glm4-ord-sim}
