@@ -23,6 +23,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -74,6 +109,35 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -440,10 +504,19 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#sec-glm4-logistic" id="toc-sec-glm4-logistic" class="nav-link active" data-scroll-target="#sec-glm4-logistic"><span class="header-section-number">21.1</span> Logistic GLM for binary responses</a>
   <ul class="collapse">
-  <li><a href="#sec-glm4-logistics-or" id="toc-sec-glm4-logistics-or" class="nav-link" data-scroll-target="#sec-glm4-logistics-or"><span class="header-section-number">21.1.1</span> Odds ratios</a></li>
+  <li><a href="#sec-glm4-logistic-sim" id="toc-sec-glm4-logistic-sim" class="nav-link" data-scroll-target="#sec-glm4-logistic-sim"><span class="header-section-number">21.1.1</span> Example using simulated data</a></li>
+  <li><a href="#sec-glm4-logistic-real" id="toc-sec-glm4-logistic-real" class="nav-link" data-scroll-target="#sec-glm4-logistic-real"><span class="header-section-number">21.1.2</span> Example using real data</a></li>
   </ul></li>
-  <li><a href="#sec-glm4-binom" id="toc-sec-glm4-binom" class="nav-link" data-scroll-target="#sec-glm4-binom"><span class="header-section-number">21.2</span> Binomial GLM for proportions</a></li>
-  <li><a href="#sec-glm4-ord" id="toc-sec-glm4-ord" class="nav-link" data-scroll-target="#sec-glm4-ord"><span class="header-section-number">21.3</span> Ordinal logistic regression</a></li>
+  <li><a href="#sec-glm4-binom" id="toc-sec-glm4-binom" class="nav-link" data-scroll-target="#sec-glm4-binom"><span class="header-section-number">21.2</span> Binomial GLM for proportions</a>
+  <ul class="collapse">
+  <li><a href="#sec-glm4-binom-sim" id="toc-sec-glm4-binom-sim" class="nav-link" data-scroll-target="#sec-glm4-binom-sim"><span class="header-section-number">21.2.1</span> Example using simulated data</a></li>
+  <li><a href="#sec-glm4-binom-real" id="toc-sec-glm4-binom-real" class="nav-link" data-scroll-target="#sec-glm4-binom-real"><span class="header-section-number">21.2.2</span> Example using real data</a></li>
+  </ul></li>
+  <li><a href="#sec-glm4-ord" id="toc-sec-glm4-ord" class="nav-link" data-scroll-target="#sec-glm4-ord"><span class="header-section-number">21.3</span> Ordinal logistic regression</a>
+  <ul class="collapse">
+  <li><a href="#sec-glm4-ord-sim" id="toc-sec-glm4-ord-sim" class="nav-link" data-scroll-target="#sec-glm4-ord-sim"><span class="header-section-number">21.3.1</span> Example using simulated data</a></li>
+  <li><a href="#sec-glm4-ord-real" id="toc-sec-glm4-ord-real" class="nav-link" data-scroll-target="#sec-glm4-ord-real"><span class="header-section-number">21.3.2</span> Example using real data</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch21.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -469,21 +542,447 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Even our curves have curves.</p>
-<p>It’s what’s under the curve that counts.</p>
+<p>This section explores GLMs for <strong>binary outcomes</strong> and <strong>proportions</strong>. Binary outcomes are results that take one of two values such as survival vs.&nbsp;non-survival, presence vs.&nbsp;absence, reproduction vs.&nbsp;not-reproducing, and so on. These data are usually coded as 1 and 0: 1 when the event occurs, and 0 when the event does not. No other values are allowed. The standard technique for modeling binary outcomes is <strong>logistic regression</strong>. This name refers to a GLM with a binomial family and logit link function.</p>
+<p>Proportions are values between 0 and 1 that express how often an event occurs out of some number of trials. For example, 45 out of 50 fish survive, or 13 out of 20 flies express a mutant phenotype. Proportions may be expressed as decimals between 0 and 1, or as percentages, or even as counts if the denominator is known. Proportions are modeled by <strong>binomial GLM</strong>, which is a GLM with a binomial family, logit link function, and a <code>weights</code> argument that defines the denominator of each observation.</p>
 <section id="sec-glm4-logistic" class="level2" data-number="21.1">
 <h2 data-number="21.1" class="anchored" data-anchor-id="sec-glm4-logistic"><span class="header-section-number">21.1</span> Logistic GLM for binary responses</h2>
-<section id="sec-glm4-logistics-or" class="level3" data-number="21.1.1">
-<h3 data-number="21.1.1" class="anchored" data-anchor-id="sec-glm4-logistics-or"><span class="header-section-number">21.1.1</span> Odds ratios</h3>
+<p><strong>Logistic regression</strong> is a technique for modeling the probability of a binary outcome: survival vs.&nbsp;death, reproductive vs.&nbsp;not reproductive, present vs.&nbsp;absent, etc. The response variable <em>Y</em> takes value 1 when the event occurs, and value 0 when the event does not occur. For each observation <em>i</em>, success occurs as the outcome of a Bernoulli trial with probability <span class="math inline">\(p_i\)</span>. The logit of <span class="math inline">\(p_i\)</span> (i.e., the logarithm of the odds that <span class="math inline">\(y_i=1\)</span>) is modeled as a linear function of the predictor variables.</p>
+<p><span class="math display">\[y_i\sim Binomial\left(p=p_i,n=1\right)\]</span></p>
+<p><span class="math display">\[\text{logit}\left(p_i\right)=\log{\left(\frac{p_i}{1-p_i}\right)}=\boldsymbol{\beta}\mathbf{x}\]</span></p>
+<p>The logit link function is available in R as <code>qlogis()</code>. The inverse of the logit function is the <strong>logistic function</strong>:</p>
+<p><span class="math display">\[logistic\left(x\right)=\frac{e^x}{1+e^x}\]</span></p>
+<p>and is available in R as <code>plogis()</code>.</p>
+<p>The linear predictor in logistic regression predicts the “log-odds” of an event occurring. The unit of the log-odds scale is the <strong>logistic unit</strong>, or <strong>logit</strong>. The logit link function is useful because it allows the outcome of a linear function–which can take on any real value–to be mapped smoothly to the natural domain of probabilities, the open interval <span class="math inline">\(\left(0,1\right)\)</span>. A key consequence of this link function is that increasing the value of one of the predictor variables by 1 will scale the log-odds by a constant. That constant is the coefficient estimated for the predictor.</p>
+<p>The logistic regression model was developed in the 1940s, decades before the GLM was first proposed. Part of the development of the idea of the GLM was recognizing that many previously known models were actually special cases of a more general model. In GLM terms, we say that logistic regression is a GLM with a binomial family and logit link function.</p>
+<section id="sec-glm4-logistic-sim" class="level3" data-number="21.1.1">
+<h3 data-number="21.1.1" class="anchored" data-anchor-id="sec-glm4-logistic-sim"><span class="header-section-number">21.1.1</span> Example using simulated data</h3>
+<p>As with the other GLM applications, we’ll start by simulating a suitable dataset and analyzing it. The code below will execute the simulation. Remember to set the random number seed for reproducibility.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">runif</span>(n, <span class="dv">0</span>, <span class="dv">12</span>), <span class="dv">1</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># coefficients</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>beta0 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">4</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>beta1 <span class="ot">&lt;-</span> <span class="fl">0.8</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># linear predictor</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>eta <span class="ot">&lt;-</span> beta0 <span class="sc">+</span> beta1 <span class="sc">*</span> x</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># logistic function (inverse link)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fu">plogis</span>(eta)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># draw y values (stochastic part)</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, prob)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># assemble dataset</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>db <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x=</span>x, <span class="at">y=</span>y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Unlike other sorts of regression problems, plotting <span class="math inline">\(y\)</span> vs.&nbsp;<span class="math inline">\(x\)</span> isn’t very illuminating.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(db<span class="sc">$</span>x, db<span class="sc">$</span>y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>If you have a lot of duplicate coordinates, it can be hard to get a sense of how many 0s and 1s are in the dataset. The scatterplot above is also a little silly because most of the <em>Y</em>-axis range is not occupied. We can use function <code>jitter()</code> to add some random noise to the <span class="math inline">\(y\)</span>-values; this will help us see what is going on.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, <span class="fu">jitter</span>(y, <span class="at">amount=</span><span class="fl">0.05</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Another way to explore binary data is with a boxplot. A boxplot can show whether <span class="math inline">\(x\)</span> tends to be smaller or greater when <span class="math inline">\(y\)</span> = 1; this is sort of the reverse of the question we are really asking, but it helps us make sense of the data as we explore.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(x<span class="sc">~</span>y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The boxplot agrees with the scatterplot: <span class="math inline">\(y\)</span> seems more likely to occur at greater values of <span class="math inline">\(x\)</span>. Making the boxplot horizontal makes the pattern easier to see:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(x<span class="sc">~</span>y, <span class="at">horizontal=</span><span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Logistic regression is fit using the <code>glm()</code> function with <code>family=binomial</code>. You don’t need to specify the link function in R, as the binomial family uses the logit link function by default.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(y<span class="sc">~</span>x, <span class="at">data=</span>db, <span class="at">family=</span>binomial)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = y ~ x, family = binomial, data = db)
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  -5.0036     1.0757  -4.652 3.29e-06 ***
+x             1.0059     0.2059   4.886 1.03e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 136.058  on 99  degrees of freedom
+Residual deviance:  55.611  on 98  degrees of freedom
+AIC: 59.611
+
+Number of Fisher Scoring iterations: 6</code></pre>
+</div>
+</div>
+<p>The parameter estimates are pretty close to the correct values. We can calculate the deviance explained:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span>mod1<span class="sc">$</span>deviance<span class="sc">/</span>mod1<span class="sc">$</span>null.deviance</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5912742</code></pre>
+</div>
+</div>
+<p>The deviance explained is pretty good. In the next example we will explore another diagnostic for logistic regression models, the area under the receiver operating characteristic curve (AUC). Although both deviance explained and AUC measure the fit of logistic regression models, they answer different questions (<a href="#sec-glm4-logistic-real-auc" class="quarto-xref"><span>Section 21.1.2.2</span></a>).</p>
+<p>The next step is to generate and plot the model predictions. For logistic regression models, as for other GLMs, predictions should be calculated on the link scale and back-transformed to get probabilities.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># values for prediction</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>use.n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(db<span class="sc">$</span>x), <span class="fu">max</span>(db<span class="sc">$</span>x), <span class="at">length=</span>use.n)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate predictions and 95% CI (link scale)</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod1, <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">x=</span>px),</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">type=</span><span class="st">"link"</span>, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>mn <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.5</span>, pred<span class="sc">$</span>fit, pred<span class="sc">$</span>se.fit)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>lo <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.025</span>, pred<span class="sc">$</span>fit, pred<span class="sc">$</span>se.fit)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>up <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>, pred<span class="sc">$</span>fit, pred<span class="sc">$</span>se.fit)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># inverse link function to get probabilities</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>mn <span class="ot">&lt;-</span> mod1<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(mn)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>lo <span class="ot">&lt;-</span> mod1<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(lo)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>up <span class="ot">&lt;-</span> mod1<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(up)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now make the plot. The argument <code>xpd=NA</code> to <code>points()</code> makes sure that all points are plotted, even those that fall outside of the plot area. This is needed because <code>plot()</code> defines the plot area using the range of <span class="math inline">\(y\)</span> values (0 and 1), but some of the jittered <span class="math inline">\(y\)</span> values will be &lt;0 or &gt;1 and thus won’t get plotted. We’ll use a polygon instead of the usual lines to show the 95% CI of the predicted probability.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(db<span class="sc">$</span>x, db<span class="sc">$</span>y, <span class="at">type=</span><span class="st">"n"</span>, <span class="at">xlab=</span><span class="st">"x"</span>, <span class="at">ylab=</span><span class="st">"y"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(<span class="at">x=</span><span class="fu">c</span>(px, <span class="fu">rev</span>(px)), </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">y=</span><span class="fu">c</span>(lo, <span class="fu">rev</span>(up)), <span class="co"># REVerse either upper or lower</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">border=</span><span class="cn">NA</span>, <span class="at">col=</span><span class="st">"grey80"</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, mn, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(db<span class="sc">$</span>x, <span class="fu">jitter</span>(db<span class="sc">$</span>y, <span class="at">amount=</span><span class="fl">0.05</span>),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex=</span><span class="fl">1.1</span>, <span class="at">xpd=</span><span class="cn">NA</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-glm4-logistic-real" class="level3" data-number="21.1.2">
+<h3 data-number="21.1.2" class="anchored" data-anchor-id="sec-glm4-logistic-real"><span class="header-section-number">21.1.2</span> Example using real data</h3>
+<p>Let’s use the NEON data for a real example. If you don’t already have it, download the <a href="..datasets/dat-neon-site-rich-env.csv">site-level richness and environmental dataset</a> and put it in your working directory.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"dat-neon-site-rich-env.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Consider this plot of lemming species richness vs.&nbsp;mean annual temperature:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx<span class="sc">$</span>mat, dx<span class="sc">$</span>lem, </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="fu">expression</span>(Mean<span class="sc">~</span>annual<span class="sc">~</span>temperature<span class="sc">~</span>(degree<span class="sc">*</span>C)),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Lemming species richness"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It looks like lemming species richness decreases with increasing temperature, but we should pump the brakes. The maximum richness is 2. Trying to model richness when it only varies between 0, 1, and 2 is going to be tough because there just isn’t very much information in the dataset. If we modeled whether there were <em>any</em> lemming species present, we don’t lose much information:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(dx<span class="sc">$</span>lem)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ 0  1  2 
+38  7  1 </code></pre>
+</div>
+</div>
+<p>Let’s convert lemming species richness to lemming presence-absence (1 and 0):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>lem.pr <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">*</span>(dx<span class="sc">$</span>lem <span class="sc">&gt;</span> <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now compare mean annual temperature at sites with lemmings vs.&nbsp;those without.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># save this expression for plots</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>mat.expr <span class="ot">&lt;-</span> <span class="fu">expression</span>(Mean<span class="sc">~</span>annual<span class="sc">~</span>temperature<span class="sc">~</span>(degree<span class="sc">*</span>C))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(mat<span class="sc">~</span>lem.pr, <span class="at">data=</span>dx, <span class="at">xlab=</span>mat.expr, <span class="at">horizontal =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Looks like sites with lemmings (<span class="math inline">\(y=1\)</span>) tend to be colder than sites without lemmings. Let’s test this relationship with logistic regression.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>mod2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(lem.pr<span class="sc">~</span>mat, <span class="at">data=</span>dx, <span class="at">family=</span>binomial)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = lem.pr ~ mat, family = binomial, data = dx)
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)   
+(Intercept) -0.23038    0.57768  -0.399  0.69003   
+mat         -0.19668    0.06988  -2.815  0.00489 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 42.507  on 45  degrees of freedom
+Residual deviance: 29.807  on 44  degrees of freedom
+AIC: 33.807
+
+Number of Fisher Scoring iterations: 6</code></pre>
+</div>
+</div>
+<p>The significant slope on <code>mat</code> confirms our suspicion that lemming presence is negatively correlated with temperature. The nonsignificant intercept is not a problem; it just means that the intercept is not significantly different from 0. Remember that 0 on the link scale–the logit scale–corresponds to a probability of 0.5. The model reduces the deviance by about 29.9%, which is okay for for this small of a sample size.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span>mod2<span class="sc">$</span>deviance<span class="sc">/</span>mod2<span class="sc">$</span>null.deviance</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2987701</code></pre>
+</div>
+</div>
+<section id="sec-glm4-logistic-real-or" class="level4" data-number="21.1.2.1">
+<h4 data-number="21.1.2.1" class="anchored" data-anchor-id="sec-glm4-logistic-real-or"><span class="header-section-number">21.1.2.1</span> Odds ratios</h4>
+<p>What does the slope in our fitted model, <span class="math inline">\(-0.20\pm0.07\)</span>, really mean? In a linear regression model, the slope is the change in expected <span class="math inline">\(y\)</span> for a unit increase in <span class="math inline">\(x\)</span>. In logistic regression, the slope is often expressed as the <strong>odds ratio</strong>, which is just the slope exponentiated.</p>
+<p><span class="math display">\[OR=e^{\beta_1}=\text{exp}\left(\beta_1\right)\]</span></p>
+<p>The odds ratio, calculated as <code>exp(coef(mod2)[2]) = 0.821</code>, indicates that each 1 °C increase in mean annual temperature multiplies the odds of lemming presence (<span class="math inline">\(y=1\)</span>) by 0.821. In other words, the odds of lemming presence decrease by approximately 17.9% for each additional degree Celsius.</p>
+<p>Note that we express effects in terms of the <em>odds</em> that <span class="math inline">\(y=1\)</span>, not the probability. This is because odds gives us more flexibility to express changes in the relative likelihood of an event occurring than probability would. For example, if <span class="math inline">\(p\left(y=1\right)\)</span> increases from 0.95 to 0.99, did <span class="math inline">\(y=1\)</span> become <span class="math inline">\(0.99/0.95=1.04\)</span> times more likely (a 4% increase in probability)? No, because an event with a probability of 0.95 is over 5 times less likely to occur. Express those probabilities as odds:</p>
+<p><span class="math display">\[\text{Odds}\left(a\right)=\frac{0.95}{1-0.95}=\frac{0.95}{0.05}=19\]</span></p>
+<p><span class="math display">\[\text{Odds}\left(b\right)=\frac{0.99}{1-0.99}=\frac{0.99}{0.01}=99\]</span></p>
+<p>So the odds ratio is, or relative likelihood of <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are</p>
+<p><span class="math display">\[\text{OR}\left(a,b\right)=\frac{\text{Odds}\left(a\right)}{\text{Odds}\left(b\right)}=\frac{19}{99}\approx0.192\]</span></p>
+<p>Event <span class="math inline">\(a\)</span> is only about one-fifth as likely to happen as event <span class="math inline">\(b\)</span> despite their probabilities being different by only 0.04.</p>
+</section>
+<section id="sec-glm4-logistic-real-auc" class="level4" data-number="21.1.2.2">
+<h4 data-number="21.1.2.2" class="anchored" data-anchor-id="sec-glm4-logistic-real-auc"><span class="header-section-number">21.1.2.2</span> Area under the curve (AUC)</h4>
+<p>Logistic regression is one way of solving what statisticians sometimes call a <strong>classification problem</strong>, where we want to use some set of predictor variables to classify observations into one category or another. The binary case is the simplest classification problem. The predictions of a logistic regression model will predict each observation to either be 0 or 1. We can use those predictions, and how often they are correct, to evaluate the efficacy of a logistic regression model.</p>
+<p>We can evaluate a logistic regression model by the accuracy of its predictions. Such a model can predict a 1 or a 0 for every observation, and each prediction can be correct or incorrect:</p>
+<div id="tbl-confusion-matrix" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-confusion-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;21.1: The four possible outcomes of a binary classifier, based on the actual and predicted classifications.
+</figcaption>
+<div aria-describedby="tbl-confusion-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Actual outcome</th>
+<th>Predicted positive (<span class="math inline">\(\hat{y}=1\)</span>)</th>
+<th>Predicted negative (<span class="math inline">\(\hat{y}=0\)</span>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Positive (<span class="math inline">\(y=1\)</span>)</td>
+<td><strong>True positive (TP)</strong></td>
+<td><strong>False negative (FN)</strong></td>
+</tr>
+<tr class="even">
+<td>Negative (<span class="math inline">\(y=0\)</span>)</td>
+<td><strong>False positive (FP)</strong></td>
+<td><strong>True negative (TN)</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The table is often summarized as the <strong>true positive rate (sensitivity)</strong> and <strong>true negative rate (specificity)</strong>.</p>
+<p>The model sensitivity, or true positive rate, is the proportion of positive observations (<span class="math inline">\(y=1\)</span>) that the model predicts to be positive (<span class="math inline">\(\hat{y}=1\)</span>). It is calculated as:</p>
+<p><span class="math display">\[\text{True positive rate (sensitivity)}:p\left(\hat{y}=1|y=1\right)=\frac{\text{True positives}}{\text{True positives}+\text{False negatives}}\]</span></p>
+<p>The model specificity, or true negative rate, is the proportion of negative observations (<span class="math inline">\(y=0\)</span>) that the model predicts to be negative (<span class="math inline">\(\hat{y}=0\)</span>).</p>
+<p><span class="math display">\[\text{True negative rate (specificity)}:p\left(\hat{y}=0|y=0\right)=\frac{\text{True negatives}}{\text{True negatives}+\text{False positives}}\]</span></p>
+<ul>
+<li>The <strong>sensitivity</strong> is the probability of a positive test given that the observation is positive.</li>
+<li>The <strong>specificity</strong> is the probability of a negative test given that the observation is negative.</li>
+</ul>
+<p>For our fitted model of lemming presence, let’s define a function that returns whether the model predicts 1 or 0. The model actually predicts a probability, so we need to specify a cutoff to distinguish predicted 1s from predicted 0s. Let’s use 0.5.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>pred.fun <span class="ot">&lt;-</span> <span class="cf">function</span>(mod, cutoff){</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    pre <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod, <span class="at">type=</span><span class="st">"response"</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    pre10 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">*</span> (pre <span class="sc">&gt;=</span> cutoff)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(pre10)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>}<span class="co">#function</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now try it out:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pred.y <span class="ot">&lt;-</span> <span class="fu">pred.fun</span>(mod2, <span class="fl">0.5</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ftable</span>(pred.y<span class="sc">~</span>dx<span class="sc">$</span>lem.p)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         pred.y  0  1
+dx$lem.p             
+0               36  2
+1                4  4</code></pre>
+</div>
+</div>
+<p>This means that the model sensitivity is <span class="math inline">\(4/\left(4+4\right)=0.5\)</span>, and the specificity is <span class="math inline">\(36/\left(2+36\right)=0.947\)</span>.</p>
+<p>We don’t have to use a cutoff of 0.5. In fact, that choice is rather arbitrary. It might be useful to see how our choice of cutoff affects the sensitivity and specificity. We can calculated that in a loop.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># vector of cutoffs to test</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>cutoffs <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.01</span>, <span class="fl">0.99</span>, <span class="at">by=</span><span class="fl">0.01</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>ncutoffs <span class="ot">&lt;-</span> <span class="fu">length</span>(cutoffs)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># data frame to hold results</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>sens.df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">cutoff=</span>cutoffs,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">spec=</span><span class="cn">NA</span>,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">sens=</span><span class="cn">NA</span>)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co"># function to tally true positives and negatives</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="co"># can't use ftable because there won't always be</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="co"># a 2 x 2 result</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>tally <span class="ot">&lt;-</span> <span class="cf">function</span>(pr, oy){</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    tp <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">intersect</span>(<span class="fu">which</span>(pr<span class="sc">==</span><span class="dv">1</span>), <span class="fu">which</span>(oy<span class="sc">==</span><span class="dv">1</span>)))</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    fn <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">intersect</span>(<span class="fu">which</span>(pr<span class="sc">==</span><span class="dv">0</span>), <span class="fu">which</span>(oy<span class="sc">==</span><span class="dv">1</span>)))</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    fp <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">intersect</span>(<span class="fu">which</span>(pr<span class="sc">==</span><span class="dv">1</span>), <span class="fu">which</span>(oy<span class="sc">==</span><span class="dv">0</span>)))</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    tn <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">intersect</span>(<span class="fu">which</span>(pr<span class="sc">==</span><span class="dv">0</span>), <span class="fu">which</span>(oy<span class="sc">==</span><span class="dv">0</span>)))</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">tp=</span>tp, <span class="at">fn=</span>fn, <span class="at">fp=</span>fp, <span class="at">tn=</span>tn)</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(res)</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>ncutoffs){</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>    pred.y <span class="ot">&lt;-</span> <span class="fu">pred.fun</span>(mod2, cutoffs[i])</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> <span class="fu">tally</span>(pred.y, dx<span class="sc">$</span>lem.pr)</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>    sens.df<span class="sc">$</span>sens[i] <span class="ot">&lt;-</span> result[<span class="st">"tp"</span>]<span class="sc">/</span>(result[<span class="st">"tp"</span>]<span class="sc">+</span>result[<span class="st">"fn"</span>])</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>    sens.df<span class="sc">$</span>spec[i] <span class="ot">&lt;-</span> result[<span class="st">"tn"</span>]<span class="sc">/</span>(result[<span class="st">"tn"</span>]<span class="sc">+</span>result[<span class="st">"fp"</span>])</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>}<span class="co">#i</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>If we plot the sensitivity against one minus the specificity, we get the <strong>receiver operating characteristic curve (ROC)</strong>. One minus the specificity is also known as the <strong>false positive rate</strong>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>sens.df<span class="sc">$</span>fpr <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> sens.df<span class="sc">$</span>spec</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sens.df<span class="sc">$</span>fpr, sens.df<span class="sc">$</span>sens, <span class="at">type=</span><span class="st">"s"</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"False positive rate"</span>,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Sensitivity"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>One interesting property of this curve is that a null model, where <span class="math inline">\(p(y=1)=0.5\)</span>, is a diagonal line.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="fl">5.1</span>, <span class="fl">5.1</span>, <span class="fl">1.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sens.df<span class="sc">$</span>fpr, sens.df<span class="sc">$</span>sens,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"s"</span>, <span class="at">lwd=</span><span class="dv">3</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"False positive rate"</span>,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Sensitivity"</span>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">3</span>, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The area under the red curve, representing the model where <span class="math inline">\(p\left(y=1\right)=0.5\)</span>, or a coin flip, is 0.5. As a model’s performance improves, the true positive rate (sensivity) must go up, and the false positive rate (<span class="math inline">\(1-specificity\)</span>) must go down. This forces the model’s ROC curve up and to the left. In the limit, the area under that curve will be 1:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The area under the ROC curve (AUC) measures how well a logistic regression model distinguishes positive (<span class="math inline">\(y=1\)</span>) from negative (<span class="math inline">\(y=0\)</span>) observations. Although we derived AUC from the proportions of correct and incorrect classifications at different thresholds, it has a useful probabilistic interpretation: AUC is the probability that a randomly selected positive observation receives a higher predicted probability than a randomly selected negative observation, with ties counted as half a success. Thus, AUC is also defined as</p>
+<p><span class="math display">\[AUC=p\left(\hat{p}_{y=1}&gt;\hat{p}_{y=0}\right)\]</span></p>
+<p>It is important to note that although AUC measures a model’s ability to discriminate between outcomes, it does not tell us whether the predicted probabilities are accurate (i.e., whether the model is well calibrated).</p>
+<p>As much fun as it is to manually calculate ROC curves and definite integrals, we can get the ROC and AUC much more quickly using the functions in package <code>pROC</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pROC)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate predictions (probabilities)</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod2, <span class="at">type=</span><span class="st">"response"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>roc2 <span class="ot">&lt;-</span> <span class="fu">roc</span>(dx<span class="sc">$</span>lem.pr <span class="sc">~</span> p2, <span class="at">plot =</span> <span class="cn">FALSE</span>, <span class="at">print.auc =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(roc2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+roc.formula(formula = dx$lem.pr ~ p2, plot = FALSE, print.auc = FALSE)
+
+Data: p2 in 38 controls (dx$lem.pr 0) &lt; 8 cases (dx$lem.pr 1).
+Area under the curve: 0.8454</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(roc2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The AUC calculated by package <code>pROC</code> (0.854) is close to the value we calculated by hand. If you don’t like the default figure produced by <code>roc()</code>, you can extract the sensitivity and sensitivity scores and make your own plot.</p>
+</section>
 </section>
 </section>
 <section id="sec-glm4-binom" class="level2" data-number="21.2">
 <h2 data-number="21.2" class="anchored" data-anchor-id="sec-glm4-binom"><span class="header-section-number">21.2</span> Binomial GLM for proportions</h2>
+<section id="sec-glm4-binom-sim" class="level3" data-number="21.2.1">
+<h3 data-number="21.2.1" class="anchored" data-anchor-id="sec-glm4-binom-sim"><span class="header-section-number">21.2.1</span> Example using simulated data</h3>
+</section>
+<section id="sec-glm4-binom-real" class="level3" data-number="21.2.2">
+<h3 data-number="21.2.2" class="anchored" data-anchor-id="sec-glm4-binom-real"><span class="header-section-number">21.2.2</span> Example using real data</h3>
+</section>
 </section>
 <section id="sec-glm4-ord" class="level2" data-number="21.3">
 <h2 data-number="21.3" class="anchored" data-anchor-id="sec-glm4-ord"><span class="header-section-number">21.3</span> Ordinal logistic regression</h2>
+<section id="sec-glm4-ord-sim" class="level3" data-number="21.3.1">
+<h3 data-number="21.3.1" class="anchored" data-anchor-id="sec-glm4-ord-sim"><span class="header-section-number">21.3.1</span> Example using simulated data</h3>
+</section>
+<section id="sec-glm4-ord-real" class="level3" data-number="21.3.2">
+<h3 data-number="21.3.2" class="anchored" data-anchor-id="sec-glm4-ord-real"><span class="header-section-number">21.3.2</span> Example using real data</h3>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

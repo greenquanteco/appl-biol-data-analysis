@@ -239,137 +239,130 @@ Event $a$ is only about one-fifth as likely to happen as event $b$ despite their
 
 Logistic regression is one way of solving what statisticians sometimes call a **classification problem**, where we want to use some set of predictor variables to classify observations into one category or another. The binary case is the simplest classification problem. The predictions of a logistic regression model will predict each observation to either be 0 or 1. We can use those predictions, and how often they are correct, to evaluate the efficacy of a logistic regression model.
 
-First let's define a function to get the predictions for a logistic regression model for its input data, with user-specified "cut-off" value that determines how great the predicted probability needs to be before declaring the prediction a 1 instead of a 0. The default, 0.5, means that any observation with a predicted probability 0.5 or greater will be counted as 1.
+We can evaluate a logistic regression model by the accuracy of its predictions. Such a model can predict a 1 or a 0 for every observation, and each prediction can be correct or incorrect:
+
+| Actual outcome | Predicted positive ($\hat{y}=1$) | Predicted negative ($\hat{y}=0$) |
+|---|---|---|
+| Positive ($y=1$) | **True positive (TP)** | **False negative (FN)** |
+| Negative ($y=0$) | **False positive (FP)** | **True negative (TN)** |
+
+: The four possible outcomes of a binary classifier, based on the actual and predicted classifications. {#tbl-confusion-matrix}
+
+The table is often summarized as the **true positive rate (sensitivity)** and **true negative rate (specificity)**. 
+
+The model sensitivity, or true positive rate, is the proportion of positive observations ($y=1$) that the model predicts to be positive ($\hat{y}=1$). It is calculated as:
+
+$$\text{True positive rate (sensitivity)}:p\left(\hat{y}=1|y=1\right)=\frac{\text{True positives}}{\text{True positives}+\text{False negatives}}$$
+
+The model specificity, or true negative rate, is the proportion of negative observations ($y=0$) that the model predicts to be negative ($\hat{y}=0$).
+
+$$\text{True negative rate (specificity)}:p\left(\hat{y}=0|y=0\right)=\frac{\text{True negatives}}{\text{True negatives}+\text{False positives}}$$
+
+- The **sensitivity** is the probability of a positive test given that the observation is positive.
+- The **specificity** is the probability of a negative test given that the observation is negative.
+
+For our fitted model of lemming presence, let's define a function that returns whether the model predicts 1 or 0. The model actually predicts a probability, so we need to specify a cutoff to distinguish predicted 1s from predicted 0s. Let's use 0.5.
 
 ```{r}
-# function to get prediction:
-pred.fun <- function(mod, data, res = "y", 
-                     pos = 1, neg = 0, cut = 0.5) {
-    probs <- predict(mod, newdata = data, type = "response")
-    ifelse(probs > cut, pos, neg)
-}
-
-# test it out:
-p2 <- pred.fun(mod2)
-ftable(p2~dx$lem.pr) 
+pred.fun <- function(mod, cutoff){
+    pre <- predict(mod, type="response")
+    pre10 <- 1 * (pre >= cutoff)
+    return(pre10)
+}#function
 ```
 
-This contingency table is called a **confusion matrix** and it summarizes how often the model is correct for a given cutoff value. Here, when the model predicts a success ($y = 1$), it is correct for 4 out of 6 observations. Confusion matrices are usually summarized by two measures, sensitivity and specificity.
-
-**Sensitivity** measures what proportion of successes were correctly identified. This is also called the **true positive rate**. Sensitivity answer the question, "What proportion of observations predicted to have y = 1 were actually 1? Sensitivity is calculated as:
-
-$$Sensitivity=\frac{n(true\ positives)}{n(true\ positives)+n(false\ negatives)}$$
-
-In our example, the sensitivity is $4/\left(4+4\right)=0.5$.
-
-**Specificity** measures what proportion of failures (y = 0) were
-correctly identified. It is also called the **true negative rate**. It
-is calculated as:
-
-$$Specificity=\frac{n(true\ negatives)}{n(true\ negatives)+n(false\ positives)}$$
-
-In our example, the specificity was $36/\left(36+2\right)=0.947$.
-
-The characteristics of the study system, the dataset, and the analysis can affect the sensitivity and the specificity of a model. If correctly identifying true positives is important (e.g., in disease screenings), then a model with greater sensitivity is preferred. If correctly identifying true negatives is important, then a model with greater specificity is preferred. The sensitivity and specificity can be varied by changing the threshold for 1 vs. 0.
-
-A **receiver operating characteristic (ROC) curve** shows how sensitivity and specificity covary at different cut-off thresholds. We can construct an ROC curve by summarizing the confusion matrix at different cut-offs. The code below shows how to do this manually, so you can see for yourself how AUC is calculated. Afterwards, we'll use functions from an add-on package to save some work.
+Now try it out:
 
 ```{r}
-# vector of cut offs to test
-co <- seq(0, 1, by=0.01)
-
-# vectors to hold specificity and sensitivity
-sen <- spe <- numeric(length(co))
-
-# calculate sensitivity and specificity in a loop
-for(i in 1:length(co)){
-    # predictions for current cutoff value
-	pred <- pred.fun(mod2, cut=co[i])
-	
-	# rearrange to data frame
-    con.mat <- data.frame(ftable(dx$lem.pr~pred))
-    con.mat$pred <- as.numeric(as.character(con.mat$pred))
-    con.mat$dx.lem.pr <- as.numeric(as.character(con.mat$dx.lem.pr))
-
-    # special case: no predicted 1s
-    if(! 1 %in% con.mat$pred){
-        add.df <- data.frame(pred=1, dx.lem.pr=0:1, Freq=0)        
-        con.mat <- rbind(con.mat, add.df)                         
-    }
-	
-    # special case: no predicted 0s
-    if(! 0 %in% con.mat$pred){
-        add.df <- data.frame(pred=0, dx.lem.pr=0:1, Freq=0)        
-        con.mat <- rbind(con.mat, add.df)                         
-    }
-
-    # sensitivity:
-    tp <- which(con.mat$pred == 1 & con.mat$dx.lem.pr == 1)
-    fn <- which(con.mat$pred == 0 & con.mat$dx.lem.pr == 1)
-    sen[i] <- con.mat$Freq[tp] / (
-                  con.mat$Freq[tp] + con.mat$Freq[fn])
-
-    # specificity:
-	tn <- which(con.mat$pred == 0 & con.mat$dx.lem.pr == 0)
-    fp <- which(con.mat$pred == 1 & con.mat$dx.lem.pr == 0)
-    spe[i] <- 1-con.mat$Freq[tn] /
-                  (con.mat$Freq[tn] + con.mat$Freq[fp])
-}
+pred.y <- pred.fun(mod2, 0.5)
+ftable(pred.y~dx$lem.p)
 ```
 
-And now plot:
+This means that the model sensitivity is $4/\left(4+4\right)=0.5$, and the specificity is $36/\left(2+36\right)=0.947$.
+
+We don't have to use a cutoff of 0.5. In fact, that choice is rather arbitrary. It might be useful to see how our choice of cutoff affects the sensitivity and specificity. We can calculated that in a loop.
+
+```{r}
+# vector of cutoffs to test
+cutoffs <- seq(0.01, 0.99, by=0.01)
+ncutoffs <- length(cutoffs)
+
+# data frame to hold results
+sens.df <- data.frame(cutoff=cutoffs,
+                      spec=NA,
+                      sens=NA)
+
+# function to tally true positives and negatives
+# can't use ftable because there won't always be
+# a 2 x 2 result
+tally <- function(pr, oy){
+    tp <- length(intersect(which(pr==1), which(oy==1)))
+    fn <- length(intersect(which(pr==0), which(oy==1)))
+    fp <- length(intersect(which(pr==1), which(oy==0)))
+    tn <- length(intersect(which(pr==0), which(oy==0)))
+    res <- c(tp=tp, fn=fn, fp=fp, tn=tn)
+    return(res)
+}
+
+for(i in 1:ncutoffs){
+    pred.y <- pred.fun(mod2, cutoffs[i])
+    result <- tally(pred.y, dx$lem.pr)
+    sens.df$sens[i] <- result["tp"]/(result["tp"]+result["fn"])
+    sens.df$spec[i] <- result["tn"]/(result["tn"]+result["fp"])
+}#i
+```
+
+If we plot the sensitivity against one minus the specificity, we get the **receiver operating characteristic curve (ROC)**. One minus the specificity is also known as the **false positive rate**.
 
 ```{r}
 #| fig.width: 8
 #| fig.height: 6
 
+sens.df$fpr <- 1 - sens.df$spec
+
 par(mar=c(5.1, 5.1, 1.1, 1.1))
-plot(spe, sen, type="l", lwd=2,
-     xlim=c(0,1), ylim=c(0,1),
+plot(sens.df$fpr, sens.df$sens, type="s",
      xlab="False positive rate",
-     yla="True positive rate")
-segments(0, 0, 1, 1, col="red", lwd=2)
+     ylab="Sensitivity")
 ```
 
-The diagonal red line shows the case of a model where predictions of 1
-are just a likely to be true positives as false positives. Obviously,
-the curve for your model should fall above this line! The curve for a
-well-fitting model should increase quickly as false positive rate
-increases from 0, and reach a y value of 1 very quickly. A model that
-perfectly classifies observations should have an area under the curve
-(AUC) of 1 (can you see why?). A model that predicts an equal number of
-true positives and false positives has an AUC of 0.5. This represents a
-model that is no better than random chance at being correct, and is the
-"worst case scenario" for a classification model like logistic
-regression. We can approximate the AUC using rectangles:
+One interesting property of this curve is that a null model, where $p(y=1)=0.5$, is a diagonal line.
 
 ```{r}
 #| fig.width: 8
 #| fig.height: 6
 
-par(mar=c(5.1, 5.1, 1.1, 1.1))
-plot(spe, sen, type="l", lwd=2,
-     xlim=c(0,1), ylim=c(0,1),
-     xlab="False positive rate",
-     yla="True positive rate")
-segments(0, 0, 1, 1, col="red", lwd=2)
 
-# add to previous plot:
-rect(spe[-length(spe)], 0,
-     spe[-1], sen, border="black",
-     col="#0000FF20")
+par(mar=c(5.1, 5.1, 1.1, 1.1))
+plot(sens.df$fpr, sens.df$sens,
+     type="s", lwd=3,
+     xlab="False positive rate",
+     ylab="Sensitivity")
+segments(0, 0, 1, 1, lty=2, lwd=3, col="red")
 ```
 
-And the numerical integration (lazy way):
+The area under the red curve, representing the model where $p\left(y=1\right)=0.5$, or a coin flip, is 0.5. As a model's performance improves, the true positive rate (sensivity) must go up, and the false positive rate ($1-specificity$) must go down. This forces the model's ROC curve up and to the left. In the limit, the area under that curve will be 1:
 
 ```{r}
-auc1 <- sum((diff(spe)*-1) * sen[-1])
-auc2 <- sum((diff(spe)*-1) * sen[-length(sen)])
-(auc1+auc2)/2
+#| fig.width: 8
+#| fig.height: 6
+#| echo: false
+
+par(mar=c(5.1, 5.1, 1.1, 1.1))
+plot(sens.df$fpr, sens.df$sens,
+     type="n",
+     xlab="False positive rate",
+     ylab="Sensitivity")
+segments(0, 0, 1, 1, lty=2, lwd=3, col="red")
+segments(0, 0, 0, 1, lwd=3)
+segments(0, 1, 1, 1, lwd=3)
 ```
 
+The area under the ROC curve (AUC) measures how well a logistic regression model distinguishes positive ($y=1$) from negative ($y=0$) observations. Although we derived AUC from the proportions of correct and incorrect classifications at different thresholds, it has a useful probabilistic interpretation: AUC is the probability that a randomly selected positive observation receives a higher predicted probability than a randomly selected negative observation, with ties counted as half a success. Thus, AUC is also defined as
 
-The AUC of 0.844 is pretty good. Remember that 0.5 is model no better than a coin flip, and 1 is perfect. 
+$$AUC=p\left(\hat{p}_{y=1}>\hat{p}_{y=0}\right)$$
+
+It is important to note that although AUC measures a model's ability to discriminate between outcomes, it does not tell us whether the predicted probabilities are accurate (i.e., whether the model is well calibrated).
 
 As much fun as it is to manually calculate ROC curves and definite integrals, we can get the ROC and AUC much more quickly using the functions in package `pROC`.
 
@@ -379,26 +372,23 @@ library(pROC)
 ```
 
 ```{r}
-#| fig.width: 8
-#| fig.height: 6
-
 # generate predictions (probabilities)
 p2 <- predict(mod2, type="response")
-roc2 <- roc(dx$lem.pr ~ p2, plot = TRUE, print.auc = TRUE)
-roc2
+roc2 <- roc(dx$lem.pr ~ p2, plot = FALSE, print.auc = FALSE)
 ```
 
-The AUC calculated by package `pROC` (0.6173) is close to the value we
-calculated by hand. If you don't like the default figure produced by
-`roc()`, you can extract the sensitivity and sensitivity scores and make
-your own plot.
-
-```{r, fig.width=5, fig.height=5}
-# 1- to orient axis correct way:
-x <- 1-roc1$specificities
-y <- roc1$sensitivities
-plot(x,y, type="l")
+```{r}
+print(roc2)
 ```
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+plot(roc2)
+```
+
+The AUC calculated by package `pROC` (0.854) is close to the value we calculated by hand. If you don't like the default figure produced by `roc()`, you can extract the sensitivity and sensitivity scores and make your own plot.
+
 
 
 ## Binomial GLM for proportions {#sec-glm4-binom}
