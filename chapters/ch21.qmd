@@ -265,9 +265,7 @@ For our fitted model of lemming presence, let's define a function that returns w
 
 ```{r}
 pred.fun <- function(mod, cutoff){
-    pre <- predict(mod, type="response")
-    pre10 <- 1 * (pre >= cutoff)
-    return(pre10)
+    1* (predict(mod, type="response") >= cutoff)
 }#function
 ```
 
@@ -280,7 +278,7 @@ ftable(pred.y~dx$lem.p)
 
 This means that the model sensitivity is $4/\left(4+4\right)=0.5$, and the specificity is $36/\left(2+36\right)=0.947$.
 
-We don't have to use a cutoff of 0.5. In fact, that choice is rather arbitrary. It might be useful to see how our choice of cutoff affects the sensitivity and specificity. We can calculated that in a loop.
+We don't have to use a cutoff of 0.5. In fact, that choice is rather arbitrary. As a general rule, any time you make an arbitrary choice you should check some of the alternatives to see how your choice affected the outcome. Let's test a range of cutoffs to see how our choice of cutoff affects the sensitivity and specificity. We can do that in a `for()` loop.
 
 ```{r}
 # vector of cutoffs to test
@@ -321,7 +319,8 @@ If we plot the sensitivity against one minus the specificity, we get the **recei
 sens.df$fpr <- 1 - sens.df$spec
 
 par(mar=c(5.1, 5.1, 1.1, 1.1))
-plot(sens.df$fpr, sens.df$sens, type="s",
+plot(sens.df$fpr, sens.df$sens,
+     type="s",
      xlab="False positive rate",
      ylab="Sensitivity")
 ```
@@ -341,14 +340,15 @@ plot(sens.df$fpr, sens.df$sens,
 segments(0, 0, 1, 1, lty=2, lwd=3, col="red")
 ```
 
-The area under the red curve, representing the model where $p\left(y=1\right)=0.5$, or a coin flip, is 0.5. As a model's performance improves, the true positive rate (sensivity) must go up, and the false positive rate ($1-specificity$) must go down. This forces the model's ROC curve up and to the left. In the limit, the area under that curve will be 1:
+The area under the red curve, representing the model where $p\left(y=1\right)=0.5$, or a coin flip, is 0.5. As a model's performance improves, the true positive rate (sensitivity) must go up, and the false positive rate ($1-\text{specificity}$) must go down. This forces the model's ROC curve up and to the left. In the limit, the area under that curve will be 1:
 
 ```{r}
 #| fig.width: 8
 #| fig.height: 6
 #| echo: false
 
-par(mar=c(5.1, 5.1, 1.1, 1.1))
+par(mar=c(5.1, 5.1, 1.1, 1.1),
+    cex.lab=1.3, cex.axis=1.3)
 plot(sens.df$fpr, sens.df$sens,
      type="n",
      xlab="False positive rate",
@@ -356,6 +356,10 @@ plot(sens.df$fpr, sens.df$sens,
 segments(0, 0, 1, 1, lty=2, lwd=3, col="red")
 segments(0, 0, 0, 1, lwd=3)
 segments(0, 1, 1, 1, lwd=3)
+legend("bottomright",
+       legend=c("Coin flip", "Perfect model"),
+       lwd=2, lty=c(2,1), col=c("red", "black"),
+       bty="n", cex=1.4)
 ```
 
 The area under the ROC curve (AUC) measures how well a logistic regression model distinguishes positive ($y=1$) from negative ($y=0$) observations. Although we derived AUC from the proportions of correct and incorrect classifications at different thresholds, it has a useful probabilistic interpretation: AUC is the probability that a randomly selected positive observation receives a higher predicted probability than a randomly selected negative observation, with ties counted as half a success. Thus, AUC is also defined as
@@ -363,6 +367,45 @@ The area under the ROC curve (AUC) measures how well a logistic regression model
 $$AUC=p\left(\hat{p}_{y=1}>\hat{p}_{y=0}\right)$$
 
 It is important to note that although AUC measures a model's ability to discriminate between outcomes, it does not tell us whether the predicted probabilities are accurate (i.e., whether the model is well calibrated).
+
+We can calculate the AUC of our fitted model as a series of rectangles:
+
+```{r}
+# Sort by increasing false positive rate
+roc.df <- sens.df[order(sens.df$fpr, sens.df$sens), ]
+roc.df <- roc.df[,c("fpr", "sens")]
+
+# Add endpoints if missing
+roc.df <- rbind(
+  data.frame(fpr = 0, sens = 0),
+  roc.df,
+  data.frame(fpr = 1, sens = 1)
+)
+
+# Calculate trapezoid widths and average heights
+widths <- diff(roc.df$fpr)
+heights <- head(roc.df$sens, -1)
+
+sum(widths * heights)
+```
+
+Or visually:
+
+```{r}
+#| echo: false
+par(mar=c(5.1, 5.1, 1.1, 1.1))
+plot(sens.df$fpr, sens.df$sens,
+     type="s", lwd=3,
+     xlab="False positive rate",
+     ylab="Sensitivity",
+     xlim=c(0, 1))
+rect(head(roc.df$fpr, -1), 0,
+     tail(roc.df$fpr, -1), head(roc.df$sens, -1),
+     col = "steelblue", lwd = 2)
+segments(0, 0, 1, 1, lty=2, lwd=3, col="red")
+points(sens.df$fpr, sens.df$sens,
+     type="s", lwd=3)
+```
 
 As much fun as it is to manually calculate ROC curves and definite integrals, we can get the ROC and AUC much more quickly using the functions in package `pROC`.
 
@@ -389,7 +432,15 @@ plot(roc2)
 
 The AUC calculated by package `pROC` (0.854) is close to the value we calculated by hand. If you don't like the default figure produced by `roc()`, you can extract the sensitivity and sensitivity scores and make your own plot.
 
+```{r}
+#| fig.width: 8
+#| fig.height: 6
 
+# 1- to orient axis correct way:
+xspec <- 1-roc2$specificities
+ysens <- roc2$sensitivities
+plot(xspec,ysens, type="l")
+```
 
 ## Binomial GLM for proportions {#sec-glm4-binom}
 
