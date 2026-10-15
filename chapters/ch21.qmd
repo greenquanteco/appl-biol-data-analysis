@@ -616,9 +616,6 @@ Unlike binary logistic regression, we generally do not use AUC to evaluate binom
 
 ### Example using real data {#sec-glm4-binom-real}
 
-
-MAKE A NEW DATASET SO WE CAN ANALYZE PROPORTION FEMALE
-
 Let's use the NEON data for a real example. If you don't already have it, download the [site-level richness and environmental dataset](..datasets/dat-neon-site-rich-env.csv) and put it in your working directory.
 
 
@@ -639,6 +636,98 @@ Consider this plot of the proportion of species present which are sciurids (`psc
 # proportion of species which are squirrels
 dx$psci <- dx$sci / dx$tot
 ```
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+par(mar=c(5,5,1,1))
+plot(dx$mat, dx$psci)
+```
+
+It looks like warmer sites tend to have proportionally fewer sciurid species. We can test that with a binomial GLM.
+
+```{r}
+mod4 <- glm(psci~mat, data=dx, family=binomial, weights=dx$tot)
+summary(mod4)
+```
+
+Sure enough, it looks like there is a modest but statistically significant effect of mean annual temperature on proportional sciurid richness. The odds ratio, $e^{-0.061}=0.941$, suggests that for every additional degree of mean annual temperature, proportional sciurid richness decreases by about 6%. However, the model only reduces the deviance by about 26% ($1-\frac{35.67}{48.15}=0.26$). 
+
+Now let's plot the model predictions and their 95% CI.
+
+```{r}
+# values for prediction
+use.n <- 100
+px <- seq(min(dx$mat), max(dx$mat), length=use.n)
+
+# calculate predictions and 95% CI (link scale)
+pred <- predict(mod4, newdata=data.frame(mat=px),
+                type="link", se.fit=TRUE)
+mn <- qnorm(0.5, pred$fit, pred$se.fit)
+lo <- qnorm(0.025, pred$fit, pred$se.fit)
+up <- qnorm(0.975, pred$fit, pred$se.fit)
+
+# inverse link function to get probabilities
+mn <- mod4$family$linkinv(mn)
+lo <- mod4$family$linkinv(lo)
+up <- mod4$family$linkinv(up)
+```
+
+And the plot:
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+
+par(mar=c(5, 5, 1, 1))
+plot(dx$mat, dx$psci, type="n",
+     xlab=expression(Mean~annual~temperature~(degree*C)),
+     ylab="Proportional sciurid richness",
+     ylim=c(0, 1))
+polygon(x=c(px, rev(px)), 
+        y=c(lo, rev(up)), # REVerse either upper or lower
+        border=NA, col="grey80")
+points(px, mn, type="l", lwd=3)
+points(dx$mat, jitter(dx$psci, amount=0.05),
+       cex=1.1, pch=19, xpd=NA)
+```
+
+Just for fun, let's extend the $x$ range of prediction to convince ourselves that the predicted values will never extend beyond the $\left[0,1\right]$ domain of proportions.
+
+```{r}
+#| fig.width: 8
+#| fig.height: 6
+
+
+# values for prediction
+use.n <- 100
+px <- seq(-100, 100, length=use.n)
+
+# calculate predictions and 95% CI (link scale)
+pred <- predict(mod4, newdata=data.frame(mat=px),
+                type="link", se.fit=TRUE)
+mn <- qnorm(0.5, pred$fit, pred$se.fit)
+lo <- qnorm(0.025, pred$fit, pred$se.fit)
+up <- qnorm(0.975, pred$fit, pred$se.fit)
+
+# inverse link function to get probabilities
+mn <- mod4$family$linkinv(mn)
+lo <- mod4$family$linkinv(lo)
+up <- mod4$family$linkinv(up)
+
+par(mar=c(5, 5, 1, 1))
+plot(dx$mat, dx$psci, type="n",
+     xlab=expression(Mean~annual~temperature~(degree*C)),
+     ylab="Proportional sciurid richness",
+     ylim=c(0, 1), xlim=c(-100, 100))
+polygon(x=c(px, rev(px)), 
+        y=c(lo, rev(up)), # REVerse either upper or lower
+        border=NA, col="grey80")
+points(px, mn, type="l", lwd=3)
+points(dx$mat, jitter(dx$psci, amount=0.05),
+       cex=1.1, pch=19, xpd=NA)
+```
+
 ## Ordinal logistic regression {#sec-glm4-ord}
 
 ### Example using simulated data {#sec-glm4-ord-sim}
