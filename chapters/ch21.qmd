@@ -40,6 +40,7 @@ $$y_i\sim \text{Binomial}\left(p=p_i, n=1\right)$$
 while the stochastic part of [binomial regression](@sec-glm4-binom) is
 
 $$y_i\sim \text{Binomial}\left(p=p_i, n=n_i\right)$$
+
 :::
 
 ## Logistic GLM for binary responses {#sec-glm4-logistic}
@@ -192,7 +193,7 @@ points(db$x, jitter(db$y, amount=0.05),
 
 ### Example using real data {#sec-glm4-logistic-real}
 
-Let's use the NEON data for a real example. If you don't already have it, download the [site-level richness and environmental dataset](..datasets/dat-neon-site-rich-env.csv) and put it in your working directory.
+Let's use the NEON data for a real example. If you don't already have it, download the [site-level richness and environmental dataset](../datasets/dat-neon-site-rich-env.csv) and put it in your working directory.
 
 
 ```{r}
@@ -488,7 +489,6 @@ plot(xspec,ysens, type="l")
 
 :::{.callout title="Probabilistic definition of AUC"}
 
-
 ```{r}
 # vector of observed 1s and 0s
 y.obs <- dx$lem.pr
@@ -525,9 +525,11 @@ mean(check)
 
 This simulated AUC matches the calculated AUC out to 2 decimal places (3 if we round both to 0.845). 
 
+:::
+
 ## Binomial GLM for proportions {#sec-glm4-binom}
 
-Proportional data describe the number of times that some event occurs, relative to the total number of times it could occur. Many phenomena that biologists study are expressed as proportions: proportion of individuals surviving, proportion of individuals with trait *A*, proportion of area covered by species *X*, and so on. Analyzing proportions is a lot like [analyzing binary outcomes](#mod-09-logistic); i.e., logistic regression. In fact, they are both GLMs with a binomial family. All that differs is the *n* term.
+Proportional data describe the number of times that some event occurs, relative to the total number of times it could occur. Many phenomena that biologists study are expressed as proportions: proportion of individuals surviving, proportion of individuals with trait *A*, proportion of area covered by species *X*, and so on. Analyzing proportions is a lot like [analyzing binary outcomes](@sec-glm4-logistic); i.e., logistic regression. In fact, they are both GLMs with a binomial family. All that differs is the *n* term.
 
 Binomial regression is defined as
 
@@ -538,7 +540,7 @@ $$\text{logit}\left(p_i\right)=\log{\left(\frac{p_i}{1-p_i}\right)}=\boldsymbol{
 
 The only real differences between this and logistic regression above () are the $n$ term in the binomial distribution, and the fact that in binomial regression we are analyzing the ratio of $z_i$ to $n_i$. If we set $n_i$ to one, then binomial regression becomes logistic regression.
 
-###When should you use binomial regression? {#sec-glm4-binom-when}
+### When should you use binomial regression? {#sec-glm4-binom-when}
 
 In logistic regression the interest is in predicting the outcomes of single trials, while in binomial regression the interest is in predicting the **proportion** of observations in a certain state. How you should analyze your data depends on your question:
 
@@ -604,7 +606,7 @@ mod3 <- glm(y~x, data=dr,
 summary(mod3)
 ```
 
-The slope and intercept estimates are very close to the truth. At this point, we can evalulate model fit with deviance explained, use AIC model selection, or whatever other interpretive post hoc analyses we need to. Just as with logistic regression, the odds ratio $e^{\beta_1}$ or `exp(coef(mod2)[2])` describes the multiplicative change in the odds that an individual "succeeds". Remember that the $p$ in the binomial part really refer to success probability in a trial. If our proportions here represent female sex ratio in experimental clutches of guppies, then the odds ratio 
+The slope and intercept estimates are very close to the truth. At this point, we can evaluate model fit with deviance explained, use AIC model selection, or whatever other interpretive post hoc analyses we need to. Just as with logistic regression, the odds ratio $e^{\beta_1}$ or `exp(coef(mod2)[2])` describes the multiplicative change in the odds that an individual "succeeds". Remember that the $p$ in the binomial part really refer to success probability in a trial. If our proportions here represent female sex ratio in experimental clutches of guppies, then the odds ratio 
 
 ```{r}
 exp(coef(mod3)[2])
@@ -616,7 +618,7 @@ Unlike binary logistic regression, we generally do not use AUC to evaluate binom
 
 ### Example using real data {#sec-glm4-binom-real}
 
-Let's use the NEON data for a real example. If you don't already have it, download the [site-level richness and environmental dataset](..datasets/dat-neon-site-rich-env.csv) and put it in your working directory.
+Let's use the NEON data for a real example. If you don't already have it, download the [site-level richness and environmental dataset](../datasets/dat-neon-site-rich-env.csv) and put it in your working directory.
 
 
 ```{r}

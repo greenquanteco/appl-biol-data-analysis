@@ -111,7 +111,6 @@
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 
 \usepackage{longtable,booktabs,array}
-\newcounter{none} % for unnumbered tables
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -275,6 +274,7 @@
 
 \renewcommand*\contentsname{Table of contents}
 {
+\hypersetup{linkcolor=}
 \setcounter{tocdepth}{2}
 \tableofcontents
 }
@@ -302,6 +302,9 @@ more digestible.
 The Fall 2026 course syllabus can be
 \href{https://greenquanteco.github.io/files/biol-7410-syllabus-fall-2026.pdf}{downloaded
 here}.
+
+An online HTML version of this book is available at
+https://greenquanteco.github.io/appl-biol-data-analysis/.
 
 \section*{Work in progress warning!}\label{work-in-progress-warning}
 \addcontentsline{toc}{section}{Work in progress warning!}
@@ -510,8 +513,8 @@ textbooks:
 \begin{itemize}
 \item
   \emph{Analysing ecological data} (Zuur \emph{et al.} 2007) and
-  \emph{Mixed effects models and extensions in ecology with R} ({Zuur
-  \emph{et al.}} 2009a) by Alain Zuur and others. These are advanced
+  \emph{Mixed effects models and extensions in ecology with R} (Zuur
+  \emph{et al.} 2009a) by Alain Zuur and others. These are advanced
   textbooks aimed at ecologists which introduce GLMs, mixed models, and
   other topics we will explore in this course.
 \item
@@ -1335,7 +1338,6 @@ many times we measure it.
 The table below summarizes the results of the three simulations we just
 ran:
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
   >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
@@ -1362,7 +1364,6 @@ Significant?
 -2 & 3 & 2000 & \(<0.001\) & Yes \\
 -2 & 0.001 & 20 & \(<0.001\) & Yes \\
 \end{longtable}
-}
 
 \subsection{\texorpdfstring{What \emph{p}-values mean and do not
 mean}{What p-values mean and do not mean}}\label{what-p-values-mean-and-do-not-mean}
@@ -2742,7 +2743,7 @@ and adapt the code you need. This is almost always permitted by the
 license of the package because most packages are released under some
 version of the GNU Public License (GPL). If you do borrow code from a
 package, it is considered good form to attribute the package authors in
-some way (e.g., ``we adapted code from the package ''foo'' version 1.0
+some way (e.g., ``we adapted code from the package''foo'' version 1.0
 (Nobody 2001)``).
 
 \subsubsection{Citing packages}\label{sec-r-pack-work-cite}
@@ -3365,8 +3366,7 @@ textbooks and more on online sources (especially StackOverflow). Still,
 a there are a few books that I use frequently, for their statistical
 exposition more than their code examples. At least one of Bolker (2008),
 Kéry (2010), Legendre and Legendre (2012), Zuur \emph{et al.} (2007),
-and {Zuur \emph{et al.}} (2009a) is usually on my desk at any given
-time.
+and Zuur \emph{et al.} (2009a) is usually on my desk at any given time.
 
 \subsubsection{Two reminders}\label{sec-r-faq-help-two}
 
@@ -5059,7 +5059,7 @@ directory}.
 
 \begin{figure}
 
-\begin{minipage}[t]{0.50\linewidth}
+\begin{minipage}{0.50\linewidth}
 
 \begin{figure}[H]
 
@@ -5074,7 +5074,7 @@ button on the right side of the Files tab.}
 
 \end{minipage}%
 %
-\begin{minipage}[t]{0.50\linewidth}
+\begin{minipage}{0.50\linewidth}
 
 \begin{figure}[H]
 
@@ -10506,7 +10506,7 @@ of consistency (\emph{r}).}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Illustration of possible positive and negative relationships between pairs of variables, with different levels of consistency (r).}]{chapters/ch06_files/figure-pdf/fig-correlations-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch06_files/figure-pdf/fig-correlations-1.pdf}}
 
 }
 
@@ -10664,7 +10664,7 @@ data frame.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Scatterplot matrix showing possible correlations between the numeric variables in the `iris` data frame.}]{chapters/ch06_files/figure-pdf/fig-scatterplotmatrix-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch06_files/figure-pdf/fig-scatterplotmatrix-1.pdf}}
 
 }
 
@@ -10695,7 +10695,7 @@ trend becomes linear.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Left: illustration of a nonlinear correlation. Right: When values are rank-transformed, the nonlinear trend becomes linear.}]{chapters/ch06_files/figure-pdf/fig-nonlinear-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch06_files/figure-pdf/fig-nonlinear-1.pdf}}
 
 }
 
@@ -10798,7 +10798,7 @@ possible nonlinear correlations between the numeric variables in the
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Scatterplot matrix showing possible nonlinear correlations between the numeric variables in the `iris` data frame.}]{chapters/ch06_files/figure-pdf/fig-scatterplotmatrix2-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch06_files/figure-pdf/fig-scatterplotmatrix2-1.pdf}}
 
 }
 
@@ -10875,7 +10875,7 @@ by any function.
 
 \caption{Example of a pivot table in Excel}
 
-{\centering \pandocbounded{\includegraphics[keepaspectratio,alt={Pivot table in Excel calculating the mean and SD of sepal length from the iris dataset.}]{chapters/../images/07-01.jpg}}
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/07-01.jpg}}
 
 }
 
@@ -12030,7 +12030,7 @@ distribution. Note also that this diagram does not include every
 distribution out there, but rather a select set of commonly encountered
 distributions in biology.
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Flowchart for picking a probability distribution for your data}]{chapters/../images/08-01.jpg}}\{\#fig-alt=``Decision
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/08-01.jpg}}\{\#fig-alt=``Decision
 tree for selecting a probability distribution based on the response
 variable. First determine whether the response is continuous or
 discrete. Continuous variables that are unbounded are modeled with a
@@ -12395,7 +12395,7 @@ on value \(\le{x}\) with probability \(F\left(x\right)\), where
 
 The figure below shows what this means.
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Relationship between the cumulative distribution function (CDF, quantiles, and values of a variable x. The CDF, F(x), gives the probability that a random variable is less than or equal to a specified value. In this example, F(−0.253)=0.4, meaning that 40\% of observations are expected to be less than or equal to −0.253. The CDF approaches 0 as x \textbackslash rightarrow -\textbackslash infty and 1 as x \textbackslash rightarrow +\textbackslash infty.}]{chapters/../images/08-03.jpg}}\{alt-text:
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/08-03.jpg}}\{alt-text:
 ``Plot of the cumulative distribution function (CDF) of a normal
 distribution. The CDF is an S-shaped curve that increases smoothly from
 0 to 1 as the value of the variable increases. Dashed red lines
@@ -12433,7 +12433,7 @@ distribution\footnote{adapted from
   \url{https://commons.wikimedia.org/wiki/File:Discrete_probability_distribution_illustration.svg}
   (public domain).}.
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Examples of cumulative distribution functions for different types of random variables. Discrete variables have stepwise CDFs because probability accumulates only at specific values. Continuous variables have smooth CDFs because probability accumulates continuously over an interval. Mixed distributions combine both features, with smooth segments interrupted by jumps corresponding to point masses.}]{chapters/../images/08-04.jpg}}\{Three
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/08-04.jpg}}\{Three
 schematic cumulative distribution functions (CDFs) illustrating
 different types of distributions. The top panel, labeled ``Discrete,''
 shows a step function with horizontal segments and jumps; open circles
@@ -12609,7 +12609,7 @@ rate at which the probability of observing a value \(\le{x}\) increases
 at each \(x\). Again, this is related to but not the same as the
 probability of that value occurring.
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Relationship between the probability density function (PDF) (left) and cumulative distribution function (CDF) (right) of a distribution. The PDF at some x value is the slope of the CDF at that x value. The CDF at some x value is the integral of the PDF up to that x value.}]{chapters/../images/08-02.jpg}}\{fig-alt:``Relationship
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/08-02.jpg}}\{fig-alt:``Relationship
 between the probability density function (PDF) and cumulative
 distribution function (CDF) of a normal distribution. The left panel
 shows the PDF, f(x), as a bell-shaped curve. The right panel shows the
@@ -13250,7 +13250,7 @@ panels will be filled in a different order:
 \texttt{par()\$mfcol} draw and fill figure panels. \texttt{mfrow} fills
 by rows, while \texttt{mfcol} fills by columns.}
 
-{\centering \pandocbounded{\includegraphics[keepaspectratio,alt={Illustration of how par options mfrow and mfcol draw and fill figure panels. mfrow fills by rows, while mfcol fills by columns.}]{chapters/../images/08-05.jpg}}
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/08-05.jpg}}
 
 }
 
@@ -13351,7 +13351,7 @@ first row have ``FL'' as their \emph{y}-axis, and ``RW'', ``CL'',
 column have ``FL'' as their \emph{x}-axis, and ``RW'', ``CL'', ``CW'',
 and ``BD'' as their \emph{y}-axes.
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={How to read a scatterplot matrix produced by pairs(). Each panel plots the variable in its row against the variable in its column.}]{chapters/../images/08-06.jpg}}\{Illustration
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/08-06.jpg}}\{Illustration
 of how to read a scatterplot matrix produced by \texttt{pairs()}. Each
 panel plots the variable in its row against the variable in its
 column.\}
@@ -13821,7 +13821,6 @@ of getting heads is 50\%. But what about if you flip the coin 10 times?
 How many heads should you get? 5 is a reasonable guess. The table below
 shows the possible outcomes to 10 coin flips:
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}cc@{}}
 \toprule\noalign{}
 Heads & Tails \\
@@ -13841,7 +13840,6 @@ Heads & Tails \\
 9 & 1 \\
 10 & 0 \\
 \end{longtable}
-}
 
 This table shows that 5 heads is only one of 11 possibilities! So, is
 the probability of 5 heads 1 in 11 (\(1/11\approx0.091\))? Of course
@@ -16111,7 +16109,6 @@ empirical estimate of the PDF of a variable.
 The table below summarizes some the key features of the \textbf{discrete
 distributions} we explored in this module.
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1105}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3488}}
@@ -16143,12 +16140,10 @@ trials when the probability \(p\) varies \\
 Multinomial & \(x_i\in\{0,1,\ldots,n\}\), with \(\sum_i x_i=n\) & Counts
 among \(k\) categories from \(n\) trials \\
 \end{longtable}
-}
 
 The table below summarizes some the key features of the
 \textbf{continuous distributions} we explored in this module.
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3590}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2308}}
@@ -16180,7 +16175,6 @@ when events occur at a constant rate \\
 Triangular & \(x\in[a,b]\) & Bounded continuous variables when only the
 minimum, maximum, and most likely value are known \\
 \end{longtable}
-}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -17046,7 +17040,7 @@ factor on the original scale are mapped to values separated by a common
   video} illustrates the usefulness of logarithms in statistics
   \textbf{\emph{and}} has a nice theme song.}.
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Relationship between a linear scale (top) and logarithmic scale(bottom).}]{chapters/../images/09-01.jpg}}\{alt-text:
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/09-01.jpg}}\{alt-text:
 ``Number line showing how multiplicative changes on a linear scale (top)
 become additive changes on a logarithmic scale (bottom). In this
 example, one-eigth, one-quarter, one-half, one, two, four, and eight are
@@ -17065,7 +17059,7 @@ scale is the same as addition on the log-transformed scale\footnote{Remember
 to 1000 (spanning 6 orders of magnitude) can be managed on the
 log-transformed scale.
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Relationship between a linear scale (top) and logarithmic scale(bottom).}]{chapters/../images/09-02.jpg}}\{alt-text:
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/09-02.jpg}}\{alt-text:
 ``Number line showing how multiplicative changes on a linear scale (top)
 become additive changes on a logarithmic scale (bottom). In this
 example, 0.001, 0.01, 0.1, 1, 10, 100, and 1000 are mapped to their base
@@ -17414,7 +17408,7 @@ unbounded interval \(\left(−\infty,+\infty\right)\). The logistic
 function (right) is its inverse, mapping values from
 \(\left(−\infty,+\infty\right)\) back onto \(\left(0,1\right)\).}
 
-{\centering \pandocbounded{\includegraphics[keepaspectratio,alt={Two plots illustrating inverse functions. The logit function increases from negative infinity as X approaches 0 to positive infinity as X approaches 1, crossing zero at X=0.5. The logistic function is an S-shaped curve increasing from 0 to 1 as X ranges from negative to positive infinity, crossing 0.5 at X=0.}]{chapters/../images/09-03.jpg}}
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/09-03.jpg}}
 
 }
 
@@ -18205,7 +18199,6 @@ with itself, with the strength of that correlation determined by the
 distance between observations. In biology, the ``distance'' that defines
 autocorrelation is often spatial, temporal, or phylogenetic.
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1528}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1528}}
@@ -18232,7 +18225,6 @@ Phylogenetic & Relatedness & Taxa that share a more recent common
 ancestor (i.e., are more closely related) are more similar to each other
 than they are to taxa that are less closely related to each other. \\
 \end{longtable}
-}
 
 The main consequence of autocorrelation is similar to the problems
 associated with pseudoreplication: because observations are not
@@ -18254,7 +18246,7 @@ half of that variance. An example semivariogram is below.
 
 This figure shows some important quantities on the semivariogram:
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Anatomy of a semivariogram. Semivariance increases with the distance between observations until reaching the sill. The range is the distance at which the sill is reached, beyond which observations are no longer spatially autocorrelated. The nugget represents variation at very short distances, including fine-scale variation and measurement error.}]{chapters/../images/12-01.jpg}}\{alt-text:
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/12-01.jpg}}\{alt-text:
 ``Schematic semivariogram with distance on the x-axis and semivariance
 on the y-axis. A curved line begins above zero at the labeled nugget,
 increases with distance, and levels off at the labeled sill. A vertical
@@ -19109,7 +19101,7 @@ stored on rows, and variables that describe those observations are
 stored in columns. All information about an observation is contained in
 1 row. All observations of one variable are contained in 1 column.}
 
-{\centering \pandocbounded{\includegraphics[keepaspectratio,alt={Structure of a typical biological dataset. Observations are stored on rows, and variables that describe those observations are stored in columns. All information about an observation is contained in 1 row. All observations of one variable are contained in 1 column.}]{chapters/../images/review-01.jpg}}
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/review-01.jpg}}
 
 }
 
@@ -19158,7 +19150,7 @@ of data frames and matrices in R.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Side-by-side comparison of a data frame and a matrix. In the data frame, columns are vectors accessed with the dollar-sign operator, while rows are data frames; values within each column must share a type, but different columns may contain different types. In the matrix, columns and rows are vectors accessed with brackets, and all values in the matrix must share the same type. A red outline highlights one column in each structure and a blue outline highlights one row.}]{chapters/../images/review-dfvsmatrix.jpg}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/review-dfvsmatrix.jpg}}
 
 }
 
@@ -19228,7 +19220,6 @@ should probably not be modeled (i.e., treated as the response variable)
 using the basic statistical methods in this module. We'll explore models
 in \href{@sec-glm1}{Module 18} for these variables.
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
@@ -19262,7 +19253,6 @@ they should not generally be treated as numerical measurements &
 Logistic, ordinal, or multinomial regression; GLMMs for non-independent
 observations; classification trees (CART) \\
 \end{longtable}
-}
 
 \section{Frequentist statistics}\label{sec-review-freq}
 
@@ -19892,7 +19882,7 @@ evidence--the bottom two sections. Given that the evidence was observed,
 the sections with \(\lnot E\) are irrelevant. The calculation then
 becomes:
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={In Bayesian inference, the probability of the hypothesis being true given the observed evidence is the ratio of cases where the evidence is observed and the hypothesis is true, to all cases where the evidence is observed.}]{chapters/../images/review-bayes2.jpg}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/review-bayes2.jpg}}
 Besides its epistemological neatness, another advantage of Bayesian
 inference in practice is that parameters in Bayesian models (e.g,
 slopes, intercepts, etc.) are estimated with \textbf{credible intervals
@@ -20080,7 +20070,7 @@ in means between groups 1 and 2. This is what R, SAS, and other programs
 are doing internally when you analyze data with a factor variable. Here
 is what that looks like visually:
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Illustration of how a t-test qualifies as a linear model.}]{chapters/../images/review-ttest.jpg}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/review-ttest.jpg}}
 Similarly, a one-way ANOVA with 3 levels can be thought of this way:
 
 \[
@@ -20399,7 +20389,6 @@ statistics}.
 
 The most common descriptive statistics are shown below:
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lcc@{}}
 \toprule\noalign{}
 Parameter & Sample & Population \\
@@ -20411,7 +20400,6 @@ Mean & \(\bar{x}\) & \(\mu\) \\
 Variance & \(s^{2}\) & \(\sigma^{2}\) \\
 Standard deviation & \(s\) & \(\sigma\) \\
 \end{longtable}
-}
 
 \subsection{\texorpdfstring{One-sample, one-tailed
 \emph{t}-test}{One-sample, one-tailed t-test}}\label{sec-groups-1samp-1t}
@@ -21514,7 +21502,7 @@ calculated). We can also see that about 94.1\% of variation (437.10 /
 coefficient of determination, or \(R^2\). The \(R^2\) tells you the
 proportion of variation in \emph{Y} explained by the model.
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Tip}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
+\begin{tcolorbox}[enhanced jigsaw, toprule=.15mm, coltitle=black, opacityback=0, colframe=quarto-callout-tip-color-frame, bottomtitle=1mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-tip-color!10!white, toptitle=1mm, titlerule=0mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Tip}, leftrule=.75mm, rightrule=.15mm, bottomrule=.15mm, arc=.35mm, colback=white, left=2mm, breakable]
 
 \textbf{Rounding errors}
 
@@ -21618,7 +21606,7 @@ greater still in \emph{Iris virginica}.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Boxplot showing that petal length is greater in *Iris versicolor* than in *Iris setosa*, and greater still in *Iris virginica*.}]{chapters/ch15_files/figure-pdf/fig-ttestboxplot2-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch15_files/figure-pdf/fig-ttestboxplot2-1.pdf}}
 
 }
 
@@ -21737,7 +21725,7 @@ Consider the example below.
 \caption{Illustration of a field experiment with 3 researcher-applied
 treatments, A, B, and C, spread out over a landscape.}
 
-{\centering \pandocbounded{\includegraphics[keepaspectratio,alt={Schematic of an unblocked experimental design with three treatments. Experimental units assigned to Treatment A, Treatment B, and Treatment C are represented by blue squares, orange triangles, and green circles, respectively. Units from all three treatments are distributed throughout the experimental area without being grouped into blocks.}]{chapters/../images/review-blocking1.jpg}}
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/review-blocking1.jpg}}
 
 }
 
@@ -21751,7 +21739,7 @@ differences explicitly, the research could instead distributed
 \textbf{blocks} of observations randomly across space, with each block
 containing 1 observation of each of the 3 treatments.
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Illustration of a field experiment with 3 researcher-applied treatments, A, B, and C, arranged in blocks spread out over a landscape.}]{chapters/../images/review-blocking2.jpg}}\{fig-alt=``fig-alt=''Schematic
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/review-blocking2.jpg}}\{fig-alt=``fig-alt=''Schematic
 of a blocked experimental design with three treatments. Experimental
 units assigned to Treatment A, Treatment B, and Treatment C are
 represented by blue squares, orange triangles, and green circles,
@@ -22042,7 +22030,7 @@ juveniles.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Boxplot showing that french fry consumption is greatest in subadults, less in adults, and lowest in juveniles.}]{chapters/ch15_files/figure-pdf/fig-ttestboxplot3-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch15_files/figure-pdf/fig-ttestboxplot3-1.pdf}}
 
 }
 
@@ -22165,7 +22153,7 @@ of consistency (\emph{r}).}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Illustration of possible positive and negative relationships between pairs of variables, with different levels of consistency (r).}]{chapters/ch16_files/figure-pdf/fig-correlations-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch16_files/figure-pdf/fig-correlations-1.pdf}}
 
 }
 
@@ -22594,7 +22582,7 @@ respectively.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Curve shapes produced by polynomial equations of order 1, 2, and 3: linear, quadratic, and cubic, respectively.}]{chapters/ch16_files/figure-pdf/fig-polynomials1-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch16_files/figure-pdf/fig-polynomials1-1.pdf}}
 
 }
 
@@ -22617,7 +22605,7 @@ polynomial function \$\$. Right: The same function plotted against
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Curve shapes produced by polynomial equations of order 1, 2, and 3: linear, quadratic, and cubic, respectively.}]{chapters/ch16_files/figure-pdf/fig-polynomials2-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch16_files/figure-pdf/fig-polynomials2-1.pdf}}
 
 }
 
@@ -22657,7 +22645,7 @@ and because \(log\left(e^z\right)=z\):
 which is the form of a straight line with intercept
 \(log\left(a\right)\) and slope \(b\).
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Tip}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
+\begin{tcolorbox}[enhanced jigsaw, toprule=.15mm, coltitle=black, opacityback=0, colframe=quarto-callout-tip-color-frame, bottomtitle=1mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-tip-color!10!white, toptitle=1mm, titlerule=0mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Tip}, leftrule=.75mm, rightrule=.15mm, bottomrule=.15mm, arc=.35mm, colback=white, left=2mm, breakable]
 
 \textbf{Logarithm bases}
 
@@ -22870,7 +22858,7 @@ and its 95\% confidence interval (dashed).}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Data plotted with the trendline (solid) and its 95\% confidence interval (dashed).}]{chapters/ch16_files/figure-pdf/fig-scattertrend-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch16_files/figure-pdf/fig-scattertrend-1.pdf}}
 
 }
 
@@ -23305,7 +23293,7 @@ ANCOVA with an interaction between X and group.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Plot of Y vs. X with groups A and B in the data, where the groups have different slopes. This illustrations ANCOVA with an interaction between X and group.}]{chapters/ch16_files/figure-pdf/fig-ancovatrend-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch16_files/figure-pdf/fig-ancovatrend-1.pdf}}
 
 }
 
@@ -23495,7 +23483,6 @@ categories are independent of each other. The expected cell counts can
 be calculated by scaling observed cell counts by the marginal and grand
 total:
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lrrr@{}}
 \toprule\noalign{}
 Pollen production & Unexposed & Exposed & Row totals \\
@@ -23508,7 +23495,6 @@ Reduced & 8 & 13 & \textbf{21} \\
 Normal & 9 & 22 & \textbf{31} \\
 Column totals & \textbf{50} & \textbf{50} & \textbf{100} \\
 \end{longtable}
-}
 
 The expected count in the cell in row \(i\), column \(j\), is:
 
@@ -23522,7 +23508,6 @@ column 2, the expected value is:
 
 So the entire table is:
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3878}}
   >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2245}}
@@ -23550,7 +23535,6 @@ Normal & \(\left(31\cdot50\right)/100=15.5\) &
 \(\left(31\cdot50\right)/100=15.5\) & \textbf{31} \\
 Column totals & \textbf{50} & \textbf{50} & \textbf{100} \\
 \end{longtable}
-}
 
 Once we have the expected counts, we can calculate the \(\chi^2\)
 statistic as:
@@ -23655,7 +23639,6 @@ population of 100 mice. You test each mouse for infection, administer an
 antihelminthic, and test the same mice again 3 weeks later. The data
 might look like this:
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lrrr@{}}
 \toprule\noalign{}
 & After: Infected & After: Not infected & Row totals \\
@@ -23667,7 +23650,6 @@ Before: Infected & 20 & 30 & 50 \\
 Before: Not infected & 10 & 40 & 50 \\
 Column totals & 30 & 70 & 100 \\
 \end{longtable}
-}
 
 And you might think of trying a chi-squared test. But, an ordinary
 Pearson chi-squared test would be inappropriate because each mouse
@@ -23827,7 +23809,6 @@ Let's calculate the odds ratios for our pesticide study. Collapse the 3
 outcomes into 2: normal pollen, and less than normal pollen (which
 includes no pollen):
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lrrr@{}}
 \toprule\noalign{}
 Pollen production & Unexposed & Exposed & Row totals \\
@@ -23839,7 +23820,6 @@ Reduced & 41 & 28 & \textbf{69} \\
 Normal & 9 & 22 & \textbf{31} \\
 Column totals & \textbf{50} & \textbf{50} & \textbf{100} \\
 \end{longtable}
-}
 
 The odds ratio for reduced pollen in the exposed treatment compared to
 control is:
@@ -24402,7 +24382,7 @@ population mean \(\mu\) given five observed values with sample mean
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={The likelihood profile for the population mean \$\textbackslash mu\$ given five observed values with sample mean \$\textbackslash bar\{x\}=66.04\$ and sample SD \$s=2.07\$.}]{chapters/ch18_files/figure-pdf/fig-likelihood1-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch18_files/figure-pdf/fig-likelihood1-1.pdf}}
 
 }
 
@@ -24486,7 +24466,7 @@ search space, shown as a heatmap with \texttt{image()}.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={The likelihood surface of a model with 2 parameters, \$\textbackslash mu\$ and \$\textbackslash sigma\$ resulting from a wide parameter search space,  shown as a heatmap with `image()`.}]{chapters/ch18_files/figure-pdf/fig-heat1-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch18_files/figure-pdf/fig-heat1-1.pdf}}
 
 }
 
@@ -24560,7 +24540,7 @@ space, shhown as a heatmap with \texttt{image()}.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={The likelihood surface of a model with 2 parameters, \$\textbackslash mu\$ and \$\textbackslash sigma\$, with a narrowed parameter search space, shhown as a heatmap with `image()`.}]{chapters/ch18_files/figure-pdf/fig-heat2-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch18_files/figure-pdf/fig-heat2-1.pdf}}
 
 }
 
@@ -24599,7 +24579,7 @@ with sample mean \(\bar{x}=66.04\) and sample SD \(s=2.07\).}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={The joint likelihood surface for a model with 2 parameters, \$\textbackslash mu\$ and \$\textbackslash sigma\$, given five observed values with sample mean \$\textbackslash bar\{x\}=66.04\$ and sample SD \$s=2.07\$.}]{chapters/ch18_files/figure-pdf/fig-surface1-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch18_files/figure-pdf/fig-surface1-1.pdf}}
 
 }
 
@@ -25213,7 +25193,7 @@ interval}.
 \subsection{Example with real data}\label{sec-glm2-gausslog-real}
 
 Let's use the NEON data for a quick example. Download the
-\href{..datasets/dat-neon-site-rich-env.csv}{site-level richness and
+\href{../datasets/dat-neon-site-rich-env.csv}{site-level richness and
 environmental dataset} and put it in your working directory.
 
 \begin{Shaded}
@@ -25597,7 +25577,7 @@ be worth a try.
 
 Returning to the NEON data, consider this plot of net primary
 productivity vs.~latitude. If you don't already have it, download the
-\href{..datasets/dat-neon-site-rich-env.csv}{site-level richness and
+\href{../datasets/dat-neon-site-rich-env.csv}{site-level richness and
 environmental dataset} and put it in your working directory.
 
 \begin{Shaded}
@@ -25848,9 +25828,9 @@ familiar with the process by now.
 \subsection{Example with real data}\label{sec-glm3-poisson-real}
 
 Let's use the NEON data for a real example. If you don't already have
-it, download the \href{..datasets/dat-neon-site-rich-env.csv}{site-level
-richness and environmental dataset} and put it in your working
-directory.
+it, download the
+\href{../datasets/dat-neon-site-rich-env.csv}{site-level richness and
+environmental dataset} and put it in your working directory.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -25977,7 +25957,7 @@ binomial GLM, making the two models nested.
 mixture distribution, then the Poisson distribution can be thought of as
 a negative binomial with no overdispersion.}
 
-{\centering \pandocbounded{\includegraphics[keepaspectratio,alt={Obi-wan Kenobi reminds us that the Poisson distribution can be thought of as a negative binomial with no overdispersion, so the two models are nested.}]{chapters/../images/glm2-pointofview.jpg}}
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/glm2-pointofview.jpg}}
 
 }
 
@@ -26311,9 +26291,9 @@ uncertainty into its SE and CI calculations.
 \subsection{Example with real data}\label{sec-glm3-negbin-real}
 
 Let's use the NEON data for a real example. If you don't already have
-it, download the \href{..datasets/dat-neon-site-rich-env.csv}{site-level
-richness and environmental dataset} and put it in your working
-directory.
+it, download the
+\href{../datasets/dat-neon-site-rich-env.csv}{site-level richness and
+environmental dataset} and put it in your working directory.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -26613,6 +26593,43 @@ as counts if the denominator is known. Proportions are modeled by
 function, and a \texttt{weights} argument that defines the denominator
 of each observation.
 
+\begin{tcolorbox}[enhanced jigsaw, toprule=.15mm, coltitle=black, opacityback=0, colframe=quarto-callout-tip-color-frame, bottomtitle=1mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-tip-color!10!white, toptitle=1mm, titlerule=0mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{The Bernoulli and the Binomial}, leftrule=.75mm, rightrule=.15mm, bottomrule=.15mm, arc=.35mm, colback=white, left=2mm, breakable]
+
+The \textbf{binomial distribution} describes the number of successes in
+a series of \(n\) trials, where each trial must see one of two outcomes
+with probability \(p\). By convention, we denote successes as 1 and
+other outcomes as 0.
+
+For example, if you flip a fair coin one time, that is one trial. The
+coin will come up heads with probability 0.5. If you flip the coin 10
+times and get heads 4 times, then your observation (10 coin flips) had
+10 trials (each flip) and 4 successes (times that heads came up). The
+long run frequency of numbers of heads in different sets of 10 trials is
+described by a binomial distribution:
+
+\[n_{heads}\sim Binomial\left(p=0.5, n=10\right) \]
+
+The distribution of outcomes is shown below:
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-1-1.pdf}}
+
+The \textbf{Bernoulli} distribution is the special case of the binomial
+distribution where \(n=1\). This is why the stochastic part of logistic
+regression is
+
+\[y_i\sim \text{Bernoulli}\left(p=p_i\right)\]
+
+or equivalently
+
+\[y_i\sim \text{Binomial}\left(p=p_i, n=1\right)\]
+
+while the stochastic part of \href{@sec-glm4-binom}{binomial regression}
+is
+
+\[y_i\sim \text{Binomial}\left(p=p_i, n=n_i\right)\]
+
+\end{tcolorbox}
+
 \section{Logistic GLM for binary responses}\label{sec-glm4-logistic}
 
 \textbf{Logistic regression} is a technique for modeling the probability
@@ -26624,7 +26641,7 @@ Bernoulli trial with probability \(p_i\). The logit of \(p_i\) (i.e.,
 the logarithm of the odds that \(y_i=1\)) is modeled as a linear
 function of the predictor variables.
 
-\[y_i\sim Binomial\left(p=p_i,n=1\right)\]
+\[y_i\sim \text{Bernoulli}\left(p=p_i\right)\]
 
 \[\text{logit}\left(p_i\right)=\log{\left(\frac{p_i}{1-p_i}\right)}=\boldsymbol{\beta}\mathbf{x}\]
 
@@ -26692,7 +26709,7 @@ isn't very illuminating.
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-2-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-3-1.pdf}}
 
 If you have a lot of duplicate coordinates, it can be hard to get a
 sense of how many 0s and 1s are in the dataset. The scatterplot above is
@@ -26707,7 +26724,7 @@ to the \(y\)-values; this will help us see what is going on.
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-3-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-4-1.pdf}}
 
 Another way to explore binary data is with a boxplot. A boxplot can show
 whether \(x\) tends to be smaller or greater when \(y\) = 1; this is
@@ -26721,7 +26738,7 @@ us make sense of the data as we explore.
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-4-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-5-1.pdf}}
 
 The boxplot agrees with the scatterplot: \(y\) seems more likely to
 occur at greater values of \(x\). Making the boxplot horizontal makes
@@ -26734,7 +26751,7 @@ the pattern easier to see:
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-5-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-6-1.pdf}}
 
 Logistic regression is fit using the \texttt{glm()} function with
 \texttt{family=binomial}. You don't need to specify the link function in
@@ -26833,14 +26850,14 @@ CI of the predicted probability.
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-9-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-10-1.pdf}}
 
 \subsection{Example using real data}\label{sec-glm4-logistic-real}
 
 Let's use the NEON data for a real example. If you don't already have
-it, download the \href{..datasets/dat-neon-site-rich-env.csv}{site-level
-richness and environmental dataset} and put it in your working
-directory.
+it, download the
+\href{../datasets/dat-neon-site-rich-env.csv}{site-level richness and
+environmental dataset} and put it in your working directory.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -26860,7 +26877,7 @@ temperature:
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-12-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-13-1.pdf}}
 
 It looks like lemming species richness decreases with increasing
 temperature, but we should pump the brakes. The maximum richness is 2.
@@ -26902,7 +26919,7 @@ without.
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-15-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-16-1.pdf}}
 
 Looks like sites with lemmings (\(y=1\)) tend to be colder than sites
 without lemmings. Let's test this relationship with logistic regression.
@@ -27151,7 +27168,7 @@ specificity is also known as the \textbf{false positive rate}.
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-21-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-22-1.pdf}}
 
 One interesting property of this curve is that a null model, where
 \(p(y=1)=0.5\), is a diagonal line.
@@ -27167,7 +27184,7 @@ One interesting property of this curve is that a null model, where
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-22-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-23-1.pdf}}
 
 The area under the red curve, representing the model where
 \(p\left(y=1\right)=0.5\), or a coin flip, is 0.5. As a model's
@@ -27176,7 +27193,7 @@ and the false positive rate (\(1-\text{specificity}\)) must go down.
 This forces the model's ROC curve up and to the left. In the limit, the
 area under that curve will be 1:
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-23-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-24-1.pdf}}
 
 The area under the ROC curve (AUC) measures how well a logistic
 regression model distinguishes positive (\(y=1\)) from negative
@@ -27222,7 +27239,7 @@ We can calculate the AUC of our fitted model as a series of rectangles:
 
 Or visually:
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-25-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-26-1.pdf}}
 
 As much fun as it is to manually calculate ROC curves and definite
 integrals, we can get the ROC and AUC much more quickly using the
@@ -27263,12 +27280,14 @@ Area under the curve: 0.8454
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-29-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-30-1.pdf}}
 
 The AUC calculated by package \texttt{pROC} (0.854) is close to the
-value we calculated by hand. If you don't like the default figure
-produced by \texttt{roc()}, you can extract the sensitivity and
-sensitivity scores and make your own plot.
+value we calculated by hand. You should use the \texttt{pROC} version
+though, because our hand calculation was only an approximation.
+
+If you don't like the default figure produced by \texttt{roc()}, you can
+extract the sensitivity and sensitivity scores and make your own plot.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -27279,13 +27298,384 @@ sensitivity scores and make your own plot.
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-30-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-31-1.pdf}}
+
+\begin{tcolorbox}[enhanced jigsaw, toprule=.15mm, leftrule=.75mm, opacityback=0, colframe=quarto-callout-color-frame, rightrule=.15mm, bottomrule=.15mm, arc=.35mm, colback=white, left=2mm, breakable]
+
+\vspace{-3mm}\textbf{Probabilistic definition of AUC}\vspace{3mm}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# vector of observed 1s and 0s}
+\NormalTok{y.obs }\OtherTok{\textless{}{-}}\NormalTok{ dx}\SpecialCharTok{$}\NormalTok{lem.pr}
+
+\CommentTok{\# vector of predicted p(y=1)}
+\NormalTok{y.pre }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod2, }\AttributeTok{type=}\StringTok{"response"}\NormalTok{)}
+
+\CommentTok{\# identify which observations are 1 and 0}
+\CommentTok{\# (i.e., positives and negatives)}
+\NormalTok{y.pos }\OtherTok{\textless{}{-}} \FunctionTok{which}\NormalTok{(y.obs}\SpecialCharTok{==}\DecValTok{1}\NormalTok{)}
+\NormalTok{y.neg }\OtherTok{\textless{}{-}} \FunctionTok{which}\NormalTok{(y.obs}\SpecialCharTok{==}\DecValTok{0}\NormalTok{)}
+
+\CommentTok{\# number of simulations}
+\NormalTok{sims }\OtherTok{\textless{}{-}} \FloatTok{1e5}
+
+\CommentTok{\# set random number seed for reproducibility}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{42}\NormalTok{)}
+
+\CommentTok{\# pick predicted probabilities for lots of }
+\CommentTok{\# pairs of postives and negatives}
+\NormalTok{draw.pos }\OtherTok{\textless{}{-}}\NormalTok{ y.pre[}\FunctionTok{sample}\NormalTok{(y.pos, sims, }\AttributeTok{replace=}\ConstantTok{TRUE}\NormalTok{)]}
+\NormalTok{draw.neg }\OtherTok{\textless{}{-}}\NormalTok{ y.pre[}\FunctionTok{sample}\NormalTok{(y.neg, sims, }\AttributeTok{replace=}\ConstantTok{TRUE}\NormalTok{)]}
+
+\CommentTok{\# check whether the positives have larger}
+\CommentTok{\# predictive probabilities than the negatives}
+\CommentTok{\# tied probabilities get "half credit"}
+\NormalTok{check }\OtherTok{\textless{}{-}}\NormalTok{ (draw.pos }\SpecialCharTok{\textgreater{}}\NormalTok{ draw.neg) }\SpecialCharTok{+}
+    \FloatTok{0.5} \SpecialCharTok{*}\NormalTok{ (draw.pos }\SpecialCharTok{==}\NormalTok{ draw.neg)}
+
+\CommentTok{\# proportion of TRUEs should match}
+\CommentTok{\# AUC calculation above}
+\FunctionTok{mean}\NormalTok{(check)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.84479
+\end{verbatim}
+
+This simulated AUC matches the calculated AUC out to 2 decimal places (3
+if we round both to 0.845).
+
+\end{tcolorbox}
 
 \section{Binomial GLM for proportions}\label{sec-glm4-binom}
 
+Proportional data describe the number of times that some event occurs,
+relative to the total number of times it could occur. Many phenomena
+that biologists study are expressed as proportions: proportion of
+individuals surviving, proportion of individuals with trait \emph{A},
+proportion of area covered by species \emph{X}, and so on. Analyzing
+proportions is a lot like \href{@sec-glm4-logistic}{analyzing binary
+outcomes}; i.e., logistic regression. In fact, they are both GLMs with a
+binomial family. All that differs is the \emph{n} term.
+
+Binomial regression is defined as
+
+\[y_i=\frac{z_i}{n_i}\] \[z_i\sim Binomial\left(p=p_i,n=n_i\right)\]
+
+\[\text{logit}\left(p_i\right)=\log{\left(\frac{p_i}{1-p_i}\right)}=\boldsymbol{\beta}\mathbf{x}\]
+
+The only real differences between this and logistic regression above ()
+are the \(n\) term in the binomial distribution, and the fact that in
+binomial regression we are analyzing the ratio of \(z_i\) to \(n_i\). If
+we set \(n_i\) to one, then binomial regression becomes logistic
+regression.
+
+\subsection{When should you use binomial
+regression?}\label{sec-glm4-binom-when}
+
+In logistic regression the interest is in predicting the outcomes of
+single trials, while in binomial regression the interest is in
+predicting the \textbf{proportion} of observations in a certain state.
+How you should analyze your data depends on your question:
+
+\begin{itemize}
+\tightlist
+\item
+  If the question is about outcomes at the individual observation level,
+  then use logistic regression.
+\item
+  If the question is about rates or probabilities of an event occurring,
+  then use binomial regression.
+\end{itemize}
+
+One good clue is to consider the level at which predictor variables are
+measured. If many observations share the same value of a predictor
+variable (or the same values of many predictor variables), then binomial
+regression might be the right approach because the sample unit is really
+the group. For example, if you want to model nestling survival in birds,
+all of the chicks within a nest would have the same values of any
+predictor variable that applied to the nest. Thus, binomial regression
+would be appropriate. If, however, there were chick-level predictors,
+then logistic regression would be appropriate. Think about what level of
+organization your predictor and response variables occur at, and what
+question you are really asking.
+
+\textbf{What if the number of trials is unknown?}
+
+This section assumes that you know how many trials each proportion
+represents. If you want to analyze proportions for which the number of
+trials is unknown, a binomial GLM is probably not the right tool. One
+option you can try instead is to apply a
+\href{@sec-trans-common-lp}{logit transform} to the proportions, then
+fit a linear regression to the transformed values.
+
 \subsection{Example using simulated data}\label{sec-glm4-binom-sim}
 
+Let's explore binomial regression by simulating some data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# random number seed}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+
+\CommentTok{\# sample size}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{100}
+
+\CommentTok{\# x values}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(n, }\FloatTok{0.001}\NormalTok{, }\DecValTok{10}\NormalTok{)}
+
+\CommentTok{\# intercept and slope}
+\NormalTok{beta0 }\OtherTok{\textless{}{-}} \DecValTok{3}
+\NormalTok{beta1 }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.75}
+
+\CommentTok{\# linear predictor}
+\NormalTok{logit.eta }\OtherTok{\textless{}{-}}\NormalTok{ beta0 }\SpecialCharTok{+}\NormalTok{ beta1}\SpecialCharTok{*}\NormalTok{x}
+
+\CommentTok{\# inverse logit to convert to}
+\CommentTok{\# probability scale}
+\NormalTok{eta }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{plogis}\NormalTok{(logit.eta), }\DecValTok{3}\NormalTok{)}
+
+\CommentTok{\# weights = sample sizes}
+\CommentTok{\# use same size for each observation for simplicity}
+\NormalTok{wts }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{20}\NormalTok{, n)}
+
+\CommentTok{\# draw observed values}
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{rbinom}\NormalTok{(n, }\AttributeTok{prob=}\NormalTok{eta, }\AttributeTok{size=}\NormalTok{wts)}\SpecialCharTok{/}\NormalTok{wts}
+
+\CommentTok{\# assemble to data frame}
+\NormalTok{dr }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{x=}\NormalTok{x, }\AttributeTok{y=}\NormalTok{y, }\AttributeTok{w=}\NormalTok{wts)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(x,y, }\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-34-1.pdf}}
+
+Linear regression would be inappropriate, because the predicted outcome
+of a linear model is not bounded to the domain of \(y\). Instead, we fit
+a binomial GLM using the \texttt{weights} argument to define the
+denominator of each observation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mod3 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(y}\SpecialCharTok{\textasciitilde{}}\NormalTok{x, }\AttributeTok{data=}\NormalTok{dr,}
+            \AttributeTok{family=}\NormalTok{binomial, }\AttributeTok{weights=}\NormalTok{dr}\SpecialCharTok{$}\NormalTok{w)}
+\FunctionTok{summary}\NormalTok{(mod3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+glm(formula = y ~ x, family = binomial, data = dr, weights = dr$w)
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  2.87937    0.14362   20.05   <2e-16 ***
+x           -0.74801    0.03206  -23.33   <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 1152.39  on 99  degrees of freedom
+Residual deviance:   83.32  on 98  degrees of freedom
+AIC: 326.82
+
+Number of Fisher Scoring iterations: 4
+\end{verbatim}
+
+The slope and intercept estimates are very close to the truth. At this
+point, we can evaluate model fit with deviance explained, use AIC model
+selection, or whatever other interpretive post hoc analyses we need to.
+Just as with logistic regression, the odds ratio \(e^{\beta_1}\) or
+\texttt{exp(coef(mod2){[}2{]})} describes the multiplicative change in
+the odds that an individual ``succeeds''. Remember that the \(p\) in the
+binomial part really refer to success probability in a trial. If our
+proportions here represent female sex ratio in experimental clutches of
+guppies, then the odds ratio
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{exp}\NormalTok{(}\FunctionTok{coef}\NormalTok{(mod3)[}\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+        x 
+0.4733064 
+\end{verbatim}
+
+means that for every additional unit of \(x\), the probability that an
+individual within a clutch is female is reduced by about 53\%.
+
+Unlike binary logistic regression, we generally do not use AUC to
+evaluate binomial regression fitted to proportions. Although AUC can
+still be calculated and retains the same mathematical interpretation, it
+measures the model's ability to distinguish individual successes from
+failures. In grouped binomial regression, however, the observations
+represent groups of trials, and our primary interest is usually in how
+accurately the model estimates the proportion of successes within each
+group. Consequently, AUC is generally less informative than measures
+such as deviance explained and comparisons of observed and predicted
+proportions.
+
 \subsection{Example using real data}\label{sec-glm4-binom-real}
+
+Let's use the NEON data for a real example. If you don't already have
+it, download the
+\href{../datasets/dat-neon-site-rich-env.csv}{site-level richness and
+environmental dataset} and put it in your working directory.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dx }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"dat{-}neon{-}site{-}rich{-}env.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Consider this plot of the proportion of species present which are
+sciurids (\texttt{psci}) varies with mean annual temperature.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# proportion of species which are squirrels}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{psci }\OtherTok{\textless{}{-}}\NormalTok{ dx}\SpecialCharTok{$}\NormalTok{sci }\SpecialCharTok{/}\NormalTok{ dx}\SpecialCharTok{$}\NormalTok{tot}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{mat, dx}\SpecialCharTok{$}\NormalTok{psci)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-40-1.pdf}}
+
+It looks like warmer sites tend to have proportionally fewer sciurid
+species. We can test that with a binomial GLM.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mod4 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(psci}\SpecialCharTok{\textasciitilde{}}\NormalTok{mat, }\AttributeTok{data=}\NormalTok{dx, }\AttributeTok{family=}\NormalTok{binomial, }\AttributeTok{weights=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{tot)}
+\FunctionTok{summary}\NormalTok{(mod4)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+glm(formula = psci ~ mat, family = binomial, data = dx, weights = dx$tot)
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept) -1.09543    0.18668  -5.868 4.41e-09 ***
+mat         -0.06095    0.01735  -3.512 0.000445 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 48.155  on 45  degrees of freedom
+Residual deviance: 35.675  on 44  degrees of freedom
+AIC: 126.1
+
+Number of Fisher Scoring iterations: 4
+\end{verbatim}
+
+Sure enough, it looks like there is a modest but statistically
+significant effect of mean annual temperature on proportional sciurid
+richness. The odds ratio, \(e^{-0.061}=0.941\), suggests that for every
+additional degree of mean annual temperature, proportional sciurid
+richness decreases by about 6\%. However, the model only reduces the
+deviance by about 26\% (\(1-\frac{35.67}{48.15}=0.26\)).
+
+Now let's plot the model predictions and their 95\% CI.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# values for prediction}
+\NormalTok{use.n }\OtherTok{\textless{}{-}} \DecValTok{100}
+\NormalTok{px }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{mat), }\FunctionTok{max}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{mat), }\AttributeTok{length=}\NormalTok{use.n)}
+
+\CommentTok{\# calculate predictions and 95\% CI (link scale)}
+\NormalTok{pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod4, }\AttributeTok{newdata=}\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{mat=}\NormalTok{px),}
+                \AttributeTok{type=}\StringTok{"link"}\NormalTok{, }\AttributeTok{se.fit=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{mn }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.5}\NormalTok{, pred}\SpecialCharTok{$}\NormalTok{fit, pred}\SpecialCharTok{$}\NormalTok{se.fit)}
+\NormalTok{lo }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.025}\NormalTok{, pred}\SpecialCharTok{$}\NormalTok{fit, pred}\SpecialCharTok{$}\NormalTok{se.fit)}
+\NormalTok{up }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.975}\NormalTok{, pred}\SpecialCharTok{$}\NormalTok{fit, pred}\SpecialCharTok{$}\NormalTok{se.fit)}
+
+\CommentTok{\# inverse link function to get probabilities}
+\NormalTok{mn }\OtherTok{\textless{}{-}}\NormalTok{ mod4}\SpecialCharTok{$}\NormalTok{family}\SpecialCharTok{$}\FunctionTok{linkinv}\NormalTok{(mn)}
+\NormalTok{lo }\OtherTok{\textless{}{-}}\NormalTok{ mod4}\SpecialCharTok{$}\NormalTok{family}\SpecialCharTok{$}\FunctionTok{linkinv}\NormalTok{(lo)}
+\NormalTok{up }\OtherTok{\textless{}{-}}\NormalTok{ mod4}\SpecialCharTok{$}\NormalTok{family}\SpecialCharTok{$}\FunctionTok{linkinv}\NormalTok{(up)}
+\end{Highlighting}
+\end{Shaded}
+
+And the plot:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{mat, dx}\SpecialCharTok{$}\NormalTok{psci, }\AttributeTok{type=}\StringTok{"n"}\NormalTok{,}
+     \AttributeTok{xlab=}\FunctionTok{expression}\NormalTok{(Mean}\SpecialCharTok{\textasciitilde{}}\NormalTok{annual}\SpecialCharTok{\textasciitilde{}}\NormalTok{temperature}\SpecialCharTok{\textasciitilde{}}\NormalTok{(degree}\SpecialCharTok{*}\NormalTok{C)),}
+     \AttributeTok{ylab=}\StringTok{"Proportional sciurid richness"}\NormalTok{,}
+     \AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\FunctionTok{polygon}\NormalTok{(}\AttributeTok{x=}\FunctionTok{c}\NormalTok{(px, }\FunctionTok{rev}\NormalTok{(px)), }
+        \AttributeTok{y=}\FunctionTok{c}\NormalTok{(lo, }\FunctionTok{rev}\NormalTok{(up)), }\CommentTok{\# REVerse either upper or lower}
+        \AttributeTok{border=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{col=}\StringTok{"grey80"}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(px, mn, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{mat, }\FunctionTok{jitter}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{psci, }\AttributeTok{amount=}\FloatTok{0.05}\NormalTok{),}
+       \AttributeTok{cex=}\FloatTok{1.1}\NormalTok{, }\AttributeTok{pch=}\DecValTok{19}\NormalTok{, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-43-1.pdf}}
+
+Just for fun, let's extend the \(x\) range of prediction to convince
+ourselves that the predicted values will never extend beyond the
+\(\left[0,1\right]\) domain of proportions.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# values for prediction}
+\NormalTok{use.n }\OtherTok{\textless{}{-}} \DecValTok{100}
+\NormalTok{px }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{100}\NormalTok{, }\DecValTok{100}\NormalTok{, }\AttributeTok{length=}\NormalTok{use.n)}
+
+\CommentTok{\# calculate predictions and 95\% CI (link scale)}
+\NormalTok{pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod4, }\AttributeTok{newdata=}\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{mat=}\NormalTok{px),}
+                \AttributeTok{type=}\StringTok{"link"}\NormalTok{, }\AttributeTok{se.fit=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{mn }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.5}\NormalTok{, pred}\SpecialCharTok{$}\NormalTok{fit, pred}\SpecialCharTok{$}\NormalTok{se.fit)}
+\NormalTok{lo }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.025}\NormalTok{, pred}\SpecialCharTok{$}\NormalTok{fit, pred}\SpecialCharTok{$}\NormalTok{se.fit)}
+\NormalTok{up }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.975}\NormalTok{, pred}\SpecialCharTok{$}\NormalTok{fit, pred}\SpecialCharTok{$}\NormalTok{se.fit)}
+
+\CommentTok{\# inverse link function to get probabilities}
+\NormalTok{mn }\OtherTok{\textless{}{-}}\NormalTok{ mod4}\SpecialCharTok{$}\NormalTok{family}\SpecialCharTok{$}\FunctionTok{linkinv}\NormalTok{(mn)}
+\NormalTok{lo }\OtherTok{\textless{}{-}}\NormalTok{ mod4}\SpecialCharTok{$}\NormalTok{family}\SpecialCharTok{$}\FunctionTok{linkinv}\NormalTok{(lo)}
+\NormalTok{up }\OtherTok{\textless{}{-}}\NormalTok{ mod4}\SpecialCharTok{$}\NormalTok{family}\SpecialCharTok{$}\FunctionTok{linkinv}\NormalTok{(up)}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{mat, dx}\SpecialCharTok{$}\NormalTok{psci, }\AttributeTok{type=}\StringTok{"n"}\NormalTok{,}
+     \AttributeTok{xlab=}\FunctionTok{expression}\NormalTok{(Mean}\SpecialCharTok{\textasciitilde{}}\NormalTok{annual}\SpecialCharTok{\textasciitilde{}}\NormalTok{temperature}\SpecialCharTok{\textasciitilde{}}\NormalTok{(degree}\SpecialCharTok{*}\NormalTok{C)),}
+     \AttributeTok{ylab=}\StringTok{"Proportional sciurid richness"}\NormalTok{,}
+     \AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{xlim=}\FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{100}\NormalTok{, }\DecValTok{100}\NormalTok{))}
+\FunctionTok{polygon}\NormalTok{(}\AttributeTok{x=}\FunctionTok{c}\NormalTok{(px, }\FunctionTok{rev}\NormalTok{(px)), }
+        \AttributeTok{y=}\FunctionTok{c}\NormalTok{(lo, }\FunctionTok{rev}\NormalTok{(up)), }\CommentTok{\# REVerse either upper or lower}
+        \AttributeTok{border=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{col=}\StringTok{"grey80"}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(px, mn, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{mat, }\FunctionTok{jitter}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{psci, }\AttributeTok{amount=}\FloatTok{0.05}\NormalTok{),}
+       \AttributeTok{cex=}\FloatTok{1.1}\NormalTok{, }\AttributeTok{pch=}\DecValTok{19}\NormalTok{, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch21_files/figure-pdf/unnamed-chunk-44-1.pdf}}
 
 \section{Ordinal logistic regression}\label{sec-glm4-ord}
 
@@ -28216,7 +28606,7 @@ data}\label{clean-up-individual-measurement-data}
 \end{Highlighting}
 \end{Shaded}
 
-\protect\phantomsection\label{refs}
+\phantomsection\label{refs}
 \begin{CSLReferences}{1}{1}
 \bibitem[\citeproctext]{ref-bolker2008ecological}
 Bolker BM. 2008. Ecological models and data in {R}. Princeton, New
@@ -28292,7 +28682,7 @@ Brain, behavior and evolution 60(3):165--180.
 \bibitem[\citeproctext]{ref-james2013}
 James G, Witten D, Hastie T, Tibshirani R. 2013.
 \href{http://faculty.marshall.usc.edu/gareth-james/ISL/}{An introduction
-to statistical learning}. 7th edn. Vol. 112. Springer.
+to statistical learning}. 7th ed. Vol. 112. Springer.
 
 \bibitem[\citeproctext]{ref-kery2010}
 Kéry M. 2010. Introduction to {W}in{BUGS} for ecologists: {B}ayesian
@@ -28380,9 +28770,9 @@ Zuur AF, Ieno EN, Smith GM. 2007. Analysing ecological data. New York:
 Springer Science+Business Media.
 
 \bibitem[\citeproctext]{ref-zuur2009mixed}
-{Zuur AF, Ieno EN, Walker NJ, Saveliev AA, Smith GM \emph{et al.}}
-2009a. Mixed effects models and extensions in ecology with {R}. Vol.
-574. New York: Springer.
+Zuur AF, Ieno EN, Walker NJ, Saveliev AA, Smith GM \emph{et al.} 2009a.
+Mixed effects models and extensions in ecology with {R}. Vol. 574. New
+York: Springer.
 
 \bibitem[\citeproctext]{ref-zuur2009}
 Zuur A, Ieno EN, Meesters E. 2009b. A beginner's guide to {R}. New York:

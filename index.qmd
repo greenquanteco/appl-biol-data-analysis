@@ -11,6 +11,15 @@ If you are a returning visitor, please note that the website has been rearranged
 
 The Fall 2026 course syllabus can be [downloaded here](https://greenquanteco.github.io/files/biol-7410-syllabus-fall-2026.pdf).
 
+::: {.content-visible when-format="html"}
+If you want a PDF version of these course notes, you can download it [here](Applied-Biological-Data-Analysis.pdf).
+:::
+
+::: {.content-visible when-format="pdf"}
+An online HTML version of this book is available at
+https://greenquanteco.github.io/appl-biol-data-analysis/.
+:::
+
 ## Work in progress warning! {.unnumbered}
 
 I am actively updating this site throughout the Fall 2026 semester. This means that many cross-references may be broken, pictures missing, etc. Please be patient with me as I get things back into working order.

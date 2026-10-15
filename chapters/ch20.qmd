@@ -105,7 +105,7 @@ points(x, y, pch=16)
 
 ### Example with real data {#sec-glm3-poisson-real}
 
-Let's use the NEON data for a real example. If you don't already have it, download the [site-level richness and environmental dataset](..datasets/dat-neon-site-rich-env.csv) and put it in your working directory.
+Let's use the NEON data for a real example. If you don't already have it, download the [site-level richness and environmental dataset](../datasets/dat-neon-site-rich-env.csv) and put it in your working directory.
 
 
 ```{r}
@@ -380,7 +380,7 @@ At first glance, the Poisson model appears to have a better fit because the 95% 
 
 ### Example with real data {#sec-glm3-negbin-real}
 
-Let's use the NEON data for a real example. If you don't already have it, download the [site-level richness and environmental dataset](..datasets/dat-neon-site-rich-env.csv) and put it in your working directory.
+Let's use the NEON data for a real example. If you don't already have it, download the [site-level richness and environmental dataset](../datasets/dat-neon-site-rich-env.csv) and put it in your working directory.
 
 
 ```{r}

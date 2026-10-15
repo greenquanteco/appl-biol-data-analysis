@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>21&nbsp; GLM for categorical and proportional responses – Applied Biological Data Analysis</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -72,14 +69,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../chapters/ch20.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -110,7 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <style>html{ scroll-behavior: smooth; }</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -163,7 +161,9 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Applied Biological Data Analysis</a> 
         <div class="sidebar-tools-main">
@@ -509,8 +509,9 @@ window.Quarto = {
   </ul></li>
   <li><a href="#sec-glm4-binom" id="toc-sec-glm4-binom" class="nav-link" data-scroll-target="#sec-glm4-binom"><span class="header-section-number">21.2</span> Binomial GLM for proportions</a>
   <ul class="collapse">
-  <li><a href="#sec-glm4-binom-sim" id="toc-sec-glm4-binom-sim" class="nav-link" data-scroll-target="#sec-glm4-binom-sim"><span class="header-section-number">21.2.1</span> Example using simulated data</a></li>
-  <li><a href="#sec-glm4-binom-real" id="toc-sec-glm4-binom-real" class="nav-link" data-scroll-target="#sec-glm4-binom-real"><span class="header-section-number">21.2.2</span> Example using real data</a></li>
+  <li><a href="#sec-glm4-binom-when" id="toc-sec-glm4-binom-when" class="nav-link" data-scroll-target="#sec-glm4-binom-when"><span class="header-section-number">21.2.1</span> When should you use binomial regression?</a></li>
+  <li><a href="#sec-glm4-binom-sim" id="toc-sec-glm4-binom-sim" class="nav-link" data-scroll-target="#sec-glm4-binom-sim"><span class="header-section-number">21.2.2</span> Example using simulated data</a></li>
+  <li><a href="#sec-glm4-binom-real" id="toc-sec-glm4-binom-real" class="nav-link" data-scroll-target="#sec-glm4-binom-real"><span class="header-section-number">21.2.3</span> Example using real data</a></li>
   </ul></li>
   <li><a href="#sec-glm4-ord" id="toc-sec-glm4-ord" class="nav-link" data-scroll-target="#sec-glm4-ord"><span class="header-section-number">21.3</span> Ordinal logistic regression</a>
   <ul class="collapse">
@@ -544,10 +545,41 @@ window.Quarto = {
 
 <p>This section explores GLMs for <strong>binary outcomes</strong> and <strong>proportions</strong>. Binary outcomes are results that take one of two values such as survival vs.&nbsp;non-survival, presence vs.&nbsp;absence, reproduction vs.&nbsp;not-reproducing, and so on. These data are usually coded as 1 and 0: 1 when the event occurs, and 0 when the event does not. No other values are allowed. The standard technique for modeling binary outcomes is <strong>logistic regression</strong>. This name refers to a GLM with a binomial family and logit link function.</p>
 <p>Proportions are values between 0 and 1 that express how often an event occurs out of some number of trials. For example, 45 out of 50 fish survive, or 13 out of 20 flies express a mutant phenotype. Proportions may be expressed as decimals between 0 and 1, or as percentages, or even as counts if the denominator is known. Proportions are modeled by <strong>binomial GLM</strong>, which is a GLM with a binomial family, logit link function, and a <code>weights</code> argument that defines the denominator of each observation.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="The Bernoulli and the Binomial">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>The Bernoulli and the Binomial
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong>binomial distribution</strong> describes the number of successes in a series of <span class="math inline">\(n\)</span> trials, where each trial must see one of two outcomes with probability <span class="math inline">\(p\)</span>. By convention, we denote successes as 1 and other outcomes as 0.</p>
+<p>For example, if you flip a fair coin one time, that is one trial. The coin will come up heads with probability 0.5. If you flip the coin 10 times and get heads 4 times, then your observation (10 coin flips) had 10 trials (each flip) and 4 successes (times that heads came up). The long run frequency of numbers of heads in different sets of 10 trials is described by a binomial distribution:</p>
+<p><span class="math display">\[n_{heads}\sim Binomial\left(p=0.5, n=10\right) \]</span></p>
+<p>The distribution of outcomes is shown below:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The <strong>Bernoulli</strong> distribution is the special case of the binomial distribution where <span class="math inline">\(n=1\)</span>. This is why the stochastic part of logistic regression is</p>
+<p><span class="math display">\[y_i\sim \text{Bernoulli}\left(p=p_i\right)\]</span></p>
+<p>or equivalently</p>
+<p><span class="math display">\[y_i\sim \text{Binomial}\left(p=p_i, n=1\right)\]</span></p>
+<p>while the stochastic part of <a href="@sec-glm4-binom">binomial regression</a> is</p>
+<p><span class="math display">\[y_i\sim \text{Binomial}\left(p=p_i, n=n_i\right)\]</span></p>
+</div>
+</div>
 <section id="sec-glm4-logistic" class="level2" data-number="21.1">
 <h2 data-number="21.1" class="anchored" data-anchor-id="sec-glm4-logistic"><span class="header-section-number">21.1</span> Logistic GLM for binary responses</h2>
 <p><strong>Logistic regression</strong> is a technique for modeling the probability of a binary outcome: survival vs.&nbsp;death, reproductive vs.&nbsp;not reproductive, present vs.&nbsp;absent, etc. The response variable <em>Y</em> takes value 1 when the event occurs, and value 0 when the event does not occur. For each observation <em>i</em>, success occurs as the outcome of a Bernoulli trial with probability <span class="math inline">\(p_i\)</span>. The logit of <span class="math inline">\(p_i\)</span> (i.e., the logarithm of the odds that <span class="math inline">\(y_i=1\)</span>) is modeled as a linear function of the predictor variables.</p>
-<p><span class="math display">\[y_i\sim Binomial\left(p=p_i,n=1\right)\]</span></p>
+<p><span class="math display">\[y_i\sim \text{Bernoulli}\left(p=p_i\right)\]</span></p>
 <p><span class="math display">\[\text{logit}\left(p_i\right)=\log{\left(\frac{p_i}{1-p_i}\right)}=\boldsymbol{\beta}\mathbf{x}\]</span></p>
 <p>The logit link function is available in R as <code>qlogis()</code>. The inverse of the logit function is the <strong>logistic function</strong>:</p>
 <p><span class="math display">\[logistic\left(x\right)=\frac{e^x}{1+e^x}\]</span></p>
@@ -585,7 +617,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch21_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="768"></p>
+<p><img src="ch21_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -597,7 +629,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch21_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="768"></p>
+<p><img src="ch21_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -609,7 +641,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch21_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="768"></p>
+<p><img src="ch21_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -621,7 +653,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch21_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="768"></p>
+<p><img src="ch21_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -690,7 +722,7 @@ Number of Fisher Scoring iterations: 6</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch21_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="768"></p>
+<p><img src="ch21_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -698,7 +730,7 @@ Number of Fisher Scoring iterations: 6</code></pre>
 </section>
 <section id="sec-glm4-logistic-real" class="level3" data-number="21.1.2">
 <h3 data-number="21.1.2" class="anchored" data-anchor-id="sec-glm4-logistic-real"><span class="header-section-number">21.1.2</span> Example using real data</h3>
-<p>Let’s use the NEON data for a real example. If you don’t already have it, download the <a href="..datasets/dat-neon-site-rich-env.csv">site-level richness and environmental dataset</a> and put it in your working directory.</p>
+<p>Let’s use the NEON data for a real example. If you don’t already have it, download the <a href="../datasets/dat-neon-site-rich-env.csv">site-level richness and environmental dataset</a> and put it in your working directory.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"dat-neon-site-rich-env.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -711,7 +743,7 @@ Number of Fisher Scoring iterations: 6</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch21_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="768"></p>
+<p><img src="ch21_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -738,7 +770,7 @@ Number of Fisher Scoring iterations: 6</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch21_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="ch21_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -895,7 +927,7 @@ dx$lem.p
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch21_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="768"></p>
+<p><img src="ch21_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -911,7 +943,7 @@ dx$lem.p
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch21_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="768"></p>
+<p><img src="ch21_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -921,7 +953,7 @@ dx$lem.p
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch21_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="768"></p>
+<p><img src="ch21_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -956,7 +988,7 @@ dx$lem.p
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch21_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="ch21_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -986,12 +1018,13 @@ Area under the curve: 0.8454</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch21_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="768"></p>
+<p><img src="ch21_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>The AUC calculated by package <code>pROC</code> (0.854) is close to the value we calculated by hand. If you don’t like the default figure produced by <code>roc()</code>, you can extract the sensitivity and sensitivity scores and make your own plot.</p>
+<p>The AUC calculated by package <code>pROC</code> (0.854) is close to the value we calculated by hand. You should use the <code>pROC</code> version though, because our hand calculation was only an approximation.</p>
+<p>If you don’t like the default figure produced by <code>roc()</code>, you can extract the sensitivity and sensitivity scores and make your own plot.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1- to orient axis correct way:</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>xspec <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">-</span>roc2<span class="sc">$</span>specificities</span>
@@ -1000,9 +1033,58 @@ Area under the curve: 0.8454</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch21_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="768"></p>
+<p><img src="ch21_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-none no-icon callout-titled" title="Probabilistic definition of AUC">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">None</span>Probabilistic definition of AUC
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># vector of observed 1s and 0s</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>y.obs <span class="ot">&lt;-</span> dx<span class="sc">$</span>lem.pr</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># vector of predicted p(y=1)</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>y.pre <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod2, <span class="at">type=</span><span class="st">"response"</span>)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co"># identify which observations are 1 and 0</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co"># (i.e., positives and negatives)</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>y.pos <span class="ot">&lt;-</span> <span class="fu">which</span>(y.obs<span class="sc">==</span><span class="dv">1</span>)</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>y.neg <span class="ot">&lt;-</span> <span class="fu">which</span>(y.obs<span class="sc">==</span><span class="dv">0</span>)</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="co"># number of simulations</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>sims <span class="ot">&lt;-</span> <span class="fl">1e5</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="co"># set random number seed for reproducibility</span></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="co"># pick predicted probabilities for lots of </span></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a><span class="co"># pairs of postives and negatives</span></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>draw.pos <span class="ot">&lt;-</span> y.pre[<span class="fu">sample</span>(y.pos, sims, <span class="at">replace=</span><span class="cn">TRUE</span>)]</span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>draw.neg <span class="ot">&lt;-</span> y.pre[<span class="fu">sample</span>(y.neg, sims, <span class="at">replace=</span><span class="cn">TRUE</span>)]</span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a><span class="co"># check whether the positives have larger</span></span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a><span class="co"># predictive probabilities than the negatives</span></span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a><span class="co"># tied probabilities get "half credit"</span></span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>check <span class="ot">&lt;-</span> (draw.pos <span class="sc">&gt;</span> draw.neg) <span class="sc">+</span></span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.5</span> <span class="sc">*</span> (draw.pos <span class="sc">==</span> draw.neg)</span>
+<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a><span class="co"># proportion of TRUEs should match</span></span>
+<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a><span class="co"># AUC calculation above</span></span>
+<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(check)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.84479</code></pre>
+</div>
+</div>
+<p>This simulated AUC matches the calculated AUC out to 2 decimal places (3 if we round both to 0.845).</p>
 </div>
 </div>
 </section>
@@ -1010,11 +1092,228 @@ Area under the curve: 0.8454</code></pre>
 </section>
 <section id="sec-glm4-binom" class="level2" data-number="21.2">
 <h2 data-number="21.2" class="anchored" data-anchor-id="sec-glm4-binom"><span class="header-section-number">21.2</span> Binomial GLM for proportions</h2>
-<section id="sec-glm4-binom-sim" class="level3" data-number="21.2.1">
-<h3 data-number="21.2.1" class="anchored" data-anchor-id="sec-glm4-binom-sim"><span class="header-section-number">21.2.1</span> Example using simulated data</h3>
+<p>Proportional data describe the number of times that some event occurs, relative to the total number of times it could occur. Many phenomena that biologists study are expressed as proportions: proportion of individuals surviving, proportion of individuals with trait <em>A</em>, proportion of area covered by species <em>X</em>, and so on. Analyzing proportions is a lot like <a href="@sec-glm4-logistic">analyzing binary outcomes</a>; i.e., logistic regression. In fact, they are both GLMs with a binomial family. All that differs is the <em>n</em> term.</p>
+<p>Binomial regression is defined as</p>
+<p><span class="math display">\[y_i=\frac{z_i}{n_i}\]</span> <span class="math display">\[z_i\sim Binomial\left(p=p_i,n=n_i\right)\]</span></p>
+<p><span class="math display">\[\text{logit}\left(p_i\right)=\log{\left(\frac{p_i}{1-p_i}\right)}=\boldsymbol{\beta}\mathbf{x}\]</span></p>
+<p>The only real differences between this and logistic regression above () are the <span class="math inline">\(n\)</span> term in the binomial distribution, and the fact that in binomial regression we are analyzing the ratio of <span class="math inline">\(z_i\)</span> to <span class="math inline">\(n_i\)</span>. If we set <span class="math inline">\(n_i\)</span> to one, then binomial regression becomes logistic regression.</p>
+<section id="sec-glm4-binom-when" class="level3" data-number="21.2.1">
+<h3 data-number="21.2.1" class="anchored" data-anchor-id="sec-glm4-binom-when"><span class="header-section-number">21.2.1</span> When should you use binomial regression?</h3>
+<p>In logistic regression the interest is in predicting the outcomes of single trials, while in binomial regression the interest is in predicting the <strong>proportion</strong> of observations in a certain state. How you should analyze your data depends on your question:</p>
+<ul>
+<li>If the question is about outcomes at the individual observation level, then use logistic regression.</li>
+<li>If the question is about rates or probabilities of an event occurring, then use binomial regression.</li>
+</ul>
+<p>One good clue is to consider the level at which predictor variables are measured. If many observations share the same value of a predictor variable (or the same values of many predictor variables), then binomial regression might be the right approach because the sample unit is really the group. For example, if you want to model nestling survival in birds, all of the chicks within a nest would have the same values of any predictor variable that applied to the nest. Thus, binomial regression would be appropriate. If, however, there were chick-level predictors, then logistic regression would be appropriate. Think about what level of organization your predictor and response variables occur at, and what question you are really asking.</p>
+<p><strong>What if the number of trials is unknown?</strong></p>
+<p>This section assumes that you know how many trials each proportion represents. If you want to analyze proportions for which the number of trials is unknown, a binomial GLM is probably not the right tool. One option you can try instead is to apply a <a href="@sec-trans-common-lp">logit transform</a> to the proportions, then fit a linear regression to the transformed values.</p>
 </section>
-<section id="sec-glm4-binom-real" class="level3" data-number="21.2.2">
-<h3 data-number="21.2.2" class="anchored" data-anchor-id="sec-glm4-binom-real"><span class="header-section-number">21.2.2</span> Example using real data</h3>
+<section id="sec-glm4-binom-sim" class="level3" data-number="21.2.2">
+<h3 data-number="21.2.2" class="anchored" data-anchor-id="sec-glm4-binom-sim"><span class="header-section-number">21.2.2</span> Example using simulated data</h3>
+<p>Let’s explore binomial regression by simulating some data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># random number seed</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co"># sample size</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="co"># x values</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="fl">0.001</span>, <span class="dv">10</span>)</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="co"># intercept and slope</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>beta0 <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>beta1 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.75</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a><span class="co"># linear predictor</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>logit.eta <span class="ot">&lt;-</span> beta0 <span class="sc">+</span> beta1<span class="sc">*</span>x</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a><span class="co"># inverse logit to convert to</span></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a><span class="co"># probability scale</span></span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>eta <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">plogis</span>(logit.eta), <span class="dv">3</span>)</span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a><span class="co"># weights = sample sizes</span></span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a><span class="co"># use same size for each observation for simplicity</span></span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>wts <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">20</span>, n)</span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a><span class="co"># draw observed values</span></span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="at">prob=</span>eta, <span class="at">size=</span>wts)<span class="sc">/</span>wts</span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true" tabindex="-1"></a><span class="co"># assemble to data frame</span></span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true" tabindex="-1"></a>dr <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x=</span>x, <span class="at">y=</span>y, <span class="at">w=</span>wts)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x,y, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Linear regression would be inappropriate, because the predicted outcome of a linear model is not bounded to the domain of <span class="math inline">\(y\)</span>. Instead, we fit a binomial GLM using the <code>weights</code> argument to define the denominator of each observation.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>mod3 <span class="ot">&lt;-</span> <span class="fu">glm</span>(y<span class="sc">~</span>x, <span class="at">data=</span>dr,</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">family=</span>binomial, <span class="at">weights=</span>dr<span class="sc">$</span>w)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = y ~ x, family = binomial, data = dr, weights = dr$w)
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  2.87937    0.14362   20.05   &lt;2e-16 ***
+x           -0.74801    0.03206  -23.33   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 1152.39  on 99  degrees of freedom
+Residual deviance:   83.32  on 98  degrees of freedom
+AIC: 326.82
+
+Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+</div>
+<p>The slope and intercept estimates are very close to the truth. At this point, we can evaluate model fit with deviance explained, use AIC model selection, or whatever other interpretive post hoc analyses we need to. Just as with logistic regression, the odds ratio <span class="math inline">\(e^{\beta_1}\)</span> or <code>exp(coef(mod2)[2])</code> describes the multiplicative change in the odds that an individual “succeeds”. Remember that the <span class="math inline">\(p\)</span> in the binomial part really refer to success probability in a trial. If our proportions here represent female sex ratio in experimental clutches of guppies, then the odds ratio</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(mod3)[<span class="dv">2</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        x 
+0.4733064 </code></pre>
+</div>
+</div>
+<p>means that for every additional unit of <span class="math inline">\(x\)</span>, the probability that an individual within a clutch is female is reduced by about 53%.</p>
+<p>Unlike binary logistic regression, we generally do not use AUC to evaluate binomial regression fitted to proportions. Although AUC can still be calculated and retains the same mathematical interpretation, it measures the model’s ability to distinguish individual successes from failures. In grouped binomial regression, however, the observations represent groups of trials, and our primary interest is usually in how accurately the model estimates the proportion of successes within each group. Consequently, AUC is generally less informative than measures such as deviance explained and comparisons of observed and predicted proportions.</p>
+</section>
+<section id="sec-glm4-binom-real" class="level3" data-number="21.2.3">
+<h3 data-number="21.2.3" class="anchored" data-anchor-id="sec-glm4-binom-real"><span class="header-section-number">21.2.3</span> Example using real data</h3>
+<p>Let’s use the NEON data for a real example. If you don’t already have it, download the <a href="../datasets/dat-neon-site-rich-env.csv">site-level richness and environmental dataset</a> and put it in your working directory.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"dat-neon-site-rich-env.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Consider this plot of the proportion of species present which are sciurids (<code>psci</code>) varies with mean annual temperature.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># proportion of species which are squirrels</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>psci <span class="ot">&lt;-</span> dx<span class="sc">$</span>sci <span class="sc">/</span> dx<span class="sc">$</span>tot</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx<span class="sc">$</span>mat, dx<span class="sc">$</span>psci)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It looks like warmer sites tend to have proportionally fewer sciurid species. We can test that with a binomial GLM.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>mod4 <span class="ot">&lt;-</span> <span class="fu">glm</span>(psci<span class="sc">~</span>mat, <span class="at">data=</span>dx, <span class="at">family=</span>binomial, <span class="at">weights=</span>dx<span class="sc">$</span>tot)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod4)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = psci ~ mat, family = binomial, data = dx, weights = dx$tot)
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept) -1.09543    0.18668  -5.868 4.41e-09 ***
+mat         -0.06095    0.01735  -3.512 0.000445 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 48.155  on 45  degrees of freedom
+Residual deviance: 35.675  on 44  degrees of freedom
+AIC: 126.1
+
+Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+</div>
+<p>Sure enough, it looks like there is a modest but statistically significant effect of mean annual temperature on proportional sciurid richness. The odds ratio, <span class="math inline">\(e^{-0.061}=0.941\)</span>, suggests that for every additional degree of mean annual temperature, proportional sciurid richness decreases by about 6%. However, the model only reduces the deviance by about 26% (<span class="math inline">\(1-\frac{35.67}{48.15}=0.26\)</span>).</p>
+<p>Now let’s plot the model predictions and their 95% CI.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># values for prediction</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>use.n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(dx<span class="sc">$</span>mat), <span class="fu">max</span>(dx<span class="sc">$</span>mat), <span class="at">length=</span>use.n)</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate predictions and 95% CI (link scale)</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod4, <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">mat=</span>px),</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">type=</span><span class="st">"link"</span>, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>mn <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.5</span>, pred<span class="sc">$</span>fit, pred<span class="sc">$</span>se.fit)</span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>lo <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.025</span>, pred<span class="sc">$</span>fit, pred<span class="sc">$</span>se.fit)</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>up <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>, pred<span class="sc">$</span>fit, pred<span class="sc">$</span>se.fit)</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a><span class="co"># inverse link function to get probabilities</span></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>mn <span class="ot">&lt;-</span> mod4<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(mn)</span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>lo <span class="ot">&lt;-</span> mod4<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(lo)</span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>up <span class="ot">&lt;-</span> mod4<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(up)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>And the plot:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx<span class="sc">$</span>mat, dx<span class="sc">$</span>psci, <span class="at">type=</span><span class="st">"n"</span>,</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="fu">expression</span>(Mean<span class="sc">~</span>annual<span class="sc">~</span>temperature<span class="sc">~</span>(degree<span class="sc">*</span>C)),</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Proportional sciurid richness"</span>,</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(<span class="at">x=</span><span class="fu">c</span>(px, <span class="fu">rev</span>(px)), </span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">y=</span><span class="fu">c</span>(lo, <span class="fu">rev</span>(up)), <span class="co"># REVerse either upper or lower</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">border=</span><span class="cn">NA</span>, <span class="at">col=</span><span class="st">"grey80"</span>)</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, mn, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(dx<span class="sc">$</span>mat, <span class="fu">jitter</span>(dx<span class="sc">$</span>psci, <span class="at">amount=</span><span class="fl">0.05</span>),</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex=</span><span class="fl">1.1</span>, <span class="at">pch=</span><span class="dv">19</span>, <span class="at">xpd=</span><span class="cn">NA</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-43-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Just for fun, let’s extend the <span class="math inline">\(x\)</span> range of prediction to convince ourselves that the predicted values will never extend beyond the <span class="math inline">\(\left[0,1\right]\)</span> domain of proportions.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># values for prediction</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>use.n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>px <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">100</span>, <span class="dv">100</span>, <span class="at">length=</span>use.n)</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate predictions and 95% CI (link scale)</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod4, <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">mat=</span>px),</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">type=</span><span class="st">"link"</span>, <span class="at">se.fit=</span><span class="cn">TRUE</span>)</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>mn <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.5</span>, pred<span class="sc">$</span>fit, pred<span class="sc">$</span>se.fit)</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>lo <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.025</span>, pred<span class="sc">$</span>fit, pred<span class="sc">$</span>se.fit)</span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>up <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>, pred<span class="sc">$</span>fit, pred<span class="sc">$</span>se.fit)</span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a><span class="co"># inverse link function to get probabilities</span></span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>mn <span class="ot">&lt;-</span> mod4<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(mn)</span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>lo <span class="ot">&lt;-</span> mod4<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(lo)</span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>up <span class="ot">&lt;-</span> mod4<span class="sc">$</span>family<span class="sc">$</span><span class="fu">linkinv</span>(up)</span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx<span class="sc">$</span>mat, dx<span class="sc">$</span>psci, <span class="at">type=</span><span class="st">"n"</span>,</span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="fu">expression</span>(Mean<span class="sc">~</span>annual<span class="sc">~</span>temperature<span class="sc">~</span>(degree<span class="sc">*</span>C)),</span>
+<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Proportional sciurid richness"</span>,</span>
+<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">100</span>, <span class="dv">100</span>))</span>
+<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(<span class="at">x=</span><span class="fu">c</span>(px, <span class="fu">rev</span>(px)), </span>
+<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">y=</span><span class="fu">c</span>(lo, <span class="fu">rev</span>(up)), <span class="co"># REVerse either upper or lower</span></span>
+<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">border=</span><span class="cn">NA</span>, <span class="at">col=</span><span class="st">"grey80"</span>)</span>
+<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px, mn, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(dx<span class="sc">$</span>mat, <span class="fu">jitter</span>(dx<span class="sc">$</span>psci, <span class="at">amount=</span><span class="fl">0.05</span>),</span>
+<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex=</span><span class="fl">1.1</span>, <span class="at">pch=</span><span class="dv">19</span>, <span class="at">xpd=</span><span class="cn">NA</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch21_files/figure-html/unnamed-chunk-44-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="sec-glm4-ord" class="level2" data-number="21.3">

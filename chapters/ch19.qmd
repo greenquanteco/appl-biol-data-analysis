@@ -136,7 +136,7 @@ legend("topleft",
 
 ### Example with real data {#sec-glm2-gausslog-real}
 
-Let's use the NEON data for a quick example. Download the [site-level richness and environmental dataset](..datasets/dat-neon-site-rich-env.csv) and put it in your working directory.
+Let's use the NEON data for a quick example. Download the [site-level richness and environmental dataset](../datasets/dat-neon-site-rich-env.csv) and put it in your working directory.
 
 ```{r}
 #| include: false
@@ -421,7 +421,7 @@ be worth a try.
 
 ### Example with real data {#sec-glm2-gamma-real}
 
-Returning to the NEON data, consider this plot of net primary productivity vs. latitude. If you don't already have it, download the [site-level richness and environmental dataset](..datasets/dat-neon-site-rich-env.csv) and put it in your working directory.
+Returning to the NEON data, consider this plot of net primary productivity vs. latitude. If you don't already have it, download the [site-level richness and environmental dataset](../datasets/dat-neon-site-rich-env.csv) and put it in your working directory.
 
 ```{r}
 #| fig.width: 8
