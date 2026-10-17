@@ -29,3 +29,15 @@ cols <- c("siteID", "gridid", "nlcdClass",
           "hindfootLength", "earLength", "tailLength",
           "totalLength", "weight")
 dz <- dx[,cols]
+
+# each row is a capture, not an individual
+length(unique(dz$tagID))
+nrow(dz)
+
+# individuals
+inds <- sort(unique(dz$tagID))
+
+tagtable <- sort(table(dz$tagID))
+tagtable[tagtable > 2]
+
+dz[dz$tagID == "NEON.MAM.D08.R1101",]
