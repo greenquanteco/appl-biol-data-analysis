@@ -60,6 +60,43 @@ where *a* and *b* are constants.
 - $a$ is the **asymptote**: the maximum $y$ value that is approached but never reached.
 - $b$ is the **Michaelis constant**. It represents the $x$ value at which $Y = a/2$. Interestingly, for any proportion of the form $c/(c+1)$, where *c* is a positive integer, the *X* value where $y=(c/(c+1))a$ is $cb$. For example, the *X* value when $y=(3/4)a$ is $3b$.
 
+```{r}
+#| fig-width: 8
+#| fig-height: 16
+#| label: fig-micmen1
+#| fig-cap: 'Top: Michaelis-Menten curves with fixed $b$ and different asymptote ($a$) terms. Bottom: Michaelis-Menten curves with fixed $a$ and different growth ($b$) terms'
+#| fig-alt: "Top panel shows different Michaelis-Menten curves with fixed b term and different asymptotes (a term). Curves increase to the right with decreasing slope, with greater a causing higher asymptotes. Bottom panel shows Michaelis-Menten curves with fixed a term and different Michaelis constants (b term). Curves increase to the right with decreasing slope, with greater b causing flatter curves that take longer to reach half of their asymptote."
+
+x <- seq(0, 10, length=100)
+a <- c(4, 6, 8, 10)
+b <- 3
+
+par(mfrow=c(2,1), mar=c(5,5,1,3), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable")
+for(i in 1:length(a)){
+    iy <- (a[i]*x)/(b+x)
+    points(x, iy, type="l", lwd=3)
+    text(max(x)+0.25, max(iy),
+         paste("a =", a[i]),
+         adj=0, cex=1.1)
+}#i
+
+a <- 5
+b <- c(1, 3, 5, 7)
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, 5))
+for(i in 1:length(b)){
+    iy <- (a*x)/(b[i]+x)
+    points(x, iy, type="l", lwd=3)
+    text(max(x)+0.25, max(iy),
+         paste("b =", b[i]),
+         adj=0, cex=1.1)
+}#i
+
+```
+
 The Michaelis-Menten curve goes by many names. In enzyme kinetics and biochemistry, it is called the Michaelis-Menten curve. Biologists also sometimes call it the **Monod function**, the **Holling type II** functional response, or the **Beverton-Holt model**. This diversity of application speaks to the generality of this function. The original definition predicted a reaction rate. However, Michaelis-Menten curves can also be used to model other phenomena. For example, @kunz2019 and @green2020 used Michaelis-Menten curves to model the effectiveness of biodiversity monitoring programs, using the asymptote term as an estimate of the maximum number of species likely to be detected.
 
 ### Gompertz curve {#sec-non-common-gomp}
@@ -301,13 +338,26 @@ The `predictNLS` function actually estimates 3 versions of the confidence interv
 ```{r}
 #| fig.width: 8
 #| fig.height: 6
-#| label: fig-earvslength2
+#| label: fig-earvslength3
 #| fig-cap: "Ear length of small mammals appears to increase as a nonlinear function of total body length. Thick line shows predicted value and dashed lines show 95% confidence interval."
 #| fig-alt: "Ear length of small mammals increases as a nonlinear function of total body length. Predicted value and confidence intervals are shown as solid and dashed lines, respectively."
 
-prx$mn <- py$summary$mean.1 # first order delta approximation
-prx$lo <- py$summary$'2.5%'
-prx$up <- py$summary$'97.5%'
+# 2026-10-26
+# different versions of propagate 
+# use different column names!
+if("Prop.Mean.1" %in% names(py$summary)){
+    # first order delta approximation
+    prx$mn <- py$summary$Prop.Mean.1 
+    prx$lo <- py$summary$'Prop.2.5%'
+    prx$up <- py$summary$'Prop.97.5%'   
+} 
+if("mean.1" %in% names(py$summary)){
+    # first order delta approximation
+    prx$mn <- py$summary$mean.1 
+    prx$lo <- py$summary$'2.5%'
+    prx$up <- py$summary$'97.5%'
+}
+
 
 par(mar=c(5,5,1,1))
 plot(dx$totalLength, dx$earLength,
@@ -339,7 +389,7 @@ tax <- read.csv("data-neon-taxa.csv")
 ```{r}
 #| fig.width: 8
 #| fig.height: 6
-#| label: fig-earvslength3
+#| label: fig-earvslength4
 #| fig-cap: "Ear length of Cricetid and Murid rodents appears to increase as a nonlinear function of total body length."
 #| fig-alt: "Ear length of Cricetid and Murid rodents increases as a nonlinear function of total body length."
 
@@ -398,7 +448,7 @@ Now make the trendlines. Remember that the data frame you pass to the `predict` 
 ```{r}
 #| fig.width: 8
 #| fig.height: 6
-#| label: fig-earvslength4
+#| label: fig-earvslength5
 #| fig-cap: "Ear length of Cricetid and Murid rodents appears to increase as a nonlinear function of total body length. Thick lines shows predicted value and dashed lines show 95% confidence interval."
 #| fig-alt: "Ear length of Cricetid and Murid rodents increases as a nonlinear function of total body length. Predicted value and confidence intervals are shown as solid and dashed lines, respectively."
 
