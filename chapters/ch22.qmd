@@ -55,7 +55,7 @@ The **Michaelis-Menten function** is a nonlinear model that is usually used to d
 
 $$Y=\frac{aX}{b+X}$$
 
-where *a* and *b* are constants. 
+where *a* and *b* are constants. It has a fixed lower bound at 0 and no inflection point.
 
 - $a$ is the **asymptote**: the maximum $y$ value that is approached but never reached.
 - $b$ is the **Michaelis constant**. It represents the $x$ value at which $Y = a/2$. Interestingly, for any proportion of the form $c/(c+1)$, where *c* is a positive integer, the *X* value where $y=(c/(c+1))a$ is $cb$. For example, the *X* value when $y=(3/4)a$ is $3b$.
@@ -64,7 +64,7 @@ where *a* and *b* are constants.
 #| fig-width: 8
 #| fig-height: 16
 #| label: fig-micmen1
-#| fig-cap: 'Top: Michaelis-Menten curves with fixed $b$ and different asymptote ($a$) terms. Bottom: Michaelis-Menten curves with fixed $a$ and different growth ($b$) terms'
+#| fig-cap: 'Top: Michaelis-Menten curves with fixed $b$ and different asymptote ($a$) terms. Bottom: Michaelis-Menten curves with fixed $a$ and different midpoints ($b$) terms'
 #| fig-alt: "Top panel shows different Michaelis-Menten curves with fixed b term and different asymptotes (a term). Curves increase to the right with decreasing slope, with greater a causing higher asymptotes. Bottom panel shows Michaelis-Menten curves with fixed a term and different Michaelis constants (b term). Curves increase to the right with decreasing slope, with greater b causing flatter curves that take longer to reach half of their asymptote."
 
 x <- seq(0, 10, length=100)
@@ -101,21 +101,21 @@ The Michaelis-Menten curve goes by many names. In enzyme kinetics and biochemist
 
 ### Gompertz curve {#sec-non-common-gomp}
 
-The Gompertz curve is a sigmoid (s-shaped) growth curve frequently used to describe biological growth. It can be written in several ways. You can use whichever form you want, but you need to be explicit about what you did. Most people use the second of the two forms presented below. In both cases, all parameters must be positive.
+The Gompertz curve is a sigmoid (s-shaped) growth curve frequently used to describe biological growth. It can be written in several ways. You can use whichever form you want, but you need to be explicit about what you did. In both cases, all parameters must be positive.
 
 #### Gompertz curve form 1
 
 The most common form of the Gompertz curve is a double exponential:
 
-$$\mathcal{f}\left(t\right)={ae}^{-be^{-ct}}$$
+$$\mathcal{f}\left(x\right)={ae}^{-be^{-cx}}$$
 
-where $a$ is the upper asymptote, $b$ moves the curve along the time axis $t$, and $c$ is a growth rate. The inflection point occurs at
+where $a$ is the upper asymptote, $b$ defines the x coordinate of the inflection point at $\log{\left(b\right)/c}$, and $c$ is a growth rate. The inflection point occurs at
 
-$$t_{inflection}=\frac{\log\left(b\right)}{c}$$
+$$x_{inflection}=\frac{\log\left(b\right)}{c}$$
 
 and at that point,
 
-$$y_{inflection}=\mathcal{f}\left(t_{inflection}\right)=\frac{a}{e}\approx0.368a$$
+$$y_{inflection}=\mathcal{f}\left(x_{inflection}\right)=\frac{a}{e}\approx0.368$$
 
 
 
@@ -123,7 +123,7 @@ $$y_{inflection}=\mathcal{f}\left(t_{inflection}\right)=\frac{a}{e}\approx0.368a
 
 Another form of the Gompertz function looks like this:
 
-$$\mathcal{f}\left(t\right)=ae^{-bc^t}$$
+$$\mathcal{f}\left(x\right)=ae^{-bc^x}$$
 
 This version is used in the R `SSgompertz` function that we'll see later. It is actually equivalent to the first version because of the identity
 
@@ -131,17 +131,17 @@ $$e^{-cx}=\left(e^{-c}\right)^x$$
 
 Start with form 1 and substitute:
 
-$$\mathcal{f}\left(t\right)={ae}^{-be^{-ct}}$$
+$$\mathcal{f}\left(x\right)={ae}^{-be^{-cx}}$$
 
-$$\mathcal{f}\left(t\right)={ae}^{-b\left(e^{-c}\right)^t}$$
+$$\mathcal{f}\left(x\right)={ae}^{-b\left(e^{-c}\right)^x}$$
 
 The second form replaces $e^{-c}$ with a new constant, which the `SSgompertz` documentation calls `b3` (with the $b$ term from form 1 being renamed `b2`):
 
-$$\mathcal{f}\left(t\right)={ae}^{-b_2\left(b_3\right)^t}$$
+$$\mathcal{f}\left(x\right)={ae}^{-b_2\left(b_3\right)^x}$$
 
-So the parameters of form 1 and form 2 thus have slightly different meanings:
+So, the two forms seen here produce the same curve, just in a slightly different way:
 
-| Parameter | Classical: $y=ae^{-be^{-ct}}$ | R `SSgompertz()`: $y=ae^{-b_2b_3^x}$ | Interpretation |
+| Parameter | Classical: $y=ae^{-be^{-cx}}$ | R `SSgompertz()`: $y=ae^{-b_2b_3^x}$ | Interpretation |
 |:---|:---:|:---:|:---|
 | Upper asymptote | $a$ | $a$ | Maximum value approached as $x\to\infty$. |
 | Initial condition | $b$ | $b_2=b$ | Controls the initial value and horizontal position of the curve. At $x=0$, $y=ae^{-b}$. |
@@ -149,63 +149,742 @@ So the parameters of form 1 and form 2 thus have slightly different meanings:
 
 : Comparison of parameterizations of the Gompertz growth curve. The two equations describe the same curve, with the relationship $b_3=e^{-c}$ (or equivalently, $c=-\ln b_3$). {#tbl-gompertz}
 
+Below is an illustration of the classic Gompertz curve with different parameters.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-gompertz1
+#| fig-cap: 'Gompertz growth curves with different asymptotes ($a$) and constant $b$ and $c$ parameters.'
+#| fig-alt: "Gompertz growth curves with different asymptotes (a) and constant b and c parameters. Curves increase to the right with decreasing slope, with greater a causing higher asymptotes."
+
+x <- seq(0, 10, length=100)
+A <- c(4, 6, 8, 10)
+B <- 3
+C <- 2
+
+par(mfrow=c(1,1), mar=c(5,5,1,3), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, max(A)))
+for(i in 1:length(A)){
+    iy <- A[i]*exp(-1*B*exp(-1*C*x))
+    points(x, iy, type="l", lwd=3)
+    text(max(x)+0.25, max(iy),
+         paste("a =", A[i]),
+         adj=0, cex=1.1)
+}#i
+```
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-gompertz2
+#| fig-cap: 'Gompertz growth curves with different $b$ parameters, which control the horizontal displacement of the inflection point as $\log{\left(b\right)}/c$. The $a$ and $c$ are held constant.'
+#| fig-alt: "Gompertz growth curves with different b parameters and constant a and c parameters. Curves increase to the right with decreasing slope, with greater b shifting the inflection point to the right."
+
+x <- seq(0, 10, length=100)
+A <- 8
+B <- c(3, 6, 9)
+C <- 0.5
+cols <- c("#e41a1c", "#377eb8", "#4daf4a")
+par(mfrow=c(1,1), mar=c(5,5,1,3), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, max(A)))
+for(i in 1:length(B)){
+    iy <- A*exp(-1*B[i]*exp(-1*C*x))
+    points(x, iy, type="l", lwd=3,
+           lty=i, col=cols[i])
+}#i
+legend("bottomright",
+       legend=c(expression(italic(b)==3),
+                expression(italic(b)==6),
+                expression(italic(b)==9)),
+       lty=1:3, lwd=3, col=cols,
+       bty="n", cex=1.2)
+```
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-gompertz3
+#| fig-cap: 'Gompertz growth curves with different $c$ parameters, which control the growth rate of the curve. The $a$ and $b$ parameters are held constant.'
+#| fig-alt: "Gompertz growth curves with different c parameters and constant a and b parameters. Curves increase to the right with decreasing slope, with greater c causing faster initial growth."
+
+x <- seq(0, 10, length=100)
+A <- 8
+B <- 10
+C <- c(0.25, 0.5, 1, 1.5)
+cols <- c("#e41a1c", "#377eb8", "#4daf4a","#984ea3")
+par(mfrow=c(1,1), mar=c(5,5,1,3), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, max(A)))
+for(i in 1:length(C)){
+    iy <- A*exp(-1*B*exp(-1*C[i]*x))
+    points(x, iy, type="l", lwd=3,
+           lty=i, col=cols[i])
+}#i
+legend("bottomright",
+       legend=c(expression(italic(c)==0.25),
+                expression(italic(c)==0.5),
+                expression(italic(c)==1),
+                expression(italic(c)==1.5)),
+       lty=1:3, lwd=3, col=cols,
+       bty="n", cex=1.2)
+```
+
 ### von Bertalanffy {#sec-non-common-vb}
 
-Like the Gompertz curve, the von Bertalanffy growth curve describes size increasing and approaching an asymptote. The von Bertalanffy model is commonly written as:
+Like the Gompertz curve, the **von Bertalanffy growth curve** describes size increasing and approaching an asymptote. Unlike the Gompertz curve, the von Bertalanffy model is not sigmoid, but rather has a decreasing slope. That is, it is always concave down whereas the the Gompertz model can have a concave up portion, a concave down portion, and an inflection point in between.
+
+The von Bertalanffy model is commonly written as:
 
 $$f\left(x\right)=L_\infty\left(1-e^{-k\left(x-t_0\right)}\right)$$
 
 where $L_{\infty}$ is the asymptotic length as $t$ approaches $\infty$, $k$ is a growth rate parameter, and $t_0$ is the theoretical time at which $\mathcal{f}\left(t\right)=0$. $L_{\infty}$ and $k$ must be positive, and $t_0$ must be negative. The von Bertalanffy model is commonly used to describe animal growth, but in principle it could be used for any situation where its parameters make sense. The same function is also sometimes called the **monomolecular curve**. Like the Gompertz curve, the von Bertalanffy model has several forms. The form given above is the most common.
 
-### Logistic curves {#sec-non-common-log}
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-vbg1
+#| fig-cap: 'von Bertalanffy growth curves with different $L_{\infty}$ parameters, which control maximal size (horizontal asympotote). The $k$ and $t_0$ parameters are held constant.'
+#| fig-alt: "von Bertalanffy growth curves with different L infinity parameters. Curves increase to the right with decreasing slope, with greater L infinity causing greater asymptotes."
+
+x <- seq(0, 50, length=100)
+Linf <- c(50, 100, 150, 200)
+K <- 0.05
+T0 <- -1
+
+C <- c(0.25, 0.5, 1, 2)
+cols <- c("#e41a1c", "#377eb8", "#4daf4a","#984ea3")
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, max(Linf)))
+for(i in 1:length(Linf)){
+    iy <- Linf[i]*(1-exp((-1*K)*(x-T0)))
+    points(x, iy, type="l", lwd=3,
+           lty=i, col=cols[i])
+    text(max(x)+1, max(iy),
+         bquote(italic(L)[infinity]==.(Linf[i])),
+         adj=0, cex=1.2)
+}#i
+```
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-vbg2
+#| fig-cap: 'von Bertalanffy growth curves with different $k$ parameters, which control growth rate. The $L_{\infty}$ and $t_0$ parameters are held constant.'
+#| fig-alt: "von Bertalanffy growth curves with different k parameters. Curves increase to the right with decreasing slope, with k causing steeper growth."
+
+x <- seq(0, 50, length=100)
+Linf <- 200
+K <- c(0.01, 0.03, 0.05, 0.1)
+T0 <- -1
+
+cols <- c("#e41a1c", "#377eb8", "#4daf4a","#984ea3")
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, max(Linf)))
+for(i in 1:length(K)){
+    iy <- Linf*(1-exp((-1*K[i])*(x-T0)))
+    points(x, iy, type="l", lwd=3,
+           lty=i, col=cols[i])
+    text(max(x)+1, max(iy),
+         bquote(italic(k)==.(K[i])),
+         adj=0, cex=1.2)
+}#i
+```
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-vbg3
+#| fig-cap: 'von Bertalanffy growth curves with different $t_0$ parameters, which control horizontal displacement and the y-intercept. The $L_{\infty}$ and $k$ parameters are held constant.'
+#| fig-alt: "von Bertalanffy growth curves with different t zero parameters. Curves increase to the right with decreasing slope, with smaller t zero causing greater y intercepts."
+
+x <- seq(0, 50, length=100)
+Linf <- 200
+K <- 0.05
+T0 <- c(-1, -5, -10, -20)
+
+cols <- c("#e41a1c", "#377eb8", "#4daf4a","#984ea3")
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, max(Linf)))
+for(i in 1:length(T0)){
+    iy <- Linf*(1-exp((-1*K)*(x-T0[i])))
+    points(x, iy, type="l", lwd=3,
+           lty=i, col=cols[i])
+}#i
+legend("bottomright",
+       legend=c(expression(italic(t)[0]==-1),
+                expression(italic(t)[0]==-5),
+                expression(italic(t)[0]==-10),
+                expression(italic(t)[0]==-20)),
+       lty=1:3, lwd=3, col=cols,
+       bty="n", cex=1.2)
+```
+
+### Logistic and log-logistic curves {#sec-non-common-log}
 
 A **logistic** curve is one that takes the form
 
-$$f\left(x\right)=\frac{L}{1+e^{-k\left(x-x_0\right)}}$$
+$$f\left(x\right)=\frac{L}{1+e^{-b\left(x-x_0\right)}}$$
 
-where $L$ is the supremum (upper asymptote), $k$ is a growth rate, and $x_0$ is the midpoint ($x$ value where $f\left(x\right)=L/2$). Logistic functions are sigmoid, with a lower limit of 0 as x tends to $-\infty$ and $L$ as x approaches $+\infty$. The **standard logistic function** with $L=1$, $k=1$ and $x_0=0$ is
+where $L$ is the supremum (upper asymptote), $b$ is a growth rate, and $x_0$ is the midpoint ($x$ value where $f\left(x\right)=L/2$). Logistic functions are sigmoid, with a lower limit of 0 as x tends to $-\infty$ and upper limit of $L$ as x approaches $+\infty$. The **standard logistic function** with $L=1$, $b=1$ and $x_0=0$ is
 
 $$f\left(x\right)=\frac{1}{1+e^{-x}}$$
 
-which you may recognize as the inverse of the [logit function](@sec-trans-common-lp-logit).
+which you may recognize as the inverse of the [logit function](@sec-trans-common-lp-logit), given by the R function `plogis()`.
 
-#### Three parameter log-logistic {#sec-non-common-log-3pl}
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-stlogistic
+#| fig-cap: 'The standard logistic curve $f\left(x\right)=1/\left(1+e^{-x}\right)$. The red dashed line illustrates how the inflection point and midpoint are at $x=0$'
+#| fig-alt: "The standard logistic curve, which increases to the right from 0 to 1 with an inflection point at 0.  A red dashed line illustrates how the inflection point and midpoint are at x=0."
 
-The logistic function can be generalized by adding parameters to specify the upper and lower asymptotes or other features. One common version is the **three parameter logistic**, available in the R package `drc`. It comes in two flavors:
+x <- seq(-6, 6, length=100)
+y <- plogis(x)
+
+par(mfrow=c(1,1), mar=c(5,5,1,3), 
+    xpd=NA, bty="n")
+plot(x, y, type="l", lwd=3, xlab="x variable",
+     ylab="y variable", ylim=c(0, 1))
+segments(0, 0, 0, 0.5, lty=2, lwd=2, col="red")
+segments(0, 0.5, -6, 0.5, lty=2, lwd=2, col="red")
+```
+
+The logistic function can be generalized by adding parameters to specify the upper and lower asymptotes or other features. These versions are called **log-logistic** functions because they use the logarithm of $x$, not $x$ itself. We will examine four versions:
+
+- the **two-parameter log-logistic (2pl)**: uses a midpoint ($g$) and a slope parameter ($b$), with lower and upper asymptotes fixed at 0 and 1, respectively.
+- the **three-parameter log-logistic (3pl)**: extends the two-parameter log-logistic model with a new term $d$ to define an upper asymptote other than 1. 
+- the **four-parameter log-logistic (4pl)**: extends the three-parameter log-logistic model with a new term $c$ to define a lower asymptote other than 0.
+- the **five-parameter log-logistic (5pl)**: extends the four-parameter log-logistic model with a new term $h$ to alter the shape of the curve.
+
+In practical terms:
+
+- the four-parameter model is just the special case of the five-parameter model with $h=1$
+- the three-parameter model is just the special case of the four-parameter model with $c=0$
+- the two-parameter model is the special case of the three-parameter model with $d=1$.
+
+:::{.callout-note title="A note on parameter names"}
+Textbooks and software packages differ a bit in the way that they label the parameters of the models in this section. In this guide I have tried to be as consistent as possible, at least within each group like the log-logistic or the Weibull families. The letters or symbols are not important--their positions in the equations are. In general, I try to avoid using $e$ and $f$ as names of parameters because in most contexts $e$ is the symbol for Euler's number and $f$ is often used to label functions (e.g., $f\left(x\right)=\dots$).
+:::
+
+#### Two-parameter log-logistic {#sec-non-common-log-2pl}
+
+The **two-parameter log-logistic** function is like the standard logistic function (@fig-stlogistic), but with parameters $b$ for the slope and $g$ for the midpoint. It is given by:
+
+$$f\left(x\right)=\frac{1}{1+e^{b\left(\log{\left(x\right)}-\log{\left(g\right)}\right)}}$$
+
+Notice that here $x$ is part of a difference in the exponent, which has the effect of moving the curve left and right. 
+
+The $b$ parameter defines the curve's growth rate. Counter intuitively, the function increases when $b<0$, and decreases when $b>0$. Greater magnitudes of $b$, regardless of sign, make for steeper curves. 
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-2pl-1
+#| fig-cap: 'Two-parameter log-logistic curves with different $b$ parameters, which control the growth rate. Negative $b$ of greater magnitude cause faster growth. The midpoint parameter $g$ is constant at 5$.'
+#| fig-alt: "Two-parameter log-logistic curves with different b parameters, which control the growth rate. Negative b of greater magnitude cause faster growth. The midpoint parameter $g$ is constant at 5$."
+
+x <- seq(0.1, 10, length=100)
+B <- -1*c(0.5, 1, 2, 4, 8)
+G <- 5
+
+cols <- c("#e41a1c", "#377eb8", "#4daf4a","#984ea3", "#ff7f00")
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, 1))
+for(i in 1:length(B)){
+    iy <- 1/(1+exp(B[i]*(log(x)-log(G))))
+    points(x, iy, type="l", lwd=3,
+           lty=i, col=cols[i])
+    text(max(x)+0.2, max(iy),
+         bquote(italic(b)==.(B[i])),
+         adj=0, cex=1.2,
+         col=cols[i])
+}#i
+```
+
+Positive $b$ cause the function to decrease:
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-2pl-2
+#| fig-cap: 'Two-parameter log-logistic curves with different $b$ parameters, which control the growth rate. Positive $b$ of greater magnitude cause faster decay. The midpoint parameter $g$ is constant at 5$.'
+#| fig-alt: "Two-parameter log-logistic curves with different b parameters, which control the growth rate. Negative b of greater magnitude cause faster decay. The midpoint parameter $g$ is constant at 5$."
+
+x <- seq(0.1, 10, length=100)
+B <- c(0.5, 1, 2, 4, 8)
+G <- 5
+
+cols <- c("#e41a1c", "#377eb8", "#4daf4a","#984ea3", "#ff7f00")
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, 1))
+for(i in 1:length(B)){
+    iy <- 1/(1+exp(B[i]*(log(x)-log(G))))
+    points(x, iy, type="l", lwd=3,
+           lty=i, col=cols[i])
+}#i
+legend("topright", 
+       legend=c(
+           expression(italic(b)==0.5),
+           expression(italic(b)==1),
+           expression(italic(b)==2),
+           expression(italic(b)==4),
+           expression(italic(b)==8)),
+       bty="n", cex=1.2,
+       lty=1:5, col=cols, lwd=3)
+
+```
+
+The $g$ parameter defines the **midpoint**, or $x$ value at which $y=1/2$. 
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-2pl-3
+#| fig-cap: 'Two-parameter log-logistic curves with different $g$ parameters, which control the function midpoint. Greater $g$ shift the curve to the right. The $b$ term is held constant at -5.'
+#| fig-alt: "Two-parameter log-logistic curves with different g parameters, which control the function midpoint. Greater g shift the curve to the right. The b term is held constant at -5."
+
+x <- seq(0.1, 10, length=100)
+B <- -5
+G <- c(2, 4, 6, 8)
+
+cols <- c("#e41a1c", "#377eb8", "#4daf4a","#984ea3")
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, 1))
+for(i in 1:length(G)){
+    iy <- 1/(1+exp(B*(log(x)-log(G[i]))))
+    points(x, iy, type="l", lwd=3,
+           lty=i, col=cols[i])
+}#i
+legend("bottomright", 
+       legend=c(
+           expression(italic(g)==2),
+           expression(italic(g)==4),
+           expression(italic(g)==6),
+           expression(italic(g)==8)),
+       bty="n", cex=1.2,
+       lty=1:5, col=cols, lwd=3)
+```
+
+#### Three-parameter log-logistic {#sec-non-common-log-3pl}
+
+The **three-parameter log-logistic** generalizes the two-parameter log-logistic by adding a term for either the upper or lower asymptote. Either the lower limit is fixed at 0 and the upper limit is the parameter $d$, or the upper limit can be fixed at 1 and the lower limit is the parameter $c$. The former version, with lower limit fixed at 0, is probably more common so we'll focus on that one. 
 
 **Lower limit fixed at 0:**
 
-$$f\left(x\right)=\frac{d}{1+e^{b\left(\log{\left(x\right)}-\log{\left(e\right)}\right)}}$$
+The most commonly encountered version of the three-parameter log-logistic model has the lower limit fixed at 0 and the upper limit as a parameter $d$:
 
-where $d$ is the upper asymptote, $b$ is a growth rate, and $e$ is the inflection point. 
+$$f\left(x\right)=\frac{d}{1+e^{b\left(\log{\left(x\right)}-\log{\left(g\right)}\right)}}$$
 
-**Upper limit fixed at 1:**
+where $d$ is the upper asymptote, $b$ is a growth rate, and $g$ is the inflection point. 
 
-$$f\left(x\right)=c+\frac{1-c}{1+e^{b\left(\log{\left(x\right)}-\log{\left(e\right)}\right)}}$$
+:::{.callout-tip title="e is not always e"}
+In the R documentation for log-logistic functions, especially in package `drc`, the midpoint parameter that we call $g$ here is often referred to as $e$. I find this incredibly unhelpful, so I use a different letter instead. Using $e$ for something other than Euler's constant is like using $\pi$ to stand for something other than the ratio of a circle's circumference to its diameter...which people also do sometimes. *Read the documentation*!
+:::
 
-where $c$ is the lower asymptote. 
+**Upper limit fixed at 1**:
 
-#### Four parameter log-logistic {#sec-non-common-log-4pl}
+The less commonly encountered version of the three-parameter log-logistic function has the upper limit fixed at 1 and the lower limit as a parameter $c$:
 
-Package `drc` also has a **four parameter logistic**:
+$$f\left(x\right)=c+\frac{1-c}{1+e^{b\left(\log{\left(x\right)}-\log{\left(g\right)}\right)}}$$
 
-$$f\left(x\right)=c+\frac{d-c}{1+e^{b\left(\log{\left(x\right)}-\log{\left(e\right)}\right)}}$$
+Here is an illustration of the fixed-lower version of the three-parameter log-logistic function with differing upper asymptotes:
 
-where $d$ is the upper asymptote, $b$ is a growth constant, $c$ is the lower asymptote, and $e$ is the inflection point. 
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-3pl-1
+#| fig-cap: 'Three-parameter log-logistic curves with different $d$ parameters, which control the upper asymptote. Greater $d$ increase the maximal value of the curve. The other parameters are held constant at $b=-4$ and $g=5$.'
+#| fig-alt: "Three-parameter log-logistic curves with different d parameters, which control the upper asymptote. Greater d increase the maximal value of the curve. The other parameters are held constant at b=-4 and g=5."
 
-In all of these log-logistic curves, the $e$ parameter is particularly useful because it can be interpreted as the ED50, or the dose producing a response halfway between $c$ and $d$. When $c=0$ and $d=1$, this is literally a 50% response; otherwise the response is midway between $c$ and $d$.
+x <- seq(0.1, 10, length=100)
+B <- -5
+G <- 5
+D <- c(4, 8, 12, 16)
+
+cols <- c("#e41a1c", "#377eb8", "#4daf4a","#984ea3")
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, max(D)))
+for(i in 1:length(D)){
+    iy <- D[i]/(1+exp(B*(log(x)-log(G))))
+    points(x, iy, type="l", lwd=3,
+           lty=i, col=cols[i])
+    text(max(x)+0.2, max(iy),
+         bquote(italic(d)==.(D[i])),
+         adj=0, cex=1.2,
+         col=cols[i])
+}#i
+```
+
+If we hold $d$ constant, then visualizing the effect of different $b$ or $g$ is exactly as it was in @fig-2pl-1 and @fig-2pl-2, just with a different upper value on the y-axis.
+
+#### Four-parameter log-logistic {#sec-non-common-log-4pl}
+
+If we take the three-parameter log-logistic, and allow both the upper and lower asymptotes to vary, we get the **four parameter log-logistic**. It has terms for the lower asymptote ($c$), upper asymptote ($d$), midpoint ($g$), and growth rate ($b$):
+
+$$f\left(x\right)=c+\frac{d-c}{1+e^{b\left(\log{\left(x\right)}-\log{\left(g\right)}\right)}}$$
+
+As in all of these log-logistic curves, the $g$ parameter is particularly useful because it can be interpreted as the ED50, or the dose producing a response halfway between $c$ and $d$. When $c=0$ and $d=1$, this is literally a response of 50% or 0.5; otherwise the $g$ parameter relates to a response midway between $c$ and $d$. Again, note that what we are calling $g$ is referred to in the `drc` documentation as `e`. 
+
+Here is an illustration of the four-parameter log-logistic curve with varying $b$ parameters:
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-4pl1
+#| fig-cap: 'Four-parameter log-logistic curves with different $b$ parameters, which control the growth rate. The other parameters are constant at $c=0$, $d=10$, and $g=5$.'
+#| fig-alt: "Four-parameter log-logistic curves with different $b$ parameters, which control the growth rate. The other parameters are constant at c=0, d=10, and g=5."
+
+x <- seq(0.1, 10, length=100)
+B <- -1*c(0.5, 1, 2, 4, 8)
+C <- 0
+D <- 10
+G <- 5
+
+cols <- c("#e41a1c", "#377eb8", "#4daf4a","#984ea3", "#ff7f00")
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, max(D)))
+for(i in 1:length(B)){
+    iy <- C+(D-C)/(1+exp(B[i]*(log(x)-log(G))))
+    points(x, iy, type="l", lwd=3,
+           lty=i, col=cols[i])
+    text(max(x)+0.2, max(iy),
+         bquote(italic(b)==.(B[i])),
+         adj=0, cex=1.2,
+         col=cols[i])
+}#i
+```
+
+Here is an illustration of the four-parameter log-logistic curve with varying $g$ parameters:
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-4pl2
+#| fig-cap: 'Four-parameter log-logistic curves with different $g$ parameters, which control the growth rate and midpoint. The black dashed lines illustrate how the $g$ parameter is really the $x$ value where $y=d/2$. The other parameters are constant at $c=0$, $d=10$, and $b=-8$.'
+#| fig-alt: "Four-parameter log-logistic curves with different $b$ parameters, which control the growth rate and midpoint. Larger g values shift the midpoint of the curve to the right. Black dashed lines illustrate how the g parameter is really the x value where y=d/2. The other parameters are constant at c=0, d=10, and b=-8."
+
+x <- seq(0.1, 10, length=100)
+B <- -8
+C <- 0
+D <- 10
+G <- c(2, 4, 6, 8)
+
+cols <- c("#e41a1c", "#377eb8", "#4daf4a","#984ea3")
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, max(D)))
+for(i in 1:length(G)){
+    iy <- C+(D-C)/(1+exp(B*(log(x)-log(G[i]))))
+    points(x, iy, type="l", lwd=3,
+           lty=i, col=cols[i])
+}#i
+legend("bottomright",
+       legend=c(expression(italic(g)==2),
+                expression(italic(g)==4),
+                expression(italic(g)==6),
+                expression(italic(g)==8)),
+       lty=1:3, lwd=3, col=cols,
+       bty="n", cex=1.2)
+for(i in 1:length(G)){
+    segments(0, D/2, G[i], D/2, lty=2)
+    segments(G[i], 0, G[i], D/2, lty=2)
+}
+```
+
+Varying the $c$ and $d$ terms in the four-parameter log-logistic move the lower and upper asymptotes, and correspondingly can squash or stretch the curves. See @fig-3pl-1 for an illustration of what that might look like.
+
+#### Five-parameter log-logistic {#sec-non-common-log-5pl}
+
+The most flexible version of the log-logistic model has 5 parameters: a lower asymptote $c$, an upper asymptote $d$, a growth rate $b$, a midpoint $g$, and a shape parameter $h$. When $h\neq1$, the function is asymmetric about $g$. When $h=1$, the model reduces to the four-parameter log-logistic. We obtain the five-parameter model by adding an exponent $h$ to the entire denominator of the four-parameter model :
+
+$$f\left(x\right)=c+\frac{d-c}{\left(1+e^{b\left(\log{\left(x\right)}-\log{\left(g\right)}\right)}\right)^h}$$
+
+The exponent $h$ allows the curve to be asymmetric about the midpoint $g$, when $h\neq1$. For an intuition about what $h$ does, imagine that the curve is a rubber or plastic rod bent into an s-shape--the shape of the log-logistic curve. If you grab the rod at the midpoint $g$ and twist clockwise, the curve will decrease left of $g$ and increase right of $g$. That is like decreaseing $h$ from 1 towards 0. If you twist counter-clockwise, the curve will decrease. This is like increasing $h$ from 1. Note that we need to adjust $g$ as a function of $h$ to keep the midpoint the same.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-5pl-1
+#| fig-cap: 'Five-parameter log-logistic curves with different $h$ parameters, which control the symmetry of the curve about the midpoint $g$. Values of $h<1$ tend to flatten the curve, while values of $h>1$ tend to make it steeper. The other parameters are constant at $c=0$, $d=10$, $b=-8$, and $g=5$.'
+#| fig-alt: "Five-parameter log-logistic curves with different $h$ parameters, which control the symmetry of the curve about the midpoint $g$. Values of h<1 tend to flatten the curve, while values of h>1 tend to make it steeper. The other parameters are constant at $c=0$, $d=10$, $b=-8$, and $g=5$."
+
+x <- seq(0.1, 10, length=100)
+B <- -8
+C <- 0
+D <- 10
+G <- 5
+H <- c(1, 0.75, 0.5, 0.25, 0.1)
+
+
+cols <- c("black", "#e41a1c", "#377eb8", "#4daf4a","#984ea3")
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, max(D)))
+for(i in 1:length(H)){
+    ig <- G / (2^(1/H[i])-1)^(1/B)
+    iy <- C+(D-C)/((1+exp(B*(log(x)-log(ig))))^H[i])
+    lines(x, iy, lwd=3, lty=i, col=cols[i])
+}#i
+legend("topleft",
+       legend=c(expression(italic(h)==1),
+                expression(italic(h)==0.75),
+                expression(italic(h)==0.5),
+                expression(italic(h)==0.25),
+                expression(italic(h)==0.1)),
+       lty=1:3, lwd=3, col=cols,
+       bty="n", cex=1.2)
+```
+
+The reason we had to adjust the midpoint to see the asymmetry wrought by $h$ is that making the curve asymmetrical has the side effect of changing the slope at $x=g$ (everywhere, really). 
+
+This is because at $x=g$, $\log{\left(x\right)}-\log{\left(x\right)}=0$, so the exponent equals $b\left(0\right)=0, so the exponential term $e^{0}=1$, so:
+
+$$f\left(x\right)=c+\frac{d-c}{\left(1+e^{b\left(\log{\left(x\right)}-\log{\left(x\right)}\right)}\right)^h}=c+\frac{d-c}{\left(1+1\right)^h}$$
+
+When $h=1$, this is halfway between the asymptotes. But when $h<1$, $2^h<2$, so $f\left(g\right)>c+\left(d-c\right)/2$ (the function is greater than the halfway point). For our example where $c=10$, $d=10$, and $b=-8$, decreasing $h$ without adjusting $g$ moves the point at which $f\left(x\right)=5$ to the left:
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-5pl-2
+#| fig-cap: 'Five-parameter log-logistic curves with different $h$ parameters, which control the symmetry of the curve about the midpoint $g$, without adjusting $g$. Values of $h<1$ tend to flatten the curve, while values of $h>1$ tend to make it steeper. The other parameters are constant at $c=0$, $d=10$, $b=-8$, and $g=5$.'
+#| fig-alt: "Five-parameter log-logistic curves with different h parameters, which control the symmetry of the curve about the midpoint g, without adjusting g. Values of h<1 tend to flatten the curve, while values of h>1 tend to make it steeper. The other parameters are constant at c=0, d=10, b=-8, and g=5."
+
+x <- seq(0.1, 10, length=100)
+B <- -8
+C <- 0
+D <- 10
+G <- 5
+H <- c(1, 0.75, 0.5, 0.25, 0.1)
+
+
+cols <- c("black", "#e41a1c", "#377eb8", "#4daf4a","#984ea3")
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, max(D)))
+for(i in 1:length(H)){
+    iy <- C+(D-C)/((1+exp(B*(log(x)-log(G))))^H[i])
+    lines(x, iy, lwd=3, lty=i, col=cols[i])
+}#i
+legend("topleft",
+       legend=c(expression(italic(h)==1),
+                expression(italic(h)==0.75),
+                expression(italic(h)==0.5),
+                expression(italic(h)==0.25),
+                expression(italic(h)==0.1)),
+       lty=1:3, lwd=3, col=cols,
+       bty="n", cex=1.2)
+```
+
+Here is the effect of increasing $h$ and adjusting $g$ so that the midpoint remains at 5:
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-5pl-3
+#| fig-cap: 'Five-parameter log-logistic curves with different $h$ parameters, which control the symmetry of the curve about the midpoint $g$. Values of $h<1$ tend to flatten the curve, while values of $h>1$ tend to make it steeper. The other parameters are constant at $c=0$, $d=10$, $b=-8$, and $g=5$.'
+#| fig-alt: "Five-parameter log-logistic curves with different $h$ parameters, which control the symmetry of the curve about the midpoint $g$. Values of h<1 tend to flatten the curve, while values of h>1 tend to make it steeper. The other parameters are constant at $c=0$, $d=10$, $b=-8$, and $g=5$."
+
+x <- seq(0.1, 10, length=100)
+B <- -8
+C <- 0
+D <- 10
+G <- 5
+H <- c(1, 5, 10)
+
+
+cols <- c("black", "#e41a1c", "#377eb8")
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, max(D)))
+for(i in 1:length(H)){
+    ig <- G / (2^(1/H[i])-1)^(1/B)
+    iy <- C+(D-C)/((1+exp(B*(log(x)-log(ig))))^H[i])
+    lines(x, iy, lwd=3, lty=i, col=cols[i])
+}#i
+legend("topleft",
+       legend=c(expression(italic(h)==1),
+                expression(italic(h)==5),
+                expression(italic(h)==10)),
+       lty=1:3, lwd=3, col=cols,
+       bty="n", cex=1.2)
+```
+
+Decreasing $h$ has a much more drastic effect than increasing it.
 
 ### Weibull curves {#sec-non-common-weibull}
 
-The **Weibull curve** is really a family of functions (like "log-logistic curves" above) with a sigmoid shape between a lower and upper asymptote. The two-parameter Weibull type 1 model is 
+The **Weibull curve** is really a family of functions with a sigmoid shape between a lower and upper asymptote. So, they can behave much like a Gompertz or log-logistic curve, and are suitable in many of the same situations. The Weibull curves differ in their numbers of parameters. 
+
+The **two-parameter Weibull** type 1 model is 
 
 $$f\left(x\right)=e^{-e^{b\left(\log\left(x\right)-\log\left(c\right)\right)}}$$
 where $c$ is the inflection point and $b$ is a growth constant. This function has a lower asymptote at 0 and upper asymptote at 1.
 
-The four-parameter Weibull curve can take other asymptotes:
+The **three-parameter Weibull** curve adds a parameter $d$ to the two-parameter Weibull model to specify the upper asymptote:
+
+$$f\left(x\right)=de^{-e^{b\left(\log{\left(x\right)}-\log{\left(c\right)}\right)}}$$
+
+Finally, the **four-parameter Weibull** curve adds one more parameter, $a$, which can specify a lower asymptotes other than 0:
 
 $$f\left(x\right)=a+\left(d-a\right)e^{-e^{b\left(\log\left(x\right)-\log\left(c\right)\right)}}$$
-where $d$ is the upper asymptote and $a$ is the lower asymptote. Unlike the log-logistic functions, none of the parameters is directly interpretable as the ED50. The Weibull curve is essentially a Gompertz-like sigmoid double exponential function applied to the logarithm of dose.
+where $d$ is the upper asymptote and $a$ is the lower asymptote. Unlike the log-logistic functions, none of the parameters is directly interpretable as the ED50. The Weibull curve is essentially a Gompertz-like sigmoid double exponential function applied to the logarithm of dose. Weibull curves are typically asymmetric.
+
+When $b$ is negative, the Weibull curve increases:
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-weibull1
+#| fig-cap: 'Four-parameter Weibull curves different $b$ parameters, which control the growth rate. Negative $b$ of larger magnitude have steeper positive growth rates. The other parameters are constant at $a=0$, $d=10$, and $c=4$.'
+#| fig-alt: "Four-parameter Weibull curves different b parameters, which control the growth rate. Negative b of larger magnitude have steeper positive growth rates. The other parameters are constant at a=0, d=10, and c=4"
+
+x <- seq(0.1, 10, length=100)
+A <- 0
+B <- -1*c(1, 2, 4, 8)
+C <- 4
+D <- 10
+
+
+cols <- c("#e41a1c", "#377eb8", "#4daf4a","#984ea3")
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, max(D)))
+off <- c(0, 0, 0, 0.2)
+for(i in 1:length(B)){
+    iy <- A+(D-A)*exp(-1*exp(B[i]*(log(x)-log(C))))
+    points(x, iy, type="l", lwd=3,
+           lty=i, col=cols[i])
+    text(max(x)+0.2, max(iy)+off[i],
+         bquote(italic(b)==.(B[i])),
+         adj=0, cex=1.2,
+         col=cols[i])
+}#i
+
+```
+
+When $b$ is positive, then the Weibull curve decreases:
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-weibull2
+#| fig-cap: 'Four-parameter Weibull curves different $b$ parameters, which control the growth rate. Positive $b$ of larger magnitude have steeper negative growth rates. The other parameters are constant at $a=0$, $d=10$, and $c=4$.'
+#| fig-alt: "Four-parameter Weibull curves different b parameters, which control the growth rate. Positive b of larger magnitude have steeper negative growth rates. The other parameters are constant at a=0, d=10, and c=4"
+
+x <- seq(0.1, 10, length=100)
+A <- 0
+B <- c(1, 2, 4, 8)
+C <- 4
+D <- 10
+
+
+cols <- c("#e41a1c", "#377eb8", "#4daf4a","#984ea3")
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, max(D)))
+off <- c(0, 0, 0, 0.2)
+for(i in 1:length(B)){
+    iy <- A+(D-A)*exp(-1*exp(B[i]*(log(x)-log(C))))
+    points(x, iy, type="l", lwd=3,
+           lty=i, col=cols[i])
+legend("topright",
+       legend=c(
+           expression(italic(b)==1),
+           expression(italic(b)==2),
+           expression(italic(b)==4),
+           expression(italic(b)==8)),
+       lty=1:length(B), lwd=3, col=cols,
+       bty="n", cex=1.2)
+}#i
+```
+
+The $c$ term shifts the inflection point left and right. Note that for some combinations of parameters, there may not be an inflection point visible in your data.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-weibull3
+#| fig-cap: 'Four-parameter Weibull curves with different $c$ parameters, which control the x position of the inflection point. Greater $c$ shift the curve to the right. The dashed lines at $y=d/2$ show that $c$ defines not the midpoint like $g$ in the four-parameter log-logistic, but rather the inflection point (the point where the second derivative changes sign). The other parameters are constant at $a=0$, $b=-4$, and $d=10$.'
+#| fig-alt: "Four-parameter Weibull curves with different c parameters, which control the x position of the inflection point. Greater c shift the curve to the right. The dashed lines at y=d/2 show that c defines not the midpoint like g in the four-parameter log-logistic, but rather the inflection point (the point where the second derivative changes sign). The other parameters are constant at a=0, b=-4, and d=10."
+
+x <- seq(0.1, 10, length=100)
+A <- 0
+B <- -4
+C <- c(2,4,6,8)
+D <- 10
+
+
+cols <- c("#e41a1c", "#377eb8", "#4daf4a","#984ea3")
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, max(D)))
+for(i in 1:length(C)){
+    iy <- A+(D-A)*exp(-1*exp(B*(log(x)-log(C[i]))))
+    points(x, iy, type="l", lwd=3,
+           lty=i, col=cols[i])
+    segments(0, D/2, C[i], D/2, lty=2)
+    segments(C[i], 0, C[i], D/2, lty=2)
+}#i
+text(0, 5.5, expression(y==d/2), adj=0, cex=1.1)
+legend("bottomright",
+       legend=c(
+           expression(italic(c)==2),
+           expression(italic(c)==4),
+           expression(italic(c)==6),
+           expression(italic(c)==8)),
+       lty=1:length(C), lwd=3, col=cols,
+       bty="n", cex=1.2)
+
+```
+
+### Nonlinear functions summary
+
+We have seen 4 types of nonlinear functions commonly used for biological data: the Michaelis-Menten, the Gompertz, the von Bertalanffy, the (log)-logistic, and the Weibull curves. Each of these can take on many shapes, and choosing which one to use to model your data requires both statistical know-how and, more importantly, biological judgement. The most important question is often not, "Which curve looks the most like my scatterplot?" but rather "Which curve has parameters that make biological sense for my question?". These curves are useful because they are defined in terms that describe biology quite well: minimum and maximum values, inflection points, midpoints, and growth rates. 
+
+
+| Model | Lower asymptote | Upper asymptote | Midpoint | Inflection point | Growth rate / shape |
+|---|---|---|---|---|---|
+| Michaelis–Menten | $0$ (fixed) | $a$ | $b$ | — | — |
+| Gompertz (classic) | $0$ (fixed) | $a$ | Derived | $\ln(b)/c$ | $c$ |
+| von Bertalanffy | $0$ (fixed) | $L_\infty$ | Derived | — | $k$ |
+| Log-logistic (2P) | $0$ (fixed) | $1$ (fixed) | $e$ | Derived | $b$ (slope) |
+| Log-logistic (3P) | $0$ (fixed) | $d$ | $e$ | Derived | $b$ (slope) |
+| Log-logistic (4P) | $c$ | $d$ | $e$ | Derived | $b$ (slope) |
+| Weibull type 1 (2P) | $0$ (fixed) | $1$ (fixed) | Derived | Derived* | $b$ (shape), $e$ (scale) |
+| Weibull type 1 (3P) | $0$ (fixed) | $d$ | Derived | Derived* | $b$ (shape), $e$ (scale) |
+| Weibull type 1 (4P) | $c$ | $d$ | Derived | Derived* | $b$ (shape), $e$ (scale) |
+
+: Comparison of parameters in common nonlinear growth models. "Derived" indicates that the characteristic point can be calculated from model parameters but is not itself a directly estimated parameter. A dash indicates that the characteristic is absent or not independently parameterized. *The Weibull type 1 curve has an interior inflection point only for appropriate values of its shape parameter. {#tbl-growth-model-parameters}
 
 
 ## Nonlinear least squares with `nls()` {#sec-non-nls}
