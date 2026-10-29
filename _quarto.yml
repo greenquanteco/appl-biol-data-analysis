@@ -72,9 +72,9 @@ book:
       chapters:
         - chapters/ch28.qmd
         - chapters/ch29.qmd
+        - chapters/ch30.qmd
     - part: chapters/part_09.qmd
       chapters:
-        - chapters/ch30.qmd
         - chapters/ch31.qmd
         - chapters/ch32.qmd
 

@@ -273,7 +273,7 @@
 
 \title{Applied Biological Data Analysis}
 \author{Nick Green}
-\date{October 28, 2026}
+\date{October 29, 2026}
 \begin{document}
 \maketitle
 
@@ -27772,7 +27772,7 @@ The function shown in Figure~\ref{fig-nonlinear1} is the famous
 
 \section{Common nonlinear functions}\label{sec-non-common}
 
-\subsection{Michaelis-Menten curves}\label{sec-non-common-mm}
+\subsection{The Michaelis-Menten function}\label{sec-non-common-mm}
 
 The \textbf{Michaelis-Menten function} is a nonlinear model that is
 usually used to describe processes that grow and approach an asymptote.
@@ -27782,7 +27782,8 @@ Michaelis-Menten equation takes the general form
 
 \[Y=\frac{aX}{b+X}\]
 
-where \emph{a} and \emph{b} are constants.
+where \emph{a} and \emph{b} are constants. It has a fixed lower bound at
+0 and no inflection point.
 
 \begin{itemize}
 \tightlist
@@ -27833,7 +27834,7 @@ where \emph{a} and \emph{b} are constants.
 
 \caption{\label{fig-micmen1}Top: Michaelis-Menten curves with fixed
 \(b\) and different asymptote (\(a\)) terms. Bottom: Michaelis-Menten
-curves with fixed \(a\) and different growth (\(b\)) terms}
+curves with fixed \(a\) and different midpoints (\(b\)) terms}
 
 \centering{
 
@@ -27855,34 +27856,34 @@ Michaelis-Menten curves to model the effectiveness of biodiversity
 monitoring programs, using the asymptote term as an estimate of the
 maximum number of species likely to be detected.
 
-\subsection{Gompertz curve}\label{sec-non-common-gomp}
+\subsection{Gompertz functions}\label{sec-non-common-gomp}
 
 The Gompertz curve is a sigmoid (s-shaped) growth curve frequently used
 to describe biological growth. It can be written in several ways. You
 can use whichever form you want, but you need to be explicit about what
-you did. Most people use the second of the two forms presented below. In
-both cases, all parameters must be positive.
+you did. In both cases, all parameters must be positive.
 
 \subsubsection{Gompertz curve form 1}\label{gompertz-curve-form-1}
 
 The most common form of the Gompertz curve is a double exponential:
 
-\[\mathcal{f}\left(t\right)={ae}^{-be^{-ct}}\]
+\[\mathcal{f}\left(x\right)={ae}^{-be^{-cx}}\]
 
-where \(a\) is the upper asymptote, \(b\) moves the curve along the time
-axis \(t\), and \(c\) is a growth rate. The inflection point occurs at
+where \(a\) is the upper asymptote, \(b\) defines the x coordinate of
+the inflection point at \(\log{\left(b\right)/c}\), and \(c\) is a
+growth rate. The inflection point occurs at
 
-\[t_{inflection}=\frac{\log\left(b\right)}{c}\]
+\[x_{inflection}=\frac{\log\left(b\right)}{c}\]
 
 and at that point,
 
-\[y_{inflection}=\mathcal{f}\left(t_{inflection}\right)=\frac{a}{e}\approx0.368\]
+\[y_{inflection}=\mathcal{f}\left(x_{inflection}\right)=\frac{a}{e}\approx0.368\]
 
 \subsubsection{Gompertz curve form 2}\label{gompertz-curve-form-2}
 
 Another form of the Gompertz function looks like this:
 
-\[\mathcal{f}\left(t\right)=ae^{-bc^t}\]
+\[\mathcal{f}\left(x\right)=ae^{-bc^x}\]
 
 This version is used in the R \texttt{SSgompertz} function that we'll
 see later. It is actually equivalent to the first version because of the
@@ -27892,15 +27893,15 @@ identity
 
 Start with form 1 and substitute:
 
-\[\mathcal{f}\left(t\right)={ae}^{-be^{-ct}}\]
+\[\mathcal{f}\left(x\right)={ae}^{-be^{-cx}}\]
 
-\[\mathcal{f}\left(t\right)={ae}^{-b\left(e^{-c}\right)^t}\]
+\[\mathcal{f}\left(x\right)={ae}^{-b\left(e^{-c}\right)^x}\]
 
 The second form replaces \(e^{-c}\) with a new constant, which the
 \texttt{SSgompertz} documentation calls \texttt{b3} (with the \(b\) term
 from form 1 being renamed \texttt{b2}):
 
-\[\mathcal{f}\left(t\right)={ae}^{-b_2\left(b_3\right)^t}\]
+\[\mathcal{f}\left(x\right)={ae}^{-b_2\left(b_3\right)^x}\]
 
 So, the two forms seen here produce the same curve, just in a slightly
 different way:
@@ -27918,7 +27919,7 @@ The two equations describe the same curve, with the relationship
 \begin{minipage}[b]{\linewidth}\raggedright
 Parameter
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-Classical: \(y=ae^{-be^{-ct}}\)
+Classical: \(y=ae^{-be^{-cx}}\)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
 R \texttt{SSgompertz()}: \(y=ae^{-b_2b_3^x}\)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
@@ -27930,7 +27931,7 @@ Interpretation
 \begin{minipage}[b]{\linewidth}\raggedright
 Parameter
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-Classical: \(y=ae^{-be^{-ct}}\)
+Classical: \(y=ae^{-be^{-cx}}\)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
 R \texttt{SSgompertz()}: \(y=ae^{-b_2b_3^x}\)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
@@ -28014,12 +28015,13 @@ asymptotes (\(a\)) and constant \(b\) and \(c\) parameters.}
 \begin{figure}[H]
 
 \caption{\label{fig-gompertz2}Gompertz growth curves with different
-\(b\) parameters, which control the initial value and horizontal
-displacement of the curve. The \(a\) and \(c\) are held constant.}
+\(b\) parameters, which control the horizontal displacement of the
+inflection point as \(\log{\left(b\right)}/c\). The \(a\) and \(c\) are
+held constant.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Gompertz growth curves with different b parameters and constant a and c parameters. Curves increase to the right with decreasing slope, with greater b causing higher asymptotes.}]{chapters/ch22_files/figure-pdf/fig-gompertz2-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={Gompertz growth curves with different b parameters and constant a and c parameters. Curves increase to the right with decreasing slope, with greater b shifting the inflection point to the right.}]{chapters/ch22_files/figure-pdf/fig-gompertz2-1.pdf}}
 
 }
 
@@ -28065,14 +28067,15 @@ and \(b\) parameters are held constant.}
 
 \end{figure}%
 
-\subsection{von Bertalanffy}\label{sec-non-common-vb}
+\subsection{The von Bertalanffy growth
+function}\label{sec-non-common-vb}
 
 Like the Gompertz curve, the \textbf{von Bertalanffy growth curve}
 describes size increasing and approaching an asymptote. Unlike the
 Gompertz curve, the von Bertalanffy model is not sigmoid, but rather has
 a decreasing slope. That is, it is always concave down whereas the the
-Gompertz model has a concave up portion, a concave down portion, and an
-inflection point in between.
+Gompertz model can have a concave up portion, a concave down portion,
+and an inflection point in between.
 
 The von Bertalanffy model is commonly written as:
 
@@ -28205,17 +28208,19 @@ y-intercept. The \(L_{\infty}\) and \(k\) parameters are held constant.}
 
 \end{figure}%
 
-\subsection{Logistic curves}\label{sec-non-common-log}
+\subsection{Logistic and log-logistic
+functions}\label{sec-non-common-log}
 
 A \textbf{logistic} curve is one that takes the form
 
-\[f\left(x\right)=\frac{L}{1+e^{-k\left(x-x_0\right)}}\]
+\[f\left(x\right)=\frac{L}{1+e^{-b\left(x-x_0\right)}}\]
 
-where \(L\) is the supremum (upper asymptote), \(k\) is a growth rate,
+where \(L\) is the supremum (upper asymptote), \(b\) is a growth rate,
 and \(x_0\) is the midpoint (\(x\) value where \(f\left(x\right)=L/2\)).
 Logistic functions are sigmoid, with a lower limit of 0 as x tends to
-\(-\infty\) and \(L\) as x approaches \(+\infty\). The \textbf{standard
-logistic function} with \(L=1\), \(k=1\) and \(x_0=0\) is
+\(-\infty\) and upper limit of \(L\) as x approaches \(+\infty\). The
+\textbf{standard logistic function} with \(L=1\), \(b=1\) and \(x_0=0\)
+is
 
 \[f\left(x\right)=\frac{1}{1+e^{-x}}\]
 
@@ -28251,23 +28256,223 @@ illustrates how the inflection point and midpoint are at \(x=0\)}
 
 \end{figure}%
 
-\subsubsection{Three parameter
+The logistic function can be generalized by adding parameters to specify
+the upper and lower asymptotes or other features. These versions are
+called \textbf{log-logistic} functions because they use the logarithm of
+\(x\), not \(x\) itself. We will examine four versions:
+
+\begin{itemize}
+\tightlist
+\item
+  the \textbf{two-parameter log-logistic (2pl)}: uses a midpoint (\(g\))
+  and a slope parameter (\(b\)), with lower and upper asymptotes fixed
+  at 0 and 1, respectively.
+\item
+  the \textbf{three-parameter log-logistic (3pl)}: extends the
+  two-parameter log-logistic model with a new term \(d\) to define an
+  upper asymptote other than 1.
+\item
+  the \textbf{four-parameter log-logistic (4pl)}: extends the
+  three-parameter log-logistic model with a new term \(c\) to define a
+  lower asymptote other than 0.
+\item
+  the \textbf{five-parameter log-logistic (5pl)}: extends the
+  four-parameter log-logistic model with a new term \(h\) to alter the
+  shape of the curve.
+\end{itemize}
+
+In practical terms:
+
+\begin{itemize}
+\tightlist
+\item
+  the four-parameter model is just the special case of the
+  five-parameter model with \(h=1\)
+\item
+  the three-parameter model is just the special case of the
+  four-parameter model with \(c=0\)
+\item
+  the two-parameter model is the special case of the three-parameter
+  model with \(d=1\).
+\end{itemize}
+
+\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{A note on parameter names}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
+
+Textbooks and software packages differ a bit in the way that they label
+the parameters of the models in this section. In this guide I have tried
+to be as consistent as possible, at least within each group like the
+log-logistic or the Weibull families. The letters or symbols are not
+important--their positions in the equations are. In general, I try to
+avoid using \(e\) and \(f\) as names of parameters because in most
+contexts \(e\) is the symbol for Euler's number and \(f\) is often used
+to label functions (e.g., \(f\left(x\right)=\dots\)).
+
+\end{tcolorbox}
+
+\subsubsection{Two-parameter log-logistic}\label{sec-non-common-log-2pl}
+
+The \textbf{two-parameter log-logistic} function is like the standard
+logistic function (Figure~\ref{fig-stlogistic}), but with parameters
+\(b\) for the slope and \(g\) for the midpoint. It is given by:
+
+\[f\left(x\right)=\frac{1}{1+e^{b\left(\log{\left(x\right)}-\log{\left(g\right)}\right)}}\]
+
+Notice that here \(x\) is part of a difference in the exponent, which
+has the effect of moving the curve left and right.
+
+The \(b\) parameter defines the curve's growth rate. Counter
+intuitively, the function increases when \(b<0\), and decreases when
+\(b>0\). Greater magnitudes of \(b\), regardless of sign, make for
+steeper curves.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{length=}\DecValTok{100}\NormalTok{)}
+\NormalTok{B }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\DecValTok{1}\SpecialCharTok{*}\FunctionTok{c}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{8}\NormalTok{)}
+\NormalTok{G }\OtherTok{\textless{}{-}} \DecValTok{5}
+
+\NormalTok{cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"\#e41a1c"}\NormalTok{, }\StringTok{"\#377eb8"}\NormalTok{, }\StringTok{"\#4daf4a"}\NormalTok{,}\StringTok{"\#984ea3"}\NormalTok{, }\StringTok{"\#ff7f00"}\NormalTok{)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{4}\NormalTok{), }
+    \AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(x, x, }\AttributeTok{type=}\StringTok{"n"}\NormalTok{, }\AttributeTok{xlab=}\StringTok{"x variable"}\NormalTok{,}
+     \AttributeTok{ylab=}\StringTok{"y variable"}\NormalTok{, }\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(B))\{}
+\NormalTok{    iy }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(B[i]}\SpecialCharTok{*}\NormalTok{(}\FunctionTok{log}\NormalTok{(x)}\SpecialCharTok{{-}}\FunctionTok{log}\NormalTok{(G))))}
+    \FunctionTok{points}\NormalTok{(x, iy, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{,}
+           \AttributeTok{lty=}\NormalTok{i, }\AttributeTok{col=}\NormalTok{cols[i])}
+    \FunctionTok{text}\NormalTok{(}\FunctionTok{max}\NormalTok{(x)}\SpecialCharTok{+}\FloatTok{0.2}\NormalTok{, }\FunctionTok{max}\NormalTok{(iy),}
+         \FunctionTok{bquote}\NormalTok{(}\FunctionTok{italic}\NormalTok{(b)}\SpecialCharTok{==}\NormalTok{.(B[i])),}
+         \AttributeTok{adj=}\DecValTok{0}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{,}
+         \AttributeTok{col=}\NormalTok{cols[i])}
+\NormalTok{\}}\CommentTok{\#i}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-2pl-1}Two-parameter log-logistic curves with
+different \(b\) parameters, which control the growth rate. Negative
+\(b\) of greater magnitude cause faster growth. The midpoint parameter
+\(g\) is constant at 5\$.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two-parameter log-logistic curves with different b parameters, which control the growth rate. Negative b of greater magnitude cause faster growth. The midpoint parameter \$g\$ is constant at 5\$.}]{chapters/ch22_files/figure-pdf/fig-2pl-1-1.pdf}}
+
+}
+
+\end{figure}%
+
+Positive \(b\) cause the function to decrease:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{length=}\DecValTok{100}\NormalTok{)}
+\NormalTok{B }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{8}\NormalTok{)}
+\NormalTok{G }\OtherTok{\textless{}{-}} \DecValTok{5}
+
+\NormalTok{cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"\#e41a1c"}\NormalTok{, }\StringTok{"\#377eb8"}\NormalTok{, }\StringTok{"\#4daf4a"}\NormalTok{,}\StringTok{"\#984ea3"}\NormalTok{, }\StringTok{"\#ff7f00"}\NormalTok{)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{4}\NormalTok{), }
+    \AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(x, x, }\AttributeTok{type=}\StringTok{"n"}\NormalTok{, }\AttributeTok{xlab=}\StringTok{"x variable"}\NormalTok{,}
+     \AttributeTok{ylab=}\StringTok{"y variable"}\NormalTok{, }\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(B))\{}
+\NormalTok{    iy }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(B[i]}\SpecialCharTok{*}\NormalTok{(}\FunctionTok{log}\NormalTok{(x)}\SpecialCharTok{{-}}\FunctionTok{log}\NormalTok{(G))))}
+    \FunctionTok{points}\NormalTok{(x, iy, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{,}
+           \AttributeTok{lty=}\NormalTok{i, }\AttributeTok{col=}\NormalTok{cols[i])}
+\NormalTok{\}}\CommentTok{\#i}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }
+       \AttributeTok{legend=}\FunctionTok{c}\NormalTok{(}
+           \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(b)}\SpecialCharTok{==}\FloatTok{0.5}\NormalTok{),}
+           \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(b)}\SpecialCharTok{==}\DecValTok{1}\NormalTok{),}
+           \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(b)}\SpecialCharTok{==}\DecValTok{2}\NormalTok{),}
+           \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(b)}\SpecialCharTok{==}\DecValTok{4}\NormalTok{),}
+           \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(b)}\SpecialCharTok{==}\DecValTok{8}\NormalTok{)),}
+       \AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{,}
+       \AttributeTok{lty=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\AttributeTok{col=}\NormalTok{cols, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-2pl-2}Two-parameter log-logistic curves with
+different \(b\) parameters, which control the growth rate. Positive
+\(b\) of greater magnitude cause faster decay. The midpoint parameter
+\(g\) is constant at 5\$.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two-parameter log-logistic curves with different b parameters, which control the growth rate. Negative b of greater magnitude cause faster decay. The midpoint parameter \$g\$ is constant at 5\$.}]{chapters/ch22_files/figure-pdf/fig-2pl-2-1.pdf}}
+
+}
+
+\end{figure}%
+
+The \(g\) parameter defines the \textbf{midpoint}, or \(x\) value at
+which \(y=1/2\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{length=}\DecValTok{100}\NormalTok{)}
+\NormalTok{B }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\DecValTok{5}
+\NormalTok{G }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{8}\NormalTok{)}
+
+\NormalTok{cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"\#e41a1c"}\NormalTok{, }\StringTok{"\#377eb8"}\NormalTok{, }\StringTok{"\#4daf4a"}\NormalTok{,}\StringTok{"\#984ea3"}\NormalTok{)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{4}\NormalTok{), }
+    \AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(x, x, }\AttributeTok{type=}\StringTok{"n"}\NormalTok{, }\AttributeTok{xlab=}\StringTok{"x variable"}\NormalTok{,}
+     \AttributeTok{ylab=}\StringTok{"y variable"}\NormalTok{, }\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(G))\{}
+\NormalTok{    iy }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(B}\SpecialCharTok{*}\NormalTok{(}\FunctionTok{log}\NormalTok{(x)}\SpecialCharTok{{-}}\FunctionTok{log}\NormalTok{(G[i]))))}
+    \FunctionTok{points}\NormalTok{(x, iy, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{,}
+           \AttributeTok{lty=}\NormalTok{i, }\AttributeTok{col=}\NormalTok{cols[i])}
+\NormalTok{\}}\CommentTok{\#i}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"bottomright"}\NormalTok{, }
+       \AttributeTok{legend=}\FunctionTok{c}\NormalTok{(}
+           \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(g)}\SpecialCharTok{==}\DecValTok{2}\NormalTok{),}
+           \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(g)}\SpecialCharTok{==}\DecValTok{4}\NormalTok{),}
+           \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(g)}\SpecialCharTok{==}\DecValTok{6}\NormalTok{),}
+           \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(g)}\SpecialCharTok{==}\DecValTok{8}\NormalTok{)),}
+       \AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{,}
+       \AttributeTok{lty=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\AttributeTok{col=}\NormalTok{cols, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-2pl-3}Two-parameter log-logistic curves with
+different \(g\) parameters, which control the function midpoint. Greater
+\(g\) shift the curve to the right. The \(b\) term is held constant at
+-5.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two-parameter log-logistic curves with different g parameters, which control the function midpoint. Greater g shift the curve to the right. The b term is held constant at -5.}]{chapters/ch22_files/figure-pdf/fig-2pl-3-1.pdf}}
+
+}
+
+\end{figure}%
+
+\subsubsection{Three-parameter
 log-logistic}\label{sec-non-common-log-3pl}
 
-The logistic function can be generalized by adding parameters to specify
-the upper and lower asymptotes or other features. One common version is
-the \textbf{three parameter log-logistic}, available in the R package
-\texttt{drc}. This model is called the ``log-logistic'' because it uses
-the logarithm of \(x\), not \(x\) itself. The three parameter
-log-logistic comes in several flavors:
+The \textbf{three-parameter log-logistic} generalizes the two-parameter
+log-logistic by adding a term for either the upper or lower asymptote.
+Either the lower limit is fixed at 0 and the upper limit is the
+parameter \(d\), or the upper limit can be fixed at 1 and the lower
+limit is the parameter \(c\). The former version, with lower limit fixed
+at 0, is probably more common so we'll focus on that one.
 
 \textbf{Lower limit fixed at 0:}
+
+The most commonly encountered version of the three-parameter
+log-logistic model has the lower limit fixed at 0 and the upper limit as
+a parameter \(d\):
 
 \[f\left(x\right)=\frac{d}{1+e^{b\left(\log{\left(x\right)}-\log{\left(g\right)}\right)}}\]
 
 where \(d\) is the upper asymptote, \(b\) is a growth rate, and \(g\) is
-the inflection point. Notice that here \(x\) is part of a difference in
-the exponent, which has the effect of moving the curve left and right.
+the inflection point.
 
 \begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{e is not always e}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
 
@@ -28281,30 +28486,77 @@ also do sometimes. \emph{Read the documentation}!
 
 \end{tcolorbox}
 
-Another version of the three-parameter log-logistic function has the
-\textbf{upper limit fixed at 1}:
+\textbf{Upper limit fixed at 1}:
+
+The less commonly encountered version of the three-parameter
+log-logistic function has the upper limit fixed at 1 and the lower limit
+as a parameter \(c\):
 
 \[f\left(x\right)=c+\frac{1-c}{1+e^{b\left(\log{\left(x\right)}-\log{\left(g\right)}\right)}}\]
 
-where \(c\) is the lower asymptote.
+Here is an illustration of the fixed-lower version of the
+three-parameter log-logistic function with differing upper asymptotes:
 
-\subsubsection{Four parameter
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{length=}\DecValTok{100}\NormalTok{)}
+\NormalTok{B }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\DecValTok{5}
+\NormalTok{G }\OtherTok{\textless{}{-}} \DecValTok{5}
+\NormalTok{D }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{12}\NormalTok{, }\DecValTok{16}\NormalTok{)}
+
+\NormalTok{cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"\#e41a1c"}\NormalTok{, }\StringTok{"\#377eb8"}\NormalTok{, }\StringTok{"\#4daf4a"}\NormalTok{,}\StringTok{"\#984ea3"}\NormalTok{)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{4}\NormalTok{), }
+    \AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(x, x, }\AttributeTok{type=}\StringTok{"n"}\NormalTok{, }\AttributeTok{xlab=}\StringTok{"x variable"}\NormalTok{,}
+     \AttributeTok{ylab=}\StringTok{"y variable"}\NormalTok{, }\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FunctionTok{max}\NormalTok{(D)))}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(D))\{}
+\NormalTok{    iy }\OtherTok{\textless{}{-}}\NormalTok{ D[i]}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(B}\SpecialCharTok{*}\NormalTok{(}\FunctionTok{log}\NormalTok{(x)}\SpecialCharTok{{-}}\FunctionTok{log}\NormalTok{(G))))}
+    \FunctionTok{points}\NormalTok{(x, iy, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{,}
+           \AttributeTok{lty=}\NormalTok{i, }\AttributeTok{col=}\NormalTok{cols[i])}
+    \FunctionTok{text}\NormalTok{(}\FunctionTok{max}\NormalTok{(x)}\SpecialCharTok{+}\FloatTok{0.2}\NormalTok{, }\FunctionTok{max}\NormalTok{(iy),}
+         \FunctionTok{bquote}\NormalTok{(}\FunctionTok{italic}\NormalTok{(d)}\SpecialCharTok{==}\NormalTok{.(D[i])),}
+         \AttributeTok{adj=}\DecValTok{0}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{,}
+         \AttributeTok{col=}\NormalTok{cols[i])}
+\NormalTok{\}}\CommentTok{\#i}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-3pl-1}Three-parameter log-logistic curves with
+different \(d\) parameters, which control the upper asymptote. Greater
+\(d\) increase the maximal value of the curve. The other parameters are
+held constant at \(b=-4\) and \(g=5\).}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Three-parameter log-logistic curves with different d parameters, which control the upper asymptote. Greater d increase the maximal value of the curve. The other parameters are held constant at b=-4 and g=5.}]{chapters/ch22_files/figure-pdf/fig-3pl-1-1.pdf}}
+
+}
+
+\end{figure}%
+
+If we hold \(d\) constant, then visualizing the effect of different
+\(b\) or \(g\) is exactly as it was in Figure~\ref{fig-2pl-1} and
+Figure~\ref{fig-2pl-2}, just with a different upper value on the y-axis.
+
+\subsubsection{Four-parameter
 log-logistic}\label{sec-non-common-log-4pl}
 
-There is also a \textbf{four parameter logistic}:
+If we take the three-parameter log-logistic, and allow both the upper
+and lower asymptotes to vary, we get the \textbf{four parameter
+log-logistic}. It has terms for the lower asymptote (\(c\)), upper
+asymptote (\(d\)), midpoint (\(g\)), and growth rate (\(b\)):
 
 \[f\left(x\right)=c+\frac{d-c}{1+e^{b\left(\log{\left(x\right)}-\log{\left(g\right)}\right)}}\]
 
-where \(d\) is the upper asymptote, \(c\) is the lower asymptote, \(b\)
-is a growth constant, and \(g\) is the inflection point.
-
-In all of these log-logistic curves, the \(g\) parameter is particularly
-useful because it can be interpreted as the ED50, or the dose producing
-a response halfway between \(c\) and \(d\). When \(c=0\) and \(d=1\),
-this is literally a response of 50\% or 0.5; otherwise the \(g\)
-parameter relates to a response midway between \(c\) and \(d\). Again,
-note that what we are calling \(g\) is referred to in the \texttt{drc}
-documentation as \texttt{e}.
+As in all of these log-logistic curves, the \(g\) parameter is
+particularly useful because it can be interpreted as the ED50, or the
+dose producing a response halfway between \(c\) and \(d\). When \(c=0\)
+and \(d=1\), this is literally a response of 50\% or 0.5; otherwise the
+\(g\) parameter relates to a response midway between \(c\) and \(d\).
+Again, note that what we are calling \(g\) is referred to in the
+\texttt{drc} documentation as \texttt{e}.
 
 Here is an illustration of the four-parameter log-logistic curve with
 varying \(b\) parameters:
@@ -28347,6 +28599,9 @@ parameters are constant at \(c=0\), \(d=10\), and \(g=5\).}
 }
 
 \end{figure}%
+
+Here is an illustration of the four-parameter log-logistic curve with
+varying \(g\) parameters:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -28396,34 +28651,384 @@ The black dashed lines illustrate how the \(g\) parameter is really the
 
 \end{figure}%
 
+Varying the \(c\) and \(d\) terms in the four-parameter log-logistic
+move the lower and upper asymptotes, and correspondingly can squash or
+stretch the curves. See Figure~\ref{fig-3pl-1} for an illustration of
+what that might look like.
+
+\subsubsection{Five-parameter
+log-logistic}\label{sec-non-common-log-5pl}
+
+The most flexible version of the log-logistic model has 5 parameters: a
+lower asymptote \(c\), an upper asymptote \(d\), a growth rate \(b\), a
+midpoint \(g\), and a shape parameter \(h\). When \(h\neq1\), the
+function is asymmetric about \(g\). When \(h=1\), the model reduces to
+the four-parameter log-logistic. We obtain the five-parameter model by
+adding an exponent \(h\) to the entire denominator of the four-parameter
+model :
+
+\[f\left(x\right)=c+\frac{d-c}{\left(1+e^{b\left(\log{\left(x\right)}-\log{\left(g\right)}\right)}\right)^h}\]
+
+The exponent \(h\) allows the curve to be asymmetric about the midpoint
+\(g\), when \(h\neq1\). For an intuition about what \(h\) does, imagine
+that the curve is a rubber or plastic rod bent into an s-shape--the
+shape of the log-logistic curve. If you grab the rod at the midpoint
+\(g\) and twist clockwise, the curve will decrease left of \(g\) and
+increase right of \(g\). That is like decreaseing \(h\) from 1 towards
+0. If you twist counter-clockwise, the curve will decrease. This is like
+increasing \(h\) from 1. Note that we need to adjust \(g\) as a function
+of \(h\) to keep the midpoint the same.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{500}\NormalTok{, }\AttributeTok{length=}\DecValTok{100}\NormalTok{)}
+\NormalTok{B }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\DecValTok{2}
+\NormalTok{C }\OtherTok{\textless{}{-}} \DecValTok{0}
+\NormalTok{D }\OtherTok{\textless{}{-}} \DecValTok{10}
+\NormalTok{G }\OtherTok{\textless{}{-}} \DecValTok{150}
+\NormalTok{H }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\FloatTok{0.75}\NormalTok{, }\FloatTok{0.5}\NormalTok{, }\FloatTok{0.25}\NormalTok{, }\FloatTok{0.1}\NormalTok{)}
+
+
+\NormalTok{cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"black"}\NormalTok{, }\StringTok{"\#e41a1c"}\NormalTok{, }\StringTok{"\#377eb8"}\NormalTok{, }\StringTok{"\#4daf4a"}\NormalTok{,}\StringTok{"\#984ea3"}\NormalTok{)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{4}\NormalTok{), }
+    \AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(x, x, }\AttributeTok{type=}\StringTok{"n"}\NormalTok{, }\AttributeTok{xlab=}\StringTok{"x variable"}\NormalTok{,}
+     \AttributeTok{ylab=}\StringTok{"y variable"}\NormalTok{, }\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FunctionTok{max}\NormalTok{(D)))}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(H))\{}
+\NormalTok{    ig }\OtherTok{\textless{}{-}}\NormalTok{ G }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{2}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\NormalTok{H[i])}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\NormalTok{B)}
+\NormalTok{    iy }\OtherTok{\textless{}{-}}\NormalTok{ C}\SpecialCharTok{+}\NormalTok{(D}\SpecialCharTok{{-}}\NormalTok{C)}\SpecialCharTok{/}\NormalTok{((}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(B}\SpecialCharTok{*}\NormalTok{(}\FunctionTok{log}\NormalTok{(x)}\SpecialCharTok{{-}}\FunctionTok{log}\NormalTok{(ig))))}\SpecialCharTok{\^{}}\NormalTok{H[i])}
+    \FunctionTok{lines}\NormalTok{(x, iy, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\NormalTok{i, }\AttributeTok{col=}\NormalTok{cols[i])}
+\NormalTok{\}}\CommentTok{\#i}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{,}
+       \AttributeTok{legend=}\FunctionTok{c}\NormalTok{(}\FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(h)}\SpecialCharTok{==}\DecValTok{1}\NormalTok{),}
+                \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(h)}\SpecialCharTok{==}\FloatTok{0.75}\NormalTok{),}
+                \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(h)}\SpecialCharTok{==}\FloatTok{0.5}\NormalTok{),}
+                \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(h)}\SpecialCharTok{==}\FloatTok{0.25}\NormalTok{),}
+                \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(h)}\SpecialCharTok{==}\FloatTok{0.1}\NormalTok{)),}
+       \AttributeTok{lty=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{col=}\NormalTok{cols,}
+       \AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-5pl-1}Five-parameter log-logistic curves with
+different \(h\) parameters, which control the symmetry of the curve
+about the midpoint \(g\). Values of \(h<1\) tend to flatten the curve,
+while values of \(h>1\) tend to make it steeper. The other parameters
+are constant at \(c=0\), \(d=10\), \(b=-8\), and \(g=5\).}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Five-parameter log-logistic curves with different h parameters, which control the symmetry of the curve about the midpoint g. Values of h\textless1 tend to flatten the curve, while values of h\textgreater1 tend to make it steeper. The other parameters are constant at c=0, d=10, b=-8, and g=5.}]{chapters/ch22_files/figure-pdf/fig-5pl-1-1.pdf}}
+
+}
+
+\end{figure}%
+
+The reason we had to adjust the midpoint to see the asymmetry wrought by
+\(h\) is that making the curve asymmetrical has the side effect of
+changing the slope at \(x=g\) (everywhere, really).
+
+This is because at \(x=g\),
+\(\log{\left(x\right)}-\log{\left(x\right)}=0\), so the exponent equals
+\(b\left(0\right)=0\), so the exponential term \(e^{0}=1\), so:
+
+\[f\left(x\right)=c+\frac{d-c}{\left(1+e^{b\left(\log{\left(x\right)}-\log{\left(x\right)}\right)}\right)^h}=c+\frac{d-c}{\left(1+1\right)^h}\]
+
+When \(h=1\), this is halfway between the asymptotes. But when \(h<1\),
+\(2^h<2\), so \(f\left(g\right)>c+\left(d-c\right)/2\) (the function is
+greater than the halfway point). For our example where \(c=10\),
+\(d=10\), and \(b=-8\), decreasing \(h\) without adjusting \(g\) moves
+the point at which \(f\left(x\right)=5\) to the left:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{500}\NormalTok{, }\AttributeTok{length=}\DecValTok{100}\NormalTok{)}
+\NormalTok{B }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\DecValTok{2}
+\NormalTok{C }\OtherTok{\textless{}{-}} \DecValTok{0}
+\NormalTok{D }\OtherTok{\textless{}{-}} \DecValTok{10}
+\NormalTok{G }\OtherTok{\textless{}{-}} \DecValTok{150}
+\NormalTok{H }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\FloatTok{0.75}\NormalTok{, }\FloatTok{0.5}\NormalTok{, }\FloatTok{0.25}\NormalTok{, }\FloatTok{0.1}\NormalTok{)}
+
+
+\NormalTok{cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"black"}\NormalTok{, }\StringTok{"\#e41a1c"}\NormalTok{, }\StringTok{"\#377eb8"}\NormalTok{, }\StringTok{"\#4daf4a"}\NormalTok{,}\StringTok{"\#984ea3"}\NormalTok{)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{4}\NormalTok{), }
+    \AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(x, x, }\AttributeTok{type=}\StringTok{"n"}\NormalTok{, }\AttributeTok{xlab=}\StringTok{"x variable"}\NormalTok{,}
+     \AttributeTok{ylab=}\StringTok{"y variable"}\NormalTok{, }\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FunctionTok{max}\NormalTok{(D)))}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(H))\{}
+\NormalTok{    iy }\OtherTok{\textless{}{-}}\NormalTok{ C}\SpecialCharTok{+}\NormalTok{(D}\SpecialCharTok{{-}}\NormalTok{C)}\SpecialCharTok{/}\NormalTok{((}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(B}\SpecialCharTok{*}\NormalTok{(}\FunctionTok{log}\NormalTok{(x)}\SpecialCharTok{{-}}\FunctionTok{log}\NormalTok{(G))))}\SpecialCharTok{\^{}}\NormalTok{H[i])}
+    \FunctionTok{lines}\NormalTok{(x, iy, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\NormalTok{i, }\AttributeTok{col=}\NormalTok{cols[i])}
+\NormalTok{\}}\CommentTok{\#i}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"bottomright"}\NormalTok{,}
+       \AttributeTok{legend=}\FunctionTok{c}\NormalTok{(}\FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(h)}\SpecialCharTok{==}\DecValTok{1}\NormalTok{),}
+                \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(h)}\SpecialCharTok{==}\FloatTok{0.75}\NormalTok{),}
+                \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(h)}\SpecialCharTok{==}\FloatTok{0.5}\NormalTok{),}
+                \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(h)}\SpecialCharTok{==}\FloatTok{0.25}\NormalTok{),}
+                \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(h)}\SpecialCharTok{==}\FloatTok{0.1}\NormalTok{)),}
+       \AttributeTok{lty=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{col=}\NormalTok{cols,}
+       \AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-5pl-2}Five-parameter log-logistic curves with
+different \(h\) parameters, which control the symmetry of the curve
+about the midpoint \(g\), without adjusting \(g\). Values of \(h<1\)
+tend to flatten the curve, while values of \(h>1\) tend to make it
+steeper. The other parameters are constant at \(c=0\), \(d=10\),
+\(b=-8\), and \(g=5\).}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Five-parameter log-logistic curves with different h parameters, which control the symmetry of the curve about the midpoint g, without adjusting g. Values of h\textless1 tend to flatten the curve, while values of h\textgreater1 tend to make it steeper. The other parameters are constant at c=0, d=10, b=-8, and g=5.}]{chapters/ch22_files/figure-pdf/fig-5pl-2-1.pdf}}
+
+}
+
+\end{figure}%
+
+Here is the effect of increasing \(h\) and adjusting \(g\) so that the
+midpoint remains at 5:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{500}\NormalTok{, }\AttributeTok{length=}\DecValTok{100}\NormalTok{)}
+\NormalTok{B }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\DecValTok{2}
+\NormalTok{C }\OtherTok{\textless{}{-}} \DecValTok{0}
+\NormalTok{D }\OtherTok{\textless{}{-}} \DecValTok{10}
+\NormalTok{G }\OtherTok{\textless{}{-}} \DecValTok{250}
+\NormalTok{H }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{10}\NormalTok{)}
+
+
+\NormalTok{cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"black"}\NormalTok{, }\StringTok{"\#e41a1c"}\NormalTok{, }\StringTok{"\#377eb8"}\NormalTok{)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{4}\NormalTok{), }
+    \AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(x, x, }\AttributeTok{type=}\StringTok{"n"}\NormalTok{, }\AttributeTok{xlab=}\StringTok{"x variable"}\NormalTok{, }
+     \AttributeTok{ylab=}\StringTok{"y variable"}\NormalTok{, }\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FunctionTok{max}\NormalTok{(D)))}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(H))\{}
+\NormalTok{    ig }\OtherTok{\textless{}{-}}\NormalTok{ G }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{2}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\NormalTok{H[i])}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\NormalTok{B)}
+\NormalTok{    iy }\OtherTok{\textless{}{-}}\NormalTok{ C}\SpecialCharTok{+}\NormalTok{(D}\SpecialCharTok{{-}}\NormalTok{C)}\SpecialCharTok{/}\NormalTok{((}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(B}\SpecialCharTok{*}\NormalTok{(}\FunctionTok{log}\NormalTok{(x)}\SpecialCharTok{{-}}\FunctionTok{log}\NormalTok{(ig))))}\SpecialCharTok{\^{}}\NormalTok{H[i])}
+    \FunctionTok{lines}\NormalTok{(x, iy, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\NormalTok{i, }\AttributeTok{col=}\NormalTok{cols[i])}
+\NormalTok{\}}\CommentTok{\#i}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{,}
+       \AttributeTok{legend=}\FunctionTok{c}\NormalTok{(}\FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(h)}\SpecialCharTok{==}\DecValTok{1}\NormalTok{),}
+                \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(h)}\SpecialCharTok{==}\DecValTok{5}\NormalTok{),}
+                \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(h)}\SpecialCharTok{==}\DecValTok{10}\NormalTok{)),}
+       \AttributeTok{lty=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{col=}\NormalTok{cols,}
+       \AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-5pl-3}Five-parameter log-logistic curves with
+different \(h\) parameters, which control the symmetry of the curve
+about the midpoint \(g\). Values of \(h<1\) tend to flatten the curve,
+while values of \(h>1\) tend to make it steeper. The other parameters
+are constant at \(c=0\), \(d=10\), \(b=-8\), and \(g=5\).}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Five-parameter log-logistic curves with different h parameters, which control the symmetry of the curve about the midpoint g. Values of h\textless1 tend to flatten the curve, while values of h\textgreater1 tend to make it steeper. The other parameters are constant at c=0, d=10, b=-8, and g=5.}]{chapters/ch22_files/figure-pdf/fig-5pl-3-1.pdf}}
+
+}
+
+\end{figure}%
+
+Decreasing \(h\) has a much more drastic effect than increasing it.
+
 \subsection{Weibull curves}\label{sec-non-common-weibull}
 
-The \textbf{Weibull curve} is really a family of functions with a
-sigmoid shape between a lower and upper asymptote. So, they can behave
-much like a Gompertz or log-logistic curve, and are suitable in many of
-the same situations. The Weibull curves differ in their numbers of
+\subsubsection{Derivation}\label{sec-non-common-weibull-der}
+
+The \textbf{Weibull function} describes a sigmoid curve between a lower
+and upper asymptote. So, it can behave much like a Gompertz or
+log-logistic curve, and is suitable in many of the same situations. Like
+the log-logistic group above, there are several versions of the Weibull
+function that with different numbers of parameters. Each additional
+parameter in the function allows another aspect of the curve to vary.
+
+Like the log-logistic function, the Weibull function is derived from a
+probability distribution. The \textbf{Weibull distribution} is a
+continuous probability distribution often used for waiting times,
+similar to the \href{@sec-dist-gamma}{gamma distribution}. The
+\href{@sec-dist-cont}{cumulative distribution function (CDF)} of the
+Weibull distribution for non-negative values is
+
+\[F_{Weibull}\left(x\right)=1-e^{-\left(x/\lambda\right)^k}\]
+
+where \(k\) and \(\lambda\) are the parameters of the distribution
+(shape and scale, respectively). We can take advantage of some exponent
+and logarithm rules to rewrite the Weibull CDF as a double exponential:
+
+\[
+\begin{alignedat}{2}
+F\left(x\right)=1-e^{-\left(x/\lambda\right)^k}
+ &\qquad& \text{Start with Weibull CDF}\\
+F\left(x\right)=1-e^{-\left(\frac{x^k}{\lambda^k}\right)}
+ &\qquad& \text{Power of a quotient:}~\left(\frac{a}{b}\right)^c\\
+F\left(x\right)=1-e^{-e^{\log{\left(\frac{x^k}{\lambda^k}\right)}}}
+ &\qquad& \text{Definition of logarithm:}~x=e^{\log\left(x\right)}\\
+F\left(x\right)=1-e^{-e^{\log\left(x^k\right)-\log{\left(\lambda^k\right)}}}
+ &\qquad& \text{Logarithm of a quotient}:~\log\left(a/b\right)=\log\left(x^k\right)-\log\left(\lambda^k\right)\\
+F\left(x\right)=1-e^{-e^{k\log\left(x\right)-k\log{\left(\lambda\right)}}}
+ &\qquad& \text{By identity}~\log\left(a^b\right)=b\log\left(a\right)\\
+F\left(x\right)=1-e^{-e^{k\left(\log\left(x\right)-\log\left(\lambda\right)\right)}}
+ &\qquad& \text{Factor out}~k\\
+\end{alignedat}
+\]
+
+This double exponential form of the Weibull CDF is sometimes called the
+``Type 2'' Weibull function, including in the R package \texttt{drc}.
+The complement of the double exponential form of the Weibull CDF is the
+``Type 1'' Weibull curve:
+
+\[\text{Weibull curve}=e^{-e^{k\left(\log\left(x\right)-\log\left(\lambda\right)\right)}}\]
+
+This version of the Weibull function has two parameters, and so it is
+called the \textbf{two-parameter Weibull function}. Like the
+\href{@sec-non-common-log-2pl}{two-parameter log-logistic}, a three- and
+four-parameter version of the function can be defined by adding
+additional parameters to define an upper asymptote other than 1
+(Section~\ref{sec-non-common-weibull-3}) and a lower asymptote other
+than 0 (Section~\ref{sec-non-common-weibull-4}). Unlike the log-logistic
+and the Gompertz functions, the Weibull function does not have a
+midpoint or inflection point as a parameter but it can be derived from
 parameters.
 
-The \textbf{two-parameter Weibull} type 1 model is
+\subsubsection{Two-parameter Weibull
+function}\label{sec-non-common-weibull-2}
+
+The \textbf{two-parameter Weibull} type 1 model is the basic Weibull
+function we derived in the previous section. We will use \(b\) instead
+of \(k\) for the shape parameter, and \(c\) instead of \(\lambda\) for
+the scale constant. It is given by
 
 \[f\left(x\right)=e^{-e^{b\left(\log\left(x\right)-\log\left(c\right)\right)}}\]
-where \(c\) is the inflection point and \(b\) is a growth constant. This
-function has a lower asymptote at 0 and upper asymptote at 1.
+where \(b\) is the shape parameter and \(c\) is the scale parameter.
+This function has a lower asymptote at 0 and upper asymptote at 1. The
+figure below shows how the curve changes shape with different \(b\)
+parameters.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{length=}\DecValTok{100}\NormalTok{)}
+\NormalTok{B }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\DecValTok{1}\SpecialCharTok{*}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{8}\NormalTok{)}
+\NormalTok{C }\OtherTok{\textless{}{-}} \DecValTok{5}
+
+\NormalTok{cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"\#e41a1c"}\NormalTok{, }\StringTok{"\#377eb8"}\NormalTok{, }\StringTok{"\#4daf4a"}\NormalTok{,}\StringTok{"\#984ea3"}\NormalTok{)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{4}\NormalTok{), }
+    \AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(x, x, }\AttributeTok{type=}\StringTok{"n"}\NormalTok{, }\AttributeTok{xlab=}\StringTok{"x variable"}\NormalTok{,}
+     \AttributeTok{ylab=}\StringTok{"y variable"}\NormalTok{, }\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(B))\{}
+\NormalTok{    iy }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\SpecialCharTok{*}\FunctionTok{exp}\NormalTok{(B[i]}\SpecialCharTok{*}\NormalTok{(}\FunctionTok{log}\NormalTok{(x)}\SpecialCharTok{{-}}\FunctionTok{log}\NormalTok{(C))))}
+    \FunctionTok{points}\NormalTok{(x, iy, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{,}
+           \AttributeTok{lty=}\NormalTok{i, }\AttributeTok{col=}\NormalTok{cols[i])}
+    \FunctionTok{text}\NormalTok{(}\FunctionTok{max}\NormalTok{(x)}\SpecialCharTok{+}\FloatTok{0.2}\NormalTok{, }\FunctionTok{max}\NormalTok{(iy),}
+         \FunctionTok{bquote}\NormalTok{(}\FunctionTok{italic}\NormalTok{(b)}\SpecialCharTok{==}\NormalTok{.(B[i])),}
+         \AttributeTok{adj=}\DecValTok{0}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{,}
+         \AttributeTok{col=}\NormalTok{cols[i])}
+\NormalTok{\}}\CommentTok{\#i}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-weibull-1}Two-parameter Weibull curves with
+different \(b\) parameters, which control the growth rate. Negative
+\(b\) of larger magnitude have steeper positive growth rates. The \(c\)
+parameter is fixed at 5.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two-parameter Weibull curves with different b parameters, which control the growth rate. Negative b of larger magnitude have steeper positive growth rates. The c parameter is fixed at 5.}]{chapters/ch22_files/figure-pdf/fig-weibull-1-1.pdf}}
+
+}
+
+\end{figure}%
+
+Changing the \(c\) changes the function shape. It often has the effect
+of shifting the midpoint and the inflection point, but it represents
+neither of these directly.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{length=}\DecValTok{100}\NormalTok{)}
+\NormalTok{B }\OtherTok{\textless{}{-}} \DecValTok{5}
+\NormalTok{C }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{8}\NormalTok{)}
+
+\NormalTok{cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"\#e41a1c"}\NormalTok{, }\StringTok{"\#377eb8"}\NormalTok{, }\StringTok{"\#4daf4a"}\NormalTok{, }\StringTok{"\#984ea3"}\NormalTok{)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{4}\NormalTok{), }
+    \AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(x, x, }\AttributeTok{type=}\StringTok{"n"}\NormalTok{, }\AttributeTok{xlab=}\StringTok{"x variable"}\NormalTok{,}
+     \AttributeTok{ylab=}\StringTok{"y variable"}\NormalTok{, }\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(C))\{}
+\NormalTok{    iy }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\SpecialCharTok{*}\FunctionTok{exp}\NormalTok{(B}\SpecialCharTok{*}\NormalTok{(}\FunctionTok{log}\NormalTok{(x)}\SpecialCharTok{{-}}\FunctionTok{log}\NormalTok{(C[i]))))}
+    \FunctionTok{points}\NormalTok{(x, iy, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{,}
+           \AttributeTok{lty=}\NormalTok{i, }\AttributeTok{col=}\NormalTok{cols[i])}
+\NormalTok{\}}\CommentTok{\#i}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{,}
+       \AttributeTok{legend=}\FunctionTok{c}\NormalTok{(}
+           \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(c)}\SpecialCharTok{==}\DecValTok{2}\NormalTok{),}
+           \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(c)}\SpecialCharTok{==}\DecValTok{4}\NormalTok{),}
+           \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(c)}\SpecialCharTok{==}\DecValTok{6}\NormalTok{),}
+           \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(c)}\SpecialCharTok{==}\DecValTok{8}\NormalTok{)),}
+       \AttributeTok{lty=}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(C), }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{col=}\NormalTok{cols,}
+       \AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-weibull-2}Two-parameter Weibull curves with
+different \(c\) parameters. The \(c\) parameter changes the function
+shape; it shifts the midpoint and the inflection point, but it
+represents neither of these directly. The \(b\) parameter is fixed at
+5.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two-parameter Weibull curves with different c parameters. The c parameter changes the function shape; it shifts the midpoint and the inflection point, but it represents neither of these directly. The b parameter is fixed at 5.}]{chapters/ch22_files/figure-pdf/fig-weibull-2-1.pdf}}
+
+}
+
+\end{figure}%
+
+Figure~\ref{fig-weibull-2} makes it seem that the scale parameter \(c\)
+shifts the function midpoint and the inflection point, but this isn't
+actually true. The function midpoint calculated from both \(b\) and
+\(c\):
+
+\[x_{mid}=ce^{\frac{\log{\left(-\log{\left(0.5\right)}\right)}}{b}}=ce^{\frac{\log{\left(\log{\left(2\right)}\right)}}{b}}\approx ce^{\frac{-0.3665}{b}}\]
+
+the derivation of which is left as an exercise for the reader (I've
+always wanted to say that).
+
+\subsubsection{Three-parameter Weibull
+function}\label{sec-non-common-weibull-3}
 
 The \textbf{three-parameter Weibull} curve adds a parameter \(d\) to the
 two-parameter Weibull model to specify the upper asymptote:
 
 \[f\left(x\right)=de^{-e^{b\left(\log{\left(x\right)}-\log{\left(c\right)}\right)}}\]
 
+Varying the shape \(b\) or the scale \(c\) has the same effect as it
+does in the two-parameter Weibull (Figure~\ref{fig-weibull-1},
+Figure~\ref{fig-weibull-2}), just with the upper asymptote shifted to
+\(d\).
+
+\subsubsection{Four-parameter Weibull
+function}\label{sec-non-common-weibull-4}
+
 Finally, the \textbf{four-parameter Weibull} curve adds one more
-parameter, \(a\), which can specify a lower asymptotes other than 0:
+parameter, \(a\), which can specify a lower asymptote other than 0:
 
 \[f\left(x\right)=a+\left(d-a\right)e^{-e^{b\left(\log\left(x\right)-\log\left(c\right)\right)}}\]
-where \(d\) is the upper asymptote and \(a\) is the lower asymptote.
-Unlike the log-logistic functions, none of the parameters is directly
-interpretable as the ED50. The Weibull curve is essentially a
-Gompertz-like sigmoid double exponential function applied to the
-logarithm of dose. Weibull curves are typically asymmetric.
+where \(b\) is the shape, \(c\) is the scale, \(d\) is the upper
+asymptote, and \(a\) is the lower asymptote.
 
 When \(b\) is negative, the Weibull curve increases:
 
@@ -28456,14 +29061,14 @@ When \(b\) is negative, the Weibull curve increases:
 
 \begin{figure}[H]
 
-\caption{\label{fig-weibull1}Four-parameter Weibull curves different
+\caption{\label{fig-weibull-3}Four-parameter Weibull curves different
 \(b\) parameters, which control the growth rate. Negative \(b\) of
 larger magnitude have steeper positive growth rates. The other
 parameters are constant at \(a=0\), \(d=10\), and \(c=4\).}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Four-parameter Weibull curves different b parameters, which control the growth rate. Negative b of larger magnitude have steeper positive growth rates. The other parameters are constant at a=0, d=10, and c=4}]{chapters/ch22_files/figure-pdf/fig-weibull1-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={Four-parameter Weibull curves different b parameters, which control the growth rate. Negative b of larger magnitude have steeper positive growth rates. The other parameters are constant at a=0, d=10, and c=4}]{chapters/ch22_files/figure-pdf/fig-weibull-3-1.pdf}}
 
 }
 
@@ -28504,22 +29109,24 @@ When \(b\) is positive, then the Weibull curve decreases:
 
 \begin{figure}[H]
 
-\caption{\label{fig-weibull2}Four-parameter Weibull curves different
+\caption{\label{fig-weibull-4}Four-parameter Weibull curves different
 \(b\) parameters, which control the growth rate. Positive \(b\) of
 larger magnitude have steeper negative growth rates. The other
 parameters are constant at \(a=0\), \(d=10\), and \(c=4\).}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Four-parameter Weibull curves different b parameters, which control the growth rate. Positive b of larger magnitude have steeper negative growth rates. The other parameters are constant at a=0, d=10, and c=4}]{chapters/ch22_files/figure-pdf/fig-weibull2-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={Four-parameter Weibull curves different b parameters, which control the growth rate. Positive b of larger magnitude have steeper negative growth rates. The other parameters are constant at a=0, d=10, and c=4}]{chapters/ch22_files/figure-pdf/fig-weibull-4-1.pdf}}
 
 }
 
 \end{figure}%
 
-The \(c\) term shifts the inflection point left and right. Note that for
-some combinations of parameters, there may not be an inflection point
-visible in your data.
+The \(c\) term changes the function shape, which often has the effect of
+shifting the midpoint to the left and right (even though \(c\) does not
+define the midpoint directly) or flattening or steepening the curve.
+Note that for some combinations of parameters, there may not be an
+inflection point visible in your data.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -28539,10 +29146,7 @@ visible in your data.
 \NormalTok{    iy }\OtherTok{\textless{}{-}}\NormalTok{ A}\SpecialCharTok{+}\NormalTok{(D}\SpecialCharTok{{-}}\NormalTok{A)}\SpecialCharTok{*}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\SpecialCharTok{*}\FunctionTok{exp}\NormalTok{(B}\SpecialCharTok{*}\NormalTok{(}\FunctionTok{log}\NormalTok{(x)}\SpecialCharTok{{-}}\FunctionTok{log}\NormalTok{(C[i]))))}
     \FunctionTok{points}\NormalTok{(x, iy, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{,}
            \AttributeTok{lty=}\NormalTok{i, }\AttributeTok{col=}\NormalTok{cols[i])}
-    \FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, D}\SpecialCharTok{/}\DecValTok{2}\NormalTok{, C[i], D}\SpecialCharTok{/}\DecValTok{2}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
-    \FunctionTok{segments}\NormalTok{(C[i], }\DecValTok{0}\NormalTok{, C[i], D}\SpecialCharTok{/}\DecValTok{2}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
 \NormalTok{\}}\CommentTok{\#i}
-\FunctionTok{text}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{5.5}\NormalTok{, }\FunctionTok{expression}\NormalTok{(y}\SpecialCharTok{==}\NormalTok{d}\SpecialCharTok{/}\DecValTok{2}\NormalTok{), }\AttributeTok{adj=}\DecValTok{0}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.1}\NormalTok{)}
 \FunctionTok{legend}\NormalTok{(}\StringTok{"bottomright"}\NormalTok{,}
        \AttributeTok{legend=}\FunctionTok{c}\NormalTok{(}
            \FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(c)}\SpecialCharTok{==}\DecValTok{2}\NormalTok{),}
@@ -28556,32 +29160,31 @@ visible in your data.
 
 \begin{figure}[H]
 
-\caption{\label{fig-weibull3}Four-parameter Weibull curves with
-different \(c\) parameters, which control the x position of the
-inflection point. Greater \(c\) shift the curve to the right. The dashed
-lines at \(y=d/2\) show that \(c\) defines not the midpoint like \(g\)
-in the four-parameter log-logistic, but rather the inflection point (the
-point where the second derivative changes sign). The other parameters
-are constant at \(a=0\), \(b=-4\), and \(d=10\).}
+\caption{\label{fig-weibull-5}Four-parameter Weibull curves with
+different scale parameters \(c\), which change the shape of the curve.
+The other parameters are constant at \(a=0\), \(b=-4\), and \(d=10\).}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={Four-parameter Weibull curves with different c parameters, which control the x position of the inflection point. Greater c shift the curve to the right. The dashed lines at y=d/2 show that c defines not the midpoint like g in the four-parameter log-logistic, but rather the inflection point (the point where the second derivative changes sign). The other parameters are constant at a=0, b=-4, and d=10.}]{chapters/ch22_files/figure-pdf/fig-weibull3-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={Four-parameter Weibull curves with different scale parameters c, which change the shape of the curve. The other parameters are constant at a=0, b=-4, and d=10.}]{chapters/ch22_files/figure-pdf/fig-weibull-5-1.pdf}}
 
 }
 
 \end{figure}%
 
-\subsection{Growth curves summary}\label{growth-curves-summary}
+\subsection{Nonlinear functions
+summary}\label{nonlinear-functions-summary}
 
-We have seen 4 types of nonlinear functions commonly used for biological
+We have seen 5 types of nonlinear functions commonly used for biological
 data: the Michaelis-Menten, the Gompertz, the von Bertalanffy, the
 (log)-logistic, and the Weibull curves. Each of these can take on many
 shapes, and choosing which one to use to model your data requires both
-statistical know-how and, more importantly, biological judgement. The
-most important question is often not, ``Which curve looks the most like
-my scatterplot?'' but rather ``Which curve has parameters that make
-biological sense for my question?''. These curves are useful because
+statistical know-how and, more importantly, biological judgement.
+
+The functions that we explore can take on many shapes. So, the most
+important question is not, ``\emph{Which curve looks the most like my
+scatterplot}?'' but rather ``\emph{Which curve has parameters that make
+biological sense for my question?}''. These curves are useful because
 they are defined in terms that describe biology quite well: minimum and
 maximum values, inflection points, midpoints, and growth rates.
 
@@ -28638,17 +29241,20 @@ Gompertz (classic) & \(0\) (fixed) & \(a\) & Derived & \(\ln(b)/c\) &
 \(c\) \\
 von Bertalanffy & \(0\) (fixed) & \(L_\infty\) & Derived & --- &
 \(k\) \\
-Log-logistic (2P) & \(0\) (fixed) & \(1\) (fixed) & \(e\) & Derived &
+Log-logistic (2P) & \(0\) (fixed) & \(1\) (fixed) & \(g\) & Derived &
 \(b\) (slope) \\
-Log-logistic (3P) & \(0\) (fixed) & \(d\) & \(e\) & Derived & \(b\)
+Log-logistic (3P) & \(0\) (fixed) & \(d\) & \(g\) & Derived & \(b\)
 (slope) \\
-Log-logistic (4P) & \(c\) & \(d\) & \(e\) & Derived & \(b\) (slope) \\
-Weibull type 1 (2P) & \(0\) (fixed) & \(1\) (fixed) & Derived & Derived*
-& \(b\) (shape), \(e\) (scale) \\
+Log-logistic (4P) & \(c\) & \(d\) & \(g\) & Derived & \(b\) (slope) \\
+Log-logistic (5P) & \(c\) & \(d\) & \(g\) & Derived & \(b\) (slope),
+\(k\) (asymmetry) \\
+Weibull type 1 (2P) & \(0\) (fixed) & \(1\) (fixed) & Derived &
+\(ce^{\log{\left(\log\left(2\right)\right)/b}}\) & \(b\) (shape), \(c\)
+(scale) \\
 Weibull type 1 (3P) & \(0\) (fixed) & \(d\) & Derived & Derived* & \(b\)
-(shape), \(e\) (scale) \\
-Weibull type 1 (4P) & \(c\) & \(d\) & Derived & Derived* & \(b\)
-(shape), \(e\) (scale) \\
+(shape), \(c\) (scale) \\
+Weibull type 1 (4P) & \(a\) & \(d\) & Derived & Derived* & \(b\)
+(shape), \(c\) (scale) \\
 \end{longtable}
 
 \section{\texorpdfstring{Nonlinear least squares with
@@ -28764,11 +29370,13 @@ functions}\label{sec-non-nls-nls}
 
 Sometimes we need to fit a model without a self starting function. This
 might be because we are fitting a model for which there is no self start
-function. Or, we need to feed an output to \texttt{propagate}. Either
-way, without a self starting function you will need to supply starting
-values for each parameter. This is usually done in a named list. Below,
-we refit the ear length vs.~body length relationship using the estimates
-from the self start model as starting values.
+function. Or, we need to feed an output to \texttt{propagate} to get
+confidence intervals. Either way, without a self starting function you
+will need to supply starting values for each parameter. This is usually
+done in a named list.
+
+Below, we refit the ear length vs.~body length relationship using the
+estimates from the self start model as starting values.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -28887,10 +29495,11 @@ need to use package \texttt{propagate}.
 Set up a series of \(x\) values and calculate a confidence interval.
 Note that if you use a self-start version of a model, you may get
 strange confidence intervals because \texttt{propagate} won't be able to
-represent the model correctly. So, you may need to fit the
-\texttt{selfStart} version, then refit by specifying the model
-explicitly, then using the explicit version to generate confidence
-intervals.
+represent the model correctly. So, you may want to fit the
+\texttt{selfStart} version to get parameter estimates, then refit by
+specifying the model explicitly, using the parameter estimates from the
+\texttt{selfStart()} version as starting values. You can then use the
+estimates from the explicit version to generate confidence intervals.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -28898,6 +29507,9 @@ intervals.
 \NormalTok{px }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{totalLength, }\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{),}
           \FunctionTok{max}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{totalLength, }\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{), }\AttributeTok{length=}\NormalTok{n)}
 \NormalTok{prx }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{totalLength=}\NormalTok{px)}
+
+\CommentTok{\# notice we use mod2, the explicitly coded model}
+\CommentTok{\# and not the selfStart version (which is mod1)}
 \NormalTok{py }\OtherTok{\textless{}{-}} \FunctionTok{predictNLS}\NormalTok{(mod2,}
                  \AttributeTok{newdata=}\NormalTok{prx,}
                  \AttributeTok{interval=}\StringTok{"confidence"}\NormalTok{,}
@@ -28913,22 +29525,15 @@ looks odd, go with one of the others.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# 2026{-}10{-}26}
-\CommentTok{\# different versions of propagate }
-\CommentTok{\# use different column names!}
-\ControlFlowTok{if}\NormalTok{(}\StringTok{"Prop.Mean.1"} \SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(py}\SpecialCharTok{$}\NormalTok{summary))\{}
-    \CommentTok{\# first order delta approximation}
-\NormalTok{    prx}\SpecialCharTok{$}\NormalTok{mn }\OtherTok{\textless{}{-}}\NormalTok{ py}\SpecialCharTok{$}\NormalTok{summary}\SpecialCharTok{$}\NormalTok{Prop.Mean}\FloatTok{.1} 
-\NormalTok{    prx}\SpecialCharTok{$}\NormalTok{lo }\OtherTok{\textless{}{-}}\NormalTok{ py}\SpecialCharTok{$}\NormalTok{summary}\SpecialCharTok{$}\StringTok{\textquotesingle{}Prop.2.5\%\textquotesingle{}}
-\NormalTok{    prx}\SpecialCharTok{$}\NormalTok{up }\OtherTok{\textless{}{-}}\NormalTok{ py}\SpecialCharTok{$}\NormalTok{summary}\SpecialCharTok{$}\StringTok{\textquotesingle{}Prop.97.5\%\textquotesingle{}}   
-\NormalTok{\} }
-\ControlFlowTok{if}\NormalTok{(}\StringTok{"mean.1"} \SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(py}\SpecialCharTok{$}\NormalTok{summary))\{}
-    \CommentTok{\# first order delta approximation}
-\NormalTok{    prx}\SpecialCharTok{$}\NormalTok{mn }\OtherTok{\textless{}{-}}\NormalTok{ py}\SpecialCharTok{$}\NormalTok{summary}\SpecialCharTok{$}\NormalTok{mean}\FloatTok{.1} 
-\NormalTok{    prx}\SpecialCharTok{$}\NormalTok{lo }\OtherTok{\textless{}{-}}\NormalTok{ py}\SpecialCharTok{$}\NormalTok{summary}\SpecialCharTok{$}\StringTok{\textquotesingle{}2.5\%\textquotesingle{}}
-\NormalTok{    prx}\SpecialCharTok{$}\NormalTok{up }\OtherTok{\textless{}{-}}\NormalTok{ py}\SpecialCharTok{$}\NormalTok{summary}\SpecialCharTok{$}\StringTok{\textquotesingle{}97.5\%\textquotesingle{}}
-\NormalTok{\}}
-
+\CommentTok{\# }\AlertTok{NOTE}\CommentTok{: this example uses R version 4.6.1 and}
+\CommentTok{\#       propagate version 1.2{-}0. The structure}
+\CommentTok{\#       of the predictNLS output is a bit }
+\CommentTok{\#       different than previous versions of }
+\CommentTok{\#       propagate (e.g., 1.0{-}7).}
+\CommentTok{\# first order delta approximation}
+\NormalTok{prx}\SpecialCharTok{$}\NormalTok{mn }\OtherTok{\textless{}{-}}\NormalTok{ py}\SpecialCharTok{$}\NormalTok{summary[,}\DecValTok{1}\NormalTok{] }\CommentTok{\# mean.1}
+\NormalTok{prx}\SpecialCharTok{$}\NormalTok{lo }\OtherTok{\textless{}{-}}\NormalTok{ py}\SpecialCharTok{$}\NormalTok{summary[,}\DecValTok{5}\NormalTok{] }\CommentTok{\# 2.5\% (first one)}
+\NormalTok{prx}\SpecialCharTok{$}\NormalTok{up }\OtherTok{\textless{}{-}}\NormalTok{ py}\SpecialCharTok{$}\NormalTok{summary[,}\DecValTok{6}\NormalTok{] }\CommentTok{\# 97.5\% (first one)}
 
 \FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
 \FunctionTok{plot}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{totalLength, dx}\SpecialCharTok{$}\NormalTok{earLength,}
@@ -29035,11 +29640,11 @@ Now construct the model.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{mod3 }\OtherTok{\textless{}{-}} \FunctionTok{nls}\NormalTok{(earLength}\SpecialCharTok{\textasciitilde{}}\NormalTok{cr}\SpecialCharTok{*}\NormalTok{((a.cr}\SpecialCharTok{*}\NormalTok{totalLength)}\SpecialCharTok{/}\NormalTok{(b.cr}\SpecialCharTok{+}\NormalTok{totalLength))}\SpecialCharTok{+}
+\NormalTok{mod4 }\OtherTok{\textless{}{-}} \FunctionTok{nls}\NormalTok{(earLength}\SpecialCharTok{\textasciitilde{}}\NormalTok{cr}\SpecialCharTok{*}\NormalTok{((a.cr}\SpecialCharTok{*}\NormalTok{totalLength)}\SpecialCharTok{/}\NormalTok{(b.cr}\SpecialCharTok{+}\NormalTok{totalLength))}\SpecialCharTok{+}
 \NormalTok{                      mu}\SpecialCharTok{*}\NormalTok{((a.mu}\SpecialCharTok{*}\NormalTok{totalLength)}\SpecialCharTok{/}\NormalTok{(b.mu}\SpecialCharTok{+}\NormalTok{totalLength)),}
             \AttributeTok{data=}\NormalTok{dx2,}
             \AttributeTok{start=}\FunctionTok{list}\NormalTok{(}\AttributeTok{a.cr=}\DecValTok{50}\NormalTok{, }\AttributeTok{b.cr=}\DecValTok{180}\NormalTok{, }\AttributeTok{a.mu=}\DecValTok{20}\NormalTok{, }\AttributeTok{b.mu=}\DecValTok{180}\NormalTok{))}
-\FunctionTok{summary}\NormalTok{(mod3)}
+\FunctionTok{summary}\NormalTok{(mod4)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -29109,6 +29714,20 @@ confidence interval.}
 }
 
 \end{figure}%
+
+\subsection{Significance and nonsignificance in nonlinear
+models}\label{sec-non-nls-sig}
+
+The \emph{p}-values in an \texttt{nls()} summary test whether each
+estimated parameter differs from zero, using an approximation based on
+the parameter's standard error. These tests are not necessarily
+meaningful for nonlinear models, especially when parameters have
+biological constraints or zero represents a degenerate model. For
+example, a nonsignificant asymptote term \(a\) in a Michaelis-Menten
+model or log-logistic model (\(d\)) may be mathematically valid, but
+biologically nonsensical. Instead of relying on \emph{p}-values, focus
+primarily on parameter estimates, their confidence intervals, and how
+well the model describes the observed relationship.
 
 \section{\texorpdfstring{Dose-response curves with
 \texttt{drc}}{Dose-response curves with drc}}\label{sec-non-drc}
@@ -29192,15 +29811,15 @@ Anything is permuted.
 
 Ain't AIC grand?
 
-\part{Bonus material}
-
-Material that didn't quite fit anywhere else. Future chapters will
-likely be added here.
-
 \chapter{Introduction to Bayesian inference for
 biologists}\label{sec-bayes}
 
 Bayes bayes bayes.
+
+\part{Bonus material}
+
+Material that didn't quite fit anywhere else. Future chapters will
+likely be added here.
 
 \chapter{Advanced R graphics}\label{sec-plot2}
 

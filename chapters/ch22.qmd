@@ -49,7 +49,7 @@ The function shown in @fig-nonlinear1 is the famous **Michaelis-Menten** functio
 
 ## Common nonlinear functions {#sec-non-common}
 
-### Michaelis-Menten curves {#sec-non-common-mm}
+### The Michaelis-Menten function {#sec-non-common-mm}
 
 The **Michaelis-Menten function** is a nonlinear model that is usually used to describe processes that grow and approach an asymptote. One of the classic applications is modeling the relationship between biochemical reaction rates and substrate concentrations. The Michaelis-Menten equation takes the general form
 
@@ -99,7 +99,7 @@ for(i in 1:length(b)){
 
 The Michaelis-Menten curve goes by many names. In enzyme kinetics and biochemistry, it is called the Michaelis-Menten curve. Biologists also sometimes call it the **Monod function**, the **Holling type II** functional response, or the **Beverton-Holt model**. This diversity of application speaks to the generality of this function. The original definition predicted a reaction rate. However, Michaelis-Menten curves can also be used to model other phenomena. For example, @kunz2019 and @green2020 used Michaelis-Menten curves to model the effectiveness of biodiversity monitoring programs, using the asymptote term as an estimate of the maximum number of species likely to be detected.
 
-### Gompertz curve {#sec-non-common-gomp}
+### Gompertz functions {#sec-non-common-gomp}
 
 The Gompertz curve is a sigmoid (s-shaped) growth curve frequently used to describe biological growth. It can be written in several ways. You can use whichever form you want, but you need to be explicit about what you did. In both cases, all parameters must be positive.
 
@@ -235,7 +235,7 @@ legend("bottomright",
        bty="n", cex=1.2)
 ```
 
-### von Bertalanffy {#sec-non-common-vb}
+### The von Bertalanffy growth function{#sec-non-common-vb}
 
 Like the Gompertz curve, the **von Bertalanffy growth curve** describes size increasing and approaching an asymptote. Unlike the Gompertz curve, the von Bertalanffy model is not sigmoid, but rather has a decreasing slope. That is, it is always concave down whereas the the Gompertz model can have a concave up portion, a concave down portion, and an inflection point in between.
 
@@ -331,7 +331,7 @@ legend("bottomright",
        bty="n", cex=1.2)
 ```
 
-### Logistic and log-logistic curves {#sec-non-common-log}
+### Logistic and log-logistic functions {#sec-non-common-log}
 
 A **logistic** curve is one that takes the form
 
@@ -629,7 +629,7 @@ The exponent $h$ allows the curve to be asymmetric about the midpoint $g$, when 
 #| fig-height: 6
 #| label: fig-5pl-1
 #| fig-cap: 'Five-parameter log-logistic curves with different $h$ parameters, which control the symmetry of the curve about the midpoint $g$. Values of $h<1$ tend to flatten the curve, while values of $h>1$ tend to make it steeper. The other parameters are constant at $c=0$, $d=10$, $b=-8$, and $g=5$.'
-#| fig-alt: "Five-parameter log-logistic curves with different $h$ parameters, which control the symmetry of the curve about the midpoint $g$. Values of h<1 tend to flatten the curve, while values of h>1 tend to make it steeper. The other parameters are constant at $c=0$, $d=10$, $b=-8$, and $g=5$."
+#| fig-alt: "Five-parameter log-logistic curves with different h parameters, which control the symmetry of the curve about the midpoint g. Values of h<1 tend to flatten the curve, while values of h>1 tend to make it steeper. The other parameters are constant at c=0, d=10, b=-8, and g=5."
 
 x <- seq(1, 500, length=100)
 B <- -2
@@ -661,7 +661,7 @@ legend("topleft",
 
 The reason we had to adjust the midpoint to see the asymmetry wrought by $h$ is that making the curve asymmetrical has the side effect of changing the slope at $x=g$ (everywhere, really). 
 
-This is because at $x=g$, $\log{\left(x\right)}-\log{\left(x\right)}=0$, so the exponent equals $b\left(0\right)=0, so the exponential term $e^{0}=1$, so:
+This is because at $x=g$, $\log{\left(x\right)}-\log{\left(x\right)}=0$, so the exponent equals $b\left(0\right)=0$, so the exponential term $e^{0}=1$, so:
 
 $$f\left(x\right)=c+\frac{d-c}{\left(1+e^{b\left(\log{\left(x\right)}-\log{\left(x\right)}\right)}\right)^h}=c+\frac{d-c}{\left(1+1\right)^h}$$
 
@@ -708,7 +708,7 @@ Here is the effect of increasing $h$ and adjusting $g$ so that the midpoint rema
 #| fig-height: 6
 #| label: fig-5pl-3
 #| fig-cap: 'Five-parameter log-logistic curves with different $h$ parameters, which control the symmetry of the curve about the midpoint $g$. Values of $h<1$ tend to flatten the curve, while values of $h>1$ tend to make it steeper. The other parameters are constant at $c=0$, $d=10$, $b=-8$, and $g=5$.'
-#| fig-alt: "Five-parameter log-logistic curves with different $h$ parameters, which control the symmetry of the curve about the midpoint $g$. Values of h<1 tend to flatten the curve, while values of h>1 tend to make it steeper. The other parameters are constant at $c=0$, $d=10$, $b=-8$, and $g=5$."
+#| fig-alt: "Five-parameter log-logistic curves with different h parameters, which control the symmetry of the curve about the midpoint g. Values of h<1 tend to flatten the curve, while values of h>1 tend to make it steeper. The other parameters are constant at c=0, d=10, b=-8, and g=5."
 
 x <- seq(1, 500, length=100)
 B <- -2
@@ -751,7 +751,6 @@ $$F_{Weibull}\left(x\right)=1-e^{-\left(x/\lambda\right)^k}$$
 where $k$ and $\lambda$ are the parameters of the distribution (shape and scale, respectively). We can take advantage of some exponent and logarithm rules to rewrite the Weibull CDF as a double exponential:
 
 
-
 $$
 \begin{alignedat}{2}
 F\left(x\right)=1-e^{-\left(x/\lambda\right)^k}
@@ -767,7 +766,6 @@ F\left(x\right)=1-e^{-e^{k\log\left(x\right)-k\log{\left(\lambda\right)}}}
 F\left(x\right)=1-e^{-e^{k\left(\log\left(x\right)-\log\left(\lambda\right)\right)}}
  &\qquad& \text{Factor out}~k\\
 \end{alignedat}
-
 $$
 
 This double exponential form of the Weibull CDF is sometimes called the "Type 2" Weibull function, including in the R package `drc`. The complement of the double exponential form of the Weibull CDF is the "Type 1" Weibull curve:
@@ -1051,7 +1049,9 @@ summary(mod1)
 
 ### Fitting the model without self start functions {#sec-non-nls-nls}
 
-Sometimes we need to fit a model without a self starting function. This might be because we are fitting a model for which there is no self start function. Or, we need to feed an output to `propagate`. Either way, without a self starting function you will need to supply starting values for each parameter. This is usually done in a named list. Below, we refit the ear length vs. body length relationship using the estimates from the self start model as starting values.
+Sometimes we need to fit a model without a self starting function. This might be because we are fitting a model for which there is no self start function. Or, we need to feed an output to `propagate` to get confidence intervals. Either way, without a self starting function you will need to supply starting values for each parameter. This is usually done in a named list.
+
+Below, we refit the ear length vs. body length relationship using the estimates from the self start model as starting values.
 
 ```{r}
 mod2 <- nls(earLength~(a*totalLength)/(b+totalLength),
@@ -1104,7 +1104,7 @@ Unlike `lm()` and `glm()`, there is no base option for generating confidence int
 library(propagate)
 ```
 
-Set up a series of $x$ values and calculate a confidence interval. Note that if you use a self-start version of a model, you may get strange confidence intervals because `propagate` won't be able to represent the model correctly. So, you may need to fit the `selfStart` version, then refit by specifying the model explicitly, then using the explicit version to generate confidence intervals.
+Set up a series of $x$ values and calculate a confidence interval. Note that if you use a self-start version of a model, you may get strange confidence intervals because `propagate` won't be able to represent the model correctly. So, you may want to fit the `selfStart` version to get parameter estimates, then refit by specifying the model explicitly, using the parameter estimates from the `selfStart()` version as starting values. You can then use the estimates from the explicit version to generate confidence intervals.
 
 ```{r}
 #| output: false
@@ -1115,6 +1115,9 @@ n <- 10
 px <- seq(min(dx$totalLength, na.rm=TRUE),
           max(dx$totalLength, na.rm=TRUE), length=n)
 prx <- data.frame(totalLength=px)
+
+# notice we use mod2, the explicitly coded model
+# and not the selfStart version (which is mod1)
 py <- predictNLS(mod2,
                  newdata=prx,
                  interval="confidence",
@@ -1149,7 +1152,6 @@ points(px, prx$lo, type="l", lwd=2, col="red", lty=2)
 points(px, prx$up, type="l", lwd=2, col="red", lty=2)
 
 ```
-
 
 ### Factors and interactions in nonlinear models {#sec-non-nls-fact}
 
@@ -1217,11 +1219,11 @@ dx2$mu <- ifelse(dx2$family=="Muridae", 1, 0)
 Now construct the model.
 
 ```{r}
-mod3 <- nls(earLength~cr*((a.cr*totalLength)/(b.cr+totalLength))+
+mod4 <- nls(earLength~cr*((a.cr*totalLength)/(b.cr+totalLength))+
                       mu*((a.mu*totalLength)/(b.mu+totalLength)),
             data=dx2,
             start=list(a.cr=50, b.cr=180, a.mu=20, b.mu=180))
-summary(mod3)
+summary(mod4)
 ```
 
 Now make the trendlines. Remember that the data frame you pass to the `predict` call has to have every variable that went into the analysis...even the indicators variables like `cr` and `mu`.
@@ -1258,6 +1260,10 @@ legend("topleft", legend=names(cols),
        cex=1.2,bty="n")
 
 ```
+
+### Significance and nonsignificance in nonlinear models {#sec-non-nls-sig} 
+
+The *p*-values in an `nls()` summary test whether each estimated parameter differs from zero, using an approximation based on the parameter's standard error. These tests are not necessarily meaningful for nonlinear models, especially when parameters have biological constraints or zero represents a degenerate model. For example, a nonsignificant asymptote term $a$ in a Michaelis-Menten model or log-logistic model ($d$) may be mathematically valid, but biologically nonsensical. Instead of relying on *p*-values, focus primarily on parameter estimates, their confidence intervals, and how well the model describes the observed relationship.
 
 ## Dose-response curves with `drc` {#sec-non-drc}
 
