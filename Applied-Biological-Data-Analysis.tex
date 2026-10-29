@@ -27770,6 +27770,218 @@ the Michaelis-Menten function remains nonlinear.}
 The function shown in Figure~\ref{fig-nonlinear1} is the famous
 \textbf{Michaelis-Menten} function, often used for enzyme kinetics.
 
+\section{Curve terminology}\label{sec-non-terms}
+
+Straight lines are easy to describe. They have an angle relative to the
+axes (the \textbf{slope}) and one point where they intersect the y-axis:
+the \textbf{intercept}. Both of these characteristics are
+\textbf{parameters} of a \textbf{function}. A function is an operation
+that assigns each value in one set to exactly one value in another set.
+In this case, the function assigns each value in \(x\) to one and only
+one expected \(y\) value (remember, a statistical model has a
+deterministic part that produces the expected value, and a stochastic
+part for describing the residual variation).
+
+\subsection{Domain and codomain}\label{sec-non-terms-cod}
+
+Because a statistical model describes a function, the straight line
+acquires two more characteristics. The \textbf{domain} of the function
+is the set of inputs accepted by the function. The \textbf{codomain} is
+the set of outputs (some older books call this the \textbf{range}, but
+that term is now considered ambiguous).
+
+Figure~\ref{fig-domain} shows some data and a linear function fitted to
+them. The domain of the fitted function is the interval between the
+smallest and largest \(x\) values. Its codomain is the interval that
+spans all of the observed \(y\) values.
+
+\begin{figure}
+
+\caption{\label{fig-domain}A linear function f(x) fit to data and its
+domain, codomain, and expected values.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={A linear function f(x)fit to data and its domain, codomain, and expected values.}]{chapters/ch22_files/figure-pdf/fig-domain-1.pdf}}
+
+}
+
+\end{figure}%
+
+Mathematically, the domain and codomain of a linear function are the
+\href{https://en.wikipedia.org/wiki/Real_number}{\textbf{real numbers}},
+often abbreviated \(\mathbb{R}\). But we're not doing math, we are doing
+statistics. The linear model that we fit to the data is only applicable
+within the set of \(x\) and \(y\) values used to fit it. Using the model
+to make predictions outside the domain of its data, or
+\textbf{extrapolation}, can be fraught with peril.
+
+\subsection{Slopes and tangent lines}\label{sec-non-terms-slope}
+
+Nonlinear models, by definition, do not have a constant slope like a
+linear model does. Usually the slope of the function at any point is a
+function of the \(x\) value. Some of them have parameters that we refer
+to as a slope or growth rate, but these are really \emph{inputs} to a
+function that determines the actual slope.
+
+The function below shows a nonlinear curve \(f\left(x\right)\) and its
+\textbf{tangent line} at \(x=7\). The tangent line is a line that
+intersects a function at exactly one point and has the same slope as the
+function at that point. The slope of the tangent line is calculated as
+the \textbf{first derivative} of the function at that \(x\) value.
+
+\begin{figure}
+
+\caption{\label{fig-curves1}In this four-parameter log-logistic curve
+defined by parameters \emph{b}, \emph{c}, \emph{d}, and \emph{g}, the
+slope of the curve \(dy/dx\) at any point is not represented directly by
+any parameter but instead is a function of those parameters and \(x\).
+Here the slope at \(x=7\) is approximately \(0.749\).}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={In this four-parameter log-logistic curve defined by parameters b, c, d, and g, the slope of the curve dy/dx at any point is not represented directly by any parameter but instead is a function of those parameters and x. Here the slope at x=7 is approximately 0.749.}]{chapters/ch22_files/figure-pdf/fig-curves1-1.pdf}}
+
+}
+
+\end{figure}%
+
+\subsection{Concavity}\label{sec-non-terms-concave}
+
+Nonlinear curves are also described by their \textbf{concavity}. A
+function is said to be \textbf{concave up} wherever its tangent line is
+below the graph of the function, and \textbf{concave down} when the
+tangent line lies above it. Remember the mnemonic, ``\emph{up cup, down
+frown}''. The concavity of a function is related to its \textbf{second
+derivative}, or the rate of change in the slope at any given point.
+
+In Figure~\ref{fig-curves2} below, the left panel shows a linear
+function \(y=2+0.75x\) and its constant slope of 0.75. The right panel
+shows a nonlinear curve whose slope changes with \(x\) (see
+Figure~\ref{fig-curves1}), and the tangent lines at \(x=2.5\) and
+\(x=7\). At the first point, the tangent line is below the function, so
+the function is concave up. At the second, the tangent line is above the
+function, so the function is concave down there. Note that the slopes of
+both tangent lines are positive.
+
+\begin{figure}
+
+\caption{\label{fig-curves2}Comparison of constant and variable slopes
+in linear and nonlinear functions. Left: A linear function has a
+constant first derivative (\(dy/dx = 0.75\)), represented by the
+horizontal red line. Right: A nonlinear sigmoidal function has a slope
+that changes with \(x\). Red and blue tangent lines illustrate the
+instantaneous slopes at two points along the curve, approximately 0.531
+and 0.562, respectively.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two-panel figure comparing slopes of linear and nonlinear functions. The left panel shows a straight black line increasing from y = 2 with slope 0.75, and a horizontal red line indicating that its derivative is constant. The right panel shows a black S-shaped curve rising from approximately y = 2 to y = 8. A red tangent line near x = 2.4 has slope 0.531, while a blue tangent line near x = 7 has slope 0.562. The tangent lines illustrate how the instantaneous rate of change varies along a nonlinear curve.}]{chapters/ch22_files/figure-pdf/fig-curves2-1.pdf}}
+
+}
+
+\end{figure}%
+
+The second derivative that defines concavity is the rate of change in
+the slope: \(dy/dx/dx\), or \(dy/dx^2\). Figure~\ref{fig-curves3} below
+shows a function which has a positive slope everywhere, but whose slope
+is decreasing. So, the function is concave down. Its first derivative is
+always positive, because the rate of change in \(y\) with respect to
+\(x\) is always positive, but that rate of change decreases as \(x\)
+gets larger.
+
+\begin{figure}
+
+\caption{\label{fig-curves3}The slope of this nonlinear function,
+represented by the red tangent lines, is always positive but decreases
+with increasing x.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={The slope of this nonlinear function, represented by the red tangent lines, is always positive but decreases with increasing x.}]{chapters/ch22_files/figure-pdf/fig-curves3-1.pdf}}
+
+}
+
+\end{figure}%
+
+\subsection{Inflection points and midpoints}\label{sec-non-terms-infmid}
+
+Some functions can change concavity over their domain. The \(x\) value
+at which they change concavity is called the \textbf{inflection point}.
+The function below has an inflection point near 3.6 where it changes
+from concave up (dark grey region) to concave down (light grey region).
+Some nonlinear functions have an inflection point as a parameter
+(Table~\ref{tbl-growth-model-parameters}).
+
+\begin{figure}
+
+\caption{\label{fig-curves4}Concavity and the inflection point of a
+nonlinear function. The curve is concave up in the darker shaded region,
+where its slope increases with \(x\) and the second derivative is
+positive. In the lighter shaded region, the curve is concave down, where
+its slope decreases with \(x\) and the second derivative is negative.
+The red point marks the inflection point, where the curve changes
+concavity and the second derivative equals zero.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Graph of an increasing S-shaped curve, with x ranging from 0 to 10 and y from 0 to 8. The left portion of the graph, from x = 0 to approximately 3.6, has a dark gray background labeled \textquotesingle Concave up region.\textquotesingle{} The right portion has a light gray background labeled \textquotesingle Concave down region.\textquotesingle{} A red dot at approximately (3.6, 2.9) marks the inflection point, where the curve transitions from increasing to decreasing slope.}]{chapters/ch22_files/figure-pdf/fig-curves4-1.pdf}}
+
+}
+
+\end{figure}%
+
+When a function has a well-defined lower and upper value, we can define
+a \textbf{midpoint}: the \(x\) coordinate at which \(f\left(x\right)\)
+is equal to half of the distance between the minimum and the maximum. If
+the minimum is 0, then this is the \(x\) such that
+\(f\left(x\right)=\max{\left(f\left(x\right)\right)}/2\).
+
+\begin{figure}
+
+\caption{\label{fig-curves5}Parameters of the three-parameter
+log-logistic function. The parameter \(d\) determines the upper
+asymptote (blue dashed line), while \(g\) determines the midpoint of the
+curve along the \(x\)-axis. At \(x=g\), the response is halfway between
+the lower asymptote (zero) and the upper asymptote, so \(f(g)=d/2\). In
+this example, \(d=8\) and \(g=6\), giving \(f(6)=4\). The parameter
+\(b\) controls the steepness and direction of the curve.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Graph of an increasing, sigmoidal three-parameter log-logistic function, with x ranging from 0 to 10 and y from 0 to 8. The equation f(x) = d/{[}1 + exp(b(log(x) - log(g))){]} appears in the upper left. A blue dashed horizontal line at y = 8 identifies the upper asymptote d = 8. Red dashed lines at x = 6 and y = 4 intersect at a red point on the curve, identifying the midpoint g = 6, where f(g) = d/2 = 4. The curve approaches zero at low x values and approaches eight at high x values.}]{chapters/ch22_files/figure-pdf/fig-curves5-1.pdf}}
+
+}
+
+\end{figure}%
+
+Note that although an inflection point and a midpoint may appear
+similar, they are not the same: an inflection point is where the
+concavity changes, and a midpoint is where the function has gone halfway
+from its minimum to its maximum. These can coincide, as in the standard
+logistic function in the left panel below, but more often they do not.
+
+\begin{figure}
+
+\caption{\label{fig-curves6}Comparison of the midpoint and inflection
+point in two sigmoidal functions. Left: In a symmetric sigmoid, the
+midpoint (red square) and inflection point (blue circle) coincide at the
+center of the curve, where the response is halfway between its
+asymptotes and the slope is greatest. Right: In an asymmetric sigmoid,
+the midpoint and inflection point occur at different values of \(x\).
+The inflection point marks the transition from concave up to concave
+down, while the midpoint identifies the response halfway between the
+asymptotes. Dark and light gray backgrounds indicate the concave-up and
+concave-down regions, respectively.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two-panel figure comparing symmetric and asymmetric increasing sigmoidal curves. The left panel shows a symmetric S-shaped curve from x = -6 to 6, with lower and upper asymptotes of 0 and 1. A red square and blue circle overlap at (0, 0.5), indicating that the midpoint and inflection point coincide. The right panel shows an asymmetric S-shaped curve from x = 0 to 10, also approaching asymptotes of 0 and 1. A blue circle marks the inflection point near (3.7, 0.29), while a red square marks the midpoint near (4.4, 0.5). In both panels, darker shading identifies the concave-up region and lighter shading identifies the concave-down region.}]{chapters/ch22_files/figure-pdf/fig-curves6-1.pdf}}
+
+}
+
+\end{figure}%
+
 \section{Common nonlinear functions}\label{sec-non-common}
 
 \subsection{The Michaelis-Menten function}\label{sec-non-common-mm}

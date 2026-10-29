@@ -47,6 +47,337 @@ title(ylab="log(y variable)", line=3.5)
 
 The function shown in @fig-nonlinear1 is the famous **Michaelis-Menten** function, often used for enzyme kinetics.
 
+## Curve terminology {#sec-non-terms}
+
+Straight lines are easy to describe. They have an angle relative to the axes (the **slope**) and one point where they intersect the y-axis: the **intercept**. Both of these characteristics are **parameters** of a **function**. A function is an operation that assigns each value in one set to exactly one value in another set. In this case, the function assigns each value in $x$ to one and only one expected $y$ value (remember, a statistical model has a deterministic part that produces the expected value, and a stochastic part for describing the residual variation).
+
+### Domain and codomain {#sec-non-terms-cod}
+
+Because a statistical model describes a function, the straight line acquires two more characteristics. The **domain** of the function is the set of inputs accepted by the function. The **codomain** is the set of outputs (some older books call this the **range**, but that term is now considered ambiguous).
+
+@fig-domain shows some data and a linear function fitted to them. The domain of the fitted function is the interval between the smallest and largest $x$ values. Its codomain is the interval that spans all of the observed $y$ values.
+
+```{r}
+#| echo: false
+#| fig.width: 8
+#| fig.height: 6
+#| label: fig-domain
+#| fig-cap: "A linear function f(x) fit to data and its domain, codomain, and expected values."
+#| fig-alt: "A linear function f(x)fit to data and its domain, codomain, and expected values."
+
+
+n <- 50
+x <- runif(n, 1, 8)
+ey <- 2 + 0.75*x
+oy <- ey+rnorm(n, 0, 0.5)
+
+par(mar=c(5,5,1,1), bty="n", lend=1, las=1,
+    mfrow=c(1,1), cex.axis=1.3, cex.lab=1.3)
+plot(x,oy, pch=19, xlab="x variable",
+     ylab="y variable", cex=1.3,
+     xlim=c(0, 10), ylim=c(0, 10))
+segments(1, 0.5, 8, 0.5, lwd=3, col="red")
+text(2, 1, expression(Domain~of~italic(f)*(italic(x))), adj=0, cex=1.2, col="red")
+segments(0, min(oy), 0, max(oy), lwd=3, col="blue")
+text(0.4, 3.5, 
+     expression(Codomain~of~italic(f)*(italic(x))),
+     adj=0, cex=1.2, col="blue", srt=90)
+px <- seq(min(x), max(x), length=10)
+pr <- 2 + 0.75*px
+lines(px, pr, lwd=4, col="green3")
+text(8.25, max(pr),
+     expression(italic(f)*(italic(x))==E*(italic(y))),
+     adj=0, cex=1.5, col="green3")
+legend("topleft",
+       legend=expression(Observed~italic(y)~values),
+       bty="n", cex=1.4, pch=19)
+```
+
+Mathematically, the domain and codomain of a linear function are the [**real numbers**](https://en.wikipedia.org/wiki/Real_number), often abbreviated $\mathbb{R}$. But we're not doing math, we are doing statistics. The linear model that we fit to the data is only applicable within the set of $x$ and $y$ values used to fit it. Using the model to make predictions outside the domain of its data, or **extrapolation**, can be fraught with peril.
+
+### Slopes and tangent lines {#sec-non-terms-slope}
+
+Nonlinear models, by definition, do not have a constant slope like a linear model does. Usually the slope of the function at any point is a function of the $x$ value. Some of them have parameters that we refer to as a slope or growth rate, but these are really *inputs* to a function that determines the actual slope.
+
+The function below shows a nonlinear curve $f\left(x\right)$ and its **tangent line** at $x=7$. The tangent line is a line that intersects a function at exactly one point and has the same slope as the function at that point. The slope of the tangent line is calculated as the **first derivative** of the function at that $x$ value.
+
+```{r}
+#| echo: false
+#| fig.width: 8
+#| fig.height: 6
+#| label: fig-curves1
+#| fig-cap: 'In this four-parameter log-logistic curve defined by parameters *b*, *c*, *d*, and *g*, the slope of the curve $dy/dx$ at any point is not represented directly by any parameter but instead is a function of those parameters and $x$. Here the slope at $x=7$ is approximately $0.749$.'
+#| fig-alt: "In this four-parameter log-logistic curve defined by parameters b, c, d, and g, the slope of the curve dy/dx at any point is not represented directly by any parameter but instead is a function of those parameters and x. Here the slope at x=7 is approximately 0.749."
+
+x <- seq(0.1, 10, length=100)
+B <- -4
+C <- 0
+D <- 8
+G <- 5
+
+par(mfrow=c(1,1), mar=c(5,5,1,1), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, 10))
+iy <- C+(D-C)/(1+exp(B*(log(x)-log(G))))
+points(x, iy, type="l", lwd=4)
+atx <- 7
+slope <- -(B*(D-C)/atx) *
+         (atx/G)^B /
+         (1+(atx/G)^B)^2
+aty <- C+(D-C)/(1+exp(B*(log(atx)-log(G))))
+ddx <- seq(4, 10, length=10)
+ddy1 <- slope*ddx
+yint <- aty-slope*atx
+ddy <- ddy1 + yint
+lines(ddx, ddy+0.05, col="red", lwd=3)
+segments(atx, 0, atx, aty, lty=2)
+text(atx+0.2, 5,
+     expression(italic(x)==7),
+     adj=0, cex=1.2)
+points(atx, aty, pch=19, col="blue", cex=1.3)
+text(atx+0.2, aty-0.3,
+     expression(italic(f)*(italic(x))==6.34),
+     adj=0, cex=1.2, col="blue")
+text(6.5, 7.5,
+expression(
+  frac(italic(d)*italic(y), italic(d)*italic(x)) ==
+    -bgroup("(", frac(italic(b)*bgroup("(", italic(d)-italic(c),")"),
+                      italic(x)), ")") ~
+    bgroup("(", frac(
+      e^{italic(b)*bgroup("(", log(italic(x))-log(italic(g)), ")")},
+      bgroup("[", 1+e^{italic(b)*bgroup("(", log(italic(x))-log(italic(g)), ")")}, "]")^2
+    ), ")")
+),
+     adj=1, cex=1.2, col="red")
+
+```
+
+### Concavity {#sec-non-terms-concave}
+
+Nonlinear curves are also described by their **concavity**. A function is said to be **concave up** wherever its tangent line is below the graph of the function, and **concave down** when the tangent line lies above it. Remember the mnemonic, "*up cup, down frown*". The concavity of a function is related to its **second derivative**, or the rate of change in the slope at any given point. 
+
+In @fig-curves2 below, the left panel shows a linear function $y=2+0.75x$ and its constant slope of 0.75. The right panel shows a nonlinear curve whose slope changes with $x$ (see @fig-curves1), and the tangent lines at $x=2.5$ and $x=7$. At the first point, the tangent line is below the function, so the function is concave up. At the second, the tangent line is above the function, so the function is concave down there. Note that the slopes of both tangent lines are positive.
+
+```{r}
+#| echo: false
+#| fig.width: 12
+#| fig.height: 6
+#| label: fig-curves2
+#| fig-cap: 'Comparison of constant and variable slopes in linear and nonlinear functions. Left: A linear function has a constant first derivative ($dy/dx = 0.75$), represented by the horizontal red line. Right: A nonlinear sigmoidal function has a slope that changes with $x$. Red and blue tangent lines illustrate the instantaneous slopes at two points along the curve, approximately 0.531 and 0.562, respectively.'
+#| fig-alt: "Two-panel figure comparing slopes of linear and nonlinear functions. The left panel shows a straight black line increasing from y = 2 with slope 0.75, and a horizontal red line indicating that its derivative is constant. The right panel shows a black S-shaped curve rising from approximately y = 2 to y = 8. A red tangent line near x = 2.4 has slope 0.531, while a blue tangent line near x = 7 has slope 0.562. The tangent lines illustrate how the instantaneous rate of change varies along a nonlinear curve."
+
+x <- seq(0.1, 10, length=100)
+B <- -4
+C <- 2
+D <- 8
+G <- 5
+y1 <- 2 + 0.75*x
+y2 <- C+(D-C)/(1+exp(B*(log(x)-log(G))))
+par(mfrow=c(1,2), mar=c(5,5,1,1), 
+    xpd=NA, bty="n")
+plot(x, y1, type="l", lwd=3,xlab="x variable",
+     ylab="y variable", ylim=c(0, 10))
+segments(0, 0.75, 10, 0.75, lwd=3, col="red")
+text(5.25, 5.5,
+     expression(italic(f)*bgroup("(",italic(x),  ")")==2+0.75*italic(x)), adj=0, cex=1.3)
+text(2, 1.5,
+     expression(frac(italic(d)*italic(y), italic(d)*italic(x)) ==0.75),
+     adj=0, cex=1.3, col="red")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, 10))
+points(x, y2, type="l", lwd=4)
+atx <- 7
+slope <- -(B*(D-C)/atx) *
+         (atx/G)^B /
+         (1+(atx/G)^B)^2
+aty <- C+(D-C)/(1+exp(B*(log(atx)-log(G))))
+ddx <- seq(atx-2, atx+2, length=10)
+ddy1 <- slope*ddx
+yint <- aty-slope*atx
+ddy <- ddy1 + yint
+lines(ddx, ddy+0.08, col="blue", lwd=3)
+points(atx, aty+0.08, pch=19, col="blue", cex=1.3)
+text(7,6, 
+     expression(frac(italic(d)*italic(y), italic(d)*italic(x))%~~%0.562),
+     adj=0, cex=1.3, col="blue")
+
+atx <- 2.5
+slope <- -(B*(D-C)/atx) *
+         (atx/G)^B /
+         (1+(atx/G)^B)^2
+aty <- C+(D-C)/(1+exp(B*(log(atx)-log(G))))
+ddx <- seq(atx-2, atx+2, length=10)
+ddy1 <- slope*ddx
+yint <- aty-slope*atx
+ddy <- ddy1 + yint
+lines(ddx, ddy-0.08, col="red", lwd=3)
+points(atx, aty-0.08, pch=19, col="red", cex=1.3)
+text(4,1.8, 
+     expression(frac(italic(d)*italic(y), italic(d)*italic(x))%~~%0.531),
+     adj=0, cex=1.3, col="red")
+
+
+```
+
+The second derivative that defines concavity is the rate of change in the slope: $dy/dx/dx$, or $dy/dx^2$. @fig-curves3 below shows a function which has a positive slope everywhere, but whose slope is decreasing. So, the function is concave down. Its first derivative is always positive, because the rate of change in $y$ with respect to $x$ is always positive, but that rate of change decreases as $x$ gets larger.
+
+```{r}
+#| echo: false
+#| fig.width: 8
+#| fig.height: 6
+#| label: fig-curves3
+#| fig-cap: 'The slope of this nonlinear function, represented by the red tangent lines, is always positive but decreases with increasing x.'
+#| fig-alt: "The slope of this nonlinear function, represented by the red tangent lines, is always positive but decreases with increasing x."
+
+a <- 6
+b <- 8
+x <- seq(0.1, 15, by=0.1)
+y <- (a*x)/(b+x)
+
+
+par(mar=c(5,5,1,1), bty="n", lend=1, las=1,
+    mfrow=c(1,1), cex.axis=1.3, cex.lab=1.3)
+plot(x,y, type="l", lwd=2, 
+     ylim=c(0,5), xlab="x variable", ylab="y variable")
+xx <- c(4, 8, 12)
+dys <- (a*b)/(b+xx)^2
+for(i in 1:length(xx)){
+    ix <- xx[i]+c(-1.5, 1.5)
+    iy <- dys[i]*xx[i]
+    oy <- (a*xx[i])/(b+xx[i])
+    dif <- oy-iy
+    py <- dif+dys[i]*ix
+    segments(ix[1], py[1]+0.02, ix[2], py[2]+0.02,
+             lwd=3, col="red")
+    points(xx[i], 0.02+dif+dys[i]*xx[i], pch=19,
+           col="red", cex=1.2)
+}
+```
+
+### Inflection points and midpoints {#sec-non-terms-infmid}
+
+Some functions can change concavity over their domain. The $x$ value at which they change concavity is called the **inflection point**. The function below has an inflection point near 3.6 where it changes from concave up (dark grey region) to concave down (light grey region). Some nonlinear functions have an inflection point as a parameter (@tbl-growth-model-parameters).
+
+```{r}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-curves4
+#| fig-cap: 'Concavity and the inflection point of a nonlinear function. The curve is concave up in the darker shaded region, where its slope increases with $x$ and the second derivative is positive. In the lighter shaded region, the curve is concave down, where its slope decreases with $x$ and the second derivative is negative. The red point marks the inflection point, where the curve changes concavity and the second derivative equals zero.'
+#| fig-alt: "Graph of an increasing S-shaped curve, with x ranging from 0 to 10 and y from 0 to 8. The left portion of the graph, from x = 0 to approximately 3.6, has a dark gray background labeled 'Concave up region.' The right portion has a light gray background labeled 'Concave down region.' A red dot at approximately (3.6, 2.9) marks the inflection point, where the curve transitions from increasing to decreasing slope."
+
+x <- seq(0, 10, length=100)
+A <- 8
+B <- 6
+C <- 0.5
+y <- A*exp(-1*B*exp(-1*C*x))
+ip <- log(B)/C
+ipy <- A*exp(-1*B*exp(-1*C*ip))
+par(mfrow=c(1,1), mar=c(5,5,1,3), 
+    xpd=NA, bty="n")
+plot(x, y, type="l", lwd=3,
+     xlab="x variable",
+     ylab="y variable", ylim=c(0, max(A)))
+
+rect(0, 0, ip, 8, border=NA, col="grey50")
+rect(ip, 0, 10, 8, border=NA, col="grey90")
+points(x, y, type="l", lwd=3)
+points(ip, ipy, pch=19,
+       cex=1.8, col="red3")
+text(ip/2, 5, "Concave up\nregion", cex=1.5)
+text(7,4, "Concave down\nregion", cex=1.5)
+text(ip+0.3, ipy-0.3, "Inflection point", cex=1.5, col="red3", adj=0)
+```
+
+When a function has a well-defined lower and upper value, we can define a **midpoint**: the $x$ coordinate at which $f\left(x\right)$ is equal to half of the distance between the minimum and the maximum. If the minimum is 0, then this is the $x$ such that $f\left(x\right)=\max{\left(f\left(x\right)\right)}/2$. 
+
+```{r}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-curves5
+#| fig-cap: 'Parameters of the three-parameter log-logistic function. The parameter $d$ determines the upper asymptote (blue dashed line), while $g$ determines the midpoint of the curve along the $x$-axis. At $x=g$, the response is halfway between the lower asymptote (zero) and the upper asymptote, so $f(g)=d/2$. In this example, $d=8$ and $g=6$, giving $f(6)=4$. The parameter $b$ controls the steepness and direction of the curve.'
+#| fig-alt: "Graph of an increasing, sigmoidal three-parameter log-logistic function, with x ranging from 0 to 10 and y from 0 to 8. The equation f(x) = d/[1 + exp(b(log(x) - log(g)))] appears in the upper left. A blue dashed horizontal line at y = 8 identifies the upper asymptote d = 8. Red dashed lines at x = 6 and y = 4 intersect at a red point on the curve, identifying the midpoint g = 6, where f(g) = d/2 = 4. The curve approaches zero at low x values and approaches eight at high x values."
+
+x <- seq(0.1, 10, length=100)
+B <- -5
+G <- 6
+D <- 8
+y <- D/(1+exp(B*(log(x)-log(G))))
+yg <- D/(1+exp(B*(log(G)-log(G))))
+
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, y, type="l", lwd=3, xlab="x variable",
+     ylab="y variable", ylim=c(0, max(D)))
+segments(G, 0, G, yg, lty=2, lwd=2, col="red")
+segments(0, yg, G, yg, lty=2, lwd=2, col="red")
+points(G, yg, pch=19, cex=2, col="red")
+text(0.5, 7,
+     expression(italic(f)*group("(", x, ")")==frac(italic(d), 1+e^{italic(b)*bgroup("(",log*(italic(x))-log*(italic(g)),")")})),
+     adj=0, cex=1.5)
+text(6.5, 2.8,
+     expression({italic(f)*group("(", italic(g), ")")==frac(italic(d), 2)}==4),
+     adj=0, cex=1.5, col="red")
+text(6.5, 3.8, expression(italic(g)==6),
+     adj=0, cex=1.5, col="red")
+segments(0, D, 10, D, lty=2, lwd=2, col="blue")
+text(10, 8.3, expression(italic(d)==8),
+     cex=1.5, adj=1, col="blue", xpd=NA)
+```
+
+Note that although an inflection point and a midpoint may appear similar, they are not the same: an inflection point is where the concavity changes, and a midpoint is where the function has gone halfway from its minimum to its maximum. These can coincide, as in the standard logistic function in the left panel below, but more often they do not.
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 6
+#| label: fig-curves6
+#| fig-cap: 'Comparison of the midpoint and inflection point in two sigmoidal functions. Left: In a symmetric sigmoid, the midpoint (red square) and inflection point (blue circle) coincide at the center of the curve, where the response is halfway between its asymptotes and the slope is greatest. Right: In an asymmetric sigmoid, the midpoint and inflection point occur at different values of $x$. The inflection point marks the transition from concave up to concave down, while the midpoint identifies the response halfway between the asymptotes. Dark and light gray backgrounds indicate the concave-up and concave-down regions, respectively.'
+#| fig-alt: "Two-panel figure comparing symmetric and asymmetric increasing sigmoidal curves. The left panel shows a symmetric S-shaped curve from x = -6 to 6, with lower and upper asymptotes of 0 and 1. A red square and blue circle overlap at (0, 0.5), indicating that the midpoint and inflection point coincide. The right panel shows an asymmetric S-shaped curve from x = 0 to 10, also approaching asymptotes of 0 and 1. A blue circle marks the inflection point near (3.7, 0.29), while a red square marks the midpoint near (4.4, 0.5). In both panels, darker shading identifies the concave-up region and lighter shading identifies the concave-down region."
+
+x <- seq(-6, 6, length=100)
+y <- plogis(x)
+
+par(mfrow=c(1,2), mar=c(5,5,1,1), 
+    xpd=NA, bty="n")
+plot(x, y, type="l", lwd=4, xlab="x variable",
+     ylab="y variable", ylim=c(0, 1))
+rect(-6, 0, 0, 1, col="grey50", border=NA)
+rect(0, 0, 6, 1, col="grey90", border=NA)
+lines(x, y, lwd=4)
+segments(0, 0, 0, 0.5, lty=2, lwd=2, col="red")
+segments(0, 0.5, -6, 0.5, lty=2, lwd=2, col="red")
+points(0, 0.5, pch=19, cex=3, col="blue")
+points(0, 0.5, pch=15, cex=1.5, col="red")
+
+x <- seq(0.1, 10, length=100)
+A <- 0
+B <- -4
+C <- 4
+D <- 10
+y <- A+(D-A)*exp(-1*exp(B*(log(x)-log(C))))
+xmid <- C*log(2)^(1/B)
+ymid <- D/2
+xinf <- C*((B-1)/B)^(1/B)
+yinf <- A+(D-A)*exp(-1*exp(B*(log(xinf)-log(C))))
+          
+plot(x, y, type="l", lwd=4, xlab="x variable",
+     ylab="y variable", ylim=c(0, max(D)))
+rect(0, 0, xinf, 10, col="grey50", border=NA)
+rect(xinf, 0, 10, 10, col="grey90", border=NA)
+lines(x,y,lwd=4)
+points(xmid, ymid, pch=15, cex=2, col="red")
+points(xinf, yinf, pch=19, cex=2, col="blue")
+segments(0, D/2, xmid, D/2, lty=2, lwd=2, col="red")
+segments(xmid, D/2, xmid, 0, lty=2, lwd=2, col="red")
+legend(4.5,2,
+       legend=c("Midpoint", "Inflection point"),
+       bty="n", pch=c(15, 19), 
+       col=c("red", "blue"), cex=1.6)
+```
+
 ## Common nonlinear functions {#sec-non-common}
 
 ### The Michaelis-Menten function {#sec-non-common-mm}
