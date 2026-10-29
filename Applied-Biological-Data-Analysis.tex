@@ -28864,20 +28864,20 @@ where \(k\) and \(\lambda\) are the parameters of the distribution
 and logarithm rules to rewrite the Weibull CDF as a double exponential:
 
 \[
-\begin{alignedat}{2}
-F\left(x\right)=1-e^{-\left(x/\lambda\right)^k}
- &\qquad& \text{Start with Weibull CDF}\\
-F\left(x\right)=1-e^{-\left(\frac{x^k}{\lambda^k}\right)}
- &\qquad& \text{Power of a quotient:}~\left(\frac{a}{b}\right)^c\\
-F\left(x\right)=1-e^{-e^{\log{\left(\frac{x^k}{\lambda^k}\right)}}}
- &\qquad& \text{Definition of logarithm:}~x=e^{\log\left(x\right)}\\
-F\left(x\right)=1-e^{-e^{\log\left(x^k\right)-\log{\left(\lambda^k\right)}}}
- &\qquad& \text{Logarithm of a quotient}:~\log\left(a/b\right)=\log\left(x^k\right)-\log\left(\lambda^k\right)\\
-F\left(x\right)=1-e^{-e^{k\log\left(x\right)-k\log{\left(\lambda\right)}}}
- &\qquad& \text{By identity}~\log\left(a^b\right)=b\log\left(a\right)\\
-F\left(x\right)=1-e^{-e^{k\left(\log\left(x\right)-\log\left(\lambda\right)\right)}}
- &\qquad& \text{Factor out}~k\\
-\end{alignedat}
+\begin{aligned}
+F(x) &= 1-e^{-(x/\lambda)^k}
+  && \qquad \text{Start with Weibull CDF}\\
+F(x) &= 1-e^{-\left(\frac{x^k}{\lambda^k}\right)}
+  && \qquad \text{Power of a quotient}\\
+F(x) &= 1-e^{-e^{\log\left(\frac{x^k}{\lambda^k}\right)}}
+  && \qquad \text{Definition of logarithm}\\
+F(x) &= 1-e^{-e^{\log(x^k)-\log(\lambda^k)}}
+  && \qquad \text{Logarithm of a quotient}\\
+F(x) &= 1-e^{-e^{k\log(x)-k\log(\lambda)}}
+  && \qquad \text{Power rule for logarithms}\\
+F(x) &= 1-e^{-e^{k(\log(x)-\log(\lambda))}}
+  && \qquad \text{Factor out } k
+\end{aligned}
 \]
 
 This double exponential form of the Weibull CDF is sometimes called the
@@ -29248,12 +29248,14 @@ Log-logistic (3P) & \(0\) (fixed) & \(d\) & \(g\) & Derived & \(b\)
 Log-logistic (4P) & \(c\) & \(d\) & \(g\) & Derived & \(b\) (slope) \\
 Log-logistic (5P) & \(c\) & \(d\) & \(g\) & Derived & \(b\) (slope),
 \(k\) (asymmetry) \\
-Weibull type 1 (2P) & \(0\) (fixed) & \(1\) (fixed) & Derived &
-\(ce^{\log{\left(\log\left(2\right)\right)/b}}\) & \(b\) (shape), \(c\)
-(scale) \\
-Weibull type 1 (3P) & \(0\) (fixed) & \(d\) & Derived & Derived* & \(b\)
+Weibull type 1 (2P) & \(0\) (fixed) & \(1\) (fixed) &
+\(ce^{\log{\left(\log\left(2\right)\right)/b}}\) & Derived* & \(b\)
 (shape), \(c\) (scale) \\
-Weibull type 1 (4P) & \(a\) & \(d\) & Derived & Derived* & \(b\)
+Weibull type 1 (3P) & \(0\) (fixed) & \(d\) &
+\(ce^{\log{\left(\log\left(2\right)\right)/b}}\) & Derived* & \(b\)
+(shape), \(c\) (scale) \\
+Weibull type 1 (4P) & \(a\) & \(d\) &
+\(ce^{\log{\left(\log\left(2\right)\right)/b}}\) & Derived* & \(b\)
 (shape), \(c\) (scale) \\
 \end{longtable}
 
@@ -29681,10 +29683,10 @@ analysis\ldots even the indicators variables like \texttt{cr} and
 \NormalTok{px2 }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(dx2}\SpecialCharTok{$}\NormalTok{totalLength[dx2}\SpecialCharTok{$}\NormalTok{family}\SpecialCharTok{==}\StringTok{"Muridae"}\NormalTok{]),}
            \FunctionTok{max}\NormalTok{(dx2}\SpecialCharTok{$}\NormalTok{totalLength[dx2}\SpecialCharTok{$}\NormalTok{family}\SpecialCharTok{==}\StringTok{"Muridae"}\NormalTok{]),}
            \AttributeTok{length=}\DecValTok{100}\NormalTok{)}
-\NormalTok{py1 }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod3,}
+\NormalTok{py1 }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod4,}
                \AttributeTok{newdata=}\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{totalLength=}\NormalTok{px1,}
                                   \AttributeTok{cr=}\DecValTok{1}\NormalTok{, }\AttributeTok{mu=}\DecValTok{0}\NormalTok{))}
-\NormalTok{py2 }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod3, }\AttributeTok{newdata=}\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{totalLength=}\NormalTok{px2,}
+\NormalTok{py2 }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod4, }\AttributeTok{newdata=}\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{totalLength=}\NormalTok{px2,}
                                         \AttributeTok{cr=}\DecValTok{0}\NormalTok{, }\AttributeTok{mu=}\DecValTok{1}\NormalTok{))}
 
 \FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
@@ -29693,9 +29695,9 @@ analysis\ldots even the indicators variables like \texttt{cr} and
      \AttributeTok{ylab=}\StringTok{"Ear length (mm)"}\NormalTok{,}
      \AttributeTok{col=}\NormalTok{dx2}\SpecialCharTok{$}\NormalTok{col, }\AttributeTok{pch=}\NormalTok{dx2}\SpecialCharTok{$}\NormalTok{pch)}
 \FunctionTok{points}\NormalTok{(px1, py1, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{4}\NormalTok{, }\AttributeTok{col=}\StringTok{"steelblue4"}\NormalTok{)}
-\FunctionTok{points}\NormalTok{(px2, py2, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{4}\NormalTok{, }\AttributeTok{col=}\NormalTok{cols[}\DecValTok{2}\NormalTok{])}
+\FunctionTok{points}\NormalTok{(px2, py2, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{4}\NormalTok{, }\AttributeTok{col=}\NormalTok{cols[}\DecValTok{2}\NormalTok{], }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
 \FunctionTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{, }\AttributeTok{legend=}\FunctionTok{names}\NormalTok{(cols),}
-       \AttributeTok{pch=}\NormalTok{pchs, }\AttributeTok{col=}\NormalTok{cols,}
+       \AttributeTok{pch=}\NormalTok{pchs, }\AttributeTok{col=}\FunctionTok{c}\NormalTok{(}\StringTok{"steelblue4"}\NormalTok{, cols[}\DecValTok{2}\NormalTok{]), }\AttributeTok{lwd=}\DecValTok{4}\NormalTok{, }\AttributeTok{lty=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{),}
        \AttributeTok{cex=}\FloatTok{1.2}\NormalTok{,}\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}

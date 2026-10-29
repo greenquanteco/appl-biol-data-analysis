@@ -1389,20 +1389,20 @@ Figure&nbsp;22.19: Five-parameter log-logistic curves with different <span class
 <p><span class="math display">\[F_{Weibull}\left(x\right)=1-e^{-\left(x/\lambda\right)^k}\]</span></p>
 <p>where <span class="math inline">\(k\)</span> and <span class="math inline">\(\lambda\)</span> are the parameters of the distribution (shape and scale, respectively). We can take advantage of some exponent and logarithm rules to rewrite the Weibull CDF as a double exponential:</p>
 <p><span class="math display">\[
-\begin{alignedat}{2}
-F\left(x\right)=1-e^{-\left(x/\lambda\right)^k}
-&amp;\qquad&amp; \text{Start with Weibull CDF}\\
-F\left(x\right)=1-e^{-\left(\frac{x^k}{\lambda^k}\right)}
-&amp;\qquad&amp; \text{Power of a quotient:}~\left(\frac{a}{b}\right)^c\\
-F\left(x\right)=1-e^{-e^{\log{\left(\frac{x^k}{\lambda^k}\right)}}}
-&amp;\qquad&amp; \text{Definition of logarithm:}~x=e^{\log\left(x\right)}\\
-F\left(x\right)=1-e^{-e^{\log\left(x^k\right)-\log{\left(\lambda^k\right)}}}
-&amp;\qquad&amp; \text{Logarithm of a quotient}:~\log\left(a/b\right)=\log\left(x^k\right)-\log\left(\lambda^k\right)\\
-F\left(x\right)=1-e^{-e^{k\log\left(x\right)-k\log{\left(\lambda\right)}}}
-&amp;\qquad&amp; \text{By identity}~\log\left(a^b\right)=b\log\left(a\right)\\
-F\left(x\right)=1-e^{-e^{k\left(\log\left(x\right)-\log\left(\lambda\right)\right)}}
-&amp;\qquad&amp; \text{Factor out}~k\\
-\end{alignedat}
+\begin{aligned}
+F(x) &amp;= 1-e^{-(x/\lambda)^k}
+  &amp;&amp; \qquad \text{Start with Weibull CDF}\\
+F(x) &amp;= 1-e^{-\left(\frac{x^k}{\lambda^k}\right)}
+  &amp;&amp; \qquad \text{Power of a quotient}\\
+F(x) &amp;= 1-e^{-e^{\log\left(\frac{x^k}{\lambda^k}\right)}}
+  &amp;&amp; \qquad \text{Definition of logarithm}\\
+F(x) &amp;= 1-e^{-e^{\log(x^k)-\log(\lambda^k)}}
+  &amp;&amp; \qquad \text{Logarithm of a quotient}\\
+F(x) &amp;= 1-e^{-e^{k\log(x)-k\log(\lambda)}}
+  &amp;&amp; \qquad \text{Power rule for logarithms}\\
+F(x) &amp;= 1-e^{-e^{k(\log(x)-\log(\lambda))}}
+  &amp;&amp; \qquad \text{Factor out } k
+\end{aligned}
 \]</span></p>
 <p>This double exponential form of the Weibull CDF is sometimes called the “Type 2” Weibull function, including in the R package <code>drc</code>. The complement of the double exponential form of the Weibull CDF is the “Type 1” Weibull curve:</p>
 <p><span class="math display">\[\text{Weibull curve}=e^{-e^{k\left(\log\left(x\right)-\log\left(\lambda\right)\right)}}\]</span></p>
@@ -1705,15 +1705,15 @@ Table&nbsp;22.2: Comparison of parameters in common nonlinear growth models. “
 <td>Weibull type 1 (2P)</td>
 <td><span class="math inline">\(0\)</span> (fixed)</td>
 <td><span class="math inline">\(1\)</span> (fixed)</td>
-<td>Derived</td>
 <td><span class="math inline">\(ce^{\log{\left(\log\left(2\right)\right)/b}}\)</span></td>
+<td>Derived*</td>
 <td><span class="math inline">\(b\)</span> (shape), <span class="math inline">\(c\)</span> (scale)</td>
 </tr>
 <tr class="odd">
 <td>Weibull type 1 (3P)</td>
 <td><span class="math inline">\(0\)</span> (fixed)</td>
 <td><span class="math inline">\(d\)</span></td>
-<td>Derived</td>
+<td><span class="math inline">\(ce^{\log{\left(\log\left(2\right)\right)/b}}\)</span></td>
 <td>Derived*</td>
 <td><span class="math inline">\(b\)</span> (shape), <span class="math inline">\(c\)</span> (scale)</td>
 </tr>
@@ -1721,7 +1721,7 @@ Table&nbsp;22.2: Comparison of parameters in common nonlinear growth models. “
 <td>Weibull type 1 (4P)</td>
 <td><span class="math inline">\(a\)</span></td>
 <td><span class="math inline">\(d\)</span></td>
-<td>Derived</td>
+<td><span class="math inline">\(ce^{\log{\left(\log\left(2\right)\right)/b}}\)</span></td>
 <td>Derived*</td>
 <td><span class="math inline">\(b\)</span> (shape), <span class="math inline">\(c\)</span> (scale)</td>
 </tr>
@@ -2015,10 +2015,10 @@ Achieved convergence tolerance: 7.632e-06</code></pre>
 <span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>px2 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(dx2<span class="sc">$</span>totalLength[dx2<span class="sc">$</span>family<span class="sc">==</span><span class="st">"Muridae"</span>]),</span>
 <span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">max</span>(dx2<span class="sc">$</span>totalLength[dx2<span class="sc">$</span>family<span class="sc">==</span><span class="st">"Muridae"</span>]),</span>
 <span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">length=</span><span class="dv">100</span>)</span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>py1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod3,</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>py1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod4,</span>
 <span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">totalLength=</span>px1,</span>
 <span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">cr=</span><span class="dv">1</span>, <span class="at">mu=</span><span class="dv">0</span>))</span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>py2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod3, <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">totalLength=</span>px2,</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>py2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod4, <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">totalLength=</span>px2,</span>
 <span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">cr=</span><span class="dv">0</span>, <span class="at">mu=</span><span class="dv">1</span>))</span>
 <span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
@@ -2027,9 +2027,9 @@ Achieved convergence tolerance: 7.632e-06</code></pre>
 <span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Ear length (mm)"</span>,</span>
 <span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span>dx2<span class="sc">$</span>col, <span class="at">pch=</span>dx2<span class="sc">$</span>pch)</span>
 <span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px1, py1, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">4</span>, <span class="at">col=</span><span class="st">"steelblue4"</span>)</span>
-<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px2, py2, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">4</span>, <span class="at">col=</span>cols[<span class="dv">2</span>])</span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(px2, py2, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">4</span>, <span class="at">col=</span>cols[<span class="dv">2</span>], <span class="at">lty=</span><span class="dv">2</span>)</span>
 <span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend=</span><span class="fu">names</span>(cols),</span>
-<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pchs, <span class="at">col=</span>cols,</span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pchs, <span class="at">col=</span><span class="fu">c</span>(<span class="st">"steelblue4"</span>, cols[<span class="dv">2</span>]), <span class="at">lwd=</span><span class="dv">4</span>, <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),</span>
 <span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex=</span><span class="fl">1.2</span>,<span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div id="fig-earvslength5" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Ear length of Cricetid and Murid rodents increases as a nonlinear function of total body length. Predicted value and confidence intervals are shown as solid and dashed lines, respectively.">

@@ -752,20 +752,20 @@ where $k$ and $\lambda$ are the parameters of the distribution (shape and scale,
 
 
 $$
-\begin{alignedat}{2}
-F\left(x\right)=1-e^{-\left(x/\lambda\right)^k}
- &\qquad& \text{Start with Weibull CDF}\\
-F\left(x\right)=1-e^{-\left(\frac{x^k}{\lambda^k}\right)}
- &\qquad& \text{Power of a quotient:}~\left(\frac{a}{b}\right)^c\\
-F\left(x\right)=1-e^{-e^{\log{\left(\frac{x^k}{\lambda^k}\right)}}}
- &\qquad& \text{Definition of logarithm:}~x=e^{\log\left(x\right)}\\
-F\left(x\right)=1-e^{-e^{\log\left(x^k\right)-\log{\left(\lambda^k\right)}}}
- &\qquad& \text{Logarithm of a quotient}:~\log\left(a/b\right)=\log\left(x^k\right)-\log\left(\lambda^k\right)\\
-F\left(x\right)=1-e^{-e^{k\log\left(x\right)-k\log{\left(\lambda\right)}}}
- &\qquad& \text{By identity}~\log\left(a^b\right)=b\log\left(a\right)\\
-F\left(x\right)=1-e^{-e^{k\left(\log\left(x\right)-\log\left(\lambda\right)\right)}}
- &\qquad& \text{Factor out}~k\\
-\end{alignedat}
+\begin{aligned}
+F(x) &= 1-e^{-(x/\lambda)^k}
+  && \qquad \text{Start with Weibull CDF}\\
+F(x) &= 1-e^{-\left(\frac{x^k}{\lambda^k}\right)}
+  && \qquad \text{Power of a quotient}\\
+F(x) &= 1-e^{-e^{\log\left(\frac{x^k}{\lambda^k}\right)}}
+  && \qquad \text{Definition of logarithm}\\
+F(x) &= 1-e^{-e^{\log(x^k)-\log(\lambda^k)}}
+  && \qquad \text{Logarithm of a quotient}\\
+F(x) &= 1-e^{-e^{k\log(x)-k\log(\lambda)}}
+  && \qquad \text{Power rule for logarithms}\\
+F(x) &= 1-e^{-e^{k(\log(x)-\log(\lambda))}}
+  && \qquad \text{Factor out } k
+\end{aligned}
 $$
 
 This double exponential form of the Weibull CDF is sometimes called the "Type 2" Weibull function, including in the R package `drc`. The complement of the double exponential form of the Weibull CDF is the "Type 1" Weibull curve:
@@ -987,9 +987,9 @@ The functions that we explore can take on many shapes. So, the most important qu
 | Log-logistic (3P) | $0$ (fixed) | $d$ | $g$ | Derived | $b$ (slope) |
 | Log-logistic (4P) | $c$ | $d$ | $g$ | Derived | $b$ (slope)|
 | Log-logistic (5P) | $c$ | $d$ | $g$ | Derived | $b$ (slope), $k$ (asymmetry) |
-| Weibull type 1 (2P) | $0$ (fixed) | $1$ (fixed) | Derived | $ce^{\log{\left(\log\left(2\right)\right)/b}}$ | $b$ (shape), $c$ (scale) |
-| Weibull type 1 (3P) | $0$ (fixed) | $d$ | Derived | Derived* | $b$ (shape), $c$ (scale) |
-| Weibull type 1 (4P) | $a$ | $d$ | Derived | Derived* | $b$ (shape), $c$ (scale) |
+| Weibull type 1 (2P) | $0$ (fixed) | $1$ (fixed) | $ce^{\log{\left(\log\left(2\right)\right)/b}}$ | Derived* | $b$ (shape), $c$ (scale) |
+| Weibull type 1 (3P) | $0$ (fixed) | $d$ | $ce^{\log{\left(\log\left(2\right)\right)/b}}$ | Derived* | $b$ (shape), $c$ (scale) |
+| Weibull type 1 (4P) | $a$ | $d$ | $ce^{\log{\left(\log\left(2\right)\right)/b}}$ | Derived* | $b$ (shape), $c$ (scale) |
 
 : Comparison of parameters in common nonlinear growth models. "Derived" indicates that the characteristic point can be calculated from model parameters but is not itself a directly estimated parameter. A dash indicates that the characteristic is absent or not independently parameterized. *The Weibull type 1 curve has an interior inflection point only for appropriate values of its shape parameter. {#tbl-growth-model-parameters}
 
@@ -1242,10 +1242,10 @@ px1 <- seq(min(dx2$totalLength[dx2$family=="Cricetidae"]),
 px2 <- seq(min(dx2$totalLength[dx2$family=="Muridae"]),
            max(dx2$totalLength[dx2$family=="Muridae"]),
            length=100)
-py1 <- predict(mod3,
+py1 <- predict(mod4,
                newdata=data.frame(totalLength=px1,
                                   cr=1, mu=0))
-py2 <- predict(mod3, newdata=data.frame(totalLength=px2,
+py2 <- predict(mod4, newdata=data.frame(totalLength=px2,
                                         cr=0, mu=1))
 
 par(mar=c(5,5,1,1))
@@ -1254,9 +1254,9 @@ plot(dx2$totalLength, dx2$earLength,
      ylab="Ear length (mm)",
      col=dx2$col, pch=dx2$pch)
 points(px1, py1, type="l", lwd=4, col="steelblue4")
-points(px2, py2, type="l", lwd=4, col=cols[2])
+points(px2, py2, type="l", lwd=4, col=cols[2], lty=2)
 legend("topleft", legend=names(cols),
-       pch=pchs, col=cols,
+       pch=pchs, col=c("steelblue4", cols[2]), lwd=4, lty=c(1,2),
        cex=1.2,bty="n")
 
 ```
