@@ -631,11 +631,11 @@ The exponent $h$ allows the curve to be asymmetric about the midpoint $g$, when 
 #| fig-cap: 'Five-parameter log-logistic curves with different $h$ parameters, which control the symmetry of the curve about the midpoint $g$. Values of $h<1$ tend to flatten the curve, while values of $h>1$ tend to make it steeper. The other parameters are constant at $c=0$, $d=10$, $b=-8$, and $g=5$.'
 #| fig-alt: "Five-parameter log-logistic curves with different $h$ parameters, which control the symmetry of the curve about the midpoint $g$. Values of h<1 tend to flatten the curve, while values of h>1 tend to make it steeper. The other parameters are constant at $c=0$, $d=10$, $b=-8$, and $g=5$."
 
-x <- seq(0.1, 10, length=100)
-B <- -8
+x <- seq(1, 500, length=100)
+B <- -2
 C <- 0
 D <- 10
-G <- 5
+G <- 150
 H <- c(1, 0.75, 0.5, 0.25, 0.1)
 
 
@@ -674,11 +674,11 @@ When $h=1$, this is halfway between the asymptotes. But when $h<1$, $2^h<2$, so 
 #| fig-cap: 'Five-parameter log-logistic curves with different $h$ parameters, which control the symmetry of the curve about the midpoint $g$, without adjusting $g$. Values of $h<1$ tend to flatten the curve, while values of $h>1$ tend to make it steeper. The other parameters are constant at $c=0$, $d=10$, $b=-8$, and $g=5$.'
 #| fig-alt: "Five-parameter log-logistic curves with different h parameters, which control the symmetry of the curve about the midpoint g, without adjusting g. Values of h<1 tend to flatten the curve, while values of h>1 tend to make it steeper. The other parameters are constant at c=0, d=10, b=-8, and g=5."
 
-x <- seq(0.1, 10, length=100)
-B <- -8
+x <- seq(1, 500, length=100)
+B <- -2
 C <- 0
 D <- 10
-G <- 5
+G <- 150
 H <- c(1, 0.75, 0.5, 0.25, 0.1)
 
 
@@ -691,7 +691,7 @@ for(i in 1:length(H)){
     iy <- C+(D-C)/((1+exp(B*(log(x)-log(G))))^H[i])
     lines(x, iy, lwd=3, lty=i, col=cols[i])
 }#i
-legend("topleft",
+legend("bottomright",
        legend=c(expression(italic(h)==1),
                 expression(italic(h)==0.75),
                 expression(italic(h)==0.5),
@@ -710,18 +710,18 @@ Here is the effect of increasing $h$ and adjusting $g$ so that the midpoint rema
 #| fig-cap: 'Five-parameter log-logistic curves with different $h$ parameters, which control the symmetry of the curve about the midpoint $g$. Values of $h<1$ tend to flatten the curve, while values of $h>1$ tend to make it steeper. The other parameters are constant at $c=0$, $d=10$, $b=-8$, and $g=5$.'
 #| fig-alt: "Five-parameter log-logistic curves with different $h$ parameters, which control the symmetry of the curve about the midpoint $g$. Values of h<1 tend to flatten the curve, while values of h>1 tend to make it steeper. The other parameters are constant at $c=0$, $d=10$, $b=-8$, and $g=5$."
 
-x <- seq(0.1, 10, length=100)
-B <- -8
+x <- seq(1, 500, length=100)
+B <- -2
 C <- 0
 D <- 10
-G <- 5
-H <- c(1, 5, 10)
+G <- 250
+H <- c(1, 2, 10)
 
 
 cols <- c("black", "#e41a1c", "#377eb8")
 par(mfrow=c(1,1), mar=c(5,5,1,4), 
     xpd=NA, bty="n")
-plot(x, x, type="n", xlab="x variable",
+plot(x, x, type="n", xlab="x variable", 
      ylab="y variable", ylim=c(0, max(D)))
 for(i in 1:length(H)){
     ig <- G / (2^(1/H[i])-1)^(1/B)
@@ -740,28 +740,137 @@ Decreasing $h$ has a much more drastic effect than increasing it.
 
 ### Weibull curves {#sec-non-common-weibull}
 
-The **Weibull curve** is really a family of functions with a sigmoid shape between a lower and upper asymptote. So, they can behave much like a Gompertz or log-logistic curve, and are suitable in many of the same situations. The Weibull curves differ in their numbers of parameters. 
+#### Derivation {#sec-non-common-weibull-der}
 
-The **two-parameter Weibull** type 1 model is 
+The **Weibull function** describes a sigmoid curve between a lower and upper asymptote. So, it can behave much like a Gompertz or log-logistic curve, and is suitable in many of the same situations. Like the log-logistic group above, there are several versions of the Weibull function that with different numbers of parameters. Each additional parameter in the function allows another aspect of the curve to vary.
+
+Like the log-logistic function, the Weibull function is derived from a probability distribution. The **Weibull distribution** is a continuous probability distribution often used for waiting times, similar to the [gamma distribution](@sec-dist-gamma). The [cumulative distribution function (CDF)](@sec-dist-cont) of the Weibull distribution for non-negative values is
+
+$$F_{Weibull}\left(x\right)=1-e^{-\left(x/\lambda\right)^k}$$
+
+where $k$ and $\lambda$ are the parameters of the distribution (shape and scale, respectively). We can take advantage of some exponent and logarithm rules to rewrite the Weibull CDF as a double exponential:
+
+
+
+$$
+\begin{alignedat}{2}
+F\left(x\right)=1-e^{-\left(x/\lambda\right)^k}
+ &\qquad& \text{Start with Weibull CDF}\\
+F\left(x\right)=1-e^{-\left(\frac{x^k}{\lambda^k}\right)}
+ &\qquad& \text{Power of a quotient:}~\left(\frac{a}{b}\right)^c\\
+F\left(x\right)=1-e^{-e^{\log{\left(\frac{x^k}{\lambda^k}\right)}}}
+ &\qquad& \text{Definition of logarithm:}~x=e^{\log\left(x\right)}\\
+F\left(x\right)=1-e^{-e^{\log\left(x^k\right)-\log{\left(\lambda^k\right)}}}
+ &\qquad& \text{Logarithm of a quotient}:~\log\left(a/b\right)=\log\left(x^k\right)-\log\left(\lambda^k\right)\\
+F\left(x\right)=1-e^{-e^{k\log\left(x\right)-k\log{\left(\lambda\right)}}}
+ &\qquad& \text{By identity}~\log\left(a^b\right)=b\log\left(a\right)\\
+F\left(x\right)=1-e^{-e^{k\left(\log\left(x\right)-\log\left(\lambda\right)\right)}}
+ &\qquad& \text{Factor out}~k\\
+\end{alignedat}
+
+$$
+
+This double exponential form of the Weibull CDF is sometimes called the "Type 2" Weibull function, including in the R package `drc`. The complement of the double exponential form of the Weibull CDF is the "Type 1" Weibull curve:
+
+$$\text{Weibull curve}=e^{-e^{k\left(\log\left(x\right)-\log\left(\lambda\right)\right)}}$$
+
+This version of the Weibull function has two parameters, and so it is called the **two-parameter Weibull function**. Like the [two-parameter log-logistic](@sec-non-common-log-2pl), a three- and four-parameter version of the function can be defined by adding additional parameters to define an upper asymptote other than 1 (@sec-non-common-weibull-3) and a lower asymptote other than 0 (@sec-non-common-weibull-4). Unlike the log-logistic and the Gompertz functions, the Weibull function does not have a midpoint or inflection point as a parameter but it can be derived from parameters.
+
+#### Two-parameter Weibull function {#sec-non-common-weibull-2}
+
+The **two-parameter Weibull** type 1 model is the basic Weibull function we derived in the previous section. We will use $b$ instead of $k$ for the shape parameter, and $c$ instead of $\lambda$ for the scale constant. It is given by 
 
 $$f\left(x\right)=e^{-e^{b\left(\log\left(x\right)-\log\left(c\right)\right)}}$$
-where $c$ is the inflection point and $b$ is a growth constant. This function has a lower asymptote at 0 and upper asymptote at 1.
+where $b$ is the shape parameter and $c$ is the scale parameter. This function has a lower asymptote at 0 and upper asymptote at 1. The figure below shows how the curve changes shape with different $b$ parameters.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-weibull-1
+#| fig-cap: 'Two-parameter Weibull curves with different $b$ parameters, which control the growth rate. Negative $b$ of larger magnitude have steeper positive growth rates. The $c$ parameter is fixed at 5.'
+#| fig-alt: "Two-parameter Weibull curves with different b parameters, which control the growth rate. Negative b of larger magnitude have steeper positive growth rates. The c parameter is fixed at 5."
+
+x <- seq(0.1, 10, length=100)
+B <- -1*c(1, 2, 4, 8)
+C <- 5
+
+cols <- c("#e41a1c", "#377eb8", "#4daf4a","#984ea3")
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, 1))
+for(i in 1:length(B)){
+    iy <- exp(-1*exp(B[i]*(log(x)-log(C))))
+    points(x, iy, type="l", lwd=3,
+           lty=i, col=cols[i])
+    text(max(x)+0.2, max(iy),
+         bquote(italic(b)==.(B[i])),
+         adj=0, cex=1.2,
+         col=cols[i])
+}#i
+
+```
+
+Changing the $c$ changes the function shape. It often has the effect of shifting the midpoint and the inflection point, but it represents neither of these directly.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-weibull-2
+#| fig-cap: 'Two-parameter Weibull curves with different $c$ parameters. The $c$ parameter changes the function shape; it shifts the midpoint and the inflection point, but it represents neither of these directly. The $b$ parameter is fixed at 5.'
+#| fig-alt: "Two-parameter Weibull curves with different c parameters. The c parameter changes the function shape; it shifts the midpoint and the inflection point, but it represents neither of these directly. The b parameter is fixed at 5."
+
+x <- seq(0.1, 10, length=100)
+B <- 5
+C <- c(2, 4, 6, 8)
+
+cols <- c("#e41a1c", "#377eb8", "#4daf4a", "#984ea3")
+par(mfrow=c(1,1), mar=c(5,5,1,4), 
+    xpd=NA, bty="n")
+plot(x, x, type="n", xlab="x variable",
+     ylab="y variable", ylim=c(0, 1))
+for(i in 1:length(C)){
+    iy <- exp(-1*exp(B*(log(x)-log(C[i]))))
+    points(x, iy, type="l", lwd=3,
+           lty=i, col=cols[i])
+}#i
+legend("topright",
+       legend=c(
+           expression(italic(c)==2),
+           expression(italic(c)==4),
+           expression(italic(c)==6),
+           expression(italic(c)==8)),
+       lty=1:length(C), lwd=3, col=cols,
+       bty="n", cex=1.2)
+```
+
+@fig-weibull-2 makes it seem that the scale parameter $c$ shifts the function midpoint and the inflection point, but this isn't actually true. The function midpoint calculated from both $b$ and $c$: 
+
+$$x_{mid}=ce^{\frac{\log{\left(-\log{\left(0.5\right)}\right)}}{b}}=ce^{\frac{\log{\left(\log{\left(2\right)}\right)}}{b}}\approx ce^{\frac{-0.3665}{b}}$$
+
+the derivation of which is left as an exercise for the reader (I've always wanted to say that). 
+
+#### Three-parameter Weibull function {#sec-non-common-weibull-3}
 
 The **three-parameter Weibull** curve adds a parameter $d$ to the two-parameter Weibull model to specify the upper asymptote:
 
 $$f\left(x\right)=de^{-e^{b\left(\log{\left(x\right)}-\log{\left(c\right)}\right)}}$$
 
-Finally, the **four-parameter Weibull** curve adds one more parameter, $a$, which can specify a lower asymptotes other than 0:
+Varying the shape $b$ or the scale $c$ has the same effect as it does in the two-parameter Weibull (@fig-weibull-1, @fig-weibull-2), just with the upper asymptote shifted to $d$.
+
+#### Four-parameter Weibull function {#sec-non-common-weibull-4}
+
+Finally, the **four-parameter Weibull** curve adds one more parameter, $a$, which can specify a lower asymptote other than 0:
 
 $$f\left(x\right)=a+\left(d-a\right)e^{-e^{b\left(\log\left(x\right)-\log\left(c\right)\right)}}$$
-where $d$ is the upper asymptote and $a$ is the lower asymptote. Unlike the log-logistic functions, none of the parameters is directly interpretable as the ED50. The Weibull curve is essentially a Gompertz-like sigmoid double exponential function applied to the logarithm of dose. Weibull curves are typically asymmetric.
+where $b$ is the shape, $c$ is the scale, $d$ is the upper asymptote, and $a$ is the lower asymptote. 
 
 When $b$ is negative, the Weibull curve increases:
 
 ```{r}
 #| fig-width: 8
 #| fig-height: 6
-#| label: fig-weibull1
+#| label: fig-weibull-3
 #| fig-cap: 'Four-parameter Weibull curves different $b$ parameters, which control the growth rate. Negative $b$ of larger magnitude have steeper positive growth rates. The other parameters are constant at $a=0$, $d=10$, and $c=4$.'
 #| fig-alt: "Four-parameter Weibull curves different b parameters, which control the growth rate. Negative b of larger magnitude have steeper positive growth rates. The other parameters are constant at a=0, d=10, and c=4"
 
@@ -795,7 +904,7 @@ When $b$ is positive, then the Weibull curve decreases:
 ```{r}
 #| fig-width: 8
 #| fig-height: 6
-#| label: fig-weibull2
+#| label: fig-weibull-4
 #| fig-cap: 'Four-parameter Weibull curves different $b$ parameters, which control the growth rate. Positive $b$ of larger magnitude have steeper negative growth rates. The other parameters are constant at $a=0$, $d=10$, and $c=4$.'
 #| fig-alt: "Four-parameter Weibull curves different b parameters, which control the growth rate. Positive b of larger magnitude have steeper negative growth rates. The other parameters are constant at a=0, d=10, and c=4"
 
@@ -827,14 +936,14 @@ legend("topright",
 }#i
 ```
 
-The $c$ term shifts the inflection point left and right. Note that for some combinations of parameters, there may not be an inflection point visible in your data.
+The $c$ term changes the function shape, which often has the effect of shifting the midpoint to the left and right (even though $c$ does not define the midpoint directly) or flattening or steepening the curve. Note that for some combinations of parameters, there may not be an inflection point visible in your data.
 
 ```{r}
 #| fig-width: 8
 #| fig-height: 6
-#| label: fig-weibull3
-#| fig-cap: 'Four-parameter Weibull curves with different $c$ parameters, which control the x position of the inflection point. Greater $c$ shift the curve to the right. The dashed lines at $y=d/2$ show that $c$ defines not the midpoint like $g$ in the four-parameter log-logistic, but rather the inflection point (the point where the second derivative changes sign). The other parameters are constant at $a=0$, $b=-4$, and $d=10$.'
-#| fig-alt: "Four-parameter Weibull curves with different c parameters, which control the x position of the inflection point. Greater c shift the curve to the right. The dashed lines at y=d/2 show that c defines not the midpoint like g in the four-parameter log-logistic, but rather the inflection point (the point where the second derivative changes sign). The other parameters are constant at a=0, b=-4, and d=10."
+#| label: fig-weibull-5
+#| fig-cap: 'Four-parameter Weibull curves with different scale parameters $c$, which change the shape of the curve. The other parameters are constant at $a=0$, $b=-4$, and $d=10$.'
+#| fig-alt: "Four-parameter Weibull curves with different scale parameters c, which change the shape of the curve. The other parameters are constant at a=0, b=-4, and d=10."
 
 x <- seq(0.1, 10, length=100)
 A <- 0
@@ -852,10 +961,7 @@ for(i in 1:length(C)){
     iy <- A+(D-A)*exp(-1*exp(B*(log(x)-log(C[i]))))
     points(x, iy, type="l", lwd=3,
            lty=i, col=cols[i])
-    segments(0, D/2, C[i], D/2, lty=2)
-    segments(C[i], 0, C[i], D/2, lty=2)
 }#i
-text(0, 5.5, expression(y==d/2), adj=0, cex=1.1)
 legend("bottomright",
        legend=c(
            expression(italic(c)==2),
@@ -869,7 +975,9 @@ legend("bottomright",
 
 ### Nonlinear functions summary
 
-We have seen 4 types of nonlinear functions commonly used for biological data: the Michaelis-Menten, the Gompertz, the von Bertalanffy, the (log)-logistic, and the Weibull curves. Each of these can take on many shapes, and choosing which one to use to model your data requires both statistical know-how and, more importantly, biological judgement. The most important question is often not, "Which curve looks the most like my scatterplot?" but rather "Which curve has parameters that make biological sense for my question?". These curves are useful because they are defined in terms that describe biology quite well: minimum and maximum values, inflection points, midpoints, and growth rates. 
+We have seen 5 types of nonlinear functions commonly used for biological data: the Michaelis-Menten, the Gompertz, the von Bertalanffy, the (log)-logistic, and the Weibull curves. Each of these can take on many shapes, and choosing which one to use to model your data requires both statistical know-how and, more importantly, biological judgement.
+
+The functions that we explore can take on many shapes. So, the most important question is  not, "*Which curve looks the most like my scatterplot*?" but rather "*Which curve has parameters that make biological sense for my question?*". These curves are useful because they are defined in terms that describe biology quite well: minimum and maximum values, inflection points, midpoints, and growth rates. 
 
 
 | Model | Lower asymptote | Upper asymptote | Midpoint | Inflection point | Growth rate / shape |
@@ -877,12 +985,13 @@ We have seen 4 types of nonlinear functions commonly used for biological data: t
 | Michaelis–Menten | $0$ (fixed) | $a$ | $b$ | — | — |
 | Gompertz (classic) | $0$ (fixed) | $a$ | Derived | $\ln(b)/c$ | $c$ |
 | von Bertalanffy | $0$ (fixed) | $L_\infty$ | Derived | — | $k$ |
-| Log-logistic (2P) | $0$ (fixed) | $1$ (fixed) | $e$ | Derived | $b$ (slope) |
-| Log-logistic (3P) | $0$ (fixed) | $d$ | $e$ | Derived | $b$ (slope) |
-| Log-logistic (4P) | $c$ | $d$ | $e$ | Derived | $b$ (slope) |
-| Weibull type 1 (2P) | $0$ (fixed) | $1$ (fixed) | Derived | Derived* | $b$ (shape), $e$ (scale) |
-| Weibull type 1 (3P) | $0$ (fixed) | $d$ | Derived | Derived* | $b$ (shape), $e$ (scale) |
-| Weibull type 1 (4P) | $c$ | $d$ | Derived | Derived* | $b$ (shape), $e$ (scale) |
+| Log-logistic (2P) | $0$ (fixed) | $1$ (fixed) | $g$ | Derived | $b$ (slope) |
+| Log-logistic (3P) | $0$ (fixed) | $d$ | $g$ | Derived | $b$ (slope) |
+| Log-logistic (4P) | $c$ | $d$ | $g$ | Derived | $b$ (slope)|
+| Log-logistic (5P) | $c$ | $d$ | $g$ | Derived | $b$ (slope), $k$ (asymmetry) |
+| Weibull type 1 (2P) | $0$ (fixed) | $1$ (fixed) | Derived | $ce^{\log{\left(\log\left(2\right)\right)/b}}$ | $b$ (shape), $c$ (scale) |
+| Weibull type 1 (3P) | $0$ (fixed) | $d$ | Derived | Derived* | $b$ (shape), $c$ (scale) |
+| Weibull type 1 (4P) | $a$ | $d$ | Derived | Derived* | $b$ (shape), $c$ (scale) |
 
 : Comparison of parameters in common nonlinear growth models. "Derived" indicates that the characteristic point can be calculated from model parameters but is not itself a directly estimated parameter. A dash indicates that the characteristic is absent or not independently parameterized. *The Weibull type 1 curve has an interior inflection point only for appropriate values of its shape parameter. {#tbl-growth-model-parameters}
 
@@ -1021,22 +1130,15 @@ The `predictNLS` function actually estimates 3 versions of the confidence interv
 #| fig-cap: "Ear length of small mammals appears to increase as a nonlinear function of total body length. Thick line shows predicted value and dashed lines show 95% confidence interval."
 #| fig-alt: "Ear length of small mammals increases as a nonlinear function of total body length. Predicted value and confidence intervals are shown as solid and dashed lines, respectively."
 
-# 2026-10-26
-# different versions of propagate 
-# use different column names!
-if("Prop.Mean.1" %in% names(py$summary)){
-    # first order delta approximation
-    prx$mn <- py$summary$Prop.Mean.1 
-    prx$lo <- py$summary$'Prop.2.5%'
-    prx$up <- py$summary$'Prop.97.5%'   
-} 
-if("mean.1" %in% names(py$summary)){
-    # first order delta approximation
-    prx$mn <- py$summary$mean.1 
-    prx$lo <- py$summary$'2.5%'
-    prx$up <- py$summary$'97.5%'
-}
-
+# NOTE: this example uses R version 4.6.1 and
+#       propagate version 1.2-0. The structure
+#       of the predictNLS output is a bit 
+#       different than previous versions of 
+#       propagate (e.g., 1.0-7).
+# first order delta approximation
+prx$mn <- py$summary[,1] # mean.1
+prx$lo <- py$summary[,5] # 2.5% (first one)
+prx$up <- py$summary[,6] # 97.5% (first one)
 
 par(mar=c(5,5,1,1))
 plot(dx$totalLength, dx$earLength,
