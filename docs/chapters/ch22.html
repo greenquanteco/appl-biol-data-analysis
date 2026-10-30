@@ -549,7 +549,11 @@ window.Quarto = {
   <li><a href="#sec-non-nls-fact" id="toc-sec-non-nls-fact" class="nav-link" data-scroll-target="#sec-non-nls-fact"><span class="header-section-number">22.3.5</span> Factors and interactions in nonlinear models</a></li>
   <li><a href="#sec-non-nls-sig" id="toc-sec-non-nls-sig" class="nav-link" data-scroll-target="#sec-non-nls-sig"><span class="header-section-number">22.3.6</span> Significance and nonsignificance in nonlinear models</a></li>
   </ul></li>
-  <li><a href="#sec-non-drc" id="toc-sec-non-drc" class="nav-link" data-scroll-target="#sec-non-drc"><span class="header-section-number">22.4</span> Dose-response curves with <code>drc</code></a></li>
+  <li><a href="#sec-non-drc" id="toc-sec-non-drc" class="nav-link" data-scroll-target="#sec-non-drc"><span class="header-section-number">22.4</span> Dose-response curves with <code>drc</code></a>
+  <ul class="collapse">
+  <li><a href="#single-groups" id="toc-single-groups" class="nav-link" data-scroll-target="#single-groups"><span class="header-section-number">22.4.1</span> Single groups</a></li>
+  <li><a href="#multiple-groups" id="toc-multiple-groups" class="nav-link" data-scroll-target="#multiple-groups"><span class="header-section-number">22.4.2</span> Multiple groups</a></li>
+  </ul></li>
   <li><a href="#sec-non-gam" id="toc-sec-non-gam" class="nav-link" data-scroll-target="#sec-non-gam"><span class="header-section-number">22.5</span> Generalized additive models (GAM)</a></li>
   <li><a href="#sec-non-gnm" id="toc-sec-non-gnm" class="nav-link" data-scroll-target="#sec-non-gnm"><span class="header-section-number">22.6</span> Generalized nonlinear models (GNM)</a></li>
   <li><a href="#sec-non-cart" id="toc-sec-non-cart" class="nav-link" data-scroll-target="#sec-non-cart"><span class="header-section-number">22.7</span> Regression trees for nonlinear patterns</a></li>
@@ -2184,7 +2188,401 @@ Figure&nbsp;22.36: Ear length of Cricetid and Murid rodents appears to increase 
 </section>
 <section id="sec-non-drc" class="level2" data-number="22.4">
 <h2 data-number="22.4" class="anchored" data-anchor-id="sec-non-drc"><span class="header-section-number">22.4</span> Dose-response curves with <code>drc</code></h2>
-<p>Coming soon!</p>
+<p>A <strong>dose response curve</strong> describes the change in a biological system following a quantitative perturbation. Most dose response models are nonlinear because of the dynamics of the systems they describe. Mechanistically, there is often a rate that scales with the current concentration of a compound, or some other aspect of the system. In other words, the dynamics of the system are described by a kind of <strong>differential equation</strong>. The state of the system is thus described by solutions to those equations.</p>
+<p>One of the most popular packages for fitting dose response models is package <code>drc</code> (<span class="citation" data-cites="ritz2015">Ritz <em>et al.</em> (<a href="#ref-ritz2015" role="doc-biblioref">2015</a>)</span>). This package provides functions for fitting all of the nonlinear functions described in this module, as well others we haven’t seen. You can see the functions available in <code>drc</code> with the function <code>drc::getMeanFunctions()</code>.</p>
+<p>I simulated some dose-response data for us to practice with. Download the <a href="../datasets/data-sim-dose-response.csv">simulated dose-response data</a>. If you want to see how the data were simulated, unfold the code block below:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code used to simulate the dataset</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># random number seed</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># experimental parameters</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="do">## concentrations tested</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>concs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">25</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>, <span class="dv">400</span>, <span class="dv">500</span>)</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="do">## species tested</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>spp <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="do">## replicates per species * concentration combination</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>repl <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a><span class="do">## make data frame</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">conc=</span>concs, <span class="at">species=</span>spp, <span class="at">repl=</span>repl)</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a><span class="co"># "true" model parameters</span></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="sc">-</span><span class="dv">4</span>)</span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">80</span>, <span class="dv">200</span>)</span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a><span class="co"># expected p(mortality)</span></span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a><span class="co"># four-parameter log-logistic model</span></span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>ey <span class="ot">&lt;-</span> C<span class="sc">+</span>(D<span class="sc">-</span>C)<span class="sc">/</span>(<span class="dv">1</span><span class="sc">+</span><span class="fu">exp</span>(B[dx<span class="sc">$</span>species]<span class="sc">*</span>(<span class="fu">log</span>(dx<span class="sc">$</span>conc)<span class="sc">-</span><span class="fu">log</span>(G[dx<span class="sc">$</span>species]))))</span>
+<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a><span class="co"># assign colors and symbols</span></span>
+<span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a>pchs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">16</span>)</span>
+<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">rainbow</span>(<span class="fu">length</span>(B))</span>
+<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>pch <span class="ot">&lt;-</span> pchs[dx<span class="sc">$</span>species]</span>
+<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>col <span class="ot">&lt;-</span> cols[dx<span class="sc">$</span>species]</span>
+<span id="cb41-29"><a href="#cb41-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-30"><a href="#cb41-30" aria-hidden="true" tabindex="-1"></a><span class="co"># simulate mortality within each trial</span></span>
+<span id="cb41-31"><a href="#cb41-31" aria-hidden="true" tabindex="-1"></a><span class="co"># and calculate percent mortality</span></span>
+<span id="cb41-32"><a href="#cb41-32" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>size <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb41-33"><a href="#cb41-33" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>mort <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="fu">nrow</span>(dx), <span class="at">size=</span>dx<span class="sc">$</span>size, <span class="at">prob=</span>dx<span class="sc">$</span>ey)</span>
+<span id="cb41-34"><a href="#cb41-34" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>pmort <span class="ot">&lt;-</span> <span class="dv">100</span><span class="sc">*</span>dx<span class="sc">$</span>mort <span class="sc">/</span> dx<span class="sc">$</span>size</span>
+<span id="cb41-35"><a href="#cb41-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-36"><a href="#cb41-36" aria-hidden="true" tabindex="-1"></a><span class="co"># export</span></span>
+<span id="cb41-37"><a href="#cb41-37" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> dx[,<span class="fu">c</span>(<span class="st">"conc"</span>, <span class="st">"species"</span>, <span class="st">"repl"</span>, <span class="st">"size"</span>, <span class="st">"pmort"</span>)]</span>
+<span id="cb41-38"><a href="#cb41-38" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>species <span class="ot">&lt;-</span> LETTERS[out<span class="sc">$</span>species]</span>
+<span id="cb41-39"><a href="#cb41-39" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(out, <span class="st">"data-sim-dose-response.csv"</span>, <span class="at">row.names=</span><span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Import the data:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-sim-dose-response.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This dataset contains simulated data from a toxic exposure experiment where two species of, say, midges were exposed to different concentrations of an experimental pesticide. Midge eggs were placed in jars, 50 per jar, with 10 replicates (variable <code>repl</code>) per species <span class="math inline">\(\times\)</span> concentration combination. The researchers recorded how many larvae out of 50 died in each jar and recorded this as percent mortality (variable <code>pmort</code>). Pesticide concentration is variable <code>conc</code>, and <code>size</code> is the number of larvae per jar.</p>
+<p>Let’s add some symbology to the dataset so we can visualize the data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assign colors and symbols</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>pchs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">16</span>)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>species <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(dx<span class="sc">$</span>species))</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pchs) <span class="ot">&lt;-</span> species</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(cols) <span class="ot">&lt;-</span> species</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>pch <span class="ot">&lt;-</span> pchs[dx<span class="sc">$</span>species]</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>col <span class="ot">&lt;-</span> cols[dx<span class="sc">$</span>species]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now make a plot with different colors and symbols for each species.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">xpd=</span><span class="cn">NA</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx<span class="sc">$</span>conc, dx<span class="sc">$</span>pmort, <span class="at">col=</span>dx<span class="sc">$</span>col, <span class="at">pch=</span>dx<span class="sc">$</span>pch,</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="fu">expression</span>(Pesticide<span class="sc">~</span>concentration<span class="sc">~</span>(mu<span class="sc">*</span>g<span class="sc">/</span>L)),</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Mortality (%)"</span>)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">legend=</span>species,</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pchs, <span class="at">col=</span>cols, <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-drc-01" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Data from a simulated toxic exposure trial where larval midges were exposed to different concentrations of an experimental pesticide. The percentage of larvae that die increases with concentration for both species A and species B, with mortality increasing faster in species A. Both species exhibit nearly 100% mortality above 300 μg/L.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-drc-01-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;22.37: Data from a simulated toxic exposure trial where larval midges were exposed to different concentrations of an experimental pesticide. The percentage of larvae that die increases with concentration for both species A and species B, with mortality increasing faster in species A. Both species exhibit nearly 100% mortality above 300 μg/L.
+</figcaption>
+<div aria-describedby="fig-drc-01-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch22_files/figure-html/fig-drc-01-1.png" class="img-fluid figure-img" alt="Data from a simulated toxic exposure trial where larval midges were exposed to different concentrations of an experimental pesticide. The percentage of larvae that die increases with concentration for both species A and species B, with mortality increasing faster in species A. Both species exhibit nearly 100% mortality above 300 μg/L." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>It looks like mortality increases with concentration, which makes sense. It also looks like the two species A and B respond differently, with mortality increasing faster in species A than in species B. Let’s test this observation by fitting some curves.</p>
+<section id="single-groups" class="level3" data-number="22.4.1">
+<h3 data-number="22.4.1" class="anchored" data-anchor-id="single-groups"><span class="header-section-number">22.4.1</span> Single groups</h3>
+<p>We can use <code>drc</code> to fit the data to one species or to multiple species. Let’s fit some curves to species A first. Filter the dataset to just that species. Then we will fit several models and compare them using AIC.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(drc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The percentage mortality variable represents a proportion, whose denominator is the <code>size</code> column (number of midges per trial). Recall from <a href="ch21.html#sec-glm4-binom" class="quarto-xref"><span>Section 21.2</span></a> that proportions are analyzed using the binomial distribution and a “weights” argument that defines the denominator of each proportion. We will have to specify that in <code>drm()</code> just as we do in <code>glm()</code>. Each call to <code>drm()</code> also takes the argument <code>fct</code> which specifies which model to fit. See <code>getMeanFunctions()</code> to see a list of available models.</p>
+<p><strong>Note:</strong> Fitting these models may generate warnings such as <code>NaNs produced</code>. These occur when the numerical optimization algorithm explores parameter values for which the model is mathematically undefined (e.g., a negative midpoint parameter). Such warnings do not necessarily indicate a problem with the final fitted model. If the model converges successfully, its parameter estimates are biologically reasonable, and its fitted curve adequately describes the data, these warnings can generally be disregarded.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filter to species A only</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>da <span class="ot">&lt;-</span> <span class="fu">subset</span>(dx, dx<span class="sc">$</span>species<span class="sc">==</span><span class="st">"A"</span>)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="co"># convert percent to proportion</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>da<span class="sc">$</span>pmort.y <span class="ot">&lt;-</span> da<span class="sc">$</span>pmort <span class="sc">/</span> <span class="dv">100</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>mod01 <span class="ot">&lt;-</span> <span class="fu">drm</span>(pmort.y<span class="sc">~</span>conc, <span class="at">data=</span>da, <span class="at">fct=</span><span class="fu">LL.2</span>(),</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">type=</span><span class="st">"binomial"</span>, <span class="at">weights=</span>size)</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>mod02 <span class="ot">&lt;-</span> <span class="fu">drm</span>(pmort.y<span class="sc">~</span>conc, <span class="at">data=</span>da, <span class="at">fct=</span><span class="fu">LL.3</span>(),</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">type=</span><span class="st">"binomial"</span>, <span class="at">weights=</span>size)</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>mod03 <span class="ot">&lt;-</span> <span class="fu">drm</span>(pmort.y<span class="sc">~</span>conc, <span class="at">data=</span>da, <span class="at">fct=</span><span class="fu">LL.4</span>(),</span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">type=</span><span class="st">"binomial"</span>, <span class="at">weights=</span>size)</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>mod04 <span class="ot">&lt;-</span> <span class="fu">drm</span>(pmort.y<span class="sc">~</span>conc, <span class="at">data=</span>da, <span class="at">fct=</span><span class="fu">W1.2</span>(),</span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">type=</span><span class="st">"binomial"</span>, <span class="at">weights=</span>size)</span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>mod05 <span class="ot">&lt;-</span> <span class="fu">drm</span>(pmort.y<span class="sc">~</span>conc, <span class="at">data=</span>da, <span class="at">fct=</span><span class="fu">W1.3</span>(),</span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">type=</span><span class="st">"binomial"</span>, <span class="at">weights=</span>size)</span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>mod06 <span class="ot">&lt;-</span> <span class="fu">drm</span>(pmort.y<span class="sc">~</span>conc, <span class="at">data=</span>da, <span class="at">fct=</span><span class="fu">W1.4</span>(),</span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>             <span class="at">type=</span><span class="st">"binomial"</span>, <span class="at">weights=</span>size)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now check the model coefficients:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># put in a list</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>mod.list <span class="ot">&lt;-</span> <span class="fu">list</span>(mod01, mod02, mod03, mod04, mod05, mod06)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(mod.list) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"mod"</span>,</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">formatC</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">width=</span><span class="dv">2</span>, <span class="at">flag=</span><span class="st">"0"</span>))</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="co"># inspect coefficients</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(mod.list, coef)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$mod01
+b:(Intercept) e:(Intercept) 
+    -2.001158     87.201257 
+
+$mod02
+b:(Intercept) d:(Intercept) e:(Intercept) 
+    -1.967928      1.005026     88.215297 
+
+$mod03
+b:(Intercept) c:(Intercept) d:(Intercept) e:(Intercept) 
+ -1.956583586  -0.001248771   1.005742038  88.093970709 
+
+$mod04
+b:(Intercept) e:(Intercept) 
+    -1.267799     53.926659 
+
+$mod05
+b:(Intercept) d:(Intercept) e:(Intercept) 
+   -0.9806101     1.1225292    65.6721373 
+
+$mod06
+b:(Intercept) c:(Intercept) d:(Intercept) e:(Intercept) 
+ -1.075057267   0.003799968   1.092910824  64.958680664 </code></pre>
+</div>
+</div>
+<p>The fitted coefficients look pretty sensible. We should also check convergence.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(mod.list, <span class="cf">function</span>(x){x<span class="sc">$</span>fit<span class="sc">$</span>convergence})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>mod01 mod02 mod03 mod04 mod05 mod06 
+ TRUE  TRUE  TRUE  TRUE  TRUE  TRUE </code></pre>
+</div>
+</div>
+<p>Before we do any model comparison, we need to check the predicted values of each model. Just because a <code>drm</code> model is converged and has sensible-looking parameters, does not mean it actually fits the data very well. Sometimes these models can get goofy fits that should disqualify them.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">2</span>))</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(mod.list)){</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(mod.list[[i]],</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">main=</span><span class="fu">names</span>(mod.list)[i])</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-drc-02" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Quick figures showing 6 nonlinear models fitted to data from a simulated toxic exposure trial. The data represent an experiment where larval midges were exposed to different concentrations of an experimental pesticide. The percentage of larvae that die increases with concentration.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-drc-02-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;22.38: Quick figures showing 6 nonlinear models fitted to data from a simulated toxic exposure trial. The data represent an experiment where larval midges were exposed to different concentrations of an experimental pesticide. The percentage of larvae that die increases with concentration.
+</figcaption>
+<div aria-describedby="fig-drc-02-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch22_files/figure-html/fig-drc-02-1.png" class="img-fluid figure-img" alt="Quick figures showing 6 nonlinear models fitted to data from a simulated toxic exposure trial. The data represent an experiment where larval midges were exposed to different concentrations of an experimental pesticide. The percentage of larvae that die increases with concentration." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>All of the figures look fine, so let’s compare all 6 models.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get model AIC</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>aicdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">mod=</span><span class="fu">names</span>(mod.list),</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">aic=</span><span class="fu">sapply</span>(mod.list, AIC))</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate delta AIC</span></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>aicdf<span class="sc">$</span>delta <span class="ot">&lt;-</span> aicdf<span class="sc">$</span>aic<span class="sc">-</span><span class="fu">min</span>(aicdf<span class="sc">$</span>aic)</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate relative likelihood</span></span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>aicdf<span class="sc">$</span>rel <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="fl">0.5</span><span class="sc">*</span>aicdf<span class="sc">$</span>delta)</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a><span class="co"># normalize to convert to aic weight</span></span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>aicdf<span class="sc">$</span>wt <span class="ot">&lt;-</span> aicdf<span class="sc">$</span>rel<span class="sc">/</span><span class="fu">sum</span>(aicdf<span class="sc">$</span>rel)</span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a><span class="co"># order by delta</span></span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>aicdf <span class="ot">&lt;-</span> aicdf[<span class="fu">order</span>(aicdf<span class="sc">$</span>delta),]</span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a><span class="co"># round</span></span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a>aicdf[,<span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(aicdf[,<span class="sc">-</span><span class="dv">1</span>], <span class="dv">2</span>)</span>
+<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a>aicdf</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        mod    aic delta  rel   wt
+mod01 mod01 163.65  0.00 1.00 0.64
+mod02 mod02 165.51  1.85 0.40 0.26
+mod03 mod03 167.38  3.73 0.16 0.10
+mod05 mod05 180.27 16.62 0.00 0.00
+mod06 mod06 180.35 16.69 0.00 0.00
+mod04 mod04 205.02 41.37 0.00 0.00</code></pre>
+</div>
+</div>
+<p>The best supported model was model 1, the two-parameter log-logistic, with an AIC weight of 0.64. This means that the probability that this model is the best supported model <em>among these 6 candidate models</em> is 0.64. Model 2, the three-parameter log-logistic, has a <span class="math inline">\(\Delta AIC\)</span> less than 2, so we cannot rule it out. The two-parameter log-logistic being the best-fitting model makes sense. <a href="#fig-drc-02" class="quarto-xref">Figure&nbsp;<span>22.38</span></a> shows that the mortality rates span the range from 0 to 1, so the extra terms in the three- and four-parameter log-logistic models that specify other asymptotes are not needed.</p>
+</section>
+<section id="multiple-groups" class="level3" data-number="22.4.2">
+<h3 data-number="22.4.2" class="anchored" data-anchor-id="multiple-groups"><span class="header-section-number">22.4.2</span> Multiple groups</h3>
+<p>We can also fit dose response curves to multiple groups at once. Let’s analyze the full dose-response dataset and compare the curves for species A and B.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>pmort.y <span class="ot">&lt;-</span> dx<span class="sc">$</span>pmort <span class="sc">/</span> <span class="dv">100</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>mod07 <span class="ot">&lt;-</span> <span class="fu">drm</span>(pmort.y<span class="sc">~</span>conc, <span class="at">curveid=</span>species, <span class="at">data=</span>dx, <span class="at">fct=</span><span class="fu">LL.2</span>(),</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">type=</span><span class="st">"binomial"</span>, <span class="at">weights=</span>size)</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>mod08 <span class="ot">&lt;-</span> <span class="fu">drm</span>(pmort.y<span class="sc">~</span>conc, <span class="at">curveid=</span>species, <span class="at">data=</span>dx, <span class="at">fct=</span><span class="fu">LL.3</span>(),</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">type=</span><span class="st">"binomial"</span>, <span class="at">weights=</span>size)</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>mod09 <span class="ot">&lt;-</span> <span class="fu">drm</span>(pmort.y<span class="sc">~</span>conc, <span class="at">curveid=</span>species, <span class="at">data=</span>dx, <span class="at">fct=</span><span class="fu">LL.4</span>(),</span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">type=</span><span class="st">"binomial"</span>, <span class="at">weights=</span>size)</span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>mod10 <span class="ot">&lt;-</span> <span class="fu">drm</span>(pmort.y<span class="sc">~</span>conc, <span class="at">curveid=</span>species, <span class="at">data=</span>dx, <span class="at">fct=</span><span class="fu">W1.2</span>(),</span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">type=</span><span class="st">"binomial"</span>, <span class="at">weights=</span>size)</span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a>mod11 <span class="ot">&lt;-</span> <span class="fu">drm</span>(pmort.y<span class="sc">~</span>conc, <span class="at">curveid=</span>species, <span class="at">data=</span>dx, <span class="at">fct=</span><span class="fu">W1.3</span>(),</span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">type=</span><span class="st">"binomial"</span>, <span class="at">weights=</span>size)</span>
+<span id="cb54-13"><a href="#cb54-13" aria-hidden="true" tabindex="-1"></a>mod12 <span class="ot">&lt;-</span> <span class="fu">drm</span>(pmort.y<span class="sc">~</span>conc, <span class="at">curveid=</span>species, <span class="at">data=</span>dx, <span class="at">fct=</span><span class="fu">W1.4</span>(),</span>
+<span id="cb54-14"><a href="#cb54-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">type=</span><span class="st">"binomial"</span>, <span class="at">weights=</span>size)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Once again, check for convergence.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># put in a list</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>mod.list2 <span class="ot">&lt;-</span> <span class="fu">list</span>(mod07, mod08, mod09, mod10, mod11, mod12)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(mod.list2) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"mod"</span>,</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">formatC</span>(<span class="dv">7</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">width=</span><span class="dv">2</span>, <span class="at">flag=</span><span class="st">"0"</span>))</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a><span class="co"># inspect coefficients</span></span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(mod.list2, coef)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$mod07
+       b:A        b:B        e:A        e:B 
+ -2.001158  -4.157096  87.202123 199.738435 
+
+$mod08
+        b:A         b:B         d:A         d:B         e:A         e:B 
+ -1.9675589  -4.2767121   1.0050434   0.9932908  88.2303331 198.3661663 
+
+$mod09
+          b:A           b:B           c:A           c:B           d:A 
+-1.945466e+00 -4.286436e+00 -2.382218e-03 -1.773330e-06  1.006493e+00 
+          d:B           e:A           e:B 
+ 9.927768e-01  8.796731e+01  1.982687e+02 
+
+$mod10
+       b:A        b:B        e:A        e:B 
+ -1.267859  -2.319653  53.929612 149.475972 
+
+$mod11
+        b:A         b:B         d:A         d:B         e:A         e:B 
+ -0.9806254  -1.8353159   1.1225321   1.1242760  65.6723157 168.1432049 
+
+$mod12
+          b:A           b:B           c:A           c:B           d:A 
+ -1.074855053  -2.377770958   0.003776190   0.002104492   1.092961978 
+          d:B           e:A           e:B 
+  1.053349887  64.958256592 166.473270107 </code></pre>
+</div>
+</div>
+<p>And check the plots for reasonableness.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">2</span>))</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(mod.list2)){</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(mod.list2[[i]],</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">main=</span><span class="fu">names</span>(mod.list2)[i],</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">legendPos=</span><span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>))</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-drc-03" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Quick figures showing 6 nonlinear models fitted to data from a simulated toxic exposure trial with two species of midge. The data represent an experiment where larval midges were exposed to different concentrations of an experimental pesticide. The percentage of larvae that die increases with concentration.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-drc-03-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;22.39: Quick figures showing 6 nonlinear models fitted to data from a simulated toxic exposure trial with two species of midge. The data represent an experiment where larval midges were exposed to different concentrations of an experimental pesticide. The percentage of larvae that die increases with concentration.
+</figcaption>
+<div aria-describedby="fig-drc-03-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch22_files/figure-html/fig-drc-03-1.png" class="img-fluid figure-img" alt="Quick figures showing 6 nonlinear models fitted to data from a simulated toxic exposure trial with two species of midge. The data represent an experiment where larval midges were exposed to different concentrations of an experimental pesticide. The percentage of larvae that die increases with concentration." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>All of the fitted curves look okay. Let’s compare models using AIC.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get model AIC</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>aicdf2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">mod=</span><span class="fu">names</span>(mod.list2),</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">aic=</span><span class="fu">sapply</span>(mod.list2, AIC))</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate delta AIC</span></span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>aicdf2<span class="sc">$</span>delta <span class="ot">&lt;-</span> aicdf2<span class="sc">$</span>aic<span class="sc">-</span><span class="fu">min</span>(aicdf2<span class="sc">$</span>aic)</span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate relative likelihood</span></span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>aicdf2<span class="sc">$</span>rel <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="fl">0.5</span><span class="sc">*</span>aicdf2<span class="sc">$</span>delta)</span>
+<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a><span class="co"># normalize to convert to aic weight</span></span>
+<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a>aicdf2<span class="sc">$</span>wt <span class="ot">&lt;-</span> aicdf2<span class="sc">$</span>rel<span class="sc">/</span><span class="fu">sum</span>(aicdf2<span class="sc">$</span>rel)</span>
+<span id="cb58-13"><a href="#cb58-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-14"><a href="#cb58-14" aria-hidden="true" tabindex="-1"></a><span class="co"># order by delta</span></span>
+<span id="cb58-15"><a href="#cb58-15" aria-hidden="true" tabindex="-1"></a>aicdf2 <span class="ot">&lt;-</span> aicdf2[<span class="fu">order</span>(aicdf2<span class="sc">$</span>delta),]</span>
+<span id="cb58-16"><a href="#cb58-16" aria-hidden="true" tabindex="-1"></a><span class="co"># round</span></span>
+<span id="cb58-17"><a href="#cb58-17" aria-hidden="true" tabindex="-1"></a>aicdf2[,<span class="sc">-</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(aicdf2[,<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb58-18"><a href="#cb58-18" aria-hidden="true" tabindex="-1"></a>aicdf2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        mod aic delta rel wt
+mod07 mod07 272     0   1  1
+mod08 mod08 276     4   0  0
+mod09 mod09 280     7   0  0
+mod12 mod12 305    33   0  0
+mod11 mod11 322    50   0  0
+mod10 mod10 371    98   0  0</code></pre>
+</div>
+</div>
+<p>In this case, model 7 (the two-parameter log-logistic) is by far the best supported. We will interpret that model.</p>
+<p>First, inspect the coefficients. The fitted parameters are very close to the truth.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod07)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Model fitted: Log-logistic (ED50 as parameter) with lower limit at 0 and upper limit at 1 (2 parms)
+
+Parameter estimates:
+
+      Estimate Std. Error t-value   p-value    
+b:A  -2.001158   0.081684 -24.499 &lt; 2.2e-16 ***
+b:B  -4.157096   0.216370 -19.213 &lt; 2.2e-16 ***
+e:A  87.202123   3.151717  27.668 &lt; 2.2e-16 ***
+e:B 199.738435   4.494227  44.443 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Because the ED50, or dose expected to cause 50% mortality, is a parameter in the log-logistic model (<code>e</code>), we don’t need to calculate it. However, we use the <code>ED()</code> function to get the estimates and their 95% confidence intervals.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ED</span>(mod07, <span class="dv">50</span>, <span class="at">interval=</span><span class="st">"delta"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Estimated effective doses
+
+       Estimate Std. Error    Lower    Upper
+e:A:50  87.2021     3.1517  81.0249  93.3794
+e:B:50 199.7384     4.4942 190.9299 208.5470</code></pre>
+</div>
+</div>
+<p>Note that <code>ED()</code> defaults to relative response levels. Thus, ED50 represents the dose producing a response halfway between the fitted lower and upper asymptotes. For <code>LL.2()</code>, those asymptotes are fixed at 0 and 1, so ED50 is also the dose corresponding to 50% mortality. If you fit a model where the asymptotes are not 0 and 1, you need to add the argument <code>type="absolute"</code> and set <code>respLev=0.5</code> instead of <code>50</code>. Otherwise, the ED50 won’t be a true ED50; it will be an ED-“whatever value is halfway between the upper and lower asymptotes”.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ED</span>(mod07, <span class="fl">0.5</span>, <span class="at">interval=</span><span class="st">"delta"</span>, <span class="at">type=</span><span class="st">"absolute"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Estimated effective doses
+
+        Estimate Std. Error    Lower    Upper
+e:A:0.5  87.2021     3.1517  81.0249  93.3794
+e:B:0.5 199.7384     4.4942 190.9299 208.5470</code></pre>
+</div>
+</div>
+<p>One caveat: if 0.5 lies outside the range of responses predicted by the fitted model, then an absolute ED50 doesn’t exist, and <code>ED()</code> may return NaN or another non-finite result.</p>
+<p>For comparing ED50 (or any parameter) between species A and B, you can use a Wald test of the difference between parameter estimates. Package <code>drc</code> has function <code>compParm()</code> that does this:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">compParm</span>(mod07, <span class="st">"e"</span>, <span class="at">operator=</span><span class="st">"-"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Comparison of parameter 'e' 
+
+     Estimate Std. Error t-value   p-value    
+A-B -112.5363     5.4892 -20.501 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Alternatively, you can compare effective doses directly:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">EDcomp</span>(mod07, <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">50</span>), <span class="at">interval =</span> <span class="st">"delta"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Estimated ratios of effect doses
+
+          Estimate   Lower   Upper
+A/B:50/50  0.43658 0.40015 0.47301</code></pre>
+</div>
+</div>
+<p>or if you have asymptotes other than 0 and 1:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">EDcomp</span>(mod07, <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>), <span class="at">interval =</span> <span class="st">"delta"</span>, <span class="at">type=</span><span class="st">"absolute"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Estimated ratios of effect doses
+
+            Estimate   Lower   Upper
+A/B:0.5/0.5  0.43658 0.40015 0.47301</code></pre>
+</div>
+</div>
+</section>
 </section>
 <section id="sec-non-gam" class="level2" data-number="22.5">
 <h2 data-number="22.5" class="anchored" data-anchor-id="sec-non-gam"><span class="header-section-number">22.5</span> Generalized additive models (GAM)</h2>
@@ -2208,6 +2606,9 @@ Green NS, Wildhaber ML, Albers JL, Pettit TW, Hooper MJ. 2020. <a href="https://
 </div>
 <div id="ref-kunz2019" class="csl-entry" role="listitem">
 Kunz BK, Waddle JH, Green NS. 2019. <a href="https://doi.org/10.1002/ieam.4202">Amphibian monitoring in hardwood forests: Optimizing methods for contaminant-based compensatory restorations</a>. Integrated environmental assessment and management.
+</div>
+<div id="ref-ritz2015" class="csl-entry" role="listitem">
+Ritz C, Baty F, Streibig JC, Gerhard D. 2015. Dose-response analysis using <span>R</span>. PLoS ONE 10(12):e0146021. <a href="https://doi.org/10.1371/journal.pone.0146021">https://doi.org/10.1371/journal.pone.0146021</a>
 </div>
 </div>
 </section>
