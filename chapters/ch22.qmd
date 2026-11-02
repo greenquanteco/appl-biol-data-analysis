@@ -672,7 +672,7 @@ where $L$ is the supremum (upper asymptote), $b$ is a growth rate, and $x_0$ is 
 
 $$f\left(x\right)=\frac{1}{1+e^{-x}}$$
 
-which you may recognize as the inverse of the [logit function](@sec-trans-common-lp-logit), given by the R function `plogis()`.
+which you may recognize as the inverse of the [logit function](#sec-trans-common-lp-logit), given by the R function `plogis()`.
 
 ```{r}
 #| fig-width: 8
@@ -1075,7 +1075,7 @@ Decreasing $h$ has a much more drastic effect than increasing it.
 
 The **Weibull function** describes a sigmoid curve between a lower and upper asymptote. So, it can behave much like a Gompertz or log-logistic curve, and is suitable in many of the same situations. Like the log-logistic group above, there are several versions of the Weibull function that with different numbers of parameters. Each additional parameter in the function allows another aspect of the curve to vary.
 
-Like the log-logistic function, the Weibull function is derived from a probability distribution. The **Weibull distribution** is a continuous probability distribution often used for waiting times, similar to the [gamma distribution](@sec-dist-gamma). The [cumulative distribution function (CDF)](@sec-dist-cont) of the Weibull distribution for non-negative values is
+Like the log-logistic function, the Weibull function is derived from a probability distribution. The **Weibull distribution** is a continuous probability distribution often used for waiting times, similar to the [gamma distribution](#sec-dist-gamma). The [cumulative distribution function (CDF)](#sec-dist-cont) of the Weibull distribution for non-negative values is
 
 $$F_{Weibull}\left(x\right)=1-e^{-\left(x/\lambda\right)^k}$$
 
@@ -1103,7 +1103,7 @@ This double exponential form of the Weibull CDF is sometimes called the "Type 2"
 
 $$\text{Weibull curve}=e^{-e^{k\left(\log\left(x\right)-\log\left(\lambda\right)\right)}}$$
 
-This version of the Weibull function has two parameters, and so it is called the **two-parameter Weibull function**. Like the [two-parameter log-logistic](@sec-non-common-log-2pl), a three- and four-parameter version of the function can be defined by adding additional parameters to define an upper asymptote other than 1 (@sec-non-common-weibull-3) and a lower asymptote other than 0 (@sec-non-common-weibull-4). Unlike the log-logistic and the Gompertz functions, the Weibull function does not have a midpoint or inflection point as a parameter but it can be derived from parameters.
+This version of the Weibull function has two parameters, and so it is called the **two-parameter Weibull function**. Like the [two-parameter log-logistic](#sec-non-common-log-2pl), a three- and four-parameter version of the function can be defined by adding additional parameters to define an upper asymptote other than 1 (@sec-non-common-weibull-3) and a lower asymptote other than 0 (@sec-non-common-weibull-4). Unlike the log-logistic and the Gompertz functions, the Weibull function does not have a midpoint or inflection point as a parameter but it can be derived from parameters.
 
 #### Two-parameter Weibull function {#sec-non-common-weibull-2}
 
@@ -1335,7 +1335,7 @@ $$E\left(y\right)=\mathcal{f}\left(x\right)$$
 
 where $\mathcal{f}\left(x\right)$ is a nonlinear function of $x$. In the NLS model, as with LM, the response variable $y$ is drawn from a normal distribution with mean $\mu$ and residual variance $\sigma^2_{res}$. Unlike LM, in NLS the function for the expected value $f\left(x\right)$ can be any number of functions.
 
-The equations above show an important assumption of NLS: the errors are normally distributed with constant variance. If you need a another response distribution, then there are [**generalized nonlinear models**](@sec-non-gnm) that extend nonlinear models the way that GLM extends LM.
+The equations above show an important assumption of NLS: the errors are normally distributed with constant variance. If you need a another response distribution, then there are [**generalized nonlinear models**](#sec-non-gnm) that extend nonlinear models the way that GLM extends LM.
 
 Unlike LM, where it is relatively straightforward to solve some linear algebra problems and get stable parameter estimates, in NLS the parameters must be approximated by searching the parameter space (i.e., set of possible values) for parameter values that minimize the sum of squared residuals. The methods for computing these estimates are extremely complicated and sensitive to starting inputs, and we won’t go into them here. @bolker2008ecological gives an overview of some of these methods. The practical upshot for the average user is that starting values for the model must be supplied.
 
