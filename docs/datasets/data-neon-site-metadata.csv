@@ -1,0 +1,47 @@
+"","domain","site","habitat","lat","lon","elev","precip","temp","npp","seas.pre","seas.temp"
+"1","D16_Pacific Northwest","ABBY","evergreenForest",45.757,-122.346,535.7,2597,9.55000000000001,1366.4,58,537.7
+"2","D18_Northeast","BARR","sedgeHerbaceous",71.249,-156.436,5,247,-10.7499999999999,208.5,82.8,1123.4
+"3","D01_Northeast","BART","mixedForest",44.049,-71.3,452.1,1615,5.25000000000006,1001.9,12.2,989.1
+"4","D02_Midatlantic","BLAN","pastureHay",39.086,-77.964,133.6,991,13.05,1409.8,14.2,854.1
+"5","D19_Midatlantic","BONA","deciduousForest",65.171,-147.515,422.9,624,-2.74999999999994,486.5,72.3,1286.7
+"6","D11_Southern Plains","CLBJ","grasslandHerbaceous",33.361,-97.614,316.6,1035,17.7500000000001,1453.7,35.6,775.6
+"7","D10_Central Plains","CPER","grasslandHerbaceous",40.83,-104.731,1648.4,349,9.25000000000006,601.7,58.4,850.8
+"8","D09_Northern Plains","DCFS","grasslandHerbaceous",47.175,-99.097,543.8,509,4.85000000000002,834.8,67.3,1158.6
+"9","D19_Midatlantic","DEJU","evergreenForest",63.878,-145.759,505,643,-1.84999999999997,531.7,61.3,1204.6
+"10","D08_Ozarks","DELA","woodyWetlands",32.534,-87.81,25.2,1356,18.45,1740.9,15.8,707.5
+"11","D03_Southeast","DSNY","woodyWetlands",28.088,-81.411,19.8,1291,22.2500000000001,1687.5,54.2,423.4
+"12","D07_Appalachians","GRSM","deciduousForest",35.692,-83.482,597.9,1366,12.55,1633.5,15.5,721.9
+"13","D04_Atlantic Neotropical","GUAN","evergreenForest",17.972,-66.859,152.1,1114,25.65,1529.9,50.9,101.8
+"14","D01_Northeast","HARV","deciduousForest",42.439,-72.244,204.7,1093,9.05000000000001,1322.3,7.8,908.5
+"15","D19_Midatlantic","HEAL","shrubScrub",63.878,-149.242,663.6,604,-3.64999999999998,444.4,71.2,1199.9
+"16","D03_Southeast","JERC","evergreenForest",31.193,-84.459,42.3,1352,19.2500000000001,1737.5,23.4,634.2
+"17","D14_Desert Southwest","JORN","shrubScrub",32.609,-106.83,1324.3,259,17.65,458.3,70.1,757.8
+"18","D06_Prairie Peninsula","KONA","cultivatedCrops",39.155,-96.627,334.4,845,12.95,1253.9,54.4,987.2
+"19","D06_Prairie Peninsula","KONZ","grasslandHerbaceous",39.093,-96.57,395.2,931,12.65,1347.2,54,965.5
+"20","D04_Atlantic Neotropical","LAJA","pastureHay",18.03,-67.077,25.1,1392,26.45,1769.8,45.8,100.9
+"21","D08_Ozarks","LENO","woodyWetlands",31.814,-88.192,14.1,1403,18.85,1778.1,16.8,670.9
+"22","D07_Appalachians","MLBS","deciduousForest",37.4,-80.524,1031,1342,8.75000000000006,1296,16.2,716.1
+"23","D13_Southern Rockies","MOAB","shrubScrub",38.246,-109.383,1859.5,252,10.7500000000001,447.3,23.9,957.9
+"24","D13_Southern Rockies","NIWO","evergreenForest",40.045,-105.564,3275.2,950,-1.34999999999997,558.3,33.3,866.5
+"25","D09_Northern Plains","NOGP","grasslandHerbaceous",46.795,-100.912,548.9,488,6.05000000000001,805.3,65.8,1130.9
+"26","D11_Southern Plains","OAES","grasslandHerbaceous",35.413,-99.063,512.1,782,15.45,1182.3,44.5,889.2
+"27","D15_Great Basin","ONAQ","shrubScrub",40.18,-112.478,1733,432,10.15,725.8,20.8,979.9
+"28","D07_Appalachians","ORNL","deciduousForest",35.942,-84.259,263.8,1397,15.15,1773.4,18,776
+"29","D03_Southeast","OSBS","woodyWetlands",29.698,-81.98,31.3,1326,20.35,1716.1,42.8,509.8
+"30","D10_Central Plains","RMNP","evergreenForest",40.187,-105.508,2710.4,564,3.05000000000001,835.4,37.3,780.6
+"31","D02_Midatlantic","SCBI","deciduousForest",38.892,-78.15,354.5,1075,12.2500000000001,1492.5,15.3,830.5
+"32","D02_Midatlantic","SERC","deciduousForest",38.89,-76.543,12.9,1197,13.85,1606.1,14.6,829.6
+"33","D17_Pacific Southwest","SJER","grasslandHerbaceous",37.098,-119.737,363.9,570,16.55,917,86.4,674.3
+"34","D17_Pacific Southwest","SOAP","evergreenForest",37.03,-119.274,1275.2,1301,11.85,1571.3,79.7,669.6
+"35","D14_Desert Southwest","SRER","shrubScrub",31.863,-110.85,1076.4,446,19.05,746,77.1,691.4
+"36","D05_Great Lakes","STEI","deciduousForest",45.809,-90.073,505.7,877,5.25000000000006,1001.9,43.6,1051.1
+"37","D10_Central Plains","STER","cultivatedCrops",40.471,-103.022,1361.6,481,9.65000000000003,795.5,63.7,914.8
+"38","D08_Ozarks","TALL","evergreenForest",32.908,-87.42,129.8,1457,17.85,1819.9,14.5,694.7
+"39","D17_Pacific Southwest","TEAK","evergreenForest",37.008,-119.025,2247.8,1202,6.35000000000002,1091.1,78.1,657.7
+"40","D18_Northeast","TOOL","dwarfScrub",68.627,-149.472,823.9,559,-10.45,215.6,85,1292.9
+"41","D05_Great Lakes","TREE","mixedForest",45.49,-89.563,463.6,801,5.65000000000003,1033.9,43.7,1048.4
+"42","D06_Prairie Peninsula","UKFS","deciduousForest",39.047,-95.196,312.2,1035,12.65,1454,46.8,950.4
+"43","D05_Great Lakes","UNDE","woodyWetlands",46.236,-89.521,514.2,878,4.65000000000003,954.9,33.8,1031.9
+"44","D09_Northern Plains","WOOD","grasslandHerbaceous",47.138,-99.239,586.8,519,4.75000000000006,848.4,67.2,1151.9
+"45","D16_Pacific Northwest","WREF","evergreenForest",45.837,-121.963,593,2477,9.35000000000002,1348.8,70.2,622.6
+"46","D12_Northern Rockies","YELL","shrubScrub",44.946,-110.534,2047.1,517,2.15000000000003,772.4,30.7,828.6

@@ -1,0 +1,16 @@
+grid,attribute,value
+BART_062,lat,44.05735
+BART_084,lat,44.048501
+HARV_001,lat,42.422943
+HARV_006,lat,42.401991
+HARV_008,lat,42.443394
+BART_062,lon,-71.308646
+BART_084,lon,-71.297965
+HARV_001,lon,-72.258721
+HARV_006,lon,-72.254785
+HARV_008,lon,-72.225117
+BART_062,nlcd,deciduousForest
+BART_084,nlcd,evergreenForest
+HARV_001,nlcd,deciduousForest
+HARV_006,nlcd,deciduousForest
+HARV_008,nlcd,deciduousForest
