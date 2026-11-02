@@ -683,10 +683,15 @@ Y_i=\beta_{0,lab}+\beta_{1,lab_i}X_i+\varepsilon_i
 </div>
 </div>
 </div>
-<p>What about potential habitat differences?</p>
+<p>What about potential habitat differences? It makes sense that different habitats, like forests or grasslands or croplands, might have different levels of nutrient availability, or predation pressure, or something that might affect body mass.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">10</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">las=</span><span class="dv">1</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(weight<span class="sc">~</span>habitat, <span class="at">data=</span>dx, <span class="at">horizontal =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make a boxplot, but turn it horizontal</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># and enlarge the y axis margin to make the</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># habitat names visible</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">10</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">las=</span><span class="dv">1</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(weight<span class="sc">~</span>habitat, <span class="at">data=</span>dx,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">horizontal =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab=</span><span class="st">""</span>, <span class="at">xlab=</span><span class="st">"Body mass (g)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -695,8 +700,11 @@ Y_i=\beta_{0,lab}+\beta_{1,lab_i}X_i+\varepsilon_i
 </div>
 </div>
 </div>
-<p>There is a lot of variability, but there might be some differences in body mass between the habitats.</p>
-<p>We will fit the model two ways: as a linear model (two-way ANOVA) and as a linear mixed effects model. Each habitat type is represented by several sites. We want to isolate the effect of habitat while accounting for other differences between the sites. The table below shows that deciduous forest and grasslands are each represented by more than 1 site. If we included a habitat represented by only one site, then any apparent effect of that habitat would actually be confounded with that site.</p>
+<p>There is a lot of variability, but it looks like there might be some differences in body mass between the habitats.</p>
+<p>We will fit the model two ways: as a linear model (two-way ANOVA) and as a linear mixed effects model.</p>
+<p>One issue we might want to consider is that each habitat type is represented by several sites, and there might be variability between sites. For example, the “deciduousForest” habitat at GRSM might be different than the same category at HARV. <a href="https://www.neonscience.org/field-sites/grsm">GRSM</a> is in the Great Smoky Mountains National Park in southeastern Tennessee, and <a href="https://www.neonscience.org/field-sites/harv">HARV</a> is Harvard Forest in Massachusetts. Both are dominated by deciduous forest, but they are not the same kind of deciduous forest. <a href="https://www.epa.gov/eco-research/level-iii-and-iv-ecoregions-continental-united-states">GRSM is in the Ridge and Valley and Southwestern Appalachian ecoregion, while HARV is in the Northeastern Coastal Zone</a>.</p>
+<p>We want to isolate the effect of habitat while accounting for other differences between the sites. We need to account for site-to-site variability, but recognize that we are not interested in these sites in and of themselves. The sites where “deciduous forest” and “grassland” were sampled are essentially a random sample of all the many possible places where they could have been sampled. That argues for treating site as a <em>random</em> effect.</p>
+<p>The table below shows that deciduous forest and grasslands are each represented by more than 1 site. If we included a habitat represented by only one site, then any apparent effect of that habitat would actually be confounded with that site.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(dx<span class="sc">$</span>habitat, dx<span class="sc">$</span>site, <span class="at">useNA=</span><span class="st">"ifany"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -732,188 +740,234 @@ Y_i=\beta_{0,lab}+\beta_{1,lab_i}X_i+\varepsilon_i
   woodyWetlands          0  691    0</code></pre>
 </div>
 </div>
+<p>It looks like we will get the most robust comparison if we restrict our analysis to deciduous forest and grassland habitats. Filter the dataset to those habitats.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmerTest)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># restrict to deciduous forest and grasslands</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dx2 <span class="ot">&lt;-</span> dx[dx<span class="sc">$</span>habitat <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"deciduousForest"</span>, <span class="st">"grasslandHerbaceous"</span>),]</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># restrict to deciduous forest and grasslands</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>dx2 <span class="ot">&lt;-</span> dx[dx<span class="sc">$</span>habitat <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"deciduousForest"</span>, <span class="st">"grasslandHerbaceous"</span>),]</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">aov</span>(weight<span class="sc">~</span>habitat<span class="sc">+</span>sex, <span class="at">data=</span>dx2)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>mod2 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(weight<span class="sc">~</span>habitat<span class="sc">+</span>sex<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>site), <span class="at">data=</span>dx2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># remove site wood, which has only 1 animal</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>dx2 <span class="ot">&lt;-</span> dx2[dx2<span class="sc">$</span>site <span class="sc">!=</span> <span class="st">"WOOD"</span>,]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Now compare the model fits.</p>
+<p>Now let’s run the analysis in two ways: as a linear model and as a linear mixed effects model. The linear model version of the analysis is a two-way ANOVA with <code>habitat</code> and <code>sex</code> plus the interaction between them. The mixed model version has the same fixed effects structure, plus a random intercept for site.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmerTest)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># two-way anova (linear model)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">aov</span>(weight<span class="sc">~</span>habitat<span class="sc">*</span>sex, <span class="at">data=</span>dx2)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># mixed model with random intercept by site</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>mod2 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(weight<span class="sc">~</span>habitat<span class="sc">*</span>sex<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>site), <span class="at">data=</span>dx2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now compare the model fits. The linear version found significant effects of both habitat and sex. The post-hoc test shows that grassland mice were about 2.04 g larger than forest mice and that males were about 0.6 g larger on average females. That’s a big difference (if you’re a mouse).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>               Df Sum Sq Mean Sq F value Pr(&gt;F)    
-habitat         1   9955    9955   567.5 &lt;2e-16 ***
-sex             1   1950    1950   111.2 &lt;2e-16 ***
-Residuals   18591 326108      18                   
+<pre><code>               Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+habitat         1   9980    9980  569.35  &lt; 2e-16 ***
+sex             1   1944    1944  110.93  &lt; 2e-16 ***
+habitat:sex     1    208     208   11.84 0.000581 ***
+Residuals   18589 325843      18                     
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">TukeyHSD</span>(mod1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  Tukey multiple comparisons of means
-    95% family-wise confidence level
-
-Fit: aov(formula = weight ~ habitat + sex, data = dx2)
-
-$habitat
-                                        diff      lwr      upr p adj
-grasslandHerbaceous-deciduousForest 2.036706 1.869134 2.204279     0
-
-$sex
-                 diff       lwr       upr p adj
-male-female 0.6522702 0.5309629 0.7735775     0</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod2, <span class="at">type=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod2, <span class="at">type=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Type II Analysis of Variance Table with Satterthwaite's method
-         Sum Sq Mean Sq NumDF   DenDF  F value Pr(&gt;F)    
-habitat    3.26    3.26     1    11.6   0.1985 0.6642    
-sex     1792.86 1792.86     1 18583.3 109.0645 &lt;2e-16 ***
+             Sum Sq Mean Sq NumDF   DenDF F value    Pr(&gt;F)    
+habitat        6.06    6.06     1    11.6   0.369    0.5553    
+sex         1792.84 1792.84     1 18581.5 109.166 &lt; 2.2e-16 ***
+habitat:sex  289.13  289.13     1 18588.2  17.605 2.732e-05 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
-<p>The effect of habitat went away! Some of the variance that was previously attributed to habitat appears to have been moved over to site.</p>
+<p>Interestingly, the main effect of habitat is significant in the linear model, but not in the mixed model.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimated fixed effect coefficients</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(mod2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod2, <span class="at">type=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>               (Intercept) habitatgrasslandHerbaceous 
-                20.7187238                  0.3424476 
-                   sexmale 
-                 0.6275365 </code></pre>
+<pre><code>Type II Analysis of Variance Table with Satterthwaite's method
+             Sum Sq Mean Sq NumDF   DenDF F value    Pr(&gt;F)    
+habitat        6.06    6.06     1    11.6   0.369    0.5553    
+sex         1792.84 1792.84     1 18581.5 109.166 &lt; 2.2e-16 ***
+habitat:sex  289.13  289.13     1 18588.2  17.605 2.732e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
+<p>In the random intercept model (<code>mod2</code>), the effect of habitat–which significant in the ANOVA–was nonsignificant and only the effect of sex remains. What happened? It appears that some of the variance that was previously attributed to habitat appears to now be associated with site.</p>
+<p>There appears to be an interaction between sex and habitat. Let’s check the coefficients:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># conditional modes (BLUPs)</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># these are deviations from population-level parameters</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ranef</span>(mod2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(mod1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>$site
-     (Intercept)
-CLBJ  0.04611402
-DCFS -0.68877943
-GRSM -0.54551689
-HARV -0.06826557
-KONZ  2.55879005
-MLBS -0.31396724
-NOGP -0.47265615
-OAES -0.87118652
-ORNL -1.41734647
-SCBI -0.05538168
-SERC  0.28932057
-STEI -0.54860964
-UKFS  2.65976693
-WOOD -0.57228197
-
-with conditional variances for "site" </code></pre>
+<pre><code>                       (Intercept)         habitatgrasslandHerbaceous 
+                        20.5895575                          1.6560410 
+                           sexmale habitatgrasslandHerbaceous:sexmale 
+                         0.5629499                          0.5987715 </code></pre>
 </div>
 </div>
+<p>The output tells us that females in grasslands are, on average, 1.65 g larger than females in deciduous forests, while males in deciduous forests are, on average, 0.56 g larger than females in deciduous forests. However, the difference between males and females is greater in grasslands (0.56 + 0.60 = 1.16 g). The interaction coefficient (0.60 g) represents the additional difference between male and female body mass in grasslands compared with deciduous forests. What about in the random intercept model?</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># group-specific coefficiednts (fixed + random effects)</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># these are the group-specific coefficients themselves</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(mod2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(mod2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                       (Intercept)         habitatgrasslandHerbaceous 
+                       20.77687386                         0.04660303 
+                           sexmale habitatgrasslandHerbaceous:sexmale 
+                        0.52194319                         0.71051491 </code></pre>
+</div>
+</div>
+<p>In this model, females in grassland are not significantly larger than females in deciduous forest (<code>0.046</code>). This is different than the linear model. The other findings are similar to the linear model:mMales in deciduous forest are about 0.52 g larger than females in deciduous forest, while in grasslands, the difference between males and females is about 0.123 (<code>0.52+0.71</code>).</p>
+<p>We can see the random effects with <code>ranef()</code>. These value are the <em>deviations</em> of each group-level intercept and slope from the global intercept of 20.77.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># these are deviations from population-level parameters</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>re3 <span class="ot">&lt;-</span> <span class="fu">ranef</span>(mod2)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>re3<span class="sc">$</span>site</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     (Intercept)
+CLBJ -0.05596660
+DCFS -0.72368354
+GRSM -0.54512707
+HARV -0.06942544
+KONZ  2.43867916
+MLBS -0.31408447
+NOGP -0.69340088
+OAES -0.96562814
+ORNL -1.41879991
+SCBI -0.05249160
+SERC  0.29511656
+STEI -0.55544391
+UKFS  2.66025583</code></pre>
+</div>
+</div>
+<p>The random effects should have mean 0 and an SD corresponding to the variances reported by <code>summary(mod2)</code> (up to sampling error). We can get the actual variances with <code>VarCorr()</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimated variances, standard deviations,</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># and correlations of random effects</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">VarCorr</span>(mod2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Groups   Name        Std.Dev.
+ site     (Intercept) 1.3008  
+ Residual             4.0525  </code></pre>
+</div>
+</div>
+<p>Finally, we can see the group-specific coefficients, which include the fixed and the random effect, with <code>coef()</code>. Notice that only the intercepts vary between sites. If we had specified random effects of habitat or sex, those columns would vary as well.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># group-specific coefficients (fixed + random effects)</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"># these are the group-specific coefficients themselves</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(mod2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$site
      (Intercept) habitatgrasslandHerbaceous   sexmale
-CLBJ    20.76484                  0.3424476 0.6275365
-DCFS    20.02994                  0.3424476 0.6275365
-GRSM    20.17321                  0.3424476 0.6275365
-HARV    20.65046                  0.3424476 0.6275365
-KONZ    23.27751                  0.3424476 0.6275365
-MLBS    20.40476                  0.3424476 0.6275365
-NOGP    20.24607                  0.3424476 0.6275365
-OAES    19.84754                  0.3424476 0.6275365
-ORNL    19.30138                  0.3424476 0.6275365
-SCBI    20.66334                  0.3424476 0.6275365
-SERC    21.00804                  0.3424476 0.6275365
-STEI    20.17011                  0.3424476 0.6275365
-UKFS    23.37849                  0.3424476 0.6275365
-WOOD    20.14644                  0.3424476 0.6275365
+CLBJ    20.72091                 0.04660303 0.5219432
+DCFS    20.05319                 0.04660303 0.5219432
+GRSM    20.23175                 0.04660303 0.5219432
+HARV    20.70745                 0.04660303 0.5219432
+KONZ    23.21555                 0.04660303 0.5219432
+MLBS    20.46279                 0.04660303 0.5219432
+NOGP    20.08347                 0.04660303 0.5219432
+OAES    19.81125                 0.04660303 0.5219432
+ORNL    19.35807                 0.04660303 0.5219432
+SCBI    20.72438                 0.04660303 0.5219432
+SERC    21.07199                 0.04660303 0.5219432
+STEI    20.22143                 0.04660303 0.5219432
+UKFS    23.43713                 0.04660303 0.5219432
+     habitatgrasslandHerbaceous:sexmale
+CLBJ                          0.7105149
+DCFS                          0.7105149
+GRSM                          0.7105149
+HARV                          0.7105149
+KONZ                          0.7105149
+MLBS                          0.7105149
+NOGP                          0.7105149
+OAES                          0.7105149
+ORNL                          0.7105149
+SCBI                          0.7105149
+SERC                          0.7105149
+STEI                          0.7105149
+UKFS                          0.7105149
 
 attr(,"class")
 [1] "coef.mer"</code></pre>
 </div>
 </div>
+<p>If desired, you can also get confidence intervals of the fixed effects with <code>confint()</code>. This can take a while depending on the number of observations and the complexity of the model.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimated variances, standard deviations, and correlations of random effects</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">VarCorr</span>(mod2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># confidence intervals</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co"># this can take a minute</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(mod2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> Groups   Name        Std.Dev.
- site     (Intercept) 1.3092  
- Residual             4.0544  </code></pre>
+<pre><code>                                        2.5 %     97.5 %
+.sig01                              0.8372966  1.8776447
+.sigma                              4.0114561  4.0938633
+(Intercept)                        19.8751759 21.6788283
+habitatgrasslandHerbaceous         -1.4714719  1.5441645
+sexmale                             0.3944790  0.6494902
+habitatgrasslandHerbaceous:sexmale  0.3784273  1.0421999</code></pre>
 </div>
 </div>
+<p>We can see that the fixed effect of habitat is indeed different than the corresponding main effect in the linear model:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># confidence intervals</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># this can take a minute</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(mod2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(mod1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                2.5 %     97.5 %
-.sig01                      0.8390303  1.8982851
-.sigma                      4.0134623  4.0959095
-(Intercept)                19.8110661 21.6266437
-habitatgrasslandHerbaceous -1.1832505  1.8190147
-sexmale                     0.5097972  0.7453469</code></pre>
+<pre><code>                                        2.5 %     97.5 %
+(Intercept)                        20.4916749 20.6874402
+habitatgrasslandHerbaceous          1.3936223  1.9184598
+sexmale                             0.4314520  0.6944478
+habitatgrasslandHerbaceous:sexmale  0.2577007  0.9398422</code></pre>
 </div>
 </div>
+<p>We can calculate 95% CI for the random coefficients, but we need to be careful here. Remember that a random effect allows us to account for variability between sites, but does not allow us to make inferences about the differences between sites. If we want to do that, we need to fit site as a fixed effect. Still, inspecting the coefficients can often give us a clue about the structure of variation in our dataset.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># to get the 95% CI estimate of the random coefficients:</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="do">## extract conditional variances (to go along with conditional modes)</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>re <span class="ot">&lt;-</span> <span class="fu">ranef</span>(mod2, <span class="at">condVar =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="do">##  pull values as numeric</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> re<span class="sc">$</span>site[, <span class="dv">1</span>]</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="do">## convert to SE (sqrt of var)</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">attr</span>(re<span class="sc">$</span>site, <span class="st">"postVar"</span>)[<span class="dv">1</span>, <span class="dv">1</span>, ])</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="do">## assemble in data frame and estimate CI</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="do">## note that these are the effects from </span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="do">## the population-level value. Add fixef(mod2)[1]</span></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="do">## to get estimate and 95% CI of conditional modes</span></span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>cond.ci <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">site =</span> <span class="fu">rownames</span>(re<span class="sc">$</span>site),</span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">estimate =</span> b,</span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">lower =</span> b <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> se,</span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">upper =</span> b <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> se</span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>cond.ci</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># to get the 95% CI estimate of the random coefficients:</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="do">## extract conditional variances (to go along with conditional modes)</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>re <span class="ot">&lt;-</span> <span class="fu">ranef</span>(mod2, <span class="at">condVar =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="do">##  pull values as numeric</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> re<span class="sc">$</span>site[, <span class="dv">1</span>]</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="do">## convert to SE (sqrt of var)</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">attr</span>(re<span class="sc">$</span>site, <span class="st">"postVar"</span>)[<span class="dv">1</span>, <span class="dv">1</span>, ])</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="do">## assemble in data frame and estimate CI</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="do">## note that these are the effects from </span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="do">## the population-level value. Add fixef(mod2)[1]</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="do">## to get estimate and 95% CI of conditional modes</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>cond.ci <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">site =</span> <span class="fu">rownames</span>(re<span class="sc">$</span>site),</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">estimate =</span> b,</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">lower =</span> b <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> se,</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">upper =</span> b <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> se</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>cond.ci</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   site    estimate       lower       upper
-1  CLBJ  0.04611402 -0.25326347  0.34549151
-2  DCFS -0.68877943 -2.32488923  0.94733037
-3  GRSM -0.54551689 -0.77979258 -0.31124119
-4  HARV -0.06826557 -0.23607359  0.09954244
-5  KONZ  2.55879005  2.36902178  2.74855831
-6  MLBS -0.31396724 -0.52204275 -0.10589174
-7  NOGP -0.47265615 -0.97768959  0.03237728
-8  OAES -0.87118652 -1.52310181 -0.21927122
-9  ORNL -1.41734647 -1.56394114 -1.27075180
-10 SCBI -0.05538168 -0.18271933  0.07195596
-11 SERC  0.28932057  0.09136838  0.48727276
-12 STEI -0.54860964 -0.76795226 -0.32926703
-13 UKFS  2.65976693  2.43323425  2.88629960
-14 WOOD -0.57228197 -3.01410681  1.86954288</code></pre>
+<pre><code>   site    estimate      lower       upper
+1  CLBJ -0.05596660 -0.3551784  0.24324526
+2  DCFS -0.72368354 -2.3550468  0.90767975
+3  GRSM -0.54512707 -0.7792806 -0.31097359
+4  HARV -0.06942544 -0.2371500  0.09829912
+5  KONZ  2.43867916  2.2490066  2.62835169
+6  MLBS -0.31408447 -0.5220536 -0.10611531
+7  NOGP -0.69340088 -1.1980788 -0.18872294
+8  OAES -0.96562814 -1.6169837 -0.31427255
+9  ORNL -1.41879991 -1.5653226 -1.27227726
+10 SCBI -0.05249160 -0.1797673  0.07478411
+11 SERC  0.29511656  0.0972648  0.49296833
+12 STEI -0.55544391 -0.7746735 -0.33621436
+13 UKFS  2.66025583  2.4338406  2.88667108</code></pre>
 </div>
 </div>
-<p>And visualize</p>
+<p>It might be more helpful to plot the random effects:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>lattice<span class="sc">::</span><span class="fu">dotplot</span>(<span class="fu">ranef</span>(mod2, <span class="at">condVar =</span> <span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>lattice<span class="sc">::</span><span class="fu">dotplot</span>(<span class="fu">ranef</span>(mod2, <span class="at">condVar =</span> <span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$site</code></pre>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch23_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="ch23_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -921,22 +975,140 @@ sexmale                     0.5097972  0.7453469</code></pre>
 </section>
 <section id="sec-mixed-lme-specify" class="level3" data-number="23.2.3">
 <h3 data-number="23.2.3" class="anchored" data-anchor-id="sec-mixed-lme-specify"><span class="header-section-number">23.2.3</span> Specifying random effects in <code>lme4</code></h3>
+<p>In <code>lme4</code>, the random effects are added to a model formula as terms after the fixed effects. Random effects are added in a form like <code>(a|b)</code>, where <code>a</code> defines the model term that is a random effect, and <code>b</code> is the factor that defines the groups. The syntax for random effects models differs slightly between the two most popular mixed models packages, <code>lme4</code> and <code>nlme</code>. The table below shows some example random effects structures in <code>lme4</code>:</p>
+<div id="tbl-random-effects-syntax" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-random-effects-syntax-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;23.1: Common random-effects formula syntax in <code>lme4</code>.
+</figcaption>
+<div aria-describedby="tbl-random-effects-syntax-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Formula</th>
+<th style="text-align: left;">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>(1 | g)</code></td>
+<td style="text-align: left;">Random intercept for each level of grouping variable <code>g</code>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>(1 | g1/g2)</code></td>
+<td style="text-align: left;">Random intercepts for <code>g1</code> and for <code>g2</code> nested within <code>g1</code>. Equivalent to <code>(1 | g1) + (1 | g1:g2)</code>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>(1 | g1) + (1 | g2)</code></td>
+<td style="text-align: left;">Random intercepts for two grouping variables, typically crossed rather than nested.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>(x | g)</code></td>
+<td style="text-align: left;">Random intercept and random slope for <code>x</code> by <code>g</code>. Their correlation is estimated.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>(x || g)</code></td>
+<td style="text-align: left;">Random intercept and random slope for numeric <code>x</code> by <code>g</code>, with their correlation constrained to zero. May help with convergence or singular fits.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>(0 + x | g)</code></td>
+<td style="text-align: left;">Random slope for <code>x</code> by <code>g</code>, without a random intercept for <code>g</code>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>You can define a huge variety of random effects structures, but probably shouldn’t. As with defining potential regression models or GLMs, it is incumbent on you as a biologist to think critically about what models represent biologically reasonable hypotheses.</p>
 </section>
 </section>
 <section id="sec-mixed-glmm" class="level2" data-number="23.3">
 <h2 data-number="23.3" class="anchored" data-anchor-id="sec-mixed-glmm"><span class="header-section-number">23.3</span> Generalized linear mixed effects models (GLMM)</h2>
+<p>Just as generalized linear model (GLM) extend linear models by allowing for non-normal response distributions, <strong>generalized linear mixed models (GLMM)</strong> extend linear mixed models in the same way. We will use package <code>lme4</code> to fit GLMM.</p>
 <section id="sec-mixed-glmm-def" class="level3" data-number="23.3.1">
 <h3 data-number="23.3.1" class="anchored" data-anchor-id="sec-mixed-glmm-def"><span class="header-section-number">23.3.1</span> Definition</h3>
+<p>The overall structure of a GLMM is similar to the structure of a GLM. The only difference is that while the only variance component of a GLM is in the response distribution (and thus relates to residual variation), GLMMs add additional structure to the variance by allowing model parameters to vary randomly.</p>
+<p>The response variable <span class="math inline">\(y\)</span> varies according to some distribution with expected value <span class="math inline">\(E\left(y\right)\)</span> and sometimes additional parameters <span class="math inline">\(\theta\)</span>:</p>
+<p><span class="math display">\[y\sim SomeDistribution\left(E\left(y\right),\theta\right)\]</span></p>
+<p>The expected value on the data scale is related to the scale of the linear predictor <span class="math inline">\(\eta\)</span> by a link function:</p>
+<p><span class="math display">\[\text{LinkFunction}\left(E\left(y\right)\right)=\eta\]</span></p>
+<p>And the linear predictor <span class="math inline">\(\eta\)</span> is a linear function of the predictor variables (we’ll just use 1, <span class="math inline">\(x\)</span>, for now).</p>
+<p><span class="math display">\[\eta=\beta_0+\beta_1 x\]</span></p>
+<p>But, to make this a GLMM instead of a GLM, we let the model parameters vary according to levels of some factor (grouping variable) denoted by <span class="math inline">\(j\)</span>. For example, a GLM with a random intercept will have linear predictor</p>
+<p><span class="math display">\[\eta=\beta_{0,j}+\beta_1 x\]</span></p>
+<p><span class="math display">\[\beta_0\sim\mathcal{Normal}\left(\mu_{\beta_0},\sigma^2_{\beta_0}\right)\]</span></p>
+<p>and a GLM with a random slope will look like</p>
+<p><span class="math display">\[\eta=\beta_0+\beta_{1,j} x\]</span></p>
+<p><span class="math display">\[\beta_1\sim\mathcal{Normal}\left(\mu_{\beta_1},\sigma^2_{\beta_1}\right)\]</span></p>
+<p>And remember, as with LME, we can write the means (or coefficients) parameterization as above where <span class="math inline">\(\beta_0\)</span> or <span class="math inline">\(\beta_1\)</span> follow distributions, or we can write the effects (or deviation) parameterization where the global parameter is specified and we fit the variance of the random effects. For example:</p>
+<p><span class="math display">\[\eta=\left(\beta_0+\gamma_j\right)+\beta_1 x\]</span></p>
+<p><span class="math display">\[\gamma_j\sim\mathcal{Normal}\left(0,\sigma^2_{\beta_0}\right)\]</span></p>
+<p>In the means parameterization, we fit <span class="math inline">\(\mu_{\beta_k}\)</span> as the global intercept (or slope) and the variance <span class="math inline">\(\sigma^2_{\beta_k}\)</span> to define the spread among the groups. In the effects parameterization, we fit the global intercept or slope (i.e., the fixed effect) as <span class="math inline">\(\beta_k\)</span>, and assume that group-level values vary according to a normal distribution with mean 0 and variance <span class="math inline">\(\sigma^2_{\beta_k}\)</span>. The effects parameterization is what R and <code>lme4</code> present by default, but I find it more informative to write and discuss the model in means parameterization. Your mileage may vary.</p>
+<p>To summarize: in the effects parameterization, we model how much each group differs from the population-level intercept; in the means parameterization, we model the group-specific intercepts directly. Both describe the same model, and we can translate between them by adding or subtracting the population-level intercept.</p>
+<p>The difference between these two modes of specifying group-level parameters is shown in <a href="#tbl-random-parameterizations" class="quarto-xref">Table&nbsp;<span>23.2</span></a> below.</p>
+<div id="tbl-random-parameterizations" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-random-parameterizations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;23.2: Comparison of effects and means parameterizations of random intercepts in linear mixed-effects models. The two parameterizations are mathematically equivalent, with <span class="math inline">\(\beta_{0j}=\beta_0+\gamma_j\)</span> and <span class="math inline">\(\beta_0=\mu_{\beta_0}\)</span>.
+</figcaption>
+<div aria-describedby="tbl-random-parameterizations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 43%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Quantity</th>
+<th style="text-align: left;">Effects parameterization</th>
+<th style="text-align: left;">Means parameterization</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Population-level intercept</td>
+<td style="text-align: left;"><span class="math inline">\(\beta_0\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\mu_{\beta_0}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group-level quantity</td>
+<td style="text-align: left;"><span class="math inline">\(\gamma_j\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\beta_{0j}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Distribution</td>
+<td style="text-align: left;"><span class="math inline">\(\gamma_j \sim N(0,\sigma_{\beta_0}^2)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\beta_{0j} \sim N(\mu_{\beta_0},\sigma_{\beta_0}^2)\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group-specific intercept</td>
+<td style="text-align: left;"><span class="math inline">\(\beta_0+\gamma_j\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\beta_{0j}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>lme4</code> extraction</td>
+<td style="text-align: left;"><code>ranef(mod)</code></td>
+<td style="text-align: left;"><code>coef(mod)</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
 </section>
 <section id="sec-mixed-glmm-example" class="level3" data-number="23.3.2">
 <h3 data-number="23.3.2" class="anchored" data-anchor-id="sec-mixed-glmm-example"><span class="header-section-number">23.3.2</span> Example with NEON data</h3>
-<p>Let’s revisit the NEON small mammal capture data. Download the <a href="../datasets/data-neon-captures-grid.csv">capture dataset</a>, the <a href="../datasets/data-neon-taxa.csv">taxonomic dataset</a>, and the <a href="../data-neon-grid-metadata.csv">grid metadata</a>, and put them in your working directory.</p>
+<p>Let’s revisit the NEON small mammal capture data. Download the <a href="../datasets/data-neon-captures-grid.csv">grid-level capture dataset</a>, the <a href="../datasets/data-neon-taxa.csv">taxonomic dataset</a>, and the <a href="../data-neon-grid-metadata.csv">grid metadata</a>, and put them in your working directory.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>cap <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-captures-grid.csv"</span>)</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>tax <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-taxa.csv"</span>)</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>met <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-grid-metadata.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>cap <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-captures-grid.csv"</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>tax <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-taxa.csv"</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>met <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-grid-metadata.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Test text 2026-11-02</p>
 </section>
 </section>
 <section id="sec-mixed-nlme" class="level2" data-number="23.4">

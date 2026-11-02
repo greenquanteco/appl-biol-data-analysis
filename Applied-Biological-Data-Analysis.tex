@@ -273,7 +273,7 @@
 
 \title{Applied Biological Data Analysis}
 \author{Nick Green}
-\date{November 1, 2026}
+\date{November 2, 2026}
 \begin{document}
 \maketitle
 
@@ -30849,28 +30849,56 @@ effect will be small.
 
 \pandocbounded{\includegraphics[keepaspectratio]{chapters/ch23_files/figure-pdf/unnamed-chunk-4-1.pdf}}
 
-What about potential habitat differences?
+What about potential habitat differences? It makes sense that different
+habitats, like forests or grasslands or croplands, might have different
+levels of nutrient availability, or predation pressure, or something
+that might affect body mass.
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# make a boxplot, but turn it horizontal}
+\CommentTok{\# and enlarge the y axis margin to make the}
+\CommentTok{\# habitat names visible}
 \FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{las=}\DecValTok{1}\NormalTok{)}
-\FunctionTok{boxplot}\NormalTok{(weight}\SpecialCharTok{\textasciitilde{}}\NormalTok{habitat, }\AttributeTok{data=}\NormalTok{dx, }\AttributeTok{horizontal =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{boxplot}\NormalTok{(weight}\SpecialCharTok{\textasciitilde{}}\NormalTok{habitat, }\AttributeTok{data=}\NormalTok{dx,}
+        \AttributeTok{horizontal =} \ConstantTok{TRUE}\NormalTok{,}
+        \AttributeTok{ylab=}\StringTok{""}\NormalTok{, }\AttributeTok{xlab=}\StringTok{"Body mass (g)"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \pandocbounded{\includegraphics[keepaspectratio]{chapters/ch23_files/figure-pdf/unnamed-chunk-5-1.pdf}}
 
-There is a lot of variability, but there might be some differences in
-body mass between the habitats.
+There is a lot of variability, but it looks like there might be some
+differences in body mass between the habitats.
 
 We will fit the model two ways: as a linear model (two-way ANOVA) and as
-a linear mixed effects model. Each habitat type is represented by
-several sites. We want to isolate the effect of habitat while accounting
-for other differences between the sites. The table below shows that
-deciduous forest and grasslands are each represented by more than 1
-site. If we included a habitat represented by only one site, then any
-apparent effect of that habitat would actually be confounded with that
-site.
+a linear mixed effects model.
+
+One issue we might want to consider is that each habitat type is
+represented by several sites, and there might be variability between
+sites. For example, the ``deciduousForest'' habitat at GRSM might be
+different than the same category at HARV.
+\href{https://www.neonscience.org/field-sites/grsm}{GRSM} is in the
+Great Smoky Mountains National Park in southeastern Tennessee, and
+\href{https://www.neonscience.org/field-sites/harv}{HARV} is Harvard
+Forest in Massachusetts. Both are dominated by deciduous forest, but
+they are not the same kind of deciduous forest.
+\href{https://www.epa.gov/eco-research/level-iii-and-iv-ecoregions-continental-united-states}{GRSM
+is in the Ridge and Valley and Southwestern Appalachian ecoregion, while
+HARV is in the Northeastern Coastal Zone}.
+
+We want to isolate the effect of habitat while accounting for other
+differences between the sites. We need to account for site-to-site
+variability, but recognize that we are not interested in these sites in
+and of themselves. The sites where ``deciduous forest'' and
+``grassland'' were sampled are essentially a random sample of all the
+many possible places where they could have been sampled. That argues for
+treating site as a \emph{random} effect.
+
+The table below shows that deciduous forest and grasslands are each
+represented by more than 1 site. If we included a habitat represented by
+only one site, then any apparent effect of that habitat would actually
+be confounded with that site.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -30911,21 +30939,44 @@ site.
   woodyWetlands          0  691    0
 \end{verbatim}
 
+It looks like we will get the most robust comparison if we restrict our
+analysis to deciduous forest and grassland habitats. Filter the dataset
+to those habitats.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# restrict to deciduous forest and grasslands}
+\NormalTok{dx2 }\OtherTok{\textless{}{-}}\NormalTok{ dx[dx}\SpecialCharTok{$}\NormalTok{habitat }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"deciduousForest"}\NormalTok{, }\StringTok{"grasslandHerbaceous"}\NormalTok{),]}
+
+\CommentTok{\# remove site wood, which has only 1 animal}
+\NormalTok{dx2 }\OtherTok{\textless{}{-}}\NormalTok{ dx2[dx2}\SpecialCharTok{$}\NormalTok{site }\SpecialCharTok{!=} \StringTok{"WOOD"}\NormalTok{,]}
+\end{Highlighting}
+\end{Shaded}
+
+Now let's run the analysis in two ways: as a linear model and as a
+linear mixed effects model. The linear model version of the analysis is
+a two-way ANOVA with \texttt{habitat} and \texttt{sex} plus the
+interaction between them. The mixed model version has the same fixed
+effects structure, plus a random intercept for site.
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(lme4)}
 \FunctionTok{library}\NormalTok{(lmerTest)}
 
-\CommentTok{\# restrict to deciduous forest and grasslands}
-\NormalTok{dx2 }\OtherTok{\textless{}{-}}\NormalTok{ dx[dx}\SpecialCharTok{$}\NormalTok{habitat }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"deciduousForest"}\NormalTok{, }\StringTok{"grasslandHerbaceous"}\NormalTok{),]}
+\CommentTok{\# two{-}way anova (linear model)}
+\NormalTok{mod1 }\OtherTok{\textless{}{-}} \FunctionTok{aov}\NormalTok{(weight}\SpecialCharTok{\textasciitilde{}}\NormalTok{habitat}\SpecialCharTok{*}\NormalTok{sex, }\AttributeTok{data=}\NormalTok{dx2)}
 
-\NormalTok{mod1 }\OtherTok{\textless{}{-}} \FunctionTok{aov}\NormalTok{(weight}\SpecialCharTok{\textasciitilde{}}\NormalTok{habitat}\SpecialCharTok{+}\NormalTok{sex, }\AttributeTok{data=}\NormalTok{dx2)}
-
-\NormalTok{mod2 }\OtherTok{\textless{}{-}} \FunctionTok{lmer}\NormalTok{(weight}\SpecialCharTok{\textasciitilde{}}\NormalTok{habitat}\SpecialCharTok{+}\NormalTok{sex}\SpecialCharTok{+}\NormalTok{(}\DecValTok{1}\SpecialCharTok{|}\NormalTok{site), }\AttributeTok{data=}\NormalTok{dx2)}
+\CommentTok{\# mixed model with random intercept by site}
+\NormalTok{mod2 }\OtherTok{\textless{}{-}} \FunctionTok{lmer}\NormalTok{(weight}\SpecialCharTok{\textasciitilde{}}\NormalTok{habitat}\SpecialCharTok{*}\NormalTok{sex}\SpecialCharTok{+}\NormalTok{(}\DecValTok{1}\SpecialCharTok{|}\NormalTok{site), }\AttributeTok{data=}\NormalTok{dx2)}
 \end{Highlighting}
 \end{Shaded}
 
-Now compare the model fits.
+Now compare the model fits. The linear version found significant effects
+of both habitat and sex. The post-hoc test shows that grassland mice
+were about 2.04 g larger than forest mice and that males were about 0.6
+g larger on average females. That's a big difference (if you're a
+mouse).
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -30934,33 +30985,13 @@ Now compare the model fits.
 \end{Shaded}
 
 \begin{verbatim}
-               Df Sum Sq Mean Sq F value Pr(>F)    
-habitat         1   9955    9955   567.5 <2e-16 ***
-sex             1   1950    1950   111.2 <2e-16 ***
-Residuals   18591 326108      18                   
+               Df Sum Sq Mean Sq F value   Pr(>F)    
+habitat         1   9980    9980  569.35  < 2e-16 ***
+sex             1   1944    1944  110.93  < 2e-16 ***
+habitat:sex     1    208     208   11.84 0.000581 ***
+Residuals   18589 325843      18                     
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{TukeyHSD}\NormalTok{(mod1)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-  Tukey multiple comparisons of means
-    95% family-wise confidence level
-
-Fit: aov(formula = weight ~ habitat + sex, data = dx2)
-
-$habitat
-                                        diff      lwr      upr p adj
-grasslandHerbaceous-deciduousForest 2.036706 1.869134 2.204279     0
-
-$sex
-                 diff       lwr       upr p adj
-male-female 0.6522702 0.5309629 0.7735775     0
 \end{verbatim}
 
 \begin{Shaded}
@@ -30971,63 +31002,139 @@ male-female 0.6522702 0.5309629 0.7735775     0
 
 \begin{verbatim}
 Type II Analysis of Variance Table with Satterthwaite's method
-         Sum Sq Mean Sq NumDF   DenDF  F value Pr(>F)    
-habitat    3.26    3.26     1    11.6   0.1985 0.6642    
-sex     1792.86 1792.86     1 18583.3 109.0645 <2e-16 ***
+             Sum Sq Mean Sq NumDF   DenDF F value    Pr(>F)    
+habitat        6.06    6.06     1    11.6   0.369    0.5553    
+sex         1792.84 1792.84     1 18581.5 109.166 < 2.2e-16 ***
+habitat:sex  289.13  289.13     1 18588.2  17.605 2.732e-05 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{verbatim}
 
-The effect of habitat went away! Some of the variance that was
-previously attributed to habitat appears to have been moved over to
-site.
+Interestingly, the main effect of habitat is significant in the linear
+model, but not in the mixed model.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# estimated fixed effect coefficients}
+\FunctionTok{anova}\NormalTok{(mod2, }\AttributeTok{type=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Type II Analysis of Variance Table with Satterthwaite's method
+             Sum Sq Mean Sq NumDF   DenDF F value    Pr(>F)    
+habitat        6.06    6.06     1    11.6   0.369    0.5553    
+sex         1792.84 1792.84     1 18581.5 109.166 < 2.2e-16 ***
+habitat:sex  289.13  289.13     1 18588.2  17.605 2.732e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+In the random intercept model (\texttt{mod2}), the effect of
+habitat--which significant in the ANOVA--was nonsignificant and only the
+effect of sex remains. What happened? It appears that some of the
+variance that was previously attributed to habitat appears to now be
+associated with site.
+
+There appears to be an interaction between sex and habitat. Let's check
+the coefficients:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{coef}\NormalTok{(mod1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                       (Intercept)         habitatgrasslandHerbaceous 
+                        20.5895575                          1.6560410 
+                           sexmale habitatgrasslandHerbaceous:sexmale 
+                         0.5629499                          0.5987715 
+\end{verbatim}
+
+The output tells us that females in grasslands are, on average, 1.65 g
+larger than females in deciduous forests, while males in deciduous
+forests are, on average, 0.56 g larger than females in deciduous
+forests. However, the difference between males and females is greater in
+grasslands (0.56 + 0.60 = 1.16 g). The interaction coefficient (0.60 g)
+represents the additional difference between male and female body mass
+in grasslands compared with deciduous forests. What about in the random
+intercept model?
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \FunctionTok{fixef}\NormalTok{(mod2)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-               (Intercept) habitatgrasslandHerbaceous 
-                20.7187238                  0.3424476 
-                   sexmale 
-                 0.6275365 
+                       (Intercept)         habitatgrasslandHerbaceous 
+                       20.77687386                         0.04660303 
+                           sexmale habitatgrasslandHerbaceous:sexmale 
+                        0.52194319                         0.71051491 
 \end{verbatim}
+
+In this model, females in grassland are not significantly larger than
+females in deciduous forest (\texttt{0.046}). This is different than the
+linear model. The other findings are similar to the linear model:mMales
+in deciduous forest are about 0.52 g larger than females in deciduous
+forest, while in grasslands, the difference between males and females is
+about 0.123 (\texttt{0.52+0.71}).
+
+We can see the random effects with \texttt{ranef()}. These value are the
+\emph{deviations} of each group-level intercept and slope from the
+global intercept of 20.77.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# conditional modes (BLUPs)}
 \CommentTok{\# these are deviations from population{-}level parameters}
-\FunctionTok{ranef}\NormalTok{(mod2)}
+\NormalTok{re3 }\OtherTok{\textless{}{-}} \FunctionTok{ranef}\NormalTok{(mod2)}
+\NormalTok{re3}\SpecialCharTok{$}\NormalTok{site}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-$site
      (Intercept)
-CLBJ  0.04611402
-DCFS -0.68877943
-GRSM -0.54551689
-HARV -0.06826557
-KONZ  2.55879005
-MLBS -0.31396724
-NOGP -0.47265615
-OAES -0.87118652
-ORNL -1.41734647
-SCBI -0.05538168
-SERC  0.28932057
-STEI -0.54860964
-UKFS  2.65976693
-WOOD -0.57228197
-
-with conditional variances for "site" 
+CLBJ -0.05596660
+DCFS -0.72368354
+GRSM -0.54512707
+HARV -0.06942544
+KONZ  2.43867916
+MLBS -0.31408447
+NOGP -0.69340088
+OAES -0.96562814
+ORNL -1.41879991
+SCBI -0.05249160
+SERC  0.29511656
+STEI -0.55544391
+UKFS  2.66025583
 \end{verbatim}
+
+The random effects should have mean 0 and an SD corresponding to the
+variances reported by \texttt{summary(mod2)} (up to sampling error). We
+can get the actual variances with \texttt{VarCorr()}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# group{-}specific coefficiednts (fixed + random effects)}
+\CommentTok{\# estimated variances, standard deviations,}
+\CommentTok{\# and correlations of random effects}
+\FunctionTok{VarCorr}\NormalTok{(mod2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+ Groups   Name        Std.Dev.
+ site     (Intercept) 1.3008  
+ Residual             4.0525  
+\end{verbatim}
+
+Finally, we can see the group-specific coefficients, which include the
+fixed and the random effect, with \texttt{coef()}. Notice that only the
+intercepts vary between sites. If we had specified random effects of
+habitat or sex, those columns would vary as well.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# group{-}specific coefficients (fixed + random effects)}
 \CommentTok{\# these are the group{-}specific coefficients themselves}
 \FunctionTok{coef}\NormalTok{(mod2)}
 \end{Highlighting}
@@ -31036,37 +31143,41 @@ with conditional variances for "site"
 \begin{verbatim}
 $site
      (Intercept) habitatgrasslandHerbaceous   sexmale
-CLBJ    20.76484                  0.3424476 0.6275365
-DCFS    20.02994                  0.3424476 0.6275365
-GRSM    20.17321                  0.3424476 0.6275365
-HARV    20.65046                  0.3424476 0.6275365
-KONZ    23.27751                  0.3424476 0.6275365
-MLBS    20.40476                  0.3424476 0.6275365
-NOGP    20.24607                  0.3424476 0.6275365
-OAES    19.84754                  0.3424476 0.6275365
-ORNL    19.30138                  0.3424476 0.6275365
-SCBI    20.66334                  0.3424476 0.6275365
-SERC    21.00804                  0.3424476 0.6275365
-STEI    20.17011                  0.3424476 0.6275365
-UKFS    23.37849                  0.3424476 0.6275365
-WOOD    20.14644                  0.3424476 0.6275365
+CLBJ    20.72091                 0.04660303 0.5219432
+DCFS    20.05319                 0.04660303 0.5219432
+GRSM    20.23175                 0.04660303 0.5219432
+HARV    20.70745                 0.04660303 0.5219432
+KONZ    23.21555                 0.04660303 0.5219432
+MLBS    20.46279                 0.04660303 0.5219432
+NOGP    20.08347                 0.04660303 0.5219432
+OAES    19.81125                 0.04660303 0.5219432
+ORNL    19.35807                 0.04660303 0.5219432
+SCBI    20.72438                 0.04660303 0.5219432
+SERC    21.07199                 0.04660303 0.5219432
+STEI    20.22143                 0.04660303 0.5219432
+UKFS    23.43713                 0.04660303 0.5219432
+     habitatgrasslandHerbaceous:sexmale
+CLBJ                          0.7105149
+DCFS                          0.7105149
+GRSM                          0.7105149
+HARV                          0.7105149
+KONZ                          0.7105149
+MLBS                          0.7105149
+NOGP                          0.7105149
+OAES                          0.7105149
+ORNL                          0.7105149
+SCBI                          0.7105149
+SERC                          0.7105149
+STEI                          0.7105149
+UKFS                          0.7105149
 
 attr(,"class")
 [1] "coef.mer"
 \end{verbatim}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# estimated variances, standard deviations, and correlations of random effects}
-\FunctionTok{VarCorr}\NormalTok{(mod2)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
- Groups   Name        Std.Dev.
- site     (Intercept) 1.3092  
- Residual             4.0544  
-\end{verbatim}
+If desired, you can also get confidence intervals of the fixed effects
+with \texttt{confint()}. This can take a while depending on the number
+of observations and the complexity of the model.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -31077,23 +31188,51 @@ attr(,"class")
 \end{Shaded}
 
 \begin{verbatim}
-                                2.5 %     97.5 %
-.sig01                      0.8390303  1.8982851
-.sigma                      4.0134623  4.0959095
-(Intercept)                19.8110661 21.6266437
-habitatgrasslandHerbaceous -1.1832505  1.8190147
-sexmale                     0.5097972  0.7453469
+                                        2.5 %     97.5 %
+.sig01                              0.8372966  1.8776447
+.sigma                              4.0114561  4.0938633
+(Intercept)                        19.8751759 21.6788283
+habitatgrasslandHerbaceous         -1.4714719  1.5441645
+sexmale                             0.3944790  0.6494902
+habitatgrasslandHerbaceous:sexmale  0.3784273  1.0421999
 \end{verbatim}
+
+We can see that the fixed effect of habitat is indeed different than the
+corresponding main effect in the linear model:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{confint}\NormalTok{(mod1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                                        2.5 %     97.5 %
+(Intercept)                        20.4916749 20.6874402
+habitatgrasslandHerbaceous          1.3936223  1.9184598
+sexmale                             0.4314520  0.6944478
+habitatgrasslandHerbaceous:sexmale  0.2577007  0.9398422
+\end{verbatim}
+
+We can calculate 95\% CI for the random coefficients, but we need to be
+careful here. Remember that a random effect allows us to account for
+variability between sites, but does not allow us to make inferences
+about the differences between sites. If we want to do that, we need to
+fit site as a fixed effect. Still, inspecting the coefficients can often
+give us a clue about the structure of variation in our dataset.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# to get the 95\% CI estimate of the random coefficients:}
 \DocumentationTok{\#\# extract conditional variances (to go along with conditional modes)}
 \NormalTok{re }\OtherTok{\textless{}{-}} \FunctionTok{ranef}\NormalTok{(mod2, }\AttributeTok{condVar =} \ConstantTok{TRUE}\NormalTok{)}
+
 \DocumentationTok{\#\#  pull values as numeric}
 \NormalTok{b }\OtherTok{\textless{}{-}}\NormalTok{ re}\SpecialCharTok{$}\NormalTok{site[, }\DecValTok{1}\NormalTok{]}
+
 \DocumentationTok{\#\# convert to SE (sqrt of var)}
 \NormalTok{se }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{attr}\NormalTok{(re}\SpecialCharTok{$}\NormalTok{site, }\StringTok{"postVar"}\NormalTok{)[}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, ])}
+
 \DocumentationTok{\#\# assemble in data frame and estimate CI}
 \DocumentationTok{\#\# note that these are the effects from }
 \DocumentationTok{\#\# the population{-}level value. Add fixef(mod2)[1]}
@@ -31109,24 +31248,23 @@ sexmale                     0.5097972  0.7453469
 \end{Shaded}
 
 \begin{verbatim}
-   site    estimate       lower       upper
-1  CLBJ  0.04611402 -0.25326347  0.34549151
-2  DCFS -0.68877943 -2.32488923  0.94733037
-3  GRSM -0.54551689 -0.77979258 -0.31124119
-4  HARV -0.06826557 -0.23607359  0.09954244
-5  KONZ  2.55879005  2.36902178  2.74855831
-6  MLBS -0.31396724 -0.52204275 -0.10589174
-7  NOGP -0.47265615 -0.97768959  0.03237728
-8  OAES -0.87118652 -1.52310181 -0.21927122
-9  ORNL -1.41734647 -1.56394114 -1.27075180
-10 SCBI -0.05538168 -0.18271933  0.07195596
-11 SERC  0.28932057  0.09136838  0.48727276
-12 STEI -0.54860964 -0.76795226 -0.32926703
-13 UKFS  2.65976693  2.43323425  2.88629960
-14 WOOD -0.57228197 -3.01410681  1.86954288
+   site    estimate      lower       upper
+1  CLBJ -0.05596660 -0.3551784  0.24324526
+2  DCFS -0.72368354 -2.3550468  0.90767975
+3  GRSM -0.54512707 -0.7792806 -0.31097359
+4  HARV -0.06942544 -0.2371500  0.09829912
+5  KONZ  2.43867916  2.2490066  2.62835169
+6  MLBS -0.31408447 -0.5220536 -0.10611531
+7  NOGP -0.69340088 -1.1980788 -0.18872294
+8  OAES -0.96562814 -1.6169837 -0.31427255
+9  ORNL -1.41879991 -1.5653226 -1.27227726
+10 SCBI -0.05249160 -0.1797673  0.07478411
+11 SERC  0.29511656  0.0972648  0.49296833
+12 STEI -0.55544391 -0.7746735 -0.33621436
+13 UKFS  2.66025583  2.4338406  2.88667108
 \end{verbatim}
 
-And visualize
+It might be more helpful to plot the random effects:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -31138,23 +31276,185 @@ And visualize
 $site
 \end{verbatim}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch23_files/figure-pdf/unnamed-chunk-17-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch23_files/figure-pdf/unnamed-chunk-20-1.pdf}}
 
 \subsection{\texorpdfstring{Specifying random effects in
 \texttt{lme4}}{Specifying random effects in lme4}}\label{sec-mixed-lme-specify}
 
+In \texttt{lme4}, the random effects are added to a model formula as
+terms after the fixed effects. Random effects are added in a form like
+\texttt{(a\textbar{}b)}, where \texttt{a} defines the model term that is
+a random effect, and \texttt{b} is the factor that defines the groups.
+The syntax for random effects models differs slightly between the two
+most popular mixed models packages, \texttt{lme4} and \texttt{nlme}. The
+table below shows some example random effects structures in
+\texttt{lme4}:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\caption{Common random-effects formula syntax in
+\protect\texttt{lme4}.}\label{tbl-random-effects-syntax}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Formula
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Meaning
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Formula
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Meaning
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{(1\ \textbar{}\ g)} & Random intercept for each level of
+grouping variable \texttt{g}. \\
+\texttt{(1\ \textbar{}\ g1/g2)} & Random intercepts for \texttt{g1} and
+for \texttt{g2} nested within \texttt{g1}. Equivalent to
+\texttt{(1\ \textbar{}\ g1)\ +\ (1\ \textbar{}\ g1:g2)}. \\
+\texttt{(1\ \textbar{}\ g1)\ +\ (1\ \textbar{}\ g2)} & Random intercepts
+for two grouping variables, typically crossed rather than nested. \\
+\texttt{(x\ \textbar{}\ g)} & Random intercept and random slope for
+\texttt{x} by \texttt{g}. Their correlation is estimated. \\
+\texttt{(x\ \textbar{}\textbar{}\ g)} & Random intercept and random
+slope for numeric \texttt{x} by \texttt{g}, with their correlation
+constrained to zero. May help with convergence or singular fits. \\
+\texttt{(0\ +\ x\ \textbar{}\ g)} & Random slope for \texttt{x} by
+\texttt{g}, without a random intercept for \texttt{g}. \\
+\end{longtable}
+
+You can define a huge variety of random effects structures, but probably
+shouldn't. As with defining potential regression models or GLMs, it is
+incumbent on you as a biologist to think critically about what models
+represent biologically reasonable hypotheses.
+
 \section{Generalized linear mixed effects models
 (GLMM)}\label{sec-mixed-glmm}
 
+Just as generalized linear model (GLM) extend linear models by allowing
+for non-normal response distributions, \textbf{generalized linear mixed
+models (GLMM)} extend linear mixed models in the same way. We will use
+package \texttt{lme4} to fit GLMM.
+
 \subsection{Definition}\label{sec-mixed-glmm-def}
+
+The overall structure of a GLMM is similar to the structure of a GLM.
+The only difference is that while the only variance component of a GLM
+is in the response distribution (and thus relates to residual
+variation), GLMMs add additional structure to the variance by allowing
+model parameters to vary randomly.
+
+The response variable \(y\) varies according to some distribution with
+expected value \(E\left(y\right)\) and sometimes additional parameters
+\(\theta\):
+
+\[y\sim SomeDistribution\left(E\left(y\right),\theta\right)\]
+
+The expected value on the data scale is related to the scale of the
+linear predictor \(\eta\) by a link function:
+
+\[\text{LinkFunction}\left(E\left(y\right)\right)=\eta\]
+
+And the linear predictor \(\eta\) is a linear function of the predictor
+variables (we'll just use 1, \(x\), for now).
+
+\[\eta=\beta_0+\beta_1 x\]
+
+But, to make this a GLMM instead of a GLM, we let the model parameters
+vary according to levels of some factor (grouping variable) denoted by
+\(j\). For example, a GLM with a random intercept will have linear
+predictor
+
+\[\eta=\beta_{0,j}+\beta_1 x\]
+
+\[\beta_0\sim\mathcal{Normal}\left(\mu_{\beta_0},\sigma^2_{\beta_0}\right)\]
+
+and a GLM with a random slope will look like
+
+\[\eta=\beta_0+\beta_{1,j} x\]
+
+\[\beta_1\sim\mathcal{Normal}\left(\mu_{\beta_1},\sigma^2_{\beta_1}\right)\]
+
+And remember, as with LME, we can write the means (or coefficients)
+parameterization as above where \(\beta_0\) or \(\beta_1\) follow
+distributions, or we can write the effects (or deviation)
+parameterization where the global parameter is specified and we fit the
+variance of the random effects. For example:
+
+\[\eta=\left(\beta_0+\gamma_j\right)+\beta_1 x\]
+
+\[\gamma_j\sim\mathcal{Normal}\left(0,\sigma^2_{\beta_0}\right)\]
+
+In the means parameterization, we fit \(\mu_{\beta_k}\) as the global
+intercept (or slope) and the variance \(\sigma^2_{\beta_k}\) to define
+the spread among the groups. In the effects parameterization, we fit the
+global intercept or slope (i.e., the fixed effect) as \(\beta_k\), and
+assume that group-level values vary according to a normal distribution
+with mean 0 and variance \(\sigma^2_{\beta_k}\). The effects
+parameterization is what R and \texttt{lme4} present by default, but I
+find it more informative to write and discuss the model in means
+parameterization. Your mileage may vary.
+
+To summarize: in the effects parameterization, we model how much each
+group differs from the population-level intercept; in the means
+parameterization, we model the group-specific intercepts directly. Both
+describe the same model, and we can translate between them by adding or
+subtracting the population-level intercept.
+
+The difference between these two modes of specifying group-level
+parameters is shown in Table~\ref{tbl-random-parameterizations} below.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}@{}}
+\caption{Comparison of effects and means parameterizations of random
+intercepts in linear mixed-effects models. The two parameterizations are
+mathematically equivalent, with \(\beta_{0j}=\beta_0+\gamma_j\) and
+\(\beta_0=\mu_{\beta_0}\).}\label{tbl-random-parameterizations}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Quantity
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Effects parameterization
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Means parameterization
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Quantity
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Effects parameterization
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Means parameterization
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Population-level intercept & \(\beta_0\) & \(\mu_{\beta_0}\) \\
+Group-level quantity & \(\gamma_j\) & \(\beta_{0j}\) \\
+Distribution & \(\gamma_j \sim N(0,\sigma_{\beta_0}^2)\) &
+\(\beta_{0j} \sim N(\mu_{\beta_0},\sigma_{\beta_0}^2)\) \\
+Group-specific intercept & \(\beta_0+\gamma_j\) & \(\beta_{0j}\) \\
+\texttt{lme4} extraction & \texttt{ranef(mod)} & \texttt{coef(mod)} \\
+\end{longtable}
 
 \subsection{Example with NEON data}\label{sec-mixed-glmm-example}
 
 Let's revisit the NEON small mammal capture data. Download the
-\href{../datasets/data-neon-captures-grid.csv}{capture dataset}, the
-\href{../datasets/data-neon-taxa.csv}{taxonomic dataset}, and the
-\href{../data-neon-grid-metadata.csv}{grid metadata}, and put them in
-your working directory.
+\href{../datasets/data-neon-captures-grid.csv}{grid-level capture
+dataset}, the \href{../datasets/data-neon-taxa.csv}{taxonomic dataset},
+and the \href{../data-neon-grid-metadata.csv}{grid metadata}, and put
+them in your working directory.
 
 \begin{Shaded}
 \begin{Highlighting}[]

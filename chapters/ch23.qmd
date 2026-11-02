@@ -185,77 +185,117 @@ We can check a boxplot of female vs. male body mass. It looks like any effect wi
 boxplot(weight~sex, data=dx)
 ```
 
-What about potential habitat differences?
+What about potential habitat differences? It makes sense that different habitats, like forests or grasslands or croplands, might have different levels of nutrient availability, or predation pressure, or something that might affect body mass.
 
 ```{r}
 #| fig.height: 8
 #| fig.width: 8
 
+# make a boxplot, but turn it horizontal
+# and enlarge the y axis margin to make the
+# habitat names visible
 par(mar=c(4, 10, 1, 1), las=1)
-boxplot(weight~habitat, data=dx, horizontal = TRUE)
+boxplot(weight~habitat, data=dx,
+        horizontal = TRUE,
+        ylab="", xlab="Body mass (g)")
 ```
 
-There is a lot of variability, but there might be some differences in body mass between the habitats.
+There is a lot of variability, but it looks like there might be some differences in body mass between the habitats.
 
-We will fit the model two ways: as a linear model (two-way ANOVA) and as a linear mixed effects model. Each habitat type is represented by several sites. We want to isolate the effect of habitat while accounting for other differences between the sites. The table below shows that deciduous forest and grasslands are each represented by more than 1 site. If we included a habitat represented by only one site, then any apparent effect of that habitat would actually be confounded with that site.
+We will fit the model two ways: as a linear model (two-way ANOVA) and as a linear mixed effects model.
+
+One issue we might want to consider is that each habitat type is represented by several sites, and there might be variability between sites. For example, the "deciduousForest" habitat at GRSM might be different than the same category at HARV. [GRSM](https://www.neonscience.org/field-sites/grsm) is in the Great Smoky Mountains National Park in southeastern Tennessee, and [HARV](https://www.neonscience.org/field-sites/harv) is Harvard Forest in Massachusetts. Both are dominated by deciduous forest, but they are not the same kind of deciduous forest. [GRSM is in the Ridge and Valley and Southwestern Appalachian ecoregion, while HARV is in the Northeastern Coastal Zone](https://www.epa.gov/eco-research/level-iii-and-iv-ecoregions-continental-united-states). 
+
+
+
+We want to isolate the effect of habitat while accounting for other differences between the sites. We need to account for site-to-site variability, but recognize that we are not interested in these sites in and of themselves. The sites where "deciduous forest" and "grassland" were sampled are essentially a random sample of all the many possible places where they could have been sampled. That argues for treating site as a *random* effect.
+
+The table below shows that deciduous forest and grasslands are each represented by more than 1 site. If we included a habitat represented by only one site, then any apparent effect of that habitat would actually be confounded with that site.
 
 ```{r}
 table(dx$habitat, dx$site, useNA="ifany")
 ```
 
+It looks like we will get the most robust comparison if we restrict our analysis to deciduous forest and grassland habitats. Filter the dataset to those habitats.
+
+```{r}
+# restrict to deciduous forest and grasslands
+dx2 <- dx[dx$habitat %in% c("deciduousForest", "grasslandHerbaceous"),]
+
+# remove site wood, which has only 1 animal
+dx2 <- dx2[dx2$site != "WOOD",]
+```
+
+Now let's run the analysis in two ways: as a linear model and as a linear mixed effects model. The linear model version of the analysis is a two-way ANOVA with `habitat` and `sex` plus the interaction between them. The mixed model version has the same fixed effects structure, plus a random intercept for site.
 
 ```{r}
 library(lme4)
 library(lmerTest)
 
-# restrict to deciduous forest and grasslands
-dx2 <- dx[dx$habitat %in% c("deciduousForest", "grasslandHerbaceous"),]
+# two-way anova (linear model)
+mod1 <- aov(weight~habitat*sex, data=dx2)
 
-mod1 <- aov(weight~habitat+sex, data=dx2)
-
-mod2 <- lmer(weight~habitat+sex+(1|site), data=dx2)
+# mixed model with random intercept by site
+mod2 <- lmer(weight~habitat*sex+(1|site), data=dx2)
 ```
 
-Now compare the model fits.
+Now compare the model fits. The linear version found significant effects of both habitat and sex. The post-hoc test shows that grassland mice were about 2.04 g larger than forest mice and that males were about 0.6 g larger on average females. That's a big difference (if you're a mouse).
 
 ```{r}
 summary(mod1)
 ```
 
 ```{r}
-TukeyHSD(mod1)
+anova(mod2, type=2)
 ```
 
+Interestingly, the main effect of habitat is significant in the linear model, but not in the mixed model.
 
 ```{r}
 anova(mod2, type=2)
 ```
 
-The effect of habitat went away! Some of the variance that was previously attributed to habitat appears to have been moved over to site.
+In the random intercept model (`mod2`), the effect of habitat--which significant in the ANOVA--was nonsignificant and only the effect of sex remains. What happened? It appears that some of the variance that was previously attributed to habitat appears to now be associated with site. 
+
+There appears to be an interaction between sex and habitat. Let's check the coefficients:
 
 ```{r}
-# estimated fixed effect coefficients
+coef(mod1)
+```
+
+The output tells us that females in grasslands are, on average, 1.65 g larger than females in deciduous forests, while males in deciduous forests are, on average, 0.56 g larger than females in deciduous forests. However, the difference between males and females is greater in grasslands (0.56 + 0.60 = 1.16 g). The interaction coefficient (0.60 g) represents the additional difference between male and female body mass in grasslands compared with deciduous forests. What about in the random intercept model?
+
+```{r}
 fixef(mod2)
 ```
 
+In this model, females in grassland are not significantly larger than females in deciduous forest (`0.046`). This is different than the linear model. The other findings are similar to the linear model:mMales in deciduous forest are about 0.52 g larger than females in deciduous forest, while in grasslands, the difference between males and females is about 0.123 (`0.52+0.71`).
+
+We can see the random effects with `ranef()`. These value are the *deviations* of each group-level intercept and slope from the global intercept of 20.77.
+
 ```{r}
-# conditional modes (BLUPs)
 # these are deviations from population-level parameters
-ranef(mod2)
+re3 <- ranef(mod2)
+re3$site
 ```
 
-```{r}
+The random effects should have mean 0 and an SD corresponding to the variances reported by `summary(mod2)` (up to sampling error). We can get the actual variances with `VarCorr()`.
 
-# group-specific coefficiednts (fixed + random effects)
+```{r}
+# estimated variances, standard deviations,
+# and correlations of random effects
+VarCorr(mod2)
+```
+
+Finally, we can see the group-specific coefficients, which include the fixed and the random effect, with `coef()`. Notice that only the intercepts vary between sites. If we had specified random effects of habitat or sex, those columns would vary as well.
+
+```{r}
+# group-specific coefficients (fixed + random effects)
 # these are the group-specific coefficients themselves
 coef(mod2)
 ```
 
-```{r}
-
-# estimated variances, standard deviations, and correlations of random effects
-VarCorr(mod2)
-```
+If desired, you can also get confidence intervals of the fixed effects with `confint()`. This can take a while depending on the number of observations and the complexity of the model.
 
 ```{r}
 
@@ -264,15 +304,26 @@ VarCorr(mod2)
 confint(mod2)
 ```
 
+We can see that the fixed effect of habitat is indeed different than the corresponding main effect in the linear model:
+
+```{r}
+confint(mod1)
+```
+
+We can calculate 95% CI for the random coefficients, but we need to be careful here. Remember that a random effect allows us to account for variability between sites, but does not allow us to make inferences about the differences between sites. If we want to do that, we need to fit site as a fixed effect. Still, inspecting the coefficients can often give us a clue about the structure of variation in our dataset.
+
 ```{r}
 
 # to get the 95% CI estimate of the random coefficients:
 ## extract conditional variances (to go along with conditional modes)
 re <- ranef(mod2, condVar = TRUE)
+
 ##  pull values as numeric
 b <- re$site[, 1]
+
 ## convert to SE (sqrt of var)
 se <- sqrt(attr(re$site, "postVar")[1, 1, ])
+
 ## assemble in data frame and estimate CI
 ## note that these are the effects from 
 ## the population-level value. Add fixef(mod2)[1]
@@ -286,7 +337,7 @@ cond.ci <- data.frame(
 cond.ci
 ```
 
-And visualize
+It might be more helpful to plot the random effects:
 
 ```{r}
 lattice::dotplot(ranef(mod2, condVar = TRUE))
@@ -294,13 +345,83 @@ lattice::dotplot(ranef(mod2, condVar = TRUE))
 
 ### Specifying random effects in `lme4` {#sec-mixed-lme-specify}
 
+In `lme4`, the random effects are added to a model formula as terms after the fixed effects. Random effects are added in a form like `(a|b)`, where `a` defines the model term that is a random effect, and `b` is the factor that defines the groups. The syntax for random effects models differs slightly between the two most popular mixed models packages, `lme4` and `nlme`. The table below shows some example random effects structures in `lme4`:
+
+
+| Formula | Meaning |
+|:--------|:--------|
+| `(1 | g)` | Random intercept for each level of grouping variable `g`. |
+| `(1 | g1/g2)` | Random intercepts for `g1` and for `g2` nested within `g1`. Equivalent to `(1 | g1) + (1 | g1:g2)`. |
+| `(1 | g1) + (1 | g2)` | Random intercepts for two grouping variables, typically crossed rather than nested. |
+| `(x | g)` | Random intercept and random slope for `x` by `g`. Their correlation is estimated. |
+| `(x || g)` | Random intercept and random slope for numeric `x` by `g`, with their correlation constrained to zero. May help with convergence or singular fits. |
+| `(0 + x | g)` | Random slope for `x` by `g`, without a random intercept for `g`. |
+
+: Common random-effects formula syntax in `lme4`. {#tbl-random-effects-syntax}
+
+
+
+You can define a huge variety of random effects structures, but probably shouldn't. As with defining potential regression models or GLMs, it is incumbent on you as a biologist to think critically about what models represent biologically reasonable hypotheses.
+
 ## Generalized linear mixed effects models (GLMM) {#sec-mixed-glmm}
+
+Just as generalized linear model (GLM) extend linear models by allowing for non-normal response distributions, **generalized linear mixed models (GLMM)** extend linear mixed models in the same way. We will use package `lme4` to fit GLMM.
 
 ### Definition {#sec-mixed-glmm-def}
 
+The overall structure of a GLMM is similar to the structure of a GLM. The only difference is that while the only variance component of a GLM is in the response distribution (and thus relates to residual variation), GLMMs add additional structure to the variance by allowing model parameters to vary randomly.
+
+The response variable $y$ varies according to some distribution with expected value $E\left(y\right)$ and sometimes additional parameters $\theta$:
+
+$$y\sim SomeDistribution\left(E\left(y\right),\theta\right)$$
+
+The expected value on the data scale is related to the scale of the linear predictor $\eta$ by a link function:
+
+$$\text{LinkFunction}\left(E\left(y\right)\right)=\eta$$
+
+And the linear predictor $\eta$ is a linear function of the predictor variables (we'll just use 1, $x$, for now).
+
+$$\eta=\beta_0+\beta_1 x$$
+
+But, to make this a GLMM instead of a GLM, we let the model parameters vary according to levels of some factor (grouping variable) denoted by $j$. For example, a GLM with a random intercept will have linear predictor
+
+$$\eta=\beta_{0,j}+\beta_1 x$$
+
+$$\beta_0\sim\mathcal{Normal}\left(\mu_{\beta_0},\sigma^2_{\beta_0}\right)$$
+
+
+and a GLM with a random slope will look like
+
+$$\eta=\beta_0+\beta_{1,j} x$$
+
+$$\beta_1\sim\mathcal{Normal}\left(\mu_{\beta_1},\sigma^2_{\beta_1}\right)$$
+
+And remember, as with LME, we can write the means (or coefficients) parameterization as above where $\beta_0$ or $\beta_1$ follow distributions, or we can write the effects (or deviation) parameterization where the global parameter is specified and we fit the variance of the random effects. For example:
+
+$$\eta=\left(\beta_0+\gamma_j\right)+\beta_1 x$$
+
+$$\gamma_j\sim\mathcal{Normal}\left(0,\sigma^2_{\beta_0}\right)$$
+
+In the means parameterization, we fit $\mu_{\beta_k}$ as the global intercept (or slope) and the variance $\sigma^2_{\beta_k}$ to define the spread among the groups. In the effects parameterization, we fit the global intercept or slope (i.e., the fixed effect) as $\beta_k$, and assume that group-level values vary according to a normal distribution with mean 0 and variance $\sigma^2_{\beta_k}$. The effects parameterization is what R and `lme4` present by default, but I find it more informative to write and discuss the model in means parameterization. Your mileage may vary.
+
+To summarize: in the effects parameterization, we model how much each group differs from the population-level intercept; in the means parameterization, we model the group-specific intercepts directly. Both describe the same model, and we can translate between them by adding or subtracting the population-level intercept.
+
+The difference between these two modes of specifying group-level parameters is shown in @tbl-random-parameterizations below.
+
+
+| Quantity | Effects parameterization | Means parameterization |
+|:---------|:-------------------------|:-----------------------|
+| Population-level intercept | $\beta_0$ | $\mu_{\beta_0}$ |
+| Group-level quantity | $\gamma_j$ | $\beta_{0j}$ |
+| Distribution | $\gamma_j \sim N(0,\sigma_{\beta_0}^2)$ | $\beta_{0j} \sim N(\mu_{\beta_0},\sigma_{\beta_0}^2)$ |
+| Group-specific intercept | $\beta_0+\gamma_j$ | $\beta_{0j}$ |
+| `lme4` extraction | `ranef(mod)` | `coef(mod)` |
+
+: Comparison of effects and means parameterizations of random intercepts in linear mixed-effects models. The two parameterizations are mathematically equivalent, with $\beta_{0j}=\beta_0+\gamma_j$ and $\beta_0=\mu_{\beta_0}$. {#tbl-random-parameterizations}
+
 ### Example with NEON data {#sec-mixed-glmm-example}
 
-Let's revisit the NEON small mammal capture data. Download the [capture dataset](../datasets/data-neon-captures-grid.csv), the [taxonomic dataset](../datasets/data-neon-taxa.csv), and the [grid metadata](../data-neon-grid-metadata.csv), and put them in your working directory.
+Let's revisit the NEON small mammal capture data. Download the [grid-level capture dataset](../datasets/data-neon-captures-grid.csv), the [taxonomic dataset](../datasets/data-neon-taxa.csv), and the [grid metadata](../data-neon-grid-metadata.csv), and put them in your working directory.
 
 ```{r}
 #| include: false
@@ -316,7 +437,6 @@ tax <- read.csv("data-neon-taxa.csv")
 met <- read.csv("data-neon-grid-metadata.csv")
 ```
 
-Test text 2026-11-02
 
 
 
