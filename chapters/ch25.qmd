@@ -1,5 +1,127 @@
-# Dissimilarity and distance {#sec-diss}
+# Dissimilarity and distance measures {#sec-diss}
 
-How far is too far?
+## Introduction and a silly example {#sec-diss-intro}
+One of the central questions in any biological data analysis is, “How similar to each other are my samples?” This is a more complicated question than it appears. It’s worth considering for a moment what “similar” even means. Consider the set of organisms in @fig-multi-animals1 How would you group them by “similarity”?
 
-## Mantel tests
+![These clip art creatures are different, but what do we mean by different? Some of them have different numbers of legs, but does that really capture the variability between them?](../images/multi-animals1.jpg){#fig-multi-animals1 fig.align="center" fig-cap="These clip art creatures are different, but what do we mean by different? Some of them have different numbers of legs, but does that really capture the variability between them?"}
+
+Here is one way to group them.
+
+![Here is one way to group the organisms from the previous figure.](../images/multi-animals2.jpg){#fig-multi-animals1 fig.align="center" fig-cap="Here is one way to group the organisms from the previous figure."}
+
+You might have come up with a slightly different set of groupings. This one is just as valid:
+
+![Here is another way to group the organisms from the previous figure.](../images/multi-animals3.jpg){#fig-multi-animals3 fig.align="center" fig-cap="Here is another way to group the organisms from the previous figure."}
+
+These examples illustrate how we might classify the organisms based on qualitative characteristics. But do our choices weight each characteristic equally? After all, fungi and plants are far more different from each other than ants and fish, but @fig-multi-animals3 lumps all non-animals together. Which characteristics of the organisms are really driving our classification decisions?
+
+One way around this problem is to assign numeric scores to characters: 1 if an organism has the trait, and 0 if it doesn’t. @table-multi-traits below illustrates this for a few organisms and characteristics. Note that bacteria have `NA` for hetertrophy, becuase many bacteria are also autotrophs.
+
+| Taxon    | Multicellular | Heterotroph | Flowers | Vertebrate | Gills | Amnion | Endotherm |
+|:---------|:------------:|:-----------:|:-------:|:----------:|:-----:|:------:|:--------:|
+| Bacteria | 0 | NA | 0 | 0 | 0 | 0 | 0 |
+| Maple    | 1 | 0  | 1 | 0 | 0 | 0 | 0 |
+| Pine     | 1 | 0  | 0 | 0 | 0 | 0 | 0 |
+| Octopus  | 1 | 1  | 0 | 0 | 1 | 0 | 0 |
+| Shark    | 1 | 1  | 0 | 1 | 1 | 0 | 0 |
+| Mushroom | 1 | 1  | 0 | 0 | 0 | 0 | 0 |
+| Frog     | 1 | 1  | 0 | 1 | 0 | 0 | 0 |
+| Elephant | 1 | 1  | 0 | 1 | 0 | 1 | 1 |
+| Penguin  | 1 | 1  | 0 | 1 | 0 | 1 | 1 |
+| ...      |   |    |   |   |   |   |   |
+
+: Example of a multivariate dataset containing binary biological traits (0 = absent, 1 = present, NA = not applicable or missing). {#tbl-multi-traits}
+
+The [full table](../datasets/silly-trait-matrix-example1.csv) for our organisms has more columns and rows. Download this and put it in your working directory.
+
+The next step is to somehow quantify the similarities between the organisms. It turns out that it's easier to define **dissimilarity** than it is define similarity. This is because the range of a similarity metric is ill-defined: there is no natural value to assign to identical samples. I.e., what value should identical samples have? Infinity? Some other arbitrary value? The first isn't very useful, and the second is highly subjective. Dissimilarity, on the other hand, has a natural value to assign to identical samples: 0. Dissimilarity is often expressed as a **distance** through a **hyperspace**. Hyperspace in this context means a coordinate system with one axis (dimension) for each variable in the data.
+
+To quantify distances between taxa, we might try adding up the differences between each pair. We should also square each individual difference, so $1-0$ counts the same as $0-1$. Then, we add up the squared differences and take the square root to get back to the original scale. For example, the distance between maple and pine in the table above would be:
+
+$$D\left(maple,pine\right)=\sqrt{(1-1)^{2}+(0-0)^{2}+(1-0)^{2}+(0-0)^{2}+(0-0)^{2}+(0-0)^{2}+(0-0)^{2}}=1$$
+
+The difference between octopus and penguin would be:
+
+$$ D(octopus,penguin)=\sqrt{(1-1)^{2}+(1-1)^{2}+(0-0)^{2}+(0-1)^{2}+(1-0)^{2}+(0-1)^{2}+(0-1)^{2}}=2$$
+
+And the difference between mushrooms and elephants is:
+
+$$ D(mushroom,elephant)=\sqrt{(1-1)^{2}+(1-1)^{2}+(0-0)^{2}+(0-1)^{2}+(1-0)^{2}+(0-1)^{2}+(0-1)^{2}}\approx1.73$$
+
+So, for this set of characteristics, octopuses  and penguins are twice as different from each other as are maple trees and pine trees, while mushrooms and elephants are not quite as different from each other as octopuses and penguins are. Interestingly, mushrooms and elephants are more different from each other than are maples and pines, even though maples and pines are in the same kingdom while mushrooms and plants are not. Does that make sense biologically? Of course not.
+ 
+These comparisons were chosen to make a couple of points about quantifying differences. First, the choice of characteristics (or measurements, or metrics, etc.) has a large influence over the calculation. Look over the list again and ask yourself if those characteristics are applicable to all of the organisms. Four of the eight traits are specific to just the animals! Second, the choice of how to combine the differences makes a big difference. There are other ways we could have quantified the differences between the organisms that might have measured dissimilarity differently. 
+
+## Distance and dissimilarity {#sec-diss-dis}
+
+As we saw in the silly organism grouping example, deciding how to measure "similarity" between sample units can be tricky. And, using the wrong metric can get to a wrong or misleading answer.
+
+When we ask "how similar to each other are my samples?", what we really have to ask is "how *dis*similar to each other are my samples?". Think about it: if someone asks you how close the nearest restaurant is, you will answer in terms of *distance*, not *closeness* (or, you will answer in terms of travel time, which is just another way to describe distance). "Similarity" and "closeness" are tricky to define, because it's hard to define the scale. The maximum value seems easy: identical entities have the maximal possible similarity score. But what is that similarity? 1? 100? $\pi^2/4$? The minimum value is even more problematic because there is no clear minimum. If Alice and Bob are 10 meters apart, and Alice and Charlie are 100 meters apart, how do we express the difference in closeness? Alice and Bob are clearly closer than Alice and Charlie, but by how much?
+
+That's why we quantify **distance** and **dissimilarity** rather than closeness and similarity. There is a clear minimum--identical entities have 0 dissimilarity or distance--and we can define dissimilarity measures both with and without maximal values. In statistics we use the terms **distance** and **dissimilarity** almost interchangeably, but they refer to slightly different things.
+
+- A **dissimilarity** is any numerical measure of how different two sample units are. Greater values mean that two entities are more different.
+- A **distance** is a special case of dissimilarity that satisfies these four properties:
+    1. Non-negativity: $d\left(x,y\right)\geq0$.
+    1. Self identity: $d\left(x,y\right)=0\iff x=y$. If $x$ and $y$ are the same, then $d\left(x,y\right)$ should equal 0.
+    1. Symmetry: $d\left(x,y\right)=d\left(y,x\right)$.
+    1. Triangle inequality: $d\left(x,z\right)\leq d\left(x,y\right)+d\left(y,z\right)$
+
+:::{.callout-note title="The Triangle Inequality"}
+A simple but very powerful fact is that the sum of the lengths of any two sides of a triangle will be longer than the length of the third side.
+
+```{r}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 6
+
+par(mar=c(1,1,1,1), mfrow=c(1,1), bty="n")
+plot(2:9, 2:9, type="n", xlab="", ylab="",
+     xlim=c(2.5,8.5), ylim=c(1,8.5), axes=FALSE)
+polygon(x=c(3,6,8,3), y=c(3,8,5,3), border="black", lwd=2)
+text(4,6, expression(italic(d)*(italic(x)*", "*italic(y))), cex=2, font=3)
+text(7.5, 7, expression(italic(d)*(italic(y)*", "*italic(z))), cex=2, font=3)
+text(6,3.5, expression(italic(d)*(italic(x)*", "*italic(z))), cex=2, font=3)
+text(5.5, 1.5, expression(italic(d)*(italic(x)*", "*italic(z))<=italic(d)*(italic(y)*", "*italic(z))+italic(d)*(italic(y)*", "*italic(z))),
+     cex=3)
+text(c(2.75, 6, 8.25), c(3, 8.5, 5),
+     c("x", "y", "z"), font=3, cex=2)
+```
+:::
+
+A dissimilarity that satisfies these four criteria is called a **metric**. Dissimilarities can also be **nonmetric** or **semimetric**. A **semimetric** dissimilarity does not obey the triangle inequality, but meets the other criteria. A **nonmetric** dissimilarity may take negative values, violating the positivity criterion.
+
+:::{.note-warning title="Reviewer 2 alert"}
+Some people treat the terms *metric* and *distance* as synonyms, and will get grouchy if you use "distance" to describe nonmetric or semimetric dissimilarities. Pick your battles. 
+:::
+
+## Observations as vectors {#sec-diss-vectors}
+
+For the rest of this unit to make sense, you need to think of observations and variables in a new way: coordinates in space. Here we use the mathematical definition of space, which is a **set** with a **structure** that 
+
+
+## Metric distances {#sec-diss-met}
+
+### Euclidean distance {#sec-diss-met-euc}
+
+The **Euclidean distance** is one of the most famous and most commonly used distance metrics. It is the generalization of the Pythagorean theorem to an arbitrary number of dimensions. The Pythagorean theorem $a^2+b^2=c^2$ gives the square of the length of the hypotenuse $c$ as the sum of the squares of the lengths of the other two sides $a$ and $b$. This form of the theorem lives in two dimensions. If we apply it to two points $a$ and $b$ in 2-d space, the expression becomes:
+
+$$d\left(a,b\right)=\sqrt{\left(a_1-b_1\right)^2+\left(a_2-b_2\right)^2}$$
+
+where $a_1$ and $a_2$ are the coordinates of point $a$ and $b_1$ and $b_2$ are the coordinates of point $b$. 
+
+We can generalize to an arbitrary number of dimensions $k$. For point $a$ with coordinates $a_1,a_2,\ldots,a_k$ and point $b$ with coordinates $b_1,b_2,\ldots,b_k$
+
+$$d_{Euc}(a,b)=\sqrt{\sum_{j=1}^{k}(a_j-b_j)^{2}}$$
+
+For example, for points with in a 4-d space:
+
+$$d_{Euc}\left(a,b|k=4\right)=\sqrt{\sum_{j=1}^{4}(a_j-b_j)^{2}}=\sqrt{\left(a_1-b_1\right)^2+\left(a_2-b_2\right)^2+\left(a_3-b_3\right)^2+\left(a_4-b_4\right)^2}$$
+
+
+### Manhattan distances {#sec-diss-met-man} 
+
+## Semimetric dissimilarities {#sec-diss-semi}
+
+### Bray-Curtis dissimilarity {#sec-diss-semi-bray}
+

@@ -273,7 +273,7 @@
 
 \title{Applied Biological Data Analysis}
 \author{Nick Green}
-\date{November 5, 2026}
+\date{November 6, 2026}
 \begin{document}
 \maketitle
 
@@ -31982,7 +31982,141 @@ The needs of the many outweigh the needs of the few, or the one.
 \chapter{Introduction to multivariate data and data
 analysis}\label{sec-mdata}
 
-How far is too far?
+\section{Multivariate data}\label{multivariate-data}
+
+Things are not always one or two dimensional. Oftentimes in biology we
+need to consider many variables at once. This is the realm of
+\textbf{multivariate statistics}. The ``multi'' in ``multivariate''
+refers to the fact that there are multiple variables or attributes of
+each sample that we want to understand simultaneously. The terminology
+can be confusing sometimes because other statistical methods have the
+word ``multiple'' in their names. For example, ``multiple linear
+regression'' is not considered a multivariate method because there is
+only one measurement from each sample (the response variable) that is
+being modeled.
+
+Figure~\ref{fig-multivariate-data} below shows some differences between
+a univariate analysis and a multivariate one. In the univariate
+analysis, one and only one variable is the response variable and is
+assumed to be predicted by (aka: depend on) the others. Frequently, the
+observations are divided \emph{a priori} into groups by a factor encoded
+by one of the predictor variables. This means that the goal of a
+univariate analysis is to explain patterns in one variable relative to
+other variables. In a univariate analysis, the emphasis is on
+discovering relationships between variables, and the observations are a
+means to that end.
+
+\begin{figure}
+
+\caption{\label{fig-multivariate-data}In a univariate analysis, there is
+one response variable which is modeled using predictor variables. In a
+multivariate analysis, there can be a response matrix of multiple
+variables, or no response variables at all. Instead, patterns among the
+variables can be explored without inferring causality.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/multi-01.jpg}}
+
+}
+
+\end{figure}%
+
+Whereas a univariate analysis has a single response variable, a
+multivariate analysis can have a response matrix of many variables.
+However, many multivariate analyses have no response variables, and
+instead all of the variables are analyzed together to characterize
+patterns among the observations. The observations may come from \emph{a
+priori} groups defined in a separate matrix (see below), or the
+researcher may want to discover how the observations naturally separate
+into clusters based on the variables (i.e., \emph{a posteriori} groups).
+Or, the researcher may want to know which variables, if any, drive most
+of the variation between observations.
+
+\subsection{Enter the matrix}\label{enter-the-matrix}
+
+When planning and executing a multivariate analysis it is very important
+to keep in mind which components of the dataset are which. These
+components are usually stored in \textbf{matrices} with a well-defined
+structure. The key concept is that of the \textbf{sample unit} or
+\textbf{observation}. Observations are also sometimes called
+\textbf{records}. These are individual entities about which many
+measurements or attributes are recorded. Sample units correspond to
+\emph{rows} of the data matrix.
+
+Each sample unit has several \textbf{variables} associated with it.
+Variables are also sometimes called \textbf{features} or
+\textbf{attributes}. Variables correspond to \emph{columns} of the data
+matrix.
+
+The figure below shows the layout of a typical multivariate dataset. The
+example has 12 observations and 6 variables . In some fields, samples
+are also called records and variables are called features.
+
+\begin{figure}
+
+\caption{\label{fig-multivariate-matrix}Structure of a dataset. Data is
+collected about entities called observations. Each row of the dataset is
+an observation, and each column of the dataset contains one type of
+value (a variable) about each entity.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/multi-02.jpg}}
+
+}
+
+\end{figure}%
+
+A complete multivariate dataset often has several matrices, each with a
+different kind of information. \textbf{?@fig-multivariate-tables} below
+shows the relationship between three interrelated matrices typical in
+community ecology. Similar matrices can be defined for other fields.
+Just replace ``Environmental variables'' with another label that helps
+describe variation among the sample units.
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Structure of a community ecology dataset with three tables. Table A contains the abundances of 6 species at 12 sites. Table E contains environmental variables that describe those 12 sites. Table S contains traits or characteristics of the 6 species from Table A.}]{chapters/../images/multi-03.jpg}}
+- The data matrix \textbf{A} contains data on the abundance of 6 species
+at each of 12 sites. - The explanatory matrix \textbf{E} contains 4
+environmental variables (e.g., temperature, latitude, etc.) for each of
+the sites. These data describe relationships between observations in
+\textbf{A}. - The trait matrix \textbf{S} contains data about traits
+(e.g., maximum size, longevity, etc.) of the species in the main matrix.
+These data describe relationships between variables in \textbf{A}.
+
+A biological system of interest might have relationships among all three
+of these matrices:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Patterns within A}: Explaining groupings or trends among the
+  sites in terms of the species present or absent at each site (or, the
+  abundances of species at each site).
+\item
+  \textbf{Patterns within E}: Discovering groupings among the sites in
+  terms of their environmental variables.
+\item
+  \textbf{Relationships between A and E}: Relating patterns in
+  environmental variables to patterns in species abundances across
+  sites.
+\item
+  \textbf{Relating patterns between A and E in terms of S}: Relating
+  species traits to environmental conditions.
+\item
+  \textbf{Patterns within S}: Identifying clusters of similar species.
+\end{itemize}
+
+McCune \emph{et al.} (2002) give a thorough treatment of the
+relationships between \textbf{S}, \textbf{E}, \textbf{A}, and other
+matrices derived from them. For this course, we will focus on analyzing
+\textbf{A} and sometimes \textbf{E}. There is a related set of
+terminology used to describe multivariate analyses in terms of what is
+being compared. Analyses that seek relationships among samples are said
+to be in \textbf{Q mode}; analyses that seek relationships among
+variables are in \textbf{R mode} (Legendre and Legendre 2012). These
+terms appear to be particular to ecology, but offer a helpful way to
+distinguish between different multivariate analysis pathways.
 
 \chapter{Dissimilarity and distance}\label{sec-diss}
 

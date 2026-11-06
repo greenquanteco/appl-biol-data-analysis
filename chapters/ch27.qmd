@@ -2,4 +2,24 @@
 
 We're all just points on a graph.
 
-## Principal components analysis {#sec-ord-pca}
+## Unconstrained ordination methods {#sec-ord-un}
+
+### Principal components analysis (PCA) {#sec-ord-un-pca}
+
+### Principal components analysis (PCoA) {#sec-ord-un-pcoa}
+
+### Correspondence analysis (CA)  {#sec-ord-un-ca}
+
+### Nonmetric multidimensional scaling (NMDS) {#sec-ord-un-nmds}
+
+## Constrained ordination methods {#sec-ord-con}
+
+Constrained ordination methods, also called canonical ordination methods, identify major axes of multivariate variation that are associated with one or more explanatory variables. Unlike unconstrained ordination, which summarizes patterns in the response variables alone, constrained ordination incorporates information about potential predictors when constructing the ordination axes.
+
+### Redundancy analysis (RA) {#sec-ord-con-ra}
+
+### Canonical correspondence analysis (CCA)  {#sec-ord-con-cca}
+
+### Distance-based RDA (dbRDA) {#sec-ord-con-dbrda}
+
+
