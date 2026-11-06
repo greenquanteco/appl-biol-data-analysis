@@ -522,9 +522,8 @@ window.Quarto = {
   </ul></li>
   <li><a href="#sec-mixed-nlme" id="toc-sec-mixed-nlme" class="nav-link" data-scroll-target="#sec-mixed-nlme"><span class="header-section-number">23.4</span> Nonlinear mixed effects models</a>
   <ul class="collapse">
-  <li><a href="#sec-mixed-nlme-def" id="toc-sec-mixed-nlme-def" class="nav-link" data-scroll-target="#sec-mixed-nlme-def"><span class="header-section-number">23.4.1</span> Definition</a></li>
-  <li><a href="#sec-mixed-nlme-example" id="toc-sec-mixed-nlme-example" class="nav-link" data-scroll-target="#sec-mixed-nlme-example"><span class="header-section-number">23.4.2</span> Example with NEON data</a></li>
-  <li><a href="#sec-mixed-nlme-specify" id="toc-sec-mixed-nlme-specify" class="nav-link" data-scroll-target="#sec-mixed-nlme-specify"><span class="header-section-number">23.4.3</span> Specifying random effects in <code>nlme</code></a></li>
+  <li><a href="#sec-mixed-nlme-example" id="toc-sec-mixed-nlme-example" class="nav-link" data-scroll-target="#sec-mixed-nlme-example"><span class="header-section-number">23.4.1</span> Example with NEON data</a></li>
+  <li><a href="#sec-mixed-nlme-specify" id="toc-sec-mixed-nlme-specify" class="nav-link" data-scroll-target="#sec-mixed-nlme-specify"><span class="header-section-number">23.4.2</span> Specifying random effects in <code>nlme</code></a></li>
   </ul></li>
   <li><a href="#sec-mixed-gamm" id="toc-sec-mixed-gamm" class="nav-link" data-scroll-target="#sec-mixed-gamm"><span class="header-section-number">23.5</span> Additive mixed models (GAMM)</a></li>
   </ul>
@@ -673,12 +672,17 @@ Y_i=\beta_{0,lab}+\beta_{1,lab_i}X_i+\varepsilon_i
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> dx[dx<span class="sc">$</span>weight <span class="sc">&gt;=</span> <span class="dv">10</span> <span class="sc">&amp;</span> dx<span class="sc">$</span>weight <span class="sc">&lt;=</span> <span class="dv">30</span>,]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can check a boxplot of female vs.&nbsp;male body mass. It looks like any effect will be small.</p>
-<div class="cell">
+<div class="cell" data-fig-label="Body mass vs. sex in White-Footed Mice *Peromyscus leucopus*.">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(weight<span class="sc">~</span>sex, <span class="at">data=</span>dx)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="ch23_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<div id="fig-lme1" class="quarto-float quarto-figure quarto-figure-center anchored" width="576" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-lme1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;23.1
+</figcaption>
+<div aria-describedby="fig-lme1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch23_files/figure-html/fig-lme1-1.png" id="fig-lme1" class="img-fluid figure-img" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus." width="576">
+</div>
 </figure>
 </div>
 </div>
@@ -695,7 +699,7 @@ Y_i=\beta_{0,lab}+\beta_{1,lab_i}X_i+\varepsilon_i
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch23_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="768"></p>
+<p><img src="ch23_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -967,7 +971,7 @@ habitatgrasslandHerbaceous:sexmale  0.2577007  0.9398422</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ch23_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="ch23_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1103,24 +1107,380 @@ Table&nbsp;23.2: Comparison of effects and means parameterizations of random int
 </section>
 <section id="sec-mixed-glmm-example" class="level3" data-number="23.3.2">
 <h3 data-number="23.3.2" class="anchored" data-anchor-id="sec-mixed-glmm-example"><span class="header-section-number">23.3.2</span> Example with NEON data</h3>
-<p>Let’s revisit the NEON small mammal capture data. Download the <a href="../datasets/data-neon-captures-grid.csv">grid-level capture dataset</a>, the <a href="../datasets/data-neon-taxa.csv">taxonomic dataset</a>, and the <a href="../data-neon-grid-metadata.csv">grid metadata</a>, and put them in your working directory.</p>
+<section id="data-import-and-first-steps" class="level4" data-number="23.3.2.1">
+<h4 data-number="23.3.2.1" class="anchored" data-anchor-id="data-import-and-first-steps"><span class="header-section-number">23.3.2.1</span> Data import and first steps</h4>
+<p>Let’s revisit the NEON small mammal capture data. Download the <a href="../datasets/data-neon-ind-meas.csv">individual measurement dataset</a> and the <a href="../datasets/data-neon-taxa.csv">taxonomic dataset</a> and put them in your working directory.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>cap <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-captures-grid.csv"</span>)</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>tax <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-taxa.csv"</span>)</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>met <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-grid-metadata.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>tax <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-taxa.csv"</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-ind-meas.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>We are going to use mixed models to investigate sexual dimorphism in body mass in white-footed mice (<em>Peromyscus leucopus</em>). We investigated this previously in <a href="#sec-mixed-lme-example" class="quarto-xref"><span>Section 23.2.2</span></a>. This time, we are going to investigate how body mass varies with body length in males and females. We are going to use a Gaussian GLM with a log-link. The log-link is appropriate here because body mass is a strictly positive, continuous variable. However, we do not suspect overdispersion, so we don’t need a Gamma distribution. We will also test a random effect for site. We are interested in this random effect because different sites have different conditions that may affect body mass.</p>
+<p>First, filter the data down to <em>P. leucopus</em>, with non-missing weights and lengths, with realistic masses and lengths, and with known sex.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filter to species P. leucopus</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> ind[ind<span class="sc">$</span>abb <span class="sc">==</span> <span class="st">"Perleu"</span>,]</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># only need these columns</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> dx[,<span class="fu">c</span>(<span class="st">"tagID"</span>, <span class="st">"sex"</span>, <span class="st">"totalLength"</span>, <span class="st">"weight"</span>)]</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># drop missing measurements</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> dx[<span class="fu">complete.cases</span>(dx),]</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="co"># realistic weights, probably correct</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> dx[dx<span class="sc">$</span>weight <span class="sc">&gt;</span> <span class="dv">10</span> <span class="sc">&amp;</span> dx<span class="sc">$</span>weight <span class="sc">&lt;</span> <span class="dv">30</span>,]</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="co"># realistic adult lengths</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> dx[dx<span class="sc">$</span>totalLength <span class="sc">&gt;</span> <span class="dv">80</span>,]</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a><span class="co"># drop unknown sex</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>sexes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"female"</span>, <span class="st">"male"</span>)</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> dx[dx<span class="sc">$</span>sex <span class="sc">%in%</span> sexes,]</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a><span class="co"># extract site</span></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>site <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">strsplit</span>(dx<span class="sc">$</span>tagID, <span class="st">"_"</span>), <span class="st">"["</span>, <span class="dv">2</span>)</span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a><span class="co"># symbology</span></span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>)</span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a>pchs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">16</span>,<span class="dv">17</span>)</span>
+<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(cols) <span class="ot">&lt;-</span> <span class="fu">names</span>(pchs) <span class="ot">&lt;-</span> sexes</span>
+<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>pch <span class="ot">&lt;-</span> pchs[dx<span class="sc">$</span>sex]</span>
+<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>col <span class="ot">&lt;-</span> cols[dx<span class="sc">$</span>sex]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>At first glance, it appears that mass increases with total length (as it should). It’s hard to tell whether there is an effect of sex. We should suspect from <a href="#sec-mixed-lme-example" class="quarto-xref"><span>Section 23.2.2</span></a> that there is at least a main effect of sex (different intercept).</p>
+<div class="cell" data-fig-label="Body mass vs. sex in White-Footed Mice *Peromyscus leucopus*.">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(weight<span class="sc">~</span>totalLength, <span class="at">data=</span>dx,</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">pch=</span>dx<span class="sc">$</span>pch, <span class="at">col=</span>dx<span class="sc">$</span>col,</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab=</span><span class="st">"Body mass (g)"</span>, <span class="at">log=</span><span class="st">"xy"</span>,</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">30</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-glmmm1" class="quarto-float quarto-figure quarto-figure-center anchored" width="768" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-glmmm1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;23.2
+</figcaption>
+<div aria-describedby="fig-glmmm1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch23_files/figure-html/fig-glmmm1-1.png" id="fig-glmmm1" class="img-fluid figure-img" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>It looks like there are some anomalous points in the upper left of the plots. Mice up there have very large mass relative to their body length. Let’s delete them and replot.</p>
+<div class="cell" data-fig-label="Body mass vs. sex in White-Footed Mice *Peromyscus leucopus*.">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> dx[dx<span class="sc">$</span>totalLength <span class="sc">&gt;</span> <span class="dv">102</span>,]</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(weight<span class="sc">~</span>totalLength, <span class="at">data=</span>dx,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">pch=</span>dx<span class="sc">$</span>pch, <span class="at">col=</span>dx<span class="sc">$</span>col,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab=</span><span class="st">"Body mass (g)"</span>, <span class="at">log=</span><span class="st">"xy"</span>,</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">30</span>))</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"right"</span>, <span class="at">legend=</span>sexes,<span class="at">pch=</span>pchs,<span class="at">col=</span>cols)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-glmmm2" class="quarto-float quarto-figure quarto-figure-center anchored" width="768" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-glmmm2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;23.3
+</figcaption>
+<div aria-describedby="fig-glmmm2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch23_files/figure-html/fig-glmmm2-1.png" id="fig-glmmm2" class="img-fluid figure-img" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>Much better. Those anomalous mice might be legitimate–for example, a mouse with an injured or missing tail would have a very large mass relative to its total length–but that would still warrant their removal.</p>
+</section>
+<section id="fit-glm-and-glmmm" class="level4" data-number="23.3.2.2">
+<h4 data-number="23.3.2.2" class="anchored" data-anchor-id="fit-glm-and-glmmm"><span class="header-section-number">23.3.2.2</span> Fit GLM and GLMMM</h4>
+<p>Now Let’s fit a GLM and a GLMM version of our model.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>loglen <span class="ot">&lt;-</span> <span class="fu">log</span>(dx<span class="sc">$</span>totalLength)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>mod04 <span class="ot">&lt;-</span> <span class="fu">glm</span>(weight<span class="sc">~</span>loglen<span class="sc">+</span>sex,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">data=</span>dx, <span class="at">family=</span><span class="fu">gaussian</span>(<span class="at">link=</span><span class="st">"log"</span>))</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod04)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = weight ~ loglen + sex, family = gaussian(link = "log"), 
+    data = dx)
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -5.30436    0.33202 -15.976   &lt;2e-16 ***
+loglen       1.65159    0.06578  25.107   &lt;2e-16 ***
+sexmale      0.02187    0.01254   1.743   0.0818 .  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for gaussian family taken to be 9.52346)
+
+    Null deviance: 12166.2  on 572  degrees of freedom
+Residual deviance:  5428.4  on 570  degrees of freedom
+AIC: 2922.5
+
+Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+</div>
+<p>The results suggest that body length actually accounts for more variation in body mass than sex does. Let’s add the random effect for site and refit as a GLMM. We are going to use an alternative optimizer because the default optimizer had an issue with convergence diagnostics. Different optimizers sometimes produce convergence warnings even when they arrive at essentially the same maximum-likelihood estimates. Comparing optimizers is one way to diagnose these warnings</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>mod05 <span class="ot">&lt;-</span> <span class="fu">glmer</span>(weight<span class="sc">~</span>loglen<span class="sc">+</span>sex<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>site),</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">data=</span>dx, <span class="at">family=</span><span class="fu">gaussian</span>(<span class="at">link=</span><span class="st">"log"</span>),</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">control =</span> <span class="fu">glmerControl</span>(<span class="at">optimizer =</span> <span class="st">"bobyqa"</span>,</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">optCtrl =</span> <span class="fu">list</span>(<span class="at">maxfun =</span> <span class="fl">2e5</span>))</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>               )</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod05)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Generalized linear mixed model fit by maximum likelihood (Laplace
+  Approximation) [glmerMod]
+ Family: gaussian  ( log )
+Formula: weight ~ loglen + sex + (1 | site)
+   Data: dx
+Control: glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e+05))
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+   2894.7    2916.4   -1442.3    2884.7       568 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.5609 -0.6994 -0.0369  0.6202  2.7373 
+
+Random effects:
+ Groups Name        Variance Std.Dev.
+ site   (Intercept) 0.007231 0.08504 
+Number of obs: 573, groups:  site, 12
+
+Fixed effects:
+            Estimate Std. Error t value Pr(&gt;|z|)    
+(Intercept) -5.25130    0.34948  -15.03   &lt;2e-16 ***
+loglen       1.64650    0.06901   23.86   &lt;2e-16 ***
+sexmale      0.02639    0.01210    2.18   0.0293 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Correlation of Fixed Effects:
+        (Intr) loglen
+loglen  -0.996       
+sexmale  0.077 -0.097</code></pre>
+</div>
+</div>
+<p>The fixed effects are pretty similar, and the AICs suggest that adding the random effect improved the model. Interestingly, the fixed effect of sex is statistically significant in the GLMM version of the model. Variance that was attributed to residual variation in the GLM was soaked up by random effect of site, which helped us detect the sex effect that we had every reason to expect to see.</p>
+<p>Let’s compare the models by AIC:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(mod04, mod05)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      df      AIC
+mod04  4 2922.499
+mod05  5 2894.660</code></pre>
+</div>
+</div>
+<p>The GLMM version has a much lower AIC, suggesting that including the random effect yields a model with better support.</p>
+</section>
+<section id="plotting-population-level-predictions" class="level4" data-number="23.3.2.3">
+<h4 data-number="23.3.2.3" class="anchored" data-anchor-id="plotting-population-level-predictions"><span class="header-section-number">23.3.2.3</span> Plotting population-level predictions</h4>
+<p>Let’s plot the model’s predicted values to see how male and female mouse mass varies with length.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sex-specific sequences of x values</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>px1 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(dx<span class="sc">$</span>loglen[dx<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"female"</span>]),</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">max</span>(dx<span class="sc">$</span>loglen[dx<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"female"</span>]), <span class="at">length=</span><span class="dv">100</span>)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>px2 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(dx<span class="sc">$</span>loglen[dx<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"male"</span>]),</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">max</span>(dx<span class="sc">$</span>loglen[dx<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"male"</span>]), <span class="at">length=</span><span class="dv">100</span>)</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="co"># sex-specific data frames</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>prx1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">loglen=</span>px1, <span class="at">length=</span><span class="fu">exp</span>(px1), <span class="at">sex=</span><span class="st">"female"</span>)</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>prx2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">loglen=</span>px2, <span class="at">length=</span><span class="fu">exp</span>(px2), <span class="at">sex=</span><span class="st">"male"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>When we calculate predictions, we need to use the argument <code>re.form</code> to specify how <code>predict()</code> will account for the random effects. We will use <code>re.form=NA</code>, which gives us the population-level prediction with the random effects set to 0. In other words, this is the predicted value at the average random effect <strong>on the link scale</strong>. It does not represent a prediction averaged over the distribution of random effects across sites (i.e., the <strong>marginal mean</strong>). To obtain that, we must account for the estimated variance of the random effects. With an identity link function, these two predictions are the same. With a nonlinear link function such as the logarithmic link used here, the difference can be substantial, especially if the random-effect variance is large.</p>
+<p>The take-home message is that <code>re.form=NA</code> is appropriate for illustrating the fixed-effect relationship, but we should be careful not to refer to these predictions as population-averaged means. In summary:</p>
+<ul>
+<li><strong>Population-level prediction with the random effects set to 0</strong>: Expected mass at a site with random intercept zero. Set <code>re.form=NA</code>.</li>
+<li><strong>Marginal means (population average)</strong>: Expected mass averaged over the distribution of site random effects. Need to integrate over random effects (see example below).</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate population-level predictions</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>prx1<span class="sc">$</span>fit <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod05, <span class="at">newdata =</span> prx1,</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">type =</span> <span class="st">"response"</span>, <span class="at">re.form =</span> <span class="cn">NA</span>)</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>prx2<span class="sc">$</span>fit <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod05, <span class="at">newdata =</span> prx2,</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">type =</span> <span class="st">"response"</span>, <span class="at">re.form =</span> <span class="cn">NA</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>And plot:</p>
+<div class="cell" data-fig-label="Body mass vs. sex in White-Footed Mice *Peromyscus leucopus*.">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(weight<span class="sc">~</span>totalLength, <span class="at">data=</span>dx,</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">pch=</span>dx<span class="sc">$</span>pch, <span class="at">col=</span>dx<span class="sc">$</span>col,</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab=</span><span class="st">"Body mass (g)"</span>, <span class="at">log=</span><span class="st">"xy"</span>,</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">50</span>))</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(prx1<span class="sc">$</span>length, prx1<span class="sc">$</span>fit, <span class="at">col=</span>cols[<span class="dv">1</span>], <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(prx2<span class="sc">$</span>length, prx2<span class="sc">$</span>fit, <span class="at">col=</span>cols[<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"right"</span>, <span class="at">legend=</span>sexes,</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pchs, <span class="at">col=</span>cols, <span class="at">lwd=</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-glmmm3" class="quarto-float quarto-figure quarto-figure-center anchored" width="768" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-glmmm3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;23.4
+</figcaption>
+<div aria-describedby="fig-glmmm3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch23_files/figure-html/fig-glmmm3-1.png" id="fig-glmmm3" class="img-fluid figure-img" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>Finally, let’s calculate and present the 95% confidence intervals. Unlike <code>glm()</code> and <code>lm()</code>, <code>glmer()</code> does not provide <code>se.fit=TRUE</code> in the usual way. There are two reasonable approaches.</p>
+<p>For the population-level predictions, we can calculate the standard error of the linear predictor using the fixed-effect variance-covariance matrix, then transform the confidence limits back to grams.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>get_ci <span class="ot">&lt;-</span> <span class="cf">function</span>(mod, newdata) {</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  newdata<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">factor</span>(newdata<span class="sc">$</span>sex,</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">levels =</span> <span class="fu">levels</span>(<span class="fu">model.frame</span>(mod)<span class="sc">$</span>sex))</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">delete.response</span>(<span class="fu">terms</span>(mod, <span class="at">fixed.only =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> newdata</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">fixef</span>(mod)</span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>  V <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">vcov</span>(mod))</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>  eta <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> b)</span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>  se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">rowSums</span>((X <span class="sc">%*%</span> V) <span class="sc">*</span> X))</span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>  newdata<span class="sc">$</span>fit.plm <span class="ot">&lt;-</span> <span class="fu">exp</span>(eta)</span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>  newdata<span class="sc">$</span>lwr.plm <span class="ot">&lt;-</span> <span class="fu">exp</span>(eta <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> se)</span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a>  newdata<span class="sc">$</span>upr.plm <span class="ot">&lt;-</span> <span class="fu">exp</span>(eta <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> se)</span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>  newdata</span>
+<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a>prx3 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(prx1, prx2)</span>
+<span id="cb46-25"><a href="#cb46-25" aria-hidden="true" tabindex="-1"></a>prx3 <span class="ot">&lt;-</span> <span class="fu">get_ci</span>(mod05, prx3)</span>
+<span id="cb46-26"><a href="#cb46-26" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(prx3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    loglen   length    sex      fit  fit.plm  lwr.plm  upr.plm
+1 4.682131 108.0000 female 11.67928 11.67928 10.80264 12.62706
+2 4.687837 108.6180 female 11.78952 11.78952 10.90987 12.74010
+3 4.693543 109.2396 female 11.90080 11.90080 11.01811 12.85422
+4 4.699249 109.8647 female 12.01314 12.01314 11.12737 12.96941
+5 4.704955 110.4933 female 12.12653 12.12653 11.23766 13.08571
+6 4.710661 111.1256 female 12.24100 12.24100 11.34899 13.20311</code></pre>
+</div>
+</div>
+<p>And check out the plot:</p>
+<div class="cell" data-fig-label="Body mass vs. sex in White-Footed Mice *Peromyscus leucopus*.">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(weight<span class="sc">~</span>totalLength, <span class="at">data=</span>dx,</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">pch=</span>dx<span class="sc">$</span>pch, <span class="at">col=</span>dx<span class="sc">$</span>col,</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab=</span><span class="st">"Body mass (g)"</span>, <span class="at">log=</span><span class="st">"xy"</span>,</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">50</span>))</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">which</span>(prx3<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"female"</span>)</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(prx3<span class="sc">$</span>length[flag], prx3<span class="sc">$</span>fit.plm[flag],</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">col=</span>cols[<span class="dv">1</span>], <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(prx3<span class="sc">$</span>length[flag], prx3<span class="sc">$</span>lwr.plm[flag],</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">col=</span>cols[<span class="dv">1</span>], <span class="at">lwd=</span><span class="dv">3</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(prx3<span class="sc">$</span>length[flag], prx3<span class="sc">$</span>upr.plm[flag],</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">col=</span>cols[<span class="dv">1</span>], <span class="at">lwd=</span><span class="dv">3</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>flag <span class="ot">&lt;-</span> <span class="fu">which</span>(prx3<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"male"</span>)</span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(prx3<span class="sc">$</span>length[flag], prx3<span class="sc">$</span>fit.plm[flag],</span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">col=</span>cols[<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(prx3<span class="sc">$</span>length[flag], prx3<span class="sc">$</span>lwr.plm[flag],</span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">col=</span>cols[<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">3</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(prx3<span class="sc">$</span>length[flag], prx3<span class="sc">$</span>upr.plm[flag],</span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">col=</span>cols[<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">3</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"top"</span>, <span class="at">legend=</span>sexes,</span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pchs, <span class="at">col=</span>cols, <span class="at">lwd=</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-glmmm5" class="quarto-float quarto-figure quarto-figure-center anchored" width="768" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-glmmm5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;23.5
+</figcaption>
+<div aria-describedby="fig-glmmm5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch23_files/figure-html/fig-glmmm5-1.png" id="fig-glmmm5" class="img-fluid figure-img" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="plotting-marginal-means" class="level4" data-number="23.3.2.4">
+<h4 data-number="23.3.2.4" class="anchored" data-anchor-id="plotting-marginal-means"><span class="header-section-number">23.3.2.4</span> Plotting marginal means</h4>
+<p>If we want to see the marginal means, which are predictions that average over the distribution of sites, we need to integrate over the distribution of random effects. Note that the calculations below are specific to this model, a Gaussian GLM(M) with a log link. If you have a different response distribution or link function, the calculation is different.</p>
+<div class="cell" data-fig-label="Body mass vs. sex in White-Footed Mice *Peromyscus leucopus*.">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">VarCorr</span>(mod05)<span class="sc">$</span>site[<span class="dv">1</span>, <span class="dv">1</span>])</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>prx1<span class="sc">$</span>fit.mm <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod05,</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">newdata =</span> prx1,</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">type =</span> <span class="st">"response"</span>, <span class="at">re.form =</span> <span class="cn">NA</span>) <span class="sc">*</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">exp</span>(v <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>prx2<span class="sc">$</span>fit.mm <span class="ot">&lt;-</span> <span class="fu">predict</span>(mod05,</span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>                       <span class="at">newdata =</span> prx2,</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">type =</span> <span class="st">"response"</span>, <span class="at">re.form =</span> <span class="cn">NA</span>) <span class="sc">*</span></span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">exp</span>(v <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(weight<span class="sc">~</span>totalLength, <span class="at">data=</span>dx,</span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">pch=</span>dx<span class="sc">$</span>pch, <span class="at">col=</span>dx<span class="sc">$</span>col,</span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab=</span><span class="st">"Body mass (g)"</span>, <span class="at">log=</span><span class="st">"xy"</span>,</span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">50</span>))</span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(prx1<span class="sc">$</span>length, prx1<span class="sc">$</span>fit.mm, <span class="at">col=</span>cols[<span class="dv">1</span>], <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(prx2<span class="sc">$</span>length, prx2<span class="sc">$</span>fit.mm, <span class="at">col=</span>cols[<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend=</span>sexes,</span>
+<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pchs, <span class="at">col=</span>cols, <span class="at">lwd=</span><span class="dv">3</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-glmm4" class="quarto-float quarto-figure quarto-figure-center anchored" width="768" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-glmm4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;23.6
+</figcaption>
+<div aria-describedby="fig-glmm4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch23_files/figure-html/fig-glmm4-1.png" id="fig-glmm4" class="img-fluid figure-img" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>In this case, the marginal means and the population-level predictions are pretty similar. Note that the procedure above is appropriate for a Gaussian GLMM with a log-link. The integration is different for other GLMMs.</p>
+<p>We can also plot the 95% CI of the marginal means, but it’s a little more involved. One way to estimate the CI is to use a parametric bootstrap using <code>bootMER()</code>. The code block below was not run during rendering because it takes over an hour.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>pred_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(mod) {</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">VarCorr</span>(mod)<span class="sc">$</span>site[<span class="dv">1</span>, <span class="dv">1</span>])</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(mod, <span class="at">newdata =</span> prx3,</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">type =</span> <span class="st">"response"</span>, <span class="at">re.form =</span> <span class="cn">NA</span>) <span class="sc">*</span> <span class="fu">exp</span>(v <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>bt <span class="ot">&lt;-</span> <span class="fu">bootMer</span>(mod05, <span class="at">FUN =</span> pred_fun,</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">nsim =</span> <span class="dv">500</span>, <span class="at">type =</span> <span class="st">"parametric"</span>,</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">use.u =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>prx3<span class="sc">$</span>fit.boot <span class="ot">&lt;-</span> <span class="fu">pred_fun</span>(mod05)</span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>prx3<span class="sc">$</span>lwr.boot <span class="ot">&lt;-</span> <span class="fu">apply</span>(bt<span class="sc">$</span>t, <span class="dv">2</span>, quantile,</span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>                       <span class="fl">0.025</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>prx3<span class="sc">$</span>upr.boot <span class="ot">&lt;-</span> <span class="fu">apply</span>(bt<span class="sc">$</span>t, <span class="dv">2</span>, quantile,</span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>                       <span class="fl">0.975</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a><span class="co"># then make the plot as usual</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
 </section>
 </section>
 <section id="sec-mixed-nlme" class="level2" data-number="23.4">
 <h2 data-number="23.4" class="anchored" data-anchor-id="sec-mixed-nlme"><span class="header-section-number">23.4</span> Nonlinear mixed effects models</h2>
-<section id="sec-mixed-nlme-def" class="level3" data-number="23.4.1">
-<h3 data-number="23.4.1" class="anchored" data-anchor-id="sec-mixed-nlme-def"><span class="header-section-number">23.4.1</span> Definition</h3>
+<p>Coming soon! ### Definition {#sec-mixed-nlme-def}</p>
+<section id="sec-mixed-nlme-example" class="level3" data-number="23.4.1">
+<h3 data-number="23.4.1" class="anchored" data-anchor-id="sec-mixed-nlme-example"><span class="header-section-number">23.4.1</span> Example with NEON data</h3>
 </section>
-<section id="sec-mixed-nlme-example" class="level3" data-number="23.4.2">
-<h3 data-number="23.4.2" class="anchored" data-anchor-id="sec-mixed-nlme-example"><span class="header-section-number">23.4.2</span> Example with NEON data</h3>
-</section>
-<section id="sec-mixed-nlme-specify" class="level3" data-number="23.4.3">
-<h3 data-number="23.4.3" class="anchored" data-anchor-id="sec-mixed-nlme-specify"><span class="header-section-number">23.4.3</span> Specifying random effects in <code>nlme</code></h3>
+<section id="sec-mixed-nlme-specify" class="level3" data-number="23.4.2">
+<h3 data-number="23.4.2" class="anchored" data-anchor-id="sec-mixed-nlme-specify"><span class="header-section-number">23.4.2</span> Specifying random effects in <code>nlme</code></h3>
 </section>
 </section>
 <section id="sec-mixed-gamm" class="level2" data-number="23.5">

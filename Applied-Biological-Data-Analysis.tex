@@ -273,7 +273,7 @@
 
 \title{Applied Biological Data Analysis}
 \author{Nick Green}
-\date{November 2, 2026}
+\date{November 5, 2026}
 \begin{document}
 \maketitle
 
@@ -30847,7 +30847,17 @@ effect will be small.
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch23_files/figure-pdf/unnamed-chunk-4-1.pdf}}
+\begin{figure}[H]
+
+\caption{\label{fig-lme1}}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Body mass vs. sex in White-Footed Mice Peromyscus leucopus.}]{chapters/ch23_files/figure-pdf/fig-lme1-1.pdf}}
+
+}
+
+\end{figure}%
 
 What about potential habitat differences? It makes sense that different
 habitats, like forests or grasslands or croplands, might have different
@@ -30866,7 +30876,7 @@ that might affect body mass.
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch23_files/figure-pdf/unnamed-chunk-5-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch23_files/figure-pdf/unnamed-chunk-4-1.pdf}}
 
 There is a lot of variability, but it looks like there might be some
 differences in body mass between the habitats.
@@ -31276,7 +31286,7 @@ It might be more helpful to plot the random effects:
 $site
 \end{verbatim}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch23_files/figure-pdf/unnamed-chunk-20-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch23_files/figure-pdf/unnamed-chunk-19-1.pdf}}
 
 \subsection{\texorpdfstring{Specifying random effects in
 \texttt{lme4}}{Specifying random effects in lme4}}\label{sec-mixed-lme-specify}
@@ -31450,23 +31460,511 @@ Group-specific intercept & \(\beta_0+\gamma_j\) & \(\beta_{0j}\) \\
 
 \subsection{Example with NEON data}\label{sec-mixed-glmm-example}
 
+\subsubsection{Data import and first
+steps}\label{data-import-and-first-steps}
+
 Let's revisit the NEON small mammal capture data. Download the
-\href{../datasets/data-neon-captures-grid.csv}{grid-level capture
-dataset}, the \href{../datasets/data-neon-taxa.csv}{taxonomic dataset},
-and the \href{../data-neon-grid-metadata.csv}{grid metadata}, and put
-them in your working directory.
+\href{../datasets/data-neon-ind-meas.csv}{individual measurement
+dataset} and the \href{../datasets/data-neon-taxa.csv}{taxonomic
+dataset} and put them in your working directory.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{cap }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data{-}neon{-}captures{-}grid.csv"}\NormalTok{)}
 \NormalTok{tax }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data{-}neon{-}taxa.csv"}\NormalTok{)}
-\NormalTok{met }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data{-}neon{-}grid{-}metadata.csv"}\NormalTok{)}
+\NormalTok{ind }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data{-}neon{-}ind{-}meas.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+We are going to use mixed models to investigate sexual dimorphism in
+body mass in white-footed mice (\emph{Peromyscus leucopus}). We
+investigated this previously in Section~\ref{sec-mixed-lme-example}.
+This time, we are going to investigate how body mass varies with body
+length in males and females. We are going to use a Gaussian GLM with a
+log-link. The log-link is appropriate here because body mass is a
+strictly positive, continuous variable. However, we do not suspect
+overdispersion, so we don't need a Gamma distribution. We will also test
+a random effect for site. We are interested in this random effect
+because different sites have different conditions that may affect body
+mass.
+
+First, filter the data down to \emph{P. leucopus}, with non-missing
+weights and lengths, with realistic masses and lengths, and with known
+sex.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# filter to species P. leucopus}
+\NormalTok{dx }\OtherTok{\textless{}{-}}\NormalTok{ ind[ind}\SpecialCharTok{$}\NormalTok{abb }\SpecialCharTok{==} \StringTok{"Perleu"}\NormalTok{,]}
+
+\CommentTok{\# only need these columns}
+\NormalTok{dx }\OtherTok{\textless{}{-}}\NormalTok{ dx[,}\FunctionTok{c}\NormalTok{(}\StringTok{"tagID"}\NormalTok{, }\StringTok{"sex"}\NormalTok{, }\StringTok{"totalLength"}\NormalTok{, }\StringTok{"weight"}\NormalTok{)]}
+
+\CommentTok{\# drop missing measurements}
+\NormalTok{dx }\OtherTok{\textless{}{-}}\NormalTok{ dx[}\FunctionTok{complete.cases}\NormalTok{(dx),]}
+
+\CommentTok{\# realistic weights, probably correct}
+\NormalTok{dx }\OtherTok{\textless{}{-}}\NormalTok{ dx[dx}\SpecialCharTok{$}\NormalTok{weight }\SpecialCharTok{\textgreater{}} \DecValTok{10} \SpecialCharTok{\&}\NormalTok{ dx}\SpecialCharTok{$}\NormalTok{weight }\SpecialCharTok{\textless{}} \DecValTok{30}\NormalTok{,]}
+
+\CommentTok{\# realistic adult lengths}
+\NormalTok{dx }\OtherTok{\textless{}{-}}\NormalTok{ dx[dx}\SpecialCharTok{$}\NormalTok{totalLength }\SpecialCharTok{\textgreater{}} \DecValTok{80}\NormalTok{,]}
+
+\CommentTok{\# drop unknown sex}
+\NormalTok{sexes }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"female"}\NormalTok{, }\StringTok{"male"}\NormalTok{)}
+\NormalTok{dx }\OtherTok{\textless{}{-}}\NormalTok{ dx[dx}\SpecialCharTok{$}\NormalTok{sex }\SpecialCharTok{\%in\%}\NormalTok{ sexes,]}
+
+\CommentTok{\# extract site}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{site }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(}\FunctionTok{strsplit}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{tagID, }\StringTok{"\_"}\NormalTok{), }\StringTok{"["}\NormalTok{, }\DecValTok{2}\NormalTok{)}
+
+\CommentTok{\# symbology}
+\NormalTok{cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"red"}\NormalTok{, }\StringTok{"blue"}\NormalTok{)}
+\NormalTok{pchs }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{16}\NormalTok{,}\DecValTok{17}\NormalTok{)}
+\FunctionTok{names}\NormalTok{(cols) }\OtherTok{\textless{}{-}} \FunctionTok{names}\NormalTok{(pchs) }\OtherTok{\textless{}{-}}\NormalTok{ sexes}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch }\OtherTok{\textless{}{-}}\NormalTok{ pchs[dx}\SpecialCharTok{$}\NormalTok{sex]}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col }\OtherTok{\textless{}{-}}\NormalTok{ cols[dx}\SpecialCharTok{$}\NormalTok{sex]}
+\end{Highlighting}
+\end{Shaded}
+
+At first glance, it appears that mass increases with total length (as it
+should). It's hard to tell whether there is an effect of sex. We should
+suspect from Section~\ref{sec-mixed-lme-example} that there is at least
+a main effect of sex (different intercept).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(weight}\SpecialCharTok{\textasciitilde{}}\NormalTok{totalLength, }\AttributeTok{data=}\NormalTok{dx,}
+        \AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col,}
+        \AttributeTok{ylab=}\StringTok{"Body mass (g)"}\NormalTok{, }\AttributeTok{log=}\StringTok{"xy"}\NormalTok{,}
+        \AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{30}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-glmmm1}}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Body mass vs. sex in White-Footed Mice Peromyscus leucopus.}]{chapters/ch23_files/figure-pdf/fig-glmmm1-1.pdf}}
+
+}
+
+\end{figure}%
+
+It looks like there are some anomalous points in the upper left of the
+plots. Mice up there have very large mass relative to their body length.
+Let's delete them and replot.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dx }\OtherTok{\textless{}{-}}\NormalTok{ dx[dx}\SpecialCharTok{$}\NormalTok{totalLength }\SpecialCharTok{\textgreater{}} \DecValTok{102}\NormalTok{,]}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(weight}\SpecialCharTok{\textasciitilde{}}\NormalTok{totalLength, }\AttributeTok{data=}\NormalTok{dx,}
+        \AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col,}
+        \AttributeTok{ylab=}\StringTok{"Body mass (g)"}\NormalTok{, }\AttributeTok{log=}\StringTok{"xy"}\NormalTok{,}
+        \AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{30}\NormalTok{))}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"right"}\NormalTok{, }\AttributeTok{legend=}\NormalTok{sexes,}\AttributeTok{pch=}\NormalTok{pchs,}\AttributeTok{col=}\NormalTok{cols)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-glmmm2}}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Body mass vs. sex in White-Footed Mice Peromyscus leucopus.}]{chapters/ch23_files/figure-pdf/fig-glmmm2-1.pdf}}
+
+}
+
+\end{figure}%
+
+Much better. Those anomalous mice might be legitimate--for example, a
+mouse with an injured or missing tail would have a very large mass
+relative to its total length--but that would still warrant their
+removal.
+
+\subsubsection{Fit GLM and GLMMM}\label{fit-glm-and-glmmm}
+
+Now Let's fit a GLM and a GLMM version of our model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{loglen }\OtherTok{\textless{}{-}} \FunctionTok{log}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{totalLength)}
+
+\NormalTok{mod04 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(weight}\SpecialCharTok{\textasciitilde{}}\NormalTok{loglen}\SpecialCharTok{+}\NormalTok{sex,}
+               \AttributeTok{data=}\NormalTok{dx, }\AttributeTok{family=}\FunctionTok{gaussian}\NormalTok{(}\AttributeTok{link=}\StringTok{"log"}\NormalTok{))}
+\FunctionTok{summary}\NormalTok{(mod04)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+glm(formula = weight ~ loglen + sex, family = gaussian(link = "log"), 
+    data = dx)
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -5.30436    0.33202 -15.976   <2e-16 ***
+loglen       1.65159    0.06578  25.107   <2e-16 ***
+sexmale      0.02187    0.01254   1.743   0.0818 .  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for gaussian family taken to be 9.52346)
+
+    Null deviance: 12166.2  on 572  degrees of freedom
+Residual deviance:  5428.4  on 570  degrees of freedom
+AIC: 2922.5
+
+Number of Fisher Scoring iterations: 4
+\end{verbatim}
+
+The results suggest that body length actually accounts for more
+variation in body mass than sex does. Let's add the random effect for
+site and refit as a GLMM. We are going to use an alternative optimizer
+because the default optimizer had an issue with convergence diagnostics.
+Different optimizers sometimes produce convergence warnings even when
+they arrive at essentially the same maximum-likelihood estimates.
+Comparing optimizers is one way to diagnose these warnings
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(lme4)}
+
+\NormalTok{mod05 }\OtherTok{\textless{}{-}} \FunctionTok{glmer}\NormalTok{(weight}\SpecialCharTok{\textasciitilde{}}\NormalTok{loglen}\SpecialCharTok{+}\NormalTok{sex}\SpecialCharTok{+}\NormalTok{(}\DecValTok{1}\SpecialCharTok{|}\NormalTok{site),}
+               \AttributeTok{data=}\NormalTok{dx, }\AttributeTok{family=}\FunctionTok{gaussian}\NormalTok{(}\AttributeTok{link=}\StringTok{"log"}\NormalTok{),}
+               \AttributeTok{control =} \FunctionTok{glmerControl}\NormalTok{(}\AttributeTok{optimizer =} \StringTok{"bobyqa"}\NormalTok{,}
+                                      \AttributeTok{optCtrl =} \FunctionTok{list}\NormalTok{(}\AttributeTok{maxfun =} \FloatTok{2e5}\NormalTok{))}
+\NormalTok{               )}
+\FunctionTok{summary}\NormalTok{(mod05)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Generalized linear mixed model fit by maximum likelihood (Laplace
+  Approximation) [glmerMod]
+ Family: gaussian  ( log )
+Formula: weight ~ loglen + sex + (1 | site)
+   Data: dx
+Control: glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e+05))
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+   2894.7    2916.4   -1442.3    2884.7       568 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.5609 -0.6994 -0.0369  0.6202  2.7373 
+
+Random effects:
+ Groups Name        Variance Std.Dev.
+ site   (Intercept) 0.007231 0.08504 
+Number of obs: 573, groups:  site, 12
+
+Fixed effects:
+            Estimate Std. Error t value Pr(>|z|)    
+(Intercept) -5.25130    0.34948  -15.03   <2e-16 ***
+loglen       1.64650    0.06901   23.86   <2e-16 ***
+sexmale      0.02639    0.01210    2.18   0.0293 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Correlation of Fixed Effects:
+        (Intr) loglen
+loglen  -0.996       
+sexmale  0.077 -0.097
+\end{verbatim}
+
+The fixed effects are pretty similar, and the AICs suggest that adding
+the random effect improved the model. Interestingly, the fixed effect of
+sex is statistically significant in the GLMM version of the model.
+Variance that was attributed to residual variation in the GLM was soaked
+up by random effect of site, which helped us detect the sex effect that
+we had every reason to expect to see.
+
+Let's compare the models by AIC:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{AIC}\NormalTok{(mod04, mod05)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+      df      AIC
+mod04  4 2922.499
+mod05  5 2894.660
+\end{verbatim}
+
+The GLMM version has a much lower AIC, suggesting that including the
+random effect yields a model with better support.
+
+\subsubsection{Plotting population-level
+predictions}\label{plotting-population-level-predictions}
+
+Let's plot the model's predicted values to see how male and female mouse
+mass varies with length.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# sex{-}specific sequences of x values}
+\NormalTok{px1 }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{loglen[dx}\SpecialCharTok{$}\NormalTok{sex}\SpecialCharTok{==}\StringTok{"female"}\NormalTok{]),}
+           \FunctionTok{max}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{loglen[dx}\SpecialCharTok{$}\NormalTok{sex}\SpecialCharTok{==}\StringTok{"female"}\NormalTok{]), }\AttributeTok{length=}\DecValTok{100}\NormalTok{)}
+\NormalTok{px2 }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{loglen[dx}\SpecialCharTok{$}\NormalTok{sex}\SpecialCharTok{==}\StringTok{"male"}\NormalTok{]),}
+           \FunctionTok{max}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{loglen[dx}\SpecialCharTok{$}\NormalTok{sex}\SpecialCharTok{==}\StringTok{"male"}\NormalTok{]), }\AttributeTok{length=}\DecValTok{100}\NormalTok{)}
+
+\CommentTok{\# sex{-}specific data frames}
+\NormalTok{prx1 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{loglen=}\NormalTok{px1, }\AttributeTok{length=}\FunctionTok{exp}\NormalTok{(px1), }\AttributeTok{sex=}\StringTok{"female"}\NormalTok{)}
+\NormalTok{prx2 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{loglen=}\NormalTok{px2, }\AttributeTok{length=}\FunctionTok{exp}\NormalTok{(px2), }\AttributeTok{sex=}\StringTok{"male"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+When we calculate predictions, we need to use the argument
+\texttt{re.form} to specify how \texttt{predict()} will account for the
+random effects. We will use \texttt{re.form=NA}, which gives us the
+population-level prediction with the random effects set to 0. In other
+words, this is the predicted value at the average random effect
+\textbf{on the link scale}. It does not represent a prediction averaged
+over the distribution of random effects across sites (i.e., the
+\textbf{marginal mean}). To obtain that, we must account for the
+estimated variance of the random effects. With an identity link
+function, these two predictions are the same. With a nonlinear link
+function such as the logarithmic link used here, the difference can be
+substantial, especially if the random-effect variance is large.
+
+The take-home message is that \texttt{re.form=NA} is appropriate for
+illustrating the fixed-effect relationship, but we should be careful not
+to refer to these predictions as population-averaged means. In summary:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Population-level prediction with the random effects set to 0}:
+  Expected mass at a site with random intercept zero. Set
+  \texttt{re.form=NA}.
+\item
+  \textbf{Marginal means (population average)}: Expected mass averaged
+  over the distribution of site random effects. Need to integrate over
+  random effects (see example below).
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# calculate population{-}level predictions}
+\NormalTok{prx1}\SpecialCharTok{$}\NormalTok{fit }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod05, }\AttributeTok{newdata =}\NormalTok{ prx1,}
+                    \AttributeTok{type =} \StringTok{"response"}\NormalTok{, }\AttributeTok{re.form =} \ConstantTok{NA}\NormalTok{)}
+
+\NormalTok{prx2}\SpecialCharTok{$}\NormalTok{fit }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod05, }\AttributeTok{newdata =}\NormalTok{ prx2,}
+                    \AttributeTok{type =} \StringTok{"response"}\NormalTok{, }\AttributeTok{re.form =} \ConstantTok{NA}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+And plot:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(weight}\SpecialCharTok{\textasciitilde{}}\NormalTok{totalLength, }\AttributeTok{data=}\NormalTok{dx,}
+        \AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col,}
+        \AttributeTok{ylab=}\StringTok{"Body mass (g)"}\NormalTok{, }\AttributeTok{log=}\StringTok{"xy"}\NormalTok{,}
+        \AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{50}\NormalTok{))}
+\FunctionTok{lines}\NormalTok{(prx1}\SpecialCharTok{$}\NormalTok{length, prx1}\SpecialCharTok{$}\NormalTok{fit, }\AttributeTok{col=}\NormalTok{cols[}\DecValTok{1}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(prx2}\SpecialCharTok{$}\NormalTok{length, prx2}\SpecialCharTok{$}\NormalTok{fit, }\AttributeTok{col=}\NormalTok{cols[}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"right"}\NormalTok{, }\AttributeTok{legend=}\NormalTok{sexes,}
+       \AttributeTok{pch=}\NormalTok{pchs, }\AttributeTok{col=}\NormalTok{cols, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-glmmm3}}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Body mass vs. sex in White-Footed Mice Peromyscus leucopus.}]{chapters/ch23_files/figure-pdf/fig-glmmm3-1.pdf}}
+
+}
+
+\end{figure}%
+
+Finally, let's calculate and present the 95\% confidence intervals.
+Unlike \texttt{glm()} and \texttt{lm()}, \texttt{glmer()} does not
+provide \texttt{se.fit=TRUE} in the usual way. There are two reasonable
+approaches.
+
+For the population-level predictions, we can calculate the standard
+error of the linear predictor using the fixed-effect variance-covariance
+matrix, then transform the confidence limits back to grams.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{get\_ci }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(mod, newdata) \{}
+
+\NormalTok{  newdata}\SpecialCharTok{$}\NormalTok{sex }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(newdata}\SpecialCharTok{$}\NormalTok{sex,}
+                        \AttributeTok{levels =} \FunctionTok{levels}\NormalTok{(}\FunctionTok{model.frame}\NormalTok{(mod)}\SpecialCharTok{$}\NormalTok{sex))}
+
+\NormalTok{  X }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(}
+    \FunctionTok{delete.response}\NormalTok{(}\FunctionTok{terms}\NormalTok{(mod, }\AttributeTok{fixed.only =} \ConstantTok{TRUE}\NormalTok{)),}
+    \AttributeTok{data =}\NormalTok{ newdata}
+\NormalTok{  )}
+
+\NormalTok{  b }\OtherTok{\textless{}{-}} \FunctionTok{fixef}\NormalTok{(mod)}
+\NormalTok{  V }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(}\FunctionTok{vcov}\NormalTok{(mod))}
+
+\NormalTok{  eta }\OtherTok{\textless{}{-}} \FunctionTok{as.vector}\NormalTok{(X }\SpecialCharTok{\%*\%}\NormalTok{ b)}
+\NormalTok{  se }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{rowSums}\NormalTok{((X }\SpecialCharTok{\%*\%}\NormalTok{ V) }\SpecialCharTok{*}\NormalTok{ X))}
+
+\NormalTok{  newdata}\SpecialCharTok{$}\NormalTok{fit.plm }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(eta)}
+\NormalTok{  newdata}\SpecialCharTok{$}\NormalTok{lwr.plm }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(eta }\SpecialCharTok{{-}} \FloatTok{1.96} \SpecialCharTok{*}\NormalTok{ se)}
+\NormalTok{  newdata}\SpecialCharTok{$}\NormalTok{upr.plm }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(eta }\SpecialCharTok{+} \FloatTok{1.96} \SpecialCharTok{*}\NormalTok{ se)}
+
+\NormalTok{  newdata}
+\NormalTok{\}}
+
+\NormalTok{prx3 }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(prx1, prx2)}
+\NormalTok{prx3 }\OtherTok{\textless{}{-}} \FunctionTok{get\_ci}\NormalTok{(mod05, prx3)}
+\FunctionTok{head}\NormalTok{(prx3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+    loglen   length    sex      fit  fit.plm  lwr.plm  upr.plm
+1 4.682131 108.0000 female 11.67928 11.67928 10.80264 12.62706
+2 4.687837 108.6180 female 11.78952 11.78952 10.90987 12.74010
+3 4.693543 109.2396 female 11.90080 11.90080 11.01811 12.85422
+4 4.699249 109.8647 female 12.01314 12.01314 11.12737 12.96941
+5 4.704955 110.4933 female 12.12653 12.12653 11.23766 13.08571
+6 4.710661 111.1256 female 12.24100 12.24100 11.34899 13.20311
+\end{verbatim}
+
+And check out the plot:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(weight}\SpecialCharTok{\textasciitilde{}}\NormalTok{totalLength, }\AttributeTok{data=}\NormalTok{dx,}
+        \AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col,}
+        \AttributeTok{ylab=}\StringTok{"Body mass (g)"}\NormalTok{, }\AttributeTok{log=}\StringTok{"xy"}\NormalTok{,}
+        \AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{50}\NormalTok{))}
+\NormalTok{flag }\OtherTok{\textless{}{-}} \FunctionTok{which}\NormalTok{(prx3}\SpecialCharTok{$}\NormalTok{sex}\SpecialCharTok{==}\StringTok{"female"}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(prx3}\SpecialCharTok{$}\NormalTok{length[flag], prx3}\SpecialCharTok{$}\NormalTok{fit.plm[flag],}
+      \AttributeTok{col=}\NormalTok{cols[}\DecValTok{1}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(prx3}\SpecialCharTok{$}\NormalTok{length[flag], prx3}\SpecialCharTok{$}\NormalTok{lwr.plm[flag],}
+      \AttributeTok{col=}\NormalTok{cols[}\DecValTok{1}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(prx3}\SpecialCharTok{$}\NormalTok{length[flag], prx3}\SpecialCharTok{$}\NormalTok{upr.plm[flag],}
+      \AttributeTok{col=}\NormalTok{cols[}\DecValTok{1}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+
+\NormalTok{flag }\OtherTok{\textless{}{-}} \FunctionTok{which}\NormalTok{(prx3}\SpecialCharTok{$}\NormalTok{sex}\SpecialCharTok{==}\StringTok{"male"}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(prx3}\SpecialCharTok{$}\NormalTok{length[flag], prx3}\SpecialCharTok{$}\NormalTok{fit.plm[flag],}
+      \AttributeTok{col=}\NormalTok{cols[}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(prx3}\SpecialCharTok{$}\NormalTok{length[flag], prx3}\SpecialCharTok{$}\NormalTok{lwr.plm[flag],}
+      \AttributeTok{col=}\NormalTok{cols[}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(prx3}\SpecialCharTok{$}\NormalTok{length[flag], prx3}\SpecialCharTok{$}\NormalTok{upr.plm[flag],}
+      \AttributeTok{col=}\NormalTok{cols[}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"top"}\NormalTok{, }\AttributeTok{legend=}\NormalTok{sexes,}
+       \AttributeTok{pch=}\NormalTok{pchs, }\AttributeTok{col=}\NormalTok{cols, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-glmmm5}}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Body mass vs. sex in White-Footed Mice Peromyscus leucopus.}]{chapters/ch23_files/figure-pdf/fig-glmmm5-1.pdf}}
+
+}
+
+\end{figure}%
+
+\subsubsection{Plotting marginal means}\label{plotting-marginal-means}
+
+If we want to see the marginal means, which are predictions that average
+over the distribution of sites, we need to integrate over the
+distribution of random effects. Note that the calculations below are
+specific to this model, a Gaussian GLM(M) with a log link. If you have a
+different response distribution or link function, the calculation is
+different.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{v }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{VarCorr}\NormalTok{(mod05)}\SpecialCharTok{$}\NormalTok{site[}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{])}
+
+\NormalTok{prx1}\SpecialCharTok{$}\NormalTok{fit.mm }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod05,}
+                       \AttributeTok{newdata =}\NormalTok{ prx1,}
+                       \AttributeTok{type =} \StringTok{"response"}\NormalTok{, }\AttributeTok{re.form =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{*}
+    \FunctionTok{exp}\NormalTok{(v }\SpecialCharTok{/} \DecValTok{2}\NormalTok{)}
+
+\NormalTok{prx2}\SpecialCharTok{$}\NormalTok{fit.mm }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(mod05,}
+                       \AttributeTok{newdata =}\NormalTok{ prx2,}
+                       \AttributeTok{type =} \StringTok{"response"}\NormalTok{, }\AttributeTok{re.form =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{*}
+    \FunctionTok{exp}\NormalTok{(v }\SpecialCharTok{/} \DecValTok{2}\NormalTok{)}
+
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(weight}\SpecialCharTok{\textasciitilde{}}\NormalTok{totalLength, }\AttributeTok{data=}\NormalTok{dx,}
+        \AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col,}
+        \AttributeTok{ylab=}\StringTok{"Body mass (g)"}\NormalTok{, }\AttributeTok{log=}\StringTok{"xy"}\NormalTok{,}
+        \AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{50}\NormalTok{))}
+\FunctionTok{lines}\NormalTok{(prx1}\SpecialCharTok{$}\NormalTok{length, prx1}\SpecialCharTok{$}\NormalTok{fit.mm, }\AttributeTok{col=}\NormalTok{cols[}\DecValTok{1}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(prx2}\SpecialCharTok{$}\NormalTok{length, prx2}\SpecialCharTok{$}\NormalTok{fit.mm, }\AttributeTok{col=}\NormalTok{cols[}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{, }\AttributeTok{legend=}\NormalTok{sexes,}
+       \AttributeTok{pch=}\NormalTok{pchs, }\AttributeTok{col=}\NormalTok{cols, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-glmm4}}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Body mass vs. sex in White-Footed Mice Peromyscus leucopus.}]{chapters/ch23_files/figure-pdf/fig-glmm4-1.pdf}}
+
+}
+
+\end{figure}%
+
+In this case, the marginal means and the population-level predictions
+are pretty similar. Note that the procedure above is appropriate for a
+Gaussian GLMM with a log-link. The integration is different for other
+GLMMs.
+
+We can also plot the 95\% CI of the marginal means, but it's a little
+more involved. One way to estimate the CI is to use a parametric
+bootstrap using \texttt{bootMER()}. The code block below was not run
+during rendering because it takes over an hour.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pred\_fun }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(mod) \{}
+\NormalTok{  v }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{VarCorr}\NormalTok{(mod)}\SpecialCharTok{$}\NormalTok{site[}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{])}
+  \FunctionTok{predict}\NormalTok{(mod, }\AttributeTok{newdata =}\NormalTok{ prx3,}
+          \AttributeTok{type =} \StringTok{"response"}\NormalTok{, }\AttributeTok{re.form =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{exp}\NormalTok{(v }\SpecialCharTok{/} \DecValTok{2}\NormalTok{)}
+\NormalTok{\}}
+
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+
+\NormalTok{bt }\OtherTok{\textless{}{-}} \FunctionTok{bootMer}\NormalTok{(mod05, }\AttributeTok{FUN =}\NormalTok{ pred\_fun,}
+              \AttributeTok{nsim =} \DecValTok{500}\NormalTok{, }\AttributeTok{type =} \StringTok{"parametric"}\NormalTok{,}
+              \AttributeTok{use.u =} \ConstantTok{FALSE}\NormalTok{)}
+
+\NormalTok{prx3}\SpecialCharTok{$}\NormalTok{fit.boot }\OtherTok{\textless{}{-}} \FunctionTok{pred\_fun}\NormalTok{(mod05)}
+\NormalTok{prx3}\SpecialCharTok{$}\NormalTok{lwr.boot }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(bt}\SpecialCharTok{$}\NormalTok{t, }\DecValTok{2}\NormalTok{, quantile,}
+                       \FloatTok{0.025}\NormalTok{, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{prx3}\SpecialCharTok{$}\NormalTok{upr.boot }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(bt}\SpecialCharTok{$}\NormalTok{t, }\DecValTok{2}\NormalTok{, quantile,}
+                       \FloatTok{0.975}\NormalTok{, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# then make the plot as usual}
 \end{Highlighting}
 \end{Shaded}
 
 \section{Nonlinear mixed effects models}\label{sec-mixed-nlme}
 
-\subsection{Definition}\label{sec-mixed-nlme-def}
+Coming soon! \#\#\# Definition \{\#sec-mixed-nlme-def\}
 
 \subsection{Example with NEON data}\label{sec-mixed-nlme-example}
 

@@ -428,18 +428,21 @@ The difference between these two modes of specifying group-level parameters is s
 
 ### Example with NEON data {#sec-mixed-glmm-example}
 
+#### Data import and first steps
+
 Let's revisit the NEON small mammal capture data. Download the [individual measurement dataset](../datasets/data-neon-ind-meas.csv) and the [taxonomic dataset](../datasets/data-neon-taxa.csv) and put them in your working directory.
 
 ```{r}
 #| include: false
 tax <- read.csv("../datasets/data-neon-taxa.csv")
-ind <- read.csv("../datasets/data-ind-meas.csv")
+ind <- read.csv("../datasets/data-neon-ind-meas.csv")
+
 ```
 
 ```{r}
 #| eval: false
 tax <- read.csv("data-neon-taxa.csv")
-ind <- read.csv("data-ind-meas.csv")
+ind <- read.csv("data-neon-ind-meas.csv")
 ```
 
 We are going to use mixed models to investigate sexual dimorphism in body mass in white-footed mice (*Peromyscus leucopus*). We investigated this previously in @sec-mixed-lme-example. This time, we are going to investigate how body mass varies with body length in males and females. We are going to use a Gaussian GLM with a log-link. The log-link is appropriate here because body mass is a strictly positive, continuous variable. However, we do not suspect overdispersion, so we don't need a Gamma distribution. We will also test a random effect for site. We are interested in this random effect because different sites have different conditions that may affect body mass. 
@@ -477,7 +480,7 @@ dx$pch <- pchs[dx$sex]
 dx$col <- cols[dx$sex]
 ```
 
-At first glance, it appears that mass increases with total length (as it should). It's hard to tell whether there is an effect of sex. We should suspect from @ that there is at least a main effect of sex (different intercept).
+At first glance, it appears that mass increases with total length (as it should). It's hard to tell whether there is an effect of sex. We should suspect from @sec-mixed-lme-example that there is at least a main effect of sex (different intercept).
 
 ```{r}
 #| fig-width: 8
@@ -513,7 +516,11 @@ plot(weight~totalLength, data=dx,
 legend("right", legend=sexes,pch=pchs,col=cols)
 ```
 
-Much better. Let's fit a GLM and a GLMM version of our model.
+Much better. Those anomalous mice might be legitimate--for example, a mouse with an injured or missing tail would have a very large mass relative to its total length--but that would still warrant their removal.
+
+#### Fit GLM and GLMMM
+
+Now Let's fit a GLM and a GLMM version of our model.
 
 ```{r}
 dx$loglen <- log(dx$totalLength)
@@ -523,22 +530,30 @@ mod04 <- glm(weight~loglen+sex,
 summary(mod04)
 ```
 
-The results suggest that body length actually accounts for more variation in body mass than sex does. Let's add the random effect for site and refit as a GLMM.
+The results suggest that body length actually accounts for more variation in body mass than sex does. Let's add the random effect for site and refit as a GLMM. We are going to use an alternative optimizer because the default optimizer had an issue with convergence diagnostics. Different optimizers sometimes produce convergence warnings even when they arrive at essentially the same maximum-likelihood estimates. Comparing optimizers is one way to diagnose these warnings
 
 ```{r}
 library(lme4)
 
 mod05 <- glmer(weight~loglen+sex+(1|site),
-               data=dx, family=gaussian(link="log"))
+               data=dx, family=gaussian(link="log"),
+               control = glmerControl(optimizer = "bobyqa",
+                                      optCtrl = list(maxfun = 2e5))
+               )
 summary(mod05)
-
 ```
 
-The fixed effects are pretty similar, and the AICs suggest that adding the random effect improved the model.
+The fixed effects are pretty similar, and the AICs suggest that adding the random effect improved the model. Interestingly, the fixed effect of sex is statistically significant in the GLMM version of the model. Variance that was attributed to residual variation in the GLM was soaked up by random effect of site, which helped us detect the sex effect that we had every reason to expect to see.
+
+Let's compare the models by AIC:
 
 ```{r}
 AIC(mod04, mod05)
 ```
+
+The GLMM version has a much lower AIC, suggesting that including the random effect yields a model with better support. 
+
+#### Plotting population-level predictions
 
 Let's plot the model's predicted values to see how male and female mouse mass varies with length.
 
@@ -589,43 +604,6 @@ lines(prx2$length, prx2$fit, col=cols[2], lwd=3)
 legend("right", legend=sexes,
        pch=pchs, col=cols, lwd=3)
 ```
-
-If we want to see the marginal means, which are predictions that average over the distribution of sites, we need to integrate over the distribution of random effects.
-
-```{r}
-#| fig-width: 8
-#| fig-height: 6
-#| fig-label: "Body mass vs. sex in White-Footed Mice *Peromyscus leucopus*."
-#| fig-alt: "Body mass vs. sex in White-Footed Mice Peromyscus leucopus."
-#| label: fig-glmmm4
-
-
-v <- as.numeric(VarCorr(mod05)$site[1, 1])
-
-prx1$fit.mm <- predict(mod05,
-                       newdata = prx1,
-                       type = "response", re.form = NA) *
-    exp(v / 2)
-
-prx2$fit.mm <- predict(mod05,
-                       newdata = prx2,
-                       type = "response", re.form = NA) *
-    exp(v / 2)
-
-
-par(mar=c(5,5,1,1))
-plot(weight~totalLength, data=dx,
-        pch=dx$pch, col=dx$col,
-        ylab="Body mass (g)", log="xy",
-        ylim=c(10, 50))
-lines(prx1$length, prx1$fit.mm, col=cols[1], lwd=3)
-lines(prx2$length, prx2$fit.mm, col=cols[2], lwd=3)
-legend("right", legend=sexes,
-       pch=pchs, col=cols, lwd=3)
-
-```
-
-In this case, the marginal means and the population-level predictions are pretty similar. Note that the procedure above is appropriate for a Gaussian GLMM with a log-link. The integration is different for other GLMMs.
 
 Finally, let's calculate and present the 95% confidence intervals. Unlike `glm()` and `lm()`, `glmer()` does not provide `se.fit=TRUE` in the usual way. There are two reasonable approaches.
 
@@ -694,11 +672,50 @@ legend("top", legend=sexes,
 
 ```
 
-Alternatively, we can plot the marginal means and their 95% CI. We can use a parametric bootstrap using `bootMER()`. I set the number of bootstrap samples to 50 for speed while rendering, but you should use a larger value like 500.
+#### Plotting marginal means
+
+If we want to see the marginal means, which are predictions that average over the distribution of sites, we need to integrate over the distribution of random effects. Note that the calculations below are specific to this model, a Gaussian GLM(M) with a log link. If you have a different response distribution or link function, the calculation is different.
 
 ```{r}
-#| eval: false 
+#| fig-width: 8
+#| fig-height: 6
+#| fig-label: "Body mass vs. sex in White-Footed Mice *Peromyscus leucopus*."
+#| fig-alt: "Body mass vs. sex in White-Footed Mice Peromyscus leucopus."
+#| label: fig-glmm4
 
+
+v <- as.numeric(VarCorr(mod05)$site[1, 1])
+
+prx1$fit.mm <- predict(mod05,
+                       newdata = prx1,
+                       type = "response", re.form = NA) *
+    exp(v / 2)
+
+prx2$fit.mm <- predict(mod05,
+                       newdata = prx2,
+                       type = "response", re.form = NA) *
+    exp(v / 2)
+
+
+par(mar=c(5,5,1,1))
+plot(weight~totalLength, data=dx,
+        pch=dx$pch, col=dx$col,
+        ylab="Body mass (g)", log="xy",
+        ylim=c(10, 50))
+lines(prx1$length, prx1$fit.mm, col=cols[1], lwd=3)
+lines(prx2$length, prx2$fit.mm, col=cols[2], lwd=3)
+legend("topleft", legend=sexes,
+       pch=pchs, col=cols, lwd=3, bty="n")
+
+```
+
+In this case, the marginal means and the population-level predictions are pretty similar. Note that the procedure above is appropriate for a Gaussian GLMM with a log-link. The integration is different for other GLMMs.
+
+We can also plot the 95% CI of the marginal means, but it's a little more involved. One way to estimate the CI is to use a parametric bootstrap using `bootMER()`. The code block below was not run during rendering because it takes over an hour.
+
+```{r}
+#| eval: false
+#| 
 pred_fun <- function(mod) {
   v <- as.numeric(VarCorr(mod)$site[1, 1])
   predict(mod, newdata = prx3,
@@ -706,8 +723,9 @@ pred_fun <- function(mod) {
 }
 
 set.seed(123)
+
 bt <- bootMer(mod05, FUN = pred_fun,
-              nsim = 20, type = "parametric",
+              nsim = 500, type = "parametric",
               use.u = FALSE)
 
 prx3$fit.boot <- pred_fun(mod05)
@@ -715,14 +733,13 @@ prx3$lwr.boot <- apply(bt$t, 2, quantile,
                        0.025, na.rm = TRUE)
 prx3$upr.boot <- apply(bt$t, 2, quantile,
                        0.975, na.rm = TRUE)
+
+# then make the plot as usual
 ```
-
-And now the plot:
-
-
 
 ## Nonlinear mixed effects models {#sec-mixed-nlme}
 
+Coming soon!
 ### Definition {#sec-mixed-nlme-def}
 
 ### Example with NEON data {#sec-mixed-nlme-example}
