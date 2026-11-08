@@ -464,6 +464,7 @@ div.csl-indent {
   <ul class="collapse">
   <li><a href="#enter-the-matrix" id="toc-enter-the-matrix" class="nav-link" data-scroll-target="#enter-the-matrix"><span class="header-section-number">24.1.1</span> Enter the matrix</a></li>
   </ul></li>
+  <li><a href="#types-of-multivariate-analyses" id="toc-types-of-multivariate-analyses" class="nav-link" data-scroll-target="#types-of-multivariate-analyses"><span class="header-section-number">24.2</span> Types of multivariate analyses</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch24.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -492,13 +493,13 @@ div.csl-indent {
 <section id="multivariate-data" class="level2" data-number="24.1">
 <h2 data-number="24.1" class="anchored" data-anchor-id="multivariate-data"><span class="header-section-number">24.1</span> Multivariate data</h2>
 <p>Things are not always one or two dimensional. Oftentimes in biology we need to consider many variables at once. This is the realm of <strong>multivariate statistics</strong>. The “multi” in “multivariate” refers to the fact that there are multiple variables or attributes of each sample that we want to understand simultaneously. The terminology can be confusing sometimes because other statistical methods have the word “multiple” in their names. For example, “multiple linear regression” is not considered a multivariate method because there is only one measurement from each sample (the response variable) that is being modeled.</p>
-<p><a href="#fig-multivariate-data" class="quarto-xref">Figure&nbsp;<span>24.1</span></a> below shows some differences between a univariate analysis and a multivariate one. In the univariate analysis, one and only one variable is the response variable and is assumed to be predicted by (aka: depend on) the others. Frequently, the observations are divided <em>a priori</em> into groups by a factor encoded by one of the predictor variables. This means that the goal of a univariate analysis is to explain patterns in one variable relative to other variables. In a univariate analysis, the emphasis is on discovering relationships between variables, and the observations are a means to that end.</p>
-<div id="fig-multivariate-data" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" data-fig-width="100%" data-fig-cap="In a univariate analysis, there is one response variable which is modeled using predictor variables. In a multivariate analysis, there can be a response matrix of multiple variables, or no response variables at all. Instead, patterns among the variables can be explored without inferring causality.">
+<p><a href="#fig-multi-data" class="quarto-xref">Figure&nbsp;<span>24.1</span></a> below shows some differences between a univariate analysis and a multivariate one. In the univariate analysis, one and only one variable is the response variable and is assumed to be predicted by (aka: depend on) the others. Frequently, the observations are divided <em>a priori</em> into groups by a factor encoded by one of the predictor variables. This means that the goal of a univariate analysis is to explain patterns in one variable relative to other variables. In a univariate analysis, the emphasis is on discovering relationships between variables, and the observations are a means to that end.</p>
+<div id="fig-multi-data" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-cap="In a univariate analysis, there is one response variable which is modeled using predictor variables. In a multivariate analysis, there can be a response matrix of multiple variables, or no response variables at all. Instead, patterns among the variables can be explored without inferring causality." data-fig.align="center" data-fig-width="100%">
 <figure class="quarto-float quarto-float-fig figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-multivariate-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-multi-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;24.1: In a univariate analysis, there is one response variable which is modeled using predictor variables. In a multivariate analysis, there can be a response matrix of multiple variables, or no response variables at all. Instead, patterns among the variables can be explored without inferring causality.
 </figcaption>
-<div aria-describedby="fig-multivariate-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="fig-multi-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../images/multi-01.jpg" class="img-fluid figure-img" data-fig.align="center" data-fig-cap="In a univariate analysis, there is one response variable which is modeled using predictor variables. In a multivariate analysis, there can be a response matrix of multiple variables, or no response variables at all. Instead, patterns among the variables can be explored without inferring causality." data-fig-width="100%">
 </div>
 </figure>
@@ -508,19 +509,33 @@ Figure&nbsp;24.1: In a univariate analysis, there is one response variable which
 <h3 data-number="24.1.1" class="anchored" data-anchor-id="enter-the-matrix"><span class="header-section-number">24.1.1</span> Enter the matrix</h3>
 <p>When planning and executing a multivariate analysis it is very important to keep in mind which components of the dataset are which. These components are usually stored in <strong>matrices</strong> with a well-defined structure. The key concept is that of the <strong>sample unit</strong> or <strong>observation</strong>. Observations are also sometimes called <strong>records</strong>. These are individual entities about which many measurements or attributes are recorded. Sample units correspond to <em>rows</em> of the data matrix.</p>
 <p>Each sample unit has several <strong>variables</strong> associated with it. Variables are also sometimes called <strong>features</strong> or <strong>attributes</strong>. Variables correspond to <em>columns</em> of the data matrix.</p>
-<p>The figure below shows the layout of a typical multivariate dataset. The example has 12 observations and 6 variables . In some fields, samples are also called records and variables are called features.</p>
-<div id="fig-multivariate-matrix" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" data-fig-cap="Structure of a dataset. Data is collected about entities called observations. Each row of the dataset is an observation, and each column of the dataset contains one type of value (a variable) about each entity.">
+<p><a href="#fig-multi-matrix" class="quarto-xref">Figure&nbsp;<span>24.2</span></a> below shows the layout of a typical multivariate dataset. The example has 12 observations and 6 variables . In some fields, samples are also called records and variables are called features.</p>
+<div id="fig-multi-matrix" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" data-fig-cap="Structure of a dataset. Data is collected about entities called observations. Each row of the dataset is an observation, and each column of the dataset contains one type of value (a variable) about each entity.">
 <figure class="quarto-float quarto-float-fig figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-multivariate-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-multi-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;24.2: Structure of a dataset. Data is collected about entities called observations. Each row of the dataset is an observation, and each column of the dataset contains one type of value (a variable) about each entity.
 </figcaption>
-<div aria-describedby="fig-multivariate-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="fig-multi-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../images/multi-02.jpg" class="img-fluid figure-img" data-fig.align="center" data-fig-cap="Structure of a dataset. Data is collected about entities called observations. Each row of the dataset is an observation, and each column of the dataset contains one type of value (a variable) about each entity.">
 </div>
 </figure>
 </div>
-<p>A complete multivariate dataset often has several matrices, each with a different kind of information. <span class="quarto-unresolved-ref">?fig-multivariate-tables</span> below shows the relationship between three interrelated matrices typical in community ecology. Similar matrices can be defined for other fields. Just replace “Environmental variables” with another label that helps describe variation among the sample units.</p>
-<p><img src="../images/multi-03.jpg" id="fig-multivariate-tables" class="img-fluid" data-fig.align="center" data-fig-cap="Structure of a community ecology dataset with three tables. Table A contains the abundances of 6 species at 12 sites. Table E contains environmental variables that describe those 12 sites. Table S contains traits or characteristics of the 6 species from Table A." alt="Structure of a community ecology dataset with three tables. Table A contains the abundances of 6 species at 12 sites. Table E contains environmental variables that describe those 12 sites. Table S contains traits or characteristics of the 6 species from Table A."> - The data matrix <strong>A</strong> contains data on the abundance of 6 species at each of 12 sites. - The explanatory matrix <strong>E</strong> contains 4 environmental variables (e.g., temperature, latitude, etc.) for each of the sites. These data describe relationships between observations in <strong>A</strong>. - The trait matrix <strong>S</strong> contains data about traits (e.g., maximum size, longevity, etc.) of the species in the main matrix. These data describe relationships between variables in <strong>A</strong>.</p>
+<p>A complete multivariate dataset often has several matrices, each with a different kind of information. <a href="#fig-multi-tables" class="quarto-xref">Figure&nbsp;<span>24.3</span></a> below shows the relationship between three interrelated matrices typical in community ecology. Similar matrices can be defined for other fields. Just replace “Environmental variables” with another label that helps describe variation among the sample units.</p>
+<div id="fig-multi-tables" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Structure of a community ecology dataset with three tables. Table A contains the abundances of 6 species at 12 sites. Table E contains environmental variables that describe those 12 sites. Table S contains traits or characteristics of the 6 species from Table A.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-multi-tables-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;24.3: Structure of a community ecology dataset with three tables. Table A contains the abundances of 6 species at 12 sites. Table E contains environmental variables that describe those 12 sites. Table S contains traits or characteristics of the 6 species from Table A.
+</figcaption>
+<div aria-describedby="fig-multi-tables-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/multi-03.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Structure of a community ecology dataset with three tables. Table A contains the abundances of 6 species at 12 sites. Table E contains environmental variables that describe those 12 sites. Table S contains traits or characteristics of the 6 species from Table A.">
+</div>
+</figure>
+</div>
+<ul>
+<li>The data matrix <strong>A</strong> contains data on the abundance of 6 species at each of 12 sites.</li>
+<li>The explanatory matrix <strong>E</strong> contains 4 environmental variables (e.g., temperature, latitude, etc.) for each of the sites. These data describe relationships between observations in <strong>A</strong>.</li>
+<li>The trait matrix <strong>S</strong> contains data about traits (e.g., maximum size, longevity, etc.) of the species in the main matrix. These data describe relationships between variables in <strong>A</strong>.</li>
+</ul>
 <p>A biological system of interest might have relationships among all three of these matrices:</p>
 <ul>
 <li><strong>Patterns within A</strong>: Explaining groupings or trends among the sites in terms of the species present or absent at each site (or, the abundances of species at each site).</li>
@@ -530,6 +545,20 @@ Figure&nbsp;24.2: Structure of a dataset. Data is collected about entities calle
 <li><strong>Patterns within S</strong>: Identifying clusters of similar species.</li>
 </ul>
 <p><span class="citation" data-cites="mccune2002analysis">McCune <em>et al.</em> (<a href="#ref-mccune2002analysis" role="doc-biblioref">2002</a>)</span> give a thorough treatment of the relationships between <strong>S</strong>, <strong>E</strong>, <strong>A</strong>, and other matrices derived from them. For this course, we will focus on analyzing <strong>A</strong> and sometimes <strong>E</strong>. There is a related set of terminology used to describe multivariate analyses in terms of what is being compared. Analyses that seek relationships among samples are said to be in <strong>Q mode</strong>; analyses that seek relationships among variables are in <strong>R mode</strong> <span class="citation" data-cites="legendre2012numerical">(<a href="#ref-legendre2012numerical" role="doc-biblioref">Legendre and Legendre 2012</a>)</span>. These terms appear to be particular to ecology, but offer a helpful way to distinguish between different multivariate analysis pathways.</p>
+</section>
+</section>
+<section id="types-of-multivariate-analyses" class="level2" data-number="24.2">
+<h2 data-number="24.2" class="anchored" data-anchor-id="types-of-multivariate-analyses"><span class="header-section-number">24.2</span> Types of multivariate analyses</h2>
+<p>There are many types of multivariate analyses. What analysis you need to do depends on what kind of question you are trying to answer.</p>
+<ul>
+<li><strong>Clustering</strong> is the practice of identifying groups of similar observations based on several variables at once. We will explore clustering in <a href="ch26.html" class="quarto-xref"><span>Chapter 26</span></a>.</li>
+<li><strong>Ordination</strong> is the practice of visualizing patterns among your observations based on several variables at once. We will explore ordination in <a href="ch27.html" class="quarto-xref"><span>Chapter 27</span></a>.
+<ul>
+<li><strong>Constrained ordination</strong> is a multivariate extension of regression. One set of variables is treated as dependent on another set of variables. Examples include <a href="#sec-ord-con-rda">redundancy analysis (RDA)</a> and <a href="ch27.html#sec-ord-con-cca">canonical correspondence analysis (CCA)</a></li>
+<li><strong>Unconstrained ordination</strong> identifies patterns among observations in terms of multiple variables at once. Some methods such as <a href="ch27.html#sec-ord-un-pca">principal components analysis</a> work by extracting composite variables from the variables; others such as <a href="ch27.html#sec-ord-un-nmds">nonmetric multidimensional scaling (NMDS)</a> do not. Unconstrained ordination is primarily a technique for data exploration.</li>
+</ul></li>
+<li><strong>Hypothesis testing</strong> is possible in a multivariate context: just as we can test for differences between groups in terms of single response variables, we can test for differences between groups in terms of a response matrix. Or, we can test for correlations between two matrices of variables. In <a href="ch28.html" class="quarto-xref"><span>Chapter 28</span></a> we will explore methods like <a href="ch28.html#sec-mtest-group-perm">PERMANOVA</a> and <a href="ch28.html#sec-mtest-dis-mantel">Mantel tests</a>.</li>
+</ul>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list">
@@ -540,7 +569,6 @@ Legendre P, Legendre L. 2012. Numerical ecology. Amsterdam: Elsevier.
 McCune B, Grace JB, Urban DL. 2002. Analysis of ecological communities. MjM software design, Gleneden Beach, Oregon, USA.
 </div>
 </div>
-</section>
 </section>
 
 </main> <!-- /main -->

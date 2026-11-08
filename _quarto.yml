@@ -68,9 +68,9 @@ book:
         - chapters/ch25.qmd
         - chapters/ch26.qmd
         - chapters/ch27.qmd
+        - chapters/ch28.qmd
     - part: chapters/part_08.qmd
       chapters:
-        - chapters/ch28.qmd
         - chapters/ch29.qmd
         - chapters/ch30.qmd
     - part: chapters/part_09.qmd
