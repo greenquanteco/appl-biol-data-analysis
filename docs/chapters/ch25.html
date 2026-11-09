@@ -568,13 +568,13 @@ window.Quarto = {
 <section id="sec-diss-intro" class="level2" data-number="25.1">
 <h2 data-number="25.1" class="anchored" data-anchor-id="sec-diss-intro"><span class="header-section-number">25.1</span> Introduction and a silly example</h2>
 <p>One of the central questions in any biological data analysis is, “How similar to each other are my samples?” This is a more complicated question than it appears. It’s worth considering for a moment what “similar” even means. Consider the set of organisms in <a href="#fig-multi-animals1" class="quarto-xref">Figure&nbsp;<span>25.2</span></a> How would you group them by “similarity”?</p>
-<div id="fig-multi-animals1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-cap="These clip art creatures are different, but what do we mean by different? Some of them have different numbers of legs, but does that really capture the variability between them?" data-fig.align="center">
+<div id="fig-multi-animals1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" alt="A collection of clip art organisms, including a microbe, a pine tree, a crab, a penguin, an elephant, and others.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-multi-animals1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;25.1: These clip art creatures are different, but what do we mean by different? Some of them have different numbers of legs, but does that really capture the variability between them?
 </figcaption>
 <div aria-describedby="fig-multi-animals1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/multi-animals1.jpg" class="img-fluid figure-img" data-fig.align="center" data-fig-cap="These clip art creatures are different, but what do we mean by different? Some of them have different numbers of legs, but does that really capture the variability between them?">
+<img src="../images/multi-animals1.jpg" class="img-fluid figure-img" data-fig.align="center" alt="A collection of clip art organisms, including a microbe, a pine tree, a crab, a penguin, an elephant, and others.">
 </div>
 </figure>
 </div>
@@ -881,6 +881,16 @@ Figure&nbsp;25.6: Two-dimensional coordinate system illustrating the Cartesian a
 <li>A distance between two points on the Cartesian plane is just the segment between them, whose length is defined by the Pythagorean theorem.</li>
 <li>And so on for more dimensions.</li>
 </ul>
+<div id="fig-clust-2mice" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" alt="Scene from The Avengers just before Banner turns into the Hulk, saying That's my secret, I'm always a vector.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-clust-2mice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;25.7: Coordinates and vectors are just two ways of representing the same concept.
+</figcaption>
+<div aria-describedby="fig-clust-2mice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/distance-hulk.jpg" class="img-fluid figure-img" data-fig.align="center" alt="Scene from The Avengers just before Banner turns into the Hulk, saying That's my secret, I'm always a vector.">
+</div>
+</figure>
+</div>
 <p>But before we move on to learning about specific distance measures, it’s worth asking: is a straight line really the only distance between two points? No.</p>
 <p>Consider the points below. One way to describe the distance from one to another is to draw a straight line. An equally valid way would be to treat the plane as a grid of city blocks, with our movement restricted to the horizontal and vertical directions.</p>
 <div class="cell">
@@ -888,7 +898,7 @@ Figure&nbsp;25.6: Two-dimensional coordinate system illustrating the Cartesian a
 <div id="fig-distances" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two-dimensional coordinate grid showing a red point at the lower left and a blue point at the upper right. A black dashed diagonal line connects the points directly, representing Euclidean distance (5.31). Green dashed horizontal and vertical lines form a right-angle path between the points, representing Manhattan distance (7.5).">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-distances-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;25.7: Comparison of Euclidean (straight-line) and Manhattan (city-block) distances between two points in two-dimensional space. Euclidean distance measures the shortest distance between the points (5.31 units), while Manhattan distance sums the absolute differences along the two coordinate axes (7.5 units).
+Figure&nbsp;25.8: Comparison of Euclidean (straight-line) and Manhattan (city-block) distances between two points in two-dimensional space. Euclidean distance measures the shortest distance between the points (5.31 units), while Manhattan distance sums the absolute differences along the two coordinate axes (7.5 units).
 </figcaption>
 <div aria-describedby="fig-distances-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="ch25_files/figure-html/fig-distances-1.png" class="img-fluid figure-img" alt="Two-dimensional coordinate grid showing a red point at the lower left and a blue point at the upper right. A black dashed diagonal line connects the points directly, representing Euclidean distance (5.31). Green dashed horizontal and vertical lines form a right-angle path between the points, representing Manhattan distance (7.5)." width="768">
@@ -940,33 +950,33 @@ Figure&nbsp;25.7: Comparison of Euclidean (straight-line) and Manhattan (city-bl
 </section>
 <section id="sec-diss-space-what" class="level3" data-number="25.3.5">
 <h3 data-number="25.3.5" class="anchored" data-anchor-id="sec-diss-space-what"><span class="header-section-number">25.3.5</span> What can you do with a distance matrix?</h3>
-<p>We don’t have to just imagine; we can visualize what a distance matrix is. <a href="#fig-distance-matrix-vis01" class="quarto-xref">Figure&nbsp;<span>25.8</span></a> shows some points in a 3d space as vectors from the origin.</p>
+<p>We don’t have to just imagine; we can visualize what a distance matrix is. <a href="#fig-distance-matrix-vis01" class="quarto-xref">Figure&nbsp;<span>25.9</span></a> shows some points in a 3d space as vectors from the origin.</p>
 <div id="fig-distance-matrix-vis01" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Three-dimensional coordinate system with X, Y, and Z axes enclosed in a wireframe cube. Numerous thin black vectors radiate outward from the origin, representing observations with different combinations of values for the three variables.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-distance-matrix-vis01-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;25.8: Representation of a multivariate dataset in three-dimensional space. Each observation is represented by a vector extending from the origin to the point defined by its values for three variables (X, Y, and Z).
+Figure&nbsp;25.9: Representation of a multivariate dataset in three-dimensional space. Each observation is represented by a vector extending from the origin to the point defined by its values for three variables (X, Y, and Z).
 </figcaption>
 <div aria-describedby="fig-distance-matrix-vis01-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../images/multi-distance-vis01.png" class="img-fluid figure-img" alt="Three-dimensional coordinate system with X, Y, and Z axes enclosed in a wireframe cube. Numerous thin black vectors radiate outward from the origin, representing observations with different combinations of values for the three variables.">
 </div>
 </figure>
 </div>
-<p>Now compare that to <a href="#fig-distance-matrix-vis02" class="quarto-xref">Figure&nbsp;<span>25.9</span></a>, which shows the distances between each point as thin grey lines.</p>
+<p>Now compare that to <a href="#fig-distance-matrix-vis02" class="quarto-xref">Figure&nbsp;<span>25.10</span></a>, which shows the distances between each point as thin grey lines.</p>
 <div id="fig-distance-matrix-vis02" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Three-dimensional coordinate system with X, Y, and Z axes enclosed in a wireframe cube. Black vectors extend from the origin to numerous observations distributed throughout the space. Thin, semitransparent gray lines connect every pair of observations, forming a dense network that illustrates all pairwise distances.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-distance-matrix-vis02-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;25.9: Pairwise distances among observations in a three-dimensional multivariate dataset. Each observation is represented by a vector extending from the origin, while additional line segments connect every pair of observations, illustrating the distances represented by a distance matrix.
+Figure&nbsp;25.10: Pairwise distances among observations in a three-dimensional multivariate dataset. Each observation is represented by a vector extending from the origin, while additional line segments connect every pair of observations, illustrating the distances represented by a distance matrix.
 </figcaption>
 <div aria-describedby="fig-distance-matrix-vis02-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../images/multi-distance-vis02.png" class="img-fluid figure-img" alt="Three-dimensional coordinate system with X, Y, and Z axes enclosed in a wireframe cube. Black vectors extend from the origin to numerous observations distributed throughout the space. Thin, semitransparent gray lines connect every pair of observations, forming a dense network that illustrates all pairwise distances.">
 </div>
 </figure>
 </div>
-<p>The lengths of every one of those thin lines would be an entry in the distance matrix. What can we do with these? One way to analyze distances is to compare <strong>within-group distances</strong> to <strong>between-group</strong> distances. <a href="#fig-distance-matrix-vis03" class="quarto-xref">Figure&nbsp;<span>25.10</span></a> below shows the distances within each of two groups, red and blue.</p>
+<p>The lengths of every one of those thin lines would be an entry in the distance matrix. What can we do with these? One way to analyze distances is to compare <strong>within-group distances</strong> to <strong>between-group</strong> distances. <a href="#fig-distance-matrix-vis03" class="quarto-xref">Figure&nbsp;<span>25.11</span></a> below shows the distances within each of two groups, red and blue.</p>
 <div id="fig-distance-matrix-vis03" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Three-dimensional coordinate system with X, Y, and Z axes enclosed in a wireframe cube. Black vectors extend from the origin to observations belonging to two groups. Thin, semitransparent red lines connect observations in the upper group, while blue lines connect observations in the lower group, illustrating within-group distances.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-distance-matrix-vis03-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;25.10: Pairwise distances within two groups of observations in a three-dimensional multivariate dataset. Each observation is represented by a vector extending from the origin. Red and blue line segments connect observations within their respective groups, illustrating within-group distances. Distances between observations belonging to different groups are not shown.
+Figure&nbsp;25.11: Pairwise distances within two groups of observations in a three-dimensional multivariate dataset. Each observation is represented by a vector extending from the origin. Red and blue line segments connect observations within their respective groups, illustrating within-group distances. Distances between observations belonging to different groups are not shown.
 </figcaption>
 <div aria-describedby="fig-distance-matrix-vis03-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../images/multi-distance-vis03.png" class="img-fluid figure-img" alt="Three-dimensional coordinate system with X, Y, and Z axes enclosed in a wireframe cube. Black vectors extend from the origin to observations belonging to two groups. Thin, semitransparent red lines connect observations in the upper group, while blue lines connect observations in the lower group, illustrating within-group distances.">
@@ -980,7 +990,7 @@ Figure&nbsp;25.10: Pairwise distances within two groups of observations in a thr
 <div id="fig-distvsdist" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Scatterplot showing dissimilarity in soil chemistry on the X-axis and dissimilarity in plant community composition on the Y-axis, both ranging approximately from 0 to 7. Thousands of semitransparent gray points show a generally positive relationship, with dense clusters at low dissimilarities and a broad, upward-trending distribution at higher values.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-distvsdist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;25.11: Relationship between dissimilarity in soil chemistry and dissimilarity in plant community composition. Each point represents a pairwise comparison between two sites. Plant communities generally become more dissimilar as differences in soil chemistry increase, although considerable variation exists around this relationship.
+Figure&nbsp;25.12: Relationship between dissimilarity in soil chemistry and dissimilarity in plant community composition. Each point represents a pairwise comparison between two sites. Plant communities generally become more dissimilar as differences in soil chemistry increase, although considerable variation exists around this relationship.
 </figcaption>
 <div aria-describedby="fig-distvsdist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="ch25_files/figure-html/fig-distvsdist-1.png" class="img-fluid figure-img" alt="Scatterplot showing dissimilarity in soil chemistry on the X-axis and dissimilarity in plant community composition on the Y-axis, both ranging approximately from 0 to 7. Thousands of semitransparent gray points show a generally positive relationship, with dense clusters at low dissimilarities and a broad, upward-trending distribution at higher values." width="768">
@@ -1032,7 +1042,7 @@ Figure&nbsp;25.11: Relationship between dissimilarity in soil chemistry and diss
 </section>
 <section id="sec-diss-meas-met-man" class="level4" data-number="25.4.1.2">
 <h4 data-number="25.4.1.2" class="anchored" data-anchor-id="sec-diss-meas-met-man"><span class="header-section-number">25.4.1.2</span> Manhattan distances</h4>
-<p>The <strong>Manhattan</strong> or <strong>city block</strong> distance treats the plane like a grid of city blocks, with distances only measurable in directions parallel to the axes. See <a href="#fig-distances" class="quarto-xref">Figure&nbsp;<span>25.7</span></a> for an illustration. Basically, it is the sum of absolute differences in each variable between two observations. The Manhattan distance between two points <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> in <span class="math inline">\(k\)</span> dimensions is:</p>
+<p>The <strong>Manhattan</strong> or <strong>city block</strong> distance treats the plane like a grid of city blocks, with distances only measurable in directions parallel to the axes. See <a href="#fig-distances" class="quarto-xref">Figure&nbsp;<span>25.8</span></a> for an illustration. Basically, it is the sum of absolute differences in each variable between two observations. The Manhattan distance between two points <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> in <span class="math inline">\(k\)</span> dimensions is:</p>
 <p><span class="math display">\[d_{Man}(a,b)=\sum_{i=1}^n{\lvert a_i-b_i\rvert}\]</span></p>
 <p>The Manhattan distance is also called the <span class="math inline">\(L^1\)</span> norm or metric.</p>
 <p>Let’s calculate the Manhattan distance for the <a href="../datasets/silly-trait-matrix-example1.csv">full table of organism traits</a> from the silly example in <a href="#sec-diss-intro" class="quarto-xref"><span>Section 25.1</span></a>. Download this and put it in your working directory.</p>
@@ -1270,7 +1280,7 @@ d_M(\mathbf{x},\mathbf{y}) =
 <div id="fig-mahalanobis" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Scatterplot of Euclidean distance versus Mahalanobis distance, with both axes ranging approximately from 0 to 7. Thousands of overlapping black open circles form a broad, positively associated cloud. A red diagonal line represents equal distances under the two metrics. Points occur both above and below the line, indicating that Mahalanobis distances can be greater or smaller than Euclidean distances for the same pair of observations.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-mahalanobis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;25.12: Comparison of Euclidean and Mahalanobis distances between pairs of observations in a multivariate dataset. Each point represents a pairwise comparison, with Euclidean distance on the X-axis and Mahalanobis distance on the Y-axis. The red line indicates where the two distances would be equal (1:1). Differences between the two measures arise because Mahalanobis distance accounts for the variances and covariances among variables.
+Figure&nbsp;25.13: Comparison of Euclidean and Mahalanobis distances between pairs of observations in a multivariate dataset. Each point represents a pairwise comparison, with Euclidean distance on the X-axis and Mahalanobis distance on the Y-axis. The red line indicates where the two distances would be equal (1:1). Differences between the two measures arise because Mahalanobis distance accounts for the variances and covariances among variables.
 </figcaption>
 <div aria-describedby="fig-mahalanobis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="ch25_files/figure-html/fig-mahalanobis-1.png" class="img-fluid figure-img" alt="Scatterplot of Euclidean distance versus Mahalanobis distance, with both axes ranging approximately from 0 to 7. Thousands of overlapping black open circles form a broad, positively associated cloud. A red diagonal line represents equal distances under the two metrics. Points occur both above and below the line, indicating that Mahalanobis distances can be greater or smaller than Euclidean distances for the same pair of observations." width="768">

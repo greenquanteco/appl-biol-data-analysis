@@ -1,9 +1,10 @@
 # Dissimilarity and distance measures {#sec-diss}
 
 ## Introduction and a silly example {#sec-diss-intro}
+
 One of the central questions in any biological data analysis is, “How similar to each other are my samples?” This is a more complicated question than it appears. It’s worth considering for a moment what “similar” even means. Consider the set of organisms in @fig-multi-animals1 How would you group them by “similarity”?
 
-![These clip art creatures are different, but what do we mean by different? Some of them have different numbers of legs, but does that really capture the variability between them?](../images/multi-animals1.jpg){#fig-multi-animals1 fig.align="center" fig-cap="These clip art creatures are different, but what do we mean by different? Some of them have different numbers of legs, but does that really capture the variability between them?"}
+![These clip art creatures are different, but what do we mean by different? Some of them have different numbers of legs, but does that really capture the variability between them?](../images/multi-animals1.jpg){#fig-multi-animals1 fig.align="center" fig-alt="A collection of clip art organisms, including a microbe, a pine tree, a crab, a penguin, an elephant, and others."}
 
 Here is one way to group them.
 
@@ -271,6 +272,8 @@ Don't worry, we're not going to be working with polar coordinates. I just wanted
 - A distance between two points on the number line is just their difference.
 - A distance between two points on the Cartesian plane is just the segment between them, whose length is defined by the Pythagorean theorem.
 - And so on for more dimensions.
+
+![Coordinates and vectors are just two ways of representing the same concept.](../images/distance-hulk.jpg){#fig-clust-2mice fig.align="center" fig-alt="Scene from The Avengers just before Banner turns into the Hulk, saying That's my secret, I'm always a vector."}
 
 But before we move on to learning about specific distance measures, it's worth asking: is a straight line really the only distance between two points? No.
 

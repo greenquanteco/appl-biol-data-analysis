@@ -533,10 +533,11 @@ window.Quarto = {
   <li><a href="#sec-clust-kmeans-intro" id="toc-sec-clust-kmeans-intro" class="nav-link" data-scroll-target="#sec-clust-kmeans-intro"><span class="header-section-number">26.2.1</span> Introduction to K-means clustering</a></li>
   <li><a href="#sec-clust-kmeans-example" id="toc-sec-clust-kmeans-example" class="nav-link" data-scroll-target="#sec-clust-kmeans-example"><span class="header-section-number">26.2.2</span> Example with NEON data</a></li>
   </ul></li>
-  <li><a href="#sec-clust-hclust" id="toc-sec-clust-hclust" class="nav-link" data-scroll-target="#sec-clust-hclust"><span class="header-section-number">26.3</span> Hierarchical agglomerative clustering</a>
+  <li><a href="#sec-clust-hier" id="toc-sec-clust-hier" class="nav-link" data-scroll-target="#sec-clust-hier"><span class="header-section-number">26.3</span> Hierarchical clustering</a>
   <ul class="collapse">
-  <li><a href="#sec-clust-hclust-ward" id="toc-sec-clust-hclust-ward" class="nav-link" data-scroll-target="#sec-clust-hclust-ward"><span class="header-section-number">26.3.1</span> Hierarchical clustering with Ward’s method</a></li>
-  <li><a href="#sec-clust-hclust-single" id="toc-sec-clust-hclust-single" class="nav-link" data-scroll-target="#sec-clust-hclust-single"><span class="header-section-number">26.3.2</span> Hierarchical clustering with single linkage</a></li>
+  <li><a href="#sec-clust-hier-intro" id="toc-sec-clust-hier-intro" class="nav-link" data-scroll-target="#sec-clust-hier-intro"><span class="header-section-number">26.3.1</span> Introduction</a></li>
+  <li><a href="#sec-clust-hier-chain" id="toc-sec-clust-hier-chain" class="nav-link" data-scroll-target="#sec-clust-hier-chain"><span class="header-section-number">26.3.2</span> Chaining</a></li>
+  <li><a href="#sec-clust-hier-methods" id="toc-sec-clust-hier-methods" class="nav-link" data-scroll-target="#sec-clust-hier-methods"><span class="header-section-number">26.3.3</span> Hierarchical clustering methods</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch26.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -584,7 +585,29 @@ Figure&nbsp;26.1: text
 <section id="sec-clust-intro-types" class="level3" data-number="26.1.1">
 <h3 data-number="26.1.1" class="anchored" data-anchor-id="sec-clust-intro-types"><span class="header-section-number">26.1.1</span> Types of clustering</h3>
 <p>There are many methods for clustering observations. Many methods are <strong>hierarchical</strong>, with groups being nested within other groups. Many biological phenomena are also hierarchical in nature, so these methods are naturally quite useful. Other methods are <strong>non-hierarchical</strong>, where groups are not constrained to be within other groups.</p>
-<p>Clustering methods also differ in their manner of group construction. Many methods are <strong>agglomerative</strong>, which means that groups are formed by combining samples. Other methods are <strong>divisive</strong>, which means that all samples start in a single group which is then broken up. Divisive techniques are also called <strong>partitioning</strong> techniques. Examples of each class of clustering method are shown below.</p>
+<p>Most hierarchical methods produce non-overlapping groups. Hierarchical methods are easier to compute in general. However, some authors (see <span class="citation" data-cites="legendre2012numerical">Legendre and Legendre (<a href="#ref-legendre2012numerical" role="doc-biblioref">2012</a>)</span>) consider hierarchical cluster methods to be “classification” rather than true clustering. The biological reasoning is clear: the hierarchy produced by a clustering algorithm is analogous to the hierarchies we see in phylogeny or Linnaean taxonomy.</p>
+<div id="fig-clust-hierarchy" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" alt="In nonhierarchical clustering, groups are not nested within each other. In hierarchical clustering, samples are partitioned into nested groups.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-clust-hierarchy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.2: In nonhierarchical clustering, groups are not nested within each other. In hierarchical clustering, samples are partitioned into nested groups.
+</figcaption>
+<div aria-describedby="fig-clust-hierarchy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/cluster-hierarchy.jpg" class="img-fluid figure-img" data-fig.align="center" alt="In nonhierarchical clustering, groups are not nested within each other. In hierarchical clustering, samples are partitioned into nested groups.">
+</div>
+</figure>
+</div>
+<p>Clustering methods also differ in their manner of group construction. Many methods are <strong>agglomerative</strong>, which means that groups are formed by combining samples. Other methods are <strong>divisive</strong>, which means that all samples start in a single group which is then broken up. Divisive techniques are also called <strong>partitioning</strong> techniques.</p>
+<div id="fig-clust-agglom" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" alt="Agglomerative clustering starts with all samples completely ungrouped, then puts groups together by combining samples. Divisive clustering or partitioning starts with all samples in the same group, then divides the group until some stopping rule is reached.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-clust-agglom-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.3: Agglomerative clustering starts with all samples completely ungrouped, then puts groups together by combining samples. Divisive clustering or partitioning starts with all samples in the same group, then divides the group until some stopping rule is reached.
+</figcaption>
+<div aria-describedby="fig-clust-agglom-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/cluster-agglom.jpg" class="img-fluid figure-img" data-fig.align="center" alt="Agglomerative clustering starts with all samples completely ungrouped, then puts groups together by combining samples. Divisive clustering or partitioning starts with all samples in the same group, then divides the group until some stopping rule is reached.">
+</div>
+</figure>
+</div>
+<p>Examples of each class of clustering method are shown below.</p>
 <div id="tbl-clustering-methods" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-clustering-methods-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -648,7 +671,7 @@ Table&nbsp;26.1: Common approaches to clustering and their methods of forming gr
 <div id="fig-kmeans-example1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-example1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.2: text
+Figure&nbsp;26.4: text
 </figcaption>
 <div aria-describedby="fig-kmeans-example1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="ch26_files/figure-html/fig-kmeans-example1-1.png" class="img-fluid figure-img" alt="text" width="960">
@@ -687,7 +710,7 @@ Figure&nbsp;26.2: text
 <div id="fig-kmeans-wss-plot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-wss-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.3: text
+Figure&nbsp;26.5: text
 </figcaption>
 <div aria-describedby="fig-kmeans-wss-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="ch26_files/figure-html/fig-kmeans-wss-plot-1.png" class="img-fluid figure-img" alt="text" width="768">
@@ -741,7 +764,7 @@ Figure&nbsp;26.3: text
 <div id="fig-kmeans-example2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-example2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.4: text
+Figure&nbsp;26.6: text
 </figcaption>
 <div aria-describedby="fig-kmeans-example2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="ch26_files/figure-html/fig-kmeans-example2-1.png" class="img-fluid figure-img" alt="text" width="960">
@@ -783,7 +806,18 @@ Figure&nbsp;26.4: text
 <span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>col <span class="ot">&lt;-</span> cols[dx<span class="sc">$</span>abb]</span>
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>pch <span class="ot">&lt;-</span> pchs[dx<span class="sc">$</span>abb]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The Eastern Deer Mouse (<em>Peromyscus maniculatus</em>) and the White-Footed Mouse (<em>P. leucopus</em>) are two morphologically similar species of mice that are widespread throughout much of North America. Among mammalogists, they are notoriously difficult to tell apart in the field. This is a problem, because they are both habitat generalists and co-occur in many places (<span class="citation" data-cites="light2021morphological">Light <em>et al.</em> (<a href="#ref-light2021morphological" role="doc-biblioref">2021</a>)</span>). Several field characters or suites of characters have been shown to differentiate them, with some success (<span class="citation" data-cites="rich1996morphological">Rich <em>et al.</em> (<a href="#ref-rich1996morphological" role="doc-biblioref">1996</a>)</span>), but regional variation in both species confounds these methods. Some studies have found that over a third of species in museum collections may have been misidentified (<span class="citation" data-cites="light2021morphological">Light <em>et al.</em> (<a href="#ref-light2021morphological" role="doc-biblioref">2021</a>)</span>). For this example analysis, we are going to assume that all individuals in the dataset have been identified correctly.</p>
+<p>The Eastern Deer Mouse (<em>Peromyscus maniculatus</em>) and the White-Footed Mouse (<em>P. leucopus</em>) are two morphologically similar species of mice that are widespread throughout much of North America. Among mammalogists, they are notoriously difficult to tell apart in the field. This is a problem, because they are both habitat generalists and co-occur in many places (<span class="citation" data-cites="light2021morphological">Light <em>et al.</em> (<a href="#ref-light2021morphological" role="doc-biblioref">2021</a>)</span>).</p>
+<div id="fig-clust-2mice" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" alt="The Eastern Deer Mouse (Peromyscus maniculatus) and the White-Footed Mouse (P. leucopus).">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-clust-2mice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.7: The Eastern Deer Mouse (<em>Peromyscus maniculatus</em>) and the White-Footed Mouse (<em>P. leucopus</em>). Both photos by the author.
+</figcaption>
+<div aria-describedby="fig-clust-2mice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/cluster-mice.jpg" class="img-fluid figure-img" data-fig.align="center" alt="The Eastern Deer Mouse (Peromyscus maniculatus) and the White-Footed Mouse (P. leucopus).">
+</div>
+</figure>
+</div>
+<p>Several field characters or suites of characters have been shown to differentiate them, with some success (<span class="citation" data-cites="rich1996morphological">Rich <em>et al.</em> (<a href="#ref-rich1996morphological" role="doc-biblioref">1996</a>)</span>), but regional variation in both species confounds these methods. Some studies have found that over a third of species in museum collections may have been misidentified (<span class="citation" data-cites="light2021morphological">Light <em>et al.</em> (<a href="#ref-light2021morphological" role="doc-biblioref">2021</a>)</span>). For this example analysis, we are going to assume that all individuals in the dataset have been identified correctly.</p>
 <p>Let’s apply <em>K</em>-means clustering to see if we can identify any groups of similar individuals. If the species can be distinguished morphologically, then the clusters may recover the species. We expect to find 2 clusters, but there may be more. We will test <span class="math inline">\(K\)</span> from 2 through 8.</p>
 <p>Unlike most of the multivariate methods in this guide, we won’t need the package <code>vegan</code>: <code>kmeans()</code> is a base function.</p>
 <div class="cell">
@@ -816,7 +850,7 @@ Figure&nbsp;26.4: text
 <div id="fig-kmeans-mice1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-mice1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.5: text
+Figure&nbsp;26.8: text
 </figcaption>
 <div aria-describedby="fig-kmeans-mice1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="ch26_files/figure-html/fig-kmeans-mice1-1.png" class="img-fluid figure-img" alt="text" width="768">
@@ -825,7 +859,7 @@ Figure&nbsp;26.5: text
 </div>
 </div>
 </div>
-<p>Unlike our first example (<a href="#fig-kmeans-wss-plot" class="quarto-xref">Figure&nbsp;<span>26.3</span></a>), this curve doesn’t have a clear break point. It is definitely leveling out by 4 to 6 clusters, but there isn’t as clean of an answer as the plot for the data that I made up earlier. Let’s explore the potential clusters in an <strong>ordination plot</strong>. This is a way to visualize multivariate data that we will cover in <a href="ch27.html" class="quarto-xref"><span>Chapter 27</span></a>. For now, just understand that <em>points that are closer together are more similar to each other</em>.</p>
+<p>Unlike our first example (<a href="#fig-kmeans-wss-plot" class="quarto-xref">Figure&nbsp;<span>26.5</span></a>), this curve doesn’t have a clear break point. It is definitely leveling out by 4 to 6 clusters, but there isn’t as clean of an answer as the plot for the data that I made up earlier. Let’s explore the potential clusters in an <strong>ordination plot</strong>. This is a way to visualize multivariate data that we will cover in <a href="ch27.html" class="quarto-xref"><span>Chapter 27</span></a>. For now, just understand that <em>points that are closer together are more similar to each other</em>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -865,7 +899,7 @@ Cumulative Proportion   0.9038  0.98725 0.996311 1.000000</code></pre>
 <div id="fig-kmeans-mice-pca" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-mice-pca-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.6: text
+Figure&nbsp;26.9: text
 </figcaption>
 <div aria-describedby="fig-kmeans-mice-pca-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="ch26_files/figure-html/fig-kmeans-mice-pca-1.png" class="img-fluid figure-img" alt="text" width="768">
@@ -932,7 +966,7 @@ Figure&nbsp;26.6: text
 <div id="fig-kmeans-mice-pca4" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-mice-pca4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.7: text
+Figure&nbsp;26.10: text
 </figcaption>
 <div aria-describedby="fig-kmeans-mice-pca4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="ch26_files/figure-html/fig-kmeans-mice-pca4-1.png" class="img-fluid figure-img" alt="text" width="768">
@@ -941,7 +975,7 @@ Figure&nbsp;26.7: text
 </div>
 </div>
 </div>
-<p>The PCA let’s us see something important about the clusters. First, all of the biplot vectors (black lines) go off to the right. This tells us that PC1 is basically a gradient of overall size. That’s not inherently a problem; overall size could be a factor that helps differentiate two species. Second, the clusters that the <em>K</em>-means algorithm discovered are essentially splitting the individuals up along that gradient of size. The top left panel of <a href="#fig-kmeans-mice-pca4" class="quarto-xref">Figure&nbsp;<span>26.7</span></a> shows that <em>P. leucopus</em> and <em>P. maniculatus</em> do separate along PC1 somewhat, but they also separate somewhat along PC2.</p>
+<p>The PCA let’s us see something important about the clusters. First, all of the biplot vectors (black lines) go off to the right. This tells us that PC1 is basically a gradient of overall size. That’s not inherently a problem; overall size could be a factor that helps differentiate two species. Second, the clusters that the <em>K</em>-means algorithm discovered are essentially splitting the individuals up along that gradient of size. The top left panel of <a href="#fig-kmeans-mice-pca4" class="quarto-xref">Figure&nbsp;<span>26.10</span></a> shows that <em>P. leucopus</em> and <em>P. maniculatus</em> do separate along PC1 somewhat, but they also separate somewhat along PC2.</p>
 <p>Just for fun, let’s redraw the figure to show PC1 and PC3 instead of PC1 and PC2. This might allow us to see some better separation.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get measurement scores</span></span>
@@ -985,7 +1019,7 @@ Figure&nbsp;26.7: text
 <div id="fig-kmeans-mice-pca4-2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-mice-pca4-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.8: text
+Figure&nbsp;26.11: text
 </figcaption>
 <div aria-describedby="fig-kmeans-mice-pca4-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="ch26_files/figure-html/fig-kmeans-mice-pca4-2-1.png" class="img-fluid figure-img" alt="text" width="768">
@@ -1037,7 +1071,7 @@ Figure&nbsp;26.8: text
 <div id="fig-kmeans-mice-pca4-3" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-mice-pca4-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.9: text
+Figure&nbsp;26.12: text
 </figcaption>
 <div aria-describedby="fig-kmeans-mice-pca4-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="ch26_files/figure-html/fig-kmeans-mice-pca4-3-1.png" class="img-fluid figure-img" alt="text" width="768">
@@ -1089,7 +1123,7 @@ Figure&nbsp;26.9: text
 <div id="fig-kmeans-mice-pca2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-mice-pca2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.10: text
+Figure&nbsp;26.13: text
 </figcaption>
 <div aria-describedby="fig-kmeans-mice-pca2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="ch26_files/figure-html/fig-kmeans-mice-pca2-1.png" class="img-fluid figure-img" alt="text" width="768">
@@ -1104,21 +1138,478 @@ Figure&nbsp;26.10: text
 <p>This leads us to an important question: if we already know the species identities, would a supervised classification method have been more appropriate? We will explore one such method, <a href="ch27.html#sec-ord-other-lda">linear discriminant analysis</a>, in the next chapter.</p>
 </section>
 </section>
-<section id="sec-clust-hclust" class="level2" data-number="26.3">
-<h2 data-number="26.3" class="anchored" data-anchor-id="sec-clust-hclust"><span class="header-section-number">26.3</span> Hierarchical agglomerative clustering</h2>
-<p>Coming soon!</p>
-<section id="sec-clust-hclust-ward" class="level3" data-number="26.3.1">
-<h3 data-number="26.3.1" class="anchored" data-anchor-id="sec-clust-hclust-ward"><span class="header-section-number">26.3.1</span> Hierarchical clustering with Ward’s method</h3>
+<section id="sec-clust-hier" class="level2" data-number="26.3">
+<h2 data-number="26.3" class="anchored" data-anchor-id="sec-clust-hier"><span class="header-section-number">26.3</span> Hierarchical clustering</h2>
+<section id="sec-clust-hier-intro" class="level3" data-number="26.3.1">
+<h3 data-number="26.3.1" class="anchored" data-anchor-id="sec-clust-hier-intro"><span class="header-section-number">26.3.1</span> Introduction</h3>
+<p>Hierarchical clustering works by constructing groups of samples, and then combining samples and groups. Most hierarchical clustering algorithms are agglomerative. The general method is as follows.</p>
+<ol type="1">
+<li><strong>Initialize the clustering.</strong> Each observation begins as the sole member of a cluster with one member.</li>
+<li><strong>Calculate distances.</strong> Calculate a distance matrix describing the dissimilarity between every pair of observations. The choice of distance measure (or dissimilarity, for reviewer 2) is important, so think carefully about that.</li>
+<li><strong>Find the closest clusters.</strong> Identify the two clusters separated by the smallest distance. Initially, each cluster contains only one observation.</li>
+<li><strong>Merge the clusters.</strong> Combine the two closest clusters into a single, larger cluster.</li>
+<li><strong>Update the distances.</strong> Calculate the distance between the newly formed cluster and each of the remaining clusters (<a href="#fig-clust-lance1966" class="quarto-xref">Figure&nbsp;<span>26.14</span></a>).</li>
+<li><strong>Repeat.</strong> Continue merging clusters and updating distances until all observations belong to a single cluster.</li>
+</ol>
+<p>The important question is how to calculate distances between clusters containing multiple observations. Several methods are available, and different methods can produce different clustering results. <span class="citation" data-cites="legendre2012numerical">Legendre and Legendre (<a href="#ref-legendre2012numerical" role="doc-biblioref">2012</a>)</span> note that many hierarchical agglomerative clustering methods are actually special cases of a general method (<span class="citation" data-cites="lance1966generalized">Lance and Williams (<a href="#ref-lance1966generalized" role="doc-biblioref">1966</a>)</span>, <span class="citation" data-cites="lance1967general">Lance and Williams (<a href="#ref-lance1967general" role="doc-biblioref">1967</a>)</span>). Rather than recalculating distances from all the individual observations after each merger, this method uses distances already calculated in previous steps.</p>
+<p>In <a href="#fig-clust-lance1966" class="quarto-xref">Figure&nbsp;<span>26.14</span></a>, clusters <strong>b</strong> and <strong>c</strong> have just been merged into a new cluster, <strong>bc</strong>. We already know the distances between clusters <strong>a</strong> and <strong>b</strong>, between <strong>a</strong> and <strong>c</strong>, and between <strong>b</strong> and <strong>c</strong>. The Lance–Williams equation uses these distances, along with the numbers of observations in each cluster, to calculate the new distance <span class="math inline">\(d\left(\mathbf{a},\mathbf{bc}\right)\)</span>.</p>
+<div id="fig-clust-lance1966" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" alt="text.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-clust-lance1966-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.14: In combinatorial hierarchical agglomerative clustering methods, the distances between already-existing clusters, along with their sample sizes, are used to determine the next cluster. Here cluster <strong>bc</strong> is already formed from combining clusters <strong>b</strong> and <strong>c</strong>. Cluster <strong>a</strong> is being considered for addition to cluster <strong>bc</strong> to form cluster <strong>abc</strong>. The distance between <strong>a</strong> and <strong>bc</strong>, <span class="math inline">\(d\left(\mathbf{a},\mathbf{bc}\right)\)</span>, is a function of the distances between <strong>a</strong> and <strong>b</strong>, <strong>a</strong> and <strong>c</strong>, <strong>b</strong> and <strong>c</strong>, and their respective sample sizes.
+</figcaption>
+<div aria-describedby="fig-clust-lance1966-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/cluster-lance1966.jpg" class="img-fluid figure-img" data-fig.align="center" alt="text.">
+</div>
+</figure>
+</div>
+<p>Different clustering methods use different rules for this calculation. For example, <a href="#sec-clust-hier-methods-single"><strong>single linkage</strong></a>, also known as <strong>nearest neighbor</strong> clustering, defines the distance between clusters using their closest pair of observations, whereas <a href="#sec-clust-hier-methods-wards"><strong>Ward’s method</strong></a> chooses mergers that minimize the increase in within-cluster variation.</p>
+</section>
+<section id="sec-clust-hier-chain" class="level3" data-number="26.3.2">
+<h3 data-number="26.3.2" class="anchored" data-anchor-id="sec-clust-hier-chain"><span class="header-section-number">26.3.2</span> Chaining</h3>
+<p>One potential pitfall in hierarchical clustering is a phenomenon called <strong>chaining</strong>. This is a situation where new samples are added to a pre-existing cluster one at a time, producing a “chain” of mostly pairwise connections going down one side of the dendrogram. Strong chaining in a dendrogram may indicate a continuous gradient, not a clear partition between groups. Chaining can also arise from outliers, noise, or observations that bridge otherwise distinct groups. Single-linkage agglomeration is the most vulnerable to chaining; Ward’s method and complete linkage are much less susceptible.</p>
+<div id="fig-clust-chain" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" alt="text.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-clust-chain-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.15: Text.
+</figcaption>
+<div aria-describedby="fig-clust-chain-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/cluster-chaining.jpg" class="img-fluid figure-img" data-fig.align="center" alt="text.">
+</div>
+</figure>
+</div>
+<p><a href="#fig-clust-chain" class="quarto-xref">Figure&nbsp;<span>26.15</span></a> shows a dendrogram of a hypothetical clustering result with evidence of possible chaining. Note that on the left side (samples B, C, D, and E), the samples are partitioned into groups with both sides of most splits having a subsequent split. On the right (samples G, H, I, J, K, L, and M), each sample is joined to the tree one at a time. This indicates that variation among these samples may be driven by a continuous gradient rather than some clear grouping structure.</p>
+</section>
+<section id="sec-clust-hier-methods" class="level3" data-number="26.3.3">
+<h3 data-number="26.3.3" class="anchored" data-anchor-id="sec-clust-hier-methods"><span class="header-section-number">26.3.3</span> Hierarchical clustering methods</h3>
+<section id="sec-clust-hier-methods-single" class="level4" data-number="26.3.3.1">
+<h4 data-number="26.3.3.1" class="anchored" data-anchor-id="sec-clust-hier-methods-single"><span class="header-section-number">26.3.3.1</span> Hierarchical clustering with single linkage</h4>
+<p>One of the simplest hierarchical clustering methods is to combine samples based on the shortest pairwise dissimilarities. This is called <strong>single linkage</strong>, or sometimes <strong>nearest neighbor</strong> clustering. “Nearest neighbor” can refer to other methods as well, so we’ll refer to this clustering method as “single linkage”. The basic idea is to merge the two clusters separated by the smallest distance between any pair of observations, one from each cluster. Because the distance between clusters depends only on their closest observations, individual samples can be added to existing clusters one at a time, producing the phenomenon of chaining.</p>
+<section id="sec-clust-hier-methods-single-ex" class="level5">
+<h5 class="anchored" data-anchor-id="sec-clust-hier-methods-single-ex">Example using NEON data</h5>
+<p>Let’s revisit the NEON small mammal data. Download the <a href="../datasets/data-neon-captures-sites.csv">site-level capture dataset</a> and the <a href="../datasets/data-neon-metadata-site.csv">site metadata dataset</a> and put them in your working directory.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>cap <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-captures-site.csv"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>met <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-metadata-site.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Let’s use hierarchical clustering to look for structure among the sites in terms of their small mammal fauna. We will convert the abundances of each species to presence-absence (1 and 0) and check for empty sites.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># organize data frame</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> cap</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(dx) <span class="ot">&lt;-</span> dx<span class="sc">$</span>site</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>X <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>site <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># convert capture numbers to presence/absence</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>dx[dx<span class="sc">&gt;</span><span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co"># verify that all sites have at least 1 species</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># should be TRUE</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(<span class="fu">rowSums</span>(dx) <span class="sc">&gt;</span> <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p>Data frame <code>dx</code> has 46 rows (sites) and 134 variables (species presence). Let’s try a single-linkage clustering to look for structure among the sites.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># use Bray-Curtis (Sørensen) dissimilarity</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="fu">vegdist</span>(dx)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># execute clustering</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>clust1 <span class="ot">&lt;-</span> <span class="fu">hclust</span>(D, <span class="at">method=</span><span class="st">"single"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now plot the dendrogram</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(clust1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-clust-single" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-clust-single-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.16: text
+</figcaption>
+<div aria-describedby="fig-clust-single-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch26_files/figure-html/fig-clust-single-1.png" class="img-fluid figure-img" alt="text" width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>We can superimpose that tree on the actual geography using package <code>terra</code>. Grab the <a href="https://www.naturalearthdata.com/downloads/110m-cultural-vectors/">Natural Earth Data 110 m countries dataset</a> and put it in your working directory. Them import it using <code>terra</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>world <span class="ot">&lt;-</span> <span class="fu">vect</span>(<span class="st">"ne_110m_admin_0_countries.shp"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># crop to North America</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>na <span class="ot">&lt;-</span> <span class="fu">crop</span>(world, <span class="fu">ext</span>(<span class="sc">-</span><span class="dv">160</span>, <span class="sc">-</span><span class="dv">60</span>, <span class="dv">15</span>, <span class="dv">75</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create spatial points</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> met[,<span class="fu">c</span>(<span class="st">"lat"</span>, <span class="st">"lon"</span>)]</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>pts <span class="ot">&lt;-</span> <span class="fu">vect</span>(coords, <span class="at">geom =</span> <span class="fu">c</span>(<span class="st">"lon"</span>, <span class="st">"lat"</span>), <span class="at">crs =</span> <span class="st">"EPSG:4326"</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Project to a suitable planar CRS before computing centroids</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>pts.pr <span class="ot">&lt;-</span> <span class="fu">project</span>(pts, <span class="st">"EPSG:5070"</span>)  <span class="co"># CONUS Albers; change if needed</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>na.proj <span class="ot">&lt;-</span> <span class="fu">project</span>(na, <span class="st">"EPSG:5070"</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>xy <span class="ot">&lt;-</span> <span class="fu">crds</span>(pts.pr)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize coordinates for all nodes</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(xy)</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA_real_</span>, <span class="at">nrow =</span> n <span class="sc">-</span> <span class="dv">1</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot sampling locations</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(na.proj)</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pts.pr, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw connections for each merger</span></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(n <span class="sc">-</span> <span class="dv">1</span>)) {</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>  children <span class="ot">&lt;-</span> clust1<span class="sc">$</span>merge[i, ]</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get coordinates for each child</span></span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>  get_xy <span class="ot">&lt;-</span> <span class="cf">function</span>(j) {</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (j <span class="sc">&lt;</span> <span class="dv">0</span>) xy[<span class="sc">-</span>j, ] <span class="cf">else</span> nodes[j, ]</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">&lt;-</span> <span class="fu">get_xy</span>(children[<span class="dv">1</span>])</span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">get_xy</span>(children[<span class="dv">2</span>])</span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># New node at midpoint of child nodes</span></span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>  nodes[i, ] <span class="ot">&lt;-</span> (a <span class="sc">+</span> b) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Draw branches</span></span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">segments</span>(a[<span class="dv">1</span>], a[<span class="dv">2</span>], nodes[i, <span class="dv">1</span>], nodes[i, <span class="dv">2</span>], <span class="at">col =</span> <span class="st">"gray50"</span>)</span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">segments</span>(b[<span class="dv">1</span>], b[<span class="dv">2</span>], nodes[i, <span class="dv">1</span>], nodes[i, <span class="dv">2</span>], <span class="at">col =</span> <span class="st">"gray50"</span>)</span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(xy, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-single-northamerica" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-single-northamerica-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.17: text
+</figcaption>
+<div aria-describedby="fig-single-northamerica-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch26_files/figure-html/fig-single-northamerica-1.png" class="img-fluid figure-img" alt="text" width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>The results are pretty interesting. For the most part, nearby sites are linked directly together. That make sense, because sites that are close together should have more similar environmental conditions, and overlap the same species distributions.</p>
+<p>There are other ways to explore the results. A dendrogram simplifies a complex dissimilarity matrix into a hierarchical structure. One way to assess how much information is preserved is the <strong>cophenetic correlation coefficient</strong>.</p>
+<p>The <strong>cophenetic distance</strong> between two sites is the height at which they first join the same cluster in the dendrogram. We can check the correlation between that distance and the original Sørensen dissimilarity matrix. Values closer to 1 indicate that the dendrogram preserves the original dissimilarity relationships relatively well.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># D is your original Sørensen dissimilarity matrix</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># clust1 is your hclust result</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>cd <span class="ot">&lt;-</span> <span class="fu">cophenetic</span>(clust1)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(D, cd)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7754411</code></pre>
+</div>
+</div>
+<p>A cophenetic <em>r</em> of 0.775 is pretty good. We can visualize this on a scatterplot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">as.vector</span>(D), <span class="fu">as.vector</span>(cd),</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Sørensen dissimilarity"</span>,</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Cophenetic distance"</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">lm</span>(<span class="fu">as.vector</span>(cd) <span class="sc">~</span> <span class="fu">as.vector</span>(D)), <span class="at">col =</span> <span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-single-cophenetic" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-single-cophenetic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.18: text
+</figcaption>
+<div aria-describedby="fig-single-cophenetic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch26_files/figure-html/fig-single-cophenetic-1.png" class="img-fluid figure-img" alt="text" width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>This is particularly useful for comparing different hierarchical clustering methods. Just keep in mind that cophenetic correlation measures fidelity to the original dissimilarities, not whether the resulting groups are biologically meaningful.</p>
+<p>Another way to interpret the clustering result is to identify clusters by cutting the dendrogram. The dendrogram represents a hierarchy, but you can choose a particular level to define discrete groups.</p>
+<p>For example, suppose you want four clusters:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">cutree</span>(clust1, <span class="at">k =</span> <span class="dv">4</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(clust1)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rect.hclust</span>(clust1, <span class="at">k =</span> <span class="dv">4</span>, <span class="at">border =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-single-groups" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-single-groups-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.19: text
+</figcaption>
+<div aria-describedby="fig-single-groups-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch26_files/figure-html/fig-single-groups-1.png" class="img-fluid figure-img" alt="text" width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>Four groups puts sites GUAN and LAJA in one group; SJER, SOAP, TEAK, ABBY, and WREF in another; YELL, NIWO, and RMNP in a third, and every other site in the last group. Geographically this makes sense: GUAN and LAJA are both in southwestern Puerto Rico. The second group consists of sites in the Pacific coastal mountain regions of California and Washington. The third consists of mountainous sites in the Rocky Mountains of Wyoming and Colorado. The lumping of the other 36 sites is a bit concerning, though. That group includes sites in Alaska and throughout the continental US east of the Rockies. Let’s see what happens if we allow for 7 groups instead of 4.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">cutree</span>(clust1, <span class="at">k =</span> <span class="dv">7</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(clust1)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rect.hclust</span>(clust1, <span class="at">k =</span> <span class="dv">7</span>, <span class="at">border =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">8</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-single-groups2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-single-groups2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.20: text
+</figcaption>
+<div aria-describedby="fig-single-groups2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch26_files/figure-html/fig-single-groups2-1.png" class="img-fluid figure-img" alt="text" width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>This time we still have a “most of the continental US” group, but a few were peeled off into their own groups. Now BARR (Utqiaġvik, Alaska; arctic tundra) is in its own group. JORN (near Las Cruces, New Mexico) and SRER (near Tucson, Arizona) ar both in the arid southwest. Let’s try 12 groups.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">cutree</span>(clust1, <span class="at">k =</span> <span class="dv">12</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(clust1)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rect.hclust</span>(clust1, <span class="at">k =</span> <span class="dv">12</span>, <span class="at">border =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">13</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-single-groups12" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-single-groups12-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.21: text
+</figcaption>
+<div aria-describedby="fig-single-groups12-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch26_files/figure-html/fig-single-groups12-1.png" class="img-fluid figure-img" alt="text" width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>Now we’re getting somewhere! Jumping up to 12 groups gives us a bit more separation within the “rest of the US” group. Let’s see what these groups might be:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(groups)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ABBY WREF BARR BART BLAN DCFS GRSM HARV MLBS NOGP ORNL SCBI SERC STEI TREE UNDE 
+   1    1    2    3    3    3    3    3    3    3    3    3    3    3    3    3 
+WOOD BONA DEJU HEAL TOOL CLBJ CPER KONA KONZ OAES STER UKFS DELA DSNY JERC LENO 
+   3    4    4    4    4    5    5    5    5    5    5    5    6    6    6    6 
+OSBS TALL GUAN LAJA JORN SRER MOAB ONAQ NIWO RMNP YELL SJER SOAP TEAK 
+   6    6    7    7    8    8    9    9   10   10   10   11   11   12 </code></pre>
+</div>
+</div>
+<div id="tbl-neon-clusters" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-neon-clusters-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;26.2: Geographic and ecological characterization of 12 clusters of NEON terrestrial field sites based on Sørensen dissimilarities in species presence/absence.
+</figcaption>
+<div aria-describedby="tbl-neon-clusters-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Group</th>
+<th>Sites</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>ABBY, WREF</td>
+<td>Pacific Northwest; Cascade Range forests</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>BARR</td>
+<td>Arctic tundra of northern Alaska</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>BART, BLAN, DCFS, GRSM, HARV, MLBS, NOGP, ORNL, SCBI, SERC, STEI, TREE, UNDE, WOOD</td>
+<td>Primarily eastern and central North American temperate forests, with some grassland and transitional sites</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>BONA, DEJU, HEAL, TOOL</td>
+<td>Interior Alaska; boreal forests and tundra</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>CLBJ, CPER, KONA, KONZ, OAES, STER, UKFS</td>
+<td>Central and southern Great Plains; grasslands, savannas, and transitional habitats</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>DELA, DSNY, JERC, LENO, OSBS, TALL</td>
+<td>Southeastern United States; coastal plain, wetlands, and subtropical forests</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>GUAN, LAJA</td>
+<td>Southwestern Puerto Rico; tropical dry forests</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>JORN, SRER</td>
+<td>Southwestern United States; desert grasslands and shrublands</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>MOAB, ONAQ</td>
+<td>Interior western United States; arid shrublands and desert environments</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>NIWO, RMNP, YELL</td>
+<td>Rocky Mountains; montane and subalpine environments</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>SJER, SOAP</td>
+<td>California Sierra Nevada; foothill and montane forests</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>TEAK</td>
+<td>California Sierra Nevada; higher-elevation coniferous forest</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Some of these descriptions are more ecologically coherent than others. A few interesting features stand out. Groups 3 and 5 encompass sites spread across substantial geographic distances, suggesting that similar communities can occur across broad regions. Groups 2 and 12 contain single sites, potentially indicating distinctive species compositions. And Groups 11 and 12 separate TEAK from SJER and SOAP, despite all three being in the Sierra Nevada, which might reflect differences in elevation or vegetation.</p>
+<p>Let’s plot the sites on a map, symbolized by their group.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># colors and symbols for points</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">hcl.colors</span>(<span class="dv">12</span>, <span class="at">palette =</span> <span class="st">"Dark 3"</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>use.cols <span class="ot">&lt;-</span> cols[groups]</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>pchs <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">15</span><span class="sc">:</span><span class="dv">18</span>, <span class="dv">4</span>), <span class="at">times=</span><span class="dv">2</span>)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>use.pch <span class="ot">&lt;-</span> pchs[groups]</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot sampling locations</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(na.proj)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pts.pr, <span class="at">pch=</span><span class="dv">46</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw connections for each merger</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(n <span class="sc">-</span> <span class="dv">1</span>)) {</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>  children <span class="ot">&lt;-</span> clust1<span class="sc">$</span>merge[i, ]</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get coordinates for each child</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>  get_xy <span class="ot">&lt;-</span> <span class="cf">function</span>(j) {</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (j <span class="sc">&lt;</span> <span class="dv">0</span>) xy[<span class="sc">-</span>j, ] <span class="cf">else</span> nodes[j, ]</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">&lt;-</span> <span class="fu">get_xy</span>(children[<span class="dv">1</span>])</span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">get_xy</span>(children[<span class="dv">2</span>])</span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># New node at midpoint of child nodes</span></span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>  nodes[i, ] <span class="ot">&lt;-</span> (a <span class="sc">+</span> b) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Draw branches</span></span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">segments</span>(a[<span class="dv">1</span>], a[<span class="dv">2</span>], nodes[i, <span class="dv">1</span>], nodes[i, <span class="dv">2</span>], <span class="at">col =</span> <span class="st">"gray50"</span>)</span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">segments</span>(b[<span class="dv">1</span>], b[<span class="dv">2</span>], nodes[i, <span class="dv">1</span>], nodes[i, <span class="dv">2</span>], <span class="at">col =</span> <span class="st">"gray50"</span>)</span>
+<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(xy, <span class="at">col=</span>use.cols, <span class="at">cex=</span><span class="fl">1.5</span>, <span class="at">pch =</span> use.pch)</span>
+<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomleft"</span>, <span class="at">legend=</span><span class="fu">paste</span>(<span class="st">"Group"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>),</span>
+<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pchs, <span class="at">col=</span>cols, <span class="at">cex=</span><span class="fl">1.3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-single-map12" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-single-map12-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.22: text
+</figcaption>
+<div aria-describedby="fig-single-map12-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch26_files/figure-html/fig-single-map12-1.png" class="img-fluid figure-img" alt="text" width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>We can see from the map that while the groups are certainly associated with geography, they are not totally determined by it. Some of the groups appear to reflect biogeographic regions rather than geographic proximity alone. The Alaskan sites, Rocky Mountain sites, southwestern deserts, and southeastern sites form fairly recognizable groups. Meanwhile, some geographically close sites belong to different clusters, presumably because their habitats or species assemblages differ.</p>
+<p>There are two particularly interesting interpretations:</p>
+<ul>
+<li>Geographic distance-decay: Nearby sites tend to share more species, producing geographically coherent clusters. We could check on that with a scatterplot of Sørensen dissimilarity and geographic distance. Hey, why not? (see below).</li>
+<li>Environmental filtering: Sites with similar environments may share species even when separated by substantial distances. Conversely, nearby sites in different habitats may have quite different assemblages.</li>
+</ul>
+<p>Of course, the map alone can’t distinguish those mechanisms.</p>
+<p>Here is the plot of Sørensen dissimilarity vs.&nbsp;geographic distance.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>dgeo <span class="ot">&lt;-</span> <span class="fu">distance</span>(pts)<span class="sc">/</span><span class="dv">1000</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dgeo, D,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Sørensen dissimilarity"</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"Geographic distance (km)"</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">log=</span><span class="st">"x"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-single-groups4" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-single-groups4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.23: text
+</figcaption>
+<div aria-describedby="fig-single-groups4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch26_files/figure-html/fig-single-groups4-1.png" class="img-fluid figure-img" alt="text" width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>And the correlation:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(D, <span class="fu">log</span>(dgeo))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7197855</code></pre>
+</div>
+</div>
+<p>The last thing I’ll point out is that the apparent strength of the geographic pattern (and its ecological sensibleness) depends on where we cut the dendrogram. With four groups, most sites fell into one enormous cluster. At twelve groups, much more recognizable geographic structure emerges. Neither solution is necessarily more correct.</p>
+</section>
+</section>
+<section id="sec-clust-hier-methods-wards" class="level4" data-number="26.3.3.2">
+<h4 data-number="26.3.3.2" class="anchored" data-anchor-id="sec-clust-hier-methods-wards"><span class="header-section-number">26.3.3.2</span> Hierarchical clustering with Ward’s method</h4>
+<p><strong>Ward’s method</strong> is another hierarchical agglomerative technique, which combines clusters to <em>minimize the increase in within-cluster variation</em>, measured by the sum of squared deviations from cluster means. In other words, Ward’s method merges the two clusters that will produce the smallest increase in overall within-cluster variation, while single linkage merges the two clusters containing the most similar pair of observations.</p>
+<p>For an analogy, think of buying clothes. The single-linkage approach is to buy a new shirt that is most similar to at least one shirt you already own. The Ward’s method approach is to buy a new shirt that makes the smallest increase in the overall variation among the shirts in your wardrobe.</p>
+<section id="sec-clust-hier-methods-wards-ex" class="level5">
+<h5 class="anchored" data-anchor-id="sec-clust-hier-methods-wards-ex">Example using NEON data</h5>
 <p>Coming soon!</p>
 </section>
-<section id="sec-clust-hclust-single" class="level3" data-number="26.3.2">
-<h3 data-number="26.3.2" class="anchored" data-anchor-id="sec-clust-hclust-single"><span class="header-section-number">26.3.2</span> Hierarchical clustering with single linkage</h3>
-<p>Coming soon!</p>
+</section>
+<section id="sec-clust-hier-methods-other" class="level4" data-number="26.3.3.3">
+<h4 data-number="26.3.3.3" class="anchored" data-anchor-id="sec-clust-hier-methods-other"><span class="header-section-number">26.3.3.3</span> Other methods for hierarchical clustering</h4>
+<p>There are other approaches to hierarchical clustering, which we will not cover here, that measure the relationships between clusters differently than single-linkage or Ward’s method. All of these are available in the R function <code>hclust()</code>.</p>
+<p>Some of these methods weight clusters by their number of observations (WPGMA and WPGMC), and the others are unweighted (UPGMA and UPGMC). They also differ in how updated centroid is calculated. In WPGMA and UPGMA the new centroid is the mean of the previous centroids, while in WPGMC and UPGMC in whether they use unweighted or weighted pairwise distances, and in whether they calculate centroids using arithmetic means or medians. Of these, UPGMA is probably the most commonly used.</p>
+<ul>
+<li><strong>UPGMA</strong>: Unweighted pair-group method using arithmetic averages. The distance between two clusters is the average of all pairwise distances between observations in the two clusters, giving each observation equal weight regardless of cluster size. Use argument <code>method="average"</code> in <code>hclust()</code>.</li>
+<li><strong>WPGMA</strong>: Weighted pair-group method using arithmetic averages. Similar to UPGMA, but when clusters are merged, each of the two original clusters contributes equally to the new distance calculations, regardless of how many observations each contains. Use argument <code>method="mcquitty"</code> in <code>hclust()</code>.</li>
+<li><strong>UPGMC</strong>: Unweighted pair-group method using centroids. The distance between two clusters is calculated from their centroids (multivariate means), with each observation contributing equally to the centroid of its cluster. Use argument <code>method="centroid"</code> in <code>hclust()</code>.</li>
+<li><strong>WPGMC</strong>: Weighted pair-group method using centroids. Similar to UPGMC, but the centroid of a newly merged cluster is calculated by averaging the centroids of the two original clusters, giving each cluster equal weight regardless of its size. Use argument <code>method="median"</code> in <code>hclust()</code>.</li>
+</ul>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-hill1979" class="csl-entry" role="listitem">
 Hill MO. 1979. A <span>FORTRAN</span> program for arranging multivariate data in an ordered two-way table by classification of the individuals and attributes. <span>TWINSPAN</span>.
+</div>
+<div id="ref-lance1967general" class="csl-entry" role="listitem">
+Lance GN, Williams WT. 1967. A general theory of classificatory sorting strategies: 1. Hierarchical systems. Comput. J. 9(4):373–380.
+</div>
+<div id="ref-lance1966generalized" class="csl-entry" role="listitem">
+Lance G, Williams W. 1966. A generalized sorting strategy for computer classifications. Nature 212(5058):218–218.
 </div>
 <div id="ref-legendre2012numerical" class="csl-entry" role="listitem">
 Legendre P, Legendre L. 2012. Numerical ecology. Amsterdam: Elsevier.
@@ -1139,6 +1630,7 @@ Roleček J, Tichý L, Zelený D, Chytrý M. 2009. Modified <span>TWINSPAN</span>
 Ward JH. 1963. Hierarchical grouping to optimize an objective function. Journal of the American Statistical Association 58(301):236–244. <a href="https://doi.org/10.1080/01621459.1963.10500845">https://doi.org/10.1080/01621459.1963.10500845</a>
 </div>
 </div>
+</section>
 </section>
 </section>
 
