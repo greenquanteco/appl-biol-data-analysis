@@ -18,8 +18,13 @@ Constrained ordination methods, also called canonical ordination methods, identi
 
 ### Redundancy analysis (RA) {#sec-ord-con-ra}
 
+### Linear discriminant analysis {#sec-ord-con-lda}
+
 ### Canonical correspondence analysis (CCA)  {#sec-ord-con-cca}
 
 ### Distance-based RDA (dbRDA) {#sec-ord-con-dbrda}
 
+## Classification and other methods {#sec-ord-other}
+
+### Linear discriminant analysis {#sec-ord-other-lda}
 

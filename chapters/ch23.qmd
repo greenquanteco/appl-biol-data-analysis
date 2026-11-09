@@ -740,6 +740,7 @@ prx3$upr.boot <- apply(bt$t, 2, quantile,
 ## Nonlinear mixed effects models {#sec-mixed-nlme}
 
 Coming soon!
+
 ### Definition {#sec-mixed-nlme-def}
 
 ### Example with NEON data {#sec-mixed-nlme-example}

@@ -379,6 +379,12 @@ div.csl-indent {
  <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Ordination</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/ch28.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Multivariate hypothesis testing</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -390,12 +396,6 @@ div.csl-indent {
           </a> 
       </div>
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/ch28.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Multivariate hypothesis testing</span></span></a>
-  </div>
-</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/ch29.html" class="sidebar-item-text sidebar-link">
@@ -494,7 +494,7 @@ div.csl-indent {
 <h2 data-number="24.1" class="anchored" data-anchor-id="multivariate-data"><span class="header-section-number">24.1</span> Multivariate data</h2>
 <p>Things are not always one or two dimensional. Oftentimes in biology we need to consider many variables at once. This is the realm of <strong>multivariate statistics</strong>. The “multi” in “multivariate” refers to the fact that there are multiple variables or attributes of each sample that we want to understand simultaneously. The terminology can be confusing sometimes because other statistical methods have the word “multiple” in their names. For example, “multiple linear regression” is not considered a multivariate method because there is only one measurement from each sample (the response variable) that is being modeled.</p>
 <p><a href="#fig-multi-data" class="quarto-xref">Figure&nbsp;<span>24.1</span></a> below shows some differences between a univariate analysis and a multivariate one. In the univariate analysis, one and only one variable is the response variable and is assumed to be predicted by (aka: depend on) the others. Frequently, the observations are divided <em>a priori</em> into groups by a factor encoded by one of the predictor variables. This means that the goal of a univariate analysis is to explain patterns in one variable relative to other variables. In a univariate analysis, the emphasis is on discovering relationships between variables, and the observations are a means to that end.</p>
-<div id="fig-multi-data" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-cap="In a univariate analysis, there is one response variable which is modeled using predictor variables. In a multivariate analysis, there can be a response matrix of multiple variables, or no response variables at all. Instead, patterns among the variables can be explored without inferring causality." data-fig.align="center" data-fig-width="100%">
+<div id="fig-multi-data" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-cap="In a univariate analysis, there is one response variable which is modeled using predictor variables. In a multivariate analysis, there can be a response matrix of multiple variables, or no response variables at all. Instead, patterns among the variables can be explored without inferring causality." data-fig-width="100%" data-fig.align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-multi-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;24.1: In a univariate analysis, there is one response variable which is modeled using predictor variables. In a multivariate analysis, there can be a response matrix of multiple variables, or no response variables at all. Instead, patterns among the variables can be explored without inferring causality.
@@ -510,7 +510,7 @@ Figure&nbsp;24.1: In a univariate analysis, there is one response variable which
 <p>When planning and executing a multivariate analysis it is very important to keep in mind which components of the dataset are which. These components are usually stored in <strong>matrices</strong> with a well-defined structure. The key concept is that of the <strong>sample unit</strong> or <strong>observation</strong>. Observations are also sometimes called <strong>records</strong>. These are individual entities about which many measurements or attributes are recorded. Sample units correspond to <em>rows</em> of the data matrix.</p>
 <p>Each sample unit has several <strong>variables</strong> associated with it. Variables are also sometimes called <strong>features</strong> or <strong>attributes</strong>. Variables correspond to <em>columns</em> of the data matrix.</p>
 <p><a href="#fig-multi-matrix" class="quarto-xref">Figure&nbsp;<span>24.2</span></a> below shows the layout of a typical multivariate dataset. The example has 12 observations and 6 variables . In some fields, samples are also called records and variables are called features.</p>
-<div id="fig-multi-matrix" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" data-fig-cap="Structure of a dataset. Data is collected about entities called observations. Each row of the dataset is an observation, and each column of the dataset contains one type of value (a variable) about each entity.">
+<div id="fig-multi-matrix" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-cap="Structure of a dataset. Data is collected about entities called observations. Each row of the dataset is an observation, and each column of the dataset contains one type of value (a variable) about each entity." data-fig.align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-multi-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;24.2: Structure of a dataset. Data is collected about entities called observations. Each row of the dataset is an observation, and each column of the dataset contains one type of value (a variable) about each entity.

@@ -273,7 +273,7 @@
 
 \title{Applied Biological Data Analysis}
 \author{Nick Green}
-\date{November 8, 2026}
+\date{November 9, 2026}
 \begin{document}
 \maketitle
 
@@ -31964,7 +31964,9 @@ during rendering because it takes over an hour.
 
 \section{Nonlinear mixed effects models}\label{sec-mixed-nlme}
 
-Coming soon! \#\#\# Definition \{\#sec-mixed-nlme-def\}
+Coming soon!
+
+\subsection{Definition}\label{sec-mixed-nlme-def}
 
 \subsection{Example with NEON data}\label{sec-mixed-nlme-example}
 
@@ -33590,7 +33592,760 @@ question of whether two empty communities should be considered similar.
 
 \chapter{Clustering for biologists}\label{sec-clust}
 
-Two is company, but three's a crowd.
+\section{Introduction}\label{sec-clust-intro}
+
+Now that we have a way of quantifying multivariate differences between
+samples as distance, we can use those measures to explore patterns in
+data. One application of distance metrics is to use them to organize
+data into \textbf{clusters} or groups consisting of samples that are
+more similar to each other than they are to other samples. In other
+words, the \textbf{within-group} distances should be smaller than the
+\textbf{between-group} distances.
+
+The figure below illustrates this concept with an imaginary example. The
+clusters shown cleanly separate red, blue, and green points. For
+example, the average distance between the red points is smaller than the
+average distance between the red points and the blue points.
+
+\begin{figure}
+
+\caption{\label{fig-cluster-example1}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch26_files/figure-pdf/fig-cluster-example1-1.pdf}}
+
+}
+
+\end{figure}%
+
+\subsection{Types of clustering}\label{sec-clust-intro-types}
+
+There are many methods for clustering observations. Many methods are
+\textbf{hierarchical}, with groups being nested within other groups.
+Many biological phenomena are also hierarchical in nature, so these
+methods are naturally quite useful. Other methods are
+\textbf{non-hierarchical}, where groups are not constrained to be within
+other groups.
+
+Clustering methods also differ in their manner of group construction.
+Many methods are \textbf{agglomerative}, which means that groups are
+formed by combining samples. Other methods are \textbf{divisive}, which
+means that all samples start in a single group which is then broken up.
+Divisive techniques are also called \textbf{partitioning} techniques.
+Examples of each class of clustering method are shown below.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\caption{Common approaches to clustering and their methods of forming
+groups.}\label{tbl-clustering-methods}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Clustering approach
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Group formation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Common methods
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Clustering approach
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Group formation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Common methods
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Partitioning (nonhierarchical) & Observations are assigned and
+reassigned among a specified number of clusters & \emph{K}-means
+clustering \\
+Hierarchical agglomerative & Individual observations or clusters are
+progressively merged into larger clusters & Ward's method (Ward 1963);
+single linkage; complete linkage \\
+Hierarchical divisive & All observations begin in one cluster, which is
+progressively divided into smaller clusters & Association analysis
+(Ludwig \emph{et al.} 1988; Legendre and Legendre 2012); TWINSPAN (Hill
+1979; Roleček \emph{et al.} 2009) \\
+\end{longtable}
+
+\section{K-means clustering}\label{sec-clust-kmeans}
+
+\subsection{Introduction to K-means
+clustering}\label{sec-clust-kmeans-intro}
+
+\emph{K}-means clustering is a method for dividing a dataset with
+\emph{n} observations, with \emph{p} variables, into \emph{K} categories
+such that each observation belongs to the cluster with the most similar
+mean. The ``mean'' for each category (i.e., group) is really a position
+in a \emph{p}-dimensional hyperspace called a \textbf{centroid}. In this
+context, centroids are calculated as the point at the central coordinate
+of each dimension. The mean is most often used, but the median can be a
+useful alternative.
+
+There are several algorithms for \emph{k}-means clustering. One of the
+most common works like this:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Select the desired number of clusters \emph{k}.
+\item
+  Make an initial guess of the mean of each cluster. I.e., Start with a
+  \emph{K} random positions in the \emph{p}-dimensional hyperspace.
+  These positions are known as centroids.
+\item
+  Calculate the Euclidean distance between each sample and each
+  centroid.
+\item
+  Assign each sample to the category corresponding to the nearest
+  centroid.
+\item
+  Update the centroids for each cluster by calculating the new centroid
+  for the samples assigned to each cluster.
+\item
+  Repeat steps 3, 4, and 5 until cluster assignments no longer change.
+\end{enumerate}
+
+This algorithm is not guaranteed to find the best possible solution, but
+it quite often finds decent solutions. Distance metrics other than the
+Euclidean can be used, but Euclidean is most common. Transforming,
+scaling, and/or standardizing variables so that they are all on the same
+scale can improve the results.
+
+The figure below shows the effects of \emph{K}-means clustering on a
+pretend dataset with 2 variables with \(K = 3\). The group assignments
+were determined because groups with those centroids had the smallest
+possible set of Euclidean distances between the points and the group
+centroids (right panel). Centroids are shown with a thick outline.
+
+\begin{figure}
+
+\caption{\label{fig-kmeans-example1}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch26_files/figure-pdf/fig-kmeans-example1-1.pdf}}
+
+}
+
+\end{figure}%
+
+How many clusters are appropriate? That's a good question to ask, and
+sometimes a tricky question to answer. There are statistical ways to
+assess how many groups are appropriate\ldots but, you always need to use
+your biological judgement when interpreting groups. Sometimes you may be
+justified on biological grounds using 1 group more or less than the
+numerical summaries indicate.
+
+One common way to assess the optimal \emph{K} is to try several \emph{K}
+and calculate the within-cluster sum of squared errors (\emph{WSS}) for
+all points. The optimal value of \emph{K} is often assumed to be the
+value at which a plot of \emph{WSS} vs.~\emph{K} starts to bend. The
+example below illustrates this method for the data above.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# generate a random dataset with 3 clusters}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{1234}\NormalTok{)}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(}\DecValTok{20}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{2}\NormalTok{), }\FunctionTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{12}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{2}\NormalTok{), }\FunctionTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{2}\NormalTok{), }\FunctionTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{14}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\NormalTok{dx }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(x,y)}
+
+\CommentTok{\# perform k{-}means clustering with k from 2 to 8}
+\NormalTok{kvec }\OtherTok{\textless{}{-}} \DecValTok{2}\SpecialCharTok{:}\DecValTok{8}
+\NormalTok{nk }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(kvec)}
+\NormalTok{k.list }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\StringTok{"list"}\NormalTok{, nk)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nk)\{}
+\NormalTok{  k.list[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{kmeans}\NormalTok{(dx, kvec[i])}
+\NormalTok{\}}
+
+\CommentTok{\# gather WSS for each k}
+\NormalTok{wss }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(k.list, }\ControlFlowTok{function}\NormalTok{(x)\{x}\SpecialCharTok{$}\NormalTok{tot.withinss\})}
+
+\CommentTok{\# plot WSS vs. k}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(kvec, wss, }\AttributeTok{type=}\StringTok{"o"}\NormalTok{,}
+     \AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{pch=}\FloatTok{1.5}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"Clusters (k)"}\NormalTok{,}
+     \AttributeTok{ylab=}\StringTok{"Total WSS"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-kmeans-wss-plot}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch26_files/figure-pdf/fig-kmeans-wss-plot-1.pdf}}
+
+}
+
+\end{figure}%
+
+Notice that total \emph{WSS} drops off much more slowly above 3
+clusters. That is, going from 3 to 4 clusters reduces \emph{WSS} much
+less than going from 2 to 3 clusters. The result above could reasonably
+justify 3 or 4 clusters. The figure below shows how the data are divided
+into 3 and 4 clusters.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# assemble values needed for plots}
+\DocumentationTok{\#\# get clusters}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{k3 }\OtherTok{\textless{}{-}}\NormalTok{ k.list[[}\FunctionTok{which}\NormalTok{(kvec }\SpecialCharTok{==} \DecValTok{3}\NormalTok{)]]}\SpecialCharTok{$}\NormalTok{cluster}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{k4 }\OtherTok{\textless{}{-}}\NormalTok{ k.list[[}\FunctionTok{which}\NormalTok{(kvec }\SpecialCharTok{==} \DecValTok{4}\NormalTok{)]]}\SpecialCharTok{$}\NormalTok{cluster}
+
+\DocumentationTok{\#\# coordinates of group centroids}
+\NormalTok{km3 }\OtherTok{\textless{}{-}}\NormalTok{ k.list[[}\FunctionTok{which}\NormalTok{(kvec }\SpecialCharTok{==} \DecValTok{3}\NormalTok{)]]}
+\NormalTok{km4 }\OtherTok{\textless{}{-}}\NormalTok{ k.list[[}\FunctionTok{which}\NormalTok{(kvec }\SpecialCharTok{==} \DecValTok{4}\NormalTok{)]]}
+
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{cenx3 }\OtherTok{\textless{}{-}}\NormalTok{ km3}\SpecialCharTok{$}\NormalTok{centers[dx}\SpecialCharTok{$}\NormalTok{k3,}\DecValTok{1}\NormalTok{]}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{ceny3 }\OtherTok{\textless{}{-}}\NormalTok{ km3}\SpecialCharTok{$}\NormalTok{centers[dx}\SpecialCharTok{$}\NormalTok{k3,}\DecValTok{2}\NormalTok{]}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{cenx4 }\OtherTok{\textless{}{-}}\NormalTok{ km4}\SpecialCharTok{$}\NormalTok{centers[dx}\SpecialCharTok{$}\NormalTok{k4,}\DecValTok{1}\NormalTok{]}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{ceny4 }\OtherTok{\textless{}{-}}\NormalTok{ km4}\SpecialCharTok{$}\NormalTok{centers[dx}\SpecialCharTok{$}\NormalTok{k4,}\DecValTok{2}\NormalTok{]}
+
+\DocumentationTok{\#\# colors for each group}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col3 }\OtherTok{\textless{}{-}} \FunctionTok{rainbow}\NormalTok{(}\DecValTok{3}\NormalTok{)[dx}\SpecialCharTok{$}\NormalTok{k3]}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col4 }\OtherTok{\textless{}{-}} \FunctionTok{rainbow}\NormalTok{(}\DecValTok{4}\NormalTok{)[dx}\SpecialCharTok{$}\NormalTok{k4]}
+
+\DocumentationTok{\#\# symbols for each group}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch3 }\OtherTok{\textless{}{-}}\NormalTok{ (}\DecValTok{15}\SpecialCharTok{:}\DecValTok{17}\NormalTok{)[dx}\SpecialCharTok{$}\NormalTok{k3]}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch4 }\OtherTok{\textless{}{-}}\NormalTok{ (}\DecValTok{15}\SpecialCharTok{:}\DecValTok{18}\NormalTok{)[dx}\SpecialCharTok{$}\NormalTok{k4]}
+
+\CommentTok{\# make plot}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(x,y, }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch3, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col3, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+    \AttributeTok{xlab=}\StringTok{"Variable 1"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"Variable 2"}\NormalTok{,}
+    \AttributeTok{main=}\FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(k)}\SpecialCharTok{==}\DecValTok{3}\NormalTok{))}
+\FunctionTok{segments}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{cenx3, dx}\SpecialCharTok{$}\NormalTok{ceny3, dx}\SpecialCharTok{$}\NormalTok{x, dx}\SpecialCharTok{$}\NormalTok{y,}
+    \AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col3, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{cenx3, dx}\SpecialCharTok{$}\NormalTok{ceny3, }\AttributeTok{pch=}\DecValTok{21}\NormalTok{, }\AttributeTok{cex=}\DecValTok{2}\NormalTok{,}
+    \AttributeTok{bg=}\StringTok{"yellow"}\NormalTok{, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col3, }\AttributeTok{lwd=}\DecValTok{4}\NormalTok{)}
+
+\FunctionTok{plot}\NormalTok{(x,y, }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch4, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col4, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+    \AttributeTok{xlab=}\StringTok{"Variable 1"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"Variable 2"}\NormalTok{,}
+    \AttributeTok{main=}\FunctionTok{expression}\NormalTok{(}\FunctionTok{italic}\NormalTok{(k)}\SpecialCharTok{==}\DecValTok{4}\NormalTok{))}
+\FunctionTok{segments}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{cenx4, dx}\SpecialCharTok{$}\NormalTok{ceny4, dx}\SpecialCharTok{$}\NormalTok{x, dx}\SpecialCharTok{$}\NormalTok{y,}
+    \AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col4, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{cenx4, dx}\SpecialCharTok{$}\NormalTok{ceny4, }\AttributeTok{pch=}\DecValTok{21}\NormalTok{, }\AttributeTok{cex=}\DecValTok{2}\NormalTok{,}
+    \AttributeTok{bg=}\StringTok{"yellow"}\NormalTok{, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col4, }\AttributeTok{lwd=}\DecValTok{4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-kmeans-example2}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch26_files/figure-pdf/fig-kmeans-example2-1.pdf}}
+
+}
+
+\end{figure}%
+
+Most of the group assignments stayed the same, but the algorithm split
+the blue group when \emph{K} increased from 3 to 4. Accepting the 3
+cluster or 4 cluster solution is as much of a biological decision as it
+is a statistical one. When you get to this point, you need to think
+about whether the groups make sense or not. Notice that \emph{K}-means
+clustering does not necessarily result in groups of equal sizes. This
+may or may not be a problem depending on the structure of your dataset
+and the question you are trying to answer.
+
+\subsection{Example with NEON data}\label{sec-clust-kmeans-example}
+
+Let's revisit the NEON small mammal data. Download the
+\href{../datasets/data-neon-ind-meas.csv}{individual measurement
+dataset} and the \href{../datasets/data-neon-taxa.csv}{taxonomic
+dataset} and put them in your working directory.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tax }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data{-}neon{-}taxa.csv"}\NormalTok{)}
+\NormalTok{ind }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data{-}neon{-}ind{-}meas.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+We are going to use these data to try out a few common clustering
+techniques. First we need to organize the data. Cut the measurement data
+down to just the columns we need: individual, species, and the four
+standard measurements.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{use.cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"tagID"}\NormalTok{, }\StringTok{"abb"}\NormalTok{, }\StringTok{"totalLength"}\NormalTok{,}
+              \StringTok{"tailLength"}\NormalTok{, }\StringTok{"hindfootLength"}\NormalTok{, }\StringTok{"earLength"}\NormalTok{ )}
+\NormalTok{dx }\OtherTok{\textless{}{-}}\NormalTok{ ind[,use.cols]}
+
+\CommentTok{\# only want individuals with no missing measurements}
+\NormalTok{dx }\OtherTok{\textless{}{-}}\NormalTok{ dx[}\FunctionTok{complete.cases}\NormalTok{(dx),]}
+
+\CommentTok{\# pick Peromyscus maniculatus (Perman) and}
+\CommentTok{\# P. leucopus (Perleu). These species are}
+\CommentTok{\# notoriously difficult to tell apart in}
+\CommentTok{\# the field. Let\textquotesingle{}s see if we can do it with clustering.}
+\NormalTok{use.spp }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Perleu"}\NormalTok{, }\StringTok{"Perman"}\NormalTok{)}
+\NormalTok{dx }\OtherTok{\textless{}{-}}\NormalTok{ dx[dx}\SpecialCharTok{$}\NormalTok{abb }\SpecialCharTok{\%in\%}\NormalTok{ use.spp,]}
+
+\CommentTok{\# assign colors and shapes for plotting later}
+\NormalTok{cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"tomato"}\NormalTok{, }\StringTok{"royalblue"}\NormalTok{)}
+\NormalTok{pchs }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{:}\DecValTok{2}
+\FunctionTok{names}\NormalTok{(cols) }\OtherTok{\textless{}{-}}\NormalTok{ use.spp}
+\FunctionTok{names}\NormalTok{(pchs) }\OtherTok{\textless{}{-}}\NormalTok{ use.spp}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col }\OtherTok{\textless{}{-}}\NormalTok{ cols[dx}\SpecialCharTok{$}\NormalTok{abb]}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch }\OtherTok{\textless{}{-}}\NormalTok{ pchs[dx}\SpecialCharTok{$}\NormalTok{abb]}
+\end{Highlighting}
+\end{Shaded}
+
+The Eastern Deer Mouse (\emph{Peromyscus maniculatus}) and the
+White-Footed Mouse (\emph{P. leucopus}) are two morphologically similar
+species of mice that are widespread throughout much of North America.
+Among mammalogists, they are notoriously difficult to tell apart in the
+field. This is a problem, because they are both habitat generalists and
+co-occur in many places (Light \emph{et al.} (2021)). Several field
+characters or suites of characters have been shown to differentiate
+them, with some success (Rich \emph{et al.} (1996)), but regional
+variation in both species confounds these methods. Some studies have
+found that over a third of species in museum collections may have been
+misidentified (Light \emph{et al.} (2021)). For this example analysis,
+we are going to assume that all individuals in the dataset have been
+identified correctly.
+
+Let's apply \emph{K}-means clustering to see if we can identify any
+groups of similar individuals. If the species can be distinguished
+morphologically, then the clusters may recover the species. We expect to
+find 2 clusters, but there may be more. We will test \(K\) from 2
+through 8.
+
+Unlike most of the multivariate methods in this guide, we won't need the
+package \texttt{vegan}: \texttt{kmeans()} is a base function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# numbers of groups to test}
+\NormalTok{kvec }\OtherTok{\textless{}{-}} \DecValTok{2}\SpecialCharTok{:}\DecValTok{8}
+
+\CommentTok{\# set up a list to catch results}
+\NormalTok{nk }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(kvec)}
+\NormalTok{k.list }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\StringTok{"list"}\NormalTok{, nk)}
+
+\CommentTok{\# columns with measurements}
+\NormalTok{meas.cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"totalLength"}\NormalTok{, }\StringTok{"tailLength"}\NormalTok{,}
+               \StringTok{"hindfootLength"}\NormalTok{,}\StringTok{"earLength"}\NormalTok{)}
+
+\CommentTok{\# fit clusters in a group}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nk)\{}
+\NormalTok{    k.list[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{kmeans}\NormalTok{(dx[,meas.cols], kvec[i])}
+\NormalTok{\}}
+
+\CommentTok{\# gather within{-}group sums of squares (wss)}
+\CommentTok{\# from each K for scree plot}
+\NormalTok{wss }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(k.list, }\ControlFlowTok{function}\NormalTok{(x)\{x}\SpecialCharTok{$}\NormalTok{tot.withinss\})}
+
+\CommentTok{\# plot wss vs. K}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(kvec, wss, }\AttributeTok{type=}\StringTok{"o"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{pch=}\FloatTok{1.5}\NormalTok{,}
+    \AttributeTok{xlab=}\StringTok{"Clusters (k)"}\NormalTok{,}
+    \AttributeTok{ylab=}\StringTok{"Total WSS"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-kmeans-mice1}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch26_files/figure-pdf/fig-kmeans-mice1-1.pdf}}
+
+}
+
+\end{figure}%
+
+Unlike our first example (Figure~\ref{fig-kmeans-wss-plot}), this curve
+doesn't have a clear break point. It is definitely leveling out by 4 to
+6 clusters, but there isn't as clean of an answer as the plot for the
+data that I made up earlier. Let's explore the potential clusters in an
+\textbf{ordination plot}. This is a way to visualize multivariate data
+that we will cover in Chapter~\ref{sec-ord}. For now, just understand
+that \emph{points that are closer together are more similar to each
+other}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(vegan)}
+
+\CommentTok{\# quick pca on scaled and centered data}
+\NormalTok{pca.dx }\OtherTok{\textless{}{-}} \FunctionTok{scale}\NormalTok{(dx[,meas.cols])}
+\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{pca}\NormalTok{(dx[,meas.cols])}
+\FunctionTok{summary}\NormalTok{(p1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+pca(X = dx[, meas.cols]) 
+
+Partitioning of variance:
+              Inertia Proportion
+Total           459.1          1
+Unconstrained   459.1          1
+
+Eigenvalues, and their contribution to the variance 
+
+Importance of components:
+                           PC1      PC2      PC3      PC4
+Eigenvalue            414.9543 38.29408 4.158315 1.693792
+Proportion Explained    0.9038  0.08341 0.009058 0.003689
+Cumulative Proportion   0.9038  0.98725 0.996311 1.000000
+\end{verbatim}
+
+First, plot the PCA and symbolize the points by species.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{xy }\OtherTok{\textless{}{-}} \FunctionTok{scores}\NormalTok{(p1, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{, }\StringTok{"sites"}\NormalTok{)}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{2}\NormalTok{], }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC1 (90.4\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (8.3\%)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend=}\NormalTok{use.spp,}
+       \AttributeTok{col=}\NormalTok{cols, }\AttributeTok{pch=}\NormalTok{pchs, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-kmeans-mice-pca}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch26_files/figure-pdf/fig-kmeans-mice-pca-1.pdf}}
+
+}
+
+\end{figure}%
+
+There is some separation between the species along PC1, with \emph{P.
+leucopus} having larger PC1 values and \emph{P. maniculatus} having
+smaller scores on that axis. There is still plenty of overlap though,
+which makes sense given the difficulty in field identification. We also
+can't rule out that some \emph{P. leucopus} were misidentified as
+\emph{P. maniculatus} and vice versa (or, for that matter, that
+individuals of other species were misidentified as one of \emph{P.
+leucopus} or \emph{P. maniculatus}).
+
+Let's compare the ``known'' species to the the assignments under 4, 5,
+and 6 cluster scenarios.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# extract clusters}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{k4 }\OtherTok{\textless{}{-}}\NormalTok{ k.list[[}\DecValTok{3}\NormalTok{]]}\SpecialCharTok{$}\NormalTok{cluster }\CommentTok{\# [[1]] == k = 2}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{k5 }\OtherTok{\textless{}{-}}\NormalTok{ k.list[[}\DecValTok{4}\NormalTok{]]}\SpecialCharTok{$}\NormalTok{cluster}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{k6 }\OtherTok{\textless{}{-}}\NormalTok{ k.list[[}\DecValTok{5}\NormalTok{]]}\SpecialCharTok{$}\NormalTok{cluster}
+
+\CommentTok{\# assign symbology}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch4 }\OtherTok{\textless{}{-}}\NormalTok{ (}\DecValTok{0}\SpecialCharTok{:}\DecValTok{3}\NormalTok{)[dx}\SpecialCharTok{$}\NormalTok{k4]}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch5 }\OtherTok{\textless{}{-}}\NormalTok{ (}\DecValTok{0}\SpecialCharTok{:}\DecValTok{4}\NormalTok{)[dx}\SpecialCharTok{$}\NormalTok{k5]}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch6 }\OtherTok{\textless{}{-}}\NormalTok{ (}\DecValTok{0}\SpecialCharTok{:}\DecValTok{5}\NormalTok{)[dx}\SpecialCharTok{$}\NormalTok{k6]}
+
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col4 }\OtherTok{\textless{}{-}} \FunctionTok{rainbow}\NormalTok{(}\DecValTok{4}\NormalTok{)[dx}\SpecialCharTok{$}\NormalTok{k4]}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col5 }\OtherTok{\textless{}{-}} \FunctionTok{rainbow}\NormalTok{(}\DecValTok{5}\NormalTok{)[dx}\SpecialCharTok{$}\NormalTok{k5]}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col6 }\OtherTok{\textless{}{-}} \FunctionTok{rainbow}\NormalTok{(}\DecValTok{6}\NormalTok{)[dx}\SpecialCharTok{$}\NormalTok{k6]}
+
+\CommentTok{\# get measurement scores}
+\NormalTok{zz }\OtherTok{\textless{}{-}} \FunctionTok{scores}\NormalTok{(p1, }\AttributeTok{display=}\StringTok{"species"}\NormalTok{, }\AttributeTok{scaling=}\DecValTok{2}\NormalTok{)}
+\NormalTok{zz }\OtherTok{\textless{}{-}} \FloatTok{0.1}\SpecialCharTok{*}\NormalTok{zz}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{), }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{)}
+\CommentTok{\# plot with species}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{2}\NormalTok{], }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC1 (90.4\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (8.3\%)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend=}\NormalTok{use.spp,}
+       \AttributeTok{col=}\NormalTok{cols, }\AttributeTok{pch=}\NormalTok{pchs, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\NormalTok{sc }\OtherTok{\textless{}{-}} \FloatTok{1.03}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, zz[,}\DecValTok{1}\NormalTok{], zz[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{1}\NormalTok{], sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(zz), }\AttributeTok{adj=}\DecValTok{0}\NormalTok{)}
+
+\CommentTok{\# plot with 4 clusters}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{2}\NormalTok{], }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch4, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col4, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC1 (90.4\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (8.3\%)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend=}\FunctionTok{paste}\NormalTok{(}\StringTok{"Group"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{),}
+       \AttributeTok{col=}\FunctionTok{rainbow}\NormalTok{(}\DecValTok{4}\NormalTok{), }\AttributeTok{pch=}\DecValTok{0}\SpecialCharTok{:}\DecValTok{3}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, zz[,}\DecValTok{1}\NormalTok{], zz[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{1}\NormalTok{], sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(zz), }\AttributeTok{adj=}\DecValTok{0}\NormalTok{)}
+
+\CommentTok{\# plot with 5 clusters}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{2}\NormalTok{], }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch5, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col5, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC1 (90.4\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (8.3\%)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend=}\FunctionTok{paste}\NormalTok{(}\StringTok{"Group"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{),}
+       \AttributeTok{col=}\FunctionTok{rainbow}\NormalTok{(}\DecValTok{5}\NormalTok{), }\AttributeTok{pch=}\DecValTok{0}\SpecialCharTok{:}\DecValTok{4}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, zz[,}\DecValTok{1}\NormalTok{], zz[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{1}\NormalTok{], sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(zz), }\AttributeTok{adj=}\DecValTok{0}\NormalTok{)}
+
+\CommentTok{\# plot with 6 clusters}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{2}\NormalTok{], }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch6, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col6, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC1 (90.4\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (8.3\%)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend=}\FunctionTok{paste}\NormalTok{(}\StringTok{"Group"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{),}
+       \AttributeTok{col=}\FunctionTok{rainbow}\NormalTok{(}\DecValTok{6}\NormalTok{), }\AttributeTok{pch=}\DecValTok{0}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, zz[,}\DecValTok{1}\NormalTok{], zz[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{1}\NormalTok{], sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(zz), }\AttributeTok{adj=}\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-kmeans-mice-pca4}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch26_files/figure-pdf/fig-kmeans-mice-pca4-1.pdf}}
+
+}
+
+\end{figure}%
+
+The PCA let's us see something important about the clusters. First, all
+of the biplot vectors (black lines) go off to the right. This tells us
+that PC1 is basically a gradient of overall size. That's not inherently
+a problem; overall size could be a factor that helps differentiate two
+species. Second, the clusters that the \emph{K}-means algorithm
+discovered are essentially splitting the individuals up along that
+gradient of size. The top left panel of
+Figure~\ref{fig-kmeans-mice-pca4} shows that \emph{P. leucopus} and
+\emph{P. maniculatus} do separate along PC1 somewhat, but they also
+separate somewhat along PC2.
+
+Just for fun, let's redraw the figure to show PC1 and PC3 instead of PC1
+and PC2. This might allow us to see some better separation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# get measurement scores}
+\NormalTok{zz }\OtherTok{\textless{}{-}} \FunctionTok{scores}\NormalTok{(p1, }\AttributeTok{choices=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{), }\AttributeTok{display=}\StringTok{"species"}\NormalTok{, }\AttributeTok{scaling=}\DecValTok{2}\NormalTok{)}
+\NormalTok{zz }\OtherTok{\textless{}{-}} \FloatTok{0.1}\SpecialCharTok{*}\NormalTok{zz}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{), }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{)}
+\CommentTok{\# plot with species}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{3}\NormalTok{], }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC1 (90.4\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC3 (4.2\%)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend=}\NormalTok{use.spp,}
+       \AttributeTok{col=}\NormalTok{cols, }\AttributeTok{pch=}\NormalTok{pchs, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\NormalTok{sc }\OtherTok{\textless{}{-}} \FloatTok{1.03}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, zz[,}\DecValTok{1}\NormalTok{], zz[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{1}\NormalTok{], sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(zz), }\AttributeTok{adj=}\DecValTok{0}\NormalTok{)}
+
+\CommentTok{\# plot with 4 clusters}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{3}\NormalTok{], }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch4, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col4, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC1 (90.4\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC3 (4.2\%)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend=}\FunctionTok{paste}\NormalTok{(}\StringTok{"Group"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{),}
+       \AttributeTok{col=}\FunctionTok{rainbow}\NormalTok{(}\DecValTok{4}\NormalTok{), }\AttributeTok{pch=}\DecValTok{0}\SpecialCharTok{:}\DecValTok{3}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, zz[,}\DecValTok{1}\NormalTok{], zz[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{1}\NormalTok{], sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(zz), }\AttributeTok{adj=}\DecValTok{0}\NormalTok{)}
+
+\CommentTok{\# plot with 5 clusters}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{3}\NormalTok{], }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch5, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col5, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC1 (90.4\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC3 (4.2\%)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend=}\FunctionTok{paste}\NormalTok{(}\StringTok{"Group"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{),}
+       \AttributeTok{col=}\FunctionTok{rainbow}\NormalTok{(}\DecValTok{5}\NormalTok{), }\AttributeTok{pch=}\DecValTok{0}\SpecialCharTok{:}\DecValTok{4}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, zz[,}\DecValTok{1}\NormalTok{], zz[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{1}\NormalTok{], sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(zz), }\AttributeTok{adj=}\DecValTok{0}\NormalTok{)}
+
+\CommentTok{\# plot with 6 clusters}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{3}\NormalTok{], }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch6, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col6, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC1 (90.4\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC3 (4.2\%)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend=}\FunctionTok{paste}\NormalTok{(}\StringTok{"Group"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{),}
+       \AttributeTok{col=}\FunctionTok{rainbow}\NormalTok{(}\DecValTok{6}\NormalTok{), }\AttributeTok{pch=}\DecValTok{0}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, zz[,}\DecValTok{1}\NormalTok{], zz[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{1}\NormalTok{], sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(zz), }\AttributeTok{adj=}\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-kmeans-mice-pca4-2}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch26_files/figure-pdf/fig-kmeans-mice-pca4-2-1.pdf}}
+
+}
+
+\end{figure}%
+
+Nope, PC1 is still dominating the figure. Let's check PC2 and PC3:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# get measurement scores}
+\NormalTok{zz }\OtherTok{\textless{}{-}} \FunctionTok{scores}\NormalTok{(p1, }\AttributeTok{choices=}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{), }\AttributeTok{display=}\StringTok{"species"}\NormalTok{, }\AttributeTok{scaling=}\DecValTok{2}\NormalTok{)}
+\NormalTok{zz }\OtherTok{\textless{}{-}} \FloatTok{0.1}\SpecialCharTok{*}\NormalTok{zz}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{), }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{)}
+\CommentTok{\# plot with species}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{2}\NormalTok{], xy[,}\DecValTok{3}\NormalTok{], }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC2 (8.3\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC3 (4.2\%)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend=}\NormalTok{use.spp,}
+       \AttributeTok{col=}\NormalTok{cols, }\AttributeTok{pch=}\NormalTok{pchs, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\NormalTok{sc }\OtherTok{\textless{}{-}} \FloatTok{1.03}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, zz[,}\DecValTok{1}\NormalTok{], zz[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{1}\NormalTok{], sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(zz), }\AttributeTok{adj=}\DecValTok{0}\NormalTok{)}
+
+\CommentTok{\# plot with 4 clusters}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{2}\NormalTok{], xy[,}\DecValTok{3}\NormalTok{], }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch4, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col4, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC2 (8.3\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC3 (4.2\%)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend=}\FunctionTok{paste}\NormalTok{(}\StringTok{"Group"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{),}
+       \AttributeTok{col=}\FunctionTok{rainbow}\NormalTok{(}\DecValTok{4}\NormalTok{), }\AttributeTok{pch=}\DecValTok{0}\SpecialCharTok{:}\DecValTok{3}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, zz[,}\DecValTok{1}\NormalTok{], zz[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{1}\NormalTok{], sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(zz), }\AttributeTok{adj=}\DecValTok{0}\NormalTok{)}
+
+\CommentTok{\# plot with 5 clusters}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{2}\NormalTok{], xy[,}\DecValTok{3}\NormalTok{], }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch5, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col5, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC2 (8.3\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC3 (4.2\%)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend=}\FunctionTok{paste}\NormalTok{(}\StringTok{"Group"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{),}
+       \AttributeTok{col=}\FunctionTok{rainbow}\NormalTok{(}\DecValTok{5}\NormalTok{), }\AttributeTok{pch=}\DecValTok{0}\SpecialCharTok{:}\DecValTok{4}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, zz[,}\DecValTok{1}\NormalTok{], zz[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{1}\NormalTok{], sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(zz), }\AttributeTok{adj=}\DecValTok{0}\NormalTok{)}
+
+\CommentTok{\# plot with 6 clusters}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{2}\NormalTok{], xy[,}\DecValTok{3}\NormalTok{], }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch6, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col6, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC2 (8.3\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC3 (4.2\%)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend=}\FunctionTok{paste}\NormalTok{(}\StringTok{"Group"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{),}
+       \AttributeTok{col=}\FunctionTok{rainbow}\NormalTok{(}\DecValTok{6}\NormalTok{), }\AttributeTok{pch=}\DecValTok{0}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, zz[,}\DecValTok{1}\NormalTok{], zz[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{1}\NormalTok{], sc}\SpecialCharTok{*}\NormalTok{zz[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(zz), }\AttributeTok{adj=}\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-kmeans-mice-pca4-3}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch26_files/figure-pdf/fig-kmeans-mice-pca4-3-1.pdf}}
+
+}
+
+\end{figure}%
+
+That is somehow worse. Okay, let's check the 2 cluster case. We can omit
+the biplot vectors because they are essentially redundant with PC1.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{k2 }\OtherTok{\textless{}{-}}\NormalTok{ k.list[[}\DecValTok{1}\NormalTok{]]}\SpecialCharTok{$}\NormalTok{cluster}
+\FunctionTok{table}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{abb, dx}\SpecialCharTok{$}\NormalTok{k2, }\AttributeTok{useNA=}\StringTok{"ifany"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+        
+           1   2
+  Perleu 389 248
+  Perman 160 548
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col2 }\OtherTok{\textless{}{-}} \FunctionTok{rainbow}\NormalTok{(}\DecValTok{2}\NormalTok{)[dx}\SpecialCharTok{$}\NormalTok{k2]}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch2 }\OtherTok{\textless{}{-}}\NormalTok{ (}\DecValTok{0}\SpecialCharTok{:}\DecValTok{1}\NormalTok{)[dx}\SpecialCharTok{$}\NormalTok{k2]}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\CommentTok{\# plot with species}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{2}\NormalTok{], }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC1 (90.4\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (8.3\%)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend=}\NormalTok{use.spp,}
+       \AttributeTok{col=}\NormalTok{cols, }\AttributeTok{pch=}\NormalTok{pchs, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+
+\CommentTok{\# plot with 2 clusters vs. PC1 and PC2}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{2}\NormalTok{], }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch2, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col2, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC1 (90.4\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (8.3\%)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend=}\FunctionTok{paste}\NormalTok{(}\StringTok{"Group"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{),}
+       \AttributeTok{col=}\FunctionTok{rainbow}\NormalTok{(}\DecValTok{2}\NormalTok{), }\AttributeTok{pch=}\DecValTok{0}\SpecialCharTok{:}\DecValTok{1}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+
+\CommentTok{\# plot with 2 clusters vs. PC1 and PC3}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{3}\NormalTok{], }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch2, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col2, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC1 (90.4\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC3 (4.2\%)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend=}\FunctionTok{paste}\NormalTok{(}\StringTok{"Group"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{),}
+       \AttributeTok{col=}\FunctionTok{rainbow}\NormalTok{(}\DecValTok{2}\NormalTok{), }\AttributeTok{pch=}\DecValTok{0}\SpecialCharTok{:}\DecValTok{1}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+
+\CommentTok{\# plot with 2 clusters vs. PC2 and PC3}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{2}\NormalTok{], xy[,}\DecValTok{3}\NormalTok{], }\AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch2, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col2, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC2 (8.3\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC3 (4.2\%)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend=}\FunctionTok{paste}\NormalTok{(}\StringTok{"Group"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{),}
+       \AttributeTok{col=}\FunctionTok{rainbow}\NormalTok{(}\DecValTok{2}\NormalTok{), }\AttributeTok{pch=}\DecValTok{0}\SpecialCharTok{:}\DecValTok{1}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-kmeans-mice-pca2}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch26_files/figure-pdf/fig-kmeans-mice-pca2-1.pdf}}
+
+}
+
+\end{figure}%
+
+So what did we learn? First, the clustering is overwhelmingly driven by
+overall size, and the clustering mirrored that. This makes sense
+mathematically. \emph{K}-means minimizes within-cluster sums of squared
+Euclidean distances. When nearly all the variation lies along one
+dimension, the algorithm can reduce that sum of squares most efficiently
+by dividing observations along that dimension. In other words, the
+algorithm worked exactly as intended, but it answers a different
+question than the one we hoped it would.
+
+Second, the clustering was not entirely useless. The contingency table
+showed that the 2 cluster solution was correct about 69.7\% of the time
+(937 out of 1,345 individuals correctly assigned). However, the accuracy
+is asymmetric: 77.4\% of \emph{P. maniculatus} are in Cluster 2, but
+only 61.1\% of \emph{P. leucopus} are in Cluster 1. So there is a real
+association between the clusters and species, even though the clusters
+don't correspond particularly well to species boundaries. A \(\chi^2\)
+test on the frequency table will confirm this lack of independence of
+cluster and species.
+
+Third, the analysis detected considerable variation in body size that
+must be associated with age, sex, geography, or some factor (or
+combination of factors) other than species identity. Indeed, both
+species exhibit considerable geographic variation, which we will explore
+in Chapter~\ref{sec-ord}.
+
+This leads us to an important question: if we already know the species
+identities, would a supervised classification method have been more
+appropriate? We will explore one such method,
+\hyperref[sec-ord-other-lda]{linear discriminant analysis}, in the next
+chapter.
+
+\section{Hierarchical agglomerative clustering}\label{sec-clust-hclust}
+
+Coming soon!
+
+\subsection{Hierarchical clustering with Ward's
+method}\label{sec-clust-hclust-ward}
+
+Coming soon!
+
+\subsection{Hierarchical clustering with single
+linkage}\label{sec-clust-hclust-single}
+
+Coming soon!
 
 \chapter{Ordination}\label{sec-ord}
 
@@ -33618,15 +34373,16 @@ predictors when constructing the ordination axes.
 
 \subsection{Redundancy analysis (RA)}\label{sec-ord-con-ra}
 
+\subsection{Linear discriminant analysis}\label{sec-ord-con-lda}
+
 \subsection{Canonical correspondence analysis
 (CCA)}\label{sec-ord-con-cca}
 
 \subsection{Distance-based RDA (dbRDA)}\label{sec-ord-con-dbrda}
 
-\part{Alternatives to \emph{p}-values: information-theoretic and
-Bayesian methods}
+\section{Classification and other methods}\label{sec-ord-other}
 
-\ldots{} until now, you have become the very thing you swore to destroy.
+\subsection{Linear discriminant analysis}\label{sec-ord-other-lda}
 
 \chapter{Multivariate hypothesis testing}\label{sec-mtest}
 
@@ -33643,6 +34399,11 @@ Anything is permuted.
 \section{Analyzing dissimilarity}\label{sec-mtest-dis}
 
 \subsection{Mantel tests}\label{sec-mtest-dis-mantel}
+
+\part{Alternatives to \emph{p}-values: information-theoretic and
+Bayesian methods}
+
+\ldots{} until now, you have become the very thing you swore to destroy.
 
 \chapter{Information theoretic model-based inference}\label{sec-it}
 
@@ -34558,6 +35319,11 @@ Grolemund G, Wickham H. 2011.
 \href{https://www.jstatsoft.org/v40/i03/}{Dates and times made easy with
 {lubridate}}. Journal of Statistical Software 40(3):1--25.
 
+\bibitem[\citeproctext]{ref-hill1979}
+Hill MO. 1979. A {FORTRAN} program for arranging multivariate data in an
+ordered two-way table by classification of the individuals and
+attributes. {TWINSPAN}.
+
 \bibitem[\citeproctext]{ref-hobbs2006}
 Hobbs NT, Hilborn R. 2006.
 \href{https://doi.org/10.1890/04-0645}{Alternatives to statistical
@@ -34607,6 +35373,15 @@ case studies}. Ecological {M}onographs 62(1):67--118.
 \bibitem[\citeproctext]{ref-legendre2012numerical}
 Legendre P, Legendre L. 2012. Numerical ecology. Amsterdam: Elsevier.
 
+\bibitem[\citeproctext]{ref-light2021morphological}
+Light JE, Siciliano-Martina L, Dohlanik EG, Hafner DJ, Lawing AM,
+Greenbaum IF. 2021. Morphological differentiation of peromyscus leucopus
+and p. Maniculatus in east texas. Therya 12(2):369--387.
+
+\bibitem[\citeproctext]{ref-ludwig1988statistical}
+Ludwig JA, Reynolds JF, QUARTET L, Reynolds J. 1988. Statistical
+ecology: {a} primer in methods and computing. John Wiley \& Sons.
+
 \bibitem[\citeproctext]{ref-mccune2002analysis}
 McCune B, Grace JB, Urban DL. 2002. Analysis of ecological communities.
 MjM software design, Gleneden Beach, Oregon, USA.
@@ -34627,14 +35402,31 @@ Young BE, Graham CH, Costa GC. 2014.
 data in life-history trait datasets: Which approach performs the best?}
 Methods in Ecology and Evolution 5(9):961--970.
 
+\bibitem[\citeproctext]{ref-rich1996morphological}
+Rich SM, Kilpatrick CW, Shippee JL, Crowell KL. 1996. Morphological
+differentiation and identification of peromyscus leucopus and p.
+Maniculatus in northeastern north america. Journal of Mammalogy
+77(4):985--991.
+
 \bibitem[\citeproctext]{ref-ritz2015}
 Ritz C, Baty F, Streibig JC, Gerhard D. 2015. Dose-response analysis
 using {R}. PLoS ONE 10(12):e0146021.
 \url{https://doi.org/10.1371/journal.pone.0146021}
 
+\bibitem[\citeproctext]{ref-rolecek2009}
+Roleček J, Tichý L, Zelený D, Chytrý M. 2009. Modified {TWINSPAN}
+classification in which the hierarchy respects cluster heterogeneity.
+Journal of Vegetation Science 20(4):596--602.
+\url{https://doi.org/10.1111/j.1654-1103.2009.01062.x}
+
 \bibitem[\citeproctext]{ref-spector2008}
 Spector P. 2008. Data manipulation with {R}. New York: Springer
 Science+Business Media.
+
+\bibitem[\citeproctext]{ref-ward1963}
+Ward JH. 1963. Hierarchical grouping to optimize an objective function.
+Journal of the American Statistical Association 58(301):236--244.
+\url{https://doi.org/10.1080/01621459.1963.10500845}
 
 \bibitem[\citeproctext]{ref-warton2011}
 Warton DI, Hui FKC. 2011. The arcsine is asinine: The analysis of

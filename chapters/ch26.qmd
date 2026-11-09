@@ -1,4 +1,544 @@
 # Clustering for biologists {#sec-clust}
 
-Two is company, but three's a crowd.
+## Introduction {#sec-clust-intro}
+
+Now that we have a way of quantifying multivariate differences between samples as distance, we can use those measures to explore patterns in data. One application of distance metrics is to use them to organize data into **clusters** or groups consisting of samples that are more similar to each other than they are to other samples. In other words, the **within-group** distances should be smaller than the **between-group** distances.
+
+The figure below illustrates this concept with an imaginary example. The clusters shown cleanly separate red, blue, and green points. For example, the average distance between the red points is smaller than the average distance between the red points and the blue points.
+
+```{r}
+#| echo: false
+#| fig-width: 7
+#| fig-height: 7
+#| label: fig-cluster-example1
+#| fig-cap: "text"
+#| fig-alt: "text"
+
+
+set.seed(123)
+n <- 8
+x1 <- runif(n, 2, 5)
+y1 <- runif(n, 6, 9)
+
+x2 <- runif(n, 7.5, 9.5)
+y2 <- runif(n, 7, 9)
+
+x3 <- runif(n, 4, 7)
+y3 <- runif(n, 2, 5)
+
+par(mar=c(1,1,1,1), bty="n")
+plot(x1, y1, xlim=c(1.5, 10), ylim=c(1.5, 10),
+     pch=22, bg="white", col="tomato", cex=2, axes=FALSE, lwd=3)
+points(x2, y2, pch=24, bg="white", col="royalblue", cex=2, lwd=3)
+points(x3, y3, pch=21, bg="white", col="forestgreen", cex=2, lwd=3)
+
+```
+
+### Types of clustering {#sec-clust-intro-types}
+
+There are many methods for clustering observations. Many methods are **hierarchical**, with groups being nested within other groups. Many biological phenomena are also hierarchical in nature, so these methods are naturally quite useful. Other methods are **non-hierarchical**, where groups are not constrained to be within other groups.
+
+Clustering methods also differ in their manner of group construction. Many methods are **agglomerative**, which means that groups are formed by combining samples. Other methods are **divisive**, which means that all samples start in a single group which is then broken up. Divisive techniques are also called **partitioning** techniques. Examples of each class of clustering method are shown below.
+
+| Clustering approach | Group formation | Common methods |
+|---|---|---|
+| Partitioning (nonhierarchical) | Observations are assigned and reassigned among a specified number of clusters | *K*-means clustering |
+| Hierarchical agglomerative | Individual observations or clusters are progressively merged into larger clusters | Ward's method [@ward1963]; single linkage; complete linkage |
+| Hierarchical divisive | All observations begin in one cluster, which is progressively divided into smaller clusters | Association analysis [@ludwig1988statistical; @legendre2012numerical]; TWINSPAN [@hill1979; @rolecek2009] |
+
+: Common approaches to clustering and their methods of forming groups. {#tbl-clustering-methods}
+
+## K-means clustering {#sec-clust-kmeans}
+
+### Introduction to K-means clustering {#sec-clust-kmeans-intro}
+
+*K*-means clustering is a method for dividing a dataset with *n* observations, with *p* variables, into *K* categories such that each observation belongs to the cluster with the most similar mean. The “mean” for each category (i.e., group) is really a position in a *p*-dimensional hyperspace called a **centroid**. In this context, centroids are calculated as the point at the central coordinate of each dimension. The mean is most often used, but the median can be a useful alternative.
+ 
+There are several algorithms for *k*-means clustering. One of the most common works like this:
+
+1. Select the desired number of clusters *k*.
+2. Make an initial guess of the mean of each cluster. I.e., Start with a *K* random positions in the *p*-dimensional hyperspace. These positions are known as centroids.
+3. Calculate the Euclidean distance between each sample and each centroid.
+4. Assign each sample to the category corresponding to the nearest centroid.
+5. Update the centroids for each cluster by calculating the new centroid for the samples assigned to each cluster. 
+6. Repeat steps 3, 4, and 5 until cluster assignments no longer change.
+
+This algorithm is not guaranteed to find the best possible solution, but it quite often finds decent solutions. Distance metrics other than the Euclidean can be used, but Euclidean is most common. Transforming, scaling, and/or standardizing variables so that they are all on the same scale can improve the results. 
+
+The figure below shows the effects of *K*-means clustering on a pretend dataset with 2 variables with $K = 3$. The group assignments were determined because groups with those centroids had the smallest possible set of Euclidean distances between the points and the group centroids (right panel). Centroids are shown with a thick outline.
+
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 5
+#| label: fig-kmeans-example1
+#| fig-cap: "text"
+#| fig-alt: "text"
+
+
+set.seed(123)
+n <- 8
+x1 <- runif(n, 1, 7)
+y1 <- runif(n, 6, 14)
+
+x2 <- runif(n, 9, 13)
+y2 <- runif(n, 8, 13)
+
+x3 <- runif(n, 5, 10)
+y3 <- runif(n, 1, 6)
+
+xx <- c(x1, x2, x3)
+yy <- c(y1, y2, y3)
+
+par(mar=c(5,5,1,1), bty="n", mfrow=c(1,2))
+plot(xx, yy, xlim=c(0, 15), ylim=c(0, 15),
+     pch=19, cex=1.4, 
+     xlab="Variable 1", ylab="Variable 2")
+plot(xx, yy, xlim=c(0, 15), ylim=c(0, 15),
+     type="n", xlab="Variable 1", ylab="Variable 2")
+points(x1, y1, pch=15, col="tomato", cex=1.4)
+points(x2, y2, pch=16, col="royalblue3", cex=1.4)
+points(x3, y3, pch=17, col="forestgreen", cex=1.4)
+segments(x1, y1, mean(x1), mean(y1), lty=2, col="tomato")
+segments(x2, y2, mean(x2), mean(y2), lty=2, col="royalblue3")
+segments(x3, y3, mean(x3), mean(y3), lty=2, col="forestgreen")
+points(mean(x1), mean(y1), pch=22, col="black", lwd=3, bg="tomato", cex=2)
+points(mean(x2), mean(y2), pch=21, col="black", lwd=3, bg="royalblue3", cex=2)
+
+points(mean(x3), mean(y3), pch=24, col="black", lwd=3, bg="forestgreen", cex=2)
+
+
+
+```
+
+How many clusters are appropriate? That’s a good question to ask, and sometimes a tricky question to answer. There are statistical ways to assess how many groups are appropriate...but, you always need to use your biological judgement when interpreting groups. Sometimes you may be justified on biological grounds using 1 group more or less than the numerical summaries indicate. 
+
+One common way to assess the optimal *K* is to try several *K* and calculate the within-cluster sum of squared errors (*WSS*) for all points. The optimal value of *K* is often assumed to be the value at which a plot of *WSS* vs. *K* starts to bend. The example below illustrates this method for the data above.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-kmeans-wss-plot
+#| fig-cap: "text"
+#| fig-alt: "text"
+
+# generate a random dataset with 3 clusters
+set.seed(1234)
+x <- c(rnorm(20, 5, 2), rnorm(10, 12, 2))
+y <- c(rnorm(10, 3, 2), rnorm(10, 10, 2), rnorm(10, 14, 2))
+dx <- data.frame(x,y)
+
+# perform k-means clustering with k from 2 to 8
+kvec <- 2:8
+nk <- length(kvec)
+k.list <- vector("list", nk)
+for(i in 1:nk){
+  k.list[[i]] <- kmeans(dx, kvec[i])
+}
+
+# gather WSS for each k
+wss <- sapply(k.list, function(x){x$tot.withinss})
+
+# plot WSS vs. k
+par(mfrow=c(1,1), mar=c(5,5,1,1))
+plot(kvec, wss, type="o",
+     lwd=3, pch=1.5,
+     xlab="Clusters (k)",
+     ylab="Total WSS")
+```
+
+Notice that total *WSS* drops off much more slowly above 3 clusters. That is, going from 3 to 4 clusters reduces *WSS* much less than going from 2 to 3 clusters. The result above could reasonably justify 3 or 4 clusters. The figure below shows how the data are divided into 3 and 4 clusters.
+
+```{r}
+#| fig-width: 10
+#| fig-height: 5
+#| label: fig-kmeans-example2
+#| fig-cap: "text"
+#| fig-alt: "text"
+
+# assemble values needed for plots
+## get clusters
+dx$k3 <- k.list[[which(kvec == 3)]]$cluster
+dx$k4 <- k.list[[which(kvec == 4)]]$cluster
+
+## coordinates of group centroids
+km3 <- k.list[[which(kvec == 3)]]
+km4 <- k.list[[which(kvec == 4)]]
+
+dx$cenx3 <- km3$centers[dx$k3,1]
+dx$ceny3 <- km3$centers[dx$k3,2]
+dx$cenx4 <- km4$centers[dx$k4,1]
+dx$ceny4 <- km4$centers[dx$k4,2]
+
+## colors for each group
+dx$col3 <- rainbow(3)[dx$k3]
+dx$col4 <- rainbow(4)[dx$k4]
+
+## symbols for each group
+dx$pch3 <- (15:17)[dx$k3]
+dx$pch4 <- (15:18)[dx$k4]
+
+# make plot
+par(mfrow=c(1,2), mar=c(5, 5, 2, 1))
+plot(x,y, pch=dx$pch3, col=dx$col3, cex=1.4,
+    xlab="Variable 1", ylab="Variable 2",
+    main=expression(italic(k)==3))
+segments(dx$cenx3, dx$ceny3, dx$x, dx$y,
+    col=dx$col3, lwd=2, lty=2)
+points(dx$cenx3, dx$ceny3, pch=21, cex=2,
+    bg="yellow", col=dx$col3, lwd=4)
+
+plot(x,y, pch=dx$pch4, col=dx$col4, cex=1.4,
+    xlab="Variable 1", ylab="Variable 2",
+    main=expression(italic(k)==4))
+segments(dx$cenx4, dx$ceny4, dx$x, dx$y,
+    col=dx$col4, lwd=2, lty=2)
+points(dx$cenx4, dx$ceny4, pch=21, cex=2,
+    bg="yellow", col=dx$col4, lwd=4)
+```
+
+Most of the group assignments stayed the same, but the algorithm split the blue group when *K* increased from 3 to 4. Accepting the 3 cluster or 4 cluster solution is as much of a biological decision as it is a statistical one. When you get to this point, you need to think about whether the groups make sense or not. Notice that *K*-means clustering does not necessarily result in groups of equal sizes. This may or may not be a problem depending on the structure of your dataset and the question you are trying to answer.
+
+### Example with NEON data {#sec-clust-kmeans-example}
+
+Let's revisit the NEON small mammal data. Download the [individual measurement dataset](../datasets/data-neon-ind-meas.csv) and the [taxonomic dataset](../datasets/data-neon-taxa.csv) and put them in your working directory.
+
+```{r}
+#| include: false
+tax <- read.csv("../datasets/data-neon-taxa.csv")
+ind <- read.csv("../datasets/data-neon-ind-meas.csv")
+
+```
+
+```{r}
+#| eval: false
+tax <- read.csv("data-neon-taxa.csv")
+ind <- read.csv("data-neon-ind-meas.csv")
+```
+
+We are going to use these data to try out a few common clustering techniques. First we need to organize the data. Cut the measurement data down to just the columns we need: individual, species, and the four standard measurements.
+
+```{r}
+use.cols <- c("tagID", "abb", "totalLength",
+              "tailLength", "hindfootLength", "earLength" )
+dx <- ind[,use.cols]
+
+# only want individuals with no missing measurements
+dx <- dx[complete.cases(dx),]
+
+# pick Peromyscus maniculatus (Perman) and
+# P. leucopus (Perleu). These species are
+# notoriously difficult to tell apart in
+# the field. Let's see if we can do it with clustering.
+use.spp <- c("Perleu", "Perman")
+dx <- dx[dx$abb %in% use.spp,]
+
+# assign colors and shapes for plotting later
+cols <- c("tomato", "royalblue")
+pchs <- 1:2
+names(cols) <- use.spp
+names(pchs) <- use.spp
+dx$col <- cols[dx$abb]
+dx$pch <- pchs[dx$abb]
+```
+
+The Eastern Deer Mouse (*Peromyscus maniculatus*) and the White-Footed Mouse (*P. leucopus*) are two morphologically similar species of mice that are widespread throughout much of North America. Among mammalogists, they are notoriously difficult to tell apart in the field. This is a problem, because they are both habitat generalists and co-occur in many places (@light2021morphological). Several field characters or suites of characters have been shown to differentiate them, with some success (@rich1996morphological), but regional variation in both species confounds these methods. Some studies have found that over a third of species in museum collections may have been misidentified (@light2021morphological). For this example analysis, we are going to assume that all individuals in the dataset have been identified correctly. 
+
+Let's apply *K*-means clustering to see if we can identify any groups of similar individuals. If the species can be distinguished morphologically, then the clusters may recover the species. We expect to find 2 clusters, but there may be more. We will test $K$ from 2 through 8. 
+
+Unlike most of the multivariate methods in this guide, we won't need the package `vegan`: `kmeans()` is a base function.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-kmeans-mice1
+#| fig-cap: "text"
+#| fig-alt: "text"
+#| 
+# numbers of groups to test
+kvec <- 2:8
+
+# set up a list to catch results
+nk <- length(kvec)
+k.list <- vector("list", nk)
+
+# columns with measurements
+meas.cols <- c("totalLength", "tailLength",
+               "hindfootLength","earLength")
+
+# fit clusters in a group
+for(i in 1:nk){
+    k.list[[i]] <- kmeans(dx[,meas.cols], kvec[i])
+}
+
+# gather within-group sums of squares (wss)
+# from each K for scree plot
+wss <- sapply(k.list, function(x){x$tot.withinss})
+
+# plot wss vs. K
+par(mar=c(5,5,1,1))
+plot(kvec, wss, type="o", lwd=3, pch=1.5,
+    xlab="Clusters (k)",
+    ylab="Total WSS")
+
+```
+
+Unlike our first example (@fig-kmeans-wss-plot), this curve doesn't have a clear break point. It is definitely leveling out by 4 to 6 clusters, but there isn't as clean of an answer as the plot for the data that I made up earlier. Let's explore the potential clusters in an **ordination plot**. This is a way to visualize multivariate data that we will cover in @sec-ord. For now, just understand that *points that are closer together are more similar to each other*.
+
+```{r}
+library(vegan)
+
+# quick pca on scaled and centered data
+pca.dx <- scale(dx[,meas.cols])
+p1 <- pca(dx[,meas.cols])
+summary(p1)
+```
+
+First, plot the PCA and symbolize the points by species.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 8
+#| label: fig-kmeans-mice-pca
+#| fig-cap: "text"
+#| fig-alt: "text"
+
+xy <- scores(p1, 1:4, "sites")
+
+par(mar=c(5,5,1,1))
+plot(xy[,1], xy[,2], pch=dx$pch, col=dx$col, cex=1.4,
+     xlab="PC1 (90.4%)", ylab="PC2 (8.3%)")
+legend("topright", legend=use.spp,
+       col=cols, pch=pchs, cex=1.4, bty="n")
+```
+
+There is some separation between the species along PC1, with *P. leucopus* having larger PC1 values and *P. maniculatus* having smaller scores on that axis. There is still plenty of overlap though, which makes sense given the difficulty in field identification. We also can't rule out that some *P. leucopus* were misidentified as *P. maniculatus* and vice versa (or, for that matter, that individuals of other species were misidentified as one of *P. leucopus* or *P. maniculatus*).
+
+Let's compare the "known" species to the the assignments under 4, 5, and 6 cluster scenarios.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 8
+#| label: fig-kmeans-mice-pca4
+#| fig-cap: "text"
+#| fig-alt: "text"
+
+# extract clusters
+dx$k4 <- k.list[[3]]$cluster # [[1]] == k = 2
+dx$k5 <- k.list[[4]]$cluster
+dx$k6 <- k.list[[5]]$cluster
+
+# assign symbology
+dx$pch4 <- (0:3)[dx$k4]
+dx$pch5 <- (0:4)[dx$k5]
+dx$pch6 <- (0:5)[dx$k6]
+
+dx$col4 <- rainbow(4)[dx$k4]
+dx$col5 <- rainbow(5)[dx$k5]
+dx$col6 <- rainbow(6)[dx$k6]
+
+# get measurement scores
+zz <- scores(p1, display="species", scaling=2)
+zz <- 0.1*zz
+
+par(mar=c(5,5,1,1), mfrow=c(2,2), xpd=NA)
+# plot with species
+plot(xy[,1], xy[,2], pch=dx$pch, col=dx$col, cex=1.4,
+     xlab="PC1 (90.4%)", ylab="PC2 (8.3%)")
+legend("topright", legend=use.spp,
+       col=cols, pch=pchs, cex=1.4, bty="n")
+sc <- 1.03
+segments(0, 0, zz[,1], zz[,2], lwd=2)
+text(sc*zz[,1], sc*zz[,2], rownames(zz), adj=0)
+
+# plot with 4 clusters
+plot(xy[,1], xy[,2], pch=dx$pch4, col=dx$col4, cex=1.4,
+     xlab="PC1 (90.4%)", ylab="PC2 (8.3%)")
+legend("topright", legend=paste("Group", 1:4),
+       col=rainbow(4), pch=0:3, bty="n")
+segments(0, 0, zz[,1], zz[,2], lwd=2)
+text(sc*zz[,1], sc*zz[,2], rownames(zz), adj=0)
+
+# plot with 5 clusters
+plot(xy[,1], xy[,2], pch=dx$pch5, col=dx$col5, cex=1.4,
+     xlab="PC1 (90.4%)", ylab="PC2 (8.3%)")
+legend("topright", legend=paste("Group", 1:5),
+       col=rainbow(5), pch=0:4, bty="n")
+segments(0, 0, zz[,1], zz[,2], lwd=2)
+text(sc*zz[,1], sc*zz[,2], rownames(zz), adj=0)
+
+# plot with 6 clusters
+plot(xy[,1], xy[,2], pch=dx$pch6, col=dx$col6, cex=1.4,
+     xlab="PC1 (90.4%)", ylab="PC2 (8.3%)")
+legend("topright", legend=paste("Group", 1:6),
+       col=rainbow(6), pch=0:5, bty="n")
+segments(0, 0, zz[,1], zz[,2], lwd=2)
+text(sc*zz[,1], sc*zz[,2], rownames(zz), adj=0)
+
+```
+
+The PCA let's us see something important about the clusters. First, all of the biplot vectors (black lines) go off to the right. This tells us that PC1 is basically a gradient of overall size. That's not inherently a problem; overall size could be a factor that helps differentiate two species. Second, the clusters that the *K*-means algorithm discovered are essentially splitting the individuals up along that gradient of size. The top left panel of @fig-kmeans-mice-pca4 shows that *P. leucopus* and *P. maniculatus* do separate along PC1 somewhat, but they also separate somewhat along PC2. 
+
+Just for fun, let's redraw the figure to show PC1 and PC3 instead of PC1 and PC2. This might allow us to see some better separation.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 8
+#| label: fig-kmeans-mice-pca4-2
+#| fig-cap: "text"
+#| fig-alt: "text"
+
+# get measurement scores
+zz <- scores(p1, choices=c(1,3), display="species", scaling=2)
+zz <- 0.1*zz
+
+par(mar=c(5,5,1,1), mfrow=c(2,2), xpd=NA)
+# plot with species
+plot(xy[,1], xy[,3], pch=dx$pch, col=dx$col, cex=1.4,
+     xlab="PC1 (90.4%)", ylab="PC3 (4.2%)")
+legend("topright", legend=use.spp,
+       col=cols, pch=pchs, cex=1.4, bty="n")
+sc <- 1.03
+segments(0, 0, zz[,1], zz[,2], lwd=2)
+text(sc*zz[,1], sc*zz[,2], rownames(zz), adj=0)
+
+# plot with 4 clusters
+plot(xy[,1], xy[,3], pch=dx$pch4, col=dx$col4, cex=1.4,
+     xlab="PC1 (90.4%)", ylab="PC3 (4.2%)")
+legend("topright", legend=paste("Group", 1:4),
+       col=rainbow(4), pch=0:3, bty="n")
+segments(0, 0, zz[,1], zz[,2], lwd=2)
+text(sc*zz[,1], sc*zz[,2], rownames(zz), adj=0)
+
+# plot with 5 clusters
+plot(xy[,1], xy[,3], pch=dx$pch5, col=dx$col5, cex=1.4,
+     xlab="PC1 (90.4%)", ylab="PC3 (4.2%)")
+legend("topright", legend=paste("Group", 1:5),
+       col=rainbow(5), pch=0:4, bty="n")
+segments(0, 0, zz[,1], zz[,2], lwd=2)
+text(sc*zz[,1], sc*zz[,2], rownames(zz), adj=0)
+
+# plot with 6 clusters
+plot(xy[,1], xy[,3], pch=dx$pch6, col=dx$col6, cex=1.4,
+     xlab="PC1 (90.4%)", ylab="PC3 (4.2%)")
+legend("topright", legend=paste("Group", 1:6),
+       col=rainbow(6), pch=0:5, bty="n")
+segments(0, 0, zz[,1], zz[,2], lwd=2)
+text(sc*zz[,1], sc*zz[,2], rownames(zz), adj=0)
+
+```
+
+Nope, PC1 is still dominating the figure. Let's check PC2 and PC3:
+
+```{r}
+#| fig-width: 8
+#| fig-height: 8
+#| label: fig-kmeans-mice-pca4-3
+#| fig-cap: "text"
+#| fig-alt: "text"
+
+# get measurement scores
+zz <- scores(p1, choices=c(2,3), display="species", scaling=2)
+zz <- 0.1*zz
+
+par(mar=c(5,5,1,1), mfrow=c(2,2), xpd=NA)
+# plot with species
+plot(xy[,2], xy[,3], pch=dx$pch, col=dx$col, cex=1.4,
+     xlab="PC2 (8.3%)", ylab="PC3 (4.2%)")
+legend("topright", legend=use.spp,
+       col=cols, pch=pchs, cex=1.4, bty="n")
+sc <- 1.03
+segments(0, 0, zz[,1], zz[,2], lwd=2)
+text(sc*zz[,1], sc*zz[,2], rownames(zz), adj=0)
+
+# plot with 4 clusters
+plot(xy[,2], xy[,3], pch=dx$pch4, col=dx$col4, cex=1.4,
+     xlab="PC2 (8.3%)", ylab="PC3 (4.2%)")
+legend("topright", legend=paste("Group", 1:4),
+       col=rainbow(4), pch=0:3, bty="n")
+segments(0, 0, zz[,1], zz[,2], lwd=2)
+text(sc*zz[,1], sc*zz[,2], rownames(zz), adj=0)
+
+# plot with 5 clusters
+plot(xy[,2], xy[,3], pch=dx$pch5, col=dx$col5, cex=1.4,
+     xlab="PC2 (8.3%)", ylab="PC3 (4.2%)")
+legend("topright", legend=paste("Group", 1:5),
+       col=rainbow(5), pch=0:4, bty="n")
+segments(0, 0, zz[,1], zz[,2], lwd=2)
+text(sc*zz[,1], sc*zz[,2], rownames(zz), adj=0)
+
+# plot with 6 clusters
+plot(xy[,2], xy[,3], pch=dx$pch6, col=dx$col6, cex=1.4,
+     xlab="PC2 (8.3%)", ylab="PC3 (4.2%)")
+legend("topright", legend=paste("Group", 1:6),
+       col=rainbow(6), pch=0:5, bty="n")
+segments(0, 0, zz[,1], zz[,2], lwd=2)
+text(sc*zz[,1], sc*zz[,2], rownames(zz), adj=0)
+
+```
+
+That is somehow worse. Okay, let's check the 2 cluster case. We can omit the biplot vectors because they are essentially redundant with PC1.
+
+```{r}
+dx$k2 <- k.list[[1]]$cluster
+table(dx$abb, dx$k2, useNA="ifany")
+```
+
+```{r}
+#| fig-width: 8
+#| fig-height: 8
+#| label: fig-kmeans-mice-pca2
+#| fig-cap: "text"
+#| fig-alt: "text"
+#| 
+dx$col2 <- rainbow(2)[dx$k2]
+dx$pch2 <- (0:1)[dx$k2]
+
+par(mar=c(5,5,1,1), mfrow=c(2,2))
+# plot with species
+plot(xy[,1], xy[,2], pch=dx$pch, col=dx$col, cex=1.4,
+     xlab="PC1 (90.4%)", ylab="PC2 (8.3%)")
+legend("topright", legend=use.spp,
+       col=cols, pch=pchs, cex=1.4, bty="n")
+
+# plot with 2 clusters vs. PC1 and PC2
+plot(xy[,1], xy[,2], pch=dx$pch2, col=dx$col2, cex=1.4,
+     xlab="PC1 (90.4%)", ylab="PC2 (8.3%)")
+legend("topright", legend=paste("Group", 1:2),
+       col=rainbow(2), pch=0:1, bty="n")
+
+# plot with 2 clusters vs. PC1 and PC3
+plot(xy[,1], xy[,3], pch=dx$pch2, col=dx$col2, cex=1.4,
+     xlab="PC1 (90.4%)", ylab="PC3 (4.2%)")
+legend("topright", legend=paste("Group", 1:2),
+       col=rainbow(2), pch=0:1, bty="n")
+
+# plot with 2 clusters vs. PC2 and PC3
+plot(xy[,2], xy[,3], pch=dx$pch2, col=dx$col2, cex=1.4,
+     xlab="PC2 (8.3%)", ylab="PC3 (4.2%)")
+legend("topright", legend=paste("Group", 1:2),
+       col=rainbow(2), pch=0:1, bty="n")
+
+```
+
+So what did we learn? First, the clustering is overwhelmingly driven by overall size, and the clustering mirrored that. This makes sense mathematically. *K*-means minimizes within-cluster sums of squared Euclidean distances. When nearly all the variation lies along one dimension, the algorithm can reduce that sum of squares most efficiently by dividing observations along that dimension. In other words, the algorithm worked exactly as intended, but it answers a different question than the one we hoped it would.
+
+Second, the clustering was not entirely useless. The contingency table showed that the 2 cluster solution was correct about 69.7% of the time (937 out of 1,345 individuals correctly assigned). However, the accuracy is asymmetric: 77.4% of *P. maniculatus* are in Cluster 2, but only 61.1% of *P. leucopus* are in Cluster 1. So there is a real association between the clusters and species, even though the clusters don't correspond particularly well to species boundaries. A $\chi^2$ test on the frequency table will confirm this lack of independence of cluster and species.
+
+Third, the analysis detected considerable variation in body size that must be associated with age, sex, geography, or some factor (or combination of factors) other than species identity. Indeed, both species exhibit considerable geographic variation, which we will explore in @sec-ord. 
+
+This leads us to an important question: if we already know the species identities, would a supervised classification method have been more appropriate? We will explore one such method, [linear discriminant analysis](#sec-ord-other-lda), in the next chapter.
+
+## Hierarchical agglomerative clustering {#sec-clust-hclust}
+
+Coming soon!
+
+### Hierarchical clustering with Ward's method {#sec-clust-hclust-ward}
+
+Coming soon!
+
+### Hierarchical clustering with single linkage {#sec-clust-hclust-single}
+
+Coming soon!
+
 
