@@ -520,28 +520,44 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#sec-non-terms" id="toc-sec-non-terms" class="nav-link active" data-scroll-target="#sec-non-terms"><span class="header-section-number">22.1</span> Curve terminology</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-non-terms-cod" id="toc-sec-non-terms-cod" class="nav-link" data-scroll-target="#sec-non-terms-cod"><span class="header-section-number">22.1.1</span> Domain and codomain</a></li>
   <li><a href="#sec-non-terms-slope" id="toc-sec-non-terms-slope" class="nav-link" data-scroll-target="#sec-non-terms-slope"><span class="header-section-number">22.1.2</span> Slopes and tangent lines</a></li>
   <li><a href="#sec-non-terms-concave" id="toc-sec-non-terms-concave" class="nav-link" data-scroll-target="#sec-non-terms-concave"><span class="header-section-number">22.1.3</span> Concavity</a></li>
   <li><a href="#sec-non-terms-infmid" id="toc-sec-non-terms-infmid" class="nav-link" data-scroll-target="#sec-non-terms-infmid"><span class="header-section-number">22.1.4</span> Inflection points and midpoints</a></li>
   </ul></li>
   <li><a href="#sec-non-common" id="toc-sec-non-common" class="nav-link" data-scroll-target="#sec-non-common"><span class="header-section-number">22.2</span> Common nonlinear functions</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-non-common-mm" id="toc-sec-non-common-mm" class="nav-link" data-scroll-target="#sec-non-common-mm"><span class="header-section-number">22.2.1</span> The Michaelis-Menten function</a></li>
-  <li><a href="#sec-non-common-gomp" id="toc-sec-non-common-gomp" class="nav-link" data-scroll-target="#sec-non-common-gomp"><span class="header-section-number">22.2.2</span> Gompertz functions</a></li>
+  <li><a href="#sec-non-common-gomp" id="toc-sec-non-common-gomp" class="nav-link" data-scroll-target="#sec-non-common-gomp"><span class="header-section-number">22.2.2</span> Gompertz functions</a>
+  <ul class="collapse">
+  <li><a href="#gompertz-curve-form-1" id="toc-gompertz-curve-form-1" class="nav-link" data-scroll-target="#gompertz-curve-form-1"><span class="header-section-number">22.2.2.1</span> Gompertz curve form 1</a></li>
+  <li><a href="#gompertz-curve-form-2" id="toc-gompertz-curve-form-2" class="nav-link" data-scroll-target="#gompertz-curve-form-2"><span class="header-section-number">22.2.2.2</span> Gompertz curve form 2</a></li>
+  </ul></li>
   <li><a href="#sec-non-common-vb" id="toc-sec-non-common-vb" class="nav-link" data-scroll-target="#sec-non-common-vb"><span class="header-section-number">22.2.3</span> The von Bertalanffy growth function</a></li>
-  <li><a href="#sec-non-common-log" id="toc-sec-non-common-log" class="nav-link" data-scroll-target="#sec-non-common-log"><span class="header-section-number">22.2.4</span> Logistic and log-logistic functions</a></li>
-  <li><a href="#sec-non-common-weibull" id="toc-sec-non-common-weibull" class="nav-link" data-scroll-target="#sec-non-common-weibull"><span class="header-section-number">22.2.5</span> Weibull curves</a></li>
+  <li><a href="#sec-non-common-log" id="toc-sec-non-common-log" class="nav-link" data-scroll-target="#sec-non-common-log"><span class="header-section-number">22.2.4</span> Logistic and log-logistic functions</a>
+  <ul class="collapse">
+  <li><a href="#sec-non-common-log-2pl" id="toc-sec-non-common-log-2pl" class="nav-link" data-scroll-target="#sec-non-common-log-2pl"><span class="header-section-number">22.2.4.1</span> Two-parameter log-logistic</a></li>
+  <li><a href="#sec-non-common-log-3pl" id="toc-sec-non-common-log-3pl" class="nav-link" data-scroll-target="#sec-non-common-log-3pl"><span class="header-section-number">22.2.4.2</span> Three-parameter log-logistic</a></li>
+  <li><a href="#sec-non-common-log-4pl" id="toc-sec-non-common-log-4pl" class="nav-link" data-scroll-target="#sec-non-common-log-4pl"><span class="header-section-number">22.2.4.3</span> Four-parameter log-logistic</a></li>
+  <li><a href="#sec-non-common-log-5pl" id="toc-sec-non-common-log-5pl" class="nav-link" data-scroll-target="#sec-non-common-log-5pl"><span class="header-section-number">22.2.4.4</span> Five-parameter log-logistic</a></li>
+  </ul></li>
+  <li><a href="#sec-non-common-weibull" id="toc-sec-non-common-weibull" class="nav-link" data-scroll-target="#sec-non-common-weibull"><span class="header-section-number">22.2.5</span> Weibull curves</a>
+  <ul class="collapse">
+  <li><a href="#sec-non-common-weibull-der" id="toc-sec-non-common-weibull-der" class="nav-link" data-scroll-target="#sec-non-common-weibull-der"><span class="header-section-number">22.2.5.1</span> Derivation</a></li>
+  <li><a href="#sec-non-common-weibull-2" id="toc-sec-non-common-weibull-2" class="nav-link" data-scroll-target="#sec-non-common-weibull-2"><span class="header-section-number">22.2.5.2</span> Two-parameter Weibull function</a></li>
+  <li><a href="#sec-non-common-weibull-3" id="toc-sec-non-common-weibull-3" class="nav-link" data-scroll-target="#sec-non-common-weibull-3"><span class="header-section-number">22.2.5.3</span> Three-parameter Weibull function</a></li>
+  <li><a href="#sec-non-common-weibull-4" id="toc-sec-non-common-weibull-4" class="nav-link" data-scroll-target="#sec-non-common-weibull-4"><span class="header-section-number">22.2.5.4</span> Four-parameter Weibull function</a></li>
+  </ul></li>
   <li><a href="#nonlinear-functions-summary" id="toc-nonlinear-functions-summary" class="nav-link" data-scroll-target="#nonlinear-functions-summary"><span class="header-section-number">22.2.6</span> Nonlinear functions summary</a></li>
   </ul></li>
   <li><a href="#sec-non-nls" id="toc-sec-non-nls" class="nav-link" data-scroll-target="#sec-non-nls"><span class="header-section-number">22.3</span> Nonlinear least squares with <code>nls()</code></a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-non-nls-self" id="toc-sec-non-nls-self" class="nav-link" data-scroll-target="#sec-non-nls-self"><span class="header-section-number">22.3.1</span> Fitting the model with self start functions</a></li>
   <li><a href="#sec-non-nls-nls" id="toc-sec-non-nls-nls" class="nav-link" data-scroll-target="#sec-non-nls-nls"><span class="header-section-number">22.3.2</span> Fitting the model without self start functions</a></li>
   <li><a href="#sec-non-nls-plot" id="toc-sec-non-nls-plot" class="nav-link" data-scroll-target="#sec-non-nls-plot"><span class="header-section-number">22.3.3</span> Plotting a nonlinear curve</a></li>
@@ -550,7 +566,7 @@ window.Quarto = {
   <li><a href="#sec-non-nls-sig" id="toc-sec-non-nls-sig" class="nav-link" data-scroll-target="#sec-non-nls-sig"><span class="header-section-number">22.3.6</span> Significance and nonsignificance in nonlinear models</a></li>
   </ul></li>
   <li><a href="#sec-non-drc" id="toc-sec-non-drc" class="nav-link" data-scroll-target="#sec-non-drc"><span class="header-section-number">22.4</span> Dose-response curves with <code>drc</code></a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#single-groups" id="toc-single-groups" class="nav-link" data-scroll-target="#single-groups"><span class="header-section-number">22.4.1</span> Single groups</a></li>
   <li><a href="#multiple-groups" id="toc-multiple-groups" class="nav-link" data-scroll-target="#multiple-groups"><span class="header-section-number">22.4.2</span> Multiple groups</a></li>
   </ul></li>

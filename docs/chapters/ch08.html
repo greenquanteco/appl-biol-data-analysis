@@ -520,12 +520,12 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#sec-plot1-single" id="toc-sec-plot1-single" class="nav-link active" data-scroll-target="#sec-plot1-single"><span class="header-section-number">8.1</span> Visualizing single variables</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-plot1-sing-hist" id="toc-sec-plot1-sing-hist" class="nav-link" data-scroll-target="#sec-plot1-sing-hist"><span class="header-section-number">8.1.1</span> Histograms</a></li>
   <li><a href="#sec-plot1-sing-bar" id="toc-sec-plot1-sing-bar" class="nav-link" data-scroll-target="#sec-plot1-sing-bar"><span class="header-section-number">8.1.2</span> Barplots</a></li>
   <li><a href="#sec-plot1-sing-box" id="toc-sec-plot1-sing-box" class="nav-link" data-scroll-target="#sec-plot1-sing-box"><span class="header-section-number">8.1.3</span> Boxplots</a></li>
@@ -533,13 +533,26 @@ window.Quarto = {
   <li><a href="#sec-plot1-sing-kern" id="toc-sec-plot1-sing-kern" class="nav-link" data-scroll-target="#sec-plot1-sing-kern"><span class="header-section-number">8.1.5</span> Kernel density plots</a></li>
   </ul></li>
   <li><a href="#sec-plot1-two" id="toc-sec-plot1-two" class="nav-link" data-scroll-target="#sec-plot1-two"><span class="header-section-number">8.2</span> Visualizing 2 variables</a>
+  <ul>
+  <li><a href="#sec-plot1-two-scatter" id="toc-sec-plot1-two-scatter" class="nav-link" data-scroll-target="#sec-plot1-two-scatter"><span class="header-section-number">8.2.1</span> Scatterplots for 2 continuous variables</a>
   <ul class="collapse">
-  <li><a href="#sec-plot1-two-scatter" id="toc-sec-plot1-two-scatter" class="nav-link" data-scroll-target="#sec-plot1-two-scatter"><span class="header-section-number">8.2.1</span> Scatterplots for 2 continuous variables</a></li>
+  <li><a href="#r-plotting-basics" id="toc-r-plotting-basics" class="nav-link" data-scroll-target="#r-plotting-basics"><span class="header-section-number">8.2.1.1</span> R plotting basics</a></li>
+  <li><a href="#advanced-r-plotting-with-par" id="toc-advanced-r-plotting-with-par" class="nav-link" data-scroll-target="#advanced-r-plotting-with-par"><span class="header-section-number">8.2.1.2</span> Advanced R plotting with <code>par()</code></a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#sec-plot1-many" id="toc-sec-plot1-many" class="nav-link" data-scroll-target="#sec-plot1-many"><span class="header-section-number">8.3</span> Visualizing many variables</a>
+  <ul>
+  <li><a href="#sec-plot1-many-pair" id="toc-sec-plot1-many-pair" class="nav-link" data-scroll-target="#sec-plot1-many-pair"><span class="header-section-number">8.3.1</span> Scatterplot matrices for many variables</a>
   <ul class="collapse">
-  <li><a href="#sec-plot1-many-pair" id="toc-sec-plot1-many-pair" class="nav-link" data-scroll-target="#sec-plot1-many-pair"><span class="header-section-number">8.3.1</span> Scatterplot matrices for many variables</a></li>
-  <li><a href="#sec-plot1-many-ord" id="toc-sec-plot1-many-ord" class="nav-link" data-scroll-target="#sec-plot1-many-ord"><span class="header-section-number">8.3.2</span> Ordination (brief introduction)</a></li>
+  <li><a href="#basic-pairs-plots" id="toc-basic-pairs-plots" class="nav-link" data-scroll-target="#basic-pairs-plots"><span class="header-section-number">8.3.1.1</span> Basic <code>pairs()</code> plots</a></li>
+  <li><a href="#improved-pairs-plots" id="toc-improved-pairs-plots" class="nav-link" data-scroll-target="#improved-pairs-plots"><span class="header-section-number">8.3.1.2</span> Improved <code>pairs()</code> plots</a></li>
+  </ul></li>
+  <li><a href="#sec-plot1-many-ord" id="toc-sec-plot1-many-ord" class="nav-link" data-scroll-target="#sec-plot1-many-ord"><span class="header-section-number">8.3.2</span> Ordination (brief introduction)</a>
+  <ul class="collapse">
+  <li><a href="#principal-components-analysis-pca" id="toc-principal-components-analysis-pca" class="nav-link" data-scroll-target="#principal-components-analysis-pca"><span class="header-section-number">8.3.2.1</span> Principal components analysis (PCA)</a></li>
+  <li><a href="#plotting-ordinations" id="toc-plotting-ordinations" class="nav-link" data-scroll-target="#plotting-ordinations"><span class="header-section-number">8.3.2.2</span> Plotting ordinations</a></li>
+  <li><a href="#ordination-wrap-up-for-now" id="toc-ordination-wrap-up-for-now" class="nav-link" data-scroll-target="#ordination-wrap-up-for-now"><span class="header-section-number">8.3.2.3</span> Ordination wrap-up (for now)</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch08.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -1227,8 +1240,8 @@ window.Quarto = {
 </section>
 <section id="advanced-r-plotting-with-par" class="level4" data-number="8.2.1.2">
 <h4 data-number="8.2.1.2" class="anchored" data-anchor-id="advanced-r-plotting-with-par"><span class="header-section-number">8.2.1.2</span> Advanced R plotting with <code>par()</code></h4>
-<section id="plot-formatting" class="level5">
-<h5 class="anchored" data-anchor-id="plot-formatting">Plot formatting</h5>
+<section id="plot-formatting" class="level5" data-number="8.2.1.2.1">
+<h5 data-number="8.2.1.2.1" class="anchored" data-anchor-id="plot-formatting"><span class="header-section-number">8.2.1.2.1</span> Plot formatting</h5>
 <p>Many options that affect plots can only be set using the <code>par()</code> function. Or, are best set using <code>par()</code>. Take a look at the <code>par()</code> help page to get a sense of the variety of options available (<code>?par</code>). It is important to keep in mind is that once <code>par()</code> options are set in an R session, they will stay that way until you change them using <code>par()</code> again. So, if you are making multiple figures within the same R workspace or work session you will need to pay attention to what you have done. You can always see all current settings by running the command <code>par()</code>.</p>
 <p>Below is an illustration of using <code>par()</code> to change graphics options:</p>
 <p>Without <code>par()</code>:</p>
@@ -1275,8 +1288,8 @@ window.Quarto = {
 </div>
 <p>We will use <code>par()</code> often in this course to clean up figures and make them more attractive. Most of the time when you are exploring data you won’t need to mess with <code>par()</code> (except for making multi-panel figures). But, you should definitely use <code>par()</code> when preparing figures for presentations or publications. Proper use of <code>par()</code> is the key to making clean, informative, and professional-looking figures.</p>
 </section>
-<section id="multi-panel-figures-with-par" class="level5">
-<h5 class="anchored" data-anchor-id="multi-panel-figures-with-par">Multi-panel figures with <code>par()</code></h5>
+<section id="multi-panel-figures-with-par" class="level5" data-number="8.2.1.2.2">
+<h5 data-number="8.2.1.2.2" class="anchored" data-anchor-id="multi-panel-figures-with-par"><span class="header-section-number">8.2.1.2.2</span> Multi-panel figures with <code>par()</code></h5>
 <p>One of the most common ways to use <code>par()</code> is to make multi-panel figures. The panels are specified in terms of the number of rows and columns in the figure. The arguments <code>mfrow</code> and <code>mfcol</code> define the panel layout.</p>
 <ul>
 <li><code>mfrow</code>: you supply the number of rows and number of columns, in that order.</li>

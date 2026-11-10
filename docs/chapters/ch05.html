@@ -520,29 +520,47 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#sec-manip-make" id="toc-sec-manip-make" class="nav-link active" data-scroll-target="#sec-manip-make"><span class="header-section-number">5.1</span> Making values</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-manip-make-c" id="toc-sec-manip-make-c" class="nav-link" data-scroll-target="#sec-manip-make-c"><span class="header-section-number">5.1.1</span> Make arbitrary values with the c() function</a></li>
-  <li><a href="#sec-manip-make-seq" id="toc-sec-manip-make-seq" class="nav-link" data-scroll-target="#sec-manip-make-seq"><span class="header-section-number">5.1.2</span> Generating sequences</a></li>
-  <li><a href="#sec-manip-make-rand" id="toc-sec-manip-make-rand" class="nav-link" data-scroll-target="#sec-manip-make-rand"><span class="header-section-number">5.1.3</span> Random values</a></li>
+  <li><a href="#sec-manip-make-seq" id="toc-sec-manip-make-seq" class="nav-link" data-scroll-target="#sec-manip-make-seq"><span class="header-section-number">5.1.2</span> Generating sequences</a>
+  <ul class="collapse">
+  <li><a href="#sec-manip-make-seq-col" id="toc-sec-manip-make-seq-col" class="nav-link" data-scroll-target="#sec-manip-make-seq-col"><span class="header-section-number">5.1.2.1</span> Consecutive values with the colon : operator</a></li>
+  <li><a href="#sec-manip-make-seq-seq" id="toc-sec-manip-make-seq-seq" class="nav-link" data-scroll-target="#sec-manip-make-seq-seq"><span class="header-section-number">5.1.2.2</span> Regular sequences with the seq() function</a></li>
+  <li><a href="#sec-manip-make-seq-rep" id="toc-sec-manip-make-seq-rep" class="nav-link" data-scroll-target="#sec-manip-make-seq-rep"><span class="header-section-number">5.1.2.3</span> Repeated values with the rep() function</a></li>
+  <li><a href="#sec-manip-make-seq-rec" id="toc-sec-manip-make-seq-rec" class="nav-link" data-scroll-target="#sec-manip-make-seq-rec"><span class="header-section-number">5.1.2.4</span> The recycling rule</a></li>
+  </ul></li>
+  <li><a href="#sec-manip-make-rand" id="toc-sec-manip-make-rand" class="nav-link" data-scroll-target="#sec-manip-make-rand"><span class="header-section-number">5.1.3</span> Random values</a>
+  <ul class="collapse">
+  <li><a href="#sec-manip-make-rand-seed" id="toc-sec-manip-make-rand-seed" class="nav-link" data-scroll-target="#sec-manip-make-rand-seed"><span class="header-section-number">5.1.3.1</span> The random number seed</a></li>
+  <li><a href="#sec-manip-make-rand-samp" id="toc-sec-manip-make-rand-samp" class="nav-link" data-scroll-target="#sec-manip-make-rand-samp"><span class="header-section-number">5.1.3.2</span> Random values from a set with the sample() function</a></li>
+  <li><a href="#sec-manip-make-rand-dist" id="toc-sec-manip-make-rand-dist" class="nav-link" data-scroll-target="#sec-manip-make-rand-dist"><span class="header-section-number">5.1.3.3</span> Random values from a distribution</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#sec-manip-select" id="toc-sec-manip-select" class="nav-link" data-scroll-target="#sec-manip-select"><span class="header-section-number">5.2</span> Selecting data with square brackets</a>
+  <ul>
+  <li><a href="#sec-manip-select-bas" id="toc-sec-manip-select-bas" class="nav-link" data-scroll-target="#sec-manip-select-bas"><span class="header-section-number">5.2.1</span> Basics of brackets</a>
   <ul class="collapse">
-  <li><a href="#sec-manip-select-bas" id="toc-sec-manip-select-bas" class="nav-link" data-scroll-target="#sec-manip-select-bas"><span class="header-section-number">5.2.1</span> Basics of brackets</a></li>
+  <li><a href="#sec-manip-select-bas-vec" id="toc-sec-manip-select-bas-vec" class="nav-link" data-scroll-target="#sec-manip-select-bas-vec"><span class="header-section-number">5.2.1.1</span> Selecting from a vector</a></li>
+  <li><a href="#sec-manip-select-bas-mat" id="toc-sec-manip-select-bas-mat" class="nav-link" data-scroll-target="#sec-manip-select-bas-mat"><span class="header-section-number">5.2.1.2</span> Selecting from a matrix</a></li>
+  <li><a href="#sec-manip-select-bas-arr" id="toc-sec-manip-select-bas-arr" class="nav-link" data-scroll-target="#sec-manip-select-bas-arr"><span class="header-section-number">5.2.1.3</span> Selecting from an array</a></li>
+  <li><a href="#sec-manip-select-bas-df" id="toc-sec-manip-select-bas-df" class="nav-link" data-scroll-target="#sec-manip-select-bas-df"><span class="header-section-number">5.2.1.4</span> Selecting from a data frame</a></li>
+  <li><a href="#sec-manip-select-bas-list" id="toc-sec-manip-select-bas-list" class="nav-link" data-scroll-target="#sec-manip-select-bas-list"><span class="header-section-number">5.2.1.5</span> Selecting from lists</a></li>
+  </ul></li>
   <li><a href="#selecting-and-extracting-with-logical-tests" id="toc-selecting-and-extracting-with-logical-tests" class="nav-link" data-scroll-target="#selecting-and-extracting-with-logical-tests"><span class="header-section-number">5.2.2</span> Selecting and extracting with logical tests</a></li>
   </ul></li>
   <li><a href="#sec-manip-date" id="toc-sec-manip-date" class="nav-link" data-scroll-target="#sec-manip-date"><span class="header-section-number">5.3</span> Dates and temporal data</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-manip-date-date" id="toc-sec-manip-date-date" class="nav-link" data-scroll-target="#sec-manip-date-date"><span class="header-section-number">5.3.1</span> Dates without times</a></li>
   <li><a href="#sec-manip-date-time" id="toc-sec-manip-date-time" class="nav-link" data-scroll-target="#sec-manip-date-time"><span class="header-section-number">5.3.2</span> Dates with times and time zones</a></li>
   <li><a href="#sec-manip-date-work" id="toc-sec-manip-date-work" class="nav-link" data-scroll-target="#sec-manip-date-work"><span class="header-section-number">5.3.3</span> Working with dates and times</a></li>
   </ul></li>
   <li><a href="#sec-manip-char" id="toc-sec-manip-char" class="nav-link" data-scroll-target="#sec-manip-char"><span class="header-section-number">5.4</span> Character data</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-manip-char-comb" id="toc-sec-manip-char-comb" class="nav-link" data-scroll-target="#sec-manip-char-comb"><span class="header-section-number">5.4.1</span> Combining character strings</a></li>
   <li><a href="#sec-manip-char-print" id="toc-sec-manip-char-print" class="nav-link" data-scroll-target="#sec-manip-char-print"><span class="header-section-number">5.4.2</span> Printing character strings</a></li>
   <li><a href="#sec-manip-char-match" id="toc-sec-manip-char-match" class="nav-link" data-scroll-target="#sec-manip-char-match"><span class="header-section-number">5.4.3</span> Matching character strings</a></li>
@@ -553,10 +571,23 @@ window.Quarto = {
   <li><a href="#sec-manip-char-stan" id="toc-sec-manip-char-stan" class="nav-link" data-scroll-target="#sec-manip-char-stan"><span class="header-section-number">5.4.8</span> Standardizing numbers as text</a></li>
   </ul></li>
   <li><a href="#sec-manip-df" id="toc-sec-manip-df" class="nav-link" data-scroll-target="#sec-manip-df"><span class="header-section-number">5.5</span> Data frame management</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-manip-df-str" id="toc-sec-manip-df-str" class="nav-link" data-scroll-target="#sec-manip-df-str"><span class="header-section-number">5.5.1</span> Data frame structure</a></li>
-  <li><a href="#sec-manip-df-com" id="toc-sec-manip-df-com" class="nav-link" data-scroll-target="#sec-manip-df-com"><span class="header-section-number">5.5.2</span> Common operations</a></li>
-  <li><a href="#sec-manip-df-oth" id="toc-sec-manip-df-oth" class="nav-link" data-scroll-target="#sec-manip-df-oth"><span class="header-section-number">5.5.3</span> Other operations</a></li>
+  <li><a href="#sec-manip-df-com" id="toc-sec-manip-df-com" class="nav-link" data-scroll-target="#sec-manip-df-com"><span class="header-section-number">5.5.2</span> Common operations</a>
+  <ul class="collapse">
+  <li><a href="#sec-manip-df-com-vars" id="toc-sec-manip-df-com-vars" class="nav-link" data-scroll-target="#sec-manip-df-com-vars"><span class="header-section-number">5.5.2.1</span> Adding and deleting variables</a></li>
+  <li><a href="#sec-manip-df-com-mod" id="toc-sec-manip-df-com-mod" class="nav-link" data-scroll-target="#sec-manip-df-com-mod"><span class="header-section-number">5.5.2.2</span> Modifying variables</a></li>
+  <li><a href="#sec-manip-df-com-rule" id="toc-sec-manip-df-com-rule" class="nav-link" data-scroll-target="#sec-manip-df-com-rule"><span class="header-section-number">5.5.2.3</span> Changing values using a rule</a></li>
+  <li><a href="#sec-manip-df-com-renam" id="toc-sec-manip-df-com-renam" class="nav-link" data-scroll-target="#sec-manip-df-com-renam"><span class="header-section-number">5.5.2.4</span> Renaming variables</a></li>
+  <li><a href="#sec-manip-df-com-rearr" id="toc-sec-manip-df-com-rearr" class="nav-link" data-scroll-target="#sec-manip-df-com-rearr"><span class="header-section-number">5.5.2.5</span> Rearranging columns</a></li>
+  <li><a href="#sec-manip-df-com-sort" id="toc-sec-manip-df-com-sort" class="nav-link" data-scroll-target="#sec-manip-df-com-sort"><span class="header-section-number">5.5.2.6</span> Sorting and ordering data</a></li>
+  <li><a href="#sec-manip-df-com-add" id="toc-sec-manip-df-com-add" class="nav-link" data-scroll-target="#sec-manip-df-com-add"><span class="header-section-number">5.5.2.7</span> Adding and removing rows</a></li>
+  </ul></li>
+  <li><a href="#sec-manip-df-oth" id="toc-sec-manip-df-oth" class="nav-link" data-scroll-target="#sec-manip-df-oth"><span class="header-section-number">5.5.3</span> Other operations</a>
+  <ul class="collapse">
+  <li><a href="#sec-manip-df-oth-merg" id="toc-sec-manip-df-oth-merg" class="nav-link" data-scroll-target="#sec-manip-df-oth-merg"><span class="header-section-number">5.5.3.1</span> Merging data frames</a></li>
+  <li><a href="#sec-manip-df-oth-shap" id="toc-sec-manip-df-oth-shap" class="nav-link" data-scroll-target="#sec-manip-df-oth-shap"><span class="header-section-number">5.5.3.2</span> Reshaping data frames</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch05.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>

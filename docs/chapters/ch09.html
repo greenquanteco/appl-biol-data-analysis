@@ -520,33 +520,64 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#sec-dist-intro" id="toc-sec-dist-intro" class="nav-link active" data-scroll-target="#sec-dist-intro"><span class="header-section-number">9.1</span> Introduction</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#residuals-the-random-variation-left-over" id="toc-residuals-the-random-variation-left-over" class="nav-link" data-scroll-target="#residuals-the-random-variation-left-over"><span class="header-section-number">9.1.1</span> Residuals: the random variation left over</a></li>
   <li><a href="#sec-dist-r" id="toc-sec-dist-r" class="nav-link" data-scroll-target="#sec-dist-r"><span class="header-section-number">9.1.2</span> Probability distributions in R</a></li>
   </ul></li>
   <li><a href="#sec-dist-disc" id="toc-sec-dist-disc" class="nav-link" data-scroll-target="#sec-dist-disc"><span class="header-section-number">9.2</span> Discrete distributions</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-dist-bern" id="toc-sec-dist-bern" class="nav-link" data-scroll-target="#sec-dist-bern"><span class="header-section-number">9.2.1</span> Bernoulli distribution</a></li>
-  <li><a href="#sec-dist-binom" id="toc-sec-dist-binom" class="nav-link" data-scroll-target="#sec-dist-binom"><span class="header-section-number">9.2.2</span> Binomial distribution</a></li>
-  <li><a href="#sec-dist-pois" id="toc-sec-dist-pois" class="nav-link" data-scroll-target="#sec-dist-pois"><span class="header-section-number">9.2.3</span> Poisson distribution</a></li>
-  <li><a href="#sec-dist-negbin" id="toc-sec-dist-negbin" class="nav-link" data-scroll-target="#sec-dist-negbin"><span class="header-section-number">9.2.4</span> Negative binomial distribution</a></li>
+  <li><a href="#sec-dist-binom" id="toc-sec-dist-binom" class="nav-link" data-scroll-target="#sec-dist-binom"><span class="header-section-number">9.2.2</span> Binomial distribution</a>
+  <ul class="collapse">
+  <li><a href="#sec-dist-binom-r" id="toc-sec-dist-binom-r" class="nav-link" data-scroll-target="#sec-dist-binom-r"><span class="header-section-number">9.2.2.1</span> Binomial distribution in R</a></li>
+  </ul></li>
+  <li><a href="#sec-dist-pois" id="toc-sec-dist-pois" class="nav-link" data-scroll-target="#sec-dist-pois"><span class="header-section-number">9.2.3</span> Poisson distribution</a>
+  <ul class="collapse">
+  <li><a href="#sec-dist-pois-r" id="toc-sec-dist-pois-r" class="nav-link" data-scroll-target="#sec-dist-pois-r"><span class="header-section-number">9.2.3.1</span> Poisson distribution in R</a></li>
+  </ul></li>
+  <li><a href="#sec-dist-negbin" id="toc-sec-dist-negbin" class="nav-link" data-scroll-target="#sec-dist-negbin"><span class="header-section-number">9.2.4</span> Negative binomial distribution</a>
+  <ul class="collapse">
+  <li><a href="#sec-dist-negbin-r" id="toc-sec-dist-negbin-r" class="nav-link" data-scroll-target="#sec-dist-negbin-r"><span class="header-section-number">9.2.4.1</span> Negative binomial distribution in R</a></li>
+  </ul></li>
   <li><a href="#sec-dist-geom" id="toc-sec-dist-geom" class="nav-link" data-scroll-target="#sec-dist-geom"><span class="header-section-number">9.2.5</span> Geometric distribution</a></li>
   <li><a href="#sec-dist-multinom" id="toc-sec-dist-multinom" class="nav-link" data-scroll-target="#sec-dist-multinom"><span class="header-section-number">9.2.6</span> Multinomial distribution</a></li>
   </ul></li>
   <li><a href="#sec-dist-cont" id="toc-sec-dist-cont" class="nav-link" data-scroll-target="#sec-dist-cont"><span class="header-section-number">9.3</span> Continuous distributions</a>
+  <ul>
+  <li><a href="#sec-dist-unif" id="toc-sec-dist-unif" class="nav-link" data-scroll-target="#sec-dist-unif"><span class="header-section-number">9.3.1</span> Uniform distribution</a>
   <ul class="collapse">
-  <li><a href="#sec-dist-unif" id="toc-sec-dist-unif" class="nav-link" data-scroll-target="#sec-dist-unif"><span class="header-section-number">9.3.1</span> Uniform distribution</a></li>
-  <li><a href="#sec-dist-norm" id="toc-sec-dist-norm" class="nav-link" data-scroll-target="#sec-dist-norm"><span class="header-section-number">9.3.2</span> Normal distribution</a></li>
-  <li><a href="#sec-dist-lnorm" id="toc-sec-dist-lnorm" class="nav-link" data-scroll-target="#sec-dist-lnorm"><span class="header-section-number">9.3.3</span> Lognormal distribution</a></li>
-  <li><a href="#sec-dist-gamma" id="toc-sec-dist-gamma" class="nav-link" data-scroll-target="#sec-dist-gamma"><span class="header-section-number">9.3.4</span> Gamma distribution</a></li>
-  <li><a href="#sec-dist-beta" id="toc-sec-dist-beta" class="nav-link" data-scroll-target="#sec-dist-beta"><span class="header-section-number">9.3.5</span> Beta distribution</a></li>
-  <li><a href="#sec-dist-exp" id="toc-sec-dist-exp" class="nav-link" data-scroll-target="#sec-dist-exp"><span class="header-section-number">9.3.6</span> Exponential distribution</a></li>
-  <li><a href="#sec-dist-tri" id="toc-sec-dist-tri" class="nav-link" data-scroll-target="#sec-dist-tri"><span class="header-section-number">9.3.7</span> Triangular distribution</a></li>
+  <li><a href="#sec-dist-unif-r" id="toc-sec-dist-unif-r" class="nav-link" data-scroll-target="#sec-dist-unif-r"><span class="header-section-number">9.3.1.1</span> Uniform distribution in R</a></li>
+  </ul></li>
+  <li><a href="#sec-dist-norm" id="toc-sec-dist-norm" class="nav-link" data-scroll-target="#sec-dist-norm"><span class="header-section-number">9.3.2</span> Normal distribution</a>
+  <ul class="collapse">
+  <li><a href="#sec-dist-norm-r" id="toc-sec-dist-norm-r" class="nav-link" data-scroll-target="#sec-dist-norm-r"><span class="header-section-number">9.3.2.1</span> Normal distribution in R</a></li>
+  </ul></li>
+  <li><a href="#sec-dist-lnorm" id="toc-sec-dist-lnorm" class="nav-link" data-scroll-target="#sec-dist-lnorm"><span class="header-section-number">9.3.3</span> Lognormal distribution</a>
+  <ul class="collapse">
+  <li><a href="#sec-dist-lnorm-r" id="toc-sec-dist-lnorm-r" class="nav-link" data-scroll-target="#sec-dist-lnorm-r"><span class="header-section-number">9.3.3.1</span> Lognormal distribution in R</a></li>
+  </ul></li>
+  <li><a href="#sec-dist-gamma" id="toc-sec-dist-gamma" class="nav-link" data-scroll-target="#sec-dist-gamma"><span class="header-section-number">9.3.4</span> Gamma distribution</a>
+  <ul class="collapse">
+  <li><a href="#sec-dist-gamma-r" id="toc-sec-dist-gamma-r" class="nav-link" data-scroll-target="#sec-dist-gamma-r"><span class="header-section-number">9.3.4.1</span> Gamma distribution in R</a></li>
+  </ul></li>
+  <li><a href="#sec-dist-beta" id="toc-sec-dist-beta" class="nav-link" data-scroll-target="#sec-dist-beta"><span class="header-section-number">9.3.5</span> Beta distribution</a>
+  <ul class="collapse">
+  <li><a href="#sec-dist-beta-r" id="toc-sec-dist-beta-r" class="nav-link" data-scroll-target="#sec-dist-beta-r"><span class="header-section-number">9.3.5.1</span> Beta distribution in R</a></li>
+  <li><a href="#sec-dist-beta-binom" id="toc-sec-dist-beta-binom" class="nav-link" data-scroll-target="#sec-dist-beta-binom"><span class="header-section-number">9.3.5.2</span> The beta and the binomial</a></li>
+  </ul></li>
+  <li><a href="#sec-dist-exp" id="toc-sec-dist-exp" class="nav-link" data-scroll-target="#sec-dist-exp"><span class="header-section-number">9.3.6</span> Exponential distribution</a>
+  <ul class="collapse">
+  <li><a href="#sec-dist-exp-r" id="toc-sec-dist-exp-r" class="nav-link" data-scroll-target="#sec-dist-exp-r"><span class="header-section-number">9.3.6.1</span> Exponential distribution in R</a></li>
+  </ul></li>
+  <li><a href="#sec-dist-tri" id="toc-sec-dist-tri" class="nav-link" data-scroll-target="#sec-dist-tri"><span class="header-section-number">9.3.7</span> Triangular distribution</a>
+  <ul class="collapse">
+  <li><a href="#sec-dist-tri-r" id="toc-sec-dist-tri-r" class="nav-link" data-scroll-target="#sec-dist-tri-r"><span class="header-section-number">9.3.7.1</span> Triangular distribution in R</a></li>
+  </ul></li>
   <li><a href="#sec-dist-summary" id="toc-sec-dist-summary" class="nav-link" data-scroll-target="#sec-dist-summary"><span class="header-section-number">9.3.8</span> Distribution summary</a></li>
   </ul></li>
   </ul>

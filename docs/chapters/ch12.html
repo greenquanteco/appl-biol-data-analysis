@@ -520,24 +520,31 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#outliers-and-erroneous-values" id="toc-outliers-and-erroneous-values" class="nav-link active" data-scroll-target="#outliers-and-erroneous-values"><span class="header-section-number">12.1</span> Outliers and erroneous values</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#detecting-outliers" id="toc-detecting-outliers" class="nav-link" data-scroll-target="#detecting-outliers"><span class="header-section-number">12.1.1</span> Detecting outliers</a></li>
-  <li><a href="#dealing-with-outliers" id="toc-dealing-with-outliers" class="nav-link" data-scroll-target="#dealing-with-outliers"><span class="header-section-number">12.1.2</span> Dealing with outliers</a></li>
+  <li><a href="#dealing-with-outliers" id="toc-dealing-with-outliers" class="nav-link" data-scroll-target="#dealing-with-outliers"><span class="header-section-number">12.1.2</span> Dealing with outliers</a>
+  <ul class="collapse">
+  <li><a href="#deletion" id="toc-deletion" class="nav-link" data-scroll-target="#deletion"><span class="header-section-number">12.1.2.1</span> Deletion</a></li>
+  <li><a href="#truncation-and-censoring" id="toc-truncation-and-censoring" class="nav-link" data-scroll-target="#truncation-and-censoring"><span class="header-section-number">12.1.2.2</span> Truncation and censoring</a></li>
+  <li><a href="#transformation" id="toc-transformation" class="nav-link" data-scroll-target="#transformation"><span class="header-section-number">12.1.2.3</span> Transformation</a></li>
+  <li><a href="#weighting" id="toc-weighting" class="nav-link" data-scroll-target="#weighting"><span class="header-section-number">12.1.2.4</span> Weighting</a></li>
+  <li><a href="#alternative-strategies" id="toc-alternative-strategies" class="nav-link" data-scroll-target="#alternative-strategies"><span class="header-section-number">12.1.2.5</span> Alternative strategies</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#sec-problems-auto" id="toc-sec-problems-auto" class="nav-link" data-scroll-target="#sec-problems-auto"><span class="header-section-number">12.2</span> Autocorrelation</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-problems-auto-graph" id="toc-sec-problems-auto-graph" class="nav-link" data-scroll-target="#sec-problems-auto-graph"><span class="header-section-number">12.2.1</span> Graphical methods to identify autocorrelation</a></li>
   <li><a href="#sec-problems-auto-mantel" id="toc-sec-problems-auto-mantel" class="nav-link" data-scroll-target="#sec-problems-auto-mantel"><span class="header-section-number">12.2.2</span> Mantel tests for autocorrelation</a></li>
   <li><a href="#sec-problems-auto-deal" id="toc-sec-problems-auto-deal" class="nav-link" data-scroll-target="#sec-problems-auto-deal"><span class="header-section-number">12.2.3</span> Dealing with autocorrelation</a></li>
   </ul></li>
   <li><a href="#sec-problems-collin" id="toc-sec-problems-collin" class="nav-link" data-scroll-target="#sec-problems-collin"><span class="header-section-number">12.3</span> Collinearity</a></li>
   <li><a href="#sec-problems-miss" id="toc-sec-problems-miss" class="nav-link" data-scroll-target="#sec-problems-miss"><span class="header-section-number">12.4</span> Missing data</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-problems-miss-ignore" id="toc-sec-problems-miss-ignore" class="nav-link" data-scroll-target="#sec-problems-miss-ignore"><span class="header-section-number">12.4.1</span> Option 1: Ignore missing data</a></li>
   <li><a href="#sec-problems-miss-inter" id="toc-sec-problems-miss-inter" class="nav-link" data-scroll-target="#sec-problems-miss-inter"><span class="header-section-number">12.4.2</span> Option 2: Interpolate or impute missing data</a></li>
   </ul></li>

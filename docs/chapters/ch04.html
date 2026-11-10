@@ -491,30 +491,44 @@ div.csl-indent {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#sec-ie-files" id="toc-sec-ie-files" class="nav-link active" data-scroll-target="#sec-ie-files"><span class="header-section-number">4.1</span> Working with your file system</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-ie-files-your" id="toc-sec-ie-files-your" class="nav-link" data-scroll-target="#sec-ie-files-your"><span class="header-section-number">4.1.1</span> Your file system</a></li>
   <li><a href="#sec-ie-files-address" id="toc-sec-ie-files-address" class="nav-link" data-scroll-target="#sec-ie-files-address"><span class="header-section-number">4.1.2</span> Folder addresses</a></li>
   <li><a href="#sec-ie-files-wd" id="toc-sec-ie-files-wd" class="nav-link" data-scroll-target="#sec-ie-files-wd"><span class="header-section-number">4.1.3</span> The working directory</a></li>
   </ul></li>
   <li><a href="#sec-ie-format" id="toc-sec-ie-format" class="nav-link" data-scroll-target="#sec-ie-format"><span class="header-section-number">4.2</span> Formatting data files</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-ie-format-name" id="toc-sec-ie-format-name" class="nav-link" data-scroll-target="#sec-ie-format-name"><span class="header-section-number">4.2.1</span> Naming data files</a></li>
-  <li><a href="#sec-ie-format-set" id="toc-sec-ie-format-set" class="nav-link" data-scroll-target="#sec-ie-format-set"><span class="header-section-number">4.2.2</span> Setting up data files</a></li>
+  <li><a href="#sec-ie-format-set" id="toc-sec-ie-format-set" class="nav-link" data-scroll-target="#sec-ie-format-set"><span class="header-section-number">4.2.2</span> Setting up data files</a>
+  <ul class="collapse">
+  <li><a href="#sec-ie-format-set-vars" id="toc-sec-ie-format-set-vars" class="nav-link" data-scroll-target="#sec-ie-format-set-vars"><span class="header-section-number">4.2.2.1</span> Variable names</a></li>
+  <li><a href="#sec-ie-format-set-vars-values" id="toc-sec-ie-format-set-vars-values" class="nav-link" data-scroll-target="#sec-ie-format-set-vars-values"><span class="header-section-number">4.2.2.2</span> Data values</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#sec-ie-import" id="toc-sec-ie-import" class="nav-link" data-scroll-target="#sec-ie-import"><span class="header-section-number">4.3</span> Data import</a>
+  <ul>
+  <li><a href="#sec-ie-import-text" id="toc-sec-ie-import-text" class="nav-link" data-scroll-target="#sec-ie-import-text"><span class="header-section-number">4.3.1</span> Importing from text files</a>
   <ul class="collapse">
-  <li><a href="#sec-ie-import-text" id="toc-sec-ie-import-text" class="nav-link" data-scroll-target="#sec-ie-import-text"><span class="header-section-number">4.3.1</span> Importing from text files</a></li>
+  <li><a href="#importing-from-the-working-directory" id="toc-importing-from-the-working-directory" class="nav-link" data-scroll-target="#importing-from-the-working-directory"><span class="header-section-number">4.3.1.1</span> Importing from the working directory</a></li>
+  <li><a href="#importing-from-another-folder" id="toc-importing-from-another-folder" class="nav-link" data-scroll-target="#importing-from-another-folder"><span class="header-section-number">4.3.1.2</span> Importing from another folder</a></li>
+  <li><a href="#sec-ie-import-text-args" id="toc-sec-ie-import-text-args" class="nav-link" data-scroll-target="#sec-ie-import-text-args"><span class="header-section-number">4.3.1.3</span> Arguments to <code>read.table()</code> and <code>read.csv()</code></a></li>
+  </ul></li>
   <li><a href="#sec-ie-import-object" id="toc-sec-ie-import-object" class="nav-link" data-scroll-target="#sec-ie-import-object"><span class="header-section-number">4.3.2</span> Saving and importing R objects</a></li>
   <li><a href="#sec-ie-import-rdata" id="toc-sec-ie-import-rdata" class="nav-link" data-scroll-target="#sec-ie-import-rdata"><span class="header-section-number">4.3.3</span> Importing from saved workspaces</a></li>
-  <li><a href="#sec-ie-import-special" id="toc-sec-ie-import-special" class="nav-link" data-scroll-target="#sec-ie-import-special"><span class="header-section-number">4.3.4</span> Importing special cases</a></li>
+  <li><a href="#sec-ie-import-special" id="toc-sec-ie-import-special" class="nav-link" data-scroll-target="#sec-ie-import-special"><span class="header-section-number">4.3.4</span> Importing special cases</a>
+  <ul class="collapse">
+  <li><a href="#sec-ie-import-special-clip" id="toc-sec-ie-import-special-clip" class="nav-link" data-scroll-target="#sec-ie-import-special-clip"><span class="header-section-number">4.3.4.1</span> The clipboard trick</a></li>
+  <li><a href="#sec-ie-import-special-scan" id="toc-sec-ie-import-special-scan" class="nav-link" data-scroll-target="#sec-ie-import-special-scan"><span class="header-section-number">4.3.4.2</span> Entering data using <code>scan()</code></a></li>
+  <li><a href="#sec-ie-import-special-c" id="toc-sec-ie-import-special-c" class="nav-link" data-scroll-target="#sec-ie-import-special-c"><span class="header-section-number">4.3.4.3</span> Entering data directl using <code>c()</code></a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#sec-ie-export" id="toc-sec-ie-export" class="nav-link" data-scroll-target="#sec-ie-export"><span class="header-section-number">4.4</span> Data export</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-ie-export-text" id="toc-sec-ie-export-text" class="nav-link" data-scroll-target="#sec-ie-export-text"><span class="header-section-number">4.4.1</span> Exporting text files</a></li>
   <li><a href="#sec-ie-export-robj" id="toc-sec-ie-export-robj" class="nav-link" data-scroll-target="#sec-ie-export-robj"><span class="header-section-number">4.4.2</span> Saving R objects</a></li>
   <li><a href="#sec-ie-export-rdata" id="toc-sec-ie-export-rdata" class="nav-link" data-scroll-target="#sec-ie-export-rdata"><span class="header-section-number">4.4.3</span> Saving workspaces</a></li>
@@ -821,8 +835,8 @@ div.csl-indent {
 <section id="sec-ie-import-text-args" class="level4" data-number="4.3.1.3">
 <h4 data-number="4.3.1.3" class="anchored" data-anchor-id="sec-ie-import-text-args"><span class="header-section-number">4.3.1.3</span> Arguments to <code>read.table()</code> and <code>read.csv()</code></h4>
 <p>The text file reading functions have a lot of options, but there are a few that I find very useful (in addition to <code>header</code> above).</p>
-<section id="sep" class="level5">
-<h5 class="anchored" data-anchor-id="sep"><code>sep</code></h5>
+<section id="sep" class="level5" data-number="4.3.1.3.1">
+<h5 data-number="4.3.1.3.1" class="anchored" data-anchor-id="sep"><span class="header-section-number">4.3.1.3.1</span> <code>sep</code></h5>
 <p>As seen in one of the examples above, the <code>sep</code> argument specifies what character separates values on each line of the data file. This argument has some useful default values. If you are using <code>read.table()</code> with a tab-delimited file, or <code>read.csv()</code> with a comma-delimited file, you don’t need to set sep.</p>
 <p>The default in <code>read.table()</code> reads any white space as a delimiter. This is fine if you have a tab-delimited file, but if the file contains a mix of spaces and tabs you might have some problems. For example, if entries are separated by tabs, but some values contain spaces. In those cases, specify the appropriate delimiter:</p>
 <div class="cell">
@@ -838,8 +852,8 @@ div.csl-indent {
 </div>
 <p>The <code>sep</code> argument is usually necessary when using the “clipboard trick” (see <a href="#sec-ie-import-special" class="quarto-xref"><span>Section 4.3.4</span></a>)</p>
 </section>
-<section id="row.names" class="level5">
-<h5 class="anchored" data-anchor-id="row.names"><code>row.names</code></h5>
+<section id="row.names" class="level5" data-number="4.3.1.3.2">
+<h5 data-number="4.3.1.3.2" class="anchored" data-anchor-id="row.names"><span class="header-section-number">4.3.1.3.2</span> <code>row.names</code></h5>
 <p>When R imports a table of data, it will assign names to the rows. The default names are just the row numbers. Some data files will have their own row names. If you want to not import these names, you can set row.names argument to FALSE to get the default numbers. You can also specify names to assign upon import as a character vector.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not run:</span></span>
@@ -850,21 +864,21 @@ div.csl-indent {
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>dat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="skip" class="level5">
-<h5 class="anchored" data-anchor-id="skip"><code>skip</code></h5>
+<section id="skip" class="level5" data-number="4.3.1.3.3">
+<h5 data-number="4.3.1.3.3" class="anchored" data-anchor-id="skip"><span class="header-section-number">4.3.1.3.3</span> <code>skip</code></h5>
 <p>Some data files will contain rows of text or other information before the tabular data starts. The argument <code>skip</code> allows you to skip these lines. Without <code>skip</code>, R will try to read those rows of text as if they were data and fail to import. For example, 5 rows of preliminary text could be skipped with the argument <code>skip=5</code>.</p>
 <p>If your data file has non-tabular header rows, the error message that <code>skip</code> will prevent can be frustrating if you don’t understand how R parses text files. What is happening is that R uses the number of elements in the first row to calculate the dimensions of the data frame that it makes upon import. For example, if a text file contains the line “These are data from Nobody (2020)” on the first line, followed by the tabular data, R would assume that the table contained 6 columns headed by “These”, “are”, “data”, and so on. But, if the table contained another number of columns, R would return an error.</p>
 <p>Why does this issue vex so many new R users (and experienced R users)? Often we will have incomplete records in a data set, where a row is missing values in one or more columns. Sometimes blank values are not read correctly.</p>
 <p>There are a few ways to deal with the errors caused by blanks. The first is to go back to the original datafile and put R’s blank value, <code>NA</code>, in the blanks. You could also put in a value that is not likely to occur, such as <code>-9999</code> in variables that must be positive. This would make your file more readable, but without locking you in to using R. Either solution will ensure that missing values are not interpreted as extra white space. This method can be very time consuming for very large datasets, even in Excel (or especially in Excel). The best time to fix this issue is at data entry. Recall that having no empty cells is one of the recommendations of <span class="citation" data-cites="broman2018">Broman and Woo (<a href="#ref-broman2018" role="doc-biblioref">2018</a>)</span>.</p>
 <p>Another way is to save the file as a comma-delimited file, because commas are less ambiguous than white space for defining missing values. This method usually works, but might still create problems if there are multiple blank values per record or blanks at the ends of rows. The third option is to use the <code>fill</code> argument in the R import functions (see below).</p>
 </section>
-<section id="fill" class="level5">
-<h5 class="anchored" data-anchor-id="fill"><code>fill</code></h5>
+<section id="fill" class="level5" data-number="4.3.1.3.4">
+<h5 data-number="4.3.1.3.4" class="anchored" data-anchor-id="fill"><span class="header-section-number">4.3.1.3.4</span> <code>fill</code></h5>
 <p>As described above, missing values can cause problems when importing data into R. One way to deal with missing values that occur at the end of a line in the data file is to use the fill argument. Setting <code>fill=TRUE</code> will automatically pad the data frame with blanks so that every row has the same number of values.</p>
 <p>As convenient as <code>fill=TRUE</code> can be, you need to be careful when using it. R may add the wrong number of values, or values of the wrong type. One common mistake is for a blank character string (<code>""</code>) to be put in place of a missing value <code>NA</code>. This is an important difference because <code>""</code> and <code>NA</code> are treated very differently by many R functions.</p>
 </section>
-<section id="stringsasfactors" class="level5">
-<h5 class="anchored" data-anchor-id="stringsasfactors"><code>stringsAsFactors</code></h5>
+<section id="stringsasfactors" class="level5" data-number="4.3.1.3.5">
+<h5 data-number="4.3.1.3.5" class="anchored" data-anchor-id="stringsasfactors"><span class="header-section-number">4.3.1.3.5</span> <code>stringsAsFactors</code></h5>
 <p>A <strong>factor</strong> is a variable in a dataset that defines group membership: control vs.&nbsp;treated, red vs.&nbsp;blue, gene 1 vs.&nbsp;gene 2 vs.&nbsp;gene 3, and so on. The different groups to which an observation can belong are called the <strong>levels</strong> of the factor. This is very useful for statistical modeling, but can be a pain in the neck when trying to work with data in R.</p>
 <p>Functions <code>read.table()</code> and <code>read.csv()</code> have an argument to automatically convert character strings to factors for convenience: <code>stringsAsFactors</code>. This is a logical switch that will interpret character strings as levels of a factor (<code>stringsAsFactors=TRUE</code>) or as character strings (<code>stringsAsFactors=FALSE</code>). The default was <code>TRUE</code> until around version 4.0 or so, but now the default is the much more convenient <code>FALSE</code>.</p>
 <p>The reason that factors can cause headaches in R is because although they look like character strings, they are really numeric codes and the text you see is just a label. If you try to use a factor as if it was a character string, you can get strange errors. My advice is to always import data with <code>stringsAsFactors=FALSE</code> and only convert to factor later if needed. Most statistical functions will convert to factor for you automatically anyway. The only time when you may want to store data as a factor is when you a very large dataset with many levels of a factor; in those situations, factors will use memory more efficiently.</p>

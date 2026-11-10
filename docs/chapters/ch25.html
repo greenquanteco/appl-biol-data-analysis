@@ -520,14 +520,14 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#sec-diss-intro" id="toc-sec-diss-intro" class="nav-link active" data-scroll-target="#sec-diss-intro"><span class="header-section-number">25.1</span> Introduction and a silly example</a></li>
   <li><a href="#sec-diss-dis" id="toc-sec-diss-dis" class="nav-link" data-scroll-target="#sec-diss-dis"><span class="header-section-number">25.2</span> Distance and dissimilarity</a></li>
   <li><a href="#sec-diss-space" id="toc-sec-diss-space" class="nav-link" data-scroll-target="#sec-diss-space"><span class="header-section-number">25.3</span> Observations in space</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-diss-space-def" id="toc-sec-diss-space-def" class="nav-link" data-scroll-target="#sec-diss-space-def"><span class="header-section-number">25.3.1</span> Definitions</a></li>
   <li><a href="#sec-diss-space-coord" id="toc-sec-diss-space-coord" class="nav-link" data-scroll-target="#sec-diss-space-coord"><span class="header-section-number">25.3.2</span> Coordinate systems</a></li>
   <li><a href="#sec-diss-space-vect" id="toc-sec-diss-space-vect" class="nav-link" data-scroll-target="#sec-diss-space-vect"><span class="header-section-number">25.3.3</span> Points as vectors</a></li>
@@ -535,9 +535,19 @@ window.Quarto = {
   <li><a href="#sec-diss-space-what" id="toc-sec-diss-space-what" class="nav-link" data-scroll-target="#sec-diss-space-what"><span class="header-section-number">25.3.5</span> What can you do with a distance matrix?</a></li>
   </ul></li>
   <li><a href="#sec-diss-meas" id="toc-sec-diss-meas" class="nav-link" data-scroll-target="#sec-diss-meas"><span class="header-section-number">25.4</span> Dissimilarity measures</a>
+  <ul>
+  <li><a href="#sec-diss-meas-met" id="toc-sec-diss-meas-met" class="nav-link" data-scroll-target="#sec-diss-meas-met"><span class="header-section-number">25.4.1</span> Metric distances</a>
   <ul class="collapse">
-  <li><a href="#sec-diss-meas-met" id="toc-sec-diss-meas-met" class="nav-link" data-scroll-target="#sec-diss-meas-met"><span class="header-section-number">25.4.1</span> Metric distances</a></li>
-  <li><a href="#sec-diss-meas-semi" id="toc-sec-diss-meas-semi" class="nav-link" data-scroll-target="#sec-diss-meas-semi"><span class="header-section-number">25.4.2</span> Semimetric dissimilarities</a></li>
+  <li><a href="#sec-diss-meas-met-euc" id="toc-sec-diss-meas-met-euc" class="nav-link" data-scroll-target="#sec-diss-meas-met-euc"><span class="header-section-number">25.4.1.1</span> Euclidean distance</a></li>
+  <li><a href="#sec-diss-meas-met-man" id="toc-sec-diss-meas-met-man" class="nav-link" data-scroll-target="#sec-diss-meas-met-man"><span class="header-section-number">25.4.1.2</span> Manhattan distances</a></li>
+  <li><a href="#sec-diss-meas-met-jaccard" id="toc-sec-diss-meas-met-jaccard" class="nav-link" data-scroll-target="#sec-diss-meas-met-jaccard"><span class="header-section-number">25.4.1.3</span> Jaccard distance</a></li>
+  <li><a href="#sec-diss-meas-met-mal" id="toc-sec-diss-meas-met-mal" class="nav-link" data-scroll-target="#sec-diss-meas-met-mal"><span class="header-section-number">25.4.1.4</span> Mahalanobis distance</a></li>
+  </ul></li>
+  <li><a href="#sec-diss-meas-semi" id="toc-sec-diss-meas-semi" class="nav-link" data-scroll-target="#sec-diss-meas-semi"><span class="header-section-number">25.4.2</span> Semimetric dissimilarities</a>
+  <ul class="collapse">
+  <li><a href="#sec-diss-meas-semi-sor" id="toc-sec-diss-meas-semi-sor" class="nav-link" data-scroll-target="#sec-diss-meas-semi-sor"><span class="header-section-number">25.4.2.1</span> Sørensen dissimilarity</a></li>
+  <li><a href="#sec-diss-meas-semi-bray" id="toc-sec-diss-meas-semi-bray" class="nav-link" data-scroll-target="#sec-diss-meas-semi-bray"><span class="header-section-number">25.4.2.2</span> Bray-Curtis dissimilarity</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#sec-diss-zeros" id="toc-sec-diss-zeros" class="nav-link" data-scroll-target="#sec-diss-zeros"><span class="header-section-number">25.5</span> Dissimilarity with many zeros</a></li>
   </ul>
@@ -568,7 +578,7 @@ window.Quarto = {
 <section id="sec-diss-intro" class="level2" data-number="25.1">
 <h2 data-number="25.1" class="anchored" data-anchor-id="sec-diss-intro"><span class="header-section-number">25.1</span> Introduction and a silly example</h2>
 <p>One of the central questions in any biological data analysis is, “How similar to each other are my samples?” This is a more complicated question than it appears. It’s worth considering for a moment what “similar” even means. Consider the set of organisms in <a href="#fig-multi-animals1" class="quarto-xref">Figure&nbsp;<span>25.2</span></a> How would you group them by “similarity”?</p>
-<div id="fig-multi-animals1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" alt="A collection of clip art organisms, including a microbe, a pine tree, a crab, a penguin, an elephant, and others.">
+<div id="fig-multi-animals1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A collection of clip art organisms, including a microbe, a pine tree, a crab, a penguin, an elephant, and others." data-fig.align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-multi-animals1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;25.1: These clip art creatures are different, but what do we mean by different? Some of them have different numbers of legs, but does that really capture the variability between them?
@@ -814,13 +824,13 @@ Table&nbsp;25.1: Example of a multivariate dataset containing binary biological 
 <p><a href="#fig-cartesian" class="quarto-xref">Figure&nbsp;<span>25.4</span></a> below shows the Cartesian plane. The <strong>origin</strong> is at coordinates <span class="math inline">\(\left(0, 0\right)\)</span>. Every location on the plane <span class="math inline">\(\left(a,b\right)\)</span> is defined by its position along the X-axis <span class="math inline">\(a\)</span> and its position along the Y-axis <span class="math inline">\(b\)</span>. So, <span class="math inline">\(\left(2,3\right)\)</span> is 2 units to the right, and 3 units up. Point <span class="math inline">\(\left(-4,-3\right)\)</span> is 4 units to the left and 3 units down.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-cartesian" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-cartesian" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Cartesian coordinate plane showing the origin (0, 0) in red and four observations: purple at (−2, 4), blue at (2, 3), green at (−4, −3), and orange at (1.5, −2.5). The X and Y axes intersect at the origin, and a grid indicates coordinate units.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cartesian-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;25.4: text
+Figure&nbsp;25.4: Four observations represented as points in two-dimensional Cartesian space, with their positions defined by X and Y coordinates relative to the origin (0, 0).
 </figcaption>
 <div aria-describedby="fig-cartesian-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch25_files/figure-html/fig-cartesian-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch25_files/figure-html/fig-cartesian-1.png" class="img-fluid figure-img" alt="Cartesian coordinate plane showing the origin (0, 0) in red and four observations: purple at (−2, 4), blue at (2, 3), green at (−4, −3), and orange at (1.5, −2.5). The X and Y axes intersect at the origin, and a grid indicates coordinate units." width="768">
 </div>
 </figure>
 </div>
@@ -881,7 +891,7 @@ Figure&nbsp;25.6: Two-dimensional coordinate system illustrating the Cartesian a
 <li>A distance between two points on the Cartesian plane is just the segment between them, whose length is defined by the Pythagorean theorem.</li>
 <li>And so on for more dimensions.</li>
 </ul>
-<div id="fig-clust-2mice" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" alt="Scene from The Avengers just before Banner turns into the Hulk, saying That's my secret, I'm always a vector.">
+<div id="fig-clust-2mice" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Scene from The Avengers just before Banner turns into the Hulk, saying That's my secret, I'm always a vector." data-fig.align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-clust-2mice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;25.7: Coordinates and vectors are just two ways of representing the same concept.

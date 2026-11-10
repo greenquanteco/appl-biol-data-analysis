@@ -125,8 +125,8 @@ One of the first spaces we learn about in school is the **Cartesian plane**, wha
 #| fig-height: 8
 #| echo: false
 #| label: fig-cartesian
-#| fig-cap: "text"
-#| fig-alt: "text"
+#| fig-cap: "Four observations represented as points in two-dimensional Cartesian space, with their positions defined by X and Y coordinates relative to the origin (0, 0)."
+#| fig-alt: "Cartesian coordinate plane showing the origin (0, 0) in red and four observations: purple at (−2, 4), blue at (2, 3), green at (−4, −3), and orange at (1.5, −2.5). The X and Y axes intersect at the origin, and a grid indicates coordinate units."
 
 par(mar=c(0,0,0,0), mfrow=c(1,1), lend=1)
 n <- 5

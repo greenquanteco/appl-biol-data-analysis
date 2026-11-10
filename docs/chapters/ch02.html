@@ -520,39 +520,62 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#sec-r-start" id="toc-sec-r-start" class="nav-link active" data-scroll-target="#sec-r-start"><span class="header-section-number">2.1</span> Getting started with R</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-r-start-install" id="toc-sec-r-start-install" class="nav-link" data-scroll-target="#sec-r-start-install"><span class="header-section-number">2.1.1</span> Download and install R (and RStudio)</a></li>
-  <li><a href="#sec-r-start-using" id="toc-sec-r-start-using" class="nav-link" data-scroll-target="#sec-r-start-using"><span class="header-section-number">2.1.2</span> Using R</a></li>
+  <li><a href="#sec-r-start-using" id="toc-sec-r-start-using" class="nav-link" data-scroll-target="#sec-r-start-using"><span class="header-section-number">2.1.2</span> Using R</a>
+  <ul class="collapse">
+  <li><a href="#base-r-gui" id="toc-base-r-gui" class="nav-link" data-scroll-target="#base-r-gui"><span class="header-section-number">2.1.2.1</span> Base R GUI</a></li>
+  <li><a href="#using-r-in-rstudio" id="toc-using-r-in-rstudio" class="nav-link" data-scroll-target="#using-r-in-rstudio"><span class="header-section-number">2.1.2.2</span> Using R in RStudio</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#sec-r-comm" id="toc-sec-r-comm" class="nav-link" data-scroll-target="#sec-r-comm"><span class="header-section-number">2.2</span> Commands, objects, and output</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-r-comm-basic" id="toc-sec-r-comm-basic" class="nav-link" data-scroll-target="#sec-r-comm-basic"><span class="header-section-number">2.2.1</span> R commands–basics</a></li>
   <li><a href="#sec-r-comm-functions" id="toc-sec-r-comm-functions" class="nav-link" data-scroll-target="#sec-r-comm-functions"><span class="header-section-number">2.2.2</span> Using R functions</a></li>
   <li><a href="#sec-r-comm-workspace" id="toc-sec-r-comm-workspace" class="nav-link" data-scroll-target="#sec-r-comm-workspace"><span class="header-section-number">2.2.3</span> The R workspace</a></li>
   </ul></li>
   <li><a href="#sec-r-syn" id="toc-sec-r-syn" class="nav-link" data-scroll-target="#sec-r-syn"><span class="header-section-number">2.3</span> R syntax</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-r-syn-oss" id="toc-sec-r-syn-oss" class="nav-link" data-scroll-target="#sec-r-syn-oss"><span class="header-section-number">2.3.1</span> Object size and structure</a></li>
   <li><a href="#sec-r-syn-ops" id="toc-sec-r-syn-ops" class="nav-link" data-scroll-target="#sec-r-syn-ops"><span class="header-section-number">2.3.2</span> Operators</a></li>
   </ul></li>
   <li><a href="#sec-r-pack" id="toc-sec-r-pack" class="nav-link" data-scroll-target="#sec-r-pack"><span class="header-section-number">2.4</span> R packages</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-r-pack-lib" id="toc-sec-r-pack-lib" class="nav-link" data-scroll-target="#sec-r-pack-lib"><span class="header-section-number">2.4.1</span> Your R library</a></li>
-  <li><a href="#sec-r-pack-install" id="toc-sec-r-pack-install" class="nav-link" data-scroll-target="#sec-r-pack-install"><span class="header-section-number">2.4.2</span> Installing R packages</a></li>
-  <li><a href="#sec-r-pack-work" id="toc-sec-r-pack-work" class="nav-link" data-scroll-target="#sec-r-pack-work"><span class="header-section-number">2.4.3</span> Working with packages in R</a></li>
+  <li><a href="#sec-r-pack-install" id="toc-sec-r-pack-install" class="nav-link" data-scroll-target="#sec-r-pack-install"><span class="header-section-number">2.4.2</span> Installing R packages</a>
+  <ul class="collapse">
+  <li><a href="#installing-r-packages-using-the-gui" id="toc-installing-r-packages-using-the-gui" class="nav-link" data-scroll-target="#installing-r-packages-using-the-gui"><span class="header-section-number">2.4.2.1</span> Installing R packages using the GUI</a></li>
+  <li><a href="#installing-packages-in-rstudio" id="toc-installing-packages-in-rstudio" class="nav-link" data-scroll-target="#installing-packages-in-rstudio"><span class="header-section-number">2.4.2.2</span> Installing packages in RStudio</a></li>
+  <li><a href="#installing-packages-using-r-code" id="toc-installing-packages-using-r-code" class="nav-link" data-scroll-target="#installing-packages-using-r-code"><span class="header-section-number">2.4.2.3</span> Installing packages using R code</a></li>
+  </ul></li>
+  <li><a href="#sec-r-pack-work" id="toc-sec-r-pack-work" class="nav-link" data-scroll-target="#sec-r-pack-work"><span class="header-section-number">2.4.3</span> Working with packages in R</a>
+  <ul class="collapse">
+  <li><a href="#sec-r-pack-work-dep" id="toc-sec-r-pack-work-dep" class="nav-link" data-scroll-target="#sec-r-pack-work-dep"><span class="header-section-number">2.4.3.1</span> Package dependencies</a></li>
+  <li><a href="#sec-r-pack-work-cite" id="toc-sec-r-pack-work-cite" class="nav-link" data-scroll-target="#sec-r-pack-work-cite"><span class="header-section-number">2.4.3.2</span> Citing packages</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#sec-r-faq" id="toc-sec-r-faq" class="nav-link" data-scroll-target="#sec-r-faq"><span class="header-section-number">2.5</span> Frequently asked questions about R</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-r-faq-what" id="toc-sec-r-faq-what" class="nav-link" data-scroll-target="#sec-r-faq-what"><span class="header-section-number">2.5.1</span> What is R</a></li>
   <li><a href="#sec-r-faq-code" id="toc-sec-r-faq-code" class="nav-link" data-scroll-target="#sec-r-faq-code"><span class="header-section-number">2.5.2</span> Why do we have to write code?</a></li>
   <li><a href="#sec-r-faq-advdis" id="toc-sec-r-faq-advdis" class="nav-link" data-scroll-target="#sec-r-faq-advdis"><span class="header-section-number">2.5.3</span> Advantages and disadvantages</a></li>
   <li><a href="#sec-r-faq-tidy" id="toc-sec-r-faq-tidy" class="nav-link" data-scroll-target="#sec-r-faq-tidy"><span class="header-section-number">2.5.4</span> Base R vs.&nbsp;tidyverse</a></li>
-  <li><a href="#sec-r-faq-help" id="toc-sec-r-faq-help" class="nav-link" data-scroll-target="#sec-r-faq-help"><span class="header-section-number">2.5.5</span> Where can I get R help?</a></li>
+  <li><a href="#sec-r-faq-help" id="toc-sec-r-faq-help" class="nav-link" data-scroll-target="#sec-r-faq-help"><span class="header-section-number">2.5.5</span> Where can I get R help?</a>
+  <ul class="collapse">
+  <li><a href="#sec-r-faq-help-doc" id="toc-sec-r-faq-help-doc" class="nav-link" data-scroll-target="#sec-r-faq-help-doc"><span class="header-section-number">2.5.5.1</span> R documentation (help) files</a></li>
+  <li><a href="#sec-r-faq-help-vig" id="toc-sec-r-faq-help-vig" class="nav-link" data-scroll-target="#sec-r-faq-help-vig"><span class="header-section-number">2.5.5.2</span> R vignettes</a></li>
+  <li><a href="#sec-r-faq-help-off" id="toc-sec-r-faq-help-off" class="nav-link" data-scroll-target="#sec-r-faq-help-off"><span class="header-section-number">2.5.5.3</span> Official resources</a></li>
+  <li><a href="#r-task-views" id="toc-r-task-views" class="nav-link" data-scroll-target="#r-task-views"><span class="header-section-number">2.5.5.4</span> R task views</a></li>
+  <li><a href="#sec-r-faq-help-mail" id="toc-sec-r-faq-help-mail" class="nav-link" data-scroll-target="#sec-r-faq-help-mail"><span class="header-section-number">2.5.5.5</span> R mailing lists</a></li>
+  <li><a href="#sec-r-faq-help-unoff" id="toc-sec-r-faq-help-unoff" class="nav-link" data-scroll-target="#sec-r-faq-help-unoff"><span class="header-section-number">2.5.5.6</span> Unofficial online resources</a></li>
+  <li><a href="#sec-r-faq-help-books" id="toc-sec-r-faq-help-books" class="nav-link" data-scroll-target="#sec-r-faq-help-books"><span class="header-section-number">2.5.5.7</span> R books</a></li>
+  <li><a href="#sec-r-faq-help-two" id="toc-sec-r-faq-help-two" class="nav-link" data-scroll-target="#sec-r-faq-help-two"><span class="header-section-number">2.5.5.8</span> Two reminders</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch02.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>

@@ -520,21 +520,30 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#sec-object-type" id="toc-sec-object-type" class="nav-link active" data-scroll-target="#sec-object-type"><span class="header-section-number">3.1</span> R data types</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#character-type" id="toc-character-type" class="nav-link" data-scroll-target="#character-type"><span class="header-section-number">3.1.1</span> Character type</a></li>
   <li><a href="#numeric-type" id="toc-numeric-type" class="nav-link" data-scroll-target="#numeric-type"><span class="header-section-number">3.1.2</span> Numeric type</a></li>
   <li><a href="#integer-type" id="toc-integer-type" class="nav-link" data-scroll-target="#integer-type"><span class="header-section-number">3.1.3</span> Integer type</a></li>
   <li><a href="#logical-type" id="toc-logical-type" class="nav-link" data-scroll-target="#logical-type"><span class="header-section-number">3.1.4</span> Logical type</a></li>
-  <li><a href="#sec-object-type-spec" id="toc-sec-object-type-spec" class="nav-link" data-scroll-target="#sec-object-type-spec"><span class="header-section-number">3.1.5</span> Special values</a></li>
+  <li><a href="#sec-object-type-spec" id="toc-sec-object-type-spec" class="nav-link" data-scroll-target="#sec-object-type-spec"><span class="header-section-number">3.1.5</span> Special values</a>
+  <ul class="collapse">
+  <li><a href="#sec-object-type-spec-na" id="toc-sec-object-type-spec-na" class="nav-link" data-scroll-target="#sec-object-type-spec-na"><span class="header-section-number">3.1.5.1</span> Missing values <code>NA</code></a></li>
+  <li><a href="#sec-object-type-spec-inf" id="toc-sec-object-type-spec-inf" class="nav-link" data-scroll-target="#sec-object-type-spec-inf"><span class="header-section-number">3.1.5.2</span> Infinities</a></li>
+  <li><a href="#sec-object-type-spec-nan" id="toc-sec-object-type-spec-nan" class="nav-link" data-scroll-target="#sec-object-type-spec-nan"><span class="header-section-number">3.1.5.3</span> Undefined values</a></li>
+  <li><a href="#sec-object-type-spec-why" id="toc-sec-object-type-spec-why" class="nav-link" data-scroll-target="#sec-object-type-spec-why"><span class="header-section-number">3.1.5.4</span> Special values are useful</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#sec-object-struct" id="toc-sec-object-struct" class="nav-link" data-scroll-target="#sec-object-struct"><span class="header-section-number">3.2</span> Basic R data structures</a>
+  <ul>
+  <li><a href="#sec-object-struct-vect" id="toc-sec-object-struct-vect" class="nav-link" data-scroll-target="#sec-object-struct-vect"><span class="header-section-number">3.2.1</span> Vectors</a>
   <ul class="collapse">
-  <li><a href="#sec-object-struct-vect" id="toc-sec-object-struct-vect" class="nav-link" data-scroll-target="#sec-object-struct-vect"><span class="header-section-number">3.2.1</span> Vectors</a></li>
+  <li><a href="#sec-object-struct-vect-atom" id="toc-sec-object-struct-vect-atom" class="nav-link" data-scroll-target="#sec-object-struct-vect-atom"><span class="header-section-number">3.2.1.1</span> Atomic vectors</a></li>
+  </ul></li>
   <li><a href="#sec-object-struct-df" id="toc-sec-object-struct-df" class="nav-link" data-scroll-target="#sec-object-struct-df"><span class="header-section-number">3.2.2</span> Data frames</a></li>
   <li><a href="#sec-object-struct-mat" id="toc-sec-object-struct-mat" class="nav-link" data-scroll-target="#sec-object-struct-mat"><span class="header-section-number">3.2.3</span> Matrices and arrays</a></li>
   <li><a href="#sec-object-struct-list" id="toc-sec-object-struct-list" class="nav-link" data-scroll-target="#sec-object-struct-list"><span class="header-section-number">3.2.4</span> Lists</a></li>

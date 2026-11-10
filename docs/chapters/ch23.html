@@ -501,27 +501,38 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#sec-mixed-intro" id="toc-sec-mixed-intro" class="nav-link active" data-scroll-target="#sec-mixed-intro"><span class="header-section-number">23.1</span> Introduction</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-mixed-rand" id="toc-sec-mixed-rand" class="nav-link" data-scroll-target="#sec-mixed-rand"><span class="header-section-number">23.1.1</span> Putting the random in random effect</a></li>
   </ul></li>
   <li><a href="#sec-mixed-lme" id="toc-sec-mixed-lme" class="nav-link" data-scroll-target="#sec-mixed-lme"><span class="header-section-number">23.2</span> Linear mixed effects models (LMM)</a>
+  <ul>
+  <li><a href="#sec-mixed-lme-def" id="toc-sec-mixed-lme-def" class="nav-link" data-scroll-target="#sec-mixed-lme-def"><span class="header-section-number">23.2.1</span> Definition</a>
   <ul class="collapse">
-  <li><a href="#sec-mixed-lme-def" id="toc-sec-mixed-lme-def" class="nav-link" data-scroll-target="#sec-mixed-lme-def"><span class="header-section-number">23.2.1</span> Definition</a></li>
+  <li><a href="#sec-mixed-lme-def-randint" id="toc-sec-mixed-lme-def-randint" class="nav-link" data-scroll-target="#sec-mixed-lme-def-randint"><span class="header-section-number">23.2.1.1</span> Random intercept model</a></li>
+  <li><a href="#sec-mixed-lme-def-randslope" id="toc-sec-mixed-lme-def-randslope" class="nav-link" data-scroll-target="#sec-mixed-lme-def-randslope"><span class="header-section-number">23.2.1.2</span> Random intercept model</a></li>
+  <li><a href="#sec-mixed-lme-def-randboth" id="toc-sec-mixed-lme-def-randboth" class="nav-link" data-scroll-target="#sec-mixed-lme-def-randboth"><span class="header-section-number">23.2.1.3</span> Random intercept and slope model</a></li>
+  </ul></li>
   <li><a href="#sec-mixed-lme-example" id="toc-sec-mixed-lme-example" class="nav-link" data-scroll-target="#sec-mixed-lme-example"><span class="header-section-number">23.2.2</span> Example with NEON data</a></li>
   <li><a href="#sec-mixed-lme-specify" id="toc-sec-mixed-lme-specify" class="nav-link" data-scroll-target="#sec-mixed-lme-specify"><span class="header-section-number">23.2.3</span> Specifying random effects in <code>lme4</code></a></li>
   </ul></li>
   <li><a href="#sec-mixed-glmm" id="toc-sec-mixed-glmm" class="nav-link" data-scroll-target="#sec-mixed-glmm"><span class="header-section-number">23.3</span> Generalized linear mixed effects models (GLMM)</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-mixed-glmm-def" id="toc-sec-mixed-glmm-def" class="nav-link" data-scroll-target="#sec-mixed-glmm-def"><span class="header-section-number">23.3.1</span> Definition</a></li>
-  <li><a href="#sec-mixed-glmm-example" id="toc-sec-mixed-glmm-example" class="nav-link" data-scroll-target="#sec-mixed-glmm-example"><span class="header-section-number">23.3.2</span> Example with NEON data</a></li>
+  <li><a href="#sec-mixed-glmm-example" id="toc-sec-mixed-glmm-example" class="nav-link" data-scroll-target="#sec-mixed-glmm-example"><span class="header-section-number">23.3.2</span> Example with NEON data</a>
+  <ul class="collapse">
+  <li><a href="#data-import-and-first-steps" id="toc-data-import-and-first-steps" class="nav-link" data-scroll-target="#data-import-and-first-steps"><span class="header-section-number">23.3.2.1</span> Data import and first steps</a></li>
+  <li><a href="#fit-glm-and-glmmm" id="toc-fit-glm-and-glmmm" class="nav-link" data-scroll-target="#fit-glm-and-glmmm"><span class="header-section-number">23.3.2.2</span> Fit GLM and GLMMM</a></li>
+  <li><a href="#plotting-population-level-predictions" id="toc-plotting-population-level-predictions" class="nav-link" data-scroll-target="#plotting-population-level-predictions"><span class="header-section-number">23.3.2.3</span> Plotting population-level predictions</a></li>
+  <li><a href="#plotting-marginal-means" id="toc-plotting-marginal-means" class="nav-link" data-scroll-target="#plotting-marginal-means"><span class="header-section-number">23.3.2.4</span> Plotting marginal means</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#sec-mixed-nlme" id="toc-sec-mixed-nlme" class="nav-link" data-scroll-target="#sec-mixed-nlme"><span class="header-section-number">23.4</span> Nonlinear mixed effects models</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-mixed-nlme-def" id="toc-sec-mixed-nlme-def" class="nav-link" data-scroll-target="#sec-mixed-nlme-def"><span class="header-section-number">23.4.1</span> Definition</a></li>
   <li><a href="#sec-mixed-nlme-example" id="toc-sec-mixed-nlme-example" class="nav-link" data-scroll-target="#sec-mixed-nlme-example"><span class="header-section-number">23.4.2</span> Example with NEON data</a></li>
   <li><a href="#sec-mixed-nlme-specify" id="toc-sec-mixed-nlme-specify" class="nav-link" data-scroll-target="#sec-mixed-nlme-specify"><span class="header-section-number">23.4.3</span> Specifying random effects in <code>nlme</code></a></li>
@@ -676,7 +687,7 @@ Y_i=\beta_{0,lab}+\beta_{1,lab_i}X_i+\varepsilon_i
 <div class="cell" data-fig-label="Body mass vs. sex in White-Footed Mice *Peromyscus leucopus*.">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(weight<span class="sc">~</span>sex, <span class="at">data=</span>dx)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-lme1" class="quarto-float quarto-figure quarto-figure-center anchored" width="576" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus.">
+<div id="fig-lme1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus." width="576">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-lme1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;23.1
@@ -1155,7 +1166,7 @@ Table&nbsp;23.2: Comparison of effects and means parameterizations of random int
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab=</span><span class="st">"Body mass (g)"</span>, <span class="at">log=</span><span class="st">"xy"</span>,</span>
 <span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">30</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-glmmm1" class="quarto-float quarto-figure quarto-figure-center anchored" width="768" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus.">
+<div id="fig-glmmm1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus." width="768">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-glmmm1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;23.2
@@ -1178,7 +1189,7 @@ Figure&nbsp;23.2
 <span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">30</span>))</span>
 <span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"right"</span>, <span class="at">legend=</span>sexes,<span class="at">pch=</span>pchs,<span class="at">col=</span>cols)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-glmmm2" class="quarto-float quarto-figure quarto-figure-center anchored" width="768" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus.">
+<div id="fig-glmmm2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus." width="768">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-glmmm2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;23.3
@@ -1320,7 +1331,7 @@ mod05  5 2894.660</code></pre>
 <span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"right"</span>, <span class="at">legend=</span>sexes,</span>
 <span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pchs, <span class="at">col=</span>cols, <span class="at">lwd=</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-glmmm3" class="quarto-float quarto-figure quarto-figure-center anchored" width="768" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus.">
+<div id="fig-glmmm3" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus." width="768">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-glmmm3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;23.4
@@ -1396,7 +1407,7 @@ Figure&nbsp;23.4
 <span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"top"</span>, <span class="at">legend=</span>sexes,</span>
 <span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pchs, <span class="at">col=</span>cols, <span class="at">lwd=</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-glmmm5" class="quarto-float quarto-figure quarto-figure-center anchored" width="768" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus.">
+<div id="fig-glmmm5" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus." width="768">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-glmmm5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;23.5
@@ -1436,7 +1447,7 @@ Figure&nbsp;23.5
 <span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend=</span>sexes,</span>
 <span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pchs, <span class="at">col=</span>cols, <span class="at">lwd=</span><span class="dv">3</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-glmm4" class="quarto-float quarto-figure quarto-figure-center anchored" width="768" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus.">
+<div id="fig-glmm4" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Body mass vs. sex in White-Footed Mice Peromyscus leucopus." width="768">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-glmm4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;23.6

@@ -520,24 +520,29 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#sec-clust-intro" id="toc-sec-clust-intro" class="nav-link active" data-scroll-target="#sec-clust-intro"><span class="header-section-number">26.1</span> Introduction</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-clust-intro-types" id="toc-sec-clust-intro-types" class="nav-link" data-scroll-target="#sec-clust-intro-types"><span class="header-section-number">26.1.1</span> Types of clustering</a></li>
   </ul></li>
   <li><a href="#sec-clust-kmeans" id="toc-sec-clust-kmeans" class="nav-link" data-scroll-target="#sec-clust-kmeans"><span class="header-section-number">26.2</span> K-means clustering</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-clust-kmeans-intro" id="toc-sec-clust-kmeans-intro" class="nav-link" data-scroll-target="#sec-clust-kmeans-intro"><span class="header-section-number">26.2.1</span> Introduction to K-means clustering</a></li>
   <li><a href="#sec-clust-kmeans-example" id="toc-sec-clust-kmeans-example" class="nav-link" data-scroll-target="#sec-clust-kmeans-example"><span class="header-section-number">26.2.2</span> Example with NEON data</a></li>
   </ul></li>
   <li><a href="#sec-clust-hier" id="toc-sec-clust-hier" class="nav-link" data-scroll-target="#sec-clust-hier"><span class="header-section-number">26.3</span> Hierarchical clustering</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#sec-clust-hier-intro" id="toc-sec-clust-hier-intro" class="nav-link" data-scroll-target="#sec-clust-hier-intro"><span class="header-section-number">26.3.1</span> Introduction</a></li>
   <li><a href="#sec-clust-hier-chain" id="toc-sec-clust-hier-chain" class="nav-link" data-scroll-target="#sec-clust-hier-chain"><span class="header-section-number">26.3.2</span> Chaining</a></li>
-  <li><a href="#sec-clust-hier-methods" id="toc-sec-clust-hier-methods" class="nav-link" data-scroll-target="#sec-clust-hier-methods"><span class="header-section-number">26.3.3</span> Hierarchical clustering methods</a></li>
+  <li><a href="#sec-clust-hier-methods" id="toc-sec-clust-hier-methods" class="nav-link" data-scroll-target="#sec-clust-hier-methods"><span class="header-section-number">26.3.3</span> Hierarchical clustering methods</a>
+  <ul class="collapse">
+  <li><a href="#sec-clust-hier-methods-single" id="toc-sec-clust-hier-methods-single" class="nav-link" data-scroll-target="#sec-clust-hier-methods-single"><span class="header-section-number">26.3.3.1</span> Hierarchical clustering with single linkage</a></li>
+  <li><a href="#sec-clust-hier-methods-wards" id="toc-sec-clust-hier-methods-wards" class="nav-link" data-scroll-target="#sec-clust-hier-methods-wards"><span class="header-section-number">26.3.3.2</span> Hierarchical clustering with Ward’s method</a></li>
+  <li><a href="#sec-clust-hier-methods-other" id="toc-sec-clust-hier-methods-other" class="nav-link" data-scroll-target="#sec-clust-hier-methods-other"><span class="header-section-number">26.3.3.3</span> Other methods for hierarchical clustering</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch26.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -570,13 +575,13 @@ window.Quarto = {
 <p>The figure below illustrates this concept with an imaginary example. The clusters shown cleanly separate red, blue, and green points. For example, the average distance between the red points is smaller than the average distance between the red points and the blue points.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-cluster-example1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-cluster-example1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Scatterplot showing three spatially separated groups of observations on a white background. Eight red squares form a cluster in the upper left, eight blue triangles form a cluster in the upper right, and eight green circles form a cluster near the bottom center. Observations within each group are relatively close together, with large gaps separating the three groups.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-cluster-example1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.1: text
+Figure&nbsp;26.1: Hypothetical dataset containing three distinct clusters of observations in two-dimensional space.
 </figcaption>
 <div aria-describedby="fig-cluster-example1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-cluster-example1-1.png" class="img-fluid figure-img" alt="text" width="672">
+<img src="ch26_files/figure-html/fig-cluster-example1-1.png" class="img-fluid figure-img" alt="Scatterplot showing three spatially separated groups of observations on a white background. Eight red squares form a cluster in the upper left, eight blue triangles form a cluster in the upper right, and eight green circles form a cluster near the bottom center. Observations within each group are relatively close together, with large gaps separating the three groups." width="672">
 </div>
 </figure>
 </div>
@@ -586,24 +591,24 @@ Figure&nbsp;26.1: text
 <h3 data-number="26.1.1" class="anchored" data-anchor-id="sec-clust-intro-types"><span class="header-section-number">26.1.1</span> Types of clustering</h3>
 <p>There are many methods for clustering observations. Many methods are <strong>hierarchical</strong>, with groups being nested within other groups. Many biological phenomena are also hierarchical in nature, so these methods are naturally quite useful. Other methods are <strong>non-hierarchical</strong>, where groups are not constrained to be within other groups.</p>
 <p>Most hierarchical methods produce non-overlapping groups. Hierarchical methods are easier to compute in general. However, some authors (see <span class="citation" data-cites="legendre2012numerical">Legendre and Legendre (<a href="#ref-legendre2012numerical" role="doc-biblioref">2012</a>)</span>) consider hierarchical cluster methods to be “classification” rather than true clustering. The biological reasoning is clear: the hierarchy produced by a clustering algorithm is analogous to the hierarchies we see in phylogeny or Linnaean taxonomy.</p>
-<div id="fig-clust-hierarchy" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" alt="In nonhierarchical clustering, groups are not nested within each other. In hierarchical clustering, samples are partitioned into nested groups.">
+<div id="fig-clust-hierarchy" class="quarto-float quarto-figure quarto-figure-center anchored" alt="In nonhierarchical clustering, groups are not nested within each other. In hierarchical clustering, samples are partitioned into nested groups." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-clust-hierarchy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;26.2: In nonhierarchical clustering, groups are not nested within each other. In hierarchical clustering, samples are partitioned into nested groups.
 </figcaption>
 <div aria-describedby="fig-clust-hierarchy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/cluster-hierarchy.jpg" class="img-fluid figure-img" data-fig.align="center" alt="In nonhierarchical clustering, groups are not nested within each other. In hierarchical clustering, samples are partitioned into nested groups.">
+<img src="../images/cluster-hierarchy.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="In nonhierarchical clustering, groups are not nested within each other. In hierarchical clustering, samples are partitioned into nested groups.">
 </div>
 </figure>
 </div>
 <p>Clustering methods also differ in their manner of group construction. Many methods are <strong>agglomerative</strong>, which means that groups are formed by combining samples. Other methods are <strong>divisive</strong>, which means that all samples start in a single group which is then broken up. Divisive techniques are also called <strong>partitioning</strong> techniques.</p>
-<div id="fig-clust-agglom" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" alt="Agglomerative clustering starts with all samples completely ungrouped, then puts groups together by combining samples. Divisive clustering or partitioning starts with all samples in the same group, then divides the group until some stopping rule is reached.">
+<div id="fig-clust-agglom" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Agglomerative clustering starts with all samples completely ungrouped, then puts groups together by combining samples. Divisive clustering or partitioning starts with all samples in the same group, then divides the group until some stopping rule is reached." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-clust-agglom-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;26.3: Agglomerative clustering starts with all samples completely ungrouped, then puts groups together by combining samples. Divisive clustering or partitioning starts with all samples in the same group, then divides the group until some stopping rule is reached.
 </figcaption>
 <div aria-describedby="fig-clust-agglom-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/cluster-agglom.jpg" class="img-fluid figure-img" data-fig.align="center" alt="Agglomerative clustering starts with all samples completely ungrouped, then puts groups together by combining samples. Divisive clustering or partitioning starts with all samples in the same group, then divides the group until some stopping rule is reached.">
+<img src="../images/cluster-agglom.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Agglomerative clustering starts with all samples completely ungrouped, then puts groups together by combining samples. Divisive clustering or partitioning starts with all samples in the same group, then divides the group until some stopping rule is reached.">
 </div>
 </figure>
 </div>
@@ -668,20 +673,20 @@ Table&nbsp;26.1: Common approaches to clustering and their methods of forming gr
 <p>The figure below shows the effects of <em>K</em>-means clustering on a pretend dataset with 2 variables with <span class="math inline">\(K = 3\)</span>. The group assignments were determined because groups with those centroids had the smallest possible set of Euclidean distances between the points and the group centroids (right panel). Centroids are shown with a thick outline.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-kmeans-example1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-kmeans-example1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two-panel scatterplot of observations measured on Variable 1 and Variable 2. The left panel shows 24 black points arranged in three distinct groups. The right panel shows the same observations assigned to three clusters: red squares in the upper left, blue circles in the upper right, and green triangles at the bottom. Each cluster has a large, black-outlined centroid symbol, with dashed lines connecting its observations to the centroid.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-example1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.4: text
+Figure&nbsp;26.4: Illustration of K-means clustering in two-dimensional space. The left panel shows the original observations, while the right panel shows their assignment to three clusters. Large, black-outlined symbols indicate cluster centroids, and dashed lines connect individual observations to their respective centroids.
 </figcaption>
 <div aria-describedby="fig-kmeans-example1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-kmeans-example1-1.png" class="img-fluid figure-img" alt="text" width="960">
+<img src="ch26_files/figure-html/fig-kmeans-example1-1.png" class="img-fluid figure-img" alt="Two-panel scatterplot of observations measured on Variable 1 and Variable 2. The left panel shows 24 black points arranged in three distinct groups. The right panel shows the same observations assigned to three clusters: red squares in the upper left, blue circles in the upper right, and green triangles at the bottom. Each cluster has a large, black-outlined centroid symbol, with dashed lines connecting its observations to the centroid." width="960">
 </div>
 </figure>
 </div>
 </div>
 </div>
 <p>How many clusters are appropriate? That’s a good question to ask, and sometimes a tricky question to answer. There are statistical ways to assess how many groups are appropriate…but, you always need to use your biological judgement when interpreting groups. Sometimes you may be justified on biological grounds using 1 group more or less than the numerical summaries indicate.</p>
-<p>One common way to assess the optimal <em>K</em> is to try several <em>K</em> and calculate the within-cluster sum of squared errors (<em>WSS</em>) for all points. The optimal value of <em>K</em> is often assumed to be the value at which a plot of <em>WSS</em> vs.&nbsp;<em>K</em> starts to bend. The example below illustrates this method for the data above.</p>
+<p>One common way to assess the optimal <em>K</em> is to try several <em>K</em> and calculate the within-cluster sum of squared errors (<em>WSS</em>) for all points. The optimal value of <em>K</em> is often assumed to be the value at which a plot of <em>WSS</em> vs.&nbsp;<em>K</em> starts to bend. The example <strong>elbow plot</strong> below illustrates this method for the data above.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate a random dataset with 3 clusters</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
@@ -707,13 +712,13 @@ Figure&nbsp;26.4: text
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"Clusters (k)"</span>,</span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Total WSS"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-kmeans-wss-plot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-kmeans-wss-plot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Line graph showing total within-cluster sum of squares (WSS) on the vertical axis and number of clusters (K) from 2 to 8 on the horizontal axis. WSS decreases sharply from approximately 415 at K = 2 to 180 at K = 3 and 130 at K = 4. The curve is nearly flat between K = 4 and 6, then decreases again to approximately 77 at K = 7 and 56 at K = 8.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-wss-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.5: text
+Figure&nbsp;26.5: Elbow plot showing the relationship between the number of clusters (K) and total within-cluster sum of squares (WSS) in K-means clustering. WSS decreases as the number of clusters increases, with a pronounced reduction up to approximately four clusters, suggesting that K = 4 may be a reasonable choice.
 </figcaption>
 <div aria-describedby="fig-kmeans-wss-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-kmeans-wss-plot-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch26_files/figure-html/fig-kmeans-wss-plot-1.png" class="img-fluid figure-img" alt="Line graph showing total within-cluster sum of squares (WSS) on the vertical axis and number of clusters (K) from 2 to 8 on the horizontal axis. WSS decreases sharply from approximately 415 at K = 2 to 180 at K = 3 and 130 at K = 4. The curve is nearly flat between K = 4 and 6, then decreases again to approximately 77 at K = 7 and 56 at K = 8." width="768">
 </div>
 </figure>
 </div>
@@ -761,13 +766,13 @@ Figure&nbsp;26.5: text
 <span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(dx<span class="sc">$</span>cenx4, dx<span class="sc">$</span>ceny4, <span class="at">pch=</span><span class="dv">21</span>, <span class="at">cex=</span><span class="dv">2</span>,</span>
 <span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">bg=</span><span class="st">"yellow"</span>, <span class="at">col=</span>dx<span class="sc">$</span>col4, <span class="at">lwd=</span><span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-kmeans-example2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-kmeans-example2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two-panel scatterplot showing K-means clustering of observations measured on Variable 1 and Variable 2. The left panel (K = 3) shows three clusters: red squares in the upper left, blue triangles in the upper right, and green circles at the bottom. The right panel (K = 4) retains the bottom green cluster but divides the upper observations into purple diamonds on the left, cyan triangles in the middle right, and red squares at the upper right. Yellow-filled, colored-outlined circles mark cluster centroids, with dashed lines connecting observations to their respective centroids.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-example2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.6: text
+Figure&nbsp;26.6: Comparison of K-means clustering solutions with three clusters (left) and four clusters (right) for the same hypothetical dataset. Increasing K from 3 to 4 divides the upper-right group into two smaller clusters, illustrating how the number of clusters influences group assignments and centroid locations.
 </figcaption>
 <div aria-describedby="fig-kmeans-example2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-kmeans-example2-1.png" class="img-fluid figure-img" alt="text" width="960">
+<img src="ch26_files/figure-html/fig-kmeans-example2-1.png" class="img-fluid figure-img" alt="Two-panel scatterplot showing K-means clustering of observations measured on Variable 1 and Variable 2. The left panel (K = 3) shows three clusters: red squares in the upper left, blue triangles in the upper right, and green circles at the bottom. The right panel (K = 4) retains the bottom green cluster but divides the upper observations into purple diamonds on the left, cyan triangles in the middle right, and red squares at the upper right. Yellow-filled, colored-outlined circles mark cluster centroids, with dashed lines connecting observations to their respective centroids." width="960">
 </div>
 </figure>
 </div>
@@ -807,13 +812,13 @@ Figure&nbsp;26.6: text
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>pch <span class="ot">&lt;-</span> pchs[dx<span class="sc">$</span>abb]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The Eastern Deer Mouse (<em>Peromyscus maniculatus</em>) and the White-Footed Mouse (<em>P. leucopus</em>) are two morphologically similar species of mice that are widespread throughout much of North America. Among mammalogists, they are notoriously difficult to tell apart in the field. This is a problem, because they are both habitat generalists and co-occur in many places (<span class="citation" data-cites="light2021morphological">Light <em>et al.</em> (<a href="#ref-light2021morphological" role="doc-biblioref">2021</a>)</span>).</p>
-<div id="fig-clust-2mice" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" alt="The Eastern Deer Mouse (Peromyscus maniculatus) and the White-Footed Mouse (P. leucopus).">
+<div id="fig-clust-2mice" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The Eastern Deer Mouse (Peromyscus maniculatus) and the White-Footed Mouse (P. leucopus)." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-clust-2mice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;26.7: The Eastern Deer Mouse (<em>Peromyscus maniculatus</em>) and the White-Footed Mouse (<em>P. leucopus</em>). Both photos by the author.
 </figcaption>
 <div aria-describedby="fig-clust-2mice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/cluster-mice.jpg" class="img-fluid figure-img" data-fig.align="center" alt="The Eastern Deer Mouse (Peromyscus maniculatus) and the White-Footed Mouse (P. leucopus).">
+<img src="../images/cluster-mice.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The Eastern Deer Mouse (Peromyscus maniculatus) and the White-Footed Mouse (P. leucopus).">
 </div>
 </figure>
 </div>
@@ -847,13 +852,13 @@ Figure&nbsp;26.7: The Eastern Deer Mouse (<em>Peromyscus maniculatus</em>) and t
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">xlab=</span><span class="st">"Clusters (k)"</span>,</span>
 <span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">ylab=</span><span class="st">"Total WSS"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-kmeans-mice1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-kmeans-mice1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Line graph showing total within-cluster sum of squares (WSS) against the number of clusters (K) from 2 to 8. WSS decreases from approximately 262,000 at K = 2 to 163,000 at K = 3, 127,000 at K = 4, and 102,000 at K = 5. The decline becomes progressively smaller, reaching approximately 73,000 at K = 8, without a distinct breakpoint.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-mice1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.8: text
+Figure&nbsp;26.8: Elbow plot showing the relationship between the number of clusters (K) and total within-cluster sum of squares (WSS) for K-means clustering of morphological measurements. WSS decreases as K increases, but the absence of a clearly defined elbow makes it difficult to identify an optimal number of clusters.
 </figcaption>
 <div aria-describedby="fig-kmeans-mice1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-kmeans-mice1-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch26_files/figure-html/fig-kmeans-mice1-1.png" class="img-fluid figure-img" alt="Line graph showing total within-cluster sum of squares (WSS) against the number of clusters (K) from 2 to 8. WSS decreases from approximately 262,000 at K = 2 to 163,000 at K = 3, 127,000 at K = 4, and 102,000 at K = 5. The decline becomes progressively smaller, reaching approximately 73,000 at K = 8, without a distinct breakpoint." width="768">
 </div>
 </figure>
 </div>
@@ -896,13 +901,13 @@ Cumulative Proportion   0.9038  0.98725 0.996311 1.000000</code></pre>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend=</span>use.spp,</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span>cols, <span class="at">pch=</span>pchs, <span class="at">cex=</span><span class="fl">1.4</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-kmeans-mice-pca" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-kmeans-mice-pca" class="quarto-float quarto-figure quarto-figure-center anchored" alt="PCA scatterplot showing P. leucopus as red open circles and P. maniculatus as blue open triangles. PC1 (horizontal axis) explains 90.4% of the variance, and PC2 (vertical axis) explains 8.3%. Most observations form a dense, horizontally elongated cloud centered near the origin. P. leucopus observations are concentrated toward positive PC1 values and slightly negative PC2 values, while P. maniculatus observations tend toward negative PC1 values and slightly positive PC2 values. The two species overlap extensively, with several outlying observations.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-mice-pca-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.9: text
+Figure&nbsp;26.9: Principal components analysis (PCA) of four morphological measurements from Peromyscus leucopus and P. maniculatus collected at NEON sites. The first two principal components explain 98.7% of the total variation. Although the species differ somewhat along PC1, their distributions overlap substantially, indicating that the morphological measurements do not clearly separate the two species.
 </figcaption>
 <div aria-describedby="fig-kmeans-mice-pca-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-kmeans-mice-pca-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch26_files/figure-html/fig-kmeans-mice-pca-1.png" class="img-fluid figure-img" alt="PCA scatterplot showing P. leucopus as red open circles and P. maniculatus as blue open triangles. PC1 (horizontal axis) explains 90.4% of the variance, and PC2 (vertical axis) explains 8.3%. Most observations form a dense, horizontally elongated cloud centered near the origin. P. leucopus observations are concentrated toward positive PC1 values and slightly negative PC2 values, while P. maniculatus observations tend toward negative PC1 values and slightly positive PC2 values. The two species overlap extensively, with several outlying observations." width="768">
 </div>
 </figure>
 </div>
@@ -963,13 +968,13 @@ Figure&nbsp;26.9: text
 <span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, zz[,<span class="dv">1</span>], zz[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
 <span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(sc<span class="sc">*</span>zz[,<span class="dv">1</span>], sc<span class="sc">*</span>zz[,<span class="dv">2</span>], <span class="fu">rownames</span>(zz), <span class="at">adj=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-kmeans-mice-pca4" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-kmeans-mice-pca4" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Four-panel PCA scatterplot with PC1 (90.4% of variation) on the horizontal axis and PC2 (8.3%) on the vertical axis. The upper-left panel shows P. leucopus as red circles and P. maniculatus as blue triangles, with substantial overlap between species. The remaining panels show K-means solutions with four, five, and six clusters, distinguished by different colors and symbols. In each clustering solution, observations form approximately vertical bands arranged along PC1, with increasing numbers of narrower bands as K increases. Black arrows representing morphological measurements point predominantly toward positive PC1 values, indicating that the dominant axis reflects variation in overall body size.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-mice-pca4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.10: text
+Figure&nbsp;26.10: Principal components analysis (PCA) of four morphological measurements from Peromyscus leucopus and P. maniculatus, showing species identities (upper left) and K-means clustering solutions with four (upper right), five (lower left), and six (lower right) clusters. Arrows indicate the contributions of the four morphological measurements to the principal components. Increasing the number of clusters progressively subdivides observations along PC1, which explains 90.4% of the total variation, rather than recovering the two species as distinct groups.
 </figcaption>
 <div aria-describedby="fig-kmeans-mice-pca4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-kmeans-mice-pca4-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch26_files/figure-html/fig-kmeans-mice-pca4-1.png" class="img-fluid figure-img" alt="Four-panel PCA scatterplot with PC1 (90.4% of variation) on the horizontal axis and PC2 (8.3%) on the vertical axis. The upper-left panel shows P. leucopus as red circles and P. maniculatus as blue triangles, with substantial overlap between species. The remaining panels show K-means solutions with four, five, and six clusters, distinguished by different colors and symbols. In each clustering solution, observations form approximately vertical bands arranged along PC1, with increasing numbers of narrower bands as K increases. Black arrows representing morphological measurements point predominantly toward positive PC1 values, indicating that the dominant axis reflects variation in overall body size." width="768">
 </div>
 </figure>
 </div>
@@ -1016,13 +1021,13 @@ Figure&nbsp;26.10: text
 <span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, zz[,<span class="dv">1</span>], zz[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
 <span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(sc<span class="sc">*</span>zz[,<span class="dv">1</span>], sc<span class="sc">*</span>zz[,<span class="dv">2</span>], <span class="fu">rownames</span>(zz), <span class="at">adj=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-kmeans-mice-pca4-2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-kmeans-mice-pca4-2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Four-panel PCA scatterplot with PC1 (90.4% of variation) on the horizontal axis and PC3 (4.2%) on the vertical axis. The upper-left panel shows P. leucopus as red open circles and P. maniculatus as blue open triangles, with substantial overlap. The other three panels show K-means solutions with four, five, and six clusters, distinguished by colors and symbols. In each solution, clusters form approximately vertical bands along PC1, with considerable overlap along PC3. Black arrows representing the four morphological measurements point predominantly toward positive PC1 values, with little displacement along PC3.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-mice-pca4-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.11: text
+Figure&nbsp;26.11: Principal components analysis (PCA) of four morphological measurements from Peromyscus leucopus and P. maniculatus, showing species identities (upper left) and K-means clustering solutions with four (upper right), five (lower left), and six (lower right) clusters. PC1 explains 90.4% of the total variation, while PC3 explains 4.2%. Increasing the number of clusters progressively subdivides observations along PC1, with little apparent separation along PC3. The clustering primarily reflects variation in overall body size rather than species identity.
 </figcaption>
 <div aria-describedby="fig-kmeans-mice-pca4-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-kmeans-mice-pca4-2-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch26_files/figure-html/fig-kmeans-mice-pca4-2-1.png" class="img-fluid figure-img" alt="Four-panel PCA scatterplot with PC1 (90.4% of variation) on the horizontal axis and PC3 (4.2%) on the vertical axis. The upper-left panel shows P. leucopus as red open circles and P. maniculatus as blue open triangles, with substantial overlap. The other three panels show K-means solutions with four, five, and six clusters, distinguished by colors and symbols. In each solution, clusters form approximately vertical bands along PC1, with considerable overlap along PC3. Black arrows representing the four morphological measurements point predominantly toward positive PC1 values, with little displacement along PC3." width="768">
 </div>
 </figure>
 </div>
@@ -1068,13 +1073,13 @@ Figure&nbsp;26.11: text
 <span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, zz[,<span class="dv">1</span>], zz[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
 <span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(sc<span class="sc">*</span>zz[,<span class="dv">1</span>], sc<span class="sc">*</span>zz[,<span class="dv">2</span>], <span class="fu">rownames</span>(zz), <span class="at">adj=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-kmeans-mice-pca4-3" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-kmeans-mice-pca4-3" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Four-panel PCA scatterplot with PC2 (8.3% of variation) on the horizontal axis and PC3 (4.2%) on the vertical axis. The upper-left panel shows P. leucopus as red open circles and P. maniculatus as blue open triangles, with extensive overlap. The remaining panels show K-means solutions with four, five, and six clusters, distinguished by colors and symbols. Unlike plots including PC1, the clusters overlap extensively in all three panels, forming dense clouds centered near the origin. Black arrows representing the four morphological measurements are concentrated near the center of each panel.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-mice-pca4-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.12: text
+Figure&nbsp;26.12: Principal components analysis (PCA) of four morphological measurements from Peromyscus leucopus and P. maniculatus, showing species identities (upper left) and K-means clustering solutions with four (upper right), five (lower left), and six (lower right) clusters. PC2 explains 8.3% of the total variation, while PC3 explains 4.2%. Neither species nor the K-means clusters show clear separation along these axes, indicating that the clustering primarily reflects variation along PC1 rather than differences in the secondary components of morphological variation.
 </figcaption>
 <div aria-describedby="fig-kmeans-mice-pca4-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-kmeans-mice-pca4-3-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch26_files/figure-html/fig-kmeans-mice-pca4-3-1.png" class="img-fluid figure-img" alt="Four-panel PCA scatterplot with PC2 (8.3% of variation) on the horizontal axis and PC3 (4.2%) on the vertical axis. The upper-left panel shows P. leucopus as red open circles and P. maniculatus as blue open triangles, with extensive overlap. The remaining panels show K-means solutions with four, five, and six clusters, distinguished by colors and symbols. Unlike plots including PC1, the clusters overlap extensively in all three panels, forming dense clouds centered near the origin. Black arrows representing the four morphological measurements are concentrated near the center of each panel." width="768">
 </div>
 </figure>
 </div>
@@ -1120,13 +1125,13 @@ Figure&nbsp;26.12: text
 <span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend=</span><span class="fu">paste</span>(<span class="st">"Group"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>),</span>
 <span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span><span class="fu">rainbow</span>(<span class="dv">2</span>), <span class="at">pch=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-kmeans-mice-pca2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-kmeans-mice-pca2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Four-panel PCA scatterplot showing species identities and a two-cluster K-means solution. The upper-left panel shows P. leucopus as red open circles and P. maniculatus as blue open triangles, with substantial overlap. The upper-right panel shows two K-means clusters, represented by red squares and cyan circles, separated along PC1 (90.4% of variation) but overlapping along PC2 (8.3%). The lower-left panel shows the same clusters plotted against PC1 and PC3 (4.2%), again revealing separation primarily along PC1. The lower-right panel plots PC2 against PC3, showing extensive overlap between the two clusters.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-kmeans-mice-pca2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.13: text
+Figure&nbsp;26.13: Principal components analysis (PCA) of four morphological measurements from Peromyscus leucopus and P. maniculatus, comparing species identities (upper left) with a K-means clustering solution containing two clusters (upper right and lower panels). The two clusters are separated primarily along PC1, which explains 90.4% of the total variation, with little separation along PC2 or PC3. Although the clustering partially distinguishes the two species, it primarily reflects variation in overall body size rather than species identity.
 </figcaption>
 <div aria-describedby="fig-kmeans-mice-pca2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-kmeans-mice-pca2-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch26_files/figure-html/fig-kmeans-mice-pca2-1.png" class="img-fluid figure-img" alt="Four-panel PCA scatterplot showing species identities and a two-cluster K-means solution. The upper-left panel shows P. leucopus as red open circles and P. maniculatus as blue open triangles, with substantial overlap. The upper-right panel shows two K-means clusters, represented by red squares and cyan circles, separated along PC1 (90.4% of variation) but overlapping along PC2 (8.3%). The lower-left panel shows the same clusters plotted against PC1 and PC3 (4.2%), again revealing separation primarily along PC1. The lower-right panel plots PC2 against PC3, showing extensive overlap between the two clusters." width="768">
 </div>
 </figure>
 </div>
@@ -1153,13 +1158,13 @@ Figure&nbsp;26.13: text
 </ol>
 <p>The important question is how to calculate distances between clusters containing multiple observations. Several methods are available, and different methods can produce different clustering results. <span class="citation" data-cites="legendre2012numerical">Legendre and Legendre (<a href="#ref-legendre2012numerical" role="doc-biblioref">2012</a>)</span> note that many hierarchical agglomerative clustering methods are actually special cases of a general method (<span class="citation" data-cites="lance1966generalized">Lance and Williams (<a href="#ref-lance1966generalized" role="doc-biblioref">1966</a>)</span>, <span class="citation" data-cites="lance1967general">Lance and Williams (<a href="#ref-lance1967general" role="doc-biblioref">1967</a>)</span>). Rather than recalculating distances from all the individual observations after each merger, this method uses distances already calculated in previous steps.</p>
 <p>In <a href="#fig-clust-lance1966" class="quarto-xref">Figure&nbsp;<span>26.14</span></a>, clusters <strong>b</strong> and <strong>c</strong> have just been merged into a new cluster, <strong>bc</strong>. We already know the distances between clusters <strong>a</strong> and <strong>b</strong>, between <strong>a</strong> and <strong>c</strong>, and between <strong>b</strong> and <strong>c</strong>. The Lance–Williams equation uses these distances, along with the numbers of observations in each cluster, to calculate the new distance <span class="math inline">\(d\left(\mathbf{a},\mathbf{bc}\right)\)</span>.</p>
-<div id="fig-clust-lance1966" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" alt="text.">
+<div id="fig-clust-lance1966" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-clust-lance1966-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;26.14: In combinatorial hierarchical agglomerative clustering methods, the distances between already-existing clusters, along with their sample sizes, are used to determine the next cluster. Here cluster <strong>bc</strong> is already formed from combining clusters <strong>b</strong> and <strong>c</strong>. Cluster <strong>a</strong> is being considered for addition to cluster <strong>bc</strong> to form cluster <strong>abc</strong>. The distance between <strong>a</strong> and <strong>bc</strong>, <span class="math inline">\(d\left(\mathbf{a},\mathbf{bc}\right)\)</span>, is a function of the distances between <strong>a</strong> and <strong>b</strong>, <strong>a</strong> and <strong>c</strong>, <strong>b</strong> and <strong>c</strong>, and their respective sample sizes.
 </figcaption>
 <div aria-describedby="fig-clust-lance1966-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/cluster-lance1966.jpg" class="img-fluid figure-img" data-fig.align="center" alt="text.">
+<img src="../images/cluster-lance1966.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="text.">
 </div>
 </figure>
 </div>
@@ -1168,13 +1173,13 @@ Figure&nbsp;26.14: In combinatorial hierarchical agglomerative clustering method
 <section id="sec-clust-hier-chain" class="level3" data-number="26.3.2">
 <h3 data-number="26.3.2" class="anchored" data-anchor-id="sec-clust-hier-chain"><span class="header-section-number">26.3.2</span> Chaining</h3>
 <p>One potential pitfall in hierarchical clustering is a phenomenon called <strong>chaining</strong>. This is a situation where new samples are added to a pre-existing cluster one at a time, producing a “chain” of mostly pairwise connections going down one side of the dendrogram. Strong chaining in a dendrogram may indicate a continuous gradient, not a clear partition between groups. Chaining can also arise from outliers, noise, or observations that bridge otherwise distinct groups. Single-linkage agglomeration is the most vulnerable to chaining; Ward’s method and complete linkage are much less susceptible.</p>
-<div id="fig-clust-chain" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig.align="center" alt="text.">
+<div id="fig-clust-chain" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Schematic dendrogram showing 13 observations labeled A through M. On the left, samples B and C form one pair, while D and E form another; these pairs subsequently merge, producing a relatively balanced branching structure highlighted by a blue bracket labeled Partitioning into groups. On the right, samples L and M merge first, followed sequentially by K, J, I, H, and G, forming a long, asymmetrical branching structure highlighted by a red bracket labeled Possible chain. Sample F joins the left cluster at a higher level, and sample A joins the entire tree last." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-clust-chain-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.15: Text.
+Figure&nbsp;26.15: Hypothetical hierarchical clustering dendrogram illustrating the difference between relatively balanced branching and possible chaining. Samples B–E on the left form two pairs that subsequently merge into a larger cluster. On the right, samples G–M exhibit a more sequential pattern of mergers, with individual observations repeatedly joining an existing cluster. This pattern, known as chaining, may reflect continuous variation rather than clearly separated groups.
 </figcaption>
 <div aria-describedby="fig-clust-chain-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/cluster-chaining.jpg" class="img-fluid figure-img" data-fig.align="center" alt="text.">
+<img src="../images/cluster-chaining.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Schematic dendrogram showing 13 observations labeled A through M. On the left, samples B and C form one pair, while D and E form another; these pairs subsequently merge, producing a relatively balanced branching structure highlighted by a blue bracket labeled Partitioning into groups. On the right, samples L and M merge first, followed sequentially by K, J, I, H, and G, forming a long, asymmetrical branching structure highlighted by a red bracket labeled Possible chain. Sample F joins the left cluster at a higher level, and sample A joins the entire tree last.">
 </div>
 </figure>
 </div>
@@ -1185,8 +1190,8 @@ Figure&nbsp;26.15: Text.
 <section id="sec-clust-hier-methods-single" class="level4" data-number="26.3.3.1">
 <h4 data-number="26.3.3.1" class="anchored" data-anchor-id="sec-clust-hier-methods-single"><span class="header-section-number">26.3.3.1</span> Hierarchical clustering with single linkage</h4>
 <p>One of the simplest hierarchical clustering methods is to combine samples based on the shortest pairwise dissimilarities. This is called <strong>single linkage</strong>, or sometimes <strong>nearest neighbor</strong> clustering. “Nearest neighbor” can refer to other methods as well, so we’ll refer to this clustering method as “single linkage”. The basic idea is to merge the two clusters separated by the smallest distance between any pair of observations, one from each cluster. Because the distance between clusters depends only on their closest observations, individual samples can be added to existing clusters one at a time, producing the phenomenon of chaining.</p>
-<section id="sec-clust-hier-methods-single-ex" class="level5">
-<h5 class="anchored" data-anchor-id="sec-clust-hier-methods-single-ex">Example using NEON data</h5>
+<section id="sec-clust-hier-methods-single-ex" class="level5" data-number="26.3.3.1.1">
+<h5 data-number="26.3.3.1.1" class="anchored" data-anchor-id="sec-clust-hier-methods-single-ex"><span class="header-section-number">26.3.3.1.1</span> Example using NEON data</h5>
 <p>Let’s revisit the NEON small mammal data. Download the <a href="../datasets/data-neon-captures-sites.csv">site-level capture dataset</a> and the <a href="../datasets/data-neon-metadata-site.csv">site metadata dataset</a> and put them in your working directory.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>cap <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-captures-site.csv"</span>)</span>
@@ -1224,13 +1229,13 @@ Figure&nbsp;26.15: Text.
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(clust1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-clust-single" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-clust-single" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Hierarchical clustering dendrogram showing 46 NEON field sites labeled by their four-letter abbreviations. The vertical axis represents Sørensen dissimilarity, ranging from 0 to approximately 0.7. Several pairs of sites merge at low dissimilarities, including GUAN and LAJA, ABBY and WREF, and DELA and LENO. Larger clusters form at intermediate heights, with many eastern and central North American sites joining into a large group around 0.5. The overall tree is asymmetrical, with several individual sites and small clusters joining existing groups at progressively greater heights, illustrating possible chaining under single-linkage clustering.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-clust-single-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.16: text
+Figure&nbsp;26.16: Hierarchical agglomerative clustering of 46 NEON terrestrial field sites using single linkage (nearest-neighbor clustering) and Sørensen dissimilarity calculated from species presence/absence data. The height of each merger represents the dissimilarity between the two clusters being joined. Several geographically related sites cluster together at relatively low dissimilarities, while the dendrogram also exhibits chaining, with individual sites or small groups joining larger clusters sequentially.
 </figcaption>
 <div aria-describedby="fig-clust-single-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-clust-single-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch26_files/figure-html/fig-clust-single-1.png" class="img-fluid figure-img" alt="Hierarchical clustering dendrogram showing 46 NEON field sites labeled by their four-letter abbreviations. The vertical axis represents Sørensen dissimilarity, ranging from 0 to approximately 0.7. Several pairs of sites merge at low dissimilarities, including GUAN and LAJA, ABBY and WREF, and DELA and LENO. Larger clusters form at intermediate heights, with many eastern and central North American sites joining into a large group around 0.5. The overall tree is asymmetrical, with several individual sites and small clusters joining existing groups at progressively greater heights, illustrating possible chaining under single-linkage clustering." width="768">
 </div>
 </figure>
 </div>
@@ -1290,13 +1295,13 @@ Figure&nbsp;26.16: text
 <span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(xy, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-single-northamerica" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-single-northamerica" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Map of North America showing 46 NEON terrestrial field sites as black points, with thin gray lines connecting sites according to a single linkage tree based on Sørensen dissimilarity. Sites are distributed across Alaska, the contiguous United States, and Puerto Rico. Many geographically nearby sites are connected, including sites within Alaska, the northeastern United States, and the Southeast. Several long lines connect distant regions, including Alaska to the contiguous United States and the southeastern United States to Puerto Rico, indicating compositional similarities between geographically distant sites.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-single-northamerica-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.17: text
+Figure&nbsp;26.17: Geographic representation of a single linkage tree connecting 46 NEON terrestrial field sites based on Sørensen dissimilarity in species presence/absence. Points indicate sampling locations, and lines connect pairs of sites selected by the single linkage tree algorithm. The connections represent similarities in species composition rather than geographic proximity, although many nearby sites are linked, suggesting a geographic component to community similarity.
 </figcaption>
 <div aria-describedby="fig-single-northamerica-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-single-northamerica-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch26_files/figure-html/fig-single-northamerica-1.png" class="img-fluid figure-img" alt="Map of North America showing 46 NEON terrestrial field sites as black points, with thin gray lines connecting sites according to a single linkage tree based on Sørensen dissimilarity. Sites are distributed across Alaska, the contiguous United States, and Puerto Rico. Many geographically nearby sites are connected, including sites within Alaska, the northeastern United States, and the Southeast. Several long lines connect distant regions, including Alaska to the contiguous United States and the southeastern United States to Puerto Rico, indicating compositional similarities between geographically distant sites." width="768">
 </div>
 </figure>
 </div>
@@ -1323,13 +1328,13 @@ Figure&nbsp;26.17: text
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Cophenetic distance"</span>)</span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">lm</span>(<span class="fu">as.vector</span>(cd) <span class="sc">~</span> <span class="fu">as.vector</span>(D)), <span class="at">col =</span> <span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-single-cophenetic" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-single-cophenetic" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Scatterplot of Sørensen dissimilarity on the horizontal axis (0–1) and cophenetic distance on the vertical axis (0–0.7). Open black circles represent pairwise comparisons among 46 NEON sites. Points generally increase from lower left to upper right, but form several prominent horizontal bands at cophenetic distances near 0.3, 0.5, 0.6, and 0.65. A red fitted regression line slopes upward through the data. Considerable vertical scatter is visible, particularly at higher Sørensen dissimilarities.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-single-cophenetic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.18: text
+Figure&nbsp;26.18: Relationship between original Sørensen dissimilarities and cophenetic distances from single-linkage hierarchical clustering of 46 NEON terrestrial field sites. Each point represents a pair of sites, with the cophenetic distance indicating the height at which the two sites first join the same cluster in the dendrogram. The red line shows the fitted linear regression. The positive relationship indicates that the dendrogram preserves some of the original dissimilarity structure, although considerable scatter suggests imperfect representation.
 </figcaption>
 <div aria-describedby="fig-single-cophenetic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-single-cophenetic-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch26_files/figure-html/fig-single-cophenetic-1.png" class="img-fluid figure-img" alt="Scatterplot of Sørensen dissimilarity on the horizontal axis (0–1) and cophenetic distance on the vertical axis (0–0.7). Open black circles represent pairwise comparisons among 46 NEON sites. Points generally increase from lower left to upper right, but form several prominent horizontal bands at cophenetic distances near 0.3, 0.5, 0.6, and 0.65. A red fitted regression line slopes upward through the data. Considerable vertical scatter is visible, particularly at higher Sørensen dissimilarities." width="768">
 </div>
 </figure>
 </div>
@@ -1344,13 +1349,13 @@ Figure&nbsp;26.18: text
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(clust1)</span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rect.hclust</span>(clust1, <span class="at">k =</span> <span class="dv">4</span>, <span class="at">border =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-single-groups" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-single-groups" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Hierarchical clustering dendrogram with 46 NEON field sites labeled by four-letter abbreviations. The vertical axis shows clustering height from 0 to 0.7. Four colored rectangles identify clusters: a red rectangle around GUAN and LAJA; a green rectangle around SJER, SOAP, TEAK, ABBY, and WREF; a blue rectangle around YELL, NIWO, and RMNP; and a large cyan rectangle encompassing the remaining 36 sites. The largest cluster contains many smaller branches that merge at progressively increasing heights, while the other three clusters remain separate until relatively high dissimilarity levels.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-single-groups-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.19: text
+Figure&nbsp;26.19: Single-linkage hierarchical clustering of 46 NEON terrestrial field sites based on Sørensen dissimilarity in species presence/absence. Colored rectangles indicate four groups identified by cutting the dendrogram at approximately 0.64. Three relatively small clusters contain sites in Puerto Rico, the Pacific coastal mountains, and the Rocky Mountains, while the fourth contains the remaining 36 sites. The highly unequal cluster sizes illustrate how single-linkage clustering can produce large, heterogeneous groups.
 </figcaption>
 <div aria-describedby="fig-single-groups-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-single-groups-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch26_files/figure-html/fig-single-groups-1.png" class="img-fluid figure-img" alt="Hierarchical clustering dendrogram with 46 NEON field sites labeled by four-letter abbreviations. The vertical axis shows clustering height from 0 to 0.7. Four colored rectangles identify clusters: a red rectangle around GUAN and LAJA; a green rectangle around SJER, SOAP, TEAK, ABBY, and WREF; a blue rectangle around YELL, NIWO, and RMNP; and a large cyan rectangle encompassing the remaining 36 sites. The largest cluster contains many smaller branches that merge at progressively increasing heights, while the other three clusters remain separate until relatively high dissimilarity levels." width="768">
 </div>
 </figure>
 </div>
@@ -1363,13 +1368,13 @@ Figure&nbsp;26.19: text
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(clust1)</span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rect.hclust</span>(clust1, <span class="at">k =</span> <span class="dv">7</span>, <span class="at">border =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">8</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-single-groups2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-single-groups2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Hierarchical clustering dendrogram showing 46 NEON field sites labeled by four-letter abbreviations, with clustering height ranging from 0 to 0.7 on the vertical axis. Six colored rectangles identify clusters: GUAN and LAJA (red); SJER and SOAP (green); TEAK, ABBY, and WREF (blue); YELL, NIWO, and RMNP (cyan); BARR alone (magenta); and JORN, SRER, TOOL, and the remaining sites (orange and gray rectangles, respectively). The largest cluster contains most of the sites and exhibits numerous sequential mergers, while five smaller clusters remain distinct until relatively high dissimilarity levels.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-single-groups2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.20: text
+Figure&nbsp;26.20: Single-linkage hierarchical clustering of 46 NEON terrestrial field sites based on Sørensen dissimilarity in species presence/absence. Colored rectangles identify six groups obtained by cutting the dendrogram at approximately 0.60. Compared with the four-group solution, the Pacific coastal mountain sites are divided into two clusters, and the Arctic site BARR forms its own cluster. However, most sites remain together in one large group, illustrating the tendency of single-linkage clustering to produce unevenly sized clusters.
 </figcaption>
 <div aria-describedby="fig-single-groups2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-single-groups2-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch26_files/figure-html/fig-single-groups2-1.png" class="img-fluid figure-img" alt="Hierarchical clustering dendrogram showing 46 NEON field sites labeled by four-letter abbreviations, with clustering height ranging from 0 to 0.7 on the vertical axis. Six colored rectangles identify clusters: GUAN and LAJA (red); SJER and SOAP (green); TEAK, ABBY, and WREF (blue); YELL, NIWO, and RMNP (cyan); BARR alone (magenta); and JORN, SRER, TOOL, and the remaining sites (orange and gray rectangles, respectively). The largest cluster contains most of the sites and exhibits numerous sequential mergers, while five smaller clusters remain distinct until relatively high dissimilarity levels." width="768">
 </div>
 </figure>
 </div>
@@ -1382,13 +1387,13 @@ Figure&nbsp;26.20: text
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(clust1)</span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rect.hclust</span>(clust1, <span class="at">k =</span> <span class="dv">12</span>, <span class="at">border =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">13</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-single-groups12" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-single-groups12" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Hierarchical clustering dendrogram showing 46 NEON terrestrial field sites labeled by four-letter abbreviations, with clustering height ranging from 0 to 0.7 on the vertical axis. Twelve colored rectangles identify groups at a clustering height of approximately 0.49. Small clusters on the left include Puerto Rican sites GUAN and LAJA, Pacific Northwest sites ABBY and WREF, Rocky Mountain sites YELL, NIWO, and RMNP, and the isolated Arctic site BARR. Larger clusters toward the right include groups of Alaskan, Great Plains, southeastern, and eastern North American sites. Cluster sizes vary considerably, with several small groups and two relatively large groups.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-single-groups12-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.21: text
+Figure&nbsp;26.21: Single-linkage hierarchical clustering of 46 NEON terrestrial field sites based on Sørensen dissimilarity in species presence/absence. Colored rectangles identify 12 groups obtained by cutting the dendrogram at approximately 0.49. Compared with the four- and six-group solutions, the 12-group solution reveals more geographically and ecologically recognizable clusters, including sites in Alaska, the Rocky Mountains, the Pacific Northwest, the southwestern deserts, and the southeastern United States.
 </figcaption>
 <div aria-describedby="fig-single-groups12-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-single-groups12-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch26_files/figure-html/fig-single-groups12-1.png" class="img-fluid figure-img" alt="Hierarchical clustering dendrogram showing 46 NEON terrestrial field sites labeled by four-letter abbreviations, with clustering height ranging from 0 to 0.7 on the vertical axis. Twelve colored rectangles identify groups at a clustering height of approximately 0.49. Small clusters on the left include Puerto Rican sites GUAN and LAJA, Pacific Northwest sites ABBY and WREF, Rocky Mountain sites YELL, NIWO, and RMNP, and the isolated Arctic site BARR. Larger clusters toward the right include groups of Alaskan, Great Plains, southeastern, and eastern North American sites. Cluster sizes vary considerably, with several small groups and two relatively large groups." width="768">
 </div>
 </figure>
 </div>
@@ -1530,13 +1535,13 @@ Table&nbsp;26.2: Geographic and ecological characterization of 12 clusters of NE
 <span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomleft"</span>, <span class="at">legend=</span><span class="fu">paste</span>(<span class="st">"Group"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>),</span>
 <span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pchs, <span class="at">col=</span>cols, <span class="at">cex=</span><span class="fl">1.3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-single-map12" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-single-map12" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Map of North America showing 46 NEON terrestrial field sites distributed across Alaska, the contiguous United States, and Puerto Rico. Sites are represented by 12 combinations of colored symbols indicating their cluster assignments. Several groups are geographically concentrated, including olive triangles in interior Alaska, blue circles in the southwestern interior, green diamonds in the Great Plains, and green crosses in the southeastern United States. Gold circles represent a larger group distributed across eastern and central North America. Gray lines connect sites according to the hierarchical clustering structure, including several long connections between distant regions. A legend on the left identifies the 12 groups.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-single-map12-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.22: text
+Figure&nbsp;26.22: Geographic distribution of 12 clusters of NEON terrestrial field sites identified using single-linkage hierarchical clustering and Sørensen dissimilarity in species presence/absence. Colors and symbols distinguish clusters, while gray lines illustrate the hierarchical relationships between sites projected onto geographic space. Many clusters correspond to recognizable geographic or ecological regions, although some geographically distant sites belong to the same cluster and nearby sites sometimes belong to different clusters.
 </figcaption>
 <div aria-describedby="fig-single-map12-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-single-map12-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch26_files/figure-html/fig-single-map12-1.png" class="img-fluid figure-img" alt="Map of North America showing 46 NEON terrestrial field sites distributed across Alaska, the contiguous United States, and Puerto Rico. Sites are represented by 12 combinations of colored symbols indicating their cluster assignments. Several groups are geographically concentrated, including olive triangles in interior Alaska, blue circles in the southwestern interior, green diamonds in the Great Plains, and green crosses in the southeastern United States. Gold circles represent a larger group distributed across eastern and central North America. Gray lines connect sites according to the hierarchical clustering structure, including several long connections between distant regions. A legend on the left identifies the 12 groups." width="768">
 </div>
 </figure>
 </div>
@@ -1545,7 +1550,7 @@ Figure&nbsp;26.22: text
 <p>We can see from the map that while the groups are certainly associated with geography, they are not totally determined by it. Some of the groups appear to reflect biogeographic regions rather than geographic proximity alone. The Alaskan sites, Rocky Mountain sites, southwestern deserts, and southeastern sites form fairly recognizable groups. Meanwhile, some geographically close sites belong to different clusters, presumably because their habitats or species assemblages differ.</p>
 <p>There are two particularly interesting interpretations:</p>
 <ul>
-<li>Geographic distance-decay: Nearby sites tend to share more species, producing geographically coherent clusters. We could check on that with a scatterplot of Sørensen dissimilarity and geographic distance. Hey, why not? (see below).</li>
+<li>Geographic distance-decay: Nearby sites tend to share more species, producing geographically coherent clusters. We could check on that with a scatterplot of Sørensen dissimilarity and geographic distance. Hey, why not? (<a href="#fig-single-sor-vs-geo" class="quarto-xref">Figure&nbsp;<span>26.23</span></a>).</li>
 <li>Environmental filtering: Sites with similar environments may share species even when separated by substantial distances. Conversely, nearby sites in different habitats may have quite different assemblages.</li>
 </ul>
 <p>Of course, the map alone can’t distinguish those mechanisms.</p>
@@ -1558,13 +1563,13 @@ Figure&nbsp;26.22: text
 <span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"Geographic distance (km)"</span>,</span>
 <span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">log=</span><span class="st">"x"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-single-groups4" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-single-sor-vs-geo" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Scatterplot of pairwise geographic distance versus Sørensen dissimilarity for NEON terrestrial field sites. The X-axis shows geographic distance from approximately 10 to 10,000 km on a logarithmic scale, and the Y-axis shows Sørensen dissimilarity from 0 to 1. Open circles represent pairs of sites. At short geographic distances, dissimilarities are generally low but variable. At greater distances, most pairs exhibit high dissimilarity, with many reaching the maximum value of 1. The overall pattern is a positive, nonlinear association between geographic distance and compositional dissimilarity.">
 <figure class="quarto-float quarto-float-fig figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-single-groups4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.23: text
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-single-sor-vs-geo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26.23: Relationship between geographic distance and Sørensen dissimilarity in species composition among 46 NEON terrestrial field sites. Each point represents a pair of sites, with geographic distance (km, logarithmic scale) on the X-axis and Sørensen dissimilarity on the Y-axis. Species composition generally becomes more dissimilar as geographic distance increases, suggesting a pattern of distance decay in community similarity. However, considerable variation exists among site pairs, indicating that geographic distance alone does not explain differences in species composition.
 </figcaption>
-<div aria-describedby="fig-single-groups4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch26_files/figure-html/fig-single-groups4-1.png" class="img-fluid figure-img" alt="text" width="768">
+<div aria-describedby="fig-single-sor-vs-geo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch26_files/figure-html/fig-single-sor-vs-geo-1.png" class="img-fluid figure-img" alt="Scatterplot of pairwise geographic distance versus Sørensen dissimilarity for NEON terrestrial field sites. The X-axis shows geographic distance from approximately 10 to 10,000 km on a logarithmic scale, and the Y-axis shows Sørensen dissimilarity from 0 to 1. Open circles represent pairs of sites. At short geographic distances, dissimilarities are generally low but variable. At greater distances, most pairs exhibit high dissimilarity, with many reaching the maximum value of 1. The overall pattern is a positive, nonlinear association between geographic distance and compositional dissimilarity." width="768">
 </div>
 </figure>
 </div>
@@ -1584,8 +1589,8 @@ Figure&nbsp;26.23: text
 <h4 data-number="26.3.3.2" class="anchored" data-anchor-id="sec-clust-hier-methods-wards"><span class="header-section-number">26.3.3.2</span> Hierarchical clustering with Ward’s method</h4>
 <p><strong>Ward’s method</strong> is another hierarchical agglomerative technique, which combines clusters to <em>minimize the increase in within-cluster variation</em>, measured by the sum of squared deviations from cluster means. In other words, Ward’s method merges the two clusters that will produce the smallest increase in overall within-cluster variation, while single linkage merges the two clusters containing the most similar pair of observations.</p>
 <p>For an analogy, think of buying clothes. The single-linkage approach is to buy a new shirt that is most similar to at least one shirt you already own. The Ward’s method approach is to buy a new shirt that makes the smallest increase in the overall variation among the shirts in your wardrobe.</p>
-<section id="sec-clust-hier-methods-wards-ex" class="level5">
-<h5 class="anchored" data-anchor-id="sec-clust-hier-methods-wards-ex">Example using NEON data</h5>
+<section id="sec-clust-hier-methods-wards-ex" class="level5" data-number="26.3.3.2.1">
+<h5 data-number="26.3.3.2.1" class="anchored" data-anchor-id="sec-clust-hier-methods-wards-ex"><span class="header-section-number">26.3.3.2.1</span> Example using NEON data</h5>
 <p>Coming soon!</p>
 </section>
 </section>

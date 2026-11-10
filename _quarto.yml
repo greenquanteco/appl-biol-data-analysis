@@ -97,9 +97,11 @@ format:
       - brand
     toc: true
     number-sections: true
-    number-depth: 4
+    number-depth: 5
     fig-cap-location: top
-    toc-depth: 3
+    tbl-cap-location: top
+    toc-depth: 4
+    toc-expand: true
     smooth-scroll: true
       
   pdf:
@@ -108,7 +110,7 @@ format:
     documentclass: report
     toc: true
     number-sections: true
-    number-depth: 4
+    number-depth: 5
     fig-cap-location: top
     keep-tex: true
     fontsize: "13"

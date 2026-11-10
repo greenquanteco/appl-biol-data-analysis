@@ -501,22 +501,26 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#sec-summ-df" id="toc-sec-summ-df" class="nav-link active" data-scroll-target="#sec-summ-df"><span class="header-section-number">7.1</span> Summarizing a data frame</a>
+  <ul>
+  <li><a href="#sec-summ-agg" id="toc-sec-summ-agg" class="nav-link" data-scroll-target="#sec-summ-agg"><span class="header-section-number">7.1.1</span> Summarizing by groups (AKA: pivot tables)</a>
   <ul class="collapse">
-  <li><a href="#sec-summ-agg" id="toc-sec-summ-agg" class="nav-link" data-scroll-target="#sec-summ-agg"><span class="header-section-number">7.1.1</span> Summarizing by groups (AKA: pivot tables)</a></li>
+  <li><a href="#aggregate" id="toc-aggregate" class="nav-link" data-scroll-target="#aggregate"><span class="header-section-number">7.1.1.1</span> <code>aggregate()</code></a></li>
+  <li><a href="#tapply" id="toc-tapply" class="nav-link" data-scroll-target="#tapply"><span class="header-section-number">7.1.1.2</span> <code>tapply()</code></a></li>
+  </ul></li>
   <li><a href="#summarizing-by-arbitrary-functions" id="toc-summarizing-by-arbitrary-functions" class="nav-link" data-scroll-target="#summarizing-by-arbitrary-functions"><span class="header-section-number">7.1.2</span> Summarizing by arbitrary functions</a></li>
   </ul></li>
   <li><a href="#the-apply-family" id="toc-the-apply-family" class="nav-link" data-scroll-target="#the-apply-family"><span class="header-section-number">7.2</span> The <code>apply()</code> family</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#apply-for-arrays-and-data-frames" id="toc-apply-for-arrays-and-data-frames" class="nav-link" data-scroll-target="#apply-for-arrays-and-data-frames"><span class="header-section-number">7.2.1</span> <code>apply()</code> for arrays and data frames</a></li>
   <li><a href="#lapply-and-sapply-for-lists-and-other-objects" id="toc-lapply-and-sapply-for-lists-and-other-objects" class="nav-link" data-scroll-target="#lapply-and-sapply-for-lists-and-other-objects"><span class="header-section-number">7.2.2</span> <code>lapply()</code> and <code>sapply()</code> for lists and other objects</a></li>
   </ul></li>
   <li><a href="#sec-summ-tab" id="toc-sec-summ-tab" class="nav-link" data-scroll-target="#sec-summ-tab"><span class="header-section-number">7.3</span> Tabulation (frequency tables)</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#frequency-tables-with-table" id="toc-frequency-tables-with-table" class="nav-link" data-scroll-target="#frequency-tables-with-table"><span class="header-section-number">7.3.1</span> Frequency tables with `table()’</a></li>
   <li><a href="#sec-summ-ftable" id="toc-sec-summ-ftable" class="nav-link" data-scroll-target="#sec-summ-ftable"><span class="header-section-number">7.3.2</span> Contingency tables with <code>ftable()</code></a></li>
   </ul></li>

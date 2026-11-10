@@ -520,23 +520,31 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#sec-review-data" id="toc-sec-review-data" class="nav-link active" data-scroll-target="#sec-review-data"><span class="header-section-number">14.1</span> Datasets and variables</a></li>
   <li><a href="#sec-review-freq" id="toc-sec-review-freq" class="nav-link" data-scroll-target="#sec-review-freq"><span class="header-section-number">14.2</span> Frequentist statistics</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#mod-09-pvalues" id="toc-mod-09-pvalues" class="nav-link" data-scroll-target="#mod-09-pvalues"><span class="header-section-number">14.2.1</span> <em>p</em>-values and NHST</a></li>
   </ul></li>
   <li><a href="#sec-review-alt" id="toc-sec-review-alt" class="nav-link" data-scroll-target="#sec-review-alt"><span class="header-section-number">14.3</span> Alternatives to frequentist statistics</a>
+  <ul>
+  <li><a href="#sec-review-alt-it" id="toc-sec-review-alt-it" class="nav-link" data-scroll-target="#sec-review-alt-it"><span class="header-section-number">14.3.1</span> Information-theoretic methods</a>
   <ul class="collapse">
-  <li><a href="#sec-review-alt-it" id="toc-sec-review-alt-it" class="nav-link" data-scroll-target="#sec-review-alt-it"><span class="header-section-number">14.3.1</span> Information-theoretic methods</a></li>
+  <li><a href="#likelihood" id="toc-likelihood" class="nav-link" data-scroll-target="#likelihood"><span class="header-section-number">14.3.1.1</span> Likelihood?</a></li>
+  </ul></li>
   <li><a href="#sec-review-alt-bayes" id="toc-sec-review-alt-bayes" class="nav-link" data-scroll-target="#sec-review-alt-bayes"><span class="header-section-number">14.3.2</span> Bayesian inference</a></li>
   </ul></li>
   <li><a href="#sec-review-lin" id="toc-sec-review-lin" class="nav-link" data-scroll-target="#sec-review-lin"><span class="header-section-number">14.4</span> Linear models</a>
+  <ul>
+  <li><a href="#sec-review-lin-def" id="toc-sec-review-lin-def" class="nav-link" data-scroll-target="#sec-review-lin-def"><span class="header-section-number">14.4.1</span> What is “linear”?</a>
   <ul class="collapse">
-  <li><a href="#sec-review-lin-def" id="toc-sec-review-lin-def" class="nav-link" data-scroll-target="#sec-review-lin-def"><span class="header-section-number">14.4.1</span> What is “linear”?</a></li>
+  <li><a href="#factors-in-linear-models" id="toc-factors-in-linear-models" class="nav-link" data-scroll-target="#factors-in-linear-models"><span class="header-section-number">14.4.1.1</span> Factors in linear models</a></li>
+  <li><a href="#sec-review-lin-ss" id="toc-sec-review-lin-ss" class="nav-link" data-scroll-target="#sec-review-lin-ss"><span class="header-section-number">14.4.1.2</span> Linear models and sums of squares</a></li>
+  <li><a href="#sec-review-lin-assum" id="toc-sec-review-lin-assum" class="nav-link" data-scroll-target="#sec-review-lin-assum"><span class="header-section-number">14.4.1.3</span> Assumptions of linear models</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#sec-review-lin-anova" id="toc-sec-review-lin-anova" class="nav-link" data-scroll-target="#sec-review-lin-anova"><span class="header-section-number">14.5</span> Analysis of variance (ANOVA)</a></li>
   </ul>
@@ -992,8 +1000,8 @@ E\left(y_i\right)=\left(1\times\beta_0\right)+\left(x_{1,i}\times\beta_1\right)+
 <section id="sec-review-lin-assum" class="level4" data-number="14.4.1.3">
 <h4 data-number="14.4.1.3" class="anchored" data-anchor-id="sec-review-lin-assum"><span class="header-section-number">14.4.1.3</span> Assumptions of linear models</h4>
 <p>Linear models have some other features and assumptions that you need to be aware of. If your data or variables violate the assumptions below, you may need to use something other than linear models to analyze your data.</p>
-<section id="assumption-1-normal-residuals" class="level5">
-<h5 class="anchored" data-anchor-id="assumption-1-normal-residuals">Assumption 1: Normal residuals</h5>
+<section id="assumption-1-normal-residuals" class="level5" data-number="14.4.1.3.1">
+<h5 data-number="14.4.1.3.1" class="anchored" data-anchor-id="assumption-1-normal-residuals"><span class="header-section-number">14.4.1.3.1</span> Assumption 1: Normal residuals</h5>
 <p>The linear model assumes that model residuals, the random errors representing the differences between observed and predicted values, follow a normal distribution. Models for data that do not have normal residuals exist, but they are not linear models. We’ll explore those in <a href="ch18.html" class="quarto-xref"><span>Chapter 18</span></a>.</p>
 <p>The assumption of normal residuals explains the last term in the linear model equation, <span class="math inline">\(\varepsilon_i\)</span>:</p>
 <p><span class="math display">\[
@@ -1010,8 +1018,8 @@ y_i\sim Normal\left(\eta_i,\ \sigma_{res}\right)
 \]</span></p>
 <p>In this version, the symbol <span class="math inline">\(\sim\)</span> means “distributed as” and denotes a <strong>stochastic</strong> relationship—a relationship that contains some element of randomness. This is in contrast to a <strong>deterministic</strong> relationship, which does not (equality, aka: identity, = is the most famous kind of deterministic relationship).</p>
 </section>
-<section id="assumption-2-homogeneity-of-variance" class="level5">
-<h5 class="anchored" data-anchor-id="assumption-2-homogeneity-of-variance">Assumption 2: Homogeneity of variance</h5>
+<section id="assumption-2-homogeneity-of-variance" class="level5" data-number="14.4.1.3.2">
+<h5 data-number="14.4.1.3.2" class="anchored" data-anchor-id="assumption-2-homogeneity-of-variance"><span class="header-section-number">14.4.1.3.2</span> Assumption 2: Homogeneity of variance</h5>
 <p>Linear models assume <strong>homoscedasticity</strong>, or constant variance. This means that the residual variance does not depend on either <em>x</em> or <em>y</em>.If the variance in the response variable depends on some predictor variable, then this should be incorporated into the model (resulting in something other thana linear model). If the variance appears to depend on the response variable, then there is probably an issue with the assumed response distribution.</p>
 <p>The figure below shows two datasets with a linear relationship between <em>x</em> and <em>y</em>. In the left panel, the variance is the same everywhere (homoscedastic). The right panel shows a heteroscedastic relationship where the variance increases at larger <em>x</em>.</p>
 <div class="quarto-figure quarto-figure-center">
@@ -1029,17 +1037,17 @@ y_i\sim Normal\left(\eta_i,\ \sigma_{res}\right)
 </div>
 <p>Heteroscedasticity is a serious problem for linear models because it leads to biased parameter estimates and standard errors (SE) of those estimates. The latter issue means that significance tests on parameters will be incorrect. Bayesian statistics does not involve significance tests, but heteroscedasticity that is unaccounted for will still lead to biased estimates. The usual solution is to either apply a variance-stabilizing transformation (like the log-transform), incorporate variance parameters that can be estimated, or be clever about choosing a response distribution.</p>
 </section>
-<section id="assumption-3-fixed-and-independent-predictors" class="level5">
-<h5 class="anchored" data-anchor-id="assumption-3-fixed-and-independent-predictors">Assumption 3: Fixed and independent predictors</h5>
+<section id="assumption-3-fixed-and-independent-predictors" class="level5" data-number="14.4.1.3.3">
+<h5 data-number="14.4.1.3.3" class="anchored" data-anchor-id="assumption-3-fixed-and-independent-predictors"><span class="header-section-number">14.4.1.3.3</span> Assumption 3: Fixed and independent predictors</h5>
 <p>Linear models assume that predictor values are precisely known (“fixed”) and independent of each other. If there is uncertainty in the predictor variables, this adds uncertainty to the response values that linear models cannot account for. Simply put, linear models have a term for uncertainty in <em>y</em>, <span class="math inline">\(\sigma_{res}\)</span>, but no term for uncertainty in <em>x</em>.</p>
 </section>
-<section id="assumption-4-independently-and-identically-distributed-errors" class="level5">
-<h5 class="anchored" data-anchor-id="assumption-4-independently-and-identically-distributed-errors">Assumption 4: Independently and identically distributed errors</h5>
+<section id="assumption-4-independently-and-identically-distributed-errors" class="level5" data-number="14.4.1.3.4">
+<h5 data-number="14.4.1.3.4" class="anchored" data-anchor-id="assumption-4-independently-and-identically-distributed-errors"><span class="header-section-number">14.4.1.3.4</span> Assumption 4: Independently and identically distributed errors</h5>
 <p>(<em>i</em>.<em>i</em>.<em>d</em>.)</p>
 <p>The assumption of independently and identically distributed (<em>i.i.d.</em>) errors is <strong><em>very</em></strong> important. It means that the residual for each observation depends only on the parameters of the residual distribution and <strong><em>not</em></strong> on predictor variables or other observations. When the assumption of independence is violated, the degrees of freedom in the analysis is artificially inflated because the number of unique pieces of information is smaller than the number used in the analysis. In frequentist analyses, this deflates the <em>p</em>-value and increases the chance of a type I error (false positive).</p>
 </section>
-<section id="final-note-about-linear-model-assumptions" class="level5">
-<h5 class="anchored" data-anchor-id="final-note-about-linear-model-assumptions">Final note about linear model assumptions</h5>
+<section id="final-note-about-linear-model-assumptions" class="level5" data-number="14.4.1.3.5">
+<h5 data-number="14.4.1.3.5" class="anchored" data-anchor-id="final-note-about-linear-model-assumptions"><span class="header-section-number">14.4.1.3.5</span> Final note about linear model assumptions</h5>
 <p>Real data almost always violate the linear model assumptions to some degree, so the answer to “do my data meet the assumptions of linear models?” is “No.”. The more useful question is, “do my data violate the assumptions of linear models <em>enough to be a problem</em>?”. Linear models can be robust to <em>mild</em> violations of these assumptions, but you need to be careful. Many of these assumptions can be tested directly—for example, testing residuals for normality or homoscedasticity—and if there is any doubt about whether your data meet the assumptions, you should perform those tests. Actually, you should perform the tests anyway just to be safe.</p>
 </section>
 </section>
