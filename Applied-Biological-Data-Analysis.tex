@@ -273,7 +273,7 @@
 
 \title{Applied Biological Data Analysis}
 \author{Nick Green}
-\date{November 10, 2026}
+\date{November 11, 2026}
 \begin{document}
 \maketitle
 
@@ -34115,10 +34115,10 @@ First, plot the PCA and symbolize the points by species.
 \begin{figure}[H]
 
 \caption{\label{fig-kmeans-mice-pca}Principal components analysis (PCA)
-of four morphological measurements from Peromyscus leucopus and P.
-maniculatus collected at NEON sites. The first two principal components
-explain 98.7\% of the total variation. Although the species differ
-somewhat along PC1, their distributions overlap substantially,
+of four morphological measurements from \emph{Peromyscus leucopus} and
+\emph{P. maniculatus} collected at NEON sites. The first two principal
+components explain 98.7\% of the total variation. Although the species
+differ somewhat along PC1, their distributions overlap substantially,
 indicating that the morphological measurements do not clearly separate
 the two species.}
 
@@ -34201,14 +34201,14 @@ and 6 cluster scenarios.
 \begin{figure}[H]
 
 \caption{\label{fig-kmeans-mice-pca4}Principal components analysis (PCA)
-of four morphological measurements from Peromyscus leucopus and P.
-maniculatus, showing species identities (upper left) and K-means
-clustering solutions with four (upper right), five (lower left), and six
-(lower right) clusters. Arrows indicate the contributions of the four
-morphological measurements to the principal components. Increasing the
-number of clusters progressively subdivides observations along PC1,
-which explains 90.4\% of the total variation, rather than recovering the
-two species as distinct groups.}
+of four morphological measurements from \emph{Peromyscus leucopus} and
+\emph{P. maniculatus}, showing species identities (upper left) and
+\emph{K}-means clustering solutions with four (upper right), five (lower
+left), and six (lower right) clusters. Arrows indicate the contributions
+of the four morphological measurements to the principal components.
+Increasing the number of clusters progressively subdivides observations
+along PC1, which explains 90.4\% of the total variation, rather than
+recovering the two species as distinct groups.}
 
 \centering{
 
@@ -34277,11 +34277,11 @@ and PC2. This might allow us to see some better separation.
 \begin{figure}[H]
 
 \caption{\label{fig-kmeans-mice-pca4-2}Principal components analysis
-(PCA) of four morphological measurements from Peromyscus leucopus and P.
-maniculatus, showing species identities (upper left) and K-means
-clustering solutions with four (upper right), five (lower left), and six
-(lower right) clusters. PC1 explains 90.4\% of the total variation,
-while PC3 explains 4.2\%. Increasing the number of clusters
+(PCA) of four morphological measurements from \emph{Peromyscus leucopus}
+and \emph{P. maniculatus}, showing species identities (upper left) and
+\emph{K}-means clustering solutions with four (upper right), five (lower
+left), and six (lower right) clusters. PC1 explains 90.4\% of the total
+variation, while PC3 explains 4.2\%. Increasing the number of clusters
 progressively subdivides observations along PC1, with little apparent
 separation along PC3. The clustering primarily reflects variation in
 overall body size rather than species identity.}
@@ -34341,14 +34341,15 @@ Nope, PC1 is still dominating the figure. Let's check PC2 and PC3:
 \begin{figure}[H]
 
 \caption{\label{fig-kmeans-mice-pca4-3}Principal components analysis
-(PCA) of four morphological measurements from Peromyscus leucopus and P.
-maniculatus, showing species identities (upper left) and K-means
-clustering solutions with four (upper right), five (lower left), and six
-(lower right) clusters. PC2 explains 8.3\% of the total variation, while
-PC3 explains 4.2\%. Neither species nor the K-means clusters show clear
-separation along these axes, indicating that the clustering primarily
-reflects variation along PC1 rather than differences in the secondary
-components of morphological variation.}
+(PCA) of four morphological measurements from \emph{Peromyscus leucopus}
+and \emph{P. maniculatus}, showing species identities (upper left) and
+\emph{K}-means clustering solutions with four (upper right), five (lower
+left), and six (lower right) clusters. PC2 explains 8.3\% of the total
+variation, while PC3 explains 4.2\%. Neither species nor the
+\emph{K}-means clusters show clear separation along these axes,
+indicating that the clustering primarily reflects variation along PC1
+rather than differences in the secondary components of morphological
+variation.}
 
 \centering{
 
@@ -34410,14 +34411,14 @@ the biplot vectors because they are essentially redundant with PC1.
 \begin{figure}[H]
 
 \caption{\label{fig-kmeans-mice-pca2}Principal components analysis (PCA)
-of four morphological measurements from Peromyscus leucopus and P.
-maniculatus, comparing species identities (upper left) with a K-means
-clustering solution containing two clusters (upper right and lower
-panels). The two clusters are separated primarily along PC1, which
-explains 90.4\% of the total variation, with little separation along PC2
-or PC3. Although the clustering partially distinguishes the two species,
-it primarily reflects variation in overall body size rather than species
-identity.}
+of four morphological measurements from \emph{Peromyscus leucopus} and
+\emph{P. maniculatus}, comparing species identities (upper left) with a
+\emph{K}-means clustering solution containing two clusters (upper right
+and lower panels). The two clusters are separated primarily along PC1,
+which explains 90.4\% of the total variation, with little separation
+along PC2 or PC3. Although the clustering partially distinguishes the
+two species, it primarily reflects variation in overall body size rather
+than species identity.}
 
 \centering{
 
@@ -34427,14 +34428,14 @@ identity.}
 
 \end{figure}%
 
-So what did we learn? First, the clustering is overwhelmingly driven by
-overall size, and the clustering mirrored that. This makes sense
-mathematically. \emph{K}-means minimizes within-cluster sums of squared
-Euclidean distances. When nearly all the variation lies along one
-dimension, the algorithm can reduce that sum of squares most efficiently
-by dividing observations along that dimension. In other words, the
-algorithm worked exactly as intended, but it answers a different
-question than the one we hoped it would.
+So what did we learn? First, the variation between samples is
+overwhelmingly driven by overall size, so the clustering mirrored that.
+This makes sense mathematically. \emph{K}-means minimizes within-cluster
+sums of squared Euclidean distances. When nearly all the variation lies
+along one dimension, the algorithm can reduce that sum of squares most
+efficiently by dividing observations along that dimension. In other
+words, the algorithm worked exactly as intended, but it answers a
+different question than the one we hoped it would.
 
 Second, the clustering was not entirely useless. The contingency table
 showed that the 2 cluster solution was correct about 69.7\% of the time
@@ -34700,11 +34701,7 @@ directory. Them import it using \texttt{terra}.
 \begin{Highlighting}[]
 \CommentTok{\# crop to North America}
 \NormalTok{na }\OtherTok{\textless{}{-}} \FunctionTok{crop}\NormalTok{(world, }\FunctionTok{ext}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{160}\NormalTok{, }\SpecialCharTok{{-}}\DecValTok{60}\NormalTok{, }\DecValTok{15}\NormalTok{, }\DecValTok{75}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{\# Create spatial points}
 \NormalTok{coords }\OtherTok{\textless{}{-}}\NormalTok{ met[,}\FunctionTok{c}\NormalTok{(}\StringTok{"lat"}\NormalTok{, }\StringTok{"lon"}\NormalTok{)]}
 \NormalTok{pts }\OtherTok{\textless{}{-}} \FunctionTok{vect}\NormalTok{(coords, }\AttributeTok{geom =} \FunctionTok{c}\NormalTok{(}\StringTok{"lon"}\NormalTok{, }\StringTok{"lat"}\NormalTok{), }\AttributeTok{crs =} \StringTok{"EPSG:4326"}\NormalTok{)}
@@ -34807,7 +34804,9 @@ a scatterplot.
 \FunctionTok{plot}\NormalTok{(}\FunctionTok{as.vector}\NormalTok{(D), }\FunctionTok{as.vector}\NormalTok{(cd),}
      \AttributeTok{xlab =} \StringTok{"Sørensen dissimilarity"}\NormalTok{,}
      \AttributeTok{ylab =} \StringTok{"Cophenetic distance"}\NormalTok{)}
-\FunctionTok{abline}\NormalTok{(}\FunctionTok{lm}\NormalTok{(}\FunctionTok{as.vector}\NormalTok{(cd) }\SpecialCharTok{\textasciitilde{}} \FunctionTok{as.vector}\NormalTok{(D)), }\AttributeTok{col =} \StringTok{"red"}\NormalTok{)}
+\CommentTok{\# specify intercept = 0 because of }
+\CommentTok{\# properties of distance/dissimilarity}
+\FunctionTok{abline}\NormalTok{(}\FunctionTok{lm}\NormalTok{(}\FunctionTok{as.vector}\NormalTok{(cd) }\SpecialCharTok{\textasciitilde{}} \DecValTok{0}\SpecialCharTok{+}\FunctionTok{as.vector}\NormalTok{(D)), }\AttributeTok{col =} \StringTok{"red"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 

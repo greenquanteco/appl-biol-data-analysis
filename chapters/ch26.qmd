@@ -312,7 +312,7 @@ First, plot the PCA and symbolize the points by species.
 #| fig-width: 8
 #| fig-height: 8
 #| label: fig-kmeans-mice-pca
-#| fig-cap: "Principal components analysis (PCA) of four morphological measurements from Peromyscus leucopus and P. maniculatus collected at NEON sites. The first two principal components explain 98.7% of the total variation. Although the species differ somewhat along PC1, their distributions overlap substantially, indicating that the morphological measurements do not clearly separate the two species."
+#| fig-cap: "Principal components analysis (PCA) of four morphological measurements from *Peromyscus leucopus* and *P. maniculatus* collected at NEON sites. The first two principal components explain 98.7% of the total variation. Although the species differ somewhat along PC1, their distributions overlap substantially, indicating that the morphological measurements do not clearly separate the two species."
 #| fig-alt: "PCA scatterplot showing P. leucopus as red open circles and P. maniculatus as blue open triangles. PC1 (horizontal axis) explains 90.4% of the variance, and PC2 (vertical axis) explains 8.3%. Most observations form a dense, horizontally elongated cloud centered near the origin. P. leucopus observations are concentrated toward positive PC1 values and slightly negative PC2 values, while P. maniculatus observations tend toward negative PC1 values and slightly positive PC2 values. The two species overlap extensively, with several outlying observations."
 
 xy <- scores(p1, 1:4, "sites")
@@ -332,7 +332,7 @@ Let's compare the "known" species to the the assignments under 4, 5, and 6 clust
 #| fig-width: 8
 #| fig-height: 8
 #| label: fig-kmeans-mice-pca4
-#| fig-cap: "Principal components analysis (PCA) of four morphological measurements from Peromyscus leucopus and P. maniculatus, showing species identities (upper left) and K-means clustering solutions with four (upper right), five (lower left), and six (lower right) clusters. Arrows indicate the contributions of the four morphological measurements to the principal components. Increasing the number of clusters progressively subdivides observations along PC1, which explains 90.4% of the total variation, rather than recovering the two species as distinct groups."
+#| fig-cap: "Principal components analysis (PCA) of four morphological measurements from *Peromyscus leucopus* and *P. maniculatus*, showing species identities (upper left) and *K*-means clustering solutions with four (upper right), five (lower left), and six (lower right) clusters. Arrows indicate the contributions of the four morphological measurements to the principal components. Increasing the number of clusters progressively subdivides observations along PC1, which explains 90.4% of the total variation, rather than recovering the two species as distinct groups."
 #| fig-alt: "Four-panel PCA scatterplot with PC1 (90.4% of variation) on the horizontal axis and PC2 (8.3%) on the vertical axis. The upper-left panel shows P. leucopus as red circles and P. maniculatus as blue triangles, with substantial overlap between species. The remaining panels show K-means solutions with four, five, and six clusters, distinguished by different colors and symbols. In each clustering solution, observations form approximately vertical bands arranged along PC1, with increasing numbers of narrower bands as K increases. Black arrows representing morphological measurements point predominantly toward positive PC1 values, indicating that the dominant axis reflects variation in overall body size."
 
 # extract clusters
@@ -397,7 +397,7 @@ Just for fun, let's redraw the figure to show PC1 and PC3 instead of PC1 and PC2
 #| fig-width: 8
 #| fig-height: 8
 #| label: fig-kmeans-mice-pca4-2
-#| fig-cap: "Principal components analysis (PCA) of four morphological measurements from Peromyscus leucopus and P. maniculatus, showing species identities (upper left) and K-means clustering solutions with four (upper right), five (lower left), and six (lower right) clusters. PC1 explains 90.4% of the total variation, while PC3 explains 4.2%. Increasing the number of clusters progressively subdivides observations along PC1, with little apparent separation along PC3. The clustering primarily reflects variation in overall body size rather than species identity."
+#| fig-cap: "Principal components analysis (PCA) of four morphological measurements from *Peromyscus leucopus* and *P. maniculatus*, showing species identities (upper left) and *K*-means clustering solutions with four (upper right), five (lower left), and six (lower right) clusters. PC1 explains 90.4% of the total variation, while PC3 explains 4.2%. Increasing the number of clusters progressively subdivides observations along PC1, with little apparent separation along PC3. The clustering primarily reflects variation in overall body size rather than species identity."
 #| fig-alt: "Four-panel PCA scatterplot with PC1 (90.4% of variation) on the horizontal axis and PC3 (4.2%) on the vertical axis. The upper-left panel shows P. leucopus as red open circles and P. maniculatus as blue open triangles, with substantial overlap. The other three panels show K-means solutions with four, five, and six clusters, distinguished by colors and symbols. In each solution, clusters form approximately vertical bands along PC1, with considerable overlap along PC3. Black arrows representing the four morphological measurements point predominantly toward positive PC1 values, with little displacement along PC3."
 
 # get measurement scores
@@ -446,7 +446,7 @@ Nope, PC1 is still dominating the figure. Let's check PC2 and PC3:
 #| fig-width: 8
 #| fig-height: 8
 #| label: fig-kmeans-mice-pca4-3
-#| fig-cap: "Principal components analysis (PCA) of four morphological measurements from Peromyscus leucopus and P. maniculatus, showing species identities (upper left) and K-means clustering solutions with four (upper right), five (lower left), and six (lower right) clusters. PC2 explains 8.3% of the total variation, while PC3 explains 4.2%. Neither species nor the K-means clusters show clear separation along these axes, indicating that the clustering primarily reflects variation along PC1 rather than differences in the secondary components of morphological variation."
+#| fig-cap: "Principal components analysis (PCA) of four morphological measurements from *Peromyscus leucopus* and *P. maniculatus*, showing species identities (upper left) and *K*-means clustering solutions with four (upper right), five (lower left), and six (lower right) clusters. PC2 explains 8.3% of the total variation, while PC3 explains 4.2%. Neither species nor the *K*-means clusters show clear separation along these axes, indicating that the clustering primarily reflects variation along PC1 rather than differences in the secondary components of morphological variation."
 #| fig-alt: "Four-panel PCA scatterplot with PC2 (8.3% of variation) on the horizontal axis and PC3 (4.2%) on the vertical axis. The upper-left panel shows P. leucopus as red open circles and P. maniculatus as blue open triangles, with extensive overlap. The remaining panels show K-means solutions with four, five, and six clusters, distinguished by colors and symbols. Unlike plots including PC1, the clusters overlap extensively in all three panels, forming dense clouds centered near the origin. Black arrows representing the four morphological measurements are concentrated near the center of each panel."
 
 # get measurement scores
@@ -500,7 +500,7 @@ table(dx$abb, dx$k2, useNA="ifany")
 #| fig-width: 8
 #| fig-height: 8
 #| label: fig-kmeans-mice-pca2
-#| fig-cap: "Principal components analysis (PCA) of four morphological measurements from Peromyscus leucopus and P. maniculatus, comparing species identities (upper left) with a K-means clustering solution containing two clusters (upper right and lower panels). The two clusters are separated primarily along PC1, which explains 90.4% of the total variation, with little separation along PC2 or PC3. Although the clustering partially distinguishes the two species, it primarily reflects variation in overall body size rather than species identity."
+#| fig-cap: "Principal components analysis (PCA) of four morphological measurements from *Peromyscus leucopus* and *P. maniculatus*, comparing species identities (upper left) with a *K*-means clustering solution containing two clusters (upper right and lower panels). The two clusters are separated primarily along PC1, which explains 90.4% of the total variation, with little separation along PC2 or PC3. Although the clustering partially distinguishes the two species, it primarily reflects variation in overall body size rather than species identity."
 #| fig-alt: "Four-panel PCA scatterplot showing species identities and a two-cluster K-means solution. The upper-left panel shows P. leucopus as red open circles and P. maniculatus as blue open triangles, with substantial overlap. The upper-right panel shows two K-means clusters, represented by red squares and cyan circles, separated along PC1 (90.4% of variation) but overlapping along PC2 (8.3%). The lower-left panel shows the same clusters plotted against PC1 and PC3 (4.2%), again revealing separation primarily along PC1. The lower-right panel plots PC2 against PC3, showing extensive overlap between the two clusters."
 #| 
 dx$col2 <- rainbow(2)[dx$k2]
@@ -533,7 +533,7 @@ legend("topright", legend=paste("Group", 1:2),
 
 ```
 
-So what did we learn? First, the clustering is overwhelmingly driven by overall size, and the clustering mirrored that. This makes sense mathematically. *K*-means minimizes within-cluster sums of squared Euclidean distances. When nearly all the variation lies along one dimension, the algorithm can reduce that sum of squares most efficiently by dividing observations along that dimension. In other words, the algorithm worked exactly as intended, but it answers a different question than the one we hoped it would.
+So what did we learn? First, the variation between samples is overwhelmingly driven by overall size, so the clustering mirrored that. This makes sense mathematically. *K*-means minimizes within-cluster sums of squared Euclidean distances. When nearly all the variation lies along one dimension, the algorithm can reduce that sum of squares most efficiently by dividing observations along that dimension. In other words, the algorithm worked exactly as intended, but it answers a different question than the one we hoped it would.
 
 Second, the clustering was not entirely useless. The contingency table showed that the 2 cluster solution was correct about 69.7% of the time (937 out of 1,345 individuals correctly assigned). However, the accuracy is asymmetric: 77.4% of *P. maniculatus* are in Cluster 2, but only 61.1% of *P. leucopus* are in Cluster 1. So there is a real association between the clusters and species, even though the clusters don't correspond particularly well to species boundaries. A $\chi^2$ test on the frequency table will confirm this lack of independence of cluster and species.
 
@@ -652,18 +652,14 @@ world <- vect("ne_110m_admin_0_countries.shp")
 ```
 
 ```{r}
-
-# crop to North America
-na <- crop(world, ext(-160, -60, 15, 75))
-```
-
-```{r}
 #| fig-width: 8
 #| fig-height: 6
 #| label: fig-single-northamerica
 #| fig-cap: "Geographic representation of a single linkage tree connecting 46 NEON terrestrial field sites based on Sørensen dissimilarity in species presence/absence. Points indicate sampling locations, and lines connect pairs of sites selected by the single linkage tree algorithm. The connections represent similarities in species composition rather than geographic proximity, although many nearby sites are linked, suggesting a geographic component to community similarity."
 #| fig-alt: "Map of North America showing 46 NEON terrestrial field sites as black points, with thin gray lines connecting sites according to a single linkage tree based on Sørensen dissimilarity. Sites are distributed across Alaska, the contiguous United States, and Puerto Rico. Many geographically nearby sites are connected, including sites within Alaska, the northeastern United States, and the Southeast. Several long lines connect distant regions, including Alaska to the contiguous United States and the southeastern United States to Puerto Rico, indicating compositional similarities between geographically distant sites."
 
+# crop to North America
+na <- crop(world, ext(-160, -60, 15, 75))
 
 # Create spatial points
 coords <- met[,c("lat", "lon")]
@@ -736,7 +732,9 @@ A cophenetic *r* of 0.775 is pretty good. We can visualize this on a scatterplot
 plot(as.vector(D), as.vector(cd),
      xlab = "Sørensen dissimilarity",
      ylab = "Cophenetic distance")
-abline(lm(as.vector(cd) ~ as.vector(D)), col = "red")
+# specify intercept = 0 because of 
+# properties of distance/dissimilarity
+abline(lm(as.vector(cd) ~ 0+as.vector(D)), col = "red")
 ```
 
 This is particularly useful for comparing different hierarchical clustering methods. Just keep in mind that cophenetic correlation measures fidelity to the original dissimilarities, not whether the resulting groups are biologically meaningful.
