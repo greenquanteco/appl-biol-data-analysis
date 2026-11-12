@@ -1,6 +1,46 @@
 # Ordination {#sec-ord}
 
-We're all just points on a graph.
+## Introduction {#sec-ord-intro}
+
+Humans are visual creatures, relying much more on their sense of vision than other senses like smell for understanding the world. When’s the last time you smelled a dataset? 
+
+Unfortunately, humans are also creatures of 3 spatial dimensions, and that severely limits our ability to “see” patterns in data. Even if patterns in data might exist clearly in 4 or 5 dimensions, our primate brains just won’t see those patterns. Instead, we need ways to bring those high-dimensional patterns down to 3 or fewer. Or, ways to bring 3 dimensional patterns down to 1 or 2, for ease of interpretation. These practices all fall under the umbrella of **dimension reduction**. One very powerful set of techniques for dimension reduction is **ordination**. A good ordination will reveal previously unseen (or unseeable) patterns in data, allow cluster identification, or even show gradients in the data that researchers didn't know they were looking for.
+
+**Ordination** is literally ordering observations along two or more axes. We put observations in order by translating them into a new coordinate system. How that translation is done varies wildly among ordination techniques. No matter how they work, all ordination methods have the same goal: representing patterns in fewer dimensions than there are variables. This makes ordination an approach to **exploratory data analysis**. Most ordination techniques allow to better see patterns, but they are not inferential tests themselves. 
+
+![Ordination describes observations using a new coordinate system. (Left) Observations are positioned according to their values for two original variables. (Middle) A new coordinate system is defined using axes oriented differently from the original variables. (Right) The observations are represented relative to the new axes, revealing a major gradient of variation along Ordination Axis 1. In this simplified example, the number of dimensions remains unchanged, but the observations could be reasonably summarized using only the first ordination axis.](../images/ord-basicidea.jpg){#fig-ord-basicidea fig-alt="Illustration of ordination as a change in coordinate systems. Left: Observations plotted against two original variables form a diagonal pattern. Middle: A new, rotated coordinate system is superimposed on the observations. Right: The same observations are plotted relative to the new axes, with most variation occurring along Ordination Axis 1."}
+
+The applications of ordination overlap with those of the multivariate techniques that we have already seen:
+
+1. **Dimension reduction:** Summarizing variation across many variables using a smaller number of synthetic axes, making complex multivariate datasets easier to visualize and interpret.
+1. **Gradient discovery:** Identifying major patterns of variation among observations, which may represent underlying biological or environmental gradients.
+1. **Group identification:** Visualizing similarities and differences among observations, including identifying potential clusters of observations that share similar characteristics.
+
+These goals are not mutually exclusive. Dimension reduction is accomplished by finding gradients in the data that are not necessarily equivalent to any of the original variables. The first is what ordination does mathematically; the second is often what we hope to find biologically. Group identification can occur when we find observations forming clusters in an ordination plot, which is itself created by plotting observations against the latent gradients identified by the algorithm. The connection to [clustering](#sec-clust) from the previous chapter should be obvious.
+
+### Ordination terminology {#sec-ord-terms}
+
+Ordination is a very different approach to statistics than we have seen so far in this course. We have largely stepped outside of the world of modeling and hypothesis testing, because most ordination methods are not hypothesis tests. But, we are still using many of the building blocks of inferential statistics that we have already learned. For example, the concepts of variance and covariance are of central importance in many ordination techniques.
+
+One of the biggest changes is that we need to start thinking of *variables* as being equivalent to **axes**. This is directly related to the notion of (spaces and coordinate systems)[#sec-diss-space-coord] that we explored in @sec-diss. The dataset defines one coordinate systemThis is somewhat similar to how in @sec-diss we started thinking of observations as equivalent to **vectors**. 
+
+### Types of ordination {#sec-intro-types}
+
+There are many methods of ordination, which differ in how they construct ordination axes and what kinds of patterns they are designed to reveal. We can classify these methods in two ways: whether the ordination is constrained by explanatory variables, and how the ordination axes are calculated.
+
+
+
+
+#### Constrained vs. unconstrained ordination {#sec-intro-types-constraint}
+
+In **unconstrained ordination**, the axes are calculated from the variation among observations without using external explanatory variables. For example, we might use measurements of several morphological traits to ordinate specimens, allowing us to identify major patterns of morphological variation. We could then investigate whether those patterns correspond to differences among species, habitats, or other characteristics.
+
+In constrained ordination, the axes are constructed to represent variation associated with one or more explanatory variables. For example, we might use environmental variables such as temperature, precipitation, and elevation to explain variation in species composition across sites. Rather than simply finding the major patterns of variation in species composition, constrained ordination focuses on the portion of that variation that can be explained by the environmental variables.
+
+Constrained ordination is often called canonical ordination, particularly in ecology. The term canonical refers to mathematical methods that identify relationships between sets of variables, as in canonical correlation analysis. In ecological applications, canonical ordination generally refers to methods that construct ordination axes using explanatory variables. However, the term has a broader mathematical meaning and is not always synonymous with constrained ordination.
+
+#### Eigenanalysis vs. optimization {#sec-intro-types-calc}
+
 
 ## Unconstrained ordination methods {#sec-ord-un}
 
