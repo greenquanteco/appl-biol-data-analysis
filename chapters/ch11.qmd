@@ -123,6 +123,44 @@ Notice where the stochasticity appears. In the transformed LM, normally distribu
 
 ## Common transformations {#sec-trans-common}
 
+### Z-scaling (standardization) {#sec-trans-common-zscore}
+
+The number of standard deviations that a value falls away from the mean is sometimes referred to as its ***z*****-score**. *Z*-scores are calculated as:
+
+$$z\left(x\right)=\frac{x-\mu}{\sigma}$$
+
+Where $x$ is the value, $\mu$ is the population mean, and $\sigma$ is the population SD. When the population mean and SD are not known, we can calculate *z*-scores based on the sample mean $\bar{x}$ and sample SD $s$. 
+
+$$z\left(x\right)=\frac{x-\bar{x}}{s}$$
+
+*Z*-scores are useful when working with variables that are normally distributed, but on very different scales. Converting the raw values to their *z*-scores is referred to as **standardizing** them. Any variable, once standardized, has a mean of 0 and SD of 1. The units of a *z*-scaled variable are "standard deviations away from the mean". This is also sometimes referred to as **sigmas**; e.g., an observation with a *z*-score of $+2.1$ is 2.1 SD greater than the mean or "2.1 sigmas". The [Six Sigma](https://en.wikipedia.org/wiki/Six_Sigma) process improvement strategy popular in business refers to a $6\sigma$ observation, which occurs about 1 in every 2 billion observations (`2*pnorm(-6, 0, 1)`).
+
+Standardized values are sometimes used in regression analyses in place of raw values. Many ordination methods such as principal components analysis (PCA) standardize variables automatically. *Z*-scores (or standardized values) are calculated in R using the `scale()` function:
+
+```{r, label='chunkx420', fig.width=8, fig.height=4, fig.align="center"}
+x1 <- rnorm(100, 100, 40)
+par(mfrow=c(1,2))
+hist(x1)
+hist(scale(x1))
+```
+
+```{r}
+mean(x1)
+```
+
+```{r}
+sd(x1)
+```
+
+```{r}
+mean(scale(x1))
+```
+
+```{r}
+sd(scale(x1))
+```
+
+Because standardized variables all have the same mean and SD, standardizing a set of variables has the effect of putting all of the variables on equal footing. Without standardizing, variables with larger values or more variance may exert more influence on the analysis than they should simply because of their magnitude.
 ### Log transformation {#sec-trans-common-log}
 
 The **log-transform** is one of the most common transforms in biology. It is simply the **logarithm of the values**. Recall that the logarithm is the inverse of exponentiation: if $a=b^c$, then $log_b\left(a \right)=c$. For example, $\log_2\left(8\right)=3$ because $2^3=8$. Most biologists use either the natural logarithm ($\log_e$, $\ln$ or just $\log$) or the base-10 logarithm ($\log_{10}$). The choice of base is not that important, because any log-transform will accomplish the same effect. The default in math and statistics (and in R) is the natural logarithm. The **common** or base-10 logarithm $\log_{10}$ is also very common in biology and engineering. Whatever base you use, just be consistent and make it clear to your audience what you did[^logchoice]. It is depressingly common to be unable to use values from old papers because they didn’t specify which base logarithm they used.

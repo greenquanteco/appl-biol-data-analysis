@@ -556,6 +556,7 @@ window.Quarto = {
   <li><a href="#sec-dist-norm" id="toc-sec-dist-norm" class="nav-link" data-scroll-target="#sec-dist-norm"><span class="header-section-number">9.3.2</span> Normal distribution</a>
   <ul class="collapse">
   <li><a href="#sec-dist-norm-r" id="toc-sec-dist-norm-r" class="nav-link" data-scroll-target="#sec-dist-norm-r"><span class="header-section-number">9.3.2.1</span> Normal distribution in R</a></li>
+  <li><a href="#sec-dist-norm-prop" id="toc-sec-dist-norm-prop" class="nav-link" data-scroll-target="#sec-dist-norm-prop"><span class="header-section-number">9.3.2.2</span> Properties of the normal distribution</a></li>
   </ul></li>
   <li><a href="#sec-dist-lnorm" id="toc-sec-dist-lnorm" class="nav-link" data-scroll-target="#sec-dist-lnorm"><span class="header-section-number">9.3.3</span> Lognormal distribution</a>
   <ul class="collapse">
@@ -1473,9 +1474,13 @@ window.Quarto = {
 </div>
 </div>
 </div>
+</section>
+<section id="sec-dist-norm-prop" class="level4" data-number="9.3.2.2">
+<h4 data-number="9.3.2.2" class="anchored" data-anchor-id="sec-dist-norm-prop"><span class="header-section-number">9.3.2.2</span> Properties of the normal distribution</h4>
 <p>The normal distribution has several useful properties. Generally, the mean and median are the same (if the distribution is not skewed). Approximately 68% of values fall within 1 SD of the mean, 95% of values fall within about 2 SD of the mean (technically 1.9599 SD, or <code>qnorm(0.975)</code>), and 99.7% of values fall within about 3 SD of the mean. So, deviations of <span class="math inline">\(&gt;3\)</span> SD are very rare and may signify outliers. The number of SD a value falls away from the mean is sometimes referred to as a <strong><em>z</em>-score</strong> or a <strong>sigma</strong>. <em>Z</em>-scores are calculated as:</p>
 <p><span class="math display">\[z\left(x\right)=\frac{x-\mu}{\sigma}\]</span></p>
-<p>Where <em>x</em> is the value, <span class="math inline">\(\mu\)</span> is the mean, and <span class="math inline">\(\sigma\)</span> is the SD.</p>
+<p>Where <em>x</em> is the value, <span class="math inline">\(\mu\)</span> is the population mean, and <span class="math inline">\(\sigma\)</span> is the population SD. When the population mean and SD are not known, we can calculate <em>z</em>-scores based on the sample mean <span class="math inline">\(\bar{x}\)</span> and sample SD <span class="math inline">\(s\)</span>.</p>
+<p><span class="math display">\[z\left(x\right)=\frac{x-\bar{x}}{s}\]</span></p>
 <p><em>Z</em>-scores are sometimes used when comparing variables that are normally distributed, but on very different scales. Converting the raw values to their <em>z</em>-scores is referred to as <strong>standardizing</strong> them. Any variable, once standardized, has a mean of 0 and SD of 1. The units of a <em>z</em>-scaled variable are “standard deviations away from the mean”.</p>
 <p>Standardized values are sometimes used in regression analyses in place of raw values. Many ordination methods such as principal components analysis (PCA) standardize variables automatically. <em>Z</em>-scores (or standardized values) are calculated in R using the <code>scale()</code> function:</p>
 <div class="cell" data-layout-align="center">

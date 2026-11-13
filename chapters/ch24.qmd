@@ -1,6 +1,6 @@
 # Introduction to multivariate data and data analysis {#sec-mdata}
 
-## Multivariate data
+## Multivariate data {#sec-mdata-intro}
 
 Things are not always one or two dimensional. Oftentimes in biology we need to consider many variables at once. This is the realm of **multivariate statistics**. The “multi” in “multivariate” refers to the fact that there are multiple variables or attributes of each sample that we want to understand simultaneously. The terminology can be confusing sometimes because other statistical methods have the word “multiple” in their names. For example, “multiple linear regression” is not considered a multivariate method because there is only one measurement from each sample (the response variable) that is being modeled. 
 
@@ -10,7 +10,7 @@ Things are not always one or two dimensional. Oftentimes in biology we need to c
 
 Whereas a univariate analysis has a single response variable, a multivariate analysis can have a response matrix of many variables. However, many multivariate analyses have no response variables, and instead all of the variables are analyzed together to characterize patterns among the observations. The observations may come from *a priori* groups defined in a separate matrix (see below), or the researcher may want to discover how the observations naturally separate into clusters based on the variables (i.e., *a posteriori* groups). Or, the researcher may want to know which variables, if any, drive most of the variation between observations.
 
-### Enter the matrix
+## Enter the matrix {#sec-mdata-matrices}
 
 When planning and executing a multivariate analysis it is very important to keep in mind which components of the dataset are which. These components are usually stored in **matrices** with a well-defined structure. The key concept is that of the **sample unit** or **observation**. Observations are also sometimes called **records**. These are individual entities about which many measurements or attributes are recorded. Sample units correspond to *rows* of the data matrix. 
 
@@ -38,7 +38,7 @@ A biological system of interest might have relationships among all three of thes
 
 @mccune2002analysis give a thorough treatment of the relationships between **S**, **E**, **A**, and other matrices derived from them. For this course, we will focus on analyzing **A** and sometimes **E**. There is a related set of terminology used to describe multivariate analyses in terms of what is being compared. Analyses that seek relationships among samples are said to be in **Q mode**; analyses that seek relationships among variables are in **R mode** [@legendre2012numerical]. These terms appear to be particular to ecology, but offer a helpful way to distinguish between different multivariate analysis pathways.
 
-## Types of multivariate analyses
+## Types of multivariate analyses {#sec-mdata-types}
 
 There are many types of multivariate analyses. What analysis you need to do depends on what kind of question you are trying to answer.
 

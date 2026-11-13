@@ -273,7 +273,7 @@
 
 \title{Applied Biological Data Analysis}
 \author{Nick Green}
-\date{November 11, 2026}
+\date{November 13, 2026}
 \begin{document}
 \maketitle
 
@@ -15270,6 +15270,9 @@ the distribution is more spread out.
 \pandocbounded{\includegraphics[keepaspectratio]{chapters/ch09_files/figure-pdf/unnamed-chunk-47-1.pdf}}
 \end{center}
 
+\subsubsection{Properties of the normal
+distribution}\label{sec-dist-norm-prop}
+
 The normal distribution has several useful properties. Generally, the
 mean and median are the same (if the distribution is not skewed).
 Approximately 68\% of values fall within 1 SD of the mean, 95\% of
@@ -15282,8 +15285,12 @@ referred to as a \textbf{\emph{z}-score} or a \textbf{sigma}.
 
 \[z\left(x\right)=\frac{x-\mu}{\sigma}\]
 
-Where \emph{x} is the value, \(\mu\) is the mean, and \(\sigma\) is the
-SD.
+Where \emph{x} is the value, \(\mu\) is the population mean, and
+\(\sigma\) is the population SD. When the population mean and SD are not
+known, we can calculate \emph{z}-scores based on the sample mean
+\(\bar{x}\) and sample SD \(s\).
+
+\[z\left(x\right)=\frac{x-\bar{x}}{s}\]
 
 \emph{Z}-scores are sometimes used when comparing variables that are
 normally distributed, but on very different scales. Converting the raw
@@ -17016,7 +17023,99 @@ not equivalent, even though they both involve logarithms.
 
 \section{Common transformations}\label{sec-trans-common}
 
-\subsection{Log transformation}\label{sec-trans-common-log}
+\subsection{Z-scaling (standardization)}\label{sec-trans-common-zscore}
+
+The number of standard deviations that a value falls away from the mean
+is sometimes referred to as its \textbf{\emph{z}-score}. \emph{Z}-scores
+are calculated as:
+
+\[z\left(x\right)=\frac{x-\mu}{\sigma}\]
+
+Where \(x\) is the value, \(\mu\) is the population mean, and \(\sigma\)
+is the population SD. When the population mean and SD are not known, we
+can calculate \emph{z}-scores based on the sample mean \(\bar{x}\) and
+sample SD \(s\).
+
+\[z\left(x\right)=\frac{x-\bar{x}}{s}\]
+
+\emph{Z}-scores are useful when working with variables that are normally
+distributed, but on very different scales. Converting the raw values to
+their \emph{z}-scores is referred to as \textbf{standardizing} them. Any
+variable, once standardized, has a mean of 0 and SD of 1. The units of a
+\emph{z}-scaled variable are ``standard deviations away from the mean''.
+This is also sometimes referred to as \textbf{sigmas}; e.g., an
+observation with a \emph{z}-score of \(+2.1\) is 2.1 SD greater than the
+mean or ``2.1 sigmas''. The
+\href{https://en.wikipedia.org/wiki/Six_Sigma}{Six Sigma} process
+improvement strategy popular in business refers to a \(6\sigma\)
+observation, which occurs about 1 in every 2 billion observations
+(\texttt{2*pnorm(-6,\ 0,\ 1)}).
+
+Standardized values are sometimes used in regression analyses in place
+of raw values. Many ordination methods such as principal components
+analysis (PCA) standardize variables automatically. \emph{Z}-scores (or
+standardized values) are calculated in R using the \texttt{scale()}
+function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x1 }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DecValTok{40}\NormalTok{)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\FunctionTok{hist}\NormalTok{(x1)}
+\FunctionTok{hist}\NormalTok{(}\FunctionTok{scale}\NormalTok{(x1))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/chunkx420-1.pdf}}
+\end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mean}\NormalTok{(x1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 97.85016
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sd}\NormalTok{(x1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 38.58892
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mean}\NormalTok{(}\FunctionTok{scale}\NormalTok{(x1))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] -8.143226e-17
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sd}\NormalTok{(}\FunctionTok{scale}\NormalTok{(x1))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 1
+\end{verbatim}
+
+Because standardized variables all have the same mean and SD,
+standardizing a set of variables has the effect of putting all of the
+variables on equal footing. Without standardizing, variables with larger
+values or more variance may exert more influence on the analysis than
+they should simply because of their magnitude. \#\#\# Log transformation
+\{\#sec-trans-common-log\}
 
 The \textbf{log-transform} is one of the most common transforms in
 biology. It is simply the \textbf{logarithm of the values}. Recall that
@@ -17214,7 +17313,7 @@ this:
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-7-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-11-1.pdf}}
 \end{center}
 
 If the smallest nonzero value differs from 1 by more than an order of
@@ -17248,8 +17347,8 @@ This can be implemented in R using the following custom function:
 \end{Shaded}
 
 \begin{verbatim}
- [1]        -Inf  0.25331851 -0.02854676 -0.04287046  1.36860228 -0.22577099
- [7]  1.51647060 -1.54875280  0.58461375  0.12385424
+ [1]       -Inf  0.7877388  0.7690422  0.3322026 -1.0083766 -0.1194526
+ [7] -0.2803953  0.5629895 -0.3724388  0.9769734
 \end{verbatim}
 
 \begin{Shaded}
@@ -17259,8 +17358,8 @@ This can be implemented in R using the following custom function:
 \end{Shaded}
 
 \begin{verbatim}
- [1] 0.000000 1.504510 1.292473 1.282103 2.458088 1.153391 2.594120 0.455949
- [9] 1.771116 1.405285
+ [1] 0.0000000 1.9424649 1.9264700 1.5664011 0.6889676 1.2273630 1.1163282
+ [8] 1.7532039 1.0553697 2.1066742
 \end{verbatim}
 
 \begin{Shaded}
@@ -17272,7 +17371,7 @@ This can be implemented in R using the following custom function:
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-10-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-14-1.pdf}}
 
 Note that if you use the McCune and Grace transform, you should keep the
 original values around for plotting because back-transforming can be
@@ -17319,7 +17418,7 @@ because many values are between 0 and 1. The McCune and Grace method
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-12-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-16-1.pdf}}
 
 The spike in the right histogram comes from the fact that the McCune and
 Grace method maps values of 0 to 0.
@@ -17344,7 +17443,7 @@ and \texttt{rank(x){[}x==max(x){]}} = \texttt{length(x)}.
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-13-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-17-1.pdf}}
 \end{center}
 
 Notice how the transformed variables \texttt{y} are evenly spaced while
@@ -17447,7 +17546,7 @@ The logit transformation can be accomplished in R using the function
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-16-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-20-1.pdf}}
 \end{center}
 
 Why is this useful? The logistic function takes any real input and
@@ -17485,7 +17584,7 @@ the model extend well outside the possible range of a probability.
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-17-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-21-1.pdf}}
 \end{center}
 
 The linear model predicts probabilities (\texttt{y}) less than 0 and
@@ -17526,7 +17625,7 @@ family and logit link}.
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-18-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-22-1.pdf}}
 \end{center}
 
 The downside of the logit transform is that it is undefined at at 0 and
@@ -17702,7 +17801,7 @@ data:
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-23-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-27-1.pdf}}
 
 Notice how the square- and cube-root transformed data appear much more
 normally-distributed than the original data.
@@ -17775,7 +17874,7 @@ arcsine transform.
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-25-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-29-1.pdf}}
 \end{center}
 
 The plot below compares the arcsine to the logit transformation for
@@ -17797,7 +17896,7 @@ proportional data.
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-26-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-30-1.pdf}}
 \end{center}
 
 Unlike the logit, the arcsine transform remains bounded at \(p=0\) and
@@ -17879,7 +17978,7 @@ base R. Here is an example using the functions in package MASS:
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-27-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-31-1.pdf}}
 \end{center}
 
 \begin{Shaded}
@@ -17894,7 +17993,7 @@ base R. Here is an example using the functions in package MASS:
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-28-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-32-1.pdf}}
 
 Notice how the diagnostic plots show some patterns in the residuals,
 violating the assumptions of the linear regression model. A Box-Cox
@@ -17908,7 +18007,7 @@ transformation might help here.
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-29-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-33-1.pdf}}
 
 The Box-Cox function estimated an optimal \(\lambda\) near 0, which
 corresponds to the log transformation that actually generated the data
@@ -17944,7 +18043,7 @@ close to 0, suggesting a log transform ().
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-31-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch11_files/figure-pdf/unnamed-chunk-35-1.pdf}}
 
 The Box-Cox transformation requires positive response values. In
 practice, its estimated value of \(\lambda\) is often most useful as a
@@ -31984,7 +32083,7 @@ The needs of the many outweigh the needs of the few, or the one.
 \chapter{Introduction to multivariate data and data
 analysis}\label{sec-mdata}
 
-\section{Multivariate data}\label{multivariate-data}
+\section{Multivariate data}\label{sec-mdata-intro}
 
 Things are not always one or two dimensional. Oftentimes in biology we
 need to consider many variables at once. This is the realm of
@@ -32035,7 +32134,7 @@ into clusters based on the variables (i.e., \emph{a posteriori} groups).
 Or, the researcher may want to know which variables, if any, drive most
 of the variation between observations.
 
-\subsection{Enter the matrix}\label{enter-the-matrix}
+\section{Enter the matrix}\label{sec-mdata-matrices}
 
 When planning and executing a multivariate analysis it is very important
 to keep in mind which components of the dataset are which. These
@@ -32143,8 +32242,7 @@ variables are in \textbf{R mode} (Legendre and Legendre 2012). These
 terms appear to be particular to ecology, but offer a helpful way to
 distinguish between different multivariate analysis pathways.
 
-\section{Types of multivariate
-analyses}\label{types-of-multivariate-analyses}
+\section{Types of multivariate analyses}\label{sec-mdata-types}
 
 There are many types of multivariate analyses. What analysis you need to
 do depends on what kind of question you are trying to answer.
@@ -34600,7 +34698,7 @@ producing the phenomenon of chaining.
 data}\label{sec-clust-hier-methods-single-ex}
 
 Let's revisit the NEON small mammal data. Download the
-\href{../datasets/data-neon-captures-sites.csv}{site-level capture
+\href{../datasets/data-neon-captures-site.csv}{site-level capture
 dataset} and the \href{../datasets/data-neon-metadata-site.csv}{site
 metadata dataset} and put them in your working directory.
 
@@ -35231,13 +35329,782 @@ medians. Of these, UPGMA is probably the most commonly used.
 
 \chapter{Ordination}\label{sec-ord}
 
-We're all just points on a graph.
+\section{Introduction}\label{sec-ord-intro}
+
+Humans are visual creatures, relying much more on their sense of vision
+than other senses like smell for understanding the world. When's the
+last time you smelled a dataset?
+
+Unfortunately, humans are also creatures of 3 spatial dimensions, and
+that severely limits our ability to ``see'' patterns in data. Even if
+patterns in data might exist clearly in 4 or 5 dimensions, our primate
+brains just won't see those patterns. Instead, we need ways to bring
+those high-dimensional patterns down to 3 or fewer. Or, ways to bring 3
+dimensional patterns down to 1 or 2, for ease of interpretation. These
+practices all fall under the umbrella of \textbf{dimension reduction}.
+One very powerful set of techniques for dimension reduction is
+\textbf{ordination}. A good ordination will reveal previously unseen (or
+unseeable) patterns in data, allow cluster identification, or even show
+gradients in the data that researchers didn't know they were looking
+for.
+
+\textbf{Ordination} is literally ordering observations along two or more
+axes. We put observations in order by translating them into a new
+coordinate system. How that translation is done varies wildly among
+ordination techniques. No matter how they work, all ordination methods
+have the same goal: representing patterns in fewer dimensions than there
+are variables. This makes ordination an approach to \textbf{exploratory
+data analysis}. Most ordination techniques allow to better see patterns,
+but they are not inferential tests themselves.
+
+\begin{figure}
+
+\caption{\label{fig-ord-basicidea}Ordination describes observations
+using a new coordinate system. (Left) Observations are positioned
+according to their values for two original variables. (Middle) A new
+coordinate system is defined using axes oriented differently from the
+original variables. (Right) The observations are represented relative to
+the new axes, revealing a major gradient of variation along Ordination
+Axis 1. In this simplified example, the number of dimensions remains
+unchanged, but the observations could be reasonably summarized using
+only the first ordination axis.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Illustration of ordination as a change in coordinate systems. Left: Observations plotted against two original variables form a diagonal pattern. Middle: A new, rotated coordinate system is superimposed on the observations. Right: The same observations are plotted relative to the new axes, with most variation occurring along Ordination Axis 1.}]{chapters/../images/ord-basicidea.jpg}}
+
+}
+
+\end{figure}%
+
+The applications of ordination overlap with those of the multivariate
+techniques that we have already seen:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Dimension reduction:} Summarizing variation across many
+  variables using a smaller number of synthetic axes, making complex
+  multivariate datasets easier to visualize and interpret.
+\item
+  \textbf{Gradient discovery:} Identifying major patterns of variation
+  among observations, which may represent underlying biological or
+  environmental gradients.
+\item
+  \textbf{Group identification:} Visualizing similarities and
+  differences among observations, including identifying potential
+  clusters of observations that share similar characteristics.
+\end{enumerate}
+
+These goals are not mutually exclusive. Dimension reduction is
+accomplished by finding gradients in the data that are not necessarily
+equivalent to any of the original variables. The first is what
+ordination does mathematically; the second is often what we hope to find
+biologically. Group identification can occur when we find observations
+forming clusters in an ordination plot, which is itself created by
+plotting observations against the latent gradients identified by the
+algorithm. The connection to \hyperref[sec-clust]{clustering} from the
+previous chapter should be obvious.
+
+\subsection{Ordination terminology}\label{sec-ord-terms}
+
+Ordination is a very different approach to statistics than we have seen
+so far in this course. We have largely stepped outside of the world of
+modeling and hypothesis testing, because most ordination methods are not
+hypothesis tests. But, we are still using many of the building blocks of
+inferential statistics that we have already learned. For example, the
+concepts of variance and covariance are of central importance in many
+ordination techniques.
+
+One of the biggest changes is that we need to start thinking of
+\emph{variables} as being equivalent to \textbf{axes}. This is directly
+related to the notion of (spaces and coordinate
+systems){[}\#sec-diss-space-coord{]} that we explored in
+Chapter~\ref{sec-diss}. The dataset defines one coordinate systemThis is
+somewhat similar to how in Chapter~\ref{sec-diss} we started thinking of
+observations as equivalent to \textbf{vectors}.
+
+\subsection{Types of ordination}\label{sec-intro-types}
+
+There are many methods of ordination, which differ in how they construct
+ordination axes and what kinds of patterns they are designed to reveal.
+We can classify these methods in two ways: whether the ordination is
+constrained by explanatory variables, and how the ordination axes are
+calculated.
+
+\subsubsection{Constrained vs.~unconstrained
+ordination}\label{sec-intro-types-constraint}
+
+In \textbf{unconstrained ordination}, the axes are calculated from the
+variation among observations without using external explanatory
+variables. For example, we might use measurements of several
+morphological traits to ordinate specimens, allowing us to identify
+major patterns of morphological variation. We could then investigate
+whether those patterns correspond to differences among species,
+habitats, or other characteristics. Figure~\ref{fig-ord-unconstrained}
+below shows how an unconstrained ordination is constructed using the
+\hyperref[fig-multi-tables]{A-E-S matrix schema} that we saw in
+Section~\ref{sec-mdata-matrices}.
+
+\begin{figure}
+
+\caption{\label{fig-ord-unconstrained}Unconstrained ordination
+summarizes variation among observations using only the variables in the
+species abundance matrix (A). The environmental (E) and species trait
+(S) matrices are not used to construct the ordination.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Diagram showing a species abundance matrix (A) with a red arrow pointing toward an ordination plot containing observations and species vectors. The environmental variable matrix (E) and species trait matrix (S) are faded to indicate that they do not contribute to the ordination.}]{chapters/../images/ord-unconstrained.jpg}}
+
+}
+
+\end{figure}%
+
+In \textbf{constrained ordination}, the axes are constructed to
+represent variation associated with one or more explanatory variables.
+For example, we might use environmental variables such as temperature,
+precipitation, and elevation to explain variation in species composition
+across sites. Rather than simply finding the major patterns of variation
+in species composition, constrained ordination focuses on the portion of
+that variation that can be explained by the environmental variables.
+
+\begin{figure}
+
+\caption{\label{fig-ord-constrained}Constrained ordination summarizes
+variation in the species abundance matrix (A) associated with
+explanatory variables in the environmental matrix (E). Both matrices
+contribute to the ordination, while the species trait matrix (S) is not
+used.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Diagram showing a species abundance matrix (A) and an environmental variable matrix (E), both contributing to an ordination plot through red and blue arrows, respectively. The ordination contains observations, species vectors, and environmental vectors. The species trait matrix (S) is faded to indicate that it does not contribute to the analysis.}]{chapters/../images/ord-constrained.jpg}}
+
+}
+
+\end{figure}%
+
+Constrained ordination is often called canonical ordination,
+particularly in ecology. The term \textbf{canonical} refers to
+mathematical methods that identify relationships between sets of
+variables, as in canonical correlation analysis. In ecological
+applications, canonical ordination generally refers to methods that
+construct ordination axes using explanatory variables. However, the term
+has a broader mathematical meaning and is not always synonymous with
+constrained ordination.
+
+\subsubsection{Eigenanalysis
+vs.~optimization}\label{sec-intro-types-calc}
+
+Ordination methods also differ in the mathematical procedures used to
+construct their axes.
+
+Some methods, including principal components analysis (PCA) and
+principal coordinates analysis (PCoA), use \textbf{eigenanalysis}:
+mathematical procedures that decompose a matrix into eigenvalues and
+eigenvectors. In linear algebra, an \textbf{eigenvector} is a vector
+whose direction is not changed by a linear transformation. An
+\textbf{eigenvalue} describes how an eigenvector is scaled by the
+transformation (see
+\href{https://www.youtube.com/watch?v=PFDu9oVAE-g}{this video} for
+visual explanation). Mathematically, we can write
+
+\[\mathbf{A}\vec{v}=\lambda\vec{v}\]
+
+where \(\mathbf{A}\) is the matrix that describes a linear
+transformation, \(\vec{v}\) is an eigenvector, and \(\lambda\) is an
+eigenvalue. Again, go watch
+\href{https://www.youtube.com/watch?v=PFDu9oVAE-g}{this video}.
+
+In Figure~\ref{fig-ord-basicidea}, the red vectors in the center panel
+are the eigenvectors which will define the axes of the ordination space.
+An The eigenvectors are used to construct ordination axes, while the
+eigenvalues describe the amount of variation represented by those axes.
+These methods generally produce a solution directly through matrix
+calculations.
+
+Other methods use \textbf{numerical optimization}, an iterative process
+that searches for a configuration of observations that best satisfies a
+particular criterion. For example, nonmetric multidimensional scaling
+(NMDS) arranges observations in a low-dimensional space so that the
+ranked distances between observations correspond as closely as possible
+to their ranked dissimilarities in the original dataset. The algorithm
+repeatedly adjusts the positions of observations to minimize a measure
+of disagreement called stress.
+
+Both approaches produce ordinations, but they differ in what their axes
+represent and how faithfully they preserve relationships in the original
+dataset. In methods such as PCA, the ordination axes are calculated as
+linear combinations of the original variables, allowing us to interpret
+each axis in terms of those variables. Other eigenanalysis methods, such
+as PCoA, derive their axes from a distance matrix rather than directly
+from the original variables.
+
+In optimization-based methods such as NMDS, the axes do not have a
+direct mathematical relationship with the original variables. Instead,
+the objective is to arrange observations so that distances between them
+in the ordination space reproduce the ranked dissimilarities in the
+original dataset as closely as possible. Consequently, an NMDS
+configuration can be rotated or reflected without changing its meaning,
+because the relationships among observations remain unchanged. In fact,
+in \texttt{vegan::metaMDS()}, which performs NMDS, the default
+post-processing includes rotating the configuration so that its first
+axis aligns with the direction of maximum variance. Although an
+eigenanalysis-based configuration can also be rotated, doing so
+generally changes the mathematical interpretation of its axes. For
+example, rotating a PCA configuration would mean that the first axis no
+longer necessarily represents the direction of maximum variance.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\caption{Comparison of common ordination methods, indicating whether the
+ordination is constrained by explanatory variables and the primary
+mathematical approach used to calculate the ordination
+axes.}\label{tbl-ordination-methods}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Constrained?
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Main computational approach
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Constrained?
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Main computational approach
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Principal components analysis (PCA) & No & Eigenanalysis / SVD \\
+Principal coordinates analysis (PCoA) & No & Eigenanalysis \\
+Nonmetric multidimensional scaling (NMDS) & No & Iterative
+optimization \\
+Redundancy analysis (RDA) & Yes & Regression + eigenanalysis \\
+Canonical correspondence analysis (CCA) & Yes & Weighted regression +
+eigenanalysis \\
+Distance-based redundancy analysis (dbRDA) & Yes & Distance-based
+eigenanalysis + regression \\
+Linear discriminant analysis (LDA) & Yes & Generalized eigenanalysis \\
+\end{longtable}
 
 \section{Unconstrained ordination methods}\label{sec-ord-un}
 
 \subsection{Principal components analysis (PCA)}\label{sec-ord-un-pca}
 
-\subsection{Principal components analysis (PCoA)}\label{sec-ord-un-pcoa}
+\subsubsection{Introduction}\label{sec-ord-un-pca-intro}
+
+The first and probably most commonly used ordination technique is
+\textbf{principal component analysis (PCA)}. It works by finding
+synthetic gradients that capture most the variation between the
+observations more efficiently than the original variables. These
+gradients are calculated by finding linear combinations of the
+variables. These combinations really define a \emph{rotation}, a kind of
+linear transformation, of the the original coordinate system. There are
+an infinite number of ways that we could apply a linear transformation
+to the data; the principal components are just the eigenvectors of the
+transformation captures the greatest variance on the first axis; the
+second greatest variance on the second axis, and so on.
+
+\subsubsection{What PCA does}\label{sec-ord-un-pca-what}
+
+To get an intuitive understanding of PCA, work through it using an
+imaginary dataset with two variables, \emph{Variable 1} and
+\emph{Variable 2}. You could capture and display all the information
+about this dataset in a 2-d scatterplot, by simply plotting one variable
+against the other. Likewise, you could capture and display all of the
+information about a 3-dimensional dataset with a 3-d plot. For 4 or more
+dimensions, a true scatterplot can't be rendered sensibly or even
+understood by our meat-based brains.
+
+\begin{figure}
+
+\caption{\label{fig-pca-explain1}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-explain1-1.pdf}}
+
+}
+
+\end{figure}%
+
+One way to describe the variation among the observations in
+Figure~\ref{fig-pca-explain1} is to think about how the samples vary
+along each axis. The figure below shows how the variation among samples
+can be broken down into the variation in Variable 1 and the variation in
+Variable 2. When we say ``variation in variable 1'', we mean ``deviation
+between the values of variable 1 and the mean of variable 1''. That is
+what is shown in Figure~\ref{fig-pca-explain2} below.
+
+\begin{itemize}
+\tightlist
+\item
+  Each point, or sample, has a Variable 1 coordinate and a Variable 2
+  coordinate.
+\item
+  Each point's value for Variable 1 can be thought of as the difference
+  between that value and the mean of Variable 1.
+\item
+  Likewise, each point's value for Variable 2 can be thought of as the
+  difference between that value and the mean of Variable 2.
+\item
+  The position of each point can thus be reframed as its deviation with
+  respect to the Variable 1, and its deviation with respect to Variable
+  2. This reframing is the same as centering each variable (i.e.,
+  subtracting the mean).
+\item
+  The total variance among the samples is equal to the variance with
+  respect to Variable 1 plus the variance with respect to Variable 2.
+\end{itemize}
+
+\begin{figure}
+
+\caption{\label{fig-pca-explain2}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-explain2-1.pdf}}
+
+}
+
+\end{figure}%
+
+Figure~\ref{fig-pca-explain2} above shows how the total variation in the
+dataset is split up (``partitioned'') into variation in Variable 1 and
+variation in Variable 2.
+
+Describing each observation as its deviation from the mean of each
+variable has the effect of \textbf{centering} the points at the origin.
+Notice that the variation, expressed as sums of squared deviations, is
+unchanged (Figure~\ref{fig-pca-explain3}).
+
+Figure~\ref{fig-pca-explain3} below shows the data as deviations from
+the means of each variable. Notice that the variation is each direction
+is unchanged from Figure~\ref{fig-pca-explain2}.
+
+\begin{figure}
+
+\caption{\label{fig-pca-explain3}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-explain3-1.pdf}}
+
+}
+
+\end{figure}%
+
+Next, we \textbf{standardize} each variable to have a variance of 1.
+This means that the original values are converted to Z-scores by
+subtracting the mean and dividing by the SD (i.e., they are
+\textbf{z-scaled}). Recall from Section~\ref{sec-trans-common-zscore}
+that the \emph{z}-score of an observation \(x\) is
+
+\[z\left(x\right)=\frac{x-\mu}{\sigma}\]
+
+Doing PCA without standardizing variables will distort the results
+because each variable's importance in the PCA will depend on its
+magnitude, not its relationship to other variables. Standardization puts
+variation along any axis on equal footing. Figure~\ref{fig-pca-explain4}
+shows the data as deviations from the variable means after
+standardization. Compare this figure to Figure~\ref{fig-pca-explain3}
+above. All that changed are the axis scales and the sum of squared
+deviations. Note that the sums of squares are equal for both variables
+now.
+
+\begin{figure}
+
+\caption{\label{fig-pca-explain4}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-explain4-1.pdf}}
+
+}
+
+\end{figure}%
+
+The goal of PCA is to find a new coordinate system that puts the most
+variance possible on its first axis, then the second most variance on
+its second axis, and so on. This new coordinate system will have the
+same number of dimensions as the original dataset. But whereas in the
+standardized dataset all variables (axes) have the same amount of
+variation associated with them, in the PCA coordinate system some axes
+will explain more variation than others.
+
+The variation among the observations is defined in terms of Variable 1
+and Variable 2, and Variable 1 and Variable 2 contributed equally to the
+total variation. But, we could describe most of the variation between
+points with just one variable, or axis, the red line
+(Figure~\ref{fig-pca-explain5}). Any remaining variation will be in the
+direction perpendicular to the red axis, the blue axis (dashed line).
+
+\begin{figure}
+
+\caption{\label{fig-pca-explain5}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-explain5-1.pdf}}
+
+}
+
+\end{figure}%
+
+The red axis is a vector that contains information about both Variable 1
+and Variable 2. It is tricky, but not too hard, to calculate each
+observation's deviations from the mean of the red axis (left panel
+below) (Figure~\ref{fig-pca-explain6}). We can also calculate the
+deviations along a perpendicular vector, because even after describing
+the variation in the red direction, there is still some variation in the
+blue direction (right panel).
+
+\begin{figure}
+
+\caption{\label{fig-pca-explain6}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-explain6-1.pdf}}
+
+}
+
+\end{figure}%
+
+We know that the variation along the red and blue axes is the same as
+the variation on the Variable 1 and Variable 2 axes, because the sums of
+squares are the same (\(76.6 + 21.4 = 49 + 49\)) . The red and blue axes
+are just different ways of orienting the data to express the same
+patterns. All we really did was rotate the original coordinate system
+(defined by Variables 1 and 2) to a new coordinate system
+(Figure~\ref{fig-pca-explain7}).
+
+\begin{figure}
+
+\caption{\label{fig-pca-explain7}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-explain7-1.pdf}}
+
+}
+
+\end{figure}%
+
+\subsubsection{\texorpdfstring{Example using
+\texttt{vegan}}{Example using vegan}}\label{sec-ord-un-pca-example}
+
+For an example PCA analysis, let's revisit the small mammal measurement
+data from Section~\ref{sec-clust-kmeans-example}. Download the
+\href{../datasets/data-neon-ind-meas.csv}{individual measurement
+dataset} and the \href{../datasets/data-neon-taxa.csv}{taxonomic
+dataset} and put them in your working directory.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tax }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data{-}neon{-}taxa.csv"}\NormalTok{)}
+\NormalTok{ind }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data{-}neon{-}ind{-}meas.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+We are going to use PCA to explore variation in small mammal morphology.
+First we need to organize the data. Cut the measurement data down to
+just the columns we need: individual, species, and the four standard
+measurements.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{use.cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"tagID"}\NormalTok{, }\StringTok{"abb"}\NormalTok{, }\StringTok{"totalLength"}\NormalTok{,}
+              \StringTok{"tailLength"}\NormalTok{, }\StringTok{"hindfootLength"}\NormalTok{,}
+              \StringTok{"earLength"}\NormalTok{, }\StringTok{"weight"}\NormalTok{)}
+\NormalTok{dx }\OtherTok{\textless{}{-}}\NormalTok{ ind[,use.cols]}
+
+\CommentTok{\# only want individuals with no missing measurements}
+\NormalTok{dx }\OtherTok{\textless{}{-}}\NormalTok{ dx[}\FunctionTok{complete.cases}\NormalTok{(dx),]}
+\end{Highlighting}
+\end{Shaded}
+
+How many individuals do we have of each species?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{rev}\NormalTok{(}\FunctionTok{sort}\NormalTok{(}\FunctionTok{table}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{abb)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+ Pergos  Perboy  Perman  Perleu  Musmus  Reimeg  Chapen  Onyleu  Ratrat  Dipord 
+   1486     745     704     634     390     320     294     273     258     203 
+ Reimon Perfla2  Pertru  Myorut  Chahis  Sorcin  Perpar  Chabai  Micoec  Dipmic 
+    185     170     110      86      79      51      41      35      34      29 
+ Sighis  Chacal  Chaint  Reiful  Micoch  Onytor  Micpen  Ochnut  Tammin  Icttri 
+     28      27      26      25      25      23      22      18      17      17 
+ Neoflo  Perpol  Peratt  Neoalb  Micmon  Sortun  Onyare  Miclon  Perere  Orypal 
+     15      14      14      14      14      13      12      12      10      10 
+ Lemtri  Lemcur  Sormon  Perino  Zaphud  Permer Perfla1  Dipmer  Sigoch  Podflo 
+      9       9       7       7       6       6       6       6       5       5 
+ Myogap  Micpin  Tamstr  Neomex  Zappri  Xerspi  Sigari  Reihum  Peramp  Baitay 
+      5       5       4       4       3       3       3       3       3       3 
+ Tamspe  Tamruf  Tamamo  Percri  Napins  Micxan  Micmiu  Xerter  Tamhud  Sorhoy 
+      2       2       2       2       2       2       2       1       1       1 
+ Ratnor  Pernas  Perlon  Percal  Neomic  Neomac  Miccal 
+      1       1       1       1       1       1       1 
+\end{verbatim}
+
+There is quite a wide range of numbers of individuals between species.
+To prevent the species with many individuals from having too much
+influence over the analysis, let's randomly select 50 individuals from
+every species with at least 50 individuals. That will give us 16
+species.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{7410}\NormalTok{)}
+
+\NormalTok{sp }\OtherTok{\textless{}{-}} \FunctionTok{names}\NormalTok{(}\FunctionTok{which}\NormalTok{(}\FunctionTok{table}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{abb) }\SpecialCharTok{\textgreater{}=} \DecValTok{50}\NormalTok{))}
+\NormalTok{out }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\StringTok{"list"}\NormalTok{, }\FunctionTok{length}\NormalTok{(sp))}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \FunctionTok{seq\_along}\NormalTok{(sp)) \{}
+\NormalTok{  d }\OtherTok{\textless{}{-}}\NormalTok{ dx[dx}\SpecialCharTok{$}\NormalTok{abb }\SpecialCharTok{==}\NormalTok{ sp[i], ]}
+\NormalTok{  out[[i]] }\OtherTok{\textless{}{-}}\NormalTok{ d[}\FunctionTok{sample}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(d), }\DecValTok{50}\NormalTok{), ]}
+\NormalTok{\}}
+
+\NormalTok{dx.pca }\OtherTok{\textless{}{-}} \FunctionTok{do.call}\NormalTok{(rbind, out)}
+\NormalTok{dx.pca }\OtherTok{\textless{}{-}} \FunctionTok{merge}\NormalTok{(dx.pca, tax[,}\FunctionTok{c}\NormalTok{(}\StringTok{"abb"}\NormalTok{, }\StringTok{"species"}\NormalTok{, }\StringTok{"family"}\NormalTok{)])}
+
+\FunctionTok{table}\NormalTok{(dx.pca}\SpecialCharTok{$}\NormalTok{species)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+     Chaetodipus hispidus  Chaetodipus penicillatus           Dipodomys ordii 
+                       50                        50                        50 
+             Mus musculus            Myodes rutilus     Onychomys leucogaster 
+                       50                        50                        50 
+       Perognathus flavus         Peromyscus boylii     Peromyscus gossypinus 
+                       50                        50                        50 
+      Peromyscus leucopus    Peromyscus maniculatus          Peromyscus truei 
+                       50                        50                        50 
+            Rattus rattus Reithrodontomys megalotis  Reithrodontomys montanus 
+                       50                        50                        50 
+           Sorex cinereus 
+                       50 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{table}\NormalTok{(dx.pca}\SpecialCharTok{$}\NormalTok{family)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+  Cricetidae Heteromyidae      Muridae    Soricidae 
+         450          200          100           50 
+\end{verbatim}
+
+We will use package \texttt{vegan} for ordination. Load it and run the
+PCA. Use argument `` to standardize the variables first.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(vegan)}
+
+\NormalTok{pca.cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"totalLength"}\NormalTok{, }\StringTok{"tailLength"}\NormalTok{,}
+              \StringTok{"hindfootLength"}\NormalTok{, }\StringTok{"earLength"}\NormalTok{)}
+\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{pca}\NormalTok{(dx.pca[,pca.cols], }\AttributeTok{scale=}\ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{summary}\NormalTok{(p1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+pca(X = dx.pca[, pca.cols], scale = TRUE) 
+
+Partitioning of correlations:
+              Inertia Proportion
+Total               4          1
+Unconstrained       4          1
+
+Eigenvalues, and their contribution to the correlations 
+
+Importance of components:
+                         PC1    PC2     PC3     PC4
+Eigenvalue            3.0109 0.6850 0.24573 0.05835
+Proportion Explained  0.7527 0.1713 0.06143 0.01459
+Cumulative Proportion 0.7527 0.9240 0.98541 1.00000
+\end{verbatim}
+
+The result shows us that PC1 explains about 75.3\% of the variation in
+measurements. PC2 adds another 17.1\%. Just the first two PCs account
+for 92.4\% of the variation. As we saw in
+Figure~\ref{fig-kmeans-mice-pca4}, the first PC likely captures a size
+gradient. Let's plot the ordination to see.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(p1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-pca-pca-neon1}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon1-1.pdf}}
+
+}
+
+\end{figure}%
+
+Well, that's not very helpful. The default plot method is a bit
+underwhelming. I prefer to extract the PC scores (coordinates in the PC
+coordinate system) and build the plot manually. Note that in the
+ordination function in package \texttt{vegan}, observations are always
+referred to as ``sites'', and variables as \texttt{species}. This is a
+result of the origin of \texttt{vegan} in community ecology.
+
+While we're at it, let's assign some colors and shapes to the species
+(the actual species, not the \texttt{"species"}).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{spps }\OtherTok{\textless{}{-}} \FunctionTok{sort}\NormalTok{(}\FunctionTok{unique}\NormalTok{(dx.pca}\SpecialCharTok{$}\NormalTok{species))}
+\NormalTok{fams }\OtherTok{\textless{}{-}} \FunctionTok{sort}\NormalTok{(}\FunctionTok{unique}\NormalTok{(dx.pca}\SpecialCharTok{$}\NormalTok{family))}
+
+\NormalTok{col.spps }\OtherTok{\textless{}{-}} \FunctionTok{hcl.colors}\NormalTok{(}\FunctionTok{length}\NormalTok{(spps), }\AttributeTok{palette =} \StringTok{"Dark 3"}\NormalTok{)}
+\NormalTok{col.fams }\OtherTok{\textless{}{-}} \FunctionTok{hcl.colors}\NormalTok{(}\FunctionTok{length}\NormalTok{(fams), }\AttributeTok{palette =} \StringTok{"Dark 3"}\NormalTok{)}
+\NormalTok{pch.fams }\OtherTok{\textless{}{-}} \DecValTok{15}\SpecialCharTok{:}\DecValTok{18}
+
+\FunctionTok{names}\NormalTok{(col.spps) }\OtherTok{\textless{}{-}}\NormalTok{ spps}
+\FunctionTok{names}\NormalTok{(col.fams) }\OtherTok{\textless{}{-}}\NormalTok{ fams}
+\FunctionTok{names}\NormalTok{(pch.fams) }\OtherTok{\textless{}{-}}\NormalTok{ fams}
+
+\NormalTok{xy.samp }\OtherTok{\textless{}{-}} \FunctionTok{scores}\NormalTok{(p1, }\AttributeTok{display=}\StringTok{"sites"}\NormalTok{, }\AttributeTok{choices=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{)}
+\NormalTok{xy.vars }\OtherTok{\textless{}{-}} \FunctionTok{scores}\NormalTok{(p1, }\AttributeTok{display=}\StringTok{"species"}\NormalTok{, }\AttributeTok{choices=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{)}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(xy.samp[,}\DecValTok{1}\NormalTok{], xy.samp[,}\DecValTok{2}\NormalTok{],}
+     \AttributeTok{pch=}\NormalTok{pch.fams[dx.pca}\SpecialCharTok{$}\NormalTok{family],}
+     \AttributeTok{col=}\NormalTok{col.spps[dx.pca}\SpecialCharTok{$}\NormalTok{species],}
+     \AttributeTok{xlab=}\StringTok{"PC1 (75.3\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (17.1\%)"}\NormalTok{)}
+\NormalTok{scal }\OtherTok{\textless{}{-}} \FloatTok{0.2}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{1}\NormalTok{], scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(}\FloatTok{1.03}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{1}\NormalTok{], }\FloatTok{1.03}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{2}\NormalTok{],}
+     \FunctionTok{rownames}\NormalTok{(xy.vars), }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\AttributeTok{legend=}\NormalTok{spps, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{,}
+       \AttributeTok{col=}\NormalTok{col.spps,}
+       \AttributeTok{pch=}\NormalTok{pch.fams[tax}\SpecialCharTok{$}\NormalTok{family[}\FunctionTok{match}\NormalTok{(spps, tax}\SpecialCharTok{$}\NormalTok{species)]],}
+       \AttributeTok{ncol=}\DecValTok{3}\NormalTok{,}
+       \AttributeTok{text.font=}\DecValTok{3}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-pca-pca-neon2}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon2-1.pdf}}
+
+}
+
+\end{figure}%
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(xy.samp[,}\DecValTok{1}\NormalTok{], xy.samp[,}\DecValTok{2}\NormalTok{],}
+     \AttributeTok{pch=}\NormalTok{pch.fams[dx.pca}\SpecialCharTok{$}\NormalTok{family],}
+     \AttributeTok{col=}\NormalTok{col.spps[dx.pca}\SpecialCharTok{$}\NormalTok{species],}
+     \AttributeTok{xlab=}\StringTok{"PC1 (75.3\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (17.1\%)"}\NormalTok{)}
+\FunctionTok{ordiellipse}\NormalTok{(p1, dx.pca}\SpecialCharTok{$}\NormalTok{species,}
+            \AttributeTok{col=}\NormalTok{col.spps, }\AttributeTok{draw=}\StringTok{"polygon"}\NormalTok{,}
+            \AttributeTok{border=}\ConstantTok{NA}\NormalTok{)}
+\NormalTok{scal }\OtherTok{\textless{}{-}} \FloatTok{0.2}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{1}\NormalTok{], scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(}\FloatTok{1.03}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{1}\NormalTok{], }\FloatTok{1.03}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{2}\NormalTok{],}
+     \FunctionTok{rownames}\NormalTok{(xy.vars), }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
+
+\FunctionTok{legend}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\AttributeTok{legend=}\NormalTok{spps, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{,}
+       \AttributeTok{col=}\NormalTok{col.spps,}
+       \AttributeTok{pch=}\NormalTok{pch.fams[tax}\SpecialCharTok{$}\NormalTok{family[}\FunctionTok{match}\NormalTok{(spps, tax}\SpecialCharTok{$}\NormalTok{species)]],}
+       \AttributeTok{ncol=}\DecValTok{3}\NormalTok{,}
+       \AttributeTok{text.font=}\DecValTok{3}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-pca-pca-neon3}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon3-1.pdf}}
+
+}
+
+\end{figure}%
+
+And color by family.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(xy.samp[,}\DecValTok{1}\NormalTok{], xy.samp[,}\DecValTok{2}\NormalTok{],}
+     \AttributeTok{pch=}\NormalTok{pch.fams[dx.pca}\SpecialCharTok{$}\NormalTok{family],}
+     \AttributeTok{col=}\NormalTok{col.fams[dx.pca}\SpecialCharTok{$}\NormalTok{family],}
+     \AttributeTok{xlab=}\StringTok{"PC1 (75.3\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (17.1\%)"}\NormalTok{)}
+\FunctionTok{ordiellipse}\NormalTok{(p1, dx.pca}\SpecialCharTok{$}\NormalTok{family,}
+            \AttributeTok{col=}\NormalTok{col.fams, }\AttributeTok{draw=}\StringTok{"polygon"}\NormalTok{,}
+            \AttributeTok{border=}\ConstantTok{NA}\NormalTok{)}
+\NormalTok{scal }\OtherTok{\textless{}{-}} \FloatTok{0.2}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{1}\NormalTok{], scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(}\FloatTok{1.03}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{1}\NormalTok{], }\FloatTok{1.03}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{2}\NormalTok{],}
+     \FunctionTok{rownames}\NormalTok{(xy.vars), }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
+
+\FunctionTok{legend}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\AttributeTok{legend=}\NormalTok{fams, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{,}
+       \AttributeTok{fill=}\NormalTok{col.fams,}
+       \AttributeTok{ncol=}\DecValTok{2}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-pca-pca-neon4}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon4-1.pdf}}
+
+}
+
+\end{figure}%
+
+Next: factor out body mass using allometric equations, then refit PCA.
+
+Work in progress!
+
+\subsection{Principal coordinates analysis
+(PCoA)}\label{sec-ord-un-pcoa}
 
 \subsection{Correspondence analysis (CA)}\label{sec-ord-un-ca}
 

@@ -578,7 +578,7 @@ One of the simplest hierarchical clustering methods is to combine samples based 
 
 ##### Example using NEON data {#sec-clust-hier-methods-single-ex}
 
-Let's revisit the NEON small mammal data. Download the [site-level capture dataset](../datasets/data-neon-captures-sites.csv) and the [site metadata dataset](../datasets/data-neon-metadata-site.csv) and put them in your working directory.
+Let's revisit the NEON small mammal data. Download the [site-level capture dataset](../datasets/data-neon-captures-site.csv) and the [site metadata dataset](../datasets/data-neon-metadata-site.csv) and put them in your working directory.
 
 ```{r}
 #| include: false

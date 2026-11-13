@@ -867,11 +867,15 @@ legend("topright", legend=c(expression(sigma==2),
         lwd=3, col=c("black", "red", "blue"))
 ```
 
+#### Properties of the normal distribution {#sec-dist-norm-prop}
+
 The normal distribution has several useful properties. Generally, the mean and median are the same (if the distribution is not skewed). Approximately 68% of values fall within 1 SD of the mean, 95% of values fall within about 2 SD of the mean (technically 1.9599 SD, or `qnorm(0.975)`), and 99.7% of values fall within about 3 SD of the mean. So, deviations of $>3$ SD are very rare and may signify outliers. The number of SD a value falls away from the mean is sometimes referred to as a ***z*****-score** or a **sigma**. *Z*-scores are calculated as:
 
 $$z\left(x\right)=\frac{x-\mu}{\sigma}$$
 
-Where *x* is the value, $\mu$ is the mean, and $\sigma$ is the SD.
+Where *x* is the value, $\mu$ is the population mean, and $\sigma$ is the population SD. When the population mean and SD are not known, we can calculate *z*-scores based on the sample mean $\bar{x}$ and sample SD $s$. 
+
+$$z\left(x\right)=\frac{x-\bar{x}}{s}$$
 
 *Z*-scores are sometimes used when comparing variables that are normally distributed, but on very different scales. Converting the raw values to their *z*-scores is referred to as **standardizing** them. Any variable, once standardized, has a mean of 0 and SD of 1. The units of a *z*-scaled variable are "standard deviations away from the mean".
 

@@ -26,6 +26,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -77,6 +112,35 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -441,23 +505,37 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-ord-un" id="toc-sec-ord-un" class="nav-link active" data-scroll-target="#sec-ord-un"><span class="header-section-number">27.1</span> Unconstrained ordination methods</a>
+  <li><a href="#sec-ord-intro" id="toc-sec-ord-intro" class="nav-link active" data-scroll-target="#sec-ord-intro"><span class="header-section-number">27.1</span> Introduction</a>
   <ul>
-  <li><a href="#sec-ord-un-pca" id="toc-sec-ord-un-pca" class="nav-link" data-scroll-target="#sec-ord-un-pca"><span class="header-section-number">27.1.1</span> Principal components analysis (PCA)</a></li>
-  <li><a href="#sec-ord-un-pcoa" id="toc-sec-ord-un-pcoa" class="nav-link" data-scroll-target="#sec-ord-un-pcoa"><span class="header-section-number">27.1.2</span> Principal components analysis (PCoA)</a></li>
-  <li><a href="#sec-ord-un-ca" id="toc-sec-ord-un-ca" class="nav-link" data-scroll-target="#sec-ord-un-ca"><span class="header-section-number">27.1.3</span> Correspondence analysis (CA)</a></li>
-  <li><a href="#sec-ord-un-nmds" id="toc-sec-ord-un-nmds" class="nav-link" data-scroll-target="#sec-ord-un-nmds"><span class="header-section-number">27.1.4</span> Nonmetric multidimensional scaling (NMDS)</a></li>
+  <li><a href="#sec-ord-terms" id="toc-sec-ord-terms" class="nav-link" data-scroll-target="#sec-ord-terms"><span class="header-section-number">27.1.1</span> Ordination terminology</a></li>
+  <li><a href="#sec-intro-types" id="toc-sec-intro-types" class="nav-link" data-scroll-target="#sec-intro-types"><span class="header-section-number">27.1.2</span> Types of ordination</a>
+  <ul class="collapse">
+  <li><a href="#sec-intro-types-constraint" id="toc-sec-intro-types-constraint" class="nav-link" data-scroll-target="#sec-intro-types-constraint"><span class="header-section-number">27.1.2.1</span> Constrained vs.&nbsp;unconstrained ordination</a></li>
+  <li><a href="#sec-intro-types-calc" id="toc-sec-intro-types-calc" class="nav-link" data-scroll-target="#sec-intro-types-calc"><span class="header-section-number">27.1.2.2</span> Eigenanalysis vs.&nbsp;optimization</a></li>
   </ul></li>
-  <li><a href="#sec-ord-con" id="toc-sec-ord-con" class="nav-link" data-scroll-target="#sec-ord-con"><span class="header-section-number">27.2</span> Constrained ordination methods</a>
-  <ul>
-  <li><a href="#sec-ord-con-ra" id="toc-sec-ord-con-ra" class="nav-link" data-scroll-target="#sec-ord-con-ra"><span class="header-section-number">27.2.1</span> Redundancy analysis (RA)</a></li>
-  <li><a href="#sec-ord-con-lda" id="toc-sec-ord-con-lda" class="nav-link" data-scroll-target="#sec-ord-con-lda"><span class="header-section-number">27.2.2</span> Linear discriminant analysis</a></li>
-  <li><a href="#sec-ord-con-cca" id="toc-sec-ord-con-cca" class="nav-link" data-scroll-target="#sec-ord-con-cca"><span class="header-section-number">27.2.3</span> Canonical correspondence analysis (CCA)</a></li>
-  <li><a href="#sec-ord-con-dbrda" id="toc-sec-ord-con-dbrda" class="nav-link" data-scroll-target="#sec-ord-con-dbrda"><span class="header-section-number">27.2.4</span> Distance-based RDA (dbRDA)</a></li>
   </ul></li>
-  <li><a href="#sec-ord-other" id="toc-sec-ord-other" class="nav-link" data-scroll-target="#sec-ord-other"><span class="header-section-number">27.3</span> Classification and other methods</a>
+  <li><a href="#sec-ord-un" id="toc-sec-ord-un" class="nav-link" data-scroll-target="#sec-ord-un"><span class="header-section-number">27.2</span> Unconstrained ordination methods</a>
   <ul>
-  <li><a href="#sec-ord-other-lda" id="toc-sec-ord-other-lda" class="nav-link" data-scroll-target="#sec-ord-other-lda"><span class="header-section-number">27.3.1</span> Linear discriminant analysis</a></li>
+  <li><a href="#sec-ord-un-pca" id="toc-sec-ord-un-pca" class="nav-link" data-scroll-target="#sec-ord-un-pca"><span class="header-section-number">27.2.1</span> Principal components analysis (PCA)</a>
+  <ul class="collapse">
+  <li><a href="#sec-ord-un-pca-intro" id="toc-sec-ord-un-pca-intro" class="nav-link" data-scroll-target="#sec-ord-un-pca-intro"><span class="header-section-number">27.2.1.1</span> Introduction</a></li>
+  <li><a href="#sec-ord-un-pca-what" id="toc-sec-ord-un-pca-what" class="nav-link" data-scroll-target="#sec-ord-un-pca-what"><span class="header-section-number">27.2.1.2</span> What PCA does</a></li>
+  <li><a href="#sec-ord-un-pca-example" id="toc-sec-ord-un-pca-example" class="nav-link" data-scroll-target="#sec-ord-un-pca-example"><span class="header-section-number">27.2.1.3</span> Example using <code>vegan</code></a></li>
+  </ul></li>
+  <li><a href="#sec-ord-un-pcoa" id="toc-sec-ord-un-pcoa" class="nav-link" data-scroll-target="#sec-ord-un-pcoa"><span class="header-section-number">27.2.2</span> Principal coordinates analysis (PCoA)</a></li>
+  <li><a href="#sec-ord-un-ca" id="toc-sec-ord-un-ca" class="nav-link" data-scroll-target="#sec-ord-un-ca"><span class="header-section-number">27.2.3</span> Correspondence analysis (CA)</a></li>
+  <li><a href="#sec-ord-un-nmds" id="toc-sec-ord-un-nmds" class="nav-link" data-scroll-target="#sec-ord-un-nmds"><span class="header-section-number">27.2.4</span> Nonmetric multidimensional scaling (NMDS)</a></li>
+  </ul></li>
+  <li><a href="#sec-ord-con" id="toc-sec-ord-con" class="nav-link" data-scroll-target="#sec-ord-con"><span class="header-section-number">27.3</span> Constrained ordination methods</a>
+  <ul>
+  <li><a href="#sec-ord-con-ra" id="toc-sec-ord-con-ra" class="nav-link" data-scroll-target="#sec-ord-con-ra"><span class="header-section-number">27.3.1</span> Redundancy analysis (RA)</a></li>
+  <li><a href="#sec-ord-con-lda" id="toc-sec-ord-con-lda" class="nav-link" data-scroll-target="#sec-ord-con-lda"><span class="header-section-number">27.3.2</span> Linear discriminant analysis</a></li>
+  <li><a href="#sec-ord-con-cca" id="toc-sec-ord-con-cca" class="nav-link" data-scroll-target="#sec-ord-con-cca"><span class="header-section-number">27.3.3</span> Canonical correspondence analysis (CCA)</a></li>
+  <li><a href="#sec-ord-con-dbrda" id="toc-sec-ord-con-dbrda" class="nav-link" data-scroll-target="#sec-ord-con-dbrda"><span class="header-section-number">27.3.4</span> Distance-based RDA (dbRDA)</a></li>
+  </ul></li>
+  <li><a href="#sec-ord-other" id="toc-sec-ord-other" class="nav-link" data-scroll-target="#sec-ord-other"><span class="header-section-number">27.4</span> Classification and other methods</a>
+  <ul>
+  <li><a href="#sec-ord-other-lda" id="toc-sec-ord-other-lda" class="nav-link" data-scroll-target="#sec-ord-other-lda"><span class="header-section-number">27.4.1</span> Linear discriminant analysis</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch27.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -484,42 +562,527 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>We’re all just points on a graph.</p>
-<section id="sec-ord-un" class="level2" data-number="27.1">
-<h2 data-number="27.1" class="anchored" data-anchor-id="sec-ord-un"><span class="header-section-number">27.1</span> Unconstrained ordination methods</h2>
-<section id="sec-ord-un-pca" class="level3" data-number="27.1.1">
-<h3 data-number="27.1.1" class="anchored" data-anchor-id="sec-ord-un-pca"><span class="header-section-number">27.1.1</span> Principal components analysis (PCA)</h3>
+<section id="sec-ord-intro" class="level2" data-number="27.1">
+<h2 data-number="27.1" class="anchored" data-anchor-id="sec-ord-intro"><span class="header-section-number">27.1</span> Introduction</h2>
+<p>Humans are visual creatures, relying much more on their sense of vision than other senses like smell for understanding the world. When’s the last time you smelled a dataset?</p>
+<p>Unfortunately, humans are also creatures of 3 spatial dimensions, and that severely limits our ability to “see” patterns in data. Even if patterns in data might exist clearly in 4 or 5 dimensions, our primate brains just won’t see those patterns. Instead, we need ways to bring those high-dimensional patterns down to 3 or fewer. Or, ways to bring 3 dimensional patterns down to 1 or 2, for ease of interpretation. These practices all fall under the umbrella of <strong>dimension reduction</strong>. One very powerful set of techniques for dimension reduction is <strong>ordination</strong>. A good ordination will reveal previously unseen (or unseeable) patterns in data, allow cluster identification, or even show gradients in the data that researchers didn’t know they were looking for.</p>
+<p><strong>Ordination</strong> is literally ordering observations along two or more axes. We put observations in order by translating them into a new coordinate system. How that translation is done varies wildly among ordination techniques. No matter how they work, all ordination methods have the same goal: representing patterns in fewer dimensions than there are variables. This makes ordination an approach to <strong>exploratory data analysis</strong>. Most ordination techniques allow to better see patterns, but they are not inferential tests themselves.</p>
+<div id="fig-ord-basicidea" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Illustration of ordination as a change in coordinate systems. Left: Observations plotted against two original variables form a diagonal pattern. Middle: A new, rotated coordinate system is superimposed on the observations. Right: The same observations are plotted relative to the new axes, with most variation occurring along Ordination Axis 1.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-ord-basicidea-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.1: Ordination describes observations using a new coordinate system. (Left) Observations are positioned according to their values for two original variables. (Middle) A new coordinate system is defined using axes oriented differently from the original variables. (Right) The observations are represented relative to the new axes, revealing a major gradient of variation along Ordination Axis 1. In this simplified example, the number of dimensions remains unchanged, but the observations could be reasonably summarized using only the first ordination axis.
+</figcaption>
+<div aria-describedby="fig-ord-basicidea-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/ord-basicidea.jpg" class="img-fluid figure-img" alt="Illustration of ordination as a change in coordinate systems. Left: Observations plotted against two original variables form a diagonal pattern. Middle: A new, rotated coordinate system is superimposed on the observations. Right: The same observations are plotted relative to the new axes, with most variation occurring along Ordination Axis 1.">
+</div>
+</figure>
+</div>
+<p>The applications of ordination overlap with those of the multivariate techniques that we have already seen:</p>
+<ol type="1">
+<li><strong>Dimension reduction:</strong> Summarizing variation across many variables using a smaller number of synthetic axes, making complex multivariate datasets easier to visualize and interpret.</li>
+<li><strong>Gradient discovery:</strong> Identifying major patterns of variation among observations, which may represent underlying biological or environmental gradients.</li>
+<li><strong>Group identification:</strong> Visualizing similarities and differences among observations, including identifying potential clusters of observations that share similar characteristics.</li>
+</ol>
+<p>These goals are not mutually exclusive. Dimension reduction is accomplished by finding gradients in the data that are not necessarily equivalent to any of the original variables. The first is what ordination does mathematically; the second is often what we hope to find biologically. Group identification can occur when we find observations forming clusters in an ordination plot, which is itself created by plotting observations against the latent gradients identified by the algorithm. The connection to <a href="ch26.html">clustering</a> from the previous chapter should be obvious.</p>
+<section id="sec-ord-terms" class="level3" data-number="27.1.1">
+<h3 data-number="27.1.1" class="anchored" data-anchor-id="sec-ord-terms"><span class="header-section-number">27.1.1</span> Ordination terminology</h3>
+<p>Ordination is a very different approach to statistics than we have seen so far in this course. We have largely stepped outside of the world of modeling and hypothesis testing, because most ordination methods are not hypothesis tests. But, we are still using many of the building blocks of inferential statistics that we have already learned. For example, the concepts of variance and covariance are of central importance in many ordination techniques.</p>
+<p>One of the biggest changes is that we need to start thinking of <em>variables</em> as being equivalent to <strong>axes</strong>. This is directly related to the notion of (spaces and coordinate systems)[#sec-diss-space-coord] that we explored in <a href="ch25.html" class="quarto-xref"><span>Chapter 25</span></a>. The dataset defines one coordinate systemThis is somewhat similar to how in <a href="ch25.html" class="quarto-xref"><span>Chapter 25</span></a> we started thinking of observations as equivalent to <strong>vectors</strong>.</p>
 </section>
-<section id="sec-ord-un-pcoa" class="level3" data-number="27.1.2">
-<h3 data-number="27.1.2" class="anchored" data-anchor-id="sec-ord-un-pcoa"><span class="header-section-number">27.1.2</span> Principal components analysis (PCoA)</h3>
+<section id="sec-intro-types" class="level3" data-number="27.1.2">
+<h3 data-number="27.1.2" class="anchored" data-anchor-id="sec-intro-types"><span class="header-section-number">27.1.2</span> Types of ordination</h3>
+<p>There are many methods of ordination, which differ in how they construct ordination axes and what kinds of patterns they are designed to reveal. We can classify these methods in two ways: whether the ordination is constrained by explanatory variables, and how the ordination axes are calculated.</p>
+<section id="sec-intro-types-constraint" class="level4" data-number="27.1.2.1">
+<h4 data-number="27.1.2.1" class="anchored" data-anchor-id="sec-intro-types-constraint"><span class="header-section-number">27.1.2.1</span> Constrained vs.&nbsp;unconstrained ordination</h4>
+<p>In <strong>unconstrained ordination</strong>, the axes are calculated from the variation among observations without using external explanatory variables. For example, we might use measurements of several morphological traits to ordinate specimens, allowing us to identify major patterns of morphological variation. We could then investigate whether those patterns correspond to differences among species, habitats, or other characteristics. <a href="#fig-ord-unconstrained" class="quarto-xref">Figure&nbsp;<span>27.2</span></a> below shows how an unconstrained ordination is constructed using the <a href="#fig-multi-tables">A-E-S matrix schema</a> that we saw in <a href="ch24.html#sec-mdata-matrices" class="quarto-xref"><span>Section 24.2</span></a>.</p>
+<div id="fig-ord-unconstrained" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Diagram showing a species abundance matrix (A) with a red arrow pointing toward an ordination plot containing observations and species vectors. The environmental variable matrix (E) and species trait matrix (S) are faded to indicate that they do not contribute to the ordination.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-ord-unconstrained-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.2: Unconstrained ordination summarizes variation among observations using only the variables in the species abundance matrix (A). The environmental (E) and species trait (S) matrices are not used to construct the ordination.
+</figcaption>
+<div aria-describedby="fig-ord-unconstrained-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/ord-unconstrained.jpg" class="img-fluid figure-img" alt="Diagram showing a species abundance matrix (A) with a red arrow pointing toward an ordination plot containing observations and species vectors. The environmental variable matrix (E) and species trait matrix (S) are faded to indicate that they do not contribute to the ordination.">
+</div>
+</figure>
+</div>
+<p>In <strong>constrained ordination</strong>, the axes are constructed to represent variation associated with one or more explanatory variables. For example, we might use environmental variables such as temperature, precipitation, and elevation to explain variation in species composition across sites. Rather than simply finding the major patterns of variation in species composition, constrained ordination focuses on the portion of that variation that can be explained by the environmental variables.</p>
+<div id="fig-ord-constrained" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Diagram showing a species abundance matrix (A) and an environmental variable matrix (E), both contributing to an ordination plot through red and blue arrows, respectively. The ordination contains observations, species vectors, and environmental vectors. The species trait matrix (S) is faded to indicate that it does not contribute to the analysis.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-ord-constrained-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.3: Constrained ordination summarizes variation in the species abundance matrix (A) associated with explanatory variables in the environmental matrix (E). Both matrices contribute to the ordination, while the species trait matrix (S) is not used.
+</figcaption>
+<div aria-describedby="fig-ord-constrained-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/ord-constrained.jpg" class="img-fluid figure-img" alt="Diagram showing a species abundance matrix (A) and an environmental variable matrix (E), both contributing to an ordination plot through red and blue arrows, respectively. The ordination contains observations, species vectors, and environmental vectors. The species trait matrix (S) is faded to indicate that it does not contribute to the analysis.">
+</div>
+</figure>
+</div>
+<p>Constrained ordination is often called canonical ordination, particularly in ecology. The term <strong>canonical</strong> refers to mathematical methods that identify relationships between sets of variables, as in canonical correlation analysis. In ecological applications, canonical ordination generally refers to methods that construct ordination axes using explanatory variables. However, the term has a broader mathematical meaning and is not always synonymous with constrained ordination.</p>
 </section>
-<section id="sec-ord-un-ca" class="level3" data-number="27.1.3">
-<h3 data-number="27.1.3" class="anchored" data-anchor-id="sec-ord-un-ca"><span class="header-section-number">27.1.3</span> Correspondence analysis (CA)</h3>
+<section id="sec-intro-types-calc" class="level4" data-number="27.1.2.2">
+<h4 data-number="27.1.2.2" class="anchored" data-anchor-id="sec-intro-types-calc"><span class="header-section-number">27.1.2.2</span> Eigenanalysis vs.&nbsp;optimization</h4>
+<p>Ordination methods also differ in the mathematical procedures used to construct their axes.</p>
+<p>Some methods, including principal components analysis (PCA) and principal coordinates analysis (PCoA), use <strong>eigenanalysis</strong>: mathematical procedures that decompose a matrix into eigenvalues and eigenvectors. In linear algebra, an <strong>eigenvector</strong> is a vector whose direction is not changed by a linear transformation. An <strong>eigenvalue</strong> describes how an eigenvector is scaled by the transformation (see <a href="https://www.youtube.com/watch?v=PFDu9oVAE-g">this video</a> for visual explanation). Mathematically, we can write</p>
+<p><span class="math display">\[\mathbf{A}\vec{v}=\lambda\vec{v}\]</span></p>
+<p>where <span class="math inline">\(\mathbf{A}\)</span> is the matrix that describes a linear transformation, <span class="math inline">\(\vec{v}\)</span> is an eigenvector, and <span class="math inline">\(\lambda\)</span> is an eigenvalue. Again, go watch <a href="https://www.youtube.com/watch?v=PFDu9oVAE-g">this video</a>.</p>
+<p>In <a href="#fig-ord-basicidea" class="quarto-xref">Figure&nbsp;<span>27.1</span></a>, the red vectors in the center panel are the eigenvectors which will define the axes of the ordination space. An The eigenvectors are used to construct ordination axes, while the eigenvalues describe the amount of variation represented by those axes. These methods generally produce a solution directly through matrix calculations.</p>
+<p>Other methods use <strong>numerical optimization</strong>, an iterative process that searches for a configuration of observations that best satisfies a particular criterion. For example, nonmetric multidimensional scaling (NMDS) arranges observations in a low-dimensional space so that the ranked distances between observations correspond as closely as possible to their ranked dissimilarities in the original dataset. The algorithm repeatedly adjusts the positions of observations to minimize a measure of disagreement called stress.</p>
+<p>Both approaches produce ordinations, but they differ in what their axes represent and how faithfully they preserve relationships in the original dataset. In methods such as PCA, the ordination axes are calculated as linear combinations of the original variables, allowing us to interpret each axis in terms of those variables. Other eigenanalysis methods, such as PCoA, derive their axes from a distance matrix rather than directly from the original variables.</p>
+<p>In optimization-based methods such as NMDS, the axes do not have a direct mathematical relationship with the original variables. Instead, the objective is to arrange observations so that distances between them in the ordination space reproduce the ranked dissimilarities in the original dataset as closely as possible. Consequently, an NMDS configuration can be rotated or reflected without changing its meaning, because the relationships among observations remain unchanged. In fact, in <code>vegan::metaMDS()</code>, which performs NMDS, the default post-processing includes rotating the configuration so that its first axis aligns with the direction of maximum variance. Although an eigenanalysis-based configuration can also be rotated, doing so generally changes the mathematical interpretation of its axes. For example, rotating a PCA configuration would mean that the first axis no longer necessarily represents the direction of maximum variance.</p>
+<div id="tbl-ordination-methods" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ordination-methods-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;27.1: Comparison of common ordination methods, indicating whether the ordination is constrained by explanatory variables and the primary mathematical approach used to calculate the ordination axes.
+</figcaption>
+<div aria-describedby="tbl-ordination-methods-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Constrained?</th>
+<th>Main computational approach</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Principal components analysis (PCA)</td>
+<td>No</td>
+<td>Eigenanalysis / SVD</td>
+</tr>
+<tr class="even">
+<td>Principal coordinates analysis (PCoA)</td>
+<td>No</td>
+<td>Eigenanalysis</td>
+</tr>
+<tr class="odd">
+<td>Nonmetric multidimensional scaling (NMDS)</td>
+<td>No</td>
+<td>Iterative optimization</td>
+</tr>
+<tr class="even">
+<td>Redundancy analysis (RDA)</td>
+<td>Yes</td>
+<td>Regression + eigenanalysis</td>
+</tr>
+<tr class="odd">
+<td>Canonical correspondence analysis (CCA)</td>
+<td>Yes</td>
+<td>Weighted regression + eigenanalysis</td>
+</tr>
+<tr class="even">
+<td>Distance-based redundancy analysis (dbRDA)</td>
+<td>Yes</td>
+<td>Distance-based eigenanalysis + regression</td>
+</tr>
+<tr class="odd">
+<td>Linear discriminant analysis (LDA)</td>
+<td>Yes</td>
+<td>Generalized eigenanalysis</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
 </section>
-<section id="sec-ord-un-nmds" class="level3" data-number="27.1.4">
-<h3 data-number="27.1.4" class="anchored" data-anchor-id="sec-ord-un-nmds"><span class="header-section-number">27.1.4</span> Nonmetric multidimensional scaling (NMDS)</h3>
 </section>
 </section>
-<section id="sec-ord-con" class="level2" data-number="27.2">
-<h2 data-number="27.2" class="anchored" data-anchor-id="sec-ord-con"><span class="header-section-number">27.2</span> Constrained ordination methods</h2>
+<section id="sec-ord-un" class="level2" data-number="27.2">
+<h2 data-number="27.2" class="anchored" data-anchor-id="sec-ord-un"><span class="header-section-number">27.2</span> Unconstrained ordination methods</h2>
+<section id="sec-ord-un-pca" class="level3" data-number="27.2.1">
+<h3 data-number="27.2.1" class="anchored" data-anchor-id="sec-ord-un-pca"><span class="header-section-number">27.2.1</span> Principal components analysis (PCA)</h3>
+<section id="sec-ord-un-pca-intro" class="level4" data-number="27.2.1.1">
+<h4 data-number="27.2.1.1" class="anchored" data-anchor-id="sec-ord-un-pca-intro"><span class="header-section-number">27.2.1.1</span> Introduction</h4>
+<p>The first and probably most commonly used ordination technique is <strong>principal component analysis (PCA)</strong>. It works by finding synthetic gradients that capture most the variation between the observations more efficiently than the original variables. These gradients are calculated by finding linear combinations of the variables. These combinations really define a <em>rotation</em>, a kind of linear transformation, of the the original coordinate system. There are an infinite number of ways that we could apply a linear transformation to the data; the principal components are just the eigenvectors of the transformation captures the greatest variance on the first axis; the second greatest variance on the second axis, and so on.</p>
+</section>
+<section id="sec-ord-un-pca-what" class="level4" data-number="27.2.1.2">
+<h4 data-number="27.2.1.2" class="anchored" data-anchor-id="sec-ord-un-pca-what"><span class="header-section-number">27.2.1.2</span> What PCA does</h4>
+<p>To get an intuitive understanding of PCA, work through it using an imaginary dataset with two variables, <em>Variable 1</em> and <em>Variable 2</em>. You could capture and display all the information about this dataset in a 2-d scatterplot, by simply plotting one variable against the other. Likewise, you could capture and display all of the information about a 3-dimensional dataset with a 3-d plot. For 4 or more dimensions, a true scatterplot can’t be rendered sensibly or even understood by our meat-based brains.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-pca-explain1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-explain1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.4: text
+</figcaption>
+<div aria-describedby="fig-pca-explain1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-explain1-1.png" class="img-fluid figure-img" alt="text" width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>One way to describe the variation among the observations in <a href="#fig-pca-explain1" class="quarto-xref">Figure&nbsp;<span>27.4</span></a> is to think about how the samples vary along each axis. The figure below shows how the variation among samples can be broken down into the variation in Variable 1 and the variation in Variable 2. When we say “variation in variable 1”, we mean “deviation between the values of variable 1 and the mean of variable 1”. That is what is shown in <a href="#fig-pca-explain2" class="quarto-xref">Figure&nbsp;<span>27.5</span></a> below.</p>
+<ul>
+<li>Each point, or sample, has a Variable 1 coordinate and a Variable 2 coordinate.</li>
+<li>Each point’s value for Variable 1 can be thought of as the difference between that value and the mean of Variable 1.</li>
+<li>Likewise, each point’s value for Variable 2 can be thought of as the difference between that value and the mean of Variable 2.</li>
+<li>The position of each point can thus be reframed as its deviation with respect to the Variable 1, and its deviation with respect to Variable 2. This reframing is the same as centering each variable (i.e., subtracting the mean).</li>
+<li>The total variance among the samples is equal to the variance with respect to Variable 1 plus the variance with respect to Variable 2.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-pca-explain2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-explain2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.5: text
+</figcaption>
+<div aria-describedby="fig-pca-explain2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-explain2-1.png" class="img-fluid figure-img" alt="text" width="960">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-pca-explain2" class="quarto-xref">Figure&nbsp;<span>27.5</span></a> above shows how the total variation in the dataset is split up (“partitioned”) into variation in Variable 1 and variation in Variable 2.</p>
+<p>Describing each observation as its deviation from the mean of each variable has the effect of <strong>centering</strong> the points at the origin. Notice that the variation, expressed as sums of squared deviations, is unchanged (<a href="#fig-pca-explain3" class="quarto-xref">Figure&nbsp;<span>27.6</span></a>).</p>
+<p><a href="#fig-pca-explain3" class="quarto-xref">Figure&nbsp;<span>27.6</span></a> below shows the data as deviations from the means of each variable. Notice that the variation is each direction is unchanged from <a href="#fig-pca-explain2" class="quarto-xref">Figure&nbsp;<span>27.5</span></a>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-pca-explain3" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-explain3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.6: text
+</figcaption>
+<div aria-describedby="fig-pca-explain3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-explain3-1.png" class="img-fluid figure-img" alt="text" width="960">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>Next, we <strong>standardize</strong> each variable to have a variance of 1. This means that the original values are converted to Z-scores by subtracting the mean and dividing by the SD (i.e., they are <strong>z-scaled</strong>). Recall from <a href="ch11.html#sec-trans-common-zscore" class="quarto-xref"><span>Section 11.4.1</span></a> that the <em>z</em>-score of an observation <span class="math inline">\(x\)</span> is</p>
+<p><span class="math display">\[z\left(x\right)=\frac{x-\mu}{\sigma}\]</span></p>
+<p>Doing PCA without standardizing variables will distort the results because each variable’s importance in the PCA will depend on its magnitude, not its relationship to other variables. Standardization puts variation along any axis on equal footing. <a href="#fig-pca-explain4" class="quarto-xref">Figure&nbsp;<span>27.7</span></a> shows the data as deviations from the variable means after standardization. Compare this figure to <a href="#fig-pca-explain3" class="quarto-xref">Figure&nbsp;<span>27.6</span></a> above. All that changed are the axis scales and the sum of squared deviations. Note that the sums of squares are equal for both variables now.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-pca-explain4" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-explain4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.7: text
+</figcaption>
+<div aria-describedby="fig-pca-explain4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-explain4-1.png" class="img-fluid figure-img" alt="text" width="960">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>The goal of PCA is to find a new coordinate system that puts the most variance possible on its first axis, then the second most variance on its second axis, and so on. This new coordinate system will have the same number of dimensions as the original dataset. But whereas in the standardized dataset all variables (axes) have the same amount of variation associated with them, in the PCA coordinate system some axes will explain more variation than others.</p>
+<p>The variation among the observations is defined in terms of Variable 1 and Variable 2, and Variable 1 and Variable 2 contributed equally to the total variation. But, we could describe most of the variation between points with just one variable, or axis, the red line (<a href="#fig-pca-explain5" class="quarto-xref">Figure&nbsp;<span>27.8</span></a>). Any remaining variation will be in the direction perpendicular to the red axis, the blue axis (dashed line).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-pca-explain5" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-explain5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.8: text
+</figcaption>
+<div aria-describedby="fig-pca-explain5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-explain5-1.png" class="img-fluid figure-img" alt="text" width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>The red axis is a vector that contains information about both Variable 1 and Variable 2. It is tricky, but not too hard, to calculate each observation’s deviations from the mean of the red axis (left panel below) (<a href="#fig-pca-explain6" class="quarto-xref">Figure&nbsp;<span>27.9</span></a>). We can also calculate the deviations along a perpendicular vector, because even after describing the variation in the red direction, there is still some variation in the blue direction (right panel).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-pca-explain6" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-explain6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.9: text
+</figcaption>
+<div aria-describedby="fig-pca-explain6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-explain6-1.png" class="img-fluid figure-img" alt="text" width="960">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>We know that the variation along the red and blue axes is the same as the variation on the Variable 1 and Variable 2 axes, because the sums of squares are the same (<span class="math inline">\(76.6 + 21.4 = 49 + 49\)</span>) . The red and blue axes are just different ways of orienting the data to express the same patterns. All we really did was rotate the original coordinate system (defined by Variables 1 and 2) to a new coordinate system (<a href="#fig-pca-explain7" class="quarto-xref">Figure&nbsp;<span>27.10</span></a>).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-pca-explain7" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-explain7-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.10: text
+</figcaption>
+<div aria-describedby="fig-pca-explain7-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-explain7-1.png" class="img-fluid figure-img" alt="text" width="960">
+</div>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-ord-un-pca-example" class="level4" data-number="27.2.1.3">
+<h4 data-number="27.2.1.3" class="anchored" data-anchor-id="sec-ord-un-pca-example"><span class="header-section-number">27.2.1.3</span> Example using <code>vegan</code></h4>
+<p>For an example PCA analysis, let’s revisit the small mammal measurement data from <a href="ch26.html#sec-clust-kmeans-example" class="quarto-xref"><span>Section 26.2.2</span></a>. Download the <a href="../datasets/data-neon-ind-meas.csv">individual measurement dataset</a> and the <a href="../datasets/data-neon-taxa.csv">taxonomic dataset</a> and put them in your working directory.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>tax <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-taxa.csv"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-ind-meas.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We are going to use PCA to explore variation in small mammal morphology. First we need to organize the data. Cut the measurement data down to just the columns we need: individual, species, and the four standard measurements.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>use.cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"tagID"</span>, <span class="st">"abb"</span>, <span class="st">"totalLength"</span>,</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>              <span class="st">"tailLength"</span>, <span class="st">"hindfootLength"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>              <span class="st">"earLength"</span>, <span class="st">"weight"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> ind[,use.cols]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># only want individuals with no missing measurements</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> dx[<span class="fu">complete.cases</span>(dx),]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>How many individuals do we have of each species?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rev</span>(<span class="fu">sort</span>(<span class="fu">table</span>(dx<span class="sc">$</span>abb)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ Pergos  Perboy  Perman  Perleu  Musmus  Reimeg  Chapen  Onyleu  Ratrat  Dipord 
+   1486     745     704     634     390     320     294     273     258     203 
+ Reimon Perfla2  Pertru  Myorut  Chahis  Sorcin  Perpar  Chabai  Micoec  Dipmic 
+    185     170     110      86      79      51      41      35      34      29 
+ Sighis  Chacal  Chaint  Reiful  Micoch  Onytor  Micpen  Ochnut  Tammin  Icttri 
+     28      27      26      25      25      23      22      18      17      17 
+ Neoflo  Perpol  Peratt  Neoalb  Micmon  Sortun  Onyare  Miclon  Perere  Orypal 
+     15      14      14      14      14      13      12      12      10      10 
+ Lemtri  Lemcur  Sormon  Perino  Zaphud  Permer Perfla1  Dipmer  Sigoch  Podflo 
+      9       9       7       7       6       6       6       6       5       5 
+ Myogap  Micpin  Tamstr  Neomex  Zappri  Xerspi  Sigari  Reihum  Peramp  Baitay 
+      5       5       4       4       3       3       3       3       3       3 
+ Tamspe  Tamruf  Tamamo  Percri  Napins  Micxan  Micmiu  Xerter  Tamhud  Sorhoy 
+      2       2       2       2       2       2       2       1       1       1 
+ Ratnor  Pernas  Perlon  Percal  Neomic  Neomac  Miccal 
+      1       1       1       1       1       1       1 </code></pre>
+</div>
+</div>
+<p>There is quite a wide range of numbers of individuals between species. To prevent the species with many individuals from having too much influence over the analysis, let’s randomly select 50 individuals from every species with at least 50 individuals. That will give us 16 species.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">7410</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>sp <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">which</span>(<span class="fu">table</span>(dx<span class="sc">$</span>abb) <span class="sc">&gt;=</span> <span class="dv">50</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"list"</span>, <span class="fu">length</span>(sp))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(sp)) {</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> dx[dx<span class="sc">$</span>abb <span class="sc">==</span> sp[i], ]</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  out[[i]] <span class="ot">&lt;-</span> d[<span class="fu">sample</span>(<span class="fu">nrow</span>(d), <span class="dv">50</span>), ]</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>dx.pca <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, out)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>dx.pca <span class="ot">&lt;-</span> <span class="fu">merge</span>(dx.pca, tax[,<span class="fu">c</span>(<span class="st">"abb"</span>, <span class="st">"species"</span>, <span class="st">"family"</span>)])</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(dx.pca<span class="sc">$</span>species)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+     Chaetodipus hispidus  Chaetodipus penicillatus           Dipodomys ordii 
+                       50                        50                        50 
+             Mus musculus            Myodes rutilus     Onychomys leucogaster 
+                       50                        50                        50 
+       Perognathus flavus         Peromyscus boylii     Peromyscus gossypinus 
+                       50                        50                        50 
+      Peromyscus leucopus    Peromyscus maniculatus          Peromyscus truei 
+                       50                        50                        50 
+            Rattus rattus Reithrodontomys megalotis  Reithrodontomys montanus 
+                       50                        50                        50 
+           Sorex cinereus 
+                       50 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(dx.pca<span class="sc">$</span>family)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  Cricetidae Heteromyidae      Muridae    Soricidae 
+         450          200          100           50 </code></pre>
+</div>
+</div>
+<p>We will use package <code>vegan</code> for ordination. Load it and run the PCA. Use argument `` to standardize the variables first.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>pca.cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"totalLength"</span>, <span class="st">"tailLength"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>              <span class="st">"hindfootLength"</span>, <span class="st">"earLength"</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">pca</span>(dx.pca[,pca.cols], <span class="at">scale=</span><span class="cn">TRUE</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(p1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+pca(X = dx.pca[, pca.cols], scale = TRUE) 
+
+Partitioning of correlations:
+              Inertia Proportion
+Total               4          1
+Unconstrained       4          1
+
+Eigenvalues, and their contribution to the correlations 
+
+Importance of components:
+                         PC1    PC2     PC3     PC4
+Eigenvalue            3.0109 0.6850 0.24573 0.05835
+Proportion Explained  0.7527 0.1713 0.06143 0.01459
+Cumulative Proportion 0.7527 0.9240 0.98541 1.00000</code></pre>
+</div>
+</div>
+<p>The result shows us that PC1 explains about 75.3% of the variation in measurements. PC2 adds another 17.1%. Just the first two PCs account for 92.4% of the variation. As we saw in <a href="ch26.html#fig-kmeans-mice-pca4" class="quarto-xref">Figure&nbsp;<span>26.10</span></a>, the first PC likely captures a size gradient. Let’s plot the ordination to see.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pca-pca-neon1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-pca-neon1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.11: text
+</figcaption>
+<div aria-describedby="fig-pca-pca-neon1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-pca-neon1-1.png" class="img-fluid figure-img" alt="text" width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>Well, that’s not very helpful. The default plot method is a bit underwhelming. I prefer to extract the PC scores (coordinates in the PC coordinate system) and build the plot manually. Note that in the ordination function in package <code>vegan</code>, observations are always referred to as “sites”, and variables as <code>species</code>. This is a result of the origin of <code>vegan</code> in community ecology.</p>
+<p>While we’re at it, let’s assign some colors and shapes to the species (the actual species, not the <code>"species"</code>).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>spps <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(dx.pca<span class="sc">$</span>species))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>fams <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(dx.pca<span class="sc">$</span>family))</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>col.spps <span class="ot">&lt;-</span> <span class="fu">hcl.colors</span>(<span class="fu">length</span>(spps), <span class="at">palette =</span> <span class="st">"Dark 3"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>col.fams <span class="ot">&lt;-</span> <span class="fu">hcl.colors</span>(<span class="fu">length</span>(fams), <span class="at">palette =</span> <span class="st">"Dark 3"</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>pch.fams <span class="ot">&lt;-</span> <span class="dv">15</span><span class="sc">:</span><span class="dv">18</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(col.spps) <span class="ot">&lt;-</span> spps</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(col.fams) <span class="ot">&lt;-</span> fams</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pch.fams) <span class="ot">&lt;-</span> fams</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>xy.samp <span class="ot">&lt;-</span> <span class="fu">scores</span>(p1, <span class="at">display=</span><span class="st">"sites"</span>, <span class="at">choices=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>xy.vars <span class="ot">&lt;-</span> <span class="fu">scores</span>(p1, <span class="at">display=</span><span class="st">"species"</span>, <span class="at">choices=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">1</span>), <span class="at">bty=</span><span class="st">"n"</span>)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy.samp[,<span class="dv">1</span>], xy.samp[,<span class="dv">2</span>],</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span>pch.fams[dx.pca<span class="sc">$</span>family],</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span>col.spps[dx.pca<span class="sc">$</span>species],</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (75.3%)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (17.1%)"</span>)</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>scal <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, scal<span class="sc">*</span>xy.vars[,<span class="dv">1</span>], scal<span class="sc">*</span>xy.vars[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fl">1.03</span><span class="sc">*</span>scal<span class="sc">*</span>xy.vars[,<span class="dv">1</span>], <span class="fl">1.03</span><span class="sc">*</span>scal<span class="sc">*</span>xy.vars[,<span class="dv">2</span>],</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>     <span class="fu">rownames</span>(xy.vars), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="fl">1.1</span>, <span class="at">legend=</span>spps, <span class="at">xpd=</span><span class="cn">NA</span>,</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span>col.spps,</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pch.fams[tax<span class="sc">$</span>family[<span class="fu">match</span>(spps, tax<span class="sc">$</span>species)]],</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">ncol=</span><span class="dv">3</span>,</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>       <span class="at">text.font=</span><span class="dv">3</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pca-pca-neon2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-pca-neon2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.12: text
+</figcaption>
+<div aria-describedby="fig-pca-pca-neon2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-pca-neon2-1.png" class="img-fluid figure-img" alt="text" width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">1</span>), <span class="at">bty=</span><span class="st">"n"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy.samp[,<span class="dv">1</span>], xy.samp[,<span class="dv">2</span>],</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span>pch.fams[dx.pca<span class="sc">$</span>family],</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span>col.spps[dx.pca<span class="sc">$</span>species],</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (75.3%)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (17.1%)"</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ordiellipse</span>(p1, dx.pca<span class="sc">$</span>species,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">col=</span>col.spps, <span class="at">draw=</span><span class="st">"polygon"</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">border=</span><span class="cn">NA</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>scal <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, scal<span class="sc">*</span>xy.vars[,<span class="dv">1</span>], scal<span class="sc">*</span>xy.vars[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fl">1.03</span><span class="sc">*</span>scal<span class="sc">*</span>xy.vars[,<span class="dv">1</span>], <span class="fl">1.03</span><span class="sc">*</span>scal<span class="sc">*</span>xy.vars[,<span class="dv">2</span>],</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>     <span class="fu">rownames</span>(xy.vars), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="fl">1.1</span>, <span class="at">legend=</span>spps, <span class="at">xpd=</span><span class="cn">NA</span>,</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span>col.spps,</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pch.fams[tax<span class="sc">$</span>family[<span class="fu">match</span>(spps, tax<span class="sc">$</span>species)]],</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">ncol=</span><span class="dv">3</span>,</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">text.font=</span><span class="dv">3</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pca-pca-neon3" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-pca-neon3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.13: text
+</figcaption>
+<div aria-describedby="fig-pca-pca-neon3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-pca-neon3-1.png" class="img-fluid figure-img" alt="text" width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>And color by family.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">1</span>), <span class="at">bty=</span><span class="st">"n"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy.samp[,<span class="dv">1</span>], xy.samp[,<span class="dv">2</span>],</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span>pch.fams[dx.pca<span class="sc">$</span>family],</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span>col.fams[dx.pca<span class="sc">$</span>family],</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (75.3%)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (17.1%)"</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ordiellipse</span>(p1, dx.pca<span class="sc">$</span>family,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">col=</span>col.fams, <span class="at">draw=</span><span class="st">"polygon"</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">border=</span><span class="cn">NA</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>scal <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, scal<span class="sc">*</span>xy.vars[,<span class="dv">1</span>], scal<span class="sc">*</span>xy.vars[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fl">1.03</span><span class="sc">*</span>scal<span class="sc">*</span>xy.vars[,<span class="dv">1</span>], <span class="fl">1.03</span><span class="sc">*</span>scal<span class="sc">*</span>xy.vars[,<span class="dv">2</span>],</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>     <span class="fu">rownames</span>(xy.vars), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="fl">1.1</span>, <span class="at">legend=</span>fams, <span class="at">xpd=</span><span class="cn">NA</span>,</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill=</span>col.fams,</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">ncol=</span><span class="dv">2</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pca-pca-neon4" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-pca-neon4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.14: text
+</figcaption>
+<div aria-describedby="fig-pca-pca-neon4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-pca-neon4-1.png" class="img-fluid figure-img" alt="text" width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>Next: factor out body mass using allometric equations, then refit PCA.</p>
+<p>Work in progress!</p>
+</section>
+</section>
+<section id="sec-ord-un-pcoa" class="level3" data-number="27.2.2">
+<h3 data-number="27.2.2" class="anchored" data-anchor-id="sec-ord-un-pcoa"><span class="header-section-number">27.2.2</span> Principal coordinates analysis (PCoA)</h3>
+</section>
+<section id="sec-ord-un-ca" class="level3" data-number="27.2.3">
+<h3 data-number="27.2.3" class="anchored" data-anchor-id="sec-ord-un-ca"><span class="header-section-number">27.2.3</span> Correspondence analysis (CA)</h3>
+</section>
+<section id="sec-ord-un-nmds" class="level3" data-number="27.2.4">
+<h3 data-number="27.2.4" class="anchored" data-anchor-id="sec-ord-un-nmds"><span class="header-section-number">27.2.4</span> Nonmetric multidimensional scaling (NMDS)</h3>
+</section>
+</section>
+<section id="sec-ord-con" class="level2" data-number="27.3">
+<h2 data-number="27.3" class="anchored" data-anchor-id="sec-ord-con"><span class="header-section-number">27.3</span> Constrained ordination methods</h2>
 <p>Constrained ordination methods, also called canonical ordination methods, identify major axes of multivariate variation that are associated with one or more explanatory variables. Unlike unconstrained ordination, which summarizes patterns in the response variables alone, constrained ordination incorporates information about potential predictors when constructing the ordination axes.</p>
-<section id="sec-ord-con-ra" class="level3" data-number="27.2.1">
-<h3 data-number="27.2.1" class="anchored" data-anchor-id="sec-ord-con-ra"><span class="header-section-number">27.2.1</span> Redundancy analysis (RA)</h3>
+<section id="sec-ord-con-ra" class="level3" data-number="27.3.1">
+<h3 data-number="27.3.1" class="anchored" data-anchor-id="sec-ord-con-ra"><span class="header-section-number">27.3.1</span> Redundancy analysis (RA)</h3>
 </section>
-<section id="sec-ord-con-lda" class="level3" data-number="27.2.2">
-<h3 data-number="27.2.2" class="anchored" data-anchor-id="sec-ord-con-lda"><span class="header-section-number">27.2.2</span> Linear discriminant analysis</h3>
+<section id="sec-ord-con-lda" class="level3" data-number="27.3.2">
+<h3 data-number="27.3.2" class="anchored" data-anchor-id="sec-ord-con-lda"><span class="header-section-number">27.3.2</span> Linear discriminant analysis</h3>
 </section>
-<section id="sec-ord-con-cca" class="level3" data-number="27.2.3">
-<h3 data-number="27.2.3" class="anchored" data-anchor-id="sec-ord-con-cca"><span class="header-section-number">27.2.3</span> Canonical correspondence analysis (CCA)</h3>
+<section id="sec-ord-con-cca" class="level3" data-number="27.3.3">
+<h3 data-number="27.3.3" class="anchored" data-anchor-id="sec-ord-con-cca"><span class="header-section-number">27.3.3</span> Canonical correspondence analysis (CCA)</h3>
 </section>
-<section id="sec-ord-con-dbrda" class="level3" data-number="27.2.4">
-<h3 data-number="27.2.4" class="anchored" data-anchor-id="sec-ord-con-dbrda"><span class="header-section-number">27.2.4</span> Distance-based RDA (dbRDA)</h3>
+<section id="sec-ord-con-dbrda" class="level3" data-number="27.3.4">
+<h3 data-number="27.3.4" class="anchored" data-anchor-id="sec-ord-con-dbrda"><span class="header-section-number">27.3.4</span> Distance-based RDA (dbRDA)</h3>
 </section>
 </section>
-<section id="sec-ord-other" class="level2" data-number="27.3">
-<h2 data-number="27.3" class="anchored" data-anchor-id="sec-ord-other"><span class="header-section-number">27.3</span> Classification and other methods</h2>
-<section id="sec-ord-other-lda" class="level3" data-number="27.3.1">
-<h3 data-number="27.3.1" class="anchored" data-anchor-id="sec-ord-other-lda"><span class="header-section-number">27.3.1</span> Linear discriminant analysis</h3>
+<section id="sec-ord-other" class="level2" data-number="27.4">
+<h2 data-number="27.4" class="anchored" data-anchor-id="sec-ord-other"><span class="header-section-number">27.4</span> Classification and other methods</h2>
+<section id="sec-ord-other-lda" class="level3" data-number="27.4.1">
+<h3 data-number="27.4.1" class="anchored" data-anchor-id="sec-ord-other-lda"><span class="header-section-number">27.4.1</span> Linear discriminant analysis</h3>
 
 
 </section>
