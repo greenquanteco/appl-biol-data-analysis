@@ -273,7 +273,7 @@
 
 \title{Applied Biological Data Analysis}
 \author{Nick Green}
-\date{November 13, 2026}
+\date{November 14, 2026}
 \begin{document}
 \maketitle
 
@@ -35599,11 +35599,9 @@ eigenanalysis + regression \\
 Linear discriminant analysis (LDA) & Yes & Generalized eigenanalysis \\
 \end{longtable}
 
-\section{Unconstrained ordination methods}\label{sec-ord-un}
+\section{Principal components analysis (PCA)}\label{sec-ord-pca}
 
-\subsection{Principal components analysis (PCA)}\label{sec-ord-un-pca}
-
-\subsubsection{Introduction}\label{sec-ord-un-pca-intro}
+\subsection{Introduction}\label{sec-ord-un-pca-intro}
 
 The first and probably most commonly used ordination technique is
 \textbf{principal component analysis (PCA)}. It works by finding
@@ -35617,7 +35615,7 @@ to the data; the principal components are just the eigenvectors of the
 transformation captures the greatest variance on the first axis; the
 second greatest variance on the second axis, and so on.
 
-\subsubsection{What PCA does}\label{sec-ord-un-pca-what}
+\subsection{What PCA does}\label{sec-ord-un-pca-what}
 
 To get an intuitive understanding of PCA, work through it using an
 imaginary dataset with two variables, \emph{Variable 1} and
@@ -35803,8 +35801,11 @@ patterns. All we really did was rotate the original coordinate system
 
 \end{figure}%
 
-\subsubsection{\texorpdfstring{Example using
-\texttt{vegan}}{Example using vegan}}\label{sec-ord-un-pca-example}
+\subsection{\texorpdfstring{Example using
+\texttt{vegan}}{Example using vegan}}\label{sec-ord-pca-example}
+
+\subsubsection{Data import and
+preparation}\label{sec-ord-pca-example-data}
 
 For an example PCA analysis, let's revisit the small mammal measurement
 data from Section~\ref{sec-clust-kmeans-example}. Download the
@@ -35821,8 +35822,8 @@ dataset} and put them in your working directory.
 
 We are going to use PCA to explore variation in small mammal morphology.
 First we need to organize the data. Cut the measurement data down to
-just the columns we need: individual, species, and the four standard
-measurements.
+just the columns we need: individual, species, body mass, and the four
+standard measurements.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -35868,7 +35869,10 @@ There is quite a wide range of numbers of individuals between species.
 To prevent the species with many individuals from having too much
 influence over the analysis, let's randomly select 50 individuals from
 every species with at least 50 individuals. That will give us 16
-species.
+species. Note that this is not what we would do in a real analysis.
+Instead, this is just a strategy to make the ordination easier to
+understand as a teaching example. If you want to do the example with all
+individuals, just uncomment the line indicated below.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -35883,6 +35887,11 @@ species.
 \NormalTok{\}}
 
 \NormalTok{dx.pca }\OtherTok{\textless{}{-}} \FunctionTok{do.call}\NormalTok{(rbind, out)}
+
+\CommentTok{\# if you want to try the analysis with all}
+\CommentTok{\# of the species, uncomment and run this line:}
+\CommentTok{\#dx.pca \textless{}{-} dx}
+
 \NormalTok{dx.pca }\OtherTok{\textless{}{-}} \FunctionTok{merge}\NormalTok{(dx.pca, tax[,}\FunctionTok{c}\NormalTok{(}\StringTok{"abb"}\NormalTok{, }\StringTok{"species"}\NormalTok{, }\StringTok{"family"}\NormalTok{)])}
 
 \FunctionTok{table}\NormalTok{(dx.pca}\SpecialCharTok{$}\NormalTok{species)}
@@ -35905,6 +35914,8 @@ species.
                        50 
 \end{verbatim}
 
+How many families do we have, and how many specie each?
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{table}\NormalTok{(dx.pca}\SpecialCharTok{$}\NormalTok{family)}
@@ -35917,8 +35928,16 @@ species.
          450          200          100           50 
 \end{verbatim}
 
+\subsubsection{Fit the PCA}\label{sec-ord-pca-example-pca}
+
 We will use package \texttt{vegan} for ordination. Load it and run the
-PCA. Use argument `` to standardize the variables first.
+PCA. We will leave body mass out of the ordination for now\ldots that
+will be important \hyperref[sec-ord-pca-example-out]{later}.
+
+Use argument \texttt{scale=TRUE} to standardize the variables first. The
+default in \texttt{vegan::pca} is to not scale the variables, because
+that usually isn't necessary (or even sensible) with the default
+distance measure.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -35952,13 +35971,81 @@ Cumulative Proportion 0.7527 0.9240 0.98541 1.00000
 
 The result shows us that PC1 explains about 75.3\% of the variation in
 measurements. PC2 adds another 17.1\%. Just the first two PCs account
-for 92.4\% of the variation. As we saw in
-Figure~\ref{fig-kmeans-mice-pca4}, the first PC likely captures a size
-gradient. Let's plot the ordination to see.
+for 92.4\% of the variation. Because we are ordinating on measurements,
+and the first PC captures a large percentage of the variation, there is
+a good chance that the first PC is capturing a size gradient (as we saw
+in Figure~\ref{fig-kmeans-mice-pca4}).
+
+\subsubsection{Plot the PCA}\label{sec-ord-pca-example-biplot}
+
+The \texttt{plot} and \texttt{biplot} methods for \texttt{pca} objects
+will produce a quick graph, but it's not very helpful. I prefer to
+extract the useful parts of the results and build a plot using base
+graphics.
+
+What we need are the PC scores of the observations and the biplot arrows
+of the original variables. The ``scores'' are what we call the
+coordinates in the PC coordinate system. The positions of the
+observations in the ordination space reflect their similarity and
+dissimilarity relative to each other. The biplot arrows start at the
+origin and show the relationship between the original variables and the
+ordination space. You can think of them as the ``shadows'' you would get
+if you projected the original axes onto the plane of the figure
+(remember that we obtained the PCA space by rotating the original
+space).
+
+First, let's assign some colors and shapes to the species and families.
+This will help us make sense of the ordination plot.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{plot}\NormalTok{(p1)}
+\NormalTok{spps }\OtherTok{\textless{}{-}} \FunctionTok{sort}\NormalTok{(}\FunctionTok{unique}\NormalTok{(dx.pca}\SpecialCharTok{$}\NormalTok{species))}
+\NormalTok{fams }\OtherTok{\textless{}{-}} \FunctionTok{sort}\NormalTok{(}\FunctionTok{unique}\NormalTok{(dx.pca}\SpecialCharTok{$}\NormalTok{family))}
+
+\NormalTok{col.spps }\OtherTok{\textless{}{-}} \FunctionTok{hcl.colors}\NormalTok{(}\FunctionTok{length}\NormalTok{(spps), }\AttributeTok{palette =} \StringTok{"Dark 3"}\NormalTok{)}
+\NormalTok{col.fams }\OtherTok{\textless{}{-}} \FunctionTok{hcl.colors}\NormalTok{(}\FunctionTok{length}\NormalTok{(fams), }\AttributeTok{palette =} \StringTok{"Dark 3"}\NormalTok{)}
+\NormalTok{pch.fams }\OtherTok{\textless{}{-}} \DecValTok{15}\SpecialCharTok{:}\DecValTok{18}
+
+\FunctionTok{names}\NormalTok{(col.spps) }\OtherTok{\textless{}{-}}\NormalTok{ spps}
+\FunctionTok{names}\NormalTok{(col.fams) }\OtherTok{\textless{}{-}}\NormalTok{ fams}
+\FunctionTok{names}\NormalTok{(pch.fams) }\OtherTok{\textless{}{-}}\NormalTok{ fams}
+\end{Highlighting}
+\end{Shaded}
+
+Next, we extract the scores of the observations. The ordination scores
+can be calculated in one of two ways, referred to as \textbf{scaling}
+(see Section~\ref{sec-ord-pca-example-biplot-scaling}). For examining
+clusters of observations, we should use scaling 1. The function
+\texttt{scores()} will extract the scores we need. Note that in
+ordination functions in package \texttt{vegan}, observations are always
+referred to as \texttt{sites}, and variables as \texttt{species}. This
+is a result of the origin of \texttt{vegan} in community ecology.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# extract scores with scaling 1}
+\NormalTok{xy.samp1 }\OtherTok{\textless{}{-}} \FunctionTok{scores}\NormalTok{(p1, }\AttributeTok{display=}\StringTok{"sites"}\NormalTok{,}
+                  \AttributeTok{choices=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{, }\AttributeTok{scaling=}\DecValTok{1}\NormalTok{)}
+\NormalTok{xy.vars1 }\OtherTok{\textless{}{-}} \FunctionTok{scores}\NormalTok{(p1, }\AttributeTok{display=}\StringTok{"species"}\NormalTok{,}
+                  \AttributeTok{choices=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{, }\AttributeTok{scaling=}\DecValTok{1}\NormalTok{)}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(xy.samp1[,}\DecValTok{1}\NormalTok{], xy.samp1[,}\DecValTok{2}\NormalTok{],}
+     \AttributeTok{pch=}\NormalTok{pch.fams[dx.pca}\SpecialCharTok{$}\NormalTok{family],}
+     \AttributeTok{col=}\NormalTok{col.spps[dx.pca}\SpecialCharTok{$}\NormalTok{species],}
+     \AttributeTok{xlab=}\StringTok{"PC1 (75.3\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (17.1\%)"}\NormalTok{)}
+\CommentTok{\# shorten the biplot vectors to fit on the plot area}
+\NormalTok{scal }\OtherTok{\textless{}{-}} \FloatTok{0.04}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, scal}\SpecialCharTok{*}\NormalTok{xy.vars1[,}\DecValTok{1}\NormalTok{], scal}\SpecialCharTok{*}\NormalTok{xy.vars1[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\CommentTok{\# move the biplot labels out by 2\%}
+\NormalTok{moveout }\OtherTok{\textless{}{-}} \FloatTok{1.02}
+\FunctionTok{text}\NormalTok{(moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars1[,}\DecValTok{1}\NormalTok{], moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars1[,}\DecValTok{2}\NormalTok{],}
+     \FunctionTok{rownames}\NormalTok{(xy.vars1), }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.9}\NormalTok{, }\FloatTok{0.45}\NormalTok{, }\AttributeTok{legend=}\NormalTok{spps,}
+       \AttributeTok{col=}\NormalTok{col.spps,}
+       \AttributeTok{pch=}\NormalTok{pch.fams[tax}\SpecialCharTok{$}\NormalTok{family[}\FunctionTok{match}\NormalTok{(spps, tax}\SpecialCharTok{$}\NormalTok{species)]],}
+       \AttributeTok{ncol=}\DecValTok{3}\NormalTok{, }
+       \AttributeTok{text.font=}\DecValTok{3}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -35974,45 +36061,52 @@ gradient. Let's plot the ordination to see.
 
 \end{figure}%
 
-Well, that's not very helpful. The default plot method is a bit
-underwhelming. I prefer to extract the PC scores (coordinates in the PC
-coordinate system) and build the plot manually. Note that in the
-ordination function in package \texttt{vegan}, observations are always
-referred to as ``sites'', and variables as \texttt{species}. This is a
-result of the origin of \texttt{vegan} in community ecology.
+Figure~\ref{fig-pca-pca-neon1} shows that many of the species form
+recognizable clusters. For example, the brown circles in the bottom left
+are Ord's kangaroo rat, \emph{Dipodomys ordii}, and that cluster is well
+separated from the pink circles in the bottom middle, which is its
+confamilial \emph{Chaetodipus hispidus}, the hispid pocket mouse. On the
+other hand, all of the \emph{Peromyscus} species (blue and greenish
+squares) do not separate cleanly from each other and instead form a big
+mess of overlapping clouds along the right side of the figure. From this
+we can infer that \emph{D. ordii} and \emph{C. hispidus} are more
+distinct from each other than the \emph{Peromyscus} species are, despite
+being in the same family.
 
-While we're at it, let's assign some colors and shapes to the species
-(the actual species, not the \texttt{"species"}).
+Another pattern we can see is that three of the four morphological
+variables point to the left and slightly down, almost but not quite
+parallel to PC1. Ear length points in a different direction, positively
+correlated with PC2 but negatively with PC1. So we can tentatively
+interpret PC1 as a gradient representing overall size: animals increase
+in size from right to left. This pattern is very commonly seen when
+ordinating morphological measurements. However, with scaling type 1, we
+cannot interpret angles between vectors as correlations. For that, we
+need scaling type 2.
+
+Extract the scores and make another biplot, this time with scaling 2.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{spps }\OtherTok{\textless{}{-}} \FunctionTok{sort}\NormalTok{(}\FunctionTok{unique}\NormalTok{(dx.pca}\SpecialCharTok{$}\NormalTok{species))}
-\NormalTok{fams }\OtherTok{\textless{}{-}} \FunctionTok{sort}\NormalTok{(}\FunctionTok{unique}\NormalTok{(dx.pca}\SpecialCharTok{$}\NormalTok{family))}
+\CommentTok{\# extract scores with scaling 1}
+\NormalTok{xy.samp2 }\OtherTok{\textless{}{-}} \FunctionTok{scores}\NormalTok{(p1, }\AttributeTok{display=}\StringTok{"sites"}\NormalTok{,}
+                  \AttributeTok{choices=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{, }\AttributeTok{scaling=}\DecValTok{2}\NormalTok{)}
+\NormalTok{xy.vars2 }\OtherTok{\textless{}{-}} \FunctionTok{scores}\NormalTok{(p1, }\AttributeTok{display=}\StringTok{"species"}\NormalTok{,}
+                  \AttributeTok{choices=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{, }\AttributeTok{scaling=}\DecValTok{2}\NormalTok{)}
 
-\NormalTok{col.spps }\OtherTok{\textless{}{-}} \FunctionTok{hcl.colors}\NormalTok{(}\FunctionTok{length}\NormalTok{(spps), }\AttributeTok{palette =} \StringTok{"Dark 3"}\NormalTok{)}
-\NormalTok{col.fams }\OtherTok{\textless{}{-}} \FunctionTok{hcl.colors}\NormalTok{(}\FunctionTok{length}\NormalTok{(fams), }\AttributeTok{palette =} \StringTok{"Dark 3"}\NormalTok{)}
-\NormalTok{pch.fams }\OtherTok{\textless{}{-}} \DecValTok{15}\SpecialCharTok{:}\DecValTok{18}
-
-\FunctionTok{names}\NormalTok{(col.spps) }\OtherTok{\textless{}{-}}\NormalTok{ spps}
-\FunctionTok{names}\NormalTok{(col.fams) }\OtherTok{\textless{}{-}}\NormalTok{ fams}
-\FunctionTok{names}\NormalTok{(pch.fams) }\OtherTok{\textless{}{-}}\NormalTok{ fams}
-
-\NormalTok{xy.samp }\OtherTok{\textless{}{-}} \FunctionTok{scores}\NormalTok{(p1, }\AttributeTok{display=}\StringTok{"sites"}\NormalTok{, }\AttributeTok{choices=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{)}
-\NormalTok{xy.vars }\OtherTok{\textless{}{-}} \FunctionTok{scores}\NormalTok{(p1, }\AttributeTok{display=}\StringTok{"species"}\NormalTok{, }\AttributeTok{choices=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{)}
-
-\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
-\FunctionTok{plot}\NormalTok{(xy.samp[,}\DecValTok{1}\NormalTok{], xy.samp[,}\DecValTok{2}\NormalTok{],}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(xy.samp2[,}\DecValTok{1}\NormalTok{], xy.samp2[,}\DecValTok{2}\NormalTok{],}
      \AttributeTok{pch=}\NormalTok{pch.fams[dx.pca}\SpecialCharTok{$}\NormalTok{family],}
      \AttributeTok{col=}\NormalTok{col.spps[dx.pca}\SpecialCharTok{$}\NormalTok{species],}
      \AttributeTok{xlab=}\StringTok{"PC1 (75.3\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (17.1\%)"}\NormalTok{)}
 \NormalTok{scal }\OtherTok{\textless{}{-}} \FloatTok{0.2}
-\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{1}\NormalTok{], scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
-\FunctionTok{text}\NormalTok{(}\FloatTok{1.03}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{1}\NormalTok{], }\FloatTok{1.03}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{2}\NormalTok{],}
-     \FunctionTok{rownames}\NormalTok{(xy.vars), }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{1}\NormalTok{], scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\NormalTok{moveout }\OtherTok{\textless{}{-}} \FloatTok{1.03}
+\FunctionTok{text}\NormalTok{(moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{1}\NormalTok{], moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{2}\NormalTok{],}
+     \FunctionTok{rownames}\NormalTok{(xy.vars2), }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{)}
 \FunctionTok{legend}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\AttributeTok{legend=}\NormalTok{spps, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{,}
        \AttributeTok{col=}\NormalTok{col.spps,}
        \AttributeTok{pch=}\NormalTok{pch.fams[tax}\SpecialCharTok{$}\NormalTok{family[}\FunctionTok{match}\NormalTok{(spps, tax}\SpecialCharTok{$}\NormalTok{species)]],}
-       \AttributeTok{ncol=}\DecValTok{3}\NormalTok{,}
+       \AttributeTok{ncol=}\DecValTok{3}\NormalTok{, }
        \AttributeTok{text.font=}\DecValTok{3}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -36029,25 +36123,391 @@ While we're at it, let's assign some colors and shapes to the species
 
 \end{figure}%
 
+Figure~\ref{fig-pca-pca-neon2} uses scaling 2 instead of scaling 1. The
+point clouds look largely the same, but notice how the axis scales have
+changed. Under scaling 2, the angles between the biplot vectors
+\emph{are} interpretable as correlations between variables. We also see
+that total length, tail length, and hindfoot length are much closer to
+parallel with PC1, reflecting their strong loading on that axis.
+
+\paragraph{A note on biplot
+scaling}\label{sec-ord-pca-example-biplot-scaling}
+
+You may have noticed that we used the argument \texttt{scaling=2} when
+extracting the scores for the biplot in Figure~\ref{fig-pca-pca-neon1}.
+This argument controls how the observation and variable scores are
+scaled relative to each other.
+
+\begin{itemize}
+\tightlist
+\item
+  In \textbf{scaling type 1 (distance scaling)}, the emphasis is on
+  preserving distances among observations. This is useful when comparing
+  observations or identifying clusters. The observation scores preserve
+  Euclidean distances among observations as well as possible in the
+  reduced ordination space. Variable scores are not proportional to
+  their correlations with other variables.
+\item
+  In \textbf{scaling type 2 (correlation scaling)}, the emphasis is on
+  representing relationships among variables. Variable scores are
+  proportional to their correlations with the principal components.
+  Angles between variable vectors approximate correlations among the
+  original variables, assuming the displayed axes adequately represent
+  those variables.
+\end{itemize}
+
+The take-home is that scaling 1 emphasizes distances among observations,
+while scaling 2 emphasizes correlations among variables. In either case,
+the variable vectors indicate the directions in which variables increase
+across the ordination, but angles between vectors should be interpreted
+as correlations only under scaling 2.
+
+Neither scaling type is inherently better; they emphasize different
+aspects of the same ordination. For our
+\hyperref[fig-pca-pca-neon1]{first biplot above}, we used scaling type 1
+because we wanted to see relationships between the observations. For the
+\hyperref[fig-pca-pca-neon2]{second biplot}, we used scaling type 2
+because we wanted to interpret the relationships among the morphological
+measurements and their associations with the principal components.
+
+For example, in Figure~\ref{fig-pca-pca-neon1}, the vectors for total
+length and tail length point in nearly the same direction, indicating
+that these measurements are strongly positively correlated. The angle
+between total length and ear length is larger, suggesting a weaker
+positive correlation. These interpretations are approximate because the
+biplot displays only the first two principal components rather than all
+four dimensions of the original dataset.
+
+Table~\ref{tbl-pca-scaling} sums up the differences between the two
+scaling types and their typical use cases.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\caption{Comparison of scaling types 1 and 2 for PCA
+biplots.}\label{tbl-pca-scaling}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Feature
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Scaling 1 (distance scaling)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Scaling 2 (correlation scaling)
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Feature
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Scaling 1 (distance scaling)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Scaling 2 (correlation scaling)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Primary emphasis & Distances among observations & Correlations among
+variables \\
+Best for & Comparing observations, identifying groups, examining
+gradients & Interpreting variable relationships and associations with
+PCs \\
+Distances between points & Approximate Euclidean distances in the
+original data & Distances are distorted by the scaling \\
+Angles between variable vectors & Not generally interpretable as
+correlations & Approximate correlations between variables \\
+\end{longtable}
+
+When should you use each scaling?
+
+\textbf{Example use case for scaling 1}: Suppose you want to determine
+whether the 16 mammal species in fig-pca-pca-neon1 form distinct
+morphological groups. You could plot the specimens using scaling 1,
+color them by species or family, and examine their separation. Distances
+between specimens in the PCA plot approximate their multivariate
+Euclidean distances, insofar as those distances are represented by the
+displayed PCs.
+
+\textbf{Example use case for scaling 2}: Suppose you want to determine
+which morphological measurements distinguish those species. You'd use
+scaling 2 to examine the directions and angles of the measurement
+vectors. In a scaling 2 biplot, variables strongly correlated with a
+particular principal component tend to have vectors pointing along that
+axis. Variables associated with multiple components tend to have vectors
+pointing between the axes. The coordinates of each vector represent its
+correlations with the components, up to a common scaling factor.
+
+One subtlety: If you're plotting only observation scores, the choice of
+scaling usually doesn't matter much visually. Switching between scaling
+1 and scaling 2 simply rescales the PC axes; it doesn't change the
+ordering of observations or the underlying PCA. However, the relative
+scaling of the axes changes, so distances and apparent group separation
+can look different.
+
+\subsubsection{Interpret the principal
+components}\label{sec-ord-pca-example-pcs}
+
+Both biplots above, especially Figure~\ref{fig-pca-pca-neon2}, suggest
+that PC1 might have something to do with overall size, and that PC2
+might describe variation in ear size after body size is accounted for.
+Let's interpret those possible interpretations. We can explore the
+possible relationships between the original variables and the PCs in 3
+somewhat related ways:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Eigenvector coefficients}: coefficients defining each PC as a
+  linear combination of the original variables. Sometimes called the
+  \textbf{variable loadings} but see below.
+\item
+  \textbf{Contributions of variables to each PC}: which variables
+  contribute the most to each PC (exactly what it sounds like).
+\item
+  \textbf{Correlations between variables and PCs}: also exactly what it
+  sounds like. Also sometimes called ``variable loadings''.
+\end{enumerate}
+
+\paragraph{Eigenvector
+coefficients}\label{sec-ord-pca-example-pcs-eigen}
+
+The \textbf{eigenvector coefficients} are the coefficients defining how
+each principal component is calculated as a linear combination of the
+original variables. Some people call these coefficients the
+\textbf{variable loadings}, but others use that term to describe the
+\hyperref[sec-ord-pca-example-pcs-corr]{correlations between the
+variables and the PCs}.
+
+Recall that a \textbf{linear combination} or \textbf{linear equation} is
+one where the result is obtained by multiplying each term by a constant
+and adding up those products (Section~\ref{sec-review-lin-def}). For our
+PCA with four standardized measurements:
+
+\[PC_1=a_{1,1}Z_1+a_{1,2}Z_2+a_{1,3}Z_3+a_{1,4}Z_4\]
+
+where \(Z_i\) are the standardized measurements and \(a_{i,j}\) are the
+eigenvector coefficients for principal component \(i\), variable \(j\).
+Principal components 2, 3, and 4 are defined the same way:
+
+\[PC_2=a_{2,1}Z_1+a_{2,2}Z_2+a_{2,3}Z_3+a_{2,4}Z_4\]
+
+\[PC_2=a_{2,1}Z_1+a_{2,2}Z_2+a_{2,3}Z_3+a_{2,4}Z_4\]
+
+\[PC_2=a_{2,1}Z_1+a_{2,2}Z_2+a_{2,3}Z_3+a_{2,4}Z_4\]
+
+We can see the eigenvector coefficients like this:
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
-\FunctionTok{plot}\NormalTok{(xy.samp[,}\DecValTok{1}\NormalTok{], xy.samp[,}\DecValTok{2}\NormalTok{],}
-     \AttributeTok{pch=}\NormalTok{pch.fams[dx.pca}\SpecialCharTok{$}\NormalTok{family],}
-     \AttributeTok{col=}\NormalTok{col.spps[dx.pca}\SpecialCharTok{$}\NormalTok{species],}
-     \AttributeTok{xlab=}\StringTok{"PC1 (75.3\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (17.1\%)"}\NormalTok{)}
-\FunctionTok{ordiellipse}\NormalTok{(p1, dx.pca}\SpecialCharTok{$}\NormalTok{species,}
-            \AttributeTok{col=}\NormalTok{col.spps, }\AttributeTok{draw=}\StringTok{"polygon"}\NormalTok{,}
-            \AttributeTok{border=}\ConstantTok{NA}\NormalTok{)}
-\NormalTok{scal }\OtherTok{\textless{}{-}} \FloatTok{0.2}
-\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{1}\NormalTok{], scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
-\FunctionTok{text}\NormalTok{(}\FloatTok{1.03}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{1}\NormalTok{], }\FloatTok{1.03}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{2}\NormalTok{],}
-     \FunctionTok{rownames}\NormalTok{(xy.vars), }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
+\NormalTok{p1}\SpecialCharTok{$}\NormalTok{CA}\SpecialCharTok{$}\NormalTok{v}
+\end{Highlighting}
+\end{Shaded}
 
+\begin{verbatim}
+                      PC1        PC2         PC3         PC4
+totalLength    -0.5534528 -0.1607461 -0.33524341 -0.74529356
+tailLength     -0.5418198 -0.2357199 -0.46232356  0.66115382
+hindfootLength -0.5133475 -0.2450069  0.81986975  0.06526506
+earLength      -0.3695884  0.9265897  0.04101683  0.05615698
+\end{verbatim}
+
+In this case, all variables contributed to PC1, but PC2 is determined
+mostly by ear length. PC3 is determined mostly by hindfoot length, and
+PC4 is determined mostly by total length and tail length. It's worth
+noting that all four measurements are positively correlated with each
+other, all though ear length is somewhat less correlated with the
+others.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor}\NormalTok{(dx.pca[,pca.cols])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+               totalLength tailLength hindfootLength earLength
+totalLength      1.0000000  0.9381799      0.8120411 0.5080321
+tailLength       0.9381799  1.0000000      0.7863965 0.4508269
+hindfootLength   0.8120411  0.7863965      1.0000000 0.4242194
+earLength        0.5080321  0.4508269      0.4242194 1.0000000
+\end{verbatim}
+
+This pattern of eigenvector coefficients, together with the correlations
+between the original variables, supports the interpretation of PC1 as a
+gradient of overall size. All variables have the same moderate
+coefficient with respect to PC1 with the same sign, and all variables
+are positively correlated with each other. Subsequent PCs are primarily
+affected by 1 or 2 measurements. PC2 is dominated by variation in ear
+length after accounting for the overall size gradient. PC2 is dominated
+by variation in hindfoot length after accounting for variation in
+overall size and ear length. And so on.
+
+\paragraph{Variable contributions}\label{sec-ord-pca-example-pcs-load}
+
+The \textbf{variable contributions} to each PC tell us how much of a
+role each variable plays in defining each PC. They are calculated as the
+squared eigenvector coefficients, rescaled to be percentages.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{var.contribs }\OtherTok{\textless{}{-}} \DecValTok{100} \SpecialCharTok{*}\NormalTok{ p1}\SpecialCharTok{$}\NormalTok{CA}\SpecialCharTok{$}\NormalTok{v}\SpecialCharTok{\^{}}\DecValTok{2}
+\FunctionTok{round}\NormalTok{(var.contribs, }\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                 PC1   PC2   PC3   PC4
+totalLength    30.63  2.58 11.24 55.55
+tailLength     29.36  5.56 21.37 43.71
+hindfootLength 26.35  6.00 67.22  0.43
+earLength      13.66 85.86  0.17  0.32
+\end{verbatim}
+
+These contributions reinforce the interpretations we made by looking at
+the eigenvector coefficients. This makes sense, because the
+contributions are just the eigenvector coefficients. squared and scaled.
+Expressing the contributions on a percentage scale makes is more clear
+just how much PCs 2 and 3 are dominated by one variable.
+
+Because each eigenvector has unit length, the contributions must sum to
+100\% for each PC.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{colSums}\NormalTok{(var.contribs)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+PC1 PC2 PC3 PC4 
+100 100 100 100 
+\end{verbatim}
+
+\paragraph{Variable-PC correlations}\label{sec-ord-pca-example-pcs-corr}
+
+The \textbf{correlations between variables and PCs} are probably the
+most intuitive way to find biological interpretations of principal
+components. These correlations are also referred to as \textbf{variable
+loadings}, meaning that this term ambiguous because it can also refer to
+the \hyperref[sec-ord-pca-example-pcs-eigen]{eigenvector coefficients}.
+
+We can get these by requesting a correlation matrix between the original
+variables and the PC scores of the variables.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor}\NormalTok{(dx.pca[,pca.cols],}
+    \FunctionTok{scores}\NormalTok{(p1, }\AttributeTok{display=}\StringTok{"sites"}\NormalTok{, }\AttributeTok{choices=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                      PC1        PC2         PC3         PC4
+totalLength    -0.9603507 -0.1330417 -0.16618498 -0.18002497
+tailLength     -0.9401650 -0.1950939 -0.22918044  0.15970109
+hindfootLength -0.8907600 -0.2027802  0.40642123  0.01576472
+earLength      -0.6413093  0.7668931  0.02033263  0.01356467
+\end{verbatim}
+
+These correlations tell us that PC1 is negatively correlated with every
+measurement, and in the same direction, supporting our interpretation of
+this PC as a gradient of overall size. PC2 is strongly correlated with
+ear length, suggesting that this PC is a gradient of relative ear size.
+We don't call PC2 a gradient of ear size, because ear size also
+contributes to PC1 and because variation in PC2 is only calculated
+\emph{after} accounting for variation in PC1.
+
+These correlations are distinct from, but related to, the variable
+loadings. The loadings tell us how the original variables are combined
+to construct each PC. The correlations tell us how strongly each
+original variabele is associated with each PC.
+
+For a PCA with standardized variables, the loadings and correlations are
+related by
+
+\[r_{jk}=a_{jk}\sqrt{\lambda_k}\]
+
+where \(a_{jk}\) is the loading of variable \(j\) onto PC \(k\),
+\(\lambda_k\) is the eigenvalue of PC \(k\), and \(r_{jk}\) is the
+correlation between variable \(j\) and PC \(k\).
+
+\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Reviewer 2 alert}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
+
+Different textbooks and different R packages use the term
+\textbf{loading} somewhat differently. In \texttt{stats::prcomp()}, the
+\texttt{rotation} part of the output contains the eigenvectors. Other
+implementations use ``loadings'' to refer to the correlations between
+the variables and the PCs. Legendre and Legendre (2012), which I is my
+primary reference for multivariate statistics, uses the eigenvector
+coefficient definition. The documentation for package \texttt{vegan}
+emphasizes ``species scores'' and ``site scores'' rather than use a
+single definition of ``loading''.
+
+We sometimes say that a variable is ``loaded onto'' a PC if there is
+some relationship between that variable and the PC. In
+Figure~\ref{fig-pca-pca-neon1}, total length, hindfoot length, and tail
+length all appear to be ``loaded onto'' PC1. However, what we mean
+mathematically by ``loaded onto'' can mean a correlation or can mean an
+eigenvector coefficient. These things are related but not the same. When
+(not if) Reviewer 2 objects to your use of ``loading'', remind them that
+both meanings are monotonically related by a factor of
+\(\sqrt{\lambda_k}\).
+
+Bottom line: if you say that some variable is ``loaded onto'' a PC
+because its biplot vector is mostly parallel with that PC, that isn't
+incorrect, but it is mathematically ambiguous. Just be clear in your
+presentation about what you mean.
+
+\end{tcolorbox}
+
+\subsubsection{Visualizing patterns in a
+biplot}\label{sec-ord-pca-example-vis}
+
+Now that we have a handle on what our biplot vectors do and don't mean,
+let's explore some more. We'll stick to the scaling 2 version of the
+biplot.
+
+One useful thing we can do is examine the group structure. We can
+superimpose the group \textbf{centroids} and \textbf{95\% confidence
+ellipses} on the plot to investigate group separation and overlap.
+Ellipses are added with function \texttt{vegan::ordiellipse()}, and we
+can get centroids from our matrix of PC scores. In
+Figure~\ref{fig-pca-pca-neon3} we will omit the points for clarity (with
+argument \texttt{type="n"} in \texttt{plot()}), but you don't have to.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# calculate species centroids}
+\NormalTok{cent.p1.sp }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(xy.samp2, }\DecValTok{2}\NormalTok{,}
+                    \ControlFlowTok{function}\NormalTok{(x)\{}\FunctionTok{tapply}\NormalTok{(x, dx.pca}\SpecialCharTok{$}\NormalTok{species, mean)\})}
+
+
+\CommentTok{\# alternative shapes}
+\NormalTok{pch.fams2 }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{22}\NormalTok{, }\DecValTok{21}\NormalTok{, }\DecValTok{24}\NormalTok{, }\DecValTok{23}\NormalTok{)}
+\FunctionTok{names}\NormalTok{(pch.fams2) }\OtherTok{\textless{}{-}}\NormalTok{ fams}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(xy.samp2[,}\DecValTok{1}\NormalTok{], xy.samp2[,}\DecValTok{2}\NormalTok{],}
+     \AttributeTok{type=}\StringTok{"n"}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC1 (75.3\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (17.1\%)"}\NormalTok{)}
+\FunctionTok{ordiellipse}\NormalTok{(p1, }\AttributeTok{groups=}\NormalTok{dx.pca}\SpecialCharTok{$}\NormalTok{species,}
+            \AttributeTok{col=}\NormalTok{col.spps,}
+            \AttributeTok{draw=}\StringTok{"polygon"}\NormalTok{, }\AttributeTok{border=}\ConstantTok{NA}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(cent.p1.sp[,}\DecValTok{1}\NormalTok{], cent.p1.sp[,}\DecValTok{2}\NormalTok{], }\AttributeTok{type=}\StringTok{"p"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{,}
+       \AttributeTok{pch=}\NormalTok{pch.fams2[dx.pca}\SpecialCharTok{$}\NormalTok{family[}\FunctionTok{match}\NormalTok{(spps, dx.pca}\SpecialCharTok{$}\NormalTok{species)]],}
+       \AttributeTok{bg=}\NormalTok{col.spps)}
+\NormalTok{scal }\OtherTok{\textless{}{-}} \FloatTok{0.2}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{1}\NormalTok{], scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\NormalTok{moveout }\OtherTok{\textless{}{-}} \FloatTok{1.03}
+\FunctionTok{text}\NormalTok{(moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{1}\NormalTok{], moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{2}\NormalTok{],}
+     \FunctionTok{rownames}\NormalTok{(xy.vars2), }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{)}
 \FunctionTok{legend}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\AttributeTok{legend=}\NormalTok{spps, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{,}
-       \AttributeTok{col=}\NormalTok{col.spps,}
-       \AttributeTok{pch=}\NormalTok{pch.fams[tax}\SpecialCharTok{$}\NormalTok{family[}\FunctionTok{match}\NormalTok{(spps, tax}\SpecialCharTok{$}\NormalTok{species)]],}
-       \AttributeTok{ncol=}\DecValTok{3}\NormalTok{,}
+       \AttributeTok{pt.bg=}\NormalTok{col.spps, }\AttributeTok{pt.lwd=}\DecValTok{2}\NormalTok{,}
+       \AttributeTok{pch=}\NormalTok{pch.fams2[tax}\SpecialCharTok{$}\NormalTok{family[}\FunctionTok{match}\NormalTok{(spps, tax}\SpecialCharTok{$}\NormalTok{species)]],}
+       \AttributeTok{ncol=}\DecValTok{3}\NormalTok{, }
        \AttributeTok{text.font=}\DecValTok{3}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -36064,26 +36524,34 @@ While we're at it, let's assign some colors and shapes to the species
 
 \end{figure}%
 
-And color by family.
+Another way to visualize groups in a biplot is to plot the
+\textbf{minimum convex hull} or \textbf{minimum convex polygon}. This is
+a shape that contains all of the points in a group. We use function
+\texttt{ordihull()}, which works similarly to \texttt{ordiellipse()}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
-\FunctionTok{plot}\NormalTok{(xy.samp[,}\DecValTok{1}\NormalTok{], xy.samp[,}\DecValTok{2}\NormalTok{],}
-     \AttributeTok{pch=}\NormalTok{pch.fams[dx.pca}\SpecialCharTok{$}\NormalTok{family],}
-     \AttributeTok{col=}\NormalTok{col.fams[dx.pca}\SpecialCharTok{$}\NormalTok{family],}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(xy.samp2[,}\DecValTok{1}\NormalTok{], xy.samp2[,}\DecValTok{2}\NormalTok{],}
+     \AttributeTok{type=}\StringTok{"n"}\NormalTok{,}
      \AttributeTok{xlab=}\StringTok{"PC1 (75.3\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (17.1\%)"}\NormalTok{)}
-\FunctionTok{ordiellipse}\NormalTok{(p1, dx.pca}\SpecialCharTok{$}\NormalTok{family,}
-            \AttributeTok{col=}\NormalTok{col.fams, }\AttributeTok{draw=}\StringTok{"polygon"}\NormalTok{,}
-            \AttributeTok{border=}\ConstantTok{NA}\NormalTok{)}
+\FunctionTok{ordihull}\NormalTok{(p1, }\AttributeTok{groups=}\NormalTok{dx.pca}\SpecialCharTok{$}\NormalTok{species,}
+            \AttributeTok{col=}\NormalTok{col.spps,}
+            \AttributeTok{draw=}\StringTok{"polygon"}\NormalTok{, }\AttributeTok{border=}\ConstantTok{NA}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(cent.p1.sp[,}\DecValTok{1}\NormalTok{], cent.p1.sp[,}\DecValTok{2}\NormalTok{],}
+       \AttributeTok{type=}\StringTok{"p"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{,}
+       \AttributeTok{pch=}\NormalTok{pch.fams2[dx.pca}\SpecialCharTok{$}\NormalTok{family[}\FunctionTok{match}\NormalTok{(spps, dx.pca}\SpecialCharTok{$}\NormalTok{species)]],}
+       \AttributeTok{bg=}\NormalTok{col.spps)}
 \NormalTok{scal }\OtherTok{\textless{}{-}} \FloatTok{0.2}
-\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{1}\NormalTok{], scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
-\FunctionTok{text}\NormalTok{(}\FloatTok{1.03}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{1}\NormalTok{], }\FloatTok{1.03}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars[,}\DecValTok{2}\NormalTok{],}
-     \FunctionTok{rownames}\NormalTok{(xy.vars), }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
-
-\FunctionTok{legend}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\AttributeTok{legend=}\NormalTok{fams, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{,}
-       \AttributeTok{fill=}\NormalTok{col.fams,}
-       \AttributeTok{ncol=}\DecValTok{2}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{1}\NormalTok{], scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\NormalTok{moveout }\OtherTok{\textless{}{-}} \FloatTok{1.03}
+\FunctionTok{text}\NormalTok{(moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{1}\NormalTok{], moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{2}\NormalTok{],}
+     \FunctionTok{rownames}\NormalTok{(xy.vars2), }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\AttributeTok{legend=}\NormalTok{spps, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{,}
+       \AttributeTok{pt.bg=}\NormalTok{col.spps, }\AttributeTok{pt.lwd=}\DecValTok{2}\NormalTok{,}
+       \AttributeTok{pch=}\NormalTok{pch.fams2[tax}\SpecialCharTok{$}\NormalTok{family[}\FunctionTok{match}\NormalTok{(spps, tax}\SpecialCharTok{$}\NormalTok{species)]],}
+       \AttributeTok{ncol=}\DecValTok{3}\NormalTok{, }
+       \AttributeTok{text.font=}\DecValTok{3}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -36099,39 +36567,484 @@ And color by family.
 
 \end{figure}%
 
-Next: factor out body mass using allometric equations, then refit PCA.
+We can embellish the group polygons with \texttt{ordispider()}, which
+draws a segment from the group centroid to every vertex of the minimum
+convex polygon. The function is \texttt{ordispider()}. Note that this
+can make a plot very busy and hard to interpret.
 
-Work in progress!
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(xy.samp2[,}\DecValTok{1}\NormalTok{], xy.samp2[,}\DecValTok{2}\NormalTok{],}
+     \AttributeTok{type=}\StringTok{"n"}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC1 (75.3\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (17.1\%)"}\NormalTok{)}
+\FunctionTok{ordihull}\NormalTok{(p1, }\AttributeTok{groups=}\NormalTok{dx.pca}\SpecialCharTok{$}\NormalTok{species,}
+            \AttributeTok{col=}\NormalTok{col.spps,}
+            \AttributeTok{draw=}\StringTok{"polygon"}\NormalTok{, }\AttributeTok{border=}\StringTok{"black"}\NormalTok{)}
+\FunctionTok{ordispider}\NormalTok{(p1, }\AttributeTok{groups=}\NormalTok{dx.pca}\SpecialCharTok{$}\NormalTok{species,}
+            \AttributeTok{col=}\NormalTok{col.spps, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(cent.p1.sp[,}\DecValTok{1}\NormalTok{], cent.p1.sp[,}\DecValTok{2}\NormalTok{], }\AttributeTok{type=}\StringTok{"p"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{,}
+       \AttributeTok{pch=}\NormalTok{pch.fams2[dx.pca}\SpecialCharTok{$}\NormalTok{family[}\FunctionTok{match}\NormalTok{(spps, dx.pca}\SpecialCharTok{$}\NormalTok{species)]],}
+       \AttributeTok{bg=}\NormalTok{col.spps)}
+\NormalTok{scal }\OtherTok{\textless{}{-}} \FloatTok{0.2}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{1}\NormalTok{], scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\NormalTok{moveout }\OtherTok{\textless{}{-}} \FloatTok{1.03}
+\FunctionTok{text}\NormalTok{(moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{1}\NormalTok{], moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{2}\NormalTok{],}
+     \FunctionTok{rownames}\NormalTok{(xy.vars2), }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\AttributeTok{legend=}\NormalTok{spps, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{,}
+       \AttributeTok{pt.bg=}\NormalTok{col.spps, }\AttributeTok{pt.lwd=}\DecValTok{2}\NormalTok{,}
+       \AttributeTok{pch=}\NormalTok{pch.fams2[tax}\SpecialCharTok{$}\NormalTok{family[}\FunctionTok{match}\NormalTok{(spps, tax}\SpecialCharTok{$}\NormalTok{species)]],}
+       \AttributeTok{ncol=}\DecValTok{3}\NormalTok{, }
+       \AttributeTok{text.font=}\DecValTok{3}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{Principal coordinates analysis
-(PCoA)}\label{sec-ord-un-pcoa}
+\begin{figure}[H]
 
-\subsection{Correspondence analysis (CA)}\label{sec-ord-un-ca}
+\caption{\label{fig-pca-pca-neon5}text}
 
-\subsection{Nonmetric multidimensional scaling
-(NMDS)}\label{sec-ord-un-nmds}
+\centering{
 
-\section{Constrained ordination methods}\label{sec-ord-con}
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon5-1.pdf}}
 
-Constrained ordination methods, also called canonical ordination
-methods, identify major axes of multivariate variation that are
-associated with one or more explanatory variables. Unlike unconstrained
-ordination, which summarizes patterns in the response variables alone,
-constrained ordination incorporates information about potential
-predictors when constructing the ordination axes.
+}
 
-\subsection{Redundancy analysis (RA)}\label{sec-ord-con-ra}
+\end{figure}%
 
-\subsection{Linear discriminant analysis}\label{sec-ord-con-lda}
+Just for fun, let's make a version symbolized only by family. This
+reveals something interesting. Notice how the teal ellipse for family
+Muridae (old world rats and mice) is near the center of the plot, when
+most of its points are on the left? If you look closely at the right
+side, you can see a little cloud of teal triangles representing House
+Mouse (\emph{Mus musculus}). They were hard to see in previous biplots
+because were mixed up with all of the other small mice in family
+Cricetidae (new world rats and mice). We confirm this in
+Figure~\ref{fig-pca-pca-neon6}, which shows the genera, and
+Figure~\ref{fig-pca-pca-neon7}, which shows the families.
 
-\subsection{Canonical correspondence analysis
-(CCA)}\label{sec-ord-con-cca}
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(xy.samp2[,}\DecValTok{1}\NormalTok{], xy.samp2[,}\DecValTok{2}\NormalTok{],}
+     \AttributeTok{pch=}\NormalTok{pch.fams[dx.pca}\SpecialCharTok{$}\NormalTok{family],}
+     \AttributeTok{col=}\NormalTok{col.fams[dx.pca}\SpecialCharTok{$}\NormalTok{family],}
+     \AttributeTok{xlab=}\StringTok{"PC1 (75.3\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (17.1\%)"}\NormalTok{)}
+\FunctionTok{ordiellipse}\NormalTok{(p1, dx.pca}\SpecialCharTok{$}\NormalTok{family,}
+            \AttributeTok{col=}\NormalTok{col.fams, }\AttributeTok{draw=}\StringTok{"polygon"}\NormalTok{,}
+            \AttributeTok{border=}\ConstantTok{NA}\NormalTok{)}
+\NormalTok{scal }\OtherTok{\textless{}{-}} \FloatTok{0.2}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{1}\NormalTok{], scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(}\FloatTok{1.03}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{1}\NormalTok{], }\FloatTok{1.03}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{2}\NormalTok{],}
+     \FunctionTok{rownames}\NormalTok{(xy.vars2), }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
 
-\subsection{Distance-based RDA (dbRDA)}\label{sec-ord-con-dbrda}
+\FunctionTok{legend}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\FloatTok{0.9}\NormalTok{, }\AttributeTok{legend=}\NormalTok{fams, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{,}
+       \AttributeTok{fill=}\NormalTok{col.fams, }\AttributeTok{cex=}\FloatTok{1.4}\NormalTok{,}
+       \AttributeTok{ncol=}\DecValTok{2}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\section{Classification and other methods}\label{sec-ord-other}
+\begin{figure}[H]
 
-\subsection{Linear discriminant analysis}\label{sec-ord-other-lda}
+\caption{\label{fig-pca-pca-neon6}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon6-1.pdf}}
+
+}
+
+\end{figure}%
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# pull genus names from tax}
+\NormalTok{dx.pca}\SpecialCharTok{$}\NormalTok{genus }\OtherTok{\textless{}{-}}\NormalTok{ tax}\SpecialCharTok{$}\NormalTok{genus[}\FunctionTok{match}\NormalTok{(dx.pca}\SpecialCharTok{$}\NormalTok{abb, tax}\SpecialCharTok{$}\NormalTok{abb)]}
+
+\CommentTok{\# unique genera in our dataset}
+\NormalTok{genera }\OtherTok{\textless{}{-}} \FunctionTok{sort}\NormalTok{(}\FunctionTok{unique}\NormalTok{(dx.pca}\SpecialCharTok{$}\NormalTok{genus))}
+
+\CommentTok{\# define colors}
+\NormalTok{col.gen }\OtherTok{\textless{}{-}} \FunctionTok{hcl.colors}\NormalTok{(}\FunctionTok{length}\NormalTok{(genera), }\AttributeTok{palette =} \StringTok{"Dark 3"}\NormalTok{)}
+\FunctionTok{names}\NormalTok{(col.gen) }\OtherTok{\textless{}{-}}\NormalTok{ genera}
+
+\CommentTok{\# genus centroids}
+\NormalTok{cent.p1.gen }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(xy.samp2, }\DecValTok{2}\NormalTok{,}
+                    \ControlFlowTok{function}\NormalTok{(x)\{}\FunctionTok{tapply}\NormalTok{(x, dx.pca}\SpecialCharTok{$}\NormalTok{genus, mean)\})}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(xy.samp2[,}\DecValTok{1}\NormalTok{], xy.samp2[,}\DecValTok{2}\NormalTok{],}
+     \AttributeTok{type=}\StringTok{"n"}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC1 (75.3\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (17.1\%)"}\NormalTok{)}
+\FunctionTok{ordiellipse}\NormalTok{(p1, dx.pca}\SpecialCharTok{$}\NormalTok{genus,}
+            \AttributeTok{col=}\NormalTok{col.gen, }\AttributeTok{draw=}\StringTok{"polygon"}\NormalTok{,}
+            \AttributeTok{border=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{alpha=}\DecValTok{100}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(cent.p1.gen[,}\DecValTok{1}\NormalTok{], cent.p1.gen[,}\DecValTok{2}\NormalTok{],}
+\NormalTok{     genera, }\AttributeTok{font=}\DecValTok{3}\NormalTok{, }\AttributeTok{cex=}\FloatTok{0.9}\NormalTok{)}
+\NormalTok{scal }\OtherTok{\textless{}{-}} \FloatTok{0.2}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{1}\NormalTok{], scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(}\FloatTok{1.03}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{1}\NormalTok{], }\FloatTok{1.03}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars2[,}\DecValTok{2}\NormalTok{],}
+     \FunctionTok{rownames}\NormalTok{(xy.vars2), }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
+
+\FunctionTok{legend}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\FloatTok{0.9}\NormalTok{, }\AttributeTok{legend=}\NormalTok{genera, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{,}
+       \AttributeTok{fill=}\NormalTok{col.gen, }
+       \AttributeTok{ncol=}\DecValTok{4}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{text.font=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-pca-pca-neon7}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon7-1.pdf}}
+
+}
+
+\end{figure}%
+
+\subsubsection{Factoring out body size}\label{sec-ord-pca-example-out}
+
+Recall that we found that PC1 is a gradient of body size. What if we
+wanted to use PCA to example body shape with size factored out? One
+option, if we are confident that PC1 represented only body size, would
+to simply drop PC1 and look at plots of PCs 2, 3, and 4. A better option
+might be to regress our measurements on some measurement of body size.
+Remember in Section~\ref{sec-ord-pca-example-pca} when we deliberately
+left body mass out of our ordination? That was so we could use it now to
+factor overall size out of our measurements.
+
+The strategy is to regress each standard measurement against body mass,
+then perform a second PCA on the residuals of those relationships.
+First, check some scatterplots to get a sense of what we are dealing
+with:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(dx.pca}\SpecialCharTok{$}\NormalTok{weight, dx.pca}\SpecialCharTok{$}\NormalTok{totalLength, }\AttributeTok{log=}\StringTok{"xy"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(dx.pca}\SpecialCharTok{$}\NormalTok{weight, dx.pca}\SpecialCharTok{$}\NormalTok{tailLength, }\AttributeTok{log=}\StringTok{"xy"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(dx.pca}\SpecialCharTok{$}\NormalTok{weight, dx.pca}\SpecialCharTok{$}\NormalTok{hindfootLength, }\AttributeTok{log=}\StringTok{"xy"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(dx.pca}\SpecialCharTok{$}\NormalTok{weight, dx.pca}\SpecialCharTok{$}\NormalTok{earLength, }\AttributeTok{log=}\StringTok{"xy"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-pca-sizeout1}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-sizeout1-1.pdf}}
+
+}
+
+\end{figure}%
+
+Figure~\ref{fig-pca-sizeout1} shows that all four measurements have a
+strong, allometric relationships with body mass. That is, the
+relationship follows a power law \(y=ax^b\) or a linear relationship on
+the log-log scale. Let's fit those relationships and add the residuals
+to \texttt{dx.pca}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{logdx }\OtherTok{\textless{}{-}} \FunctionTok{log}\NormalTok{(dx.pca[,pca.cols])}
+\FunctionTok{names}\NormalTok{(logdx) }\OtherTok{\textless{}{-}} \FunctionTok{paste}\NormalTok{(}\StringTok{"log"}\NormalTok{, }\FunctionTok{c}\NormalTok{(}\StringTok{"total"}\NormalTok{, }\StringTok{"tail"}\NormalTok{, }\StringTok{"foot"}\NormalTok{, }\StringTok{"ear"}\NormalTok{), }\AttributeTok{sep=}\StringTok{"\_"}\NormalTok{)}
+\NormalTok{dx.pca }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(dx.pca, logdx)}
+\NormalTok{dx.pca}\SpecialCharTok{$}\NormalTok{logmass }\OtherTok{\textless{}{-}} \FunctionTok{log}\NormalTok{(dx.pca}\SpecialCharTok{$}\NormalTok{weight)}
+
+\NormalTok{mod.list }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\StringTok{"list"}\NormalTok{, }\AttributeTok{length=}\DecValTok{4}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{)\{}
+\NormalTok{    y }\OtherTok{\textless{}{-}}\NormalTok{ dx.pca[,}\FunctionTok{names}\NormalTok{(logdx)[i]]}
+\NormalTok{    current.model }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(y}\SpecialCharTok{\textasciitilde{}}\NormalTok{dx.pca}\SpecialCharTok{$}\NormalTok{logmass)}
+\NormalTok{    mod.list[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{residuals}\NormalTok{(current.model)}
+\NormalTok{\}}
+
+\NormalTok{dx.pca.res }\OtherTok{\textless{}{-}} \FunctionTok{do.call}\NormalTok{(cbind, mod.list)}
+\FunctionTok{colnames}\NormalTok{(dx.pca.res) }\OtherTok{\textless{}{-}}\NormalTok{ pca.cols}
+\NormalTok{dx.pca.res }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(dx.pca.res)}
+\end{Highlighting}
+\end{Shaded}
+
+Now we can run a new PCA on our size-adjusted measurements.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{pca}\NormalTok{(dx.pca.res, }\AttributeTok{scale=}\ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{summary}\NormalTok{(p2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+pca(X = dx.pca.res, scale = TRUE) 
+
+Partitioning of correlations:
+              Inertia Proportion
+Total               4          1
+Unconstrained       4          1
+
+Eigenvalues, and their contribution to the correlations 
+
+Importance of components:
+                         PC1    PC2    PC3     PC4
+Eigenvalue            2.0858 0.9986 0.7363 0.17933
+Proportion Explained  0.5214 0.2497 0.1841 0.04483
+Cumulative Proportion 0.5214 0.7711 0.9552 1.00000
+\end{verbatim}
+
+This is different. In the first PCA that was not size-adjusted, PC1
+accounted for over 75\% of variation. In the size-adjusted PCA, it's
+more like 52\%. We know that overall size has been factored out, so PC1
+cannot be a gradient of overall size.
+
+Check the variable loadings (correlation sense):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor}\NormalTok{(dx.pca.res, }
+    \FunctionTok{scores}\NormalTok{(p2, }\AttributeTok{display=}\StringTok{"sites"}\NormalTok{, }\AttributeTok{choices=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                      PC1         PC2        PC3         PC4
+totalLength    0.90903127  0.02676730  0.2926666  0.29545208
+tailLength     0.91969117  0.06294948  0.2420286 -0.30270062
+hindfootLength 0.63935589 -0.02012092 -0.7684682  0.01660641
+earLength      0.06958742 -0.99676003  0.0386570 -0.01151785
+\end{verbatim}
+
+The loadings tell us what to expect in the biplot, and actually make a
+lot of biological sense. PC1 is correlated with total length and tail
+length, and to a lesser extent hindfoot length. Total length and tail
+length in particularly are strongly correlated, so it make sense that
+they should be correlated with the same axis. PC2, as in the first PCA,
+is strongly associated with ear length. PC3 is mostly a gradient of
+hindfoot length.
+
+Let's check out the biplot:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# extract scores with scaling 1}
+\NormalTok{xy.samp3 }\OtherTok{\textless{}{-}} \FunctionTok{scores}\NormalTok{(p2, }\AttributeTok{display=}\StringTok{"sites"}\NormalTok{,}
+                  \AttributeTok{choices=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{, }\AttributeTok{scaling=}\DecValTok{2}\NormalTok{)}
+\NormalTok{xy.vars3 }\OtherTok{\textless{}{-}} \FunctionTok{scores}\NormalTok{(p2, }\AttributeTok{display=}\StringTok{"species"}\NormalTok{,}
+                  \AttributeTok{choices=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{, }\AttributeTok{scaling=}\DecValTok{2}\NormalTok{)}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(xy.samp3[,}\DecValTok{1}\NormalTok{], xy.samp3[,}\DecValTok{2}\NormalTok{],}
+     \AttributeTok{pch=}\NormalTok{pch.fams[dx.pca}\SpecialCharTok{$}\NormalTok{family],}
+     \AttributeTok{col=}\NormalTok{col.spps[dx.pca}\SpecialCharTok{$}\NormalTok{species],}
+     \AttributeTok{xlab=}\StringTok{"PC1 (52.1\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (25.0\%)"}\NormalTok{)}
+\CommentTok{\# shorten the biplot vectors to fit on the plot area}
+\NormalTok{scal }\OtherTok{\textless{}{-}} \FloatTok{0.1}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, scal}\SpecialCharTok{*}\NormalTok{xy.vars3[,}\DecValTok{1}\NormalTok{], scal}\SpecialCharTok{*}\NormalTok{xy.vars3[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\CommentTok{\# move the biplot labels out by 2\%}
+\NormalTok{moveout }\OtherTok{\textless{}{-}} \FloatTok{1.02}
+\FunctionTok{text}\NormalTok{(moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars3[,}\DecValTok{1}\NormalTok{], moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars3[,}\DecValTok{2}\NormalTok{],}
+     \FunctionTok{rownames}\NormalTok{(xy.vars3), }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{1.25}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\AttributeTok{legend=}\NormalTok{spps,}
+       \AttributeTok{col=}\NormalTok{col.spps,}
+       \AttributeTok{pch=}\NormalTok{pch.fams[tax}\SpecialCharTok{$}\NormalTok{family[}\FunctionTok{match}\NormalTok{(spps, tax}\SpecialCharTok{$}\NormalTok{species)]],}
+       \AttributeTok{ncol=}\DecValTok{3}\NormalTok{, }
+       \AttributeTok{text.font=}\DecValTok{3}\NormalTok{, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-pca-sizeout2}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-sizeout2-1.pdf}}
+
+}
+
+\end{figure}%
+
+In Figure~\ref{fig-pca-sizeout2} we still see PC1 being a gradient of
+overall size, with ear length being mostly orthogonal to the other
+variables. The arrangement of the samples is quite different, though.
+Let's superimpose the species:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# get species centroids in p2 PCA coordinates}
+\NormalTok{cent.p2.sp }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(xy.samp3, }\DecValTok{2}\NormalTok{,}
+                    \ControlFlowTok{function}\NormalTok{(x)\{}\FunctionTok{tapply}\NormalTok{(x, dx.pca}\SpecialCharTok{$}\NormalTok{species, mean)\})}
+
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(xy.samp3[,}\DecValTok{1}\NormalTok{], xy.samp3[,}\DecValTok{2}\NormalTok{],}
+     \AttributeTok{type=}\StringTok{"n"}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC1 (52.1\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (25.0\%)"}\NormalTok{)}
+\FunctionTok{ordiellipse}\NormalTok{(p2, dx.pca}\SpecialCharTok{$}\NormalTok{species, }\AttributeTok{col=}\NormalTok{col.spps,}
+            \AttributeTok{border=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{draw=}\StringTok{"polygon"}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(cent.p2.sp[,}\DecValTok{1}\NormalTok{], cent.p2.sp[,}\DecValTok{2}\NormalTok{], }
+\NormalTok{     spps, }\AttributeTok{font=}\DecValTok{3}\NormalTok{, }\AttributeTok{cex=}\FloatTok{0.8}\NormalTok{)}
+\CommentTok{\# shorten the biplot vectors to fit on the plot area}
+\NormalTok{scal }\OtherTok{\textless{}{-}} \FloatTok{0.1}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, scal}\SpecialCharTok{*}\NormalTok{xy.vars3[,}\DecValTok{1}\NormalTok{], scal}\SpecialCharTok{*}\NormalTok{xy.vars3[,}\DecValTok{2}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\CommentTok{\# move the biplot labels out by 2\%}
+\NormalTok{moveout }\OtherTok{\textless{}{-}} \FloatTok{1.02}
+\FunctionTok{text}\NormalTok{(moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars3[,}\DecValTok{1}\NormalTok{], moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars3[,}\DecValTok{2}\NormalTok{],}
+     \FunctionTok{rownames}\NormalTok{(xy.vars3), }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{1.4}\NormalTok{, }\FloatTok{1.1}\NormalTok{, }\AttributeTok{legend=}\NormalTok{spps,}
+       \AttributeTok{fill=}\NormalTok{col.spps, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{cex=}\FloatTok{0.8}\NormalTok{, }\AttributeTok{ncol=}\DecValTok{3}\NormalTok{, }\AttributeTok{text.font=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-pca-sizeout3}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-sizeout3-1.pdf}}
+
+}
+
+\end{figure}%
+
+One interesting consequence I see is that now that we factored out
+overall size, \emph{Rattus} is much closer to the \emph{Mus} and most of
+the mouse group. We also now see Northern Grasshopper Mouse
+(\emph{Onychomys leucogaster}) and Northern Red-backed Vole
+(\emph{Myodes rutilus}) as now much more separated from the rest of the
+cricetids (\emph{Peromyscus} and \emph{Reithrodontomys}). And, the
+heteromyids are grouped together more closely than they were when size
+was driving PC1. I'm a little surprise to see Masked Shrew (\emph{Sorex
+cinereus}) up there with the heteromyids. In the
+\hyperref[fig-pca-pca-neon3]{first ordination} they were simply the
+smallest species. Does that pattern happen along other PCs?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(xy.samp3[,}\DecValTok{1}\NormalTok{], xy.samp3[,}\DecValTok{3}\NormalTok{],}
+     \AttributeTok{type=}\StringTok{"n"}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC1 (52.1\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC3 (18.4\%)"}\NormalTok{)}
+\FunctionTok{ordiellipse}\NormalTok{(p2, dx.pca}\SpecialCharTok{$}\NormalTok{species, }\AttributeTok{col=}\NormalTok{col.spps,}
+            \AttributeTok{border=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{draw=}\StringTok{"polygon"}\NormalTok{,}
+            \AttributeTok{choices=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{))}
+\FunctionTok{text}\NormalTok{(cent.p2.sp[,}\DecValTok{1}\NormalTok{], cent.p2.sp[,}\DecValTok{3}\NormalTok{], }
+\NormalTok{     spps, }\AttributeTok{font=}\DecValTok{3}\NormalTok{, }\AttributeTok{cex=}\FloatTok{0.8}\NormalTok{)}
+\CommentTok{\# shorten the biplot vectors to fit on the plot area}
+\NormalTok{scal }\OtherTok{\textless{}{-}} \FloatTok{0.1}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, scal}\SpecialCharTok{*}\NormalTok{xy.vars3[,}\DecValTok{1}\NormalTok{], scal}\SpecialCharTok{*}\NormalTok{xy.vars3[,}\DecValTok{3}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\CommentTok{\# move the biplot labels out by 2\%}
+\NormalTok{moveout }\OtherTok{\textless{}{-}} \FloatTok{1.02}
+\FunctionTok{text}\NormalTok{(moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars3[,}\DecValTok{1}\NormalTok{], moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars3[,}\DecValTok{3}\NormalTok{],}
+     \FunctionTok{rownames}\NormalTok{(xy.vars3), }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{1.0}\NormalTok{, }\DecValTok{2}\NormalTok{, }\AttributeTok{legend=}\NormalTok{spps,}
+       \AttributeTok{fill=}\NormalTok{col.spps, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{cex=}\FloatTok{0.8}\NormalTok{, }\AttributeTok{ncol=}\DecValTok{3}\NormalTok{, }\AttributeTok{text.font=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-pca-sizeout4}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-sizeout4-1.pdf}}
+
+}
+
+\end{figure}%
+
+It appears so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(xy.samp3[,}\DecValTok{2}\NormalTok{], xy.samp3[,}\DecValTok{3}\NormalTok{],}
+     \AttributeTok{type=}\StringTok{"n"}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"PC2 (25.0\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC3 (18.4\%)"}\NormalTok{)}
+\FunctionTok{ordiellipse}\NormalTok{(p2, dx.pca}\SpecialCharTok{$}\NormalTok{species, }\AttributeTok{col=}\NormalTok{col.spps,}
+            \AttributeTok{border=}\ConstantTok{NA}\NormalTok{, }\AttributeTok{draw=}\StringTok{"polygon"}\NormalTok{,}
+            \AttributeTok{choices=}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{))}
+\FunctionTok{text}\NormalTok{(cent.p2.sp[,}\DecValTok{2}\NormalTok{], cent.p2.sp[,}\DecValTok{3}\NormalTok{], }
+\NormalTok{     spps, }\AttributeTok{font=}\DecValTok{3}\NormalTok{, }\AttributeTok{cex=}\FloatTok{0.8}\NormalTok{)}
+\CommentTok{\# shorten the biplot vectors to fit on the plot area}
+\NormalTok{scal }\OtherTok{\textless{}{-}} \FloatTok{0.1}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, scal}\SpecialCharTok{*}\NormalTok{xy.vars3[,}\DecValTok{2}\NormalTok{], scal}\SpecialCharTok{*}\NormalTok{xy.vars3[,}\DecValTok{3}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\CommentTok{\# move the biplot labels out by 2\%}
+\NormalTok{moveout }\OtherTok{\textless{}{-}} \FloatTok{1.02}
+\FunctionTok{text}\NormalTok{(moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars3[,}\DecValTok{2}\NormalTok{], moveout}\SpecialCharTok{*}\NormalTok{scal}\SpecialCharTok{*}\NormalTok{xy.vars3[,}\DecValTok{3}\NormalTok{],}
+     \FunctionTok{rownames}\NormalTok{(xy.vars3), }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.45}\NormalTok{, }\DecValTok{2}\NormalTok{, }\AttributeTok{legend=}\NormalTok{spps,}
+       \AttributeTok{fill=}\NormalTok{col.spps, }\AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{cex=}\FloatTok{0.8}\NormalTok{, }\AttributeTok{ncol=}\DecValTok{3}\NormalTok{, }\AttributeTok{text.font=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-pca-sizeout5}text}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-sizeout5-1.pdf}}
+
+}
+
+\end{figure}%
+
+So what did we learn?
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  PCA can help us visualize variation between samples and what variables
+  drive that variation.
+\item
+  The closer two samples are together in the ordination space, the more
+  similar they are.
+\item
+  Variables get bigger in the direction of their arrow.
+\item
+  Size matters.
+\item
+  Shrews are weird but neat.
+\end{enumerate}
+
+Next let's explore principal coordinates analysis (PCoA), a technique
+for exploring patterns among samples without the Euclidean distance
+metric.
+
+\section{Principal coordinates analysis (PCoA)}\label{sec-ord-pcoa}
+
+Coming soon!
+
+\section{Correspondence analysis (CA)}\label{sec-ord-ca}
+
+Coming soon!
+
+\section{Nonmetric multidimensional scaling (NMDS)}\label{sec-ord-nmds}
+
+Coming soon!
+
+\section{Redundancy analysis (RA)}\label{sec-ord-ra}
+
+Coming soon!
+
+\section{Canonical correspondence analysis (CCA)}\label{sec-ord-cca}
+
+Coming soon!
+
+\section{Distance-based RDA (dbRDA)}\label{sec-ord-dbrda}
+
+Coming soon!
+
+\section{Linear discriminant analysis}\label{sec-ord-lda}
+
+Coming soon!
 
 \chapter{Multivariate hypothesis testing}\label{sec-mtest}
 

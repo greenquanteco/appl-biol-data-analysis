@@ -71,15 +71,13 @@ In optimization-based methods such as NMDS, the axes do not have a direct mathem
 
 : Comparison of common ordination methods, indicating whether the ordination is constrained by explanatory variables and the primary mathematical approach used to calculate the ordination axes. {#tbl-ordination-methods}
 
-## Unconstrained ordination methods {#sec-ord-un}
-
-### Principal components analysis (PCA) {#sec-ord-un-pca}
+## Principal components analysis (PCA) {#sec-ord-pca}
 
 
-#### Introduction {#sec-ord-un-pca-intro}
+### Introduction {#sec-ord-un-pca-intro}
 The first and probably most commonly used ordination technique is **principal component analysis (PCA)**. It works  by finding synthetic gradients that capture most the variation between the observations more efficiently than the original variables. These gradients are calculated by finding linear combinations of the variables. These combinations really define a *rotation*, a kind of linear transformation, of the the original coordinate system. There are an infinite number of ways that we could apply a linear transformation to the data; the principal components are just the eigenvectors of the transformation captures the greatest variance on the first axis; the second greatest variance on the second axis, and so on. 
 
-#### What PCA does {#sec-ord-un-pca-what}
+### What PCA does {#sec-ord-un-pca-what}
 
 To get an intuitive understanding of PCA, work through it using an imaginary dataset with two variables, *Variable 1* and *Variable 2*. You could capture and display all the information about this dataset in a 2-d scatterplot, by simply plotting one variable against the other. Likewise, you could capture and display all of the information about a 3-dimensional dataset with a 3-d plot. For 4 or more dimensions, a true scatterplot can’t be rendered sensibly or even understood by our meat-based brains.
 
@@ -87,8 +85,8 @@ To get an intuitive understanding of PCA, work through it using an imaginary dat
 #| echo: FALSE
 #| fig.width: 8
 #| fig.height: 8
-#| fig-cap: "text"
-#| fig-alt: "text"
+#| fig-cap: "Scatterplot of a hypothetical dataset containing two positively correlated variables. The observations form an elongated cloud of points, illustrating a pattern that can be summarized using principal component analysis (PCA)."
+#| fig-alt: "Scatterplot of Variable 1 on the horizontal axis and Variable 2 on the vertical axis. Approximately 50 black points form an elongated cloud trending upward from lower left to upper right, indicating a positive relationship between the variables."
 #| label: fig-pca-explain1
 
 
@@ -118,8 +116,8 @@ One way to describe the variation among the observations in @fig-pca-explain1 is
 #| echo: false
 #| fig.width: 10
 #| fig.height: 5
-#| fig-cap: "text"
-#| fig-alt: "text"
+#| fig-cap: "Variation in two variables in a hypothetical dataset. The left panel shows horizontal deviations from the mean of Variable 1 (red), while the right panel shows vertical deviations from the mean of Variable 2 (blue). The sums of squared deviations are 1531.9 and 8020.7, respectively, indicating greater variation in Variable 2."
+#| fig-alt: "Two scatterplots of the same hypothetical dataset. In the left panel, red horizontal lines connect each observation to the mean of Variable 1, shown by a vertical dashed red line. In the right panel, blue vertical lines connect each observation to the mean of Variable 2, shown by a horizontal dashed blue line. The sums of squared deviations are 1531.9 for Variable 1 and 8020.7 for Variable 2."
 #| label: fig-pca-explain2
 
 ymin <- min(y)
@@ -162,8 +160,8 @@ Describing each observation as its deviation from the mean of each variable has 
 #| echo: false
 #| fig.width: 10
 #| fig.height: 5
-#| fig-cap: "text"
-#| fig-alt: "text"
+#| fig-cap: "Variation in two variables after centering the hypothetical dataset by subtracting the mean of each variable. Horizontal red lines (left) and vertical blue lines (right) show deviations from the respective variable means, now located at zero. Centering changes the coordinates of the observations but not the sums of squared deviations."
+#| fig-alt: "Two scatterplots of the same mean-centered dataset, with observations forming an upward-trending cloud around the origin. In the left panel, red horizontal lines show deviations from the mean of Variable 1, now at zero, with a sum of squares of 1531.9. In the right panel, blue vertical lines show deviations from the mean of Variable 2, also at zero, with a sum of squares of 8020.7."
 #| label: fig-pca-explain3
 
 
@@ -210,8 +208,8 @@ Doing PCA without standardizing variables will distort the results because each 
 #| echo: false
 #| fig.width: 10
 #| fig.height: 5
-#| fig-cap: "text"
-#| fig-alt: "text"
+#| fig-cap: "Variation in two variables after centering and standardizing the hypothetical dataset. Horizontal red lines (left) and vertical blue lines (right) show deviations from the respective variable means, now zero. Standardization gives both variables a standard deviation of one, resulting in equal sums of squared deviations (49) despite their different original variances."
+#| fig-alt: "Two scatterplots of the same standardized dataset, with observations forming an upward-trending cloud centered at the origin. In the left panel, red horizontal lines show deviations from the mean of Variable 1, with a sum of squares of 49. In the right panel, blue vertical lines show deviations from the mean of Variable 2, also with a sum of squares of 49. Both variables now range approximately from minus two to plus two."
 #| label: fig-pca-explain4
 
 
@@ -256,8 +254,8 @@ The variation among the observations is defined in terms of Variable 1 and Varia
 #| echo: false
 #| fig.width: 8
 #| fig.height: 8
-#| fig-cap: "text"
-#| fig-alt: "text"
+#| fig-cap: "Principal component axes for the standardized hypothetical dataset. The first principal component (solid red line) follows the direction of greatest variation among observations, while the second principal component (dashed blue line) is perpendicular to the first and represents the remaining variation."
+#| fig-alt: "Scatterplot of standardized Variable 1 and Variable 2, with approximately 50 black points forming an elongated cloud trending upward from left to right. A solid red line passes through the origin along the long axis of the point cloud, representing PC1. A dashed blue line passes through the origin perpendicular to the red line, representing PC2."
 #| label: fig-pca-explain5
 
 ########### illustrate rotation to PCs
@@ -297,8 +295,8 @@ The red axis is a vector that contains information about both Variable 1 and Var
 #| echo: false
 #| fig.width: 10
 #| fig.height: 5
-#| fig-cap: "text"
-#| fig-alt: "text"
+#| fig-cap: "Variation along the two principal component axes of the standardized hypothetical dataset. Dashed lines show the projections of observations onto PC1 (red, left panel) and PC2 (blue, right panel). The sum of squared deviations is much greater along PC1 (88.01) than PC2 (9.99), illustrating how PCA identifies the direction of greatest variation and a perpendicular axis accounting for the remaining variation."
+#| fig-alt: "Two scatterplots of the same standardized dataset, showing approximately 50 black points and two perpendicular principal component axes. In the left panel, dashed red lines project observations onto the solid red PC1 axis, which slopes upward from left to right. In the right panel, dashed blue lines project observations onto the solid blue PC2 axis, which slopes downward from left to right. The sums of squared deviations along PC1 and PC2 are 88.01 and 9.99, respectively."
 #| label: fig-pca-explain6
 
 
@@ -400,8 +398,8 @@ We know that the variation along the red and blue axes is the same as the variat
 #| echo: false
 #| fig.width: 10
 #| fig.height: 5
-#| fig-cap: "text"
-#| fig-alt: "text"
+#| fig-cap: "Rotation of the coordinate system in principal component analysis (PCA). The left panel shows the original standardized variables and their coordinate grid (gray), overlaid with the new principal component axes (red for PC1, blue for PC2) and their rotated grid lines. The right panel shows the same observations expressed in the new coordinate system, with PC1 and PC2 as the horizontal and vertical axes, respectively. The rotation preserves the relative positions and distances among observations while concentrating most of the variation along PC1."
+#| fig-alt: "Two scatterplots illustrating a rotation of coordinate axes. The left panel shows black observations on the original Variable 1 and Variable 2 axes, with a gray grid and diagonal red and blue grid lines representing the principal component coordinate system. Thick red and blue lines mark PC1 and PC2. The right panel shows the same observations in the rotated coordinate system, with PC1 horizontal and PC2 vertical. Most of the spread is now horizontal along PC1, while relatively little variation remains along PC2."
 #| label: fig-pca-explain7
 
 
@@ -473,7 +471,9 @@ for (b in seq(-6, 6, by=1)) {
 
 ```
 
-#### Example using `vegan` {#sec-ord-un-pca-example}
+### Example using `vegan` {#sec-ord-pca-example}
+
+#### Data import and preparation {#sec-ord-pca-example-data}
 
 For an example PCA analysis, let's revisit the small mammal measurement data from @sec-clust-kmeans-example. Download the [individual measurement dataset](../datasets/data-neon-ind-meas.csv) and the [taxonomic dataset](../datasets/data-neon-taxa.csv) and put them in your working directory.
 
@@ -490,7 +490,7 @@ tax <- read.csv("data-neon-taxa.csv")
 ind <- read.csv("data-neon-ind-meas.csv")
 ```
 
-We are going to use PCA to explore variation in small mammal morphology. First we need to organize the data. Cut the measurement data down to just the columns we need: individual, species, and the four standard measurements.
+We are going to use PCA to explore variation in small mammal morphology. First we need to organize the data. Cut the measurement data down to just the columns we need: individual, species, body mass, and the four standard measurements. 
 
 ```{r}
 use.cols <- c("tagID", "abb", "totalLength",
@@ -508,7 +508,7 @@ How many individuals do we have of each species?
 rev(sort(table(dx$abb)))
 ```
 
-There is quite a wide range of numbers of individuals between species. To prevent the species with many individuals from having too much influence over the analysis, let's randomly select 50 individuals from every species with at least 50 individuals. That will give us 16 species.
+There is quite a wide range of numbers of individuals between species. To prevent the species with many individuals from having too much influence over the analysis, let's randomly select 50 individuals from every species with at least 50 individuals. That will give us 16 species. Note that this is not what we would do in a real analysis. Instead, this is just a strategy to make the ordination easier to understand as a teaching example. If you want to do the example with all individuals, just uncomment the line indicated below.
 
 ```{r}
 set.seed(7410)
@@ -522,16 +522,26 @@ for (i in seq_along(sp)) {
 }
 
 dx.pca <- do.call(rbind, out)
+
+# if you want to try the analysis with all
+# of the species, uncomment and run this line:
+#dx.pca <- dx
+
 dx.pca <- merge(dx.pca, tax[,c("abb", "species", "family")])
 
 table(dx.pca$species)
 ```
 
+How many families do we have, and how many specie each?
 ```{r}
 table(dx.pca$family)
 ```
 
-We will use package `vegan` for ordination. Load it and run the PCA. Use argument `` to standardize the variables first.
+#### Fit the PCA {#sec-ord-pca-example-pca}
+ 
+We will use package `vegan` for ordination. Load it and run the PCA. We will leave body mass out of the ordination for now...that will be important [later](#sec-ord-pca-example-out).
+
+Use argument `scale=TRUE` to standardize the variables first. The default in `vegan::pca` is to not scale the variables, because that usually isn't necessary (or even sensible) with the default distance measure.
 
 ```{r}
 library(vegan)
@@ -542,28 +552,18 @@ p1 <- pca(dx.pca[,pca.cols], scale=TRUE)
 summary(p1)
 ```
 
-The result shows us that PC1 explains about 75.3% of the variation in measurements. PC2 adds another 17.1%. Just the first two PCs account for 92.4% of the variation. As we saw in @fig-kmeans-mice-pca4, the first PC likely captures a size gradient. Let's plot the ordination to see.
+The result shows us that PC1 explains about 75.3% of the variation in measurements. PC2 adds another 17.1%. Just the first two PCs account for 92.4% of the variation. Because we are ordinating on measurements, and the first PC captures a large percentage of the variation, there is a good chance that the first PC is capturing a size gradient (as we saw in @fig-kmeans-mice-pca4).
+
+
+#### Plot the PCA {#sec-ord-pca-example-biplot}
+
+The `plot` and `biplot` methods for `pca` objects will produce a quick graph, but it's not very helpful. I prefer to extract the useful parts of the results and build a plot using base graphics.
+
+What we need are the PC scores of the observations and the biplot arrows of the original variables. The "scores" are what we call the coordinates in the PC coordinate system. The positions of the observations in the ordination space reflect their similarity and dissimilarity relative to each other. The biplot arrows start at the origin and show the relationship between the original variables and the ordination space. You can think of them as the "shadows" you would get if you projected the original axes onto the plane of the figure (remember that we obtained the PCA space by rotating the original space).
+
+First, let's assign some colors and shapes to the species and families. This will help us make sense of the ordination plot.
 
 ```{r}
-#| fig.width: 8
-#| fig.height: 6
-#| fig-cap: "text"
-#| fig-alt: "text"
-#| label: fig-pca-pca-neon1
-plot(p1)
-```
-
-Well, that's not very helpful. The default plot method is a bit underwhelming. I prefer to extract the PC scores (coordinates in the PC coordinate system) and build the plot manually. Note that in the ordination function in package `vegan`, observations are always referred to as "sites", and variables as `species`. This is a result of the origin of `vegan` in community ecology.
-
-While we're at it, let's assign some colors and shapes to the species (the actual species, not the `"species"`).
-
-```{r}
-#| fig.width: 8
-#| fig.height: 8
-#| fig-cap: "text"
-#| fig-alt: "text"
-#| label: fig-pca-pca-neon2
-
 spps <- sort(unique(dx.pca$species))
 fams <- sort(unique(dx.pca$family))
 
@@ -574,68 +574,323 @@ pch.fams <- 15:18
 names(col.spps) <- spps
 names(col.fams) <- fams
 names(pch.fams) <- fams
+```
 
-xy.samp <- scores(p1, display="sites", choices=1:2)
-xy.vars <- scores(p1, display="species", choices=1:2)
+Next, we extract the scores of the observations. The ordination scores can be calculated in one of two ways, referred to as **scaling** (see @sec-ord-pca-example-biplot-scaling). For examining clusters of observations, we should use scaling 1. The function `scores()` will extract the scores we need. Note that in ordination functions in package `vegan`, observations are always referred to as `sites`, and variables as `species`. This is a result of the origin of `vegan` in community ecology.
 
-par(mar=c(5,5,6,1), bty="n")
-plot(xy.samp[,1], xy.samp[,2],
+
+```{r}
+#| fig.width: 8
+#| fig.height: 9
+#| fig-cap: "PCA biplot of four standardized morphological measurements from 16 small mammal species, using scaling type 1 (distance scaling). Each point represents an individual specimen, with colors and symbols identifying species. PC1 explains 75.3% of the variation and PC2 explains 17.1%. Black vectors indicate the directions in which total length, tail length, hindfoot length, and ear length increase. Scaling type 1 emphasizes distances among specimens rather than correlations among morphological variables."
+#| fig-alt: "PCA biplot showing individual specimens from 16 small mammal species, distinguished by colored symbols. PC1 (horizontal, 75.3%) separates specimens primarily along a body-size gradient, while PC2 (vertical, 17.1%) distinguishes specimens partly by ear length. Black vectors for total length, tail length, and hindfoot length point toward the lower left and overlap considerably. The ear-length vector points steeply upward and slightly left. Species form several recognizable clusters, including Rattus rattus at far left and Peromyscus truei toward the upper center."
+#| label: fig-pca-pca-neon1
+
+# extract scores with scaling 1
+xy.samp1 <- scores(p1, display="sites",
+                  choices=1:2, scaling=1)
+xy.vars1 <- scores(p1, display="species",
+                  choices=1:2, scaling=1)
+
+par(mar=c(5,5,7,1), bty="n", xpd=NA)
+plot(xy.samp1[,1], xy.samp1[,2],
      pch=pch.fams[dx.pca$family],
      col=col.spps[dx.pca$species],
      xlab="PC1 (75.3%)", ylab="PC2 (17.1%)")
-scal <- 0.2
-segments(0, 0, scal*xy.vars[,1], scal*xy.vars[,2], lwd=2)
-text(1.03*scal*xy.vars[,1], 1.03*scal*xy.vars[,2],
-     rownames(xy.vars), cex=1.2)
-legend(-1, 1.1, legend=spps, xpd=NA,
+# shorten the biplot vectors to fit on the plot area
+scal <- 0.04
+segments(0, 0, scal*xy.vars1[,1], scal*xy.vars1[,2], lwd=2)
+# move the biplot labels out by 2%
+moveout <- 1.02
+text(moveout*scal*xy.vars1[,1], moveout*scal*xy.vars1[,2],
+     rownames(xy.vars1), cex=1.2)
+legend(-0.9, 0.45, legend=spps,
        col=col.spps,
        pch=pch.fams[tax$family[match(spps, tax$species)]],
-       ncol=3,
+       ncol=3, 
        text.font=3, bty="n")
 
 
 ```
 
+@fig-pca-pca-neon1 shows that many of the species form recognizable clusters. For example, the brown circles in the bottom left are Ord's kangaroo rat, *Dipodomys ordii*, and that cluster is well separated from the pink circles in the bottom middle, which is its confamilial *Chaetodipus hispidus*, the hispid pocket mouse. On the other hand, all of the *Peromyscus* species (blue and greenish squares) do not separate cleanly from each other and instead form a big mess of overlapping clouds along the right side of the figure. From this we can infer that *D. ordii* and *C. hispidus* are more distinct from each other than the *Peromyscus* species are, despite being in the same family. 
+
+Another pattern we can see is that three of the four morphological variables point to the left and slightly down, almost but not quite parallel to PC1. Ear length points in a different direction, positively correlated with PC2 but negatively with PC1. So we can tentatively interpret PC1 as a gradient representing overall size: animals increase in size from right to left. This pattern is very commonly seen when ordinating morphological measurements. However, with scaling type 1, we cannot interpret angles between vectors as correlations. For that, we need scaling type 2.
+
+Extract the scores and make another biplot, this time with scaling 2.
+
+```{r}
+#| fig.width: 8
+#| fig.height: 9
+#| fig-cap: "PCA biplot of four standardized morphological measurements from 16 small mammal species, using scaling type 2 (correlation scaling). Each point represents an individual specimen, with colors and symbols identifying species. PC1 explains 75.3% of the variation and PC2 explains 17.1%. Black vectors represent the morphological measurements, with their directions and angles emphasizing correlations among variables and their relationships with the principal components. Total length, tail length, and hindfoot length are strongly associated with PC1, while ear length is more strongly associated with PC2."
+#| fig-alt: "PCA biplot showing specimens from 16 small mammal species, distinguished by colored symbols. PC1 is horizontal and explains 75.3% of the variation; PC2 is vertical and explains 17.1%. Black vectors for total length, tail length, and hindfoot length point almost horizontally to the left, indicating strong negative correlations with PC1. The ear-length vector points diagonally toward the upper left, indicating a negative correlation with PC1 and a positive correlation with PC2. Rattus rattus specimens cluster at the far left, while Peromyscus truei specimens occupy the upper central region."
+#| label: fig-pca-pca-neon2
+
+# extract scores with scaling 1
+xy.samp2 <- scores(p1, display="sites",
+                  choices=1:2, scaling=2)
+xy.vars2 <- scores(p1, display="species",
+                  choices=1:2, scaling=2)
+
+par(mar=c(5,5,7,1), bty="n")
+plot(xy.samp2[,1], xy.samp2[,2],
+     pch=pch.fams[dx.pca$family],
+     col=col.spps[dx.pca$species],
+     xlab="PC1 (75.3%)", ylab="PC2 (17.1%)")
+scal <- 0.2
+segments(0, 0, scal*xy.vars2[,1], scal*xy.vars2[,2], lwd=2)
+moveout <- 1.03
+text(moveout*scal*xy.vars2[,1], moveout*scal*xy.vars2[,2],
+     rownames(xy.vars2), cex=1.2, xpd=NA)
+legend(-1, 1.1, legend=spps, xpd=NA,
+       col=col.spps,
+       pch=pch.fams[tax$family[match(spps, tax$species)]],
+       ncol=3, 
+       text.font=3, bty="n")
+
+
+```
+
+@fig-pca-pca-neon2 uses scaling 2 instead of scaling 1. The point clouds look largely the same, but notice how the axis scales have changed. Under scaling 2, the angles between the biplot vectors *are* interpretable as correlations between variables. We also see that total length, tail length, and hindfoot length are much closer to parallel with PC1, reflecting their strong loading on that axis. 
+
+##### A note on biplot scaling {#sec-ord-pca-example-biplot-scaling}
+
+You may have noticed that we used the argument `scaling=2` when extracting the scores for the biplot in @fig-pca-pca-neon1. This argument controls how the observation and variable scores are scaled relative to each other.
+
+- In **scaling type 1 (distance scaling)**, the emphasis is on preserving distances among observations. This is useful when comparing observations or identifying clusters. The observation scores preserve Euclidean distances among observations as well as possible in the reduced ordination space. Variable scores are not proportional to their correlations with other variables.
+- In **scaling type 2 (correlation scaling)**, the emphasis is on representing relationships among variables. Variable scores are proportional to their correlations with the principal components. Angles between variable vectors approximate correlations among the original variables, assuming the displayed axes adequately represent those variables.
+
+The take-home is that scaling 1 emphasizes distances among observations, while scaling 2 emphasizes correlations among variables. In either case, the variable vectors indicate the directions in which variables increase across the ordination, but angles between vectors should be interpreted as correlations only under scaling 2.
+
+Neither scaling type is inherently better; they emphasize different aspects of the same ordination. For our [first biplot above](#fig-pca-pca-neon1), we used scaling type 1 because we wanted to see relationships between the observations. For the [second biplot](#fig-pca-pca-neon2), we used scaling type 2 because we wanted to interpret the relationships among the morphological measurements and their associations with the principal components.
+
+For example, in @fig-pca-pca-neon1, the vectors for total length and tail length point in nearly the same direction, indicating that these measurements are strongly positively correlated. The angle between total length and ear length is larger, suggesting a weaker positive correlation. These interpretations are approximate because the biplot displays only the first two principal components rather than all four dimensions of the original dataset.
+
+@tbl-pca-scaling sums up the differences between the two scaling types and their typical use cases.
+
+| Feature | Scaling 1 (distance scaling) | Scaling 2 (correlation scaling) |
+|---|---|---|
+| Primary emphasis | Distances among observations | Correlations among variables |
+| Best for | Comparing observations, identifying groups, examining gradients | Interpreting variable relationships and associations with PCs |
+| Distances between points | Approximate Euclidean distances in the original data | Distances are distorted by the scaling |
+| Angles between variable vectors | Not generally interpretable as correlations | Approximate correlations between variables |
+
+: Comparison of scaling types 1 and 2 for PCA biplots. {#tbl-pca-scaling}
+
+When should you use each scaling? 
+
+**Example use case for scaling 1**: Suppose you want to determine whether the 16 mammal species in fig-pca-pca-neon1 form distinct morphological groups. You could plot the specimens using scaling 1, color them by species or family, and examine their separation. Distances between specimens in the PCA plot approximate their multivariate Euclidean distances, insofar as those distances are represented by the displayed PCs.
+
+**Example use case for scaling 2**: Suppose you want to determine which morphological measurements distinguish those species. You'd use scaling 2 to examine the directions and angles of the measurement vectors. In a scaling 2 biplot, variables strongly correlated with a particular principal component tend to have vectors pointing along that axis. Variables associated with multiple components tend to have vectors pointing between the axes. The coordinates of each vector represent its correlations with the components, up to a common scaling factor.
+
+One subtlety: If you're plotting only observation scores, the choice of scaling usually doesn't matter much visually. Switching between scaling 1 and scaling 2 simply rescales the PC axes; it doesn't change the ordering of observations or the underlying PCA. However, the relative scaling of the axes changes, so distances and apparent group separation can look different.
+
+
+#### Interpret the principal components {#sec-ord-pca-example-pcs}
+
+Both biplots above, especially @fig-pca-pca-neon2, suggest that PC1 might have something to do with overall size, and that PC2 might describe variation in ear size after body size is accounted for. Let's interpret those possible interpretations. We can explore the possible relationships between the original variables and the PCs in 3 somewhat related ways:
+
+1. **Eigenvector coefficients**: coefficients defining each PC as a linear combination of the original variables. Sometimes called the **variable loadings** but see below.
+1. **Contributions of variables to each PC**: which variables contribute the most to each PC (exactly what it sounds like).
+1. **Correlations between variables and PCs**: also exactly what it sounds like. Also sometimes called "variable loadings".
+
+##### Eigenvector coefficients {#sec-ord-pca-example-pcs-eigen} 
+
+The **eigenvector coefficients** are the coefficients defining how each principal component is calculated as a linear combination of the original variables. Some people call these coefficients the **variable loadings**, but others use that term to describe the [correlations between the variables and the PCs](#sec-ord-pca-example-pcs-corr).
+
+Recall that a **linear combination** or **linear equation** is one where the result is obtained by multiplying each term by a constant and adding up those products (@sec-review-lin-def). For our PCA with four standardized measurements:
+
+$$PC_1=a_{1,1}Z_1+a_{1,2}Z_2+a_{1,3}Z_3+a_{1,4}Z_4$$
+
+where $Z_i$ are the standardized measurements and $a_{i,j}$ are the eigenvector coefficients for principal component $i$, variable $j$. Principal components 2, 3, and 4 are defined the same way:
+
+$$PC_2=a_{2,1}Z_1+a_{2,2}Z_2+a_{2,3}Z_3+a_{2,4}Z_4$$
+
+$$PC_2=a_{2,1}Z_1+a_{2,2}Z_2+a_{2,3}Z_3+a_{2,4}Z_4$$
+
+$$PC_2=a_{2,1}Z_1+a_{2,2}Z_2+a_{2,3}Z_3+a_{2,4}Z_4$$
+
+We can see the eigenvector coefficients like this:
+
+```{r}
+p1$CA$v
+```
+
+In this case, all variables contributed to PC1, but PC2 is determined mostly by ear length. PC3 is determined mostly by hindfoot length, and PC4 is determined mostly by total length and tail length. It's worth noting that all four measurements are positively correlated with each other, all though ear length is somewhat less correlated with the others.
+
+```{r}
+cor(dx.pca[,pca.cols])
+```
+
+This pattern of eigenvector coefficients, together with the correlations between the original variables, supports the interpretation of PC1 as a gradient of overall size. All variables have the same moderate coefficient with respect to PC1 with the same sign, and all variables are positively correlated with each other. Subsequent PCs are primarily affected by 1 or 2 measurements. PC2 is dominated by variation in ear length after accounting for the overall size gradient. PC2 is dominated by variation in hindfoot length after accounting for variation in overall size and ear length. And so on.
+
+##### Variable contributions {#sec-ord-pca-example-pcs-load}
+
+The **variable contributions** to each PC tell us how much of a role each variable plays in defining each PC. They are calculated as the squared eigenvector coefficients, rescaled to be percentages.
+
+```{r}
+var.contribs <- 100 * p1$CA$v^2
+round(var.contribs, 2)
+```
+
+These contributions reinforce the interpretations we made by looking at the eigenvector coefficients. This makes sense, because the contributions are just the eigenvector coefficients. squared and scaled. Expressing the contributions on a percentage scale makes is more clear just how much PCs 2 and 3 are dominated by one variable.
+
+Because each eigenvector has unit length, the contributions must sum to 100% for each PC.
+
+```{r}
+colSums(var.contribs)
+```
+
+##### Variable-PC correlations {#sec-ord-pca-example-pcs-corr}
+
+The **correlations between variables and PCs** are probably the most intuitive way to find biological interpretations of principal components. These correlations are also referred to as **variable loadings**, meaning that this term ambiguous because it can also refer to the [eigenvector coefficients](#sec-ord-pca-example-pcs-eigen). 
+
+We can get these by requesting a correlation matrix between the original variables and the PC scores of the variables.
+
+```{r}
+cor(dx.pca[,pca.cols],
+    scores(p1, display="sites", choices=1:4))
+```
+
+These correlations tell us that PC1 is negatively correlated with every measurement, and in the same direction, supporting our interpretation of this PC as a gradient of overall size. PC2 is strongly correlated with ear length, suggesting that this PC is a gradient of relative ear size. We don't call PC2 a gradient of ear size, because ear size also contributes to PC1 and because variation in PC2 is only calculated *after* accounting for variation in PC1.
+
+These correlations are distinct from, but related to, the variable loadings. The loadings tell us how the original variables are combined to construct each PC. The correlations tell us how strongly each original variabele is associated with each PC.
+
+For a PCA with standardized variables, the loadings and correlations are related by
+
+$$r_{jk}=a_{jk}\sqrt{\lambda_k}$$
+
+where $a_{jk}$ is the loading of variable $j$ onto PC $k$, $\lambda_k$ is the eigenvalue of PC $k$, and $r_{jk}$ is the correlation between variable $j$ and PC $k$. 
+
+:::{.callout-note title="Reviewer 2 alert"}
+Different textbooks and different R packages use the term **loading** somewhat differently. In `stats::prcomp()`, the `rotation` part of the output contains the eigenvectors. Other implementations use "loadings" to refer to the correlations between the variables and the PCs. @legendre2012numerical, which I is my primary reference for multivariate statistics, uses the eigenvector coefficient definition. The documentation for package `vegan` emphasizes "species scores" and "site scores" rather than use a single definition of "loading".
+
+We sometimes say that a variable is "loaded onto" a PC if there is some relationship between that variable and the PC. In @fig-pca-pca-neon1, total length, hindfoot length, and tail length all appear to be "loaded onto" PC1. However, what we mean mathematically by "loaded onto" can mean a correlation or can mean an eigenvector coefficient. These things are related but not the same. When (not if) Reviewer 2 objects to your use of "loading", remind them that both meanings are monotonically related by a factor of $\sqrt{\lambda_k}$.
+
+Bottom line: if you say that some variable is "loaded onto" a PC because its biplot vector is mostly parallel with that PC, that isn't incorrect, but it is mathematically ambiguous. Just be clear in your presentation about what you mean.
+:::
+
+#### Visualizing patterns in a biplot {#sec-ord-pca-example-vis}
+
+Now that we have a handle on what our biplot vectors do and don't mean, let's explore some more. We'll stick to the scaling 2 version of the biplot. 
+
+One useful thing we can do is examine the group structure. We can superimpose the group **centroids** and **95% confidence ellipses** on the plot to investigate group separation and overlap. Ellipses are added with function `vegan::ordiellipse()`, and we can get centroids from our matrix of PC scores. In @fig-pca-pca-neon3 we will omit the points for clarity (with argument `type="n"` in `plot()`), but you don't have to.
+
 ```{r}
 #| fig.width: 8
 #| fig.height: 8
-#| fig-cap: "text"
-#| fig-alt: "text"
+#| fig-cap: "PCA biplot of four standardized morphological measurements from 16 small mammal species, showing species centroids and ellipses instead of individual specimens. Each symbol represents the centroid of a species, and the surrounding shaded ellipse summarizes the dispersion of specimens belonging to that species. PC1 explains 75.3% of the variation and PC2 explains 17.1%. Black vectors show the relationships of the four morphological measurements with the principal components, using scaling type 2."
+#| fig-alt: "PCA biplot showing 16 species centroids as colored symbols outlined in black, each surrounded by a shaded ellipse of the same color. Rattus rattus has a broad ellipse at the far left, Dipodomys ordii is isolated in the lower left, and Peromyscus truei occupies the upper portion of the plot. Several species have overlapping ellipses near the center and right. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left."
 #| label: fig-pca-pca-neon3
 
+# calculate species centroids
+cent.p1.sp <- apply(xy.samp2, 2,
+                    function(x){tapply(x, dx.pca$species, mean)})
 
-par(mar=c(5,5,6,1), bty="n")
-plot(xy.samp[,1], xy.samp[,2],
-     pch=pch.fams[dx.pca$family],
-     col=col.spps[dx.pca$species],
+
+# alternative shapes
+pch.fams2 <- c(22, 21, 24, 23)
+names(pch.fams2) <- fams
+
+par(mar=c(5,5,7,1), bty="n")
+plot(xy.samp2[,1], xy.samp2[,2],
+     type="n",
      xlab="PC1 (75.3%)", ylab="PC2 (17.1%)")
-ordiellipse(p1, dx.pca$species,
-            col=col.spps, draw="polygon",
-            border=NA)
+ordiellipse(p1, groups=dx.pca$species,
+            col=col.spps,
+            draw="polygon", border=NA)
+points(cent.p1.sp[,1], cent.p1.sp[,2], type="p", lwd=2,
+       pch=pch.fams2[dx.pca$family[match(spps, dx.pca$species)]],
+       bg=col.spps)
 scal <- 0.2
-segments(0, 0, scal*xy.vars[,1], scal*xy.vars[,2], lwd=2)
-text(1.03*scal*xy.vars[,1], 1.03*scal*xy.vars[,2],
-     rownames(xy.vars), cex=1.2)
-
+segments(0, 0, scal*xy.vars2[,1], scal*xy.vars2[,2], lwd=2)
+moveout <- 1.03
+text(moveout*scal*xy.vars2[,1], moveout*scal*xy.vars2[,2],
+     rownames(xy.vars2), cex=1.2, xpd=NA)
 legend(-1, 1.1, legend=spps, xpd=NA,
-       col=col.spps,
-       pch=pch.fams[tax$family[match(spps, tax$species)]],
-       ncol=3,
+       pt.bg=col.spps, pt.lwd=2,
+       pch=pch.fams2[tax$family[match(spps, tax$species)]],
+       ncol=3, 
        text.font=3, bty="n")
 ```
 
-And color by family.
+Another way to visualize groups in a biplot is to plot the **minimum convex hull** or **minimum convex polygon**. This is a shape that contains all of the points in a group. We use function `ordihull()`, which works similarly to `ordiellipse()`.
 
 ```{r}
 #| fig.width: 8
 #| fig.height: 8
-#| fig-cap: "text"
-#| fig-alt: "text"
+#| fig-cap: "PCA biplot of four standardized morphological measurements from 16 small mammal species, showing species centroids and convex hulls generated using `vegan::ordihull()`. Each symbol represents a species centroid, and the surrounding shaded polygon encloses the outermost specimens of that species in the two-dimensional ordination. Unlike ellipses, convex hulls show the observed extent of each species rather than a statistical summary of its dispersion. PC1 explains 75.3% of the variation and PC2 explains 17.1%. Black vectors represent the morphological measurements using scaling type 2."
+#| fig-alt: "PCA biplot showing 16 species centroids as colored symbols outlined in black, surrounded by translucent convex polygons of matching colors. The polygons vary in size and shape, with a large purple hull for Rattus rattus extending across the left side, a blue hull for Peromyscus truei near the top, and several overlapping polygons near the center and right. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left."
 #| label: fig-pca-pca-neon4
 
+par(mar=c(5,5,7,1), bty="n")
+plot(xy.samp2[,1], xy.samp2[,2],
+     type="n",
+     xlab="PC1 (75.3%)", ylab="PC2 (17.1%)")
+ordihull(p1, groups=dx.pca$species,
+            col=col.spps,
+            draw="polygon", border=NA)
+points(cent.p1.sp[,1], cent.p1.sp[,2],
+       type="p", lwd=2,
+       pch=pch.fams2[dx.pca$family[match(spps, dx.pca$species)]],
+       bg=col.spps)
+scal <- 0.2
+segments(0, 0, scal*xy.vars2[,1], scal*xy.vars2[,2], lwd=2)
+moveout <- 1.03
+text(moveout*scal*xy.vars2[,1], moveout*scal*xy.vars2[,2],
+     rownames(xy.vars2), cex=1.2, xpd=NA)
+legend(-1, 1.1, legend=spps, xpd=NA,
+       pt.bg=col.spps, pt.lwd=2,
+       pch=pch.fams2[tax$family[match(spps, tax$species)]],
+       ncol=3, 
+       text.font=3, bty="n")
+```
 
-par(mar=c(5,5,6,1), bty="n")
-plot(xy.samp[,1], xy.samp[,2],
+We can embellish the group polygons with `ordispider()`, which draws a segment from the group centroid to every vertex of the minimum convex polygon. The function is `ordispider()`. Note that this can make a plot very busy and hard to interpret.
+
+```{r}
+#| fig.width: 8
+#| fig.height: 8
+#| fig-cap: "PCA biplot of four standardized morphological measurements from 16 small mammal species, showing species centroids, convex hulls, and lines connecting individual specimens to their species centroids using `vegan::ordispider()`. Each colored line connects an individual specimen to its species centroid, illustrating within-species variation in the ordination. Shaded polygons generated by `vegan::ordihull()` enclose the outermost specimens of each species. PC1 explains 75.3% of the variation and PC2 explains 17.1%. Black vectors represent the morphological measurements using scaling type 2."
+#| fig-alt: "PCA biplot showing 16 species centroids as colored symbols outlined in black, surrounded by translucent convex hulls with black borders. Numerous colored lines radiate from each centroid to the positions of individual specimens, forming spider-like patterns that illustrate within-species dispersion. Rattus rattus has a large purple hull on the left, while several species have overlapping hulls near the center and right. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left."
+#| label: fig-pca-pca-neon5
+
+par(mar=c(5,5,7,1), bty="n")
+plot(xy.samp2[,1], xy.samp2[,2],
+     type="n",
+     xlab="PC1 (75.3%)", ylab="PC2 (17.1%)")
+ordihull(p1, groups=dx.pca$species,
+            col=col.spps,
+            draw="polygon", border="black")
+ordispider(p1, groups=dx.pca$species,
+            col=col.spps, lwd=2)
+points(cent.p1.sp[,1], cent.p1.sp[,2], type="p", lwd=2,
+       pch=pch.fams2[dx.pca$family[match(spps, dx.pca$species)]],
+       bg=col.spps)
+scal <- 0.2
+segments(0, 0, scal*xy.vars2[,1], scal*xy.vars2[,2], lwd=2)
+moveout <- 1.03
+text(moveout*scal*xy.vars2[,1], moveout*scal*xy.vars2[,2],
+     rownames(xy.vars2), cex=1.2, xpd=NA)
+legend(-1, 1.1, legend=spps, xpd=NA,
+       pt.bg=col.spps, pt.lwd=2,
+       pch=pch.fams2[tax$family[match(spps, tax$species)]],
+       ncol=3, 
+       text.font=3, bty="n")
+```
+
+Just for fun, let's make a version symbolized only by family. This reveals something interesting. Notice how the teal ellipse for family Muridae (old world rats and mice) is near the center of the plot, when most of its points are on the left? If you look closely at the right side, you can see a little cloud of teal triangles representing House Mouse (*Mus musculus*). They were hard to see in previous biplots because were mixed up with all of the other small mice in family Cricetidae (new world rats and mice). We confirm this in @fig-pca-pca-neon6, which shows the genera, and @fig-pca-pca-neon7, which shows the families.
+
+```{r}
+#| fig.width: 8
+#| fig.height: 8
+#| fig-cap: "PCA biplot of four standardized morphological measurements from 16 small mammal species, grouped by taxonomic family. Each point represents an individual specimen, with colors and symbols identifying the four families. Shaded ellipses generated using `vegan::ordiellipse()` summarize the dispersion of specimens within each family. PC1 explains 75.3% of the variation and PC2 explains 17.1%. Black vectors represent the morphological measurements using scaling type 2. The families differ in their distributions across the ordination, although their ellipses overlap."
+#| fig-alt: "PCA biplot showing specimens from four mammal families: Cricetidae (pink squares), Heteromyidae (olive circles), Muridae (teal triangles), and Soricidae (purple diamonds). Cricetidae specimens are concentrated in the upper central region, Heteromyidae specimens primarily occupy the lower portion, Muridae specimens extend broadly from the far left toward the center, and Soricidae specimens form a compact group at the far right. Translucent ellipses summarize each family's dispersion, with substantial overlap among some groups. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left."
+#| label: fig-pca-pca-neon6
+
+
+par(mar=c(5,5,4,1), bty="n")
+plot(xy.samp2[,1], xy.samp2[,2],
      pch=pch.fams[dx.pca$family],
      col=col.fams[dx.pca$family],
      xlab="PC1 (75.3%)", ylab="PC2 (17.1%)")
@@ -643,39 +898,274 @@ ordiellipse(p1, dx.pca$family,
             col=col.fams, draw="polygon",
             border=NA)
 scal <- 0.2
-segments(0, 0, scal*xy.vars[,1], scal*xy.vars[,2], lwd=2)
-text(1.03*scal*xy.vars[,1], 1.03*scal*xy.vars[,2],
-     rownames(xy.vars), cex=1.2)
+segments(0, 0, scal*xy.vars2[,1], scal*xy.vars2[,2], lwd=2)
+text(1.03*scal*xy.vars2[,1], 1.03*scal*xy.vars2[,2],
+     rownames(xy.vars2), cex=1.2)
 
-legend(-1, 1.1, legend=fams, xpd=NA,
-       fill=col.fams,
+legend(-1, 0.9, legend=fams, xpd=NA,
+       fill=col.fams, cex=1.4,
        ncol=2, bty="n")
 ```
 
-Next: factor out body mass using allometric equations, then refit PCA.
+```{r}
+#| fig.width: 8
+#| fig.height: 8
+#| fig-cap: "PCA biplot of four standardized morphological measurements from 16 small mammal species, grouped by genus. Shaded ellipses generated using `vegan::ordiellipse()` summarize the dispersion of specimens within each genus, with labels identifying the genera. PC1 explains 75.3% of the variation and PC2 explains 17.1%. Black vectors represent the morphological measurements using scaling type 2. Several genera occupy distinct regions of the ordination, while others overlap, particularly Myodes, Onychomys, Mus, and Reithrodontomys."
+#| fig-alt: "PCA biplot showing ten mammal genera represented by labeled, translucent ellipses. Rattus occupies the far left, Dipodomys the lower left, Peromyscus the upper center, and Chaetodipus the lower center. Myodes, Onychomys, Mus, and Reithrodontomys have overlapping ellipses near the center-right, while Perognathus and Sorex form separate groups farther right and below the horizontal axis. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left."
+#| label: fig-pca-pca-neon7
+
+# pull genus names from tax
+dx.pca$genus <- tax$genus[match(dx.pca$abb, tax$abb)]
+
+# unique genera in our dataset
+genera <- sort(unique(dx.pca$genus))
+
+# define colors
+col.gen <- hcl.colors(length(genera), palette = "Dark 3")
+names(col.gen) <- genera
+
+# genus centroids
+cent.p1.gen <- apply(xy.samp2, 2,
+                    function(x){tapply(x, dx.pca$genus, mean)})
+
+par(mar=c(5,5,4,1), bty="n")
+plot(xy.samp2[,1], xy.samp2[,2],
+     type="n",
+     xlab="PC1 (75.3%)", ylab="PC2 (17.1%)")
+ordiellipse(p1, dx.pca$genus,
+            col=col.gen, draw="polygon",
+            border=NA, alpha=100)
+text(cent.p1.gen[,1], cent.p1.gen[,2],
+     genera, font=3, cex=0.9)
+scal <- 0.2
+segments(0, 0, scal*xy.vars2[,1], scal*xy.vars2[,2], lwd=2)
+text(1.03*scal*xy.vars2[,1], 1.03*scal*xy.vars2[,2],
+     rownames(xy.vars2), cex=1.2)
+
+legend(-1, 0.9, legend=genera, xpd=NA,
+       fill=col.gen, 
+       ncol=4, bty="n", text.font=3)
+```
+
+#### Factoring out body size {#sec-ord-pca-example-out}
+
+Recall that we found that PC1 is a gradient of body size. What if we wanted to use PCA to example body shape with size factored out? One option, if we are confident that PC1 represented only body size, would to simply drop PC1 and look at plots of PCs 2, 3, and 4. A better option might be to regress our measurements on some measurement of body size. Remember in @sec-ord-pca-example-pca when we deliberately left body mass out of our ordination? That was so we could use it now to factor overall size out of our measurements.
+
+The strategy is to regress each standard measurement against body mass, then perform a second PCA on the residuals of those relationships. First, check some scatterplots to get a sense of what we are dealing with:
+
+```{r}
+#| fig.width: 8
+#| fig.height: 8
+#| fig-cap: "Relationships between body mass and four morphological measurements in the small mammal dataset. Total length (upper left), tail length (upper right), hindfoot length (lower left), and ear length (lower right) generally increase with body mass, although the strength and shape of these relationships differ among measurements. Both axes are logarithmically scaled. These relationships illustrate the need to account for body size when investigating variation in morphological proportions."
+#| fig-alt: "Four scatterplots showing body mass on the horizontal axis and a morphological measurement on the vertical axis, both on logarithmic scales. Total length, tail length, and hindfoot length show strong positive relationships with body mass, with several distinct clusters of observations. Ear length has a weaker positive relationship with considerable scatter. Each plot contains numerous open black circles representing individual mammal specimens."
+#| label: fig-pca-sizeout1
+
+par(mar=c(5,5,1,1), mfrow=c(2,2))
+plot(dx.pca$weight, dx.pca$totalLength, log="xy")
+plot(dx.pca$weight, dx.pca$tailLength, log="xy")
+plot(dx.pca$weight, dx.pca$hindfootLength, log="xy")
+plot(dx.pca$weight, dx.pca$earLength, log="xy")
+```
+
+@fig-pca-sizeout1 shows that all four measurements have a strong, allometric relationships with body mass. That is, the relationship follows a power law $y=ax^b$ or a linear relationship on the log-log scale. Let's fit those relationships and add the residuals to `dx.pca`.
+
+```{r}
+logdx <- log(dx.pca[,pca.cols])
+names(logdx) <- paste("log", c("total", "tail", "foot", "ear"), sep="_")
+dx.pca <- cbind(dx.pca, logdx)
+dx.pca$logmass <- log(dx.pca$weight)
+
+mod.list <- vector("list", length=4)
+for(i in 1:4){
+    y <- dx.pca[,names(logdx)[i]]
+    current.model <- lm(y~dx.pca$logmass)
+    mod.list[[i]] <- residuals(current.model)
+}
+
+dx.pca.res <- do.call(cbind, mod.list)
+colnames(dx.pca.res) <- pca.cols
+dx.pca.res <- data.frame(dx.pca.res)
+```
+
+Now we can run a new PCA on our size-adjusted measurements.
+
+```{r}
+p2 <- pca(dx.pca.res, scale=TRUE)
+summary(p2)
+```
+
+This is different. In the first PCA that was not size-adjusted, PC1 accounted for over 75% of variation. In the size-adjusted PCA, it's more like 52%. We know that overall size has been factored out, so PC1 cannot be a gradient of overall size.
+
+Check the variable loadings (correlation sense):
+
+```{r}
+cor(dx.pca.res, 
+    scores(p2, display="sites", choices=1:4))
+```
+
+The loadings tell us what to expect in the biplot, and actually make a lot of biological sense. PC1 is correlated with total length and tail length, and to a lesser extent hindfoot length. Total length and tail length in particularly are strongly correlated, so it make sense that they should be correlated with the same axis. PC2, as in the first PCA, is strongly associated with ear length. PC3 is mostly a gradient of hindfoot length. 
+
+Let's check out the biplot:
+
+```{r}
+#| fig.width: 8
+#| fig.height: 9
+#| fig-cap: "PCA biplot of four size-adjusted morphological measurements from 16 small mammal species, using scaling type 2. Measurements were adjusted for body mass before PCA to emphasize variation in morphology independent of overall body size. PC1 explains 52.1% of the remaining variation and PC2 explains 25.0%. Each point represents an individual specimen, with colors and symbols identifying species. Black vectors show the relationships between the size-adjusted measurements and the principal components. Compared with the PCA of unadjusted measurements, the species are distributed along different morphological gradients."
+#| fig-alt: "PCA biplot of size-adjusted morphological measurements for 16 small mammal species, distinguished by colored symbols. PC1 is horizontal and explains 52.1% of the variation; PC2 is vertical and explains 25.0%. Onychomys leucogaster forms a cluster toward the far left, while Peromyscus truei occupies the lower central region. Chaetodipus and Sorex specimens are concentrated toward the upper portion of the plot, with considerable overlap among other species. Black vectors for total length, tail length, and hindfoot length point toward the right, while the ear-length vector points downward."
+#| label: fig-pca-sizeout2
+
+# extract scores with scaling 1
+xy.samp3 <- scores(p2, display="sites",
+                  choices=1:4, scaling=2)
+xy.vars3 <- scores(p2, display="species",
+                  choices=1:4, scaling=2)
+
+par(mar=c(5,5,7,1), bty="n", xpd=NA)
+plot(xy.samp3[,1], xy.samp3[,2],
+     pch=pch.fams[dx.pca$family],
+     col=col.spps[dx.pca$species],
+     xlab="PC1 (52.1%)", ylab="PC2 (25.0%)")
+# shorten the biplot vectors to fit on the plot area
+scal <- 0.1
+segments(0, 0, scal*xy.vars3[,1], scal*xy.vars3[,2], lwd=2)
+# move the biplot labels out by 2%
+moveout <- 1.02
+text(moveout*scal*xy.vars3[,1], moveout*scal*xy.vars3[,2],
+     rownames(xy.vars3), cex=1.2)
+legend(-1.25, 1.1, legend=spps,
+       col=col.spps,
+       pch=pch.fams[tax$family[match(spps, tax$species)]],
+       ncol=3, 
+       text.font=3, bty="n")
+```
+
+In @fig-pca-sizeout2 we still see PC1 being a gradient of overall size, with ear length being mostly orthogonal to the other variables. The arrangement of the samples is quite different, though. Let's superimpose the species:
+
+```{r}
+#| fig.width: 8
+#| fig.height: 9
+#| fig-cap: "PCA biplot of four size-adjusted morphological measurements from 16 small mammal species, showing species ellipses instead of individual specimens. Shaded ellipses generated using `vegan::ordiellipse()` summarize the dispersion of specimens within each species, with labels identifying the species. PC1 explains 52.1% of the variation and PC2 explains 25.0%. Black vectors represent the size-adjusted morphological measurements using scaling type 2. Several species occupy distinct regions of the ordination, while others exhibit considerable overlap."
+#| fig-alt: "PCA biplot showing 16 small mammal species as labeled, translucent ellipses. Onychomys leucogaster and Myodes rutilus occupy relatively distinct regions on the left. Chaetodipus hispidus, C. penicillatus, Perognathus flavus, and Sorex cinereus occupy overlapping regions in the upper center. Several Peromyscus species overlap extensively in the lower center, with P. truei positioned lowest. Black vectors for total length, tail length, and hindfoot length point toward the right, while the ear-length vector points downward. PC1 explains 52.1% and PC2 explains 25.0% of the variation."
+#| label: fig-pca-sizeout3
+
+# get species centroids in p2 PCA coordinates
+cent.p2.sp <- apply(xy.samp3, 2,
+                    function(x){tapply(x, dx.pca$species, mean)})
 
 
-Work in progress!
+par(mar=c(5,5,7,1), bty="n", xpd=NA)
+plot(xy.samp3[,1], xy.samp3[,2],
+     type="n",
+     xlab="PC1 (52.1%)", ylab="PC2 (25.0%)")
+ordiellipse(p2, dx.pca$species, col=col.spps,
+            border=NA, draw="polygon")
+text(cent.p2.sp[,1], cent.p2.sp[,2], 
+     spps, font=3, cex=0.8)
+# shorten the biplot vectors to fit on the plot area
+scal <- 0.1
+segments(0, 0, scal*xy.vars3[,1], scal*xy.vars3[,2], lwd=2)
+# move the biplot labels out by 2%
+moveout <- 1.02
+text(moveout*scal*xy.vars3[,1], moveout*scal*xy.vars3[,2],
+     rownames(xy.vars3), cex=1.2)
+legend(-1.4, 1.1, legend=spps,
+       fill=col.spps, bty="n", cex=0.8, ncol=3, text.font=3)
+```
+    
+One interesting consequence I see is that now that we factored out overall size, *Rattus* is much closer to the *Mus* and most of the mouse group. We also now see Northern Grasshopper Mouse (*Onychomys leucogaster*) and Northern Red-backed Vole (*Myodes rutilus*) as now much more separated from the rest of the cricetids (*Peromyscus* and *Reithrodontomys*). And, the heteromyids are grouped together more closely than they were when size was driving PC1. I'm a little surprise to see Masked Shrew (*Sorex cinereus*) up there with the heteromyids. In the [first ordination](#fig-pca-pca-neon3) they were simply the smallest species. Does that pattern happen along other PCs?
 
-### Principal coordinates analysis (PCoA) {#sec-ord-un-pcoa}
+```{r}
+#| fig.width: 8
+#| fig.height: 9
+#| fig-cap: "PCA biplot of four size-adjusted morphological measurements from 16 small mammal species, showing PC1 and PC3 rather than PC1 and PC2. Shaded ellipses generated using `vegan::ordiellipse()` summarize the dispersion of specimens within each species, with labels identifying the species. PC1 explains 52.1% of the variation and PC3 explains 18.4%. Black vectors represent the size-adjusted morphological measurements using scaling type 2. Several species that overlap on PC1 and PC2 are more clearly distinguished along PC3, particularly Dipodomys ordii."
+#| fig-alt: "PCA biplot showing PC1 on the horizontal axis (52.1%) and PC3 on the vertical axis (18.4%). Sixteen small mammal species are represented by labeled, translucent ellipses. Onychomys leucogaster and Myodes rutilus occupy separate regions on the far left, while Dipodomys ordii is isolated in the lower right. Rattus rattus occupies the upper right, and most remaining species have extensively overlapping ellipses near the center. Black vectors for the four size-adjusted morphological measurements are concentrated near the horizontal axis, except for hindfoot length, which points downward and slightly right."
+#| label: fig-pca-sizeout4
 
-### Correspondence analysis (CA)  {#sec-ord-un-ca}
+par(mar=c(5,5,7,1), bty="n", xpd=NA)
+plot(xy.samp3[,1], xy.samp3[,3],
+     type="n",
+     xlab="PC1 (52.1%)", ylab="PC3 (18.4%)")
+ordiellipse(p2, dx.pca$species, col=col.spps,
+            border=NA, draw="polygon",
+            choices=c(1,3))
+text(cent.p2.sp[,1], cent.p2.sp[,3], 
+     spps, font=3, cex=0.8)
+# shorten the biplot vectors to fit on the plot area
+scal <- 0.1
+segments(0, 0, scal*xy.vars3[,1], scal*xy.vars3[,3], lwd=2)
+# move the biplot labels out by 2%
+moveout <- 1.02
+text(moveout*scal*xy.vars3[,1], moveout*scal*xy.vars3[,3],
+     rownames(xy.vars3), cex=1.2)
+legend(-1.0, 2, legend=spps,
+       fill=col.spps, bty="n", cex=0.8, ncol=3, text.font=3)
+```
 
-### Nonmetric multidimensional scaling (NMDS) {#sec-ord-un-nmds}
+It appears so:
 
-## Constrained ordination methods {#sec-ord-con}
+```{r}
+#| fig.width: 8
+#| fig.height: 9
+#| fig-cap: "PCA biplot of four size-adjusted morphological measurements from 16 small mammal species, showing PC2 and PC3 rather than PC1 and PC2. Shaded ellipses generated using `vegan::ordiellipse()` summarize the dispersion of specimens within each species, with labels identifying the species. PC2 explains 25.0% of the variation and PC3 explains 18.4%. Black vectors represent the size-adjusted morphological measurements using scaling type 2. Several species are more clearly separated along PC2, particularly Chaetodipus hispidus and Dipodomys ordii, while other species overlap extensively."
+#| fig-alt: "PCA biplot showing PC2 on the horizontal axis (25.0%) and PC3 on the vertical axis (18.4%). Sixteen small mammal species are represented by labeled, translucent ellipses. Chaetodipus hispidus and C. penicillatus occupy the right side, while Dipodomys ordii forms a separate ellipse in the lower right. Rattus rattus is near the upper center, and several Peromyscus species overlap on the left. Black vectors representing the four size-adjusted morphological measurements are concentrated near the origin, with hindfoot length pointing downward."
+#| label: fig-pca-sizeout5
 
-Constrained ordination methods, also called canonical ordination methods, identify major axes of multivariate variation that are associated with one or more explanatory variables. Unlike unconstrained ordination, which summarizes patterns in the response variables alone, constrained ordination incorporates information about potential predictors when constructing the ordination axes.
+par(mar=c(5,5,7,1), bty="n", xpd=NA)
+plot(xy.samp3[,2], xy.samp3[,3],
+     type="n",
+     xlab="PC2 (25.0%)", ylab="PC3 (18.4%)")
+ordiellipse(p2, dx.pca$species, col=col.spps,
+            border=NA, draw="polygon",
+            choices=c(2,3))
+text(cent.p2.sp[,2], cent.p2.sp[,3], 
+     spps, font=3, cex=0.8)
+# shorten the biplot vectors to fit on the plot area
+scal <- 0.1
+segments(0, 0, scal*xy.vars3[,2], scal*xy.vars3[,3], lwd=2)
+# move the biplot labels out by 2%
+moveout <- 1.02
+text(moveout*scal*xy.vars3[,2], moveout*scal*xy.vars3[,3],
+     rownames(xy.vars3), cex=1.2)
+legend(-0.45, 2, legend=spps,
+       fill=col.spps, bty="n", cex=0.8, ncol=3, text.font=3)
+```
 
-### Redundancy analysis (RA) {#sec-ord-con-ra}
+So what did we learn?
 
-### Linear discriminant analysis {#sec-ord-con-lda}
+1. PCA can help us visualize variation between samples and what variables drive that variation.
+1. The closer two samples are together in the ordination space, the more similar they are.
+1. Variables get bigger in the direction of their arrow.
+1. Size matters.
+1. Shrews are weird but neat.
 
-### Canonical correspondence analysis (CCA)  {#sec-ord-con-cca}
+Next let's explore principal coordinates analysis (PCoA), a technique for exploring patterns among samples without the Euclidean distance metric.
 
-### Distance-based RDA (dbRDA) {#sec-ord-con-dbrda}
+## Principal coordinates analysis (PCoA) {#sec-ord-pcoa}
 
-## Classification and other methods {#sec-ord-other}
+Coming soon!
 
-### Linear discriminant analysis {#sec-ord-other-lda}
+## Correspondence analysis (CA)  {#sec-ord-ca}
+
+Coming soon!
+
+## Nonmetric multidimensional scaling (NMDS) {#sec-ord-nmds}
+
+**Nonmetric multidimensional scaling (NMDS)** is an ordination method that attempts to arrange samples in a lower-dimensional space in a way that preserves the **rank order of the dissimilarity matrix**. It 
+
+
+## Redundancy analysis (RA) {#sec-ord-ra}
+
+Coming soon!
+
+## Canonical correspondence analysis (CCA)  {#sec-ord-cca}
+
+Coming soon!
+
+## Distance-based RDA (dbRDA) {#sec-ord-dbrda}
+
+Coming soon!
+
+## Linear discriminant analysis {#sec-ord-lda}
+
+Coming soon!
 

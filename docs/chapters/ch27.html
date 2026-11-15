@@ -61,7 +61,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -514,29 +533,27 @@ window.Quarto = {
   <li><a href="#sec-intro-types-calc" id="toc-sec-intro-types-calc" class="nav-link" data-scroll-target="#sec-intro-types-calc"><span class="header-section-number">27.1.2.2</span> Eigenanalysis vs.&nbsp;optimization</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#sec-ord-un" id="toc-sec-ord-un" class="nav-link" data-scroll-target="#sec-ord-un"><span class="header-section-number">27.2</span> Unconstrained ordination methods</a>
+  <li><a href="#sec-ord-pca" id="toc-sec-ord-pca" class="nav-link" data-scroll-target="#sec-ord-pca"><span class="header-section-number">27.2</span> Principal components analysis (PCA)</a>
   <ul>
-  <li><a href="#sec-ord-un-pca" id="toc-sec-ord-un-pca" class="nav-link" data-scroll-target="#sec-ord-un-pca"><span class="header-section-number">27.2.1</span> Principal components analysis (PCA)</a>
+  <li><a href="#sec-ord-un-pca-intro" id="toc-sec-ord-un-pca-intro" class="nav-link" data-scroll-target="#sec-ord-un-pca-intro"><span class="header-section-number">27.2.1</span> Introduction</a></li>
+  <li><a href="#sec-ord-un-pca-what" id="toc-sec-ord-un-pca-what" class="nav-link" data-scroll-target="#sec-ord-un-pca-what"><span class="header-section-number">27.2.2</span> What PCA does</a></li>
+  <li><a href="#sec-ord-pca-example" id="toc-sec-ord-pca-example" class="nav-link" data-scroll-target="#sec-ord-pca-example"><span class="header-section-number">27.2.3</span> Example using <code>vegan</code></a>
   <ul class="collapse">
-  <li><a href="#sec-ord-un-pca-intro" id="toc-sec-ord-un-pca-intro" class="nav-link" data-scroll-target="#sec-ord-un-pca-intro"><span class="header-section-number">27.2.1.1</span> Introduction</a></li>
-  <li><a href="#sec-ord-un-pca-what" id="toc-sec-ord-un-pca-what" class="nav-link" data-scroll-target="#sec-ord-un-pca-what"><span class="header-section-number">27.2.1.2</span> What PCA does</a></li>
-  <li><a href="#sec-ord-un-pca-example" id="toc-sec-ord-un-pca-example" class="nav-link" data-scroll-target="#sec-ord-un-pca-example"><span class="header-section-number">27.2.1.3</span> Example using <code>vegan</code></a></li>
+  <li><a href="#sec-ord-pca-example-data" id="toc-sec-ord-pca-example-data" class="nav-link" data-scroll-target="#sec-ord-pca-example-data"><span class="header-section-number">27.2.3.1</span> Data import and preparation</a></li>
+  <li><a href="#sec-ord-pca-example-pca" id="toc-sec-ord-pca-example-pca" class="nav-link" data-scroll-target="#sec-ord-pca-example-pca"><span class="header-section-number">27.2.3.2</span> Fit the PCA</a></li>
+  <li><a href="#sec-ord-pca-example-biplot" id="toc-sec-ord-pca-example-biplot" class="nav-link" data-scroll-target="#sec-ord-pca-example-biplot"><span class="header-section-number">27.2.3.3</span> Plot the PCA</a></li>
+  <li><a href="#sec-ord-pca-example-pcs" id="toc-sec-ord-pca-example-pcs" class="nav-link" data-scroll-target="#sec-ord-pca-example-pcs"><span class="header-section-number">27.2.3.4</span> Interpret the principal components</a></li>
+  <li><a href="#sec-ord-pca-example-vis" id="toc-sec-ord-pca-example-vis" class="nav-link" data-scroll-target="#sec-ord-pca-example-vis"><span class="header-section-number">27.2.3.5</span> Visualizing patterns in a biplot</a></li>
+  <li><a href="#sec-ord-pca-example-out" id="toc-sec-ord-pca-example-out" class="nav-link" data-scroll-target="#sec-ord-pca-example-out"><span class="header-section-number">27.2.3.6</span> Factoring out body size</a></li>
   </ul></li>
-  <li><a href="#sec-ord-un-pcoa" id="toc-sec-ord-un-pcoa" class="nav-link" data-scroll-target="#sec-ord-un-pcoa"><span class="header-section-number">27.2.2</span> Principal coordinates analysis (PCoA)</a></li>
-  <li><a href="#sec-ord-un-ca" id="toc-sec-ord-un-ca" class="nav-link" data-scroll-target="#sec-ord-un-ca"><span class="header-section-number">27.2.3</span> Correspondence analysis (CA)</a></li>
-  <li><a href="#sec-ord-un-nmds" id="toc-sec-ord-un-nmds" class="nav-link" data-scroll-target="#sec-ord-un-nmds"><span class="header-section-number">27.2.4</span> Nonmetric multidimensional scaling (NMDS)</a></li>
   </ul></li>
-  <li><a href="#sec-ord-con" id="toc-sec-ord-con" class="nav-link" data-scroll-target="#sec-ord-con"><span class="header-section-number">27.3</span> Constrained ordination methods</a>
-  <ul>
-  <li><a href="#sec-ord-con-ra" id="toc-sec-ord-con-ra" class="nav-link" data-scroll-target="#sec-ord-con-ra"><span class="header-section-number">27.3.1</span> Redundancy analysis (RA)</a></li>
-  <li><a href="#sec-ord-con-lda" id="toc-sec-ord-con-lda" class="nav-link" data-scroll-target="#sec-ord-con-lda"><span class="header-section-number">27.3.2</span> Linear discriminant analysis</a></li>
-  <li><a href="#sec-ord-con-cca" id="toc-sec-ord-con-cca" class="nav-link" data-scroll-target="#sec-ord-con-cca"><span class="header-section-number">27.3.3</span> Canonical correspondence analysis (CCA)</a></li>
-  <li><a href="#sec-ord-con-dbrda" id="toc-sec-ord-con-dbrda" class="nav-link" data-scroll-target="#sec-ord-con-dbrda"><span class="header-section-number">27.3.4</span> Distance-based RDA (dbRDA)</a></li>
-  </ul></li>
-  <li><a href="#sec-ord-other" id="toc-sec-ord-other" class="nav-link" data-scroll-target="#sec-ord-other"><span class="header-section-number">27.4</span> Classification and other methods</a>
-  <ul>
-  <li><a href="#sec-ord-other-lda" id="toc-sec-ord-other-lda" class="nav-link" data-scroll-target="#sec-ord-other-lda"><span class="header-section-number">27.4.1</span> Linear discriminant analysis</a></li>
-  </ul></li>
+  <li><a href="#sec-ord-pcoa" id="toc-sec-ord-pcoa" class="nav-link" data-scroll-target="#sec-ord-pcoa"><span class="header-section-number">27.3</span> Principal coordinates analysis (PCoA)</a></li>
+  <li><a href="#sec-ord-ca" id="toc-sec-ord-ca" class="nav-link" data-scroll-target="#sec-ord-ca"><span class="header-section-number">27.4</span> Correspondence analysis (CA)</a></li>
+  <li><a href="#sec-ord-nmds" id="toc-sec-ord-nmds" class="nav-link" data-scroll-target="#sec-ord-nmds"><span class="header-section-number">27.5</span> Nonmetric multidimensional scaling (NMDS)</a></li>
+  <li><a href="#sec-ord-ra" id="toc-sec-ord-ra" class="nav-link" data-scroll-target="#sec-ord-ra"><span class="header-section-number">27.6</span> Redundancy analysis (RA)</a></li>
+  <li><a href="#sec-ord-cca" id="toc-sec-ord-cca" class="nav-link" data-scroll-target="#sec-ord-cca"><span class="header-section-number">27.7</span> Canonical correspondence analysis (CCA)</a></li>
+  <li><a href="#sec-ord-dbrda" id="toc-sec-ord-dbrda" class="nav-link" data-scroll-target="#sec-ord-dbrda"><span class="header-section-number">27.8</span> Distance-based RDA (dbRDA)</a></li>
+  <li><a href="#sec-ord-lda" id="toc-sec-ord-lda" class="nav-link" data-scroll-target="#sec-ord-lda"><span class="header-section-number">27.9</span> Linear discriminant analysis</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch27.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -691,26 +708,24 @@ Table&nbsp;27.1: Comparison of common ordination methods, indicating whether the
 </section>
 </section>
 </section>
-<section id="sec-ord-un" class="level2" data-number="27.2">
-<h2 data-number="27.2" class="anchored" data-anchor-id="sec-ord-un"><span class="header-section-number">27.2</span> Unconstrained ordination methods</h2>
-<section id="sec-ord-un-pca" class="level3" data-number="27.2.1">
-<h3 data-number="27.2.1" class="anchored" data-anchor-id="sec-ord-un-pca"><span class="header-section-number">27.2.1</span> Principal components analysis (PCA)</h3>
-<section id="sec-ord-un-pca-intro" class="level4" data-number="27.2.1.1">
-<h4 data-number="27.2.1.1" class="anchored" data-anchor-id="sec-ord-un-pca-intro"><span class="header-section-number">27.2.1.1</span> Introduction</h4>
+<section id="sec-ord-pca" class="level2" data-number="27.2">
+<h2 data-number="27.2" class="anchored" data-anchor-id="sec-ord-pca"><span class="header-section-number">27.2</span> Principal components analysis (PCA)</h2>
+<section id="sec-ord-un-pca-intro" class="level3" data-number="27.2.1">
+<h3 data-number="27.2.1" class="anchored" data-anchor-id="sec-ord-un-pca-intro"><span class="header-section-number">27.2.1</span> Introduction</h3>
 <p>The first and probably most commonly used ordination technique is <strong>principal component analysis (PCA)</strong>. It works by finding synthetic gradients that capture most the variation between the observations more efficiently than the original variables. These gradients are calculated by finding linear combinations of the variables. These combinations really define a <em>rotation</em>, a kind of linear transformation, of the the original coordinate system. There are an infinite number of ways that we could apply a linear transformation to the data; the principal components are just the eigenvectors of the transformation captures the greatest variance on the first axis; the second greatest variance on the second axis, and so on.</p>
 </section>
-<section id="sec-ord-un-pca-what" class="level4" data-number="27.2.1.2">
-<h4 data-number="27.2.1.2" class="anchored" data-anchor-id="sec-ord-un-pca-what"><span class="header-section-number">27.2.1.2</span> What PCA does</h4>
+<section id="sec-ord-un-pca-what" class="level3" data-number="27.2.2">
+<h3 data-number="27.2.2" class="anchored" data-anchor-id="sec-ord-un-pca-what"><span class="header-section-number">27.2.2</span> What PCA does</h3>
 <p>To get an intuitive understanding of PCA, work through it using an imaginary dataset with two variables, <em>Variable 1</em> and <em>Variable 2</em>. You could capture and display all the information about this dataset in a 2-d scatterplot, by simply plotting one variable against the other. Likewise, you could capture and display all of the information about a 3-dimensional dataset with a 3-d plot. For 4 or more dimensions, a true scatterplot can’t be rendered sensibly or even understood by our meat-based brains.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-pca-explain1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-pca-explain1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Scatterplot of Variable 1 on the horizontal axis and Variable 2 on the vertical axis. Approximately 50 black points form an elongated cloud trending upward from lower left to upper right, indicating a positive relationship between the variables.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-explain1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;27.4: text
+Figure&nbsp;27.4: Scatterplot of a hypothetical dataset containing two positively correlated variables. The observations form an elongated cloud of points, illustrating a pattern that can be summarized using principal component analysis (PCA).
 </figcaption>
 <div aria-describedby="fig-pca-explain1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch27_files/figure-html/fig-pca-explain1-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch27_files/figure-html/fig-pca-explain1-1.png" class="img-fluid figure-img" alt="Scatterplot of Variable 1 on the horizontal axis and Variable 2 on the vertical axis. Approximately 50 black points form an elongated cloud trending upward from lower left to upper right, indicating a positive relationship between the variables." width="768">
 </div>
 </figure>
 </div>
@@ -726,13 +741,13 @@ Figure&nbsp;27.4: text
 </ul>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-pca-explain2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-pca-explain2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two scatterplots of the same hypothetical dataset. In the left panel, red horizontal lines connect each observation to the mean of Variable 1, shown by a vertical dashed red line. In the right panel, blue vertical lines connect each observation to the mean of Variable 2, shown by a horizontal dashed blue line. The sums of squared deviations are 1531.9 for Variable 1 and 8020.7 for Variable 2.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-explain2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;27.5: text
+Figure&nbsp;27.5: Variation in two variables in a hypothetical dataset. The left panel shows horizontal deviations from the mean of Variable 1 (red), while the right panel shows vertical deviations from the mean of Variable 2 (blue). The sums of squared deviations are 1531.9 and 8020.7, respectively, indicating greater variation in Variable 2.
 </figcaption>
 <div aria-describedby="fig-pca-explain2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch27_files/figure-html/fig-pca-explain2-1.png" class="img-fluid figure-img" alt="text" width="960">
+<img src="ch27_files/figure-html/fig-pca-explain2-1.png" class="img-fluid figure-img" alt="Two scatterplots of the same hypothetical dataset. In the left panel, red horizontal lines connect each observation to the mean of Variable 1, shown by a vertical dashed red line. In the right panel, blue vertical lines connect each observation to the mean of Variable 2, shown by a horizontal dashed blue line. The sums of squared deviations are 1531.9 for Variable 1 and 8020.7 for Variable 2." width="960">
 </div>
 </figure>
 </div>
@@ -743,13 +758,13 @@ Figure&nbsp;27.5: text
 <p><a href="#fig-pca-explain3" class="quarto-xref">Figure&nbsp;<span>27.6</span></a> below shows the data as deviations from the means of each variable. Notice that the variation is each direction is unchanged from <a href="#fig-pca-explain2" class="quarto-xref">Figure&nbsp;<span>27.5</span></a>.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-pca-explain3" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-pca-explain3" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two scatterplots of the same mean-centered dataset, with observations forming an upward-trending cloud around the origin. In the left panel, red horizontal lines show deviations from the mean of Variable 1, now at zero, with a sum of squares of 1531.9. In the right panel, blue vertical lines show deviations from the mean of Variable 2, also at zero, with a sum of squares of 8020.7.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-explain3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;27.6: text
+Figure&nbsp;27.6: Variation in two variables after centering the hypothetical dataset by subtracting the mean of each variable. Horizontal red lines (left) and vertical blue lines (right) show deviations from the respective variable means, now located at zero. Centering changes the coordinates of the observations but not the sums of squared deviations.
 </figcaption>
 <div aria-describedby="fig-pca-explain3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch27_files/figure-html/fig-pca-explain3-1.png" class="img-fluid figure-img" alt="text" width="960">
+<img src="ch27_files/figure-html/fig-pca-explain3-1.png" class="img-fluid figure-img" alt="Two scatterplots of the same mean-centered dataset, with observations forming an upward-trending cloud around the origin. In the left panel, red horizontal lines show deviations from the mean of Variable 1, now at zero, with a sum of squares of 1531.9. In the right panel, blue vertical lines show deviations from the mean of Variable 2, also at zero, with a sum of squares of 8020.7." width="960">
 </div>
 </figure>
 </div>
@@ -760,13 +775,13 @@ Figure&nbsp;27.6: text
 <p>Doing PCA without standardizing variables will distort the results because each variable’s importance in the PCA will depend on its magnitude, not its relationship to other variables. Standardization puts variation along any axis on equal footing. <a href="#fig-pca-explain4" class="quarto-xref">Figure&nbsp;<span>27.7</span></a> shows the data as deviations from the variable means after standardization. Compare this figure to <a href="#fig-pca-explain3" class="quarto-xref">Figure&nbsp;<span>27.6</span></a> above. All that changed are the axis scales and the sum of squared deviations. Note that the sums of squares are equal for both variables now.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-pca-explain4" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-pca-explain4" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two scatterplots of the same standardized dataset, with observations forming an upward-trending cloud centered at the origin. In the left panel, red horizontal lines show deviations from the mean of Variable 1, with a sum of squares of 49. In the right panel, blue vertical lines show deviations from the mean of Variable 2, also with a sum of squares of 49. Both variables now range approximately from minus two to plus two.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-explain4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;27.7: text
+Figure&nbsp;27.7: Variation in two variables after centering and standardizing the hypothetical dataset. Horizontal red lines (left) and vertical blue lines (right) show deviations from the respective variable means, now zero. Standardization gives both variables a standard deviation of one, resulting in equal sums of squared deviations (49) despite their different original variances.
 </figcaption>
 <div aria-describedby="fig-pca-explain4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch27_files/figure-html/fig-pca-explain4-1.png" class="img-fluid figure-img" alt="text" width="960">
+<img src="ch27_files/figure-html/fig-pca-explain4-1.png" class="img-fluid figure-img" alt="Two scatterplots of the same standardized dataset, with observations forming an upward-trending cloud centered at the origin. In the left panel, red horizontal lines show deviations from the mean of Variable 1, with a sum of squares of 49. In the right panel, blue vertical lines show deviations from the mean of Variable 2, also with a sum of squares of 49. Both variables now range approximately from minus two to plus two." width="960">
 </div>
 </figure>
 </div>
@@ -776,13 +791,13 @@ Figure&nbsp;27.7: text
 <p>The variation among the observations is defined in terms of Variable 1 and Variable 2, and Variable 1 and Variable 2 contributed equally to the total variation. But, we could describe most of the variation between points with just one variable, or axis, the red line (<a href="#fig-pca-explain5" class="quarto-xref">Figure&nbsp;<span>27.8</span></a>). Any remaining variation will be in the direction perpendicular to the red axis, the blue axis (dashed line).</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-pca-explain5" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-pca-explain5" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Scatterplot of standardized Variable 1 and Variable 2, with approximately 50 black points forming an elongated cloud trending upward from left to right. A solid red line passes through the origin along the long axis of the point cloud, representing PC1. A dashed blue line passes through the origin perpendicular to the red line, representing PC2.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-explain5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;27.8: text
+Figure&nbsp;27.8: Principal component axes for the standardized hypothetical dataset. The first principal component (solid red line) follows the direction of greatest variation among observations, while the second principal component (dashed blue line) is perpendicular to the first and represents the remaining variation.
 </figcaption>
 <div aria-describedby="fig-pca-explain5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch27_files/figure-html/fig-pca-explain5-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch27_files/figure-html/fig-pca-explain5-1.png" class="img-fluid figure-img" alt="Scatterplot of standardized Variable 1 and Variable 2, with approximately 50 black points forming an elongated cloud trending upward from left to right. A solid red line passes through the origin along the long axis of the point cloud, representing PC1. A dashed blue line passes through the origin perpendicular to the red line, representing PC2." width="768">
 </div>
 </figure>
 </div>
@@ -791,13 +806,13 @@ Figure&nbsp;27.8: text
 <p>The red axis is a vector that contains information about both Variable 1 and Variable 2. It is tricky, but not too hard, to calculate each observation’s deviations from the mean of the red axis (left panel below) (<a href="#fig-pca-explain6" class="quarto-xref">Figure&nbsp;<span>27.9</span></a>). We can also calculate the deviations along a perpendicular vector, because even after describing the variation in the red direction, there is still some variation in the blue direction (right panel).</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-pca-explain6" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-pca-explain6" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two scatterplots of the same standardized dataset, showing approximately 50 black points and two perpendicular principal component axes. In the left panel, dashed red lines project observations onto the solid red PC1 axis, which slopes upward from left to right. In the right panel, dashed blue lines project observations onto the solid blue PC2 axis, which slopes downward from left to right. The sums of squared deviations along PC1 and PC2 are 88.01 and 9.99, respectively.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-explain6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;27.9: text
+Figure&nbsp;27.9: Variation along the two principal component axes of the standardized hypothetical dataset. Dashed lines show the projections of observations onto PC1 (red, left panel) and PC2 (blue, right panel). The sum of squared deviations is much greater along PC1 (88.01) than PC2 (9.99), illustrating how PCA identifies the direction of greatest variation and a perpendicular axis accounting for the remaining variation.
 </figcaption>
 <div aria-describedby="fig-pca-explain6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch27_files/figure-html/fig-pca-explain6-1.png" class="img-fluid figure-img" alt="text" width="960">
+<img src="ch27_files/figure-html/fig-pca-explain6-1.png" class="img-fluid figure-img" alt="Two scatterplots of the same standardized dataset, showing approximately 50 black points and two perpendicular principal component axes. In the left panel, dashed red lines project observations onto the solid red PC1 axis, which slopes upward from left to right. In the right panel, dashed blue lines project observations onto the solid blue PC2 axis, which slopes downward from left to right. The sums of squared deviations along PC1 and PC2 are 88.01 and 9.99, respectively." width="960">
 </div>
 </figure>
 </div>
@@ -806,27 +821,29 @@ Figure&nbsp;27.9: text
 <p>We know that the variation along the red and blue axes is the same as the variation on the Variable 1 and Variable 2 axes, because the sums of squares are the same (<span class="math inline">\(76.6 + 21.4 = 49 + 49\)</span>) . The red and blue axes are just different ways of orienting the data to express the same patterns. All we really did was rotate the original coordinate system (defined by Variables 1 and 2) to a new coordinate system (<a href="#fig-pca-explain7" class="quarto-xref">Figure&nbsp;<span>27.10</span></a>).</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-pca-explain7" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-pca-explain7" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two scatterplots illustrating a rotation of coordinate axes. The left panel shows black observations on the original Variable 1 and Variable 2 axes, with a gray grid and diagonal red and blue grid lines representing the principal component coordinate system. Thick red and blue lines mark PC1 and PC2. The right panel shows the same observations in the rotated coordinate system, with PC1 horizontal and PC2 vertical. Most of the spread is now horizontal along PC1, while relatively little variation remains along PC2.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-explain7-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;27.10: text
+Figure&nbsp;27.10: Rotation of the coordinate system in principal component analysis (PCA). The left panel shows the original standardized variables and their coordinate grid (gray), overlaid with the new principal component axes (red for PC1, blue for PC2) and their rotated grid lines. The right panel shows the same observations expressed in the new coordinate system, with PC1 and PC2 as the horizontal and vertical axes, respectively. The rotation preserves the relative positions and distances among observations while concentrating most of the variation along PC1.
 </figcaption>
 <div aria-describedby="fig-pca-explain7-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch27_files/figure-html/fig-pca-explain7-1.png" class="img-fluid figure-img" alt="text" width="960">
+<img src="ch27_files/figure-html/fig-pca-explain7-1.png" class="img-fluid figure-img" alt="Two scatterplots illustrating a rotation of coordinate axes. The left panel shows black observations on the original Variable 1 and Variable 2 axes, with a gray grid and diagonal red and blue grid lines representing the principal component coordinate system. Thick red and blue lines mark PC1 and PC2. The right panel shows the same observations in the rotated coordinate system, with PC1 horizontal and PC2 vertical. Most of the spread is now horizontal along PC1, while relatively little variation remains along PC2." width="960">
 </div>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="sec-ord-un-pca-example" class="level4" data-number="27.2.1.3">
-<h4 data-number="27.2.1.3" class="anchored" data-anchor-id="sec-ord-un-pca-example"><span class="header-section-number">27.2.1.3</span> Example using <code>vegan</code></h4>
+<section id="sec-ord-pca-example" class="level3" data-number="27.2.3">
+<h3 data-number="27.2.3" class="anchored" data-anchor-id="sec-ord-pca-example"><span class="header-section-number">27.2.3</span> Example using <code>vegan</code></h3>
+<section id="sec-ord-pca-example-data" class="level4" data-number="27.2.3.1">
+<h4 data-number="27.2.3.1" class="anchored" data-anchor-id="sec-ord-pca-example-data"><span class="header-section-number">27.2.3.1</span> Data import and preparation</h4>
 <p>For an example PCA analysis, let’s revisit the small mammal measurement data from <a href="ch26.html#sec-clust-kmeans-example" class="quarto-xref"><span>Section 26.2.2</span></a>. Download the <a href="../datasets/data-neon-ind-meas.csv">individual measurement dataset</a> and the <a href="../datasets/data-neon-taxa.csv">taxonomic dataset</a> and put them in your working directory.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>tax <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-taxa.csv"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-ind-meas.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>We are going to use PCA to explore variation in small mammal morphology. First we need to organize the data. Cut the measurement data down to just the columns we need: individual, species, and the four standard measurements.</p>
+<p>We are going to use PCA to explore variation in small mammal morphology. First we need to organize the data. Cut the measurement data down to just the columns we need: individual, species, body mass, and the four standard measurements.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>use.cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"tagID"</span>, <span class="st">"abb"</span>, <span class="st">"totalLength"</span>,</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>              <span class="st">"tailLength"</span>, <span class="st">"hindfootLength"</span>,</span>
@@ -859,7 +876,7 @@ Figure&nbsp;27.10: text
       1       1       1       1       1       1       1 </code></pre>
 </div>
 </div>
-<p>There is quite a wide range of numbers of individuals between species. To prevent the species with many individuals from having too much influence over the analysis, let’s randomly select 50 individuals from every species with at least 50 individuals. That will give us 16 species.</p>
+<p>There is quite a wide range of numbers of individuals between species. To prevent the species with many individuals from having too much influence over the analysis, let’s randomly select 50 individuals from every species with at least 50 individuals. That will give us 16 species. Note that this is not what we would do in a real analysis. Instead, this is just a strategy to make the ordination easier to understand as a teaching example. If you want to do the example with all individuals, just uncomment the line indicated below.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">7410</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -872,9 +889,14 @@ Figure&nbsp;27.10: text
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>dx.pca <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, out)</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>dx.pca <span class="ot">&lt;-</span> <span class="fu">merge</span>(dx.pca, tax[,<span class="fu">c</span>(<span class="st">"abb"</span>, <span class="st">"species"</span>, <span class="st">"family"</span>)])</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(dx.pca<span class="sc">$</span>species)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># if you want to try the analysis with all</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># of the species, uncomment and run this line:</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">#dx.pca &lt;- dx</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>dx.pca <span class="ot">&lt;-</span> <span class="fu">merge</span>(dx.pca, tax[,<span class="fu">c</span>(<span class="st">"abb"</span>, <span class="st">"species"</span>, <span class="st">"family"</span>)])</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(dx.pca<span class="sc">$</span>species)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
      Chaetodipus hispidus  Chaetodipus penicillatus           Dipodomys ordii 
@@ -891,6 +913,7 @@ Figure&nbsp;27.10: text
                        50 </code></pre>
 </div>
 </div>
+<p>How many families do we have, and how many specie each?</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(dx.pca<span class="sc">$</span>family)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -899,7 +922,11 @@ Figure&nbsp;27.10: text
          450          200          100           50 </code></pre>
 </div>
 </div>
-<p>We will use package <code>vegan</code> for ordination. Load it and run the PCA. Use argument `` to standardize the variables first.</p>
+</section>
+<section id="sec-ord-pca-example-pca" class="level4" data-number="27.2.3.2">
+<h4 data-number="27.2.3.2" class="anchored" data-anchor-id="sec-ord-pca-example-pca"><span class="header-section-number">27.2.3.2</span> Fit the PCA</h4>
+<p>We will use package <code>vegan</code> for ordination. Load it and run the PCA. We will leave body mass out of the ordination for now…that will be important <a href="#sec-ord-pca-example-out">later</a>.</p>
+<p>Use argument <code>scale=TRUE</code> to standardize the variables first. The default in <code>vegan::pca</code> is to not scale the variables, because that usually isn’t necessary (or even sensible) with the default distance measure.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -926,166 +953,728 @@ Proportion Explained  0.7527 0.1713 0.06143 0.01459
 Cumulative Proportion 0.7527 0.9240 0.98541 1.00000</code></pre>
 </div>
 </div>
-<p>The result shows us that PC1 explains about 75.3% of the variation in measurements. PC2 adds another 17.1%. Just the first two PCs account for 92.4% of the variation. As we saw in <a href="ch26.html#fig-kmeans-mice-pca4" class="quarto-xref">Figure&nbsp;<span>26.10</span></a>, the first PC likely captures a size gradient. Let’s plot the ordination to see.</p>
+<p>The result shows us that PC1 explains about 75.3% of the variation in measurements. PC2 adds another 17.1%. Just the first two PCs account for 92.4% of the variation. Because we are ordinating on measurements, and the first PC captures a large percentage of the variation, there is a good chance that the first PC is capturing a size gradient (as we saw in <a href="ch26.html#fig-kmeans-mice-pca4" class="quarto-xref">Figure&nbsp;<span>26.10</span></a>).</p>
+</section>
+<section id="sec-ord-pca-example-biplot" class="level4" data-number="27.2.3.3">
+<h4 data-number="27.2.3.3" class="anchored" data-anchor-id="sec-ord-pca-example-biplot"><span class="header-section-number">27.2.3.3</span> Plot the PCA</h4>
+<p>The <code>plot</code> and <code>biplot</code> methods for <code>pca</code> objects will produce a quick graph, but it’s not very helpful. I prefer to extract the useful parts of the results and build a plot using base graphics.</p>
+<p>What we need are the PC scores of the observations and the biplot arrows of the original variables. The “scores” are what we call the coordinates in the PC coordinate system. The positions of the observations in the ordination space reflect their similarity and dissimilarity relative to each other. The biplot arrows start at the origin and show the relationship between the original variables and the ordination space. You can think of them as the “shadows” you would get if you projected the original axes onto the plane of the figure (remember that we obtained the PCA space by rotating the original space).</p>
+<p>First, let’s assign some colors and shapes to the species and families. This will help us make sense of the ordination plot.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>spps <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(dx.pca<span class="sc">$</span>species))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>fams <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(dx.pca<span class="sc">$</span>family))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>col.spps <span class="ot">&lt;-</span> <span class="fu">hcl.colors</span>(<span class="fu">length</span>(spps), <span class="at">palette =</span> <span class="st">"Dark 3"</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>col.fams <span class="ot">&lt;-</span> <span class="fu">hcl.colors</span>(<span class="fu">length</span>(fams), <span class="at">palette =</span> <span class="st">"Dark 3"</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>pch.fams <span class="ot">&lt;-</span> <span class="dv">15</span><span class="sc">:</span><span class="dv">18</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(col.spps) <span class="ot">&lt;-</span> spps</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(col.fams) <span class="ot">&lt;-</span> fams</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pch.fams) <span class="ot">&lt;-</span> fams</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Next, we extract the scores of the observations. The ordination scores can be calculated in one of two ways, referred to as <strong>scaling</strong> (see <a href="#sec-ord-pca-example-biplot-scaling" class="quarto-xref"><span>Section 27.2.3.3.1</span></a>). For examining clusters of observations, we should use scaling 1. The function <code>scores()</code> will extract the scores we need. Note that in ordination functions in package <code>vegan</code>, observations are always referred to as <code>sites</code>, and variables as <code>species</code>. This is a result of the origin of <code>vegan</code> in community ecology.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract scores with scaling 1</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>xy.samp1 <span class="ot">&lt;-</span> <span class="fu">scores</span>(p1, <span class="at">display=</span><span class="st">"sites"</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">choices=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">scaling=</span><span class="dv">1</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>xy.vars1 <span class="ot">&lt;-</span> <span class="fu">scores</span>(p1, <span class="at">display=</span><span class="st">"species"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">choices=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">scaling=</span><span class="dv">1</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">1</span>), <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">xpd=</span><span class="cn">NA</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy.samp1[,<span class="dv">1</span>], xy.samp1[,<span class="dv">2</span>],</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span>pch.fams[dx.pca<span class="sc">$</span>family],</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span>col.spps[dx.pca<span class="sc">$</span>species],</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (75.3%)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (17.1%)"</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co"># shorten the biplot vectors to fit on the plot area</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>scal <span class="ot">&lt;-</span> <span class="fl">0.04</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, scal<span class="sc">*</span>xy.vars1[,<span class="dv">1</span>], scal<span class="sc">*</span>xy.vars1[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co"># move the biplot labels out by 2%</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>moveout <span class="ot">&lt;-</span> <span class="fl">1.02</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars1[,<span class="dv">1</span>], moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars1[,<span class="dv">2</span>],</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>     <span class="fu">rownames</span>(xy.vars1), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="fl">0.9</span>, <span class="fl">0.45</span>, <span class="at">legend=</span>spps,</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span>col.spps,</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pch.fams[tax<span class="sc">$</span>family[<span class="fu">match</span>(spps, tax<span class="sc">$</span>species)]],</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">ncol=</span><span class="dv">3</span>, </span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>       <span class="at">text.font=</span><span class="dv">3</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-pca-pca-neon1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-pca-pca-neon1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="PCA biplot showing individual specimens from 16 small mammal species, distinguished by colored symbols. PC1 (horizontal, 75.3%) separates specimens primarily along a body-size gradient, while PC2 (vertical, 17.1%) distinguishes specimens partly by ear length. Black vectors for total length, tail length, and hindfoot length point toward the lower left and overlap considerably. The ear-length vector points steeply upward and slightly left. Species form several recognizable clusters, including Rattus rattus at far left and Peromyscus truei toward the upper center.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-pca-neon1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;27.11: text
+Figure&nbsp;27.11: PCA biplot of four standardized morphological measurements from 16 small mammal species, using scaling type 1 (distance scaling). Each point represents an individual specimen, with colors and symbols identifying species. PC1 explains 75.3% of the variation and PC2 explains 17.1%. Black vectors indicate the directions in which total length, tail length, hindfoot length, and ear length increase. Scaling type 1 emphasizes distances among specimens rather than correlations among morphological variables.
 </figcaption>
 <div aria-describedby="fig-pca-pca-neon1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch27_files/figure-html/fig-pca-pca-neon1-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch27_files/figure-html/fig-pca-pca-neon1-1.png" class="img-fluid figure-img" alt="PCA biplot showing individual specimens from 16 small mammal species, distinguished by colored symbols. PC1 (horizontal, 75.3%) separates specimens primarily along a body-size gradient, while PC2 (vertical, 17.1%) distinguishes specimens partly by ear length. Black vectors for total length, tail length, and hindfoot length point toward the lower left and overlap considerably. The ear-length vector points steeply upward and slightly left. Species form several recognizable clusters, including Rattus rattus at far left and Peromyscus truei toward the upper center." width="768">
 </div>
 </figure>
 </div>
 </div>
 </div>
-<p>Well, that’s not very helpful. The default plot method is a bit underwhelming. I prefer to extract the PC scores (coordinates in the PC coordinate system) and build the plot manually. Note that in the ordination function in package <code>vegan</code>, observations are always referred to as “sites”, and variables as <code>species</code>. This is a result of the origin of <code>vegan</code> in community ecology.</p>
-<p>While we’re at it, let’s assign some colors and shapes to the species (the actual species, not the <code>"species"</code>).</p>
+<p><a href="#fig-pca-pca-neon1" class="quarto-xref">Figure&nbsp;<span>27.11</span></a> shows that many of the species form recognizable clusters. For example, the brown circles in the bottom left are Ord’s kangaroo rat, <em>Dipodomys ordii</em>, and that cluster is well separated from the pink circles in the bottom middle, which is its confamilial <em>Chaetodipus hispidus</em>, the hispid pocket mouse. On the other hand, all of the <em>Peromyscus</em> species (blue and greenish squares) do not separate cleanly from each other and instead form a big mess of overlapping clouds along the right side of the figure. From this we can infer that <em>D. ordii</em> and <em>C. hispidus</em> are more distinct from each other than the <em>Peromyscus</em> species are, despite being in the same family.</p>
+<p>Another pattern we can see is that three of the four morphological variables point to the left and slightly down, almost but not quite parallel to PC1. Ear length points in a different direction, positively correlated with PC2 but negatively with PC1. So we can tentatively interpret PC1 as a gradient representing overall size: animals increase in size from right to left. This pattern is very commonly seen when ordinating morphological measurements. However, with scaling type 1, we cannot interpret angles between vectors as correlations. For that, we need scaling type 2.</p>
+<p>Extract the scores and make another biplot, this time with scaling 2.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>spps <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(dx.pca<span class="sc">$</span>species))</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>fams <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(dx.pca<span class="sc">$</span>family))</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>col.spps <span class="ot">&lt;-</span> <span class="fu">hcl.colors</span>(<span class="fu">length</span>(spps), <span class="at">palette =</span> <span class="st">"Dark 3"</span>)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>col.fams <span class="ot">&lt;-</span> <span class="fu">hcl.colors</span>(<span class="fu">length</span>(fams), <span class="at">palette =</span> <span class="st">"Dark 3"</span>)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>pch.fams <span class="ot">&lt;-</span> <span class="dv">15</span><span class="sc">:</span><span class="dv">18</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(col.spps) <span class="ot">&lt;-</span> spps</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(col.fams) <span class="ot">&lt;-</span> fams</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pch.fams) <span class="ot">&lt;-</span> fams</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>xy.samp <span class="ot">&lt;-</span> <span class="fu">scores</span>(p1, <span class="at">display=</span><span class="st">"sites"</span>, <span class="at">choices=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>xy.vars <span class="ot">&lt;-</span> <span class="fu">scores</span>(p1, <span class="at">display=</span><span class="st">"species"</span>, <span class="at">choices=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">1</span>), <span class="at">bty=</span><span class="st">"n"</span>)</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy.samp[,<span class="dv">1</span>], xy.samp[,<span class="dv">2</span>],</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span>pch.fams[dx.pca<span class="sc">$</span>family],</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span>col.spps[dx.pca<span class="sc">$</span>species],</span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (75.3%)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (17.1%)"</span>)</span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>scal <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, scal<span class="sc">*</span>xy.vars[,<span class="dv">1</span>], scal<span class="sc">*</span>xy.vars[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fl">1.03</span><span class="sc">*</span>scal<span class="sc">*</span>xy.vars[,<span class="dv">1</span>], <span class="fl">1.03</span><span class="sc">*</span>scal<span class="sc">*</span>xy.vars[,<span class="dv">2</span>],</span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>     <span class="fu">rownames</span>(xy.vars), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="fl">1.1</span>, <span class="at">legend=</span>spps, <span class="at">xpd=</span><span class="cn">NA</span>,</span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span>col.spps,</span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pch.fams[tax<span class="sc">$</span>family[<span class="fu">match</span>(spps, tax<span class="sc">$</span>species)]],</span>
-<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">ncol=</span><span class="dv">3</span>,</span>
-<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>       <span class="at">text.font=</span><span class="dv">3</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract scores with scaling 1</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>xy.samp2 <span class="ot">&lt;-</span> <span class="fu">scores</span>(p1, <span class="at">display=</span><span class="st">"sites"</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">choices=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">scaling=</span><span class="dv">2</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>xy.vars2 <span class="ot">&lt;-</span> <span class="fu">scores</span>(p1, <span class="at">display=</span><span class="st">"species"</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">choices=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">scaling=</span><span class="dv">2</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">1</span>), <span class="at">bty=</span><span class="st">"n"</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy.samp2[,<span class="dv">1</span>], xy.samp2[,<span class="dv">2</span>],</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span>pch.fams[dx.pca<span class="sc">$</span>family],</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span>col.spps[dx.pca<span class="sc">$</span>species],</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (75.3%)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (17.1%)"</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>scal <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, scal<span class="sc">*</span>xy.vars2[,<span class="dv">1</span>], scal<span class="sc">*</span>xy.vars2[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>moveout <span class="ot">&lt;-</span> <span class="fl">1.03</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars2[,<span class="dv">1</span>], moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars2[,<span class="dv">2</span>],</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>     <span class="fu">rownames</span>(xy.vars2), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">xpd=</span><span class="cn">NA</span>)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="fl">1.1</span>, <span class="at">legend=</span>spps, <span class="at">xpd=</span><span class="cn">NA</span>,</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span>col.spps,</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pch.fams[tax<span class="sc">$</span>family[<span class="fu">match</span>(spps, tax<span class="sc">$</span>species)]],</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">ncol=</span><span class="dv">3</span>, </span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">text.font=</span><span class="dv">3</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-pca-pca-neon2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-pca-pca-neon2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="PCA biplot showing specimens from 16 small mammal species, distinguished by colored symbols. PC1 is horizontal and explains 75.3% of the variation; PC2 is vertical and explains 17.1%. Black vectors for total length, tail length, and hindfoot length point almost horizontally to the left, indicating strong negative correlations with PC1. The ear-length vector points diagonally toward the upper left, indicating a negative correlation with PC1 and a positive correlation with PC2. Rattus rattus specimens cluster at the far left, while Peromyscus truei specimens occupy the upper central region.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-pca-neon2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;27.12: text
+Figure&nbsp;27.12: PCA biplot of four standardized morphological measurements from 16 small mammal species, using scaling type 2 (correlation scaling). Each point represents an individual specimen, with colors and symbols identifying species. PC1 explains 75.3% of the variation and PC2 explains 17.1%. Black vectors represent the morphological measurements, with their directions and angles emphasizing correlations among variables and their relationships with the principal components. Total length, tail length, and hindfoot length are strongly associated with PC1, while ear length is more strongly associated with PC2.
 </figcaption>
 <div aria-describedby="fig-pca-pca-neon2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch27_files/figure-html/fig-pca-pca-neon2-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch27_files/figure-html/fig-pca-pca-neon2-1.png" class="img-fluid figure-img" alt="PCA biplot showing specimens from 16 small mammal species, distinguished by colored symbols. PC1 is horizontal and explains 75.3% of the variation; PC2 is vertical and explains 17.1%. Black vectors for total length, tail length, and hindfoot length point almost horizontally to the left, indicating strong negative correlations with PC1. The ear-length vector points diagonally toward the upper left, indicating a negative correlation with PC1 and a positive correlation with PC2. Rattus rattus specimens cluster at the far left, while Peromyscus truei specimens occupy the upper central region." width="768">
 </div>
 </figure>
 </div>
 </div>
 </div>
+<p><a href="#fig-pca-pca-neon2" class="quarto-xref">Figure&nbsp;<span>27.12</span></a> uses scaling 2 instead of scaling 1. The point clouds look largely the same, but notice how the axis scales have changed. Under scaling 2, the angles between the biplot vectors <em>are</em> interpretable as correlations between variables. We also see that total length, tail length, and hindfoot length are much closer to parallel with PC1, reflecting their strong loading on that axis.</p>
+<section id="sec-ord-pca-example-biplot-scaling" class="level5" data-number="27.2.3.3.1">
+<h5 data-number="27.2.3.3.1" class="anchored" data-anchor-id="sec-ord-pca-example-biplot-scaling"><span class="header-section-number">27.2.3.3.1</span> A note on biplot scaling</h5>
+<p>You may have noticed that we used the argument <code>scaling=2</code> when extracting the scores for the biplot in <a href="#fig-pca-pca-neon1" class="quarto-xref">Figure&nbsp;<span>27.11</span></a>. This argument controls how the observation and variable scores are scaled relative to each other.</p>
+<ul>
+<li>In <strong>scaling type 1 (distance scaling)</strong>, the emphasis is on preserving distances among observations. This is useful when comparing observations or identifying clusters. The observation scores preserve Euclidean distances among observations as well as possible in the reduced ordination space. Variable scores are not proportional to their correlations with other variables.</li>
+<li>In <strong>scaling type 2 (correlation scaling)</strong>, the emphasis is on representing relationships among variables. Variable scores are proportional to their correlations with the principal components. Angles between variable vectors approximate correlations among the original variables, assuming the displayed axes adequately represent those variables.</li>
+</ul>
+<p>The take-home is that scaling 1 emphasizes distances among observations, while scaling 2 emphasizes correlations among variables. In either case, the variable vectors indicate the directions in which variables increase across the ordination, but angles between vectors should be interpreted as correlations only under scaling 2.</p>
+<p>Neither scaling type is inherently better; they emphasize different aspects of the same ordination. For our <a href="#fig-pca-pca-neon1">first biplot above</a>, we used scaling type 1 because we wanted to see relationships between the observations. For the <a href="#fig-pca-pca-neon2">second biplot</a>, we used scaling type 2 because we wanted to interpret the relationships among the morphological measurements and their associations with the principal components.</p>
+<p>For example, in <a href="#fig-pca-pca-neon1" class="quarto-xref">Figure&nbsp;<span>27.11</span></a>, the vectors for total length and tail length point in nearly the same direction, indicating that these measurements are strongly positively correlated. The angle between total length and ear length is larger, suggesting a weaker positive correlation. These interpretations are approximate because the biplot displays only the first two principal components rather than all four dimensions of the original dataset.</p>
+<p><a href="#tbl-pca-scaling" class="quarto-xref">Table&nbsp;<span>27.2</span></a> sums up the differences between the two scaling types and their typical use cases.</p>
+<div id="tbl-pca-scaling" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-pca-scaling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;27.2: Comparison of scaling types 1 and 2 for PCA biplots.
+</figcaption>
+<div aria-describedby="tbl-pca-scaling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>Scaling 1 (distance scaling)</th>
+<th>Scaling 2 (correlation scaling)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Primary emphasis</td>
+<td>Distances among observations</td>
+<td>Correlations among variables</td>
+</tr>
+<tr class="even">
+<td>Best for</td>
+<td>Comparing observations, identifying groups, examining gradients</td>
+<td>Interpreting variable relationships and associations with PCs</td>
+</tr>
+<tr class="odd">
+<td>Distances between points</td>
+<td>Approximate Euclidean distances in the original data</td>
+<td>Distances are distorted by the scaling</td>
+</tr>
+<tr class="even">
+<td>Angles between variable vectors</td>
+<td>Not generally interpretable as correlations</td>
+<td>Approximate correlations between variables</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>When should you use each scaling?</p>
+<p><strong>Example use case for scaling 1</strong>: Suppose you want to determine whether the 16 mammal species in fig-pca-pca-neon1 form distinct morphological groups. You could plot the specimens using scaling 1, color them by species or family, and examine their separation. Distances between specimens in the PCA plot approximate their multivariate Euclidean distances, insofar as those distances are represented by the displayed PCs.</p>
+<p><strong>Example use case for scaling 2</strong>: Suppose you want to determine which morphological measurements distinguish those species. You’d use scaling 2 to examine the directions and angles of the measurement vectors. In a scaling 2 biplot, variables strongly correlated with a particular principal component tend to have vectors pointing along that axis. Variables associated with multiple components tend to have vectors pointing between the axes. The coordinates of each vector represent its correlations with the components, up to a common scaling factor.</p>
+<p>One subtlety: If you’re plotting only observation scores, the choice of scaling usually doesn’t matter much visually. Switching between scaling 1 and scaling 2 simply rescales the PC axes; it doesn’t change the ordering of observations or the underlying PCA. However, the relative scaling of the axes changes, so distances and apparent group separation can look different.</p>
+</section>
+</section>
+<section id="sec-ord-pca-example-pcs" class="level4" data-number="27.2.3.4">
+<h4 data-number="27.2.3.4" class="anchored" data-anchor-id="sec-ord-pca-example-pcs"><span class="header-section-number">27.2.3.4</span> Interpret the principal components</h4>
+<p>Both biplots above, especially <a href="#fig-pca-pca-neon2" class="quarto-xref">Figure&nbsp;<span>27.12</span></a>, suggest that PC1 might have something to do with overall size, and that PC2 might describe variation in ear size after body size is accounted for. Let’s interpret those possible interpretations. We can explore the possible relationships between the original variables and the PCs in 3 somewhat related ways:</p>
+<ol type="1">
+<li><strong>Eigenvector coefficients</strong>: coefficients defining each PC as a linear combination of the original variables. Sometimes called the <strong>variable loadings</strong> but see below.</li>
+<li><strong>Contributions of variables to each PC</strong>: which variables contribute the most to each PC (exactly what it sounds like).</li>
+<li><strong>Correlations between variables and PCs</strong>: also exactly what it sounds like. Also sometimes called “variable loadings”.</li>
+</ol>
+<section id="sec-ord-pca-example-pcs-eigen" class="level5" data-number="27.2.3.4.1">
+<h5 data-number="27.2.3.4.1" class="anchored" data-anchor-id="sec-ord-pca-example-pcs-eigen"><span class="header-section-number">27.2.3.4.1</span> Eigenvector coefficients</h5>
+<p>The <strong>eigenvector coefficients</strong> are the coefficients defining how each principal component is calculated as a linear combination of the original variables. Some people call these coefficients the <strong>variable loadings</strong>, but others use that term to describe the <a href="#sec-ord-pca-example-pcs-corr">correlations between the variables and the PCs</a>.</p>
+<p>Recall that a <strong>linear combination</strong> or <strong>linear equation</strong> is one where the result is obtained by multiplying each term by a constant and adding up those products (<a href="ch14.html#sec-review-lin-def" class="quarto-xref"><span>Section 14.4.1</span></a>). For our PCA with four standardized measurements:</p>
+<p><span class="math display">\[PC_1=a_{1,1}Z_1+a_{1,2}Z_2+a_{1,3}Z_3+a_{1,4}Z_4\]</span></p>
+<p>where <span class="math inline">\(Z_i\)</span> are the standardized measurements and <span class="math inline">\(a_{i,j}\)</span> are the eigenvector coefficients for principal component <span class="math inline">\(i\)</span>, variable <span class="math inline">\(j\)</span>. Principal components 2, 3, and 4 are defined the same way:</p>
+<p><span class="math display">\[PC_2=a_{2,1}Z_1+a_{2,2}Z_2+a_{2,3}Z_3+a_{2,4}Z_4\]</span></p>
+<p><span class="math display">\[PC_2=a_{2,1}Z_1+a_{2,2}Z_2+a_{2,3}Z_3+a_{2,4}Z_4\]</span></p>
+<p><span class="math display">\[PC_2=a_{2,1}Z_1+a_{2,2}Z_2+a_{2,3}Z_3+a_{2,4}Z_4\]</span></p>
+<p>We can see the eigenvector coefficients like this:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">1</span>), <span class="at">bty=</span><span class="st">"n"</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy.samp[,<span class="dv">1</span>], xy.samp[,<span class="dv">2</span>],</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span>pch.fams[dx.pca<span class="sc">$</span>family],</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span>col.spps[dx.pca<span class="sc">$</span>species],</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (75.3%)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (17.1%)"</span>)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ordiellipse</span>(p1, dx.pca<span class="sc">$</span>species,</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">col=</span>col.spps, <span class="at">draw=</span><span class="st">"polygon"</span>,</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">border=</span><span class="cn">NA</span>)</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>scal <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, scal<span class="sc">*</span>xy.vars[,<span class="dv">1</span>], scal<span class="sc">*</span>xy.vars[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fl">1.03</span><span class="sc">*</span>scal<span class="sc">*</span>xy.vars[,<span class="dv">1</span>], <span class="fl">1.03</span><span class="sc">*</span>scal<span class="sc">*</span>xy.vars[,<span class="dv">2</span>],</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>     <span class="fu">rownames</span>(xy.vars), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="fl">1.1</span>, <span class="at">legend=</span>spps, <span class="at">xpd=</span><span class="cn">NA</span>,</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span>col.spps,</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pch.fams[tax<span class="sc">$</span>family[<span class="fu">match</span>(spps, tax<span class="sc">$</span>species)]],</span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">ncol=</span><span class="dv">3</span>,</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">text.font=</span><span class="dv">3</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>p1<span class="sc">$</span>CA<span class="sc">$</span>v</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                      PC1        PC2         PC3         PC4
+totalLength    -0.5534528 -0.1607461 -0.33524341 -0.74529356
+tailLength     -0.5418198 -0.2357199 -0.46232356  0.66115382
+hindfootLength -0.5133475 -0.2450069  0.81986975  0.06526506
+earLength      -0.3695884  0.9265897  0.04101683  0.05615698</code></pre>
+</div>
+</div>
+<p>In this case, all variables contributed to PC1, but PC2 is determined mostly by ear length. PC3 is determined mostly by hindfoot length, and PC4 is determined mostly by total length and tail length. It’s worth noting that all four measurements are positively correlated with each other, all though ear length is somewhat less correlated with the others.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(dx.pca[,pca.cols])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               totalLength tailLength hindfootLength earLength
+totalLength      1.0000000  0.9381799      0.8120411 0.5080321
+tailLength       0.9381799  1.0000000      0.7863965 0.4508269
+hindfootLength   0.8120411  0.7863965      1.0000000 0.4242194
+earLength        0.5080321  0.4508269      0.4242194 1.0000000</code></pre>
+</div>
+</div>
+<p>This pattern of eigenvector coefficients, together with the correlations between the original variables, supports the interpretation of PC1 as a gradient of overall size. All variables have the same moderate coefficient with respect to PC1 with the same sign, and all variables are positively correlated with each other. Subsequent PCs are primarily affected by 1 or 2 measurements. PC2 is dominated by variation in ear length after accounting for the overall size gradient. PC2 is dominated by variation in hindfoot length after accounting for variation in overall size and ear length. And so on.</p>
+</section>
+<section id="sec-ord-pca-example-pcs-load" class="level5" data-number="27.2.3.4.2">
+<h5 data-number="27.2.3.4.2" class="anchored" data-anchor-id="sec-ord-pca-example-pcs-load"><span class="header-section-number">27.2.3.4.2</span> Variable contributions</h5>
+<p>The <strong>variable contributions</strong> to each PC tell us how much of a role each variable plays in defining each PC. They are calculated as the squared eigenvector coefficients, rescaled to be percentages.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>var.contribs <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">*</span> p1<span class="sc">$</span>CA<span class="sc">$</span>v<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(var.contribs, <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 PC1   PC2   PC3   PC4
+totalLength    30.63  2.58 11.24 55.55
+tailLength     29.36  5.56 21.37 43.71
+hindfootLength 26.35  6.00 67.22  0.43
+earLength      13.66 85.86  0.17  0.32</code></pre>
+</div>
+</div>
+<p>These contributions reinforce the interpretations we made by looking at the eigenvector coefficients. This makes sense, because the contributions are just the eigenvector coefficients. squared and scaled. Expressing the contributions on a percentage scale makes is more clear just how much PCs 2 and 3 are dominated by one variable.</p>
+<p>Because each eigenvector has unit length, the contributions must sum to 100% for each PC.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(var.contribs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>PC1 PC2 PC3 PC4 
+100 100 100 100 </code></pre>
+</div>
+</div>
+</section>
+<section id="sec-ord-pca-example-pcs-corr" class="level5" data-number="27.2.3.4.3">
+<h5 data-number="27.2.3.4.3" class="anchored" data-anchor-id="sec-ord-pca-example-pcs-corr"><span class="header-section-number">27.2.3.4.3</span> Variable-PC correlations</h5>
+<p>The <strong>correlations between variables and PCs</strong> are probably the most intuitive way to find biological interpretations of principal components. These correlations are also referred to as <strong>variable loadings</strong>, meaning that this term ambiguous because it can also refer to the <a href="#sec-ord-pca-example-pcs-eigen">eigenvector coefficients</a>.</p>
+<p>We can get these by requesting a correlation matrix between the original variables and the PC scores of the variables.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(dx.pca[,pca.cols],</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scores</span>(p1, <span class="at">display=</span><span class="st">"sites"</span>, <span class="at">choices=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                      PC1        PC2         PC3         PC4
+totalLength    -0.9603507 -0.1330417 -0.16618498 -0.18002497
+tailLength     -0.9401650 -0.1950939 -0.22918044  0.15970109
+hindfootLength -0.8907600 -0.2027802  0.40642123  0.01576472
+earLength      -0.6413093  0.7668931  0.02033263  0.01356467</code></pre>
+</div>
+</div>
+<p>These correlations tell us that PC1 is negatively correlated with every measurement, and in the same direction, supporting our interpretation of this PC as a gradient of overall size. PC2 is strongly correlated with ear length, suggesting that this PC is a gradient of relative ear size. We don’t call PC2 a gradient of ear size, because ear size also contributes to PC1 and because variation in PC2 is only calculated <em>after</em> accounting for variation in PC1.</p>
+<p>These correlations are distinct from, but related to, the variable loadings. The loadings tell us how the original variables are combined to construct each PC. The correlations tell us how strongly each original variabele is associated with each PC.</p>
+<p>For a PCA with standardized variables, the loadings and correlations are related by</p>
+<p><span class="math display">\[r_{jk}=a_{jk}\sqrt{\lambda_k}\]</span></p>
+<p>where <span class="math inline">\(a_{jk}\)</span> is the loading of variable <span class="math inline">\(j\)</span> onto PC <span class="math inline">\(k\)</span>, <span class="math inline">\(\lambda_k\)</span> is the eigenvalue of PC <span class="math inline">\(k\)</span>, and <span class="math inline">\(r_{jk}\)</span> is the correlation between variable <span class="math inline">\(j\)</span> and PC <span class="math inline">\(k\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Reviewer 2 alert">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Reviewer 2 alert
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Different textbooks and different R packages use the term <strong>loading</strong> somewhat differently. In <code>stats::prcomp()</code>, the <code>rotation</code> part of the output contains the eigenvectors. Other implementations use “loadings” to refer to the correlations between the variables and the PCs. <span class="citation" data-cites="legendre2012numerical">Legendre and Legendre (<a href="#ref-legendre2012numerical" role="doc-biblioref">2012</a>)</span>, which I is my primary reference for multivariate statistics, uses the eigenvector coefficient definition. The documentation for package <code>vegan</code> emphasizes “species scores” and “site scores” rather than use a single definition of “loading”.</p>
+<p>We sometimes say that a variable is “loaded onto” a PC if there is some relationship between that variable and the PC. In <a href="#fig-pca-pca-neon1" class="quarto-xref">Figure&nbsp;<span>27.11</span></a>, total length, hindfoot length, and tail length all appear to be “loaded onto” PC1. However, what we mean mathematically by “loaded onto” can mean a correlation or can mean an eigenvector coefficient. These things are related but not the same. When (not if) Reviewer 2 objects to your use of “loading”, remind them that both meanings are monotonically related by a factor of <span class="math inline">\(\sqrt{\lambda_k}\)</span>.</p>
+<p>Bottom line: if you say that some variable is “loaded onto” a PC because its biplot vector is mostly parallel with that PC, that isn’t incorrect, but it is mathematically ambiguous. Just be clear in your presentation about what you mean.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-ord-pca-example-vis" class="level4" data-number="27.2.3.5">
+<h4 data-number="27.2.3.5" class="anchored" data-anchor-id="sec-ord-pca-example-vis"><span class="header-section-number">27.2.3.5</span> Visualizing patterns in a biplot</h4>
+<p>Now that we have a handle on what our biplot vectors do and don’t mean, let’s explore some more. We’ll stick to the scaling 2 version of the biplot.</p>
+<p>One useful thing we can do is examine the group structure. We can superimpose the group <strong>centroids</strong> and <strong>95% confidence ellipses</strong> on the plot to investigate group separation and overlap. Ellipses are added with function <code>vegan::ordiellipse()</code>, and we can get centroids from our matrix of PC scores. In <a href="#fig-pca-pca-neon3" class="quarto-xref">Figure&nbsp;<span>27.13</span></a> we will omit the points for clarity (with argument <code>type="n"</code> in <code>plot()</code>), but you don’t have to.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate species centroids</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>cent.p1.sp <span class="ot">&lt;-</span> <span class="fu">apply</span>(xy.samp2, <span class="dv">2</span>,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">function</span>(x){<span class="fu">tapply</span>(x, dx.pca<span class="sc">$</span>species, mean)})</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co"># alternative shapes</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>pch.fams2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">22</span>, <span class="dv">21</span>, <span class="dv">24</span>, <span class="dv">23</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pch.fams2) <span class="ot">&lt;-</span> fams</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">1</span>), <span class="at">bty=</span><span class="st">"n"</span>)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy.samp2[,<span class="dv">1</span>], xy.samp2[,<span class="dv">2</span>],</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"n"</span>,</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (75.3%)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (17.1%)"</span>)</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ordiellipse</span>(p1, <span class="at">groups=</span>dx.pca<span class="sc">$</span>species,</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">col=</span>col.spps,</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">draw=</span><span class="st">"polygon"</span>, <span class="at">border=</span><span class="cn">NA</span>)</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(cent.p1.sp[,<span class="dv">1</span>], cent.p1.sp[,<span class="dv">2</span>], <span class="at">type=</span><span class="st">"p"</span>, <span class="at">lwd=</span><span class="dv">2</span>,</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pch.fams2[dx.pca<span class="sc">$</span>family[<span class="fu">match</span>(spps, dx.pca<span class="sc">$</span>species)]],</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">bg=</span>col.spps)</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>scal <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, scal<span class="sc">*</span>xy.vars2[,<span class="dv">1</span>], scal<span class="sc">*</span>xy.vars2[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>moveout <span class="ot">&lt;-</span> <span class="fl">1.03</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars2[,<span class="dv">1</span>], moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars2[,<span class="dv">2</span>],</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>     <span class="fu">rownames</span>(xy.vars2), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">xpd=</span><span class="cn">NA</span>)</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="fl">1.1</span>, <span class="at">legend=</span>spps, <span class="at">xpd=</span><span class="cn">NA</span>,</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">pt.bg=</span>col.spps, <span class="at">pt.lwd=</span><span class="dv">2</span>,</span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pch.fams2[tax<span class="sc">$</span>family[<span class="fu">match</span>(spps, tax<span class="sc">$</span>species)]],</span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>       <span class="at">ncol=</span><span class="dv">3</span>, </span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">text.font=</span><span class="dv">3</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-pca-pca-neon3" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-pca-pca-neon3" class="quarto-float quarto-figure quarto-figure-center anchored" alt="PCA biplot showing 16 species centroids as colored symbols outlined in black, each surrounded by a shaded ellipse of the same color. Rattus rattus has a broad ellipse at the far left, Dipodomys ordii is isolated in the lower left, and Peromyscus truei occupies the upper portion of the plot. Several species have overlapping ellipses near the center and right. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-pca-neon3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;27.13: text
+Figure&nbsp;27.13: PCA biplot of four standardized morphological measurements from 16 small mammal species, showing species centroids and ellipses instead of individual specimens. Each symbol represents the centroid of a species, and the surrounding shaded ellipse summarizes the dispersion of specimens belonging to that species. PC1 explains 75.3% of the variation and PC2 explains 17.1%. Black vectors show the relationships of the four morphological measurements with the principal components, using scaling type 2.
 </figcaption>
 <div aria-describedby="fig-pca-pca-neon3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch27_files/figure-html/fig-pca-pca-neon3-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch27_files/figure-html/fig-pca-pca-neon3-1.png" class="img-fluid figure-img" alt="PCA biplot showing 16 species centroids as colored symbols outlined in black, each surrounded by a shaded ellipse of the same color. Rattus rattus has a broad ellipse at the far left, Dipodomys ordii is isolated in the lower left, and Peromyscus truei occupies the upper portion of the plot. Several species have overlapping ellipses near the center and right. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left." width="768">
 </div>
 </figure>
 </div>
 </div>
 </div>
-<p>And color by family.</p>
+<p>Another way to visualize groups in a biplot is to plot the <strong>minimum convex hull</strong> or <strong>minimum convex polygon</strong>. This is a shape that contains all of the points in a group. We use function <code>ordihull()</code>, which works similarly to <code>ordiellipse()</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">1</span>), <span class="at">bty=</span><span class="st">"n"</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy.samp[,<span class="dv">1</span>], xy.samp[,<span class="dv">2</span>],</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span>pch.fams[dx.pca<span class="sc">$</span>family],</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span>col.fams[dx.pca<span class="sc">$</span>family],</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (75.3%)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (17.1%)"</span>)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ordiellipse</span>(p1, dx.pca<span class="sc">$</span>family,</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">col=</span>col.fams, <span class="at">draw=</span><span class="st">"polygon"</span>,</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">border=</span><span class="cn">NA</span>)</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>scal <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, scal<span class="sc">*</span>xy.vars[,<span class="dv">1</span>], scal<span class="sc">*</span>xy.vars[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fl">1.03</span><span class="sc">*</span>scal<span class="sc">*</span>xy.vars[,<span class="dv">1</span>], <span class="fl">1.03</span><span class="sc">*</span>scal<span class="sc">*</span>xy.vars[,<span class="dv">2</span>],</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>     <span class="fu">rownames</span>(xy.vars), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="fl">1.1</span>, <span class="at">legend=</span>fams, <span class="at">xpd=</span><span class="cn">NA</span>,</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill=</span>col.fams,</span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">ncol=</span><span class="dv">2</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">1</span>), <span class="at">bty=</span><span class="st">"n"</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy.samp2[,<span class="dv">1</span>], xy.samp2[,<span class="dv">2</span>],</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"n"</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (75.3%)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (17.1%)"</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ordihull</span>(p1, <span class="at">groups=</span>dx.pca<span class="sc">$</span>species,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">col=</span>col.spps,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">draw=</span><span class="st">"polygon"</span>, <span class="at">border=</span><span class="cn">NA</span>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(cent.p1.sp[,<span class="dv">1</span>], cent.p1.sp[,<span class="dv">2</span>],</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">type=</span><span class="st">"p"</span>, <span class="at">lwd=</span><span class="dv">2</span>,</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pch.fams2[dx.pca<span class="sc">$</span>family[<span class="fu">match</span>(spps, dx.pca<span class="sc">$</span>species)]],</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">bg=</span>col.spps)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>scal <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, scal<span class="sc">*</span>xy.vars2[,<span class="dv">1</span>], scal<span class="sc">*</span>xy.vars2[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>moveout <span class="ot">&lt;-</span> <span class="fl">1.03</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars2[,<span class="dv">1</span>], moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars2[,<span class="dv">2</span>],</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>     <span class="fu">rownames</span>(xy.vars2), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">xpd=</span><span class="cn">NA</span>)</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="fl">1.1</span>, <span class="at">legend=</span>spps, <span class="at">xpd=</span><span class="cn">NA</span>,</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">pt.bg=</span>col.spps, <span class="at">pt.lwd=</span><span class="dv">2</span>,</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pch.fams2[tax<span class="sc">$</span>family[<span class="fu">match</span>(spps, tax<span class="sc">$</span>species)]],</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">ncol=</span><span class="dv">3</span>, </span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">text.font=</span><span class="dv">3</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-pca-pca-neon4" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text">
+<div id="fig-pca-pca-neon4" class="quarto-float quarto-figure quarto-figure-center anchored" alt="PCA biplot showing 16 species centroids as colored symbols outlined in black, surrounded by translucent convex polygons of matching colors. The polygons vary in size and shape, with a large purple hull for Rattus rattus extending across the left side, a blue hull for Peromyscus truei near the top, and several overlapping polygons near the center and right. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left.">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-pca-neon4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;27.14: text
+Figure&nbsp;27.14: PCA biplot of four standardized morphological measurements from 16 small mammal species, showing species centroids and convex hulls generated using <code>vegan::ordihull()</code>. Each symbol represents a species centroid, and the surrounding shaded polygon encloses the outermost specimens of that species in the two-dimensional ordination. Unlike ellipses, convex hulls show the observed extent of each species rather than a statistical summary of its dispersion. PC1 explains 75.3% of the variation and PC2 explains 17.1%. Black vectors represent the morphological measurements using scaling type 2.
 </figcaption>
 <div aria-describedby="fig-pca-pca-neon4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="ch27_files/figure-html/fig-pca-pca-neon4-1.png" class="img-fluid figure-img" alt="text" width="768">
+<img src="ch27_files/figure-html/fig-pca-pca-neon4-1.png" class="img-fluid figure-img" alt="PCA biplot showing 16 species centroids as colored symbols outlined in black, surrounded by translucent convex polygons of matching colors. The polygons vary in size and shape, with a large purple hull for Rattus rattus extending across the left side, a blue hull for Peromyscus truei near the top, and several overlapping polygons near the center and right. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left." width="768">
 </div>
 </figure>
 </div>
 </div>
 </div>
-<p>Next: factor out body mass using allometric equations, then refit PCA.</p>
-<p>Work in progress!</p>
+<p>We can embellish the group polygons with <code>ordispider()</code>, which draws a segment from the group centroid to every vertex of the minimum convex polygon. The function is <code>ordispider()</code>. Note that this can make a plot very busy and hard to interpret.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">1</span>), <span class="at">bty=</span><span class="st">"n"</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy.samp2[,<span class="dv">1</span>], xy.samp2[,<span class="dv">2</span>],</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"n"</span>,</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (75.3%)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (17.1%)"</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ordihull</span>(p1, <span class="at">groups=</span>dx.pca<span class="sc">$</span>species,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">col=</span>col.spps,</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">draw=</span><span class="st">"polygon"</span>, <span class="at">border=</span><span class="st">"black"</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ordispider</span>(p1, <span class="at">groups=</span>dx.pca<span class="sc">$</span>species,</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">col=</span>col.spps, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(cent.p1.sp[,<span class="dv">1</span>], cent.p1.sp[,<span class="dv">2</span>], <span class="at">type=</span><span class="st">"p"</span>, <span class="at">lwd=</span><span class="dv">2</span>,</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pch.fams2[dx.pca<span class="sc">$</span>family[<span class="fu">match</span>(spps, dx.pca<span class="sc">$</span>species)]],</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">bg=</span>col.spps)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>scal <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, scal<span class="sc">*</span>xy.vars2[,<span class="dv">1</span>], scal<span class="sc">*</span>xy.vars2[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>moveout <span class="ot">&lt;-</span> <span class="fl">1.03</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars2[,<span class="dv">1</span>], moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars2[,<span class="dv">2</span>],</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>     <span class="fu">rownames</span>(xy.vars2), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">xpd=</span><span class="cn">NA</span>)</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="fl">1.1</span>, <span class="at">legend=</span>spps, <span class="at">xpd=</span><span class="cn">NA</span>,</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">pt.bg=</span>col.spps, <span class="at">pt.lwd=</span><span class="dv">2</span>,</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pch.fams2[tax<span class="sc">$</span>family[<span class="fu">match</span>(spps, tax<span class="sc">$</span>species)]],</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">ncol=</span><span class="dv">3</span>, </span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">text.font=</span><span class="dv">3</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pca-pca-neon5" class="quarto-float quarto-figure quarto-figure-center anchored" alt="PCA biplot showing 16 species centroids as colored symbols outlined in black, surrounded by translucent convex hulls with black borders. Numerous colored lines radiate from each centroid to the positions of individual specimens, forming spider-like patterns that illustrate within-species dispersion. Rattus rattus has a large purple hull on the left, while several species have overlapping hulls near the center and right. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-pca-neon5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.15: PCA biplot of four standardized morphological measurements from 16 small mammal species, showing species centroids, convex hulls, and lines connecting individual specimens to their species centroids using <code>vegan::ordispider()</code>. Each colored line connects an individual specimen to its species centroid, illustrating within-species variation in the ordination. Shaded polygons generated by <code>vegan::ordihull()</code> enclose the outermost specimens of each species. PC1 explains 75.3% of the variation and PC2 explains 17.1%. Black vectors represent the morphological measurements using scaling type 2.
+</figcaption>
+<div aria-describedby="fig-pca-pca-neon5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-pca-neon5-1.png" class="img-fluid figure-img" alt="PCA biplot showing 16 species centroids as colored symbols outlined in black, surrounded by translucent convex hulls with black borders. Numerous colored lines radiate from each centroid to the positions of individual specimens, forming spider-like patterns that illustrate within-species dispersion. Rattus rattus has a large purple hull on the left, while several species have overlapping hulls near the center and right. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>Just for fun, let’s make a version symbolized only by family. This reveals something interesting. Notice how the teal ellipse for family Muridae (old world rats and mice) is near the center of the plot, when most of its points are on the left? If you look closely at the right side, you can see a little cloud of teal triangles representing House Mouse (<em>Mus musculus</em>). They were hard to see in previous biplots because were mixed up with all of the other small mice in family Cricetidae (new world rats and mice). We confirm this in <a href="#fig-pca-pca-neon6" class="quarto-xref">Figure&nbsp;<span>27.16</span></a>, which shows the genera, and <a href="#fig-pca-pca-neon7" class="quarto-xref">Figure&nbsp;<span>27.17</span></a>, which shows the families.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">1</span>), <span class="at">bty=</span><span class="st">"n"</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy.samp2[,<span class="dv">1</span>], xy.samp2[,<span class="dv">2</span>],</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span>pch.fams[dx.pca<span class="sc">$</span>family],</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span>col.fams[dx.pca<span class="sc">$</span>family],</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (75.3%)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (17.1%)"</span>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ordiellipse</span>(p1, dx.pca<span class="sc">$</span>family,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">col=</span>col.fams, <span class="at">draw=</span><span class="st">"polygon"</span>,</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">border=</span><span class="cn">NA</span>)</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>scal <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, scal<span class="sc">*</span>xy.vars2[,<span class="dv">1</span>], scal<span class="sc">*</span>xy.vars2[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fl">1.03</span><span class="sc">*</span>scal<span class="sc">*</span>xy.vars2[,<span class="dv">1</span>], <span class="fl">1.03</span><span class="sc">*</span>scal<span class="sc">*</span>xy.vars2[,<span class="dv">2</span>],</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>     <span class="fu">rownames</span>(xy.vars2), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="fl">0.9</span>, <span class="at">legend=</span>fams, <span class="at">xpd=</span><span class="cn">NA</span>,</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill=</span>col.fams, <span class="at">cex=</span><span class="fl">1.4</span>,</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">ncol=</span><span class="dv">2</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pca-pca-neon6" class="quarto-float quarto-figure quarto-figure-center anchored" alt="PCA biplot showing specimens from four mammal families: Cricetidae (pink squares), Heteromyidae (olive circles), Muridae (teal triangles), and Soricidae (purple diamonds). Cricetidae specimens are concentrated in the upper central region, Heteromyidae specimens primarily occupy the lower portion, Muridae specimens extend broadly from the far left toward the center, and Soricidae specimens form a compact group at the far right. Translucent ellipses summarize each family's dispersion, with substantial overlap among some groups. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-pca-neon6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.16: PCA biplot of four standardized morphological measurements from 16 small mammal species, grouped by taxonomic family. Each point represents an individual specimen, with colors and symbols identifying the four families. Shaded ellipses generated using <code>vegan::ordiellipse()</code> summarize the dispersion of specimens within each family. PC1 explains 75.3% of the variation and PC2 explains 17.1%. Black vectors represent the morphological measurements using scaling type 2. The families differ in their distributions across the ordination, although their ellipses overlap.
+</figcaption>
+<div aria-describedby="fig-pca-pca-neon6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-pca-neon6-1.png" class="img-fluid figure-img" alt="PCA biplot showing specimens from four mammal families: Cricetidae (pink squares), Heteromyidae (olive circles), Muridae (teal triangles), and Soricidae (purple diamonds). Cricetidae specimens are concentrated in the upper central region, Heteromyidae specimens primarily occupy the lower portion, Muridae specimens extend broadly from the far left toward the center, and Soricidae specimens form a compact group at the far right. Translucent ellipses summarize each family's dispersion, with substantial overlap among some groups. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pull genus names from tax</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>dx.pca<span class="sc">$</span>genus <span class="ot">&lt;-</span> tax<span class="sc">$</span>genus[<span class="fu">match</span>(dx.pca<span class="sc">$</span>abb, tax<span class="sc">$</span>abb)]</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># unique genera in our dataset</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>genera <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(dx.pca<span class="sc">$</span>genus))</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># define colors</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>col.gen <span class="ot">&lt;-</span> <span class="fu">hcl.colors</span>(<span class="fu">length</span>(genera), <span class="at">palette =</span> <span class="st">"Dark 3"</span>)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(col.gen) <span class="ot">&lt;-</span> genera</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="co"># genus centroids</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>cent.p1.gen <span class="ot">&lt;-</span> <span class="fu">apply</span>(xy.samp2, <span class="dv">2</span>,</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">function</span>(x){<span class="fu">tapply</span>(x, dx.pca<span class="sc">$</span>genus, mean)})</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">1</span>), <span class="at">bty=</span><span class="st">"n"</span>)</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy.samp2[,<span class="dv">1</span>], xy.samp2[,<span class="dv">2</span>],</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"n"</span>,</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (75.3%)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (17.1%)"</span>)</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ordiellipse</span>(p1, dx.pca<span class="sc">$</span>genus,</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>            <span class="at">col=</span>col.gen, <span class="at">draw=</span><span class="st">"polygon"</span>,</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>            <span class="at">border=</span><span class="cn">NA</span>, <span class="at">alpha=</span><span class="dv">100</span>)</span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(cent.p1.gen[,<span class="dv">1</span>], cent.p1.gen[,<span class="dv">2</span>],</span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>     genera, <span class="at">font=</span><span class="dv">3</span>, <span class="at">cex=</span><span class="fl">0.9</span>)</span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>scal <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, scal<span class="sc">*</span>xy.vars2[,<span class="dv">1</span>], scal<span class="sc">*</span>xy.vars2[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fl">1.03</span><span class="sc">*</span>scal<span class="sc">*</span>xy.vars2[,<span class="dv">1</span>], <span class="fl">1.03</span><span class="sc">*</span>scal<span class="sc">*</span>xy.vars2[,<span class="dv">2</span>],</span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>     <span class="fu">rownames</span>(xy.vars2), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="fl">0.9</span>, <span class="at">legend=</span>genera, <span class="at">xpd=</span><span class="cn">NA</span>,</span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill=</span>col.gen, </span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>       <span class="at">ncol=</span><span class="dv">4</span>, <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">text.font=</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pca-pca-neon7" class="quarto-float quarto-figure quarto-figure-center anchored" alt="PCA biplot showing ten mammal genera represented by labeled, translucent ellipses. Rattus occupies the far left, Dipodomys the lower left, Peromyscus the upper center, and Chaetodipus the lower center. Myodes, Onychomys, Mus, and Reithrodontomys have overlapping ellipses near the center-right, while Perognathus and Sorex form separate groups farther right and below the horizontal axis. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-pca-neon7-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.17: PCA biplot of four standardized morphological measurements from 16 small mammal species, grouped by genus. Shaded ellipses generated using <code>vegan::ordiellipse()</code> summarize the dispersion of specimens within each genus, with labels identifying the genera. PC1 explains 75.3% of the variation and PC2 explains 17.1%. Black vectors represent the morphological measurements using scaling type 2. Several genera occupy distinct regions of the ordination, while others overlap, particularly Myodes, Onychomys, Mus, and Reithrodontomys.
+</figcaption>
+<div aria-describedby="fig-pca-pca-neon7-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-pca-neon7-1.png" class="img-fluid figure-img" alt="PCA biplot showing ten mammal genera represented by labeled, translucent ellipses. Rattus occupies the far left, Dipodomys the lower left, Peromyscus the upper center, and Chaetodipus the lower center. Myodes, Onychomys, Mus, and Reithrodontomys have overlapping ellipses near the center-right, while Perognathus and Sorex form separate groups farther right and below the horizontal axis. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-ord-pca-example-out" class="level4" data-number="27.2.3.6">
+<h4 data-number="27.2.3.6" class="anchored" data-anchor-id="sec-ord-pca-example-out"><span class="header-section-number">27.2.3.6</span> Factoring out body size</h4>
+<p>Recall that we found that PC1 is a gradient of body size. What if we wanted to use PCA to example body shape with size factored out? One option, if we are confident that PC1 represented only body size, would to simply drop PC1 and look at plots of PCs 2, 3, and 4. A better option might be to regress our measurements on some measurement of body size. Remember in <a href="#sec-ord-pca-example-pca" class="quarto-xref"><span>Section 27.2.3.2</span></a> when we deliberately left body mass out of our ordination? That was so we could use it now to factor overall size out of our measurements.</p>
+<p>The strategy is to regress each standard measurement against body mass, then perform a second PCA on the residuals of those relationships. First, check some scatterplots to get a sense of what we are dealing with:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx.pca<span class="sc">$</span>weight, dx.pca<span class="sc">$</span>totalLength, <span class="at">log=</span><span class="st">"xy"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx.pca<span class="sc">$</span>weight, dx.pca<span class="sc">$</span>tailLength, <span class="at">log=</span><span class="st">"xy"</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx.pca<span class="sc">$</span>weight, dx.pca<span class="sc">$</span>hindfootLength, <span class="at">log=</span><span class="st">"xy"</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dx.pca<span class="sc">$</span>weight, dx.pca<span class="sc">$</span>earLength, <span class="at">log=</span><span class="st">"xy"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pca-sizeout1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Four scatterplots showing body mass on the horizontal axis and a morphological measurement on the vertical axis, both on logarithmic scales. Total length, tail length, and hindfoot length show strong positive relationships with body mass, with several distinct clusters of observations. Ear length has a weaker positive relationship with considerable scatter. Each plot contains numerous open black circles representing individual mammal specimens.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-sizeout1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.18: Relationships between body mass and four morphological measurements in the small mammal dataset. Total length (upper left), tail length (upper right), hindfoot length (lower left), and ear length (lower right) generally increase with body mass, although the strength and shape of these relationships differ among measurements. Both axes are logarithmically scaled. These relationships illustrate the need to account for body size when investigating variation in morphological proportions.
+</figcaption>
+<div aria-describedby="fig-pca-sizeout1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-sizeout1-1.png" class="img-fluid figure-img" alt="Four scatterplots showing body mass on the horizontal axis and a morphological measurement on the vertical axis, both on logarithmic scales. Total length, tail length, and hindfoot length show strong positive relationships with body mass, with several distinct clusters of observations. Ear length has a weaker positive relationship with considerable scatter. Each plot contains numerous open black circles representing individual mammal specimens." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-pca-sizeout1" class="quarto-xref">Figure&nbsp;<span>27.18</span></a> shows that all four measurements have a strong, allometric relationships with body mass. That is, the relationship follows a power law <span class="math inline">\(y=ax^b\)</span> or a linear relationship on the log-log scale. Let’s fit those relationships and add the residuals to <code>dx.pca</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>logdx <span class="ot">&lt;-</span> <span class="fu">log</span>(dx.pca[,pca.cols])</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(logdx) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"log"</span>, <span class="fu">c</span>(<span class="st">"total"</span>, <span class="st">"tail"</span>, <span class="st">"foot"</span>, <span class="st">"ear"</span>), <span class="at">sep=</span><span class="st">"_"</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>dx.pca <span class="ot">&lt;-</span> <span class="fu">cbind</span>(dx.pca, logdx)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>dx.pca<span class="sc">$</span>logmass <span class="ot">&lt;-</span> <span class="fu">log</span>(dx.pca<span class="sc">$</span>weight)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>mod.list <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"list"</span>, <span class="at">length=</span><span class="dv">4</span>)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>){</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> dx.pca[,<span class="fu">names</span>(logdx)[i]]</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    current.model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span>dx.pca<span class="sc">$</span>logmass)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    mod.list[[i]] <span class="ot">&lt;-</span> <span class="fu">residuals</span>(current.model)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>dx.pca.res <span class="ot">&lt;-</span> <span class="fu">do.call</span>(cbind, mod.list)</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(dx.pca.res) <span class="ot">&lt;-</span> pca.cols</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>dx.pca.res <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(dx.pca.res)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now we can run a new PCA on our size-adjusted measurements.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">pca</span>(dx.pca.res, <span class="at">scale=</span><span class="cn">TRUE</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(p2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+pca(X = dx.pca.res, scale = TRUE) 
+
+Partitioning of correlations:
+              Inertia Proportion
+Total               4          1
+Unconstrained       4          1
+
+Eigenvalues, and their contribution to the correlations 
+
+Importance of components:
+                         PC1    PC2    PC3     PC4
+Eigenvalue            2.0858 0.9986 0.7363 0.17933
+Proportion Explained  0.5214 0.2497 0.1841 0.04483
+Cumulative Proportion 0.5214 0.7711 0.9552 1.00000</code></pre>
+</div>
+</div>
+<p>This is different. In the first PCA that was not size-adjusted, PC1 accounted for over 75% of variation. In the size-adjusted PCA, it’s more like 52%. We know that overall size has been factored out, so PC1 cannot be a gradient of overall size.</p>
+<p>Check the variable loadings (correlation sense):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(dx.pca.res, </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scores</span>(p2, <span class="at">display=</span><span class="st">"sites"</span>, <span class="at">choices=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                      PC1         PC2        PC3         PC4
+totalLength    0.90903127  0.02676730  0.2926666  0.29545208
+tailLength     0.91969117  0.06294948  0.2420286 -0.30270062
+hindfootLength 0.63935589 -0.02012092 -0.7684682  0.01660641
+earLength      0.06958742 -0.99676003  0.0386570 -0.01151785</code></pre>
+</div>
+</div>
+<p>The loadings tell us what to expect in the biplot, and actually make a lot of biological sense. PC1 is correlated with total length and tail length, and to a lesser extent hindfoot length. Total length and tail length in particularly are strongly correlated, so it make sense that they should be correlated with the same axis. PC2, as in the first PCA, is strongly associated with ear length. PC3 is mostly a gradient of hindfoot length.</p>
+<p>Let’s check out the biplot:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract scores with scaling 1</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>xy.samp3 <span class="ot">&lt;-</span> <span class="fu">scores</span>(p2, <span class="at">display=</span><span class="st">"sites"</span>,</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">choices=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">scaling=</span><span class="dv">2</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>xy.vars3 <span class="ot">&lt;-</span> <span class="fu">scores</span>(p2, <span class="at">display=</span><span class="st">"species"</span>,</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">choices=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">scaling=</span><span class="dv">2</span>)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">1</span>), <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">xpd=</span><span class="cn">NA</span>)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy.samp3[,<span class="dv">1</span>], xy.samp3[,<span class="dv">2</span>],</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span>pch.fams[dx.pca<span class="sc">$</span>family],</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span>col.spps[dx.pca<span class="sc">$</span>species],</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (52.1%)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (25.0%)"</span>)</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="co"># shorten the biplot vectors to fit on the plot area</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>scal <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, scal<span class="sc">*</span>xy.vars3[,<span class="dv">1</span>], scal<span class="sc">*</span>xy.vars3[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a><span class="co"># move the biplot labels out by 2%</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>moveout <span class="ot">&lt;-</span> <span class="fl">1.02</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars3[,<span class="dv">1</span>], moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars3[,<span class="dv">2</span>],</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>     <span class="fu">rownames</span>(xy.vars3), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="fl">1.25</span>, <span class="fl">1.1</span>, <span class="at">legend=</span>spps,</span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span>col.spps,</span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pch.fams[tax<span class="sc">$</span>family[<span class="fu">match</span>(spps, tax<span class="sc">$</span>species)]],</span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">ncol=</span><span class="dv">3</span>, </span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>       <span class="at">text.font=</span><span class="dv">3</span>, <span class="at">bty=</span><span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pca-sizeout2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="PCA biplot of size-adjusted morphological measurements for 16 small mammal species, distinguished by colored symbols. PC1 is horizontal and explains 52.1% of the variation; PC2 is vertical and explains 25.0%. Onychomys leucogaster forms a cluster toward the far left, while Peromyscus truei occupies the lower central region. Chaetodipus and Sorex specimens are concentrated toward the upper portion of the plot, with considerable overlap among other species. Black vectors for total length, tail length, and hindfoot length point toward the right, while the ear-length vector points downward.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-sizeout2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.19: PCA biplot of four size-adjusted morphological measurements from 16 small mammal species, using scaling type 2. Measurements were adjusted for body mass before PCA to emphasize variation in morphology independent of overall body size. PC1 explains 52.1% of the remaining variation and PC2 explains 25.0%. Each point represents an individual specimen, with colors and symbols identifying species. Black vectors show the relationships between the size-adjusted measurements and the principal components. Compared with the PCA of unadjusted measurements, the species are distributed along different morphological gradients.
+</figcaption>
+<div aria-describedby="fig-pca-sizeout2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-sizeout2-1.png" class="img-fluid figure-img" alt="PCA biplot of size-adjusted morphological measurements for 16 small mammal species, distinguished by colored symbols. PC1 is horizontal and explains 52.1% of the variation; PC2 is vertical and explains 25.0%. Onychomys leucogaster forms a cluster toward the far left, while Peromyscus truei occupies the lower central region. Chaetodipus and Sorex specimens are concentrated toward the upper portion of the plot, with considerable overlap among other species. Black vectors for total length, tail length, and hindfoot length point toward the right, while the ear-length vector points downward." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>In <a href="#fig-pca-sizeout2" class="quarto-xref">Figure&nbsp;<span>27.19</span></a> we still see PC1 being a gradient of overall size, with ear length being mostly orthogonal to the other variables. The arrangement of the samples is quite different, though. Let’s superimpose the species:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get species centroids in p2 PCA coordinates</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>cent.p2.sp <span class="ot">&lt;-</span> <span class="fu">apply</span>(xy.samp3, <span class="dv">2</span>,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">function</span>(x){<span class="fu">tapply</span>(x, dx.pca<span class="sc">$</span>species, mean)})</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">1</span>), <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">xpd=</span><span class="cn">NA</span>)</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy.samp3[,<span class="dv">1</span>], xy.samp3[,<span class="dv">2</span>],</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"n"</span>,</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (52.1%)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (25.0%)"</span>)</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ordiellipse</span>(p2, dx.pca<span class="sc">$</span>species, <span class="at">col=</span>col.spps,</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">border=</span><span class="cn">NA</span>, <span class="at">draw=</span><span class="st">"polygon"</span>)</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(cent.p2.sp[,<span class="dv">1</span>], cent.p2.sp[,<span class="dv">2</span>], </span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>     spps, <span class="at">font=</span><span class="dv">3</span>, <span class="at">cex=</span><span class="fl">0.8</span>)</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="co"># shorten the biplot vectors to fit on the plot area</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>scal <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, scal<span class="sc">*</span>xy.vars3[,<span class="dv">1</span>], scal<span class="sc">*</span>xy.vars3[,<span class="dv">2</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a><span class="co"># move the biplot labels out by 2%</span></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>moveout <span class="ot">&lt;-</span> <span class="fl">1.02</span></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars3[,<span class="dv">1</span>], moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars3[,<span class="dv">2</span>],</span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>     <span class="fu">rownames</span>(xy.vars3), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="fl">1.4</span>, <span class="fl">1.1</span>, <span class="at">legend=</span>spps,</span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill=</span>col.spps, <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">cex=</span><span class="fl">0.8</span>, <span class="at">ncol=</span><span class="dv">3</span>, <span class="at">text.font=</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pca-sizeout3" class="quarto-float quarto-figure quarto-figure-center anchored" alt="PCA biplot showing 16 small mammal species as labeled, translucent ellipses. Onychomys leucogaster and Myodes rutilus occupy relatively distinct regions on the left. Chaetodipus hispidus, C. penicillatus, Perognathus flavus, and Sorex cinereus occupy overlapping regions in the upper center. Several Peromyscus species overlap extensively in the lower center, with P. truei positioned lowest. Black vectors for total length, tail length, and hindfoot length point toward the right, while the ear-length vector points downward. PC1 explains 52.1% and PC2 explains 25.0% of the variation.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-sizeout3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.20: PCA biplot of four size-adjusted morphological measurements from 16 small mammal species, showing species ellipses instead of individual specimens. Shaded ellipses generated using <code>vegan::ordiellipse()</code> summarize the dispersion of specimens within each species, with labels identifying the species. PC1 explains 52.1% of the variation and PC2 explains 25.0%. Black vectors represent the size-adjusted morphological measurements using scaling type 2. Several species occupy distinct regions of the ordination, while others exhibit considerable overlap.
+</figcaption>
+<div aria-describedby="fig-pca-sizeout3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-sizeout3-1.png" class="img-fluid figure-img" alt="PCA biplot showing 16 small mammal species as labeled, translucent ellipses. Onychomys leucogaster and Myodes rutilus occupy relatively distinct regions on the left. Chaetodipus hispidus, C. penicillatus, Perognathus flavus, and Sorex cinereus occupy overlapping regions in the upper center. Several Peromyscus species overlap extensively in the lower center, with P. truei positioned lowest. Black vectors for total length, tail length, and hindfoot length point toward the right, while the ear-length vector points downward. PC1 explains 52.1% and PC2 explains 25.0% of the variation." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>One interesting consequence I see is that now that we factored out overall size, <em>Rattus</em> is much closer to the <em>Mus</em> and most of the mouse group. We also now see Northern Grasshopper Mouse (<em>Onychomys leucogaster</em>) and Northern Red-backed Vole (<em>Myodes rutilus</em>) as now much more separated from the rest of the cricetids (<em>Peromyscus</em> and <em>Reithrodontomys</em>). And, the heteromyids are grouped together more closely than they were when size was driving PC1. I’m a little surprise to see Masked Shrew (<em>Sorex cinereus</em>) up there with the heteromyids. In the <a href="#fig-pca-pca-neon3">first ordination</a> they were simply the smallest species. Does that pattern happen along other PCs?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">1</span>), <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">xpd=</span><span class="cn">NA</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy.samp3[,<span class="dv">1</span>], xy.samp3[,<span class="dv">3</span>],</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"n"</span>,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (52.1%)"</span>, <span class="at">ylab=</span><span class="st">"PC3 (18.4%)"</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ordiellipse</span>(p2, dx.pca<span class="sc">$</span>species, <span class="at">col=</span>col.spps,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">border=</span><span class="cn">NA</span>, <span class="at">draw=</span><span class="st">"polygon"</span>,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">choices=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(cent.p2.sp[,<span class="dv">1</span>], cent.p2.sp[,<span class="dv">3</span>], </span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>     spps, <span class="at">font=</span><span class="dv">3</span>, <span class="at">cex=</span><span class="fl">0.8</span>)</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="co"># shorten the biplot vectors to fit on the plot area</span></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>scal <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, scal<span class="sc">*</span>xy.vars3[,<span class="dv">1</span>], scal<span class="sc">*</span>xy.vars3[,<span class="dv">3</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a><span class="co"># move the biplot labels out by 2%</span></span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>moveout <span class="ot">&lt;-</span> <span class="fl">1.02</span></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars3[,<span class="dv">1</span>], moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars3[,<span class="dv">3</span>],</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>     <span class="fu">rownames</span>(xy.vars3), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="fl">1.0</span>, <span class="dv">2</span>, <span class="at">legend=</span>spps,</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill=</span>col.spps, <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">cex=</span><span class="fl">0.8</span>, <span class="at">ncol=</span><span class="dv">3</span>, <span class="at">text.font=</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pca-sizeout4" class="quarto-float quarto-figure quarto-figure-center anchored" alt="PCA biplot showing PC1 on the horizontal axis (52.1%) and PC3 on the vertical axis (18.4%). Sixteen small mammal species are represented by labeled, translucent ellipses. Onychomys leucogaster and Myodes rutilus occupy separate regions on the far left, while Dipodomys ordii is isolated in the lower right. Rattus rattus occupies the upper right, and most remaining species have extensively overlapping ellipses near the center. Black vectors for the four size-adjusted morphological measurements are concentrated near the horizontal axis, except for hindfoot length, which points downward and slightly right.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-sizeout4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.21: PCA biplot of four size-adjusted morphological measurements from 16 small mammal species, showing PC1 and PC3 rather than PC1 and PC2. Shaded ellipses generated using <code>vegan::ordiellipse()</code> summarize the dispersion of specimens within each species, with labels identifying the species. PC1 explains 52.1% of the variation and PC3 explains 18.4%. Black vectors represent the size-adjusted morphological measurements using scaling type 2. Several species that overlap on PC1 and PC2 are more clearly distinguished along PC3, particularly Dipodomys ordii.
+</figcaption>
+<div aria-describedby="fig-pca-sizeout4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-sizeout4-1.png" class="img-fluid figure-img" alt="PCA biplot showing PC1 on the horizontal axis (52.1%) and PC3 on the vertical axis (18.4%). Sixteen small mammal species are represented by labeled, translucent ellipses. Onychomys leucogaster and Myodes rutilus occupy separate regions on the far left, while Dipodomys ordii is isolated in the lower right. Rattus rattus occupies the upper right, and most remaining species have extensively overlapping ellipses near the center. Black vectors for the four size-adjusted morphological measurements are concentrated near the horizontal axis, except for hindfoot length, which points downward and slightly right." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>It appears so:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">1</span>), <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">xpd=</span><span class="cn">NA</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy.samp3[,<span class="dv">2</span>], xy.samp3[,<span class="dv">3</span>],</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"n"</span>,</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC2 (25.0%)"</span>, <span class="at">ylab=</span><span class="st">"PC3 (18.4%)"</span>)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ordiellipse</span>(p2, dx.pca<span class="sc">$</span>species, <span class="at">col=</span>col.spps,</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">border=</span><span class="cn">NA</span>, <span class="at">draw=</span><span class="st">"polygon"</span>,</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">choices=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(cent.p2.sp[,<span class="dv">2</span>], cent.p2.sp[,<span class="dv">3</span>], </span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>     spps, <span class="at">font=</span><span class="dv">3</span>, <span class="at">cex=</span><span class="fl">0.8</span>)</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="co"># shorten the biplot vectors to fit on the plot area</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>scal <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, scal<span class="sc">*</span>xy.vars3[,<span class="dv">2</span>], scal<span class="sc">*</span>xy.vars3[,<span class="dv">3</span>], <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a><span class="co"># move the biplot labels out by 2%</span></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>moveout <span class="ot">&lt;-</span> <span class="fl">1.02</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars3[,<span class="dv">2</span>], moveout<span class="sc">*</span>scal<span class="sc">*</span>xy.vars3[,<span class="dv">3</span>],</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>     <span class="fu">rownames</span>(xy.vars3), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="fl">0.45</span>, <span class="dv">2</span>, <span class="at">legend=</span>spps,</span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill=</span>col.spps, <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">cex=</span><span class="fl">0.8</span>, <span class="at">ncol=</span><span class="dv">3</span>, <span class="at">text.font=</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pca-sizeout5" class="quarto-float quarto-figure quarto-figure-center anchored" alt="PCA biplot showing PC2 on the horizontal axis (25.0%) and PC3 on the vertical axis (18.4%). Sixteen small mammal species are represented by labeled, translucent ellipses. Chaetodipus hispidus and C. penicillatus occupy the right side, while Dipodomys ordii forms a separate ellipse in the lower right. Rattus rattus is near the upper center, and several Peromyscus species overlap on the left. Black vectors representing the four size-adjusted morphological measurements are concentrated near the origin, with hindfoot length pointing downward.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-pca-sizeout5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.22: PCA biplot of four size-adjusted morphological measurements from 16 small mammal species, showing PC2 and PC3 rather than PC1 and PC2. Shaded ellipses generated using <code>vegan::ordiellipse()</code> summarize the dispersion of specimens within each species, with labels identifying the species. PC2 explains 25.0% of the variation and PC3 explains 18.4%. Black vectors represent the size-adjusted morphological measurements using scaling type 2. Several species are more clearly separated along PC2, particularly Chaetodipus hispidus and Dipodomys ordii, while other species overlap extensively.
+</figcaption>
+<div aria-describedby="fig-pca-sizeout5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-pca-sizeout5-1.png" class="img-fluid figure-img" alt="PCA biplot showing PC2 on the horizontal axis (25.0%) and PC3 on the vertical axis (18.4%). Sixteen small mammal species are represented by labeled, translucent ellipses. Chaetodipus hispidus and C. penicillatus occupy the right side, while Dipodomys ordii forms a separate ellipse in the lower right. Rattus rattus is near the upper center, and several Peromyscus species overlap on the left. Black vectors representing the four size-adjusted morphological measurements are concentrated near the origin, with hindfoot length pointing downward." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>So what did we learn?</p>
+<ol type="1">
+<li>PCA can help us visualize variation between samples and what variables drive that variation.</li>
+<li>The closer two samples are together in the ordination space, the more similar they are.</li>
+<li>Variables get bigger in the direction of their arrow.</li>
+<li>Size matters.</li>
+<li>Shrews are weird but neat.</li>
+</ol>
+<p>Next let’s explore principal coordinates analysis (PCoA), a technique for exploring patterns among samples without the Euclidean distance metric.</p>
 </section>
 </section>
-<section id="sec-ord-un-pcoa" class="level3" data-number="27.2.2">
-<h3 data-number="27.2.2" class="anchored" data-anchor-id="sec-ord-un-pcoa"><span class="header-section-number">27.2.2</span> Principal coordinates analysis (PCoA)</h3>
 </section>
-<section id="sec-ord-un-ca" class="level3" data-number="27.2.3">
-<h3 data-number="27.2.3" class="anchored" data-anchor-id="sec-ord-un-ca"><span class="header-section-number">27.2.3</span> Correspondence analysis (CA)</h3>
+<section id="sec-ord-pcoa" class="level2" data-number="27.3">
+<h2 data-number="27.3" class="anchored" data-anchor-id="sec-ord-pcoa"><span class="header-section-number">27.3</span> Principal coordinates analysis (PCoA)</h2>
+<p>Coming soon!</p>
 </section>
-<section id="sec-ord-un-nmds" class="level3" data-number="27.2.4">
-<h3 data-number="27.2.4" class="anchored" data-anchor-id="sec-ord-un-nmds"><span class="header-section-number">27.2.4</span> Nonmetric multidimensional scaling (NMDS)</h3>
+<section id="sec-ord-ca" class="level2" data-number="27.4">
+<h2 data-number="27.4" class="anchored" data-anchor-id="sec-ord-ca"><span class="header-section-number">27.4</span> Correspondence analysis (CA)</h2>
+<p>Coming soon!</p>
 </section>
+<section id="sec-ord-nmds" class="level2" data-number="27.5">
+<h2 data-number="27.5" class="anchored" data-anchor-id="sec-ord-nmds"><span class="header-section-number">27.5</span> Nonmetric multidimensional scaling (NMDS)</h2>
+<p>Coming soon!</p>
 </section>
-<section id="sec-ord-con" class="level2" data-number="27.3">
-<h2 data-number="27.3" class="anchored" data-anchor-id="sec-ord-con"><span class="header-section-number">27.3</span> Constrained ordination methods</h2>
-<p>Constrained ordination methods, also called canonical ordination methods, identify major axes of multivariate variation that are associated with one or more explanatory variables. Unlike unconstrained ordination, which summarizes patterns in the response variables alone, constrained ordination incorporates information about potential predictors when constructing the ordination axes.</p>
-<section id="sec-ord-con-ra" class="level3" data-number="27.3.1">
-<h3 data-number="27.3.1" class="anchored" data-anchor-id="sec-ord-con-ra"><span class="header-section-number">27.3.1</span> Redundancy analysis (RA)</h3>
+<section id="sec-ord-ra" class="level2" data-number="27.6">
+<h2 data-number="27.6" class="anchored" data-anchor-id="sec-ord-ra"><span class="header-section-number">27.6</span> Redundancy analysis (RA)</h2>
+<p>Coming soon!</p>
 </section>
-<section id="sec-ord-con-lda" class="level3" data-number="27.3.2">
-<h3 data-number="27.3.2" class="anchored" data-anchor-id="sec-ord-con-lda"><span class="header-section-number">27.3.2</span> Linear discriminant analysis</h3>
+<section id="sec-ord-cca" class="level2" data-number="27.7">
+<h2 data-number="27.7" class="anchored" data-anchor-id="sec-ord-cca"><span class="header-section-number">27.7</span> Canonical correspondence analysis (CCA)</h2>
+<p>Coming soon!</p>
 </section>
-<section id="sec-ord-con-cca" class="level3" data-number="27.3.3">
-<h3 data-number="27.3.3" class="anchored" data-anchor-id="sec-ord-con-cca"><span class="header-section-number">27.3.3</span> Canonical correspondence analysis (CCA)</h3>
+<section id="sec-ord-dbrda" class="level2" data-number="27.8">
+<h2 data-number="27.8" class="anchored" data-anchor-id="sec-ord-dbrda"><span class="header-section-number">27.8</span> Distance-based RDA (dbRDA)</h2>
+<p>Coming soon!</p>
 </section>
-<section id="sec-ord-con-dbrda" class="level3" data-number="27.3.4">
-<h3 data-number="27.3.4" class="anchored" data-anchor-id="sec-ord-con-dbrda"><span class="header-section-number">27.3.4</span> Distance-based RDA (dbRDA)</h3>
-</section>
-</section>
-<section id="sec-ord-other" class="level2" data-number="27.4">
-<h2 data-number="27.4" class="anchored" data-anchor-id="sec-ord-other"><span class="header-section-number">27.4</span> Classification and other methods</h2>
-<section id="sec-ord-other-lda" class="level3" data-number="27.4.1">
-<h3 data-number="27.4.1" class="anchored" data-anchor-id="sec-ord-other-lda"><span class="header-section-number">27.4.1</span> Linear discriminant analysis</h3>
+<section id="sec-ord-lda" class="level2" data-number="27.9">
+<h2 data-number="27.9" class="anchored" data-anchor-id="sec-ord-lda"><span class="header-section-number">27.9</span> Linear discriminant analysis</h2>
+<p>Coming soon!</p>
 
 
-</section>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-legendre2012numerical" class="csl-entry" role="listitem">
+Legendre P, Legendre L. 2012. Numerical ecology. Amsterdam: Elsevier.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
