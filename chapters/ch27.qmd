@@ -1150,8 +1150,169 @@ Coming soon!
 
 ## Nonmetric multidimensional scaling (NMDS) {#sec-ord-nmds}
 
-**Nonmetric multidimensional scaling (NMDS)** is an ordination method that attempts to arrange samples in a lower-dimensional space in a way that preserves the **rank order of the dissimilarity matrix**. It 
+### Definition and illustration {#sec-ord-nmds-def}
 
+**Nonmetric multidimensional scaling (NMDS)** is an ordination method that attempts to arrange samples in a lower-dimensional space in a way that preserves the **rank order of the dissimilarity matrix**. It finds this arrangement, or **configuration**, through numerical optimization, rather than eigenanalysis.
+
+NMDS works by finding a way to arrange samples in fewer dimensions while minimizing the distortion of the distance matrix. Imagine a dataset with 3 dimensions (@fig-ord-nmds-distance3d). The distance matrix, represented by the thin grey lines, exists in the same three-dimensional space as the dataset. Differences between the observations are summarized in the distance matrix. It follows that any new representation of the data should preserve that distance matrix.
+
+![Pairwise distances among observations in a three-dimensional dataset. Each point represents an observation defined by three variables, and the gray lines connect pairs of observations, illustrating the distances that a distance-based ordination method such as nonmetric multidimensional scaling (NMDS) attempts to represent in fewer dimensions.](../images/ord-nmds-distance3d.png){#fig-ord-nmds-distance3d fig-alt="Three-dimensional scatterplot with axes labeled Variable 1, Variable 2, and Variable 3. Approximately 50 black points are distributed throughout a cube. Numerous thin gray lines connect pairs of points, forming a dense network that illustrates pairwise distances in three-dimensional space."}
+
+The observations could be represented in two dimensions by projecting them down to the plane defined by Variable 1 and Variable 2. 
+
+![Projection of a three-dimensional dataset into two dimensions. The upper plot shows observations and their pairwise distances in three-dimensional space. Red dashed arrows illustrate the projection of the observations onto a two-dimensional plane below. Simply removing the third dimension distorts the distances among observations, motivating the search for a new two-dimensional configuration that better preserves the original distance relationships.](../images/ord-nmds-distanceproject.jpg){#fig-ord-nmds-distanceproject fig-alt="Three-dimensional scatterplot above a tilted two-dimensional plane. The upper plot contains black points connected by numerous thin gray lines representing pairwise distances in three dimensions. Four red dashed arrows point toward the lower plane, where the same observations are represented using only two coordinates. The resulting network of connecting lines illustrates how pairwise distances change when one dimension is discarded."}
+
+But, there is a problem. If we simply project the points down to 2d, we discard all of the information in the other variables. This has the effect of distorting the distance matrix between the observations. It's the same problem that arises when projecting the Earth's surface onto a flat map: removing the curvature (information in the third dimension) distorts relative distances and directions on the map.
+
+```{r}
+#| echo: false
+#| fig.width: 8
+#| fig.height: 7
+#| label: fig-ord-nmds-dist23
+#| fig-cap: "Comparison of pairwise Euclidean distances calculated from the original three-dimensional dataset and its two-dimensional projection. Each point represents a pair of observations, with the original three-dimensional distance on the horizontal axis and the projected two-dimensional distance on the vertical axis. The red line indicates equality between the two distances. All points fall on or below this line because removing a dimension cannot increase Euclidean distance. The variation in distance reduction illustrates how simple projection distorts the relationships among observations."
+#| fig-alt: "Scatterplot comparing pairwise distances in three dimensions (horizontal axis) with distances after projection into two dimensions (vertical axis). Numerous semitransparent gray points form a triangular cloud below a red diagonal line representing equal distances. Some distances are nearly unchanged by projection, while others become substantially smaller, illustrating unequal distortion of pairwise distances."
+
+library(vegan)
+
+set.seed(42)
+x  <- scale(rnorm(60, 15, 2))
+y <- scale(rnorm(60, 6, 1))
+z  <- scale(rnorm(60, 26, 3))
+dx <- data.frame(x=x, y=y, z=z)
+d3 <- vegdist(dx, method="euclidean")
+d2 <- vegdist(dx[,1:2], method="euclidean")
+
+par(mar=c(5,5,1,1), bty="n", lend=1,
+    las=1, cex.lab=1.4, cex.axis=1.4)
+plot(d3, d2, pch=16, col="#00000030", 
+     xlab="Distance matrix in 3d",
+     ylab="Distance matrix in 2d")
+polygon(x=c(0, 0, 5.4, 0),
+        y=c(0, 5.4, 5.4, 0), border=NA, col="white")
+segments(0, 0, 5.4, 5.4, col="red", lwd=2)
+```
+
+If we want to represent the relationships between the samples in a 3d space in a 2d space, we need allow the points to move a bit so that information from the third dimension is not entirely discarded. 
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+set.seed(123)
+dz <- dx
+dz$x <- dz$x + min(dz$x) + 0.01
+n1 <- metaMDS(dx, distance="euclidean",
+              autotransform = FALSE,
+              noshare = FALSE,
+              wascores = FALSE)
+xy <- scores(n1, display="sites", choices=1:2, scaling=1)
+```
+
+```{r}
+#| fig-width: 5
+#| fig-height: 10
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-cap: "Comparison of the original two-dimensional projection of a three-dimensional dataset (top) with a two-dimensional configuration obtained using nonmetric multidimensional scaling (NMDS; bottom). Each point represents an observation, and gray lines connect pairs of observations to illustrate their distances. Unlike simple projection, NMDS rearranges the observations to better preserve the rank ordering of pairwise distances in the original three-dimensional space. The NMDS axes do not correspond directly to the original variables."
+#| fig-alt: "Two vertically arranged scatterplots showing approximately 50 observations connected by numerous thin gray lines. The upper plot shows the original Variable 1 and Variable 2 coordinates, with open white squares representing observations. The lower plot shows the NMDS configuration, with yellow squares representing the same observations. The positions of the observations and the lengths of the connecting lines differ between the two plots, illustrating how NMDS rearranges points to better represent the original three-dimensional dissimilarities."
+
+
+combo2d <- combn(1:nrow(dx), 2)
+par(mfrow=c(2,1), mar=c(5,5,1,1), bty="n", lend=1,
+    las=1, cex.lab=1.4, cex.axis=1.4)
+plot(dx$x, dx$y, pch=16, 
+     xlab="Variable 1", ylab="Variable 2")
+for(i in 1:ncol(combo2d)){
+    segments(
+        x0=dx$x[combo2d[1,i]],
+        y0=dx$y[combo2d[1, i]],
+        x1=dx$x[combo2d[2, i]],
+        y1=dx$y[combo2d[2, i]],
+        col="#00000030")
+}
+points(dx$x, dx$y, pch=21, cex=1.1, bg="white", lwd=2)
+plot(xy[,1], xy[,2], pch=16, 
+     xlab="NMDS axis 1", ylab="NMDS axis 2")
+for(i in 1:ncol(combo2d)){
+    segments(
+        x0=xy[combo2d[1,i],1],
+        y0=xy[combo2d[1, i],2],
+        x1=xy[combo2d[2, i],1],
+        y1=xy[combo2d[2, i],2],
+        col="#00000030")
+}
+points(xy[,1], xy[,2], pch=22,
+       cex=1.1, bg="yellow", lwd=2)
+
+```
+
+The NMDS configuration looks different than the projection onto the X-Y plane. Did it do a better job at representing the distance matrix?
+
+```{r}
+#| fig-width: 10
+#| fig-height: 5
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-nmds-explain1
+#| fig-cap: "Comparison of pairwise Euclidean distances in the original three-dimensional dataset with distances in two-dimensional representations. The left panel shows distances after simply projecting the observations into two dimensions, while the right panel shows distances in a two-dimensional configuration obtained using nonmetric multidimensional scaling (NMDS). Each point represents a pair of observations, and the red lines indicate equal distances. Simple projection systematically reduces distances, whereas NMDS rearranges observations to better preserve the rank ordering of their original distances, allowing some distances to increase and others to decrease."
+#| fig-alt: "Two scatterplots comparing pairwise distances in the original three-dimensional space (horizontal axes) with distances in two dimensions (vertical axes). The left panel shows a triangular cloud of gray points entirely below a red line of equality, indicating that projection reduces distances. The right panel shows gray points distributed on both sides of the red line, indicating that NMDS produces a new configuration in which some distances are larger and others smaller than their original values."
+
+d4 <- vegdist(xy, method="euclidean")
+
+par(mfrow=c(1,2), mar=c(5,5,1,1), bty="n", lend=1,
+    las=1, cex.lab=1.4, cex.axis=1.4)
+plot(d3, d2, pch=16, col="#00000030", 
+     xlab="Distance matrix in original 3d space",
+     ylab="Distance matrix in 2d projection")
+polygon(x=c(0, 0, 5.4, 0),
+        y=c(0, 5.4, 5.4, 0), border=NA, col="white")
+segments(0, 0, 5.4, 5.4, col="white", lwd=4)
+segments(0, 0, 5.4, 5.4, col="red", lwd=2)
+
+plot(d3, d4, pch=16, col="#00000030", 
+     xlab="Distance matrix in original 3d space",
+     ylab="Distance matrix in 2d NMDS space")
+segments(0, 0, 5.4, 5.4, col="white", lwd=4)
+segments(0, 0, 5.4, 5.4, col="red", lwd=2)
+```
+
+The left panel in @fig-nmds-explain1 is the same as @fig-ord-nmds-dist23, showing how the distances in the 2d projection relate to the corresponding distances in the original 3d. The right panel in @fig-nmds-explain1 shows how distances in the 2d NMDS space relate to the original 3d distance matrix. Notice that the discrepancies between the NMDS solution distances and the original distances are both positive and negative, whereas the distances in the 2d projection are always less than their counterparts in 3 dimensions. If we calculate the correlations between the original 3d distances and the two methods of reducing the data to 2 dimensions, we see that the distances in the NMDS solution are much more closely correlated with the original distances than the distances in the 2d projection are.
+
+```{r}
+#| echo: false
+cat("Correlation between 2d projection distances\nand original 3d distance matrix\n")
+cor(d3, d2)
+
+cat("Correlation between 2d NMDS configuration\ndistances and original 3d distance matrix\n")
+cor(d3, d4)
+```
+
+The example we just stepped through illustrates why we use NMDS: dimension reduction without dissimilarity distortion. 
+### Details of the algorithm {#sec-ord-nmds-details}
+
+Coming soon!
+
+### Example using NEON data {#sec-ord-nmds-neon}
+
+Coming soon!
+
+#### Data import and preparation {#sec-ord-nmds-neon-data}
+
+Coming soon!
+
+#### Fit the NMDS {#sec-ord-nmds-neon-fit}
+
+Coming soon!
+
+#### Inspect and plot {#sec-ord-nmds-neon-plot}
+
+Coming soon!
+
+#### Fitting environmental variables {#sec-ord-nmds-neon-envfit}
+
+Coming soon!
 
 ## Redundancy analysis (RA) {#sec-ord-ra}
 

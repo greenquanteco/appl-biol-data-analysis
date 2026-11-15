@@ -94,4 +94,45 @@ for(i in 1:ncol(combo2)){
 par3d(zoom=0.9)
 rgl.snapshot("C:/_courses/appl-biol-data-analysis/images/multi-distance-vis02.png")
 
+######################
 
+# plot for NMDS in ch 27
+plot3d(dx$N2, dx$pH2, dx$M2, type="p", 
+       xlim=c(-2.6, 2.01), ylim=c(-2, 2.9), zlim=c(-2.2, 2.1),
+       xlab="Variable 1", ylab="Variable 2", zlab="Variable 3"
+)
+for(i in 1:ncol(combo1)){
+    segments3d(
+        x=c(dx$N2[combo1[1,i]], dx$N2[combo1[2,i]]),
+        y=c(dx$pH2[combo1[1,i]], dx$pH2[combo1[2,i]]),
+        z=c(dx$M2[combo1[1,i]], dx$M2[combo1[2,i]]),
+        color="black", alpha=0.15)
+}
+for(i in 1:ncol(combo2)){
+    segments3d(
+        x=c(dx$N2[combo2[1,i]], dx$N2[combo2[2,i]]),
+        y=c(dx$pH2[combo2[1,i]], dx$pH2[combo2[2,i]]),
+        z=c(dx$M2[combo2[1,i]], dx$M2[combo2[2,i]]),
+        color="black", alpha=0.15)
+}
+par3d(zoom=0.8)
+rgl.snapshot("C:/_courses/appl-biol-data-analysis/images/ord-nmds-distance3d.png")
+
+combo2d <- combn(1:nrow(dx), 2)
+
+jpeg("C:/_courses/appl-biol-data-analysis/images/ord-nmds-distance2d.jpg",
+     width=8, height=6, units="in", res=300)
+par(mar=c(5,5,1,1), bty="n", lend=1,
+    las=1, cex.lab=1.4, cex.axis=1.4)
+plot(dx$N2, dx$pH2, pch=16, 
+     xlab="Variable 1", ylab="Variable 2")
+for(i in 1:ncol(combo2d)){
+    segments(
+        x0=dx$N2[combo2d[1,i]],
+        y0=dx$pH2[combo2d[1, i]],
+        x1=dx$N2[combo2d[2, i]],
+        y1=dx$pH2[combo2d[2, i]],
+        col="#00000030")
+}
+points(dx$N2, dx$pH2, pch=21, cex=1.1, bg="white", lwd=2)
+dev.off()
