@@ -273,7 +273,7 @@
 
 \title{Applied Biological Data Analysis}
 \author{Nick Green}
-\date{November 14, 2026}
+\date{November 15, 2026}
 \begin{document}
 \maketitle
 
@@ -35628,11 +35628,14 @@ understood by our meat-based brains.
 
 \begin{figure}
 
-\caption{\label{fig-pca-explain1}text}
+\caption{\label{fig-pca-explain1}Scatterplot of a hypothetical dataset
+containing two positively correlated variables. The observations form an
+elongated cloud of points, illustrating a pattern that can be summarized
+using principal component analysis (PCA).}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-explain1-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={Scatterplot of Variable 1 on the horizontal axis and Variable 2 on the vertical axis. Approximately 50 black points form an elongated cloud trending upward from lower left to upper right, indicating a positive relationship between the variables.}]{chapters/ch27_files/figure-pdf/fig-pca-explain1-1.pdf}}
 
 }
 
@@ -35669,11 +35672,16 @@ what is shown in Figure~\ref{fig-pca-explain2} below.
 
 \begin{figure}
 
-\caption{\label{fig-pca-explain2}text}
+\caption{\label{fig-pca-explain2}Variation in two variables in a
+hypothetical dataset. The left panel shows horizontal deviations from
+the mean of Variable 1 (red), while the right panel shows vertical
+deviations from the mean of Variable 2 (blue). The sums of squared
+deviations are 1531.9 and 8020.7, respectively, indicating greater
+variation in Variable 2.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-explain2-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two scatterplots of the same hypothetical dataset. In the left panel, red horizontal lines connect each observation to the mean of Variable 1, shown by a vertical dashed red line. In the right panel, blue vertical lines connect each observation to the mean of Variable 2, shown by a horizontal dashed blue line. The sums of squared deviations are 1531.9 for Variable 1 and 8020.7 for Variable 2.}]{chapters/ch27_files/figure-pdf/fig-pca-explain2-1.pdf}}
 
 }
 
@@ -35694,11 +35702,16 @@ is unchanged from Figure~\ref{fig-pca-explain2}.
 
 \begin{figure}
 
-\caption{\label{fig-pca-explain3}text}
+\caption{\label{fig-pca-explain3}Variation in two variables after
+centering the hypothetical dataset by subtracting the mean of each
+variable. Horizontal red lines (left) and vertical blue lines (right)
+show deviations from the respective variable means, now located at zero.
+Centering changes the coordinates of the observations but not the sums
+of squared deviations.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-explain3-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two scatterplots of the same mean-centered dataset, with observations forming an upward-trending cloud around the origin. In the left panel, red horizontal lines show deviations from the mean of Variable 1, now at zero, with a sum of squares of 1531.9. In the right panel, blue vertical lines show deviations from the mean of Variable 2, also at zero, with a sum of squares of 8020.7.}]{chapters/ch27_files/figure-pdf/fig-pca-explain3-1.pdf}}
 
 }
 
@@ -35724,11 +35737,16 @@ now.
 
 \begin{figure}
 
-\caption{\label{fig-pca-explain4}text}
+\caption{\label{fig-pca-explain4}Variation in two variables after
+centering and standardizing the hypothetical dataset. Horizontal red
+lines (left) and vertical blue lines (right) show deviations from the
+respective variable means, now zero. Standardization gives both
+variables a standard deviation of one, resulting in equal sums of
+squared deviations (49) despite their different original variances.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-explain4-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two scatterplots of the same standardized dataset, with observations forming an upward-trending cloud centered at the origin. In the left panel, red horizontal lines show deviations from the mean of Variable 1, with a sum of squares of 49. In the right panel, blue vertical lines show deviations from the mean of Variable 2, also with a sum of squares of 49. Both variables now range approximately from minus two to plus two.}]{chapters/ch27_files/figure-pdf/fig-pca-explain4-1.pdf}}
 
 }
 
@@ -35751,11 +35769,15 @@ direction perpendicular to the red axis, the blue axis (dashed line).
 
 \begin{figure}
 
-\caption{\label{fig-pca-explain5}text}
+\caption{\label{fig-pca-explain5}Principal component axes for the
+standardized hypothetical dataset. The first principal component (solid
+red line) follows the direction of greatest variation among
+observations, while the second principal component (dashed blue line) is
+perpendicular to the first and represents the remaining variation.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-explain5-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={Scatterplot of standardized Variable 1 and Variable 2, with approximately 50 black points forming an elongated cloud trending upward from left to right. A solid red line passes through the origin along the long axis of the point cloud, representing PC1. A dashed blue line passes through the origin perpendicular to the red line, representing PC2.}]{chapters/ch27_files/figure-pdf/fig-pca-explain5-1.pdf}}
 
 }
 
@@ -35771,11 +35793,17 @@ blue direction (right panel).
 
 \begin{figure}
 
-\caption{\label{fig-pca-explain6}text}
+\caption{\label{fig-pca-explain6}Variation along the two principal
+component axes of the standardized hypothetical dataset. Dashed lines
+show the projections of observations onto PC1 (red, left panel) and PC2
+(blue, right panel). The sum of squared deviations is much greater along
+PC1 (88.01) than PC2 (9.99), illustrating how PCA identifies the
+direction of greatest variation and a perpendicular axis accounting for
+the remaining variation.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-explain6-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two scatterplots of the same standardized dataset, showing approximately 50 black points and two perpendicular principal component axes. In the left panel, dashed red lines project observations onto the solid red PC1 axis, which slopes upward from left to right. In the right panel, dashed blue lines project observations onto the solid blue PC2 axis, which slopes downward from left to right. The sums of squared deviations along PC1 and PC2 are 88.01 and 9.99, respectively.}]{chapters/ch27_files/figure-pdf/fig-pca-explain6-1.pdf}}
 
 }
 
@@ -35791,11 +35819,19 @@ patterns. All we really did was rotate the original coordinate system
 
 \begin{figure}
 
-\caption{\label{fig-pca-explain7}text}
+\caption{\label{fig-pca-explain7}Rotation of the coordinate system in
+principal component analysis (PCA). The left panel shows the original
+standardized variables and their coordinate grid (gray), overlaid with
+the new principal component axes (red for PC1, blue for PC2) and their
+rotated grid lines. The right panel shows the same observations
+expressed in the new coordinate system, with PC1 and PC2 as the
+horizontal and vertical axes, respectively. The rotation preserves the
+relative positions and distances among observations while concentrating
+most of the variation along PC1.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-explain7-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two scatterplots illustrating a rotation of coordinate axes. The left panel shows black observations on the original Variable 1 and Variable 2 axes, with a gray grid and diagonal red and blue grid lines representing the principal component coordinate system. Thick red and blue lines mark PC1 and PC2. The right panel shows the same observations in the rotated coordinate system, with PC1 horizontal and PC2 vertical. Most of the spread is now horizontal along PC1, while relatively little variation remains along PC2.}]{chapters/ch27_files/figure-pdf/fig-pca-explain7-1.pdf}}
 
 }
 
@@ -36051,11 +36087,18 @@ is a result of the origin of \texttt{vegan} in community ecology.
 
 \begin{figure}[H]
 
-\caption{\label{fig-pca-pca-neon1}text}
+\caption{\label{fig-pca-pca-neon1}PCA biplot of four standardized
+morphological measurements from 16 small mammal species, using scaling
+type 1 (distance scaling). Each point represents an individual specimen,
+with colors and symbols identifying species. PC1 explains 75.3\% of the
+variation and PC2 explains 17.1\%. Black vectors indicate the directions
+in which total length, tail length, hindfoot length, and ear length
+increase. Scaling type 1 emphasizes distances among specimens rather
+than correlations among morphological variables.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon1-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={PCA biplot showing individual specimens from 16 small mammal species, distinguished by colored symbols. PC1 (horizontal, 75.3\%) separates specimens primarily along a body-size gradient, while PC2 (vertical, 17.1\%) distinguishes specimens partly by ear length. Black vectors for total length, tail length, and hindfoot length point toward the lower left and overlap considerably. The ear-length vector points steeply upward and slightly left. Species form several recognizable clusters, including Rattus rattus at far left and Peromyscus truei toward the upper center.}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon1-1.pdf}}
 
 }
 
@@ -36113,11 +36156,20 @@ Extract the scores and make another biplot, this time with scaling 2.
 
 \begin{figure}[H]
 
-\caption{\label{fig-pca-pca-neon2}text}
+\caption{\label{fig-pca-pca-neon2}PCA biplot of four standardized
+morphological measurements from 16 small mammal species, using scaling
+type 2 (correlation scaling). Each point represents an individual
+specimen, with colors and symbols identifying species. PC1 explains
+75.3\% of the variation and PC2 explains 17.1\%. Black vectors represent
+the morphological measurements, with their directions and angles
+emphasizing correlations among variables and their relationships with
+the principal components. Total length, tail length, and hindfoot length
+are strongly associated with PC1, while ear length is more strongly
+associated with PC2.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon2-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={PCA biplot showing specimens from 16 small mammal species, distinguished by colored symbols. PC1 is horizontal and explains 75.3\% of the variation; PC2 is vertical and explains 17.1\%. Black vectors for total length, tail length, and hindfoot length point almost horizontally to the left, indicating strong negative correlations with PC1. The ear-length vector points diagonally toward the upper left, indicating a negative correlation with PC1 and a positive correlation with PC2. Rattus rattus specimens cluster at the far left, while Peromyscus truei specimens occupy the upper central region.}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon2-1.pdf}}
 
 }
 
@@ -36514,11 +36566,18 @@ argument \texttt{type="n"} in \texttt{plot()}), but you don't have to.
 
 \begin{figure}[H]
 
-\caption{\label{fig-pca-pca-neon3}text}
+\caption{\label{fig-pca-pca-neon3}PCA biplot of four standardized
+morphological measurements from 16 small mammal species, showing species
+centroids and ellipses instead of individual specimens. Each symbol
+represents the centroid of a species, and the surrounding shaded ellipse
+summarizes the dispersion of specimens belonging to that species. PC1
+explains 75.3\% of the variation and PC2 explains 17.1\%. Black vectors
+show the relationships of the four morphological measurements with the
+principal components, using scaling type 2.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon3-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={PCA biplot showing 16 species centroids as colored symbols outlined in black, each surrounded by a shaded ellipse of the same color. Rattus rattus has a broad ellipse at the far left, Dipodomys ordii is isolated in the lower left, and Peromyscus truei occupies the upper portion of the plot. Several species have overlapping ellipses near the center and right. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left.}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon3-1.pdf}}
 
 }
 
@@ -36557,11 +36616,20 @@ a shape that contains all of the points in a group. We use function
 
 \begin{figure}[H]
 
-\caption{\label{fig-pca-pca-neon4}text}
+\caption{\label{fig-pca-pca-neon4}PCA biplot of four standardized
+morphological measurements from 16 small mammal species, showing species
+centroids and convex hulls generated using \texttt{vegan::ordihull()}.
+Each symbol represents a species centroid, and the surrounding shaded
+polygon encloses the outermost specimens of that species in the
+two-dimensional ordination. Unlike ellipses, convex hulls show the
+observed extent of each species rather than a statistical summary of its
+dispersion. PC1 explains 75.3\% of the variation and PC2 explains
+17.1\%. Black vectors represent the morphological measurements using
+scaling type 2.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon4-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={PCA biplot showing 16 species centroids as colored symbols outlined in black, surrounded by translucent convex polygons of matching colors. The polygons vary in size and shape, with a large purple hull for Rattus rattus extending across the left side, a blue hull for Peromyscus truei near the top, and several overlapping polygons near the center and right. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left.}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon4-1.pdf}}
 
 }
 
@@ -36601,11 +36669,20 @@ can make a plot very busy and hard to interpret.
 
 \begin{figure}[H]
 
-\caption{\label{fig-pca-pca-neon5}text}
+\caption{\label{fig-pca-pca-neon5}PCA biplot of four standardized
+morphological measurements from 16 small mammal species, showing species
+centroids, convex hulls, and lines connecting individual specimens to
+their species centroids using \texttt{vegan::ordispider()}. Each colored
+line connects an individual specimen to its species centroid,
+illustrating within-species variation in the ordination. Shaded polygons
+generated by \texttt{vegan::ordihull()} enclose the outermost specimens
+of each species. PC1 explains 75.3\% of the variation and PC2 explains
+17.1\%. Black vectors represent the morphological measurements using
+scaling type 2.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon5-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={PCA biplot showing 16 species centroids as colored symbols outlined in black, surrounded by translucent convex hulls with black borders. Numerous colored lines radiate from each centroid to the positions of individual specimens, forming spider-like patterns that illustrate within-species dispersion. Rattus rattus has a large purple hull on the left, while several species have overlapping hulls near the center and right. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left.}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon5-1.pdf}}
 
 }
 
@@ -36645,11 +36722,19 @@ Figure~\ref{fig-pca-pca-neon7}, which shows the families.
 
 \begin{figure}[H]
 
-\caption{\label{fig-pca-pca-neon6}text}
+\caption{\label{fig-pca-pca-neon6}PCA biplot of four standardized
+morphological measurements from 16 small mammal species, grouped by
+taxonomic family. Each point represents an individual specimen, with
+colors and symbols identifying the four families. Shaded ellipses
+generated using \texttt{vegan::ordiellipse()} summarize the dispersion
+of specimens within each family. PC1 explains 75.3\% of the variation
+and PC2 explains 17.1\%. Black vectors represent the morphological
+measurements using scaling type 2. The families differ in their
+distributions across the ordination, although their ellipses overlap.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon6-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={PCA biplot showing specimens from four mammal families: Cricetidae (pink squares), Heteromyidae (olive circles), Muridae (teal triangles), and Soricidae (purple diamonds). Cricetidae specimens are concentrated in the upper central region, Heteromyidae specimens primarily occupy the lower portion, Muridae specimens extend broadly from the far left toward the center, and Soricidae specimens form a compact group at the far right. Translucent ellipses summarize each family\textquotesingle s dispersion, with substantial overlap among some groups. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left.}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon6-1.pdf}}
 
 }
 
@@ -36693,11 +36778,19 @@ Figure~\ref{fig-pca-pca-neon7}, which shows the families.
 
 \begin{figure}[H]
 
-\caption{\label{fig-pca-pca-neon7}text}
+\caption{\label{fig-pca-pca-neon7}PCA biplot of four standardized
+morphological measurements from 16 small mammal species, grouped by
+genus. Shaded ellipses generated using \texttt{vegan::ordiellipse()}
+summarize the dispersion of specimens within each genus, with labels
+identifying the genera. PC1 explains 75.3\% of the variation and PC2
+explains 17.1\%. Black vectors represent the morphological measurements
+using scaling type 2. Several genera occupy distinct regions of the
+ordination, while others overlap, particularly Myodes, Onychomys, Mus,
+and Reithrodontomys.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon7-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={PCA biplot showing ten mammal genera represented by labeled, translucent ellipses. Rattus occupies the far left, Dipodomys the lower left, Peromyscus the upper center, and Chaetodipus the lower center. Myodes, Onychomys, Mus, and Reithrodontomys have overlapping ellipses near the center-right, while Perognathus and Sorex form separate groups farther right and below the horizontal axis. Black vectors for total length, tail length, and hindfoot length point nearly horizontally left, while the ear-length vector points diagonally toward the upper left.}]{chapters/ch27_files/figure-pdf/fig-pca-pca-neon7-1.pdf}}
 
 }
 
@@ -36731,11 +36824,18 @@ with:
 
 \begin{figure}[H]
 
-\caption{\label{fig-pca-sizeout1}text}
+\caption{\label{fig-pca-sizeout1}Relationships between body mass and
+four morphological measurements in the small mammal dataset. Total
+length (upper left), tail length (upper right), hindfoot length (lower
+left), and ear length (lower right) generally increase with body mass,
+although the strength and shape of these relationships differ among
+measurements. Both axes are logarithmically scaled. These relationships
+illustrate the need to account for body size when investigating
+variation in morphological proportions.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-sizeout1-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={Four scatterplots showing body mass on the horizontal axis and a morphological measurement on the vertical axis, both on logarithmic scales. Total length, tail length, and hindfoot length show strong positive relationships with body mass, with several distinct clusters of observations. Ear length has a weaker positive relationship with considerable scatter. Each plot contains numerous open black circles representing individual mammal specimens.}]{chapters/ch27_files/figure-pdf/fig-pca-sizeout1-1.pdf}}
 
 }
 
@@ -36857,11 +36957,20 @@ Let's check out the biplot:
 
 \begin{figure}[H]
 
-\caption{\label{fig-pca-sizeout2}text}
+\caption{\label{fig-pca-sizeout2}PCA biplot of four size-adjusted
+morphological measurements from 16 small mammal species, using scaling
+type 2. Measurements were adjusted for body mass before PCA to emphasize
+variation in morphology independent of overall body size. PC1 explains
+52.1\% of the remaining variation and PC2 explains 25.0\%. Each point
+represents an individual specimen, with colors and symbols identifying
+species. Black vectors show the relationships between the size-adjusted
+measurements and the principal components. Compared with the PCA of
+unadjusted measurements, the species are distributed along different
+morphological gradients.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-sizeout2-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={PCA biplot of size-adjusted morphological measurements for 16 small mammal species, distinguished by colored symbols. PC1 is horizontal and explains 52.1\% of the variation; PC2 is vertical and explains 25.0\%. Onychomys leucogaster forms a cluster toward the far left, while Peromyscus truei occupies the lower central region. Chaetodipus and Sorex specimens are concentrated toward the upper portion of the plot, with considerable overlap among other species. Black vectors for total length, tail length, and hindfoot length point toward the right, while the ear-length vector points downward.}]{chapters/ch27_files/figure-pdf/fig-pca-sizeout2-1.pdf}}
 
 }
 
@@ -36901,11 +37010,19 @@ Let's superimpose the species:
 
 \begin{figure}[H]
 
-\caption{\label{fig-pca-sizeout3}text}
+\caption{\label{fig-pca-sizeout3}PCA biplot of four size-adjusted
+morphological measurements from 16 small mammal species, showing species
+ellipses instead of individual specimens. Shaded ellipses generated
+using \texttt{vegan::ordiellipse()} summarize the dispersion of
+specimens within each species, with labels identifying the species. PC1
+explains 52.1\% of the variation and PC2 explains 25.0\%. Black vectors
+represent the size-adjusted morphological measurements using scaling
+type 2. Several species occupy distinct regions of the ordination, while
+others exhibit considerable overlap.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-sizeout3-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={PCA biplot showing 16 small mammal species as labeled, translucent ellipses. Onychomys leucogaster and Myodes rutilus occupy relatively distinct regions on the left. Chaetodipus hispidus, C. penicillatus, Perognathus flavus, and Sorex cinereus occupy overlapping regions in the upper center. Several Peromyscus species overlap extensively in the lower center, with P. truei positioned lowest. Black vectors for total length, tail length, and hindfoot length point toward the right, while the ear-length vector points downward. PC1 explains 52.1\% and PC2 explains 25.0\% of the variation.}]{chapters/ch27_files/figure-pdf/fig-pca-sizeout3-1.pdf}}
 
 }
 
@@ -36948,11 +37065,19 @@ smallest species. Does that pattern happen along other PCs?
 
 \begin{figure}[H]
 
-\caption{\label{fig-pca-sizeout4}text}
+\caption{\label{fig-pca-sizeout4}PCA biplot of four size-adjusted
+morphological measurements from 16 small mammal species, showing PC1 and
+PC3 rather than PC1 and PC2. Shaded ellipses generated using
+\texttt{vegan::ordiellipse()} summarize the dispersion of specimens
+within each species, with labels identifying the species. PC1 explains
+52.1\% of the variation and PC3 explains 18.4\%. Black vectors represent
+the size-adjusted morphological measurements using scaling type 2.
+Several species that overlap on PC1 and PC2 are more clearly
+distinguished along PC3, particularly Dipodomys ordii.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-sizeout4-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={PCA biplot showing PC1 on the horizontal axis (52.1\%) and PC3 on the vertical axis (18.4\%). Sixteen small mammal species are represented by labeled, translucent ellipses. Onychomys leucogaster and Myodes rutilus occupy separate regions on the far left, while Dipodomys ordii is isolated in the lower right. Rattus rattus occupies the upper right, and most remaining species have extensively overlapping ellipses near the center. Black vectors for the four size-adjusted morphological measurements are concentrated near the horizontal axis, except for hindfoot length, which points downward and slightly right.}]{chapters/ch27_files/figure-pdf/fig-pca-sizeout4-1.pdf}}
 
 }
 
@@ -36985,11 +37110,20 @@ It appears so:
 
 \begin{figure}[H]
 
-\caption{\label{fig-pca-sizeout5}text}
+\caption{\label{fig-pca-sizeout5}PCA biplot of four size-adjusted
+morphological measurements from 16 small mammal species, showing PC2 and
+PC3 rather than PC1 and PC2. Shaded ellipses generated using
+\texttt{vegan::ordiellipse()} summarize the dispersion of specimens
+within each species, with labels identifying the species. PC2 explains
+25.0\% of the variation and PC3 explains 18.4\%. Black vectors represent
+the size-adjusted morphological measurements using scaling type 2.
+Several species are more clearly separated along PC2, particularly
+Chaetodipus hispidus and Dipodomys ordii, while other species overlap
+extensively.}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio,alt={text}]{chapters/ch27_files/figure-pdf/fig-pca-sizeout5-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={PCA biplot showing PC2 on the horizontal axis (25.0\%) and PC3 on the vertical axis (18.4\%). Sixteen small mammal species are represented by labeled, translucent ellipses. Chaetodipus hispidus and C. penicillatus occupy the right side, while Dipodomys ordii forms a separate ellipse in the lower right. Rattus rattus is near the upper center, and several Peromyscus species overlap on the left. Black vectors representing the four size-adjusted morphological measurements are concentrated near the origin, with hindfoot length pointing downward.}]{chapters/ch27_files/figure-pdf/fig-pca-sizeout5-1.pdf}}
 
 }
 
@@ -37027,6 +37161,314 @@ Coming soon!
 Coming soon!
 
 \section{Nonmetric multidimensional scaling (NMDS)}\label{sec-ord-nmds}
+
+\subsection{Definition and illustration}\label{sec-ord-nmds-def}
+
+\textbf{Nonmetric multidimensional scaling (NMDS)} is an ordination
+method that attempts to arrange samples in a lower-dimensional space in
+a way that preserves the \textbf{rank order of the dissimilarity
+matrix}. It finds this arrangement, or \textbf{configuration}, through
+numerical optimization, rather than eigenanalysis.
+
+NMDS works by finding a way to arrange samples in fewer dimensions while
+minimizing the distortion of the distance matrix. Imagine a dataset with
+3 dimensions (Figure~\ref{fig-ord-nmds-distance3d}). The distance
+matrix, represented by the thin grey lines, exists in the same
+three-dimensional space as the dataset. Differences between the
+observations are summarized in the distance matrix. It follows that any
+new representation of the data should preserve that distance matrix.
+
+\begin{figure}
+
+\caption{\label{fig-ord-nmds-distance3d}Pairwise distances among
+observations in a three-dimensional dataset. Each point represents an
+observation defined by three variables, and the gray lines connect pairs
+of observations, illustrating the distances that a distance-based
+ordination method such as nonmetric multidimensional scaling (NMDS)
+attempts to represent in fewer dimensions.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Three-dimensional scatterplot with axes labeled Variable 1, Variable 2, and Variable 3. Approximately 50 black points are distributed throughout a cube. Numerous thin gray lines connect pairs of points, forming a dense network that illustrates pairwise distances in three-dimensional space.}]{chapters/../images/ord-nmds-distance3d.png}}
+
+}
+
+\end{figure}%
+
+The observations could be represented in two dimensions by projecting
+them down to the plane defined by Variable 1 and Variable 2.
+
+\begin{figure}
+
+\caption{\label{fig-ord-nmds-distanceproject}Projection of a
+three-dimensional dataset into two dimensions. The upper plot shows
+observations and their pairwise distances in three-dimensional space.
+Red dashed arrows illustrate the projection of the observations onto a
+two-dimensional plane below. Simply removing the third dimension
+distorts the distances among observations, motivating the search for a
+new two-dimensional configuration that better preserves the original
+distance relationships.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Three-dimensional scatterplot above a tilted two-dimensional plane. The upper plot contains black points connected by numerous thin gray lines representing pairwise distances in three dimensions. Four red dashed arrows point toward the lower plane, where the same observations are represented using only two coordinates. The resulting network of connecting lines illustrates how pairwise distances change when one dimension is discarded.}]{chapters/../images/ord-nmds-distanceproject.jpg}}
+
+}
+
+\end{figure}%
+
+But, there is a problem. If we simply project the points down to 2d, we
+discard all of the information in the other variables. This has the
+effect of distorting the distance matrix between the observations. It's
+the same problem that arises when projecting the Earth's surface onto a
+flat map: removing the curvature (information in the third dimension)
+distorts relative distances and directions on the map.
+
+\begin{figure}
+
+\caption{\label{fig-ord-nmds-dist23}Comparison of pairwise Euclidean
+distances calculated from the original three-dimensional dataset and its
+two-dimensional projection. Each point represents a pair of
+observations, with the original three-dimensional distance on the
+horizontal axis and the projected two-dimensional distance on the
+vertical axis. The red line indicates equality between the two
+distances. All points fall on or below this line because removing a
+dimension cannot increase Euclidean distance. The variation in distance
+reduction illustrates how simple projection distorts the relationships
+among observations.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Scatterplot comparing pairwise distances in three dimensions (horizontal axis) with distances after projection into two dimensions (vertical axis). Numerous semitransparent gray points form a triangular cloud below a red diagonal line representing equal distances. Some distances are nearly unchanged by projection, while others become substantially smaller, illustrating unequal distortion of pairwise distances.}]{chapters/ch27_files/figure-pdf/fig-ord-nmds-dist23-1.pdf}}
+
+}
+
+\end{figure}%
+
+If we want to represent the relationships between the samples in a 3d
+space in a 2d space, we need allow the points to move a bit so that
+information from the third dimension is not entirely discarded.
+
+\begin{verbatim}
+Run 0 stress 0.2046256 
+Run 1 stress 0.2116927 
+Run 2 stress 0.2051575 
+Run 3 stress 0.2106919 
+Run 4 stress 0.2237271 
+Run 5 stress 0.2176059 
+Run 6 stress 0.2143323 
+Run 7 stress 0.2116798 
+Run 8 stress 0.2112006 
+Run 9 stress 0.2138354 
+Run 10 stress 0.2022788 
+... New best solution
+... Procrustes: rmse 0.04241575  max resid 0.2043617 
+Run 11 stress 0.2106919 
+Run 12 stress 0.2154941 
+Run 13 stress 0.2106919 
+Run 14 stress 0.2167754 
+Run 15 stress 0.2095638 
+Run 16 stress 0.2080194 
+Run 17 stress 0.2051329 
+Run 18 stress 0.2020145 
+... New best solution
+... Procrustes: rmse 0.01160848  max resid 0.07650897 
+Run 19 stress 0.2046256 
+Run 20 stress 0.2020909 
+... Procrustes: rmse 0.005079137  max resid 0.02857704 
+*** Best solution was not repeated -- monoMDS stopping criteria:
+    19: stress ratio > sratmax
+     1: scale factor of the gradient < sfgrmin
+\end{verbatim}
+
+\begin{figure}[H]
+
+\caption{Comparison of the original two-dimensional projection of a
+three-dimensional dataset (top) with a two-dimensional configuration
+obtained using nonmetric multidimensional scaling (NMDS; bottom). Each
+point represents an observation, and gray lines connect pairs of
+observations to illustrate their distances. Unlike simple projection,
+NMDS rearranges the observations to better preserve the rank ordering of
+pairwise distances in the original three-dimensional space. The NMDS
+axes do not correspond directly to the original variables.}
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio,alt={Two vertically arranged scatterplots showing approximately 50 observations connected by numerous thin gray lines. The upper plot shows the original Variable 1 and Variable 2 coordinates, with open white squares representing observations. The lower plot shows the NMDS configuration, with yellow squares representing the same observations. The positions of the observations and the lengths of the connecting lines differ between the two plots, illustrating how NMDS rearranges points to better represent the original three-dimensional dissimilarities.}]{chapters/ch27_files/figure-pdf/unnamed-chunk-18-1.pdf}}
+
+}
+
+\end{figure}%
+
+The NMDS configuration looks different than the projection onto the X-Y
+plane. Did it do a better job at representing the distance matrix?
+
+\begin{figure}
+
+\caption{\label{fig-nmds-explain1}Comparison of pairwise Euclidean
+distances in the original three-dimensional dataset with distances in
+two-dimensional representations. The left panel shows distances after
+simply projecting the observations into two dimensions, while the right
+panel shows distances in a two-dimensional configuration obtained using
+nonmetric multidimensional scaling (NMDS). Each point represents a pair
+of observations, and the red lines indicate equal distances. Simple
+projection systematically reduces distances, whereas NMDS rearranges
+observations to better preserve the rank ordering of their original
+distances, allowing some distances to increase and others to decrease.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two scatterplots comparing pairwise distances in the original three-dimensional space (horizontal axes) with distances in two dimensions (vertical axes). The left panel shows a triangular cloud of gray points entirely below a red line of equality, indicating that projection reduces distances. The right panel shows gray points distributed on both sides of the red line, indicating that NMDS produces a new configuration in which some distances are larger and others smaller than their original values.}]{chapters/ch27_files/figure-pdf/fig-nmds-explain1-1.pdf}}
+
+}
+
+\end{figure}%
+
+The left panel in Figure~\ref{fig-nmds-explain1} is the same as
+Figure~\ref{fig-ord-nmds-dist23}, showing how the distances in the 2d
+projection relate to the corresponding distances in the original 3d. The
+right panel in Figure~\ref{fig-nmds-explain1} shows how distances in the
+2d NMDS space relate to the original 3d distance matrix. Notice that the
+discrepancies between the NMDS solution distances and the original
+distances are both positive and negative, whereas the distances in the
+2d projection are always less than their counterparts in 3 dimensions.
+If we calculate the correlations between the original 3d distances and
+the two methods of reducing the data to 2 dimensions, we see that the
+distances in the NMDS solution are much more closely correlated with the
+original distances than the distances in the 2d projection are.
+
+\begin{verbatim}
+Correlation between 2d projection distances
+and original 3d distance matrix
+\end{verbatim}
+
+\begin{verbatim}
+[1] 0.7902007
+\end{verbatim}
+
+\begin{verbatim}
+Correlation between 2d NMDS configuration
+distances and original 3d distance matrix
+\end{verbatim}
+
+\begin{verbatim}
+[1] 0.880239
+\end{verbatim}
+
+The example we just stepped through illustrates why we use NMDS:
+dimension reduction without dissimilarity distortion. \#\#\# Details of
+the algorithm \{\#sec-ord-nmds-details\}
+
+Coming soon!
+
+\subsection{Example using NEON data}\label{sec-ord-nmds-neon}
+
+Coming soon!
+
+\subsubsection{Data import and
+preparation}\label{sec-ord-nmds-neon-data}
+
+For an example PCA analysis, let's revisit the small mammal measurement
+data from Section~\ref{sec-clust-kmeans-example}. Download the
+\href{../datasets/data-neon-captures-site.csv}{site-level capture
+dataset}, the \href{../datasets/data-neon-metadata-site.csv}{site
+metadata}, and the \href{../datasets/data-neon-taxa.csv}{taxonomic
+dataset} and put them in your working directory.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tax }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data{-}neon{-}taxa.csv"}\NormalTok{)}
+\NormalTok{cap }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data{-}neon{-}captures{-}site.csv"}\NormalTok{)}
+\NormalTok{met }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data{-}neon{-}metadata{-}site.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+We are going to use NMDS to explore variation in small mammal diversity
+between sites First we need to organize the data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# convert capture numbers to presence absence}
+\NormalTok{pa }\OtherTok{\textless{}{-}}\NormalTok{ cap}
+\NormalTok{pa}\SpecialCharTok{$}\NormalTok{X }\OtherTok{\textless{}{-}} \ConstantTok{NULL}
+\FunctionTok{rownames}\NormalTok{(pa) }\OtherTok{\textless{}{-}}\NormalTok{ pa}\SpecialCharTok{$}\NormalTok{site}
+\NormalTok{pa}\SpecialCharTok{$}\NormalTok{site }\OtherTok{\textless{}{-}} \ConstantTok{NULL}
+
+\NormalTok{pa[pa}\SpecialCharTok{\textgreater{}}\DecValTok{0}\NormalTok{] }\OtherTok{\textless{}{-}} \DecValTok{1}
+\FunctionTok{hist}\NormalTok{(}\FunctionTok{colSums}\NormalTok{(pa))}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch27_files/figure-pdf/unnamed-chunk-22-1.pdf}}
+
+\subsubsection{Fit the NMDS}\label{sec-ord-nmds-neon-fit}
+
+The \texttt{vegan} function for NMDS is \texttt{metaMDS()}. We will use
+the default dissimilarity, Bray-Curtis.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(vegan)}
+
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{12}\NormalTok{)}
+\NormalTok{n1 }\OtherTok{\textless{}{-}} \FunctionTok{metaMDS}\NormalTok{(pa)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Run 0 stress 0.1157083 
+Run 1 stress 0.1157084 
+... Procrustes: rmse 0.0005291083  max resid 0.00309328 
+... Similar to previous best
+Run 2 stress 0.1565656 
+Run 3 stress 0.1585646 
+Run 4 stress 0.12028 
+Run 5 stress 0.1160273 
+... Procrustes: rmse 0.004644895  max resid 0.02378213 
+Run 6 stress 0.1157089 
+... Procrustes: rmse 0.0002810476  max resid 0.001643115 
+... Similar to previous best
+Run 7 stress 0.1157088 
+... Procrustes: rmse 0.0006986409  max resid 0.004081606 
+... Similar to previous best
+Run 8 stress 0.1160272 
+... Procrustes: rmse 0.004672019  max resid 0.02354286 
+Run 9 stress 0.1157087 
+... Procrustes: rmse 0.0006014595  max resid 0.003510318 
+... Similar to previous best
+Run 10 stress 0.1157082 
+... New best solution
+... Procrustes: rmse 9.505359e-05  max resid 0.0005557513 
+... Similar to previous best
+Run 11 stress 0.1642549 
+Run 12 stress 0.1160273 
+... Procrustes: rmse 0.004642375  max resid 0.0238443 
+Run 13 stress 0.1658836 
+Run 14 stress 0.1157082 
+... New best solution
+... Procrustes: rmse 3.612556e-05  max resid 0.0002015742 
+... Similar to previous best
+Run 15 stress 0.1349674 
+Run 16 stress 0.1157083 
+... Procrustes: rmse 1.743284e-05  max resid 3.244429e-05 
+... Similar to previous best
+Run 17 stress 0.1157086 
+... Procrustes: rmse 0.0002612398  max resid 0.001526905 
+... Similar to previous best
+Run 18 stress 0.1157087 
+... Procrustes: rmse 0.0003102469  max resid 0.00180157 
+... Similar to previous best
+Run 19 stress 0.1157087 
+... Procrustes: rmse 0.0003207051  max resid 0.001873653 
+... Similar to previous best
+Run 20 stress 0.1524464 
+*** Best solution repeated 5 times
+\end{verbatim}
+
+\subsubsection{Inspect and plot}\label{sec-ord-nmds-neon-plot}
+
+Coming soon!
+
+\subsubsection{Fitting environmental
+variables}\label{sec-ord-nmds-neon-envfit}
 
 Coming soon!
 

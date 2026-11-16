@@ -1290,7 +1290,9 @@ cor(d3, d4)
 ```
 
 The example we just stepped through illustrates why we use NMDS: dimension reduction without dissimilarity distortion. 
+
 ### Details of the algorithm {#sec-ord-nmds-details}
+
 
 Coming soon!
 
@@ -1300,11 +1302,46 @@ Coming soon!
 
 #### Data import and preparation {#sec-ord-nmds-neon-data}
 
-Coming soon!
+For an example PCA analysis, let's revisit the small mammal measurement data from @sec-clust-kmeans-example. Download the [site-level capture dataset](../datasets/data-neon-captures-site.csv), the [site metadata](../datasets/data-neon-metadata-site.csv), and the [taxonomic dataset](../datasets/data-neon-taxa.csv) and put them in your working directory.
+
+```{r}
+#| include: false
+tax <- read.csv("../datasets/data-neon-taxa.csv")
+cap <- read.csv("../datasets/data-neon-captures-site.csv")
+met <- read.csv("../datasets/data-neon-metadata-site.csv")
+```
+
+```{r}
+#| eval: false
+tax <- read.csv("data-neon-taxa.csv")
+cap <- read.csv("data-neon-captures-site.csv")
+met <- read.csv("data-neon-metadata-site.csv")
+```
+
+We are going to use NMDS to explore variation in small mammal diversity between sites First we need to organize the data. 
+
+```{r}
+# convert capture numbers to presence absence
+pa <- cap
+pa$X <- NULL
+rownames(pa) <- pa$site
+pa$site <- NULL
+
+pa[pa>0] <- 1
+hist(colSums(pa))
+```
 
 #### Fit the NMDS {#sec-ord-nmds-neon-fit}
 
-Coming soon!
+The `vegan` function for NMDS is `metaMDS()`. We will use the default dissimilarity, Bray-Curtis.
+
+```{r}
+library(vegan)
+
+set.seed(12)
+n1 <- metaMDS(pa)
+```
+
 
 #### Inspect and plot {#sec-ord-nmds-neon-plot}
 

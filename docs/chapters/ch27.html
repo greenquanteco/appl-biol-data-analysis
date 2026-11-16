@@ -549,7 +549,17 @@ window.Quarto = {
   </ul></li>
   <li><a href="#sec-ord-pcoa" id="toc-sec-ord-pcoa" class="nav-link" data-scroll-target="#sec-ord-pcoa"><span class="header-section-number">27.3</span> Principal coordinates analysis (PCoA)</a></li>
   <li><a href="#sec-ord-ca" id="toc-sec-ord-ca" class="nav-link" data-scroll-target="#sec-ord-ca"><span class="header-section-number">27.4</span> Correspondence analysis (CA)</a></li>
-  <li><a href="#sec-ord-nmds" id="toc-sec-ord-nmds" class="nav-link" data-scroll-target="#sec-ord-nmds"><span class="header-section-number">27.5</span> Nonmetric multidimensional scaling (NMDS)</a></li>
+  <li><a href="#sec-ord-nmds" id="toc-sec-ord-nmds" class="nav-link" data-scroll-target="#sec-ord-nmds"><span class="header-section-number">27.5</span> Nonmetric multidimensional scaling (NMDS)</a>
+  <ul>
+  <li><a href="#sec-ord-nmds-def" id="toc-sec-ord-nmds-def" class="nav-link" data-scroll-target="#sec-ord-nmds-def"><span class="header-section-number">27.5.1</span> Definition and illustration</a></li>
+  <li><a href="#sec-ord-nmds-neon" id="toc-sec-ord-nmds-neon" class="nav-link" data-scroll-target="#sec-ord-nmds-neon"><span class="header-section-number">27.5.2</span> Example using NEON data</a>
+  <ul class="collapse">
+  <li><a href="#sec-ord-nmds-neon-data" id="toc-sec-ord-nmds-neon-data" class="nav-link" data-scroll-target="#sec-ord-nmds-neon-data"><span class="header-section-number">27.5.2.1</span> Data import and preparation</a></li>
+  <li><a href="#sec-ord-nmds-neon-fit" id="toc-sec-ord-nmds-neon-fit" class="nav-link" data-scroll-target="#sec-ord-nmds-neon-fit"><span class="header-section-number">27.5.2.2</span> Fit the NMDS</a></li>
+  <li><a href="#sec-ord-nmds-neon-plot" id="toc-sec-ord-nmds-neon-plot" class="nav-link" data-scroll-target="#sec-ord-nmds-neon-plot"><span class="header-section-number">27.5.2.3</span> Inspect and plot</a></li>
+  <li><a href="#sec-ord-nmds-neon-envfit" id="toc-sec-ord-nmds-neon-envfit" class="nav-link" data-scroll-target="#sec-ord-nmds-neon-envfit"><span class="header-section-number">27.5.2.4</span> Fitting environmental variables</a></li>
+  </ul></li>
+  </ul></li>
   <li><a href="#sec-ord-ra" id="toc-sec-ord-ra" class="nav-link" data-scroll-target="#sec-ord-ra"><span class="header-section-number">27.6</span> Redundancy analysis (RA)</a></li>
   <li><a href="#sec-ord-cca" id="toc-sec-ord-cca" class="nav-link" data-scroll-target="#sec-ord-cca"><span class="header-section-number">27.7</span> Canonical correspondence analysis (CCA)</a></li>
   <li><a href="#sec-ord-dbrda" id="toc-sec-ord-dbrda" class="nav-link" data-scroll-target="#sec-ord-dbrda"><span class="header-section-number">27.8</span> Distance-based RDA (dbRDA)</a></li>
@@ -1651,7 +1661,223 @@ Figure&nbsp;27.22: PCA biplot of four size-adjusted morphological measurements f
 </section>
 <section id="sec-ord-nmds" class="level2" data-number="27.5">
 <h2 data-number="27.5" class="anchored" data-anchor-id="sec-ord-nmds"><span class="header-section-number">27.5</span> Nonmetric multidimensional scaling (NMDS)</h2>
+<section id="sec-ord-nmds-def" class="level3" data-number="27.5.1">
+<h3 data-number="27.5.1" class="anchored" data-anchor-id="sec-ord-nmds-def"><span class="header-section-number">27.5.1</span> Definition and illustration</h3>
+<p><strong>Nonmetric multidimensional scaling (NMDS)</strong> is an ordination method that attempts to arrange samples in a lower-dimensional space in a way that preserves the <strong>rank order of the dissimilarity matrix</strong>. It finds this arrangement, or <strong>configuration</strong>, through numerical optimization, rather than eigenanalysis.</p>
+<p>NMDS works by finding a way to arrange samples in fewer dimensions while minimizing the distortion of the distance matrix. Imagine a dataset with 3 dimensions (<a href="#fig-ord-nmds-distance3d" class="quarto-xref">Figure&nbsp;<span>27.23</span></a>). The distance matrix, represented by the thin grey lines, exists in the same three-dimensional space as the dataset. Differences between the observations are summarized in the distance matrix. It follows that any new representation of the data should preserve that distance matrix.</p>
+<div id="fig-ord-nmds-distance3d" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Three-dimensional scatterplot with axes labeled Variable 1, Variable 2, and Variable 3. Approximately 50 black points are distributed throughout a cube. Numerous thin gray lines connect pairs of points, forming a dense network that illustrates pairwise distances in three-dimensional space.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-ord-nmds-distance3d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.23: Pairwise distances among observations in a three-dimensional dataset. Each point represents an observation defined by three variables, and the gray lines connect pairs of observations, illustrating the distances that a distance-based ordination method such as nonmetric multidimensional scaling (NMDS) attempts to represent in fewer dimensions.
+</figcaption>
+<div aria-describedby="fig-ord-nmds-distance3d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/ord-nmds-distance3d.png" class="img-fluid figure-img" alt="Three-dimensional scatterplot with axes labeled Variable 1, Variable 2, and Variable 3. Approximately 50 black points are distributed throughout a cube. Numerous thin gray lines connect pairs of points, forming a dense network that illustrates pairwise distances in three-dimensional space.">
+</div>
+</figure>
+</div>
+<p>The observations could be represented in two dimensions by projecting them down to the plane defined by Variable 1 and Variable 2.</p>
+<div id="fig-ord-nmds-distanceproject" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Three-dimensional scatterplot above a tilted two-dimensional plane. The upper plot contains black points connected by numerous thin gray lines representing pairwise distances in three dimensions. Four red dashed arrows point toward the lower plane, where the same observations are represented using only two coordinates. The resulting network of connecting lines illustrates how pairwise distances change when one dimension is discarded.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-ord-nmds-distanceproject-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.24: Projection of a three-dimensional dataset into two dimensions. The upper plot shows observations and their pairwise distances in three-dimensional space. Red dashed arrows illustrate the projection of the observations onto a two-dimensional plane below. Simply removing the third dimension distorts the distances among observations, motivating the search for a new two-dimensional configuration that better preserves the original distance relationships.
+</figcaption>
+<div aria-describedby="fig-ord-nmds-distanceproject-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/ord-nmds-distanceproject.jpg" class="img-fluid figure-img" alt="Three-dimensional scatterplot above a tilted two-dimensional plane. The upper plot contains black points connected by numerous thin gray lines representing pairwise distances in three dimensions. Four red dashed arrows point toward the lower plane, where the same observations are represented using only two coordinates. The resulting network of connecting lines illustrates how pairwise distances change when one dimension is discarded.">
+</div>
+</figure>
+</div>
+<p>But, there is a problem. If we simply project the points down to 2d, we discard all of the information in the other variables. This has the effect of distorting the distance matrix between the observations. It’s the same problem that arises when projecting the Earth’s surface onto a flat map: removing the curvature (information in the third dimension) distorts relative distances and directions on the map.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-ord-nmds-dist23" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Scatterplot comparing pairwise distances in three dimensions (horizontal axis) with distances after projection into two dimensions (vertical axis). Numerous semitransparent gray points form a triangular cloud below a red diagonal line representing equal distances. Some distances are nearly unchanged by projection, while others become substantially smaller, illustrating unequal distortion of pairwise distances.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-ord-nmds-dist23-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.25: Comparison of pairwise Euclidean distances calculated from the original three-dimensional dataset and its two-dimensional projection. Each point represents a pair of observations, with the original three-dimensional distance on the horizontal axis and the projected two-dimensional distance on the vertical axis. The red line indicates equality between the two distances. All points fall on or below this line because removing a dimension cannot increase Euclidean distance. The variation in distance reduction illustrates how simple projection distorts the relationships among observations.
+</figcaption>
+<div aria-describedby="fig-ord-nmds-dist23-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-ord-nmds-dist23-1.png" class="img-fluid figure-img" alt="Scatterplot comparing pairwise distances in three dimensions (horizontal axis) with distances after projection into two dimensions (vertical axis). Numerous semitransparent gray points form a triangular cloud below a red diagonal line representing equal distances. Some distances are nearly unchanged by projection, while others become substantially smaller, illustrating unequal distortion of pairwise distances." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>If we want to represent the relationships between the samples in a 3d space in a 2d space, we need allow the points to move a bit so that information from the third dimension is not entirely discarded.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Run 0 stress 0.2046256 
+Run 1 stress 0.2116927 
+Run 2 stress 0.2051575 
+Run 3 stress 0.2106919 
+Run 4 stress 0.2237271 
+Run 5 stress 0.2176059 
+Run 6 stress 0.2143323 
+Run 7 stress 0.2116798 
+Run 8 stress 0.2112006 
+Run 9 stress 0.2138354 
+Run 10 stress 0.2022788 
+... New best solution
+... Procrustes: rmse 0.04241575  max resid 0.2043617 
+Run 11 stress 0.2106919 
+Run 12 stress 0.2154941 
+Run 13 stress 0.2106919 
+Run 14 stress 0.2167754 
+Run 15 stress 0.2095638 
+Run 16 stress 0.2080194 
+Run 17 stress 0.2051329 
+Run 18 stress 0.2020145 
+... New best solution
+... Procrustes: rmse 0.01160848  max resid 0.07650897 
+Run 19 stress 0.2046256 
+Run 20 stress 0.2020909 
+... Procrustes: rmse 0.005079137  max resid 0.02857704 
+*** Best solution was not repeated -- monoMDS stopping criteria:
+    19: stress ratio &gt; sratmax
+     1: scale factor of the gradient &lt; sfgrmin</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<figcaption>Comparison of the original two-dimensional projection of a three-dimensional dataset (top) with a two-dimensional configuration obtained using nonmetric multidimensional scaling (NMDS; bottom). Each point represents an observation, and gray lines connect pairs of observations to illustrate their distances. Unlike simple projection, NMDS rearranges the observations to better preserve the rank ordering of pairwise distances in the original three-dimensional space. The NMDS axes do not correspond directly to the original variables.</figcaption>
+<p><img src="ch27_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" alt="Two vertically arranged scatterplots showing approximately 50 observations connected by numerous thin gray lines. The upper plot shows the original Variable 1 and Variable 2 coordinates, with open white squares representing observations. The lower plot shows the NMDS configuration, with yellow squares representing the same observations. The positions of the observations and the lengths of the connecting lines differ between the two plots, illustrating how NMDS rearranges points to better represent the original three-dimensional dissimilarities." width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The NMDS configuration looks different than the projection onto the X-Y plane. Did it do a better job at representing the distance matrix?</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-nmds-explain1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two scatterplots comparing pairwise distances in the original three-dimensional space (horizontal axes) with distances in two dimensions (vertical axes). The left panel shows a triangular cloud of gray points entirely below a red line of equality, indicating that projection reduces distances. The right panel shows gray points distributed on both sides of the red line, indicating that NMDS produces a new configuration in which some distances are larger and others smaller than their original values.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-nmds-explain1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.26: Comparison of pairwise Euclidean distances in the original three-dimensional dataset with distances in two-dimensional representations. The left panel shows distances after simply projecting the observations into two dimensions, while the right panel shows distances in a two-dimensional configuration obtained using nonmetric multidimensional scaling (NMDS). Each point represents a pair of observations, and the red lines indicate equal distances. Simple projection systematically reduces distances, whereas NMDS rearranges observations to better preserve the rank ordering of their original distances, allowing some distances to increase and others to decrease.
+</figcaption>
+<div aria-describedby="fig-nmds-explain1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-nmds-explain1-1.png" class="img-fluid figure-img" alt="Two scatterplots comparing pairwise distances in the original three-dimensional space (horizontal axes) with distances in two dimensions (vertical axes). The left panel shows a triangular cloud of gray points entirely below a red line of equality, indicating that projection reduces distances. The right panel shows gray points distributed on both sides of the red line, indicating that NMDS produces a new configuration in which some distances are larger and others smaller than their original values." width="960">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>The left panel in <a href="#fig-nmds-explain1" class="quarto-xref">Figure&nbsp;<span>27.26</span></a> is the same as <a href="#fig-ord-nmds-dist23" class="quarto-xref">Figure&nbsp;<span>27.25</span></a>, showing how the distances in the 2d projection relate to the corresponding distances in the original 3d. The right panel in <a href="#fig-nmds-explain1" class="quarto-xref">Figure&nbsp;<span>27.26</span></a> shows how distances in the 2d NMDS space relate to the original 3d distance matrix. Notice that the discrepancies between the NMDS solution distances and the original distances are both positive and negative, whereas the distances in the 2d projection are always less than their counterparts in 3 dimensions. If we calculate the correlations between the original 3d distances and the two methods of reducing the data to 2 dimensions, we see that the distances in the NMDS solution are much more closely correlated with the original distances than the distances in the 2d projection are.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Correlation between 2d projection distances
+and original 3d distance matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7902007</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Correlation between 2d NMDS configuration
+distances and original 3d distance matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.880239</code></pre>
+</div>
+</div>
+<p>The example we just stepped through illustrates why we use NMDS: dimension reduction without dissimilarity distortion. ### Details of the algorithm {#sec-ord-nmds-details}</p>
 <p>Coming soon!</p>
+</section>
+<section id="sec-ord-nmds-neon" class="level3" data-number="27.5.2">
+<h3 data-number="27.5.2" class="anchored" data-anchor-id="sec-ord-nmds-neon"><span class="header-section-number">27.5.2</span> Example using NEON data</h3>
+<p>Coming soon!</p>
+<section id="sec-ord-nmds-neon-data" class="level4" data-number="27.5.2.1">
+<h4 data-number="27.5.2.1" class="anchored" data-anchor-id="sec-ord-nmds-neon-data"><span class="header-section-number">27.5.2.1</span> Data import and preparation</h4>
+<p>For an example PCA analysis, let’s revisit the small mammal measurement data from <a href="ch26.html#sec-clust-kmeans-example" class="quarto-xref"><span>Section 26.2.2</span></a>. Download the <a href="../datasets/data-neon-captures-site.csv">site-level capture dataset</a>, the <a href="../datasets/data-neon-metadata-site.csv">site metadata</a>, and the <a href="../datasets/data-neon-taxa.csv">taxonomic dataset</a> and put them in your working directory.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>tax <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-taxa.csv"</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>cap <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-captures-site.csv"</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>met <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-metadata-site.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We are going to use NMDS to explore variation in small mammal diversity between sites First we need to organize the data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert capture numbers to presence absence</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>pa <span class="ot">&lt;-</span> cap</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>pa<span class="sc">$</span>X <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(pa) <span class="ot">&lt;-</span> pa<span class="sc">$</span>site</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>pa<span class="sc">$</span>site <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>pa[pa<span class="sc">&gt;</span><span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">colSums</span>(pa))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch27_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-ord-nmds-neon-fit" class="level4" data-number="27.5.2.2">
+<h4 data-number="27.5.2.2" class="anchored" data-anchor-id="sec-ord-nmds-neon-fit"><span class="header-section-number">27.5.2.2</span> Fit the NMDS</h4>
+<p>The <code>vegan</code> function for NMDS is <code>metaMDS()</code>. We will use the default dissimilarity, Bray-Curtis.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12</span>)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> <span class="fu">metaMDS</span>(pa)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Run 0 stress 0.1157083 
+Run 1 stress 0.1157084 
+... Procrustes: rmse 0.0005291083  max resid 0.00309328 
+... Similar to previous best
+Run 2 stress 0.1565656 
+Run 3 stress 0.1585646 
+Run 4 stress 0.12028 
+Run 5 stress 0.1160273 
+... Procrustes: rmse 0.004644895  max resid 0.02378213 
+Run 6 stress 0.1157089 
+... Procrustes: rmse 0.0002810476  max resid 0.001643115 
+... Similar to previous best
+Run 7 stress 0.1157088 
+... Procrustes: rmse 0.0006986409  max resid 0.004081606 
+... Similar to previous best
+Run 8 stress 0.1160272 
+... Procrustes: rmse 0.004672019  max resid 0.02354286 
+Run 9 stress 0.1157087 
+... Procrustes: rmse 0.0006014595  max resid 0.003510318 
+... Similar to previous best
+Run 10 stress 0.1157082 
+... New best solution
+... Procrustes: rmse 9.505359e-05  max resid 0.0005557513 
+... Similar to previous best
+Run 11 stress 0.1642549 
+Run 12 stress 0.1160273 
+... Procrustes: rmse 0.004642375  max resid 0.0238443 
+Run 13 stress 0.1658836 
+Run 14 stress 0.1157082 
+... New best solution
+... Procrustes: rmse 3.612556e-05  max resid 0.0002015742 
+... Similar to previous best
+Run 15 stress 0.1349674 
+Run 16 stress 0.1157083 
+... Procrustes: rmse 1.743284e-05  max resid 3.244429e-05 
+... Similar to previous best
+Run 17 stress 0.1157086 
+... Procrustes: rmse 0.0002612398  max resid 0.001526905 
+... Similar to previous best
+Run 18 stress 0.1157087 
+... Procrustes: rmse 0.0003102469  max resid 0.00180157 
+... Similar to previous best
+Run 19 stress 0.1157087 
+... Procrustes: rmse 0.0003207051  max resid 0.001873653 
+... Similar to previous best
+Run 20 stress 0.1524464 
+*** Best solution repeated 5 times</code></pre>
+</div>
+</div>
+</section>
+<section id="sec-ord-nmds-neon-plot" class="level4" data-number="27.5.2.3">
+<h4 data-number="27.5.2.3" class="anchored" data-anchor-id="sec-ord-nmds-neon-plot"><span class="header-section-number">27.5.2.3</span> Inspect and plot</h4>
+<p>Coming soon!</p>
+</section>
+<section id="sec-ord-nmds-neon-envfit" class="level4" data-number="27.5.2.4">
+<h4 data-number="27.5.2.4" class="anchored" data-anchor-id="sec-ord-nmds-neon-envfit"><span class="header-section-number">27.5.2.4</span> Fitting environmental variables</h4>
+<p>Coming soon!</p>
+</section>
+</section>
 </section>
 <section id="sec-ord-ra" class="level2" data-number="27.6">
 <h2 data-number="27.6" class="anchored" data-anchor-id="sec-ord-ra"><span class="header-section-number">27.6</span> Redundancy analysis (RA)</h2>
