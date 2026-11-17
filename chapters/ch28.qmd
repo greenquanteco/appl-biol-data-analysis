@@ -5,12 +5,32 @@ Anything is permuted.
 
 ## Comparing groups {#sec-mtest-group}
 
-### MANOVA {#sec-mtest-group-man}
+We can compare test for differences between groups in multivariate using extensions of ANOVA: **multivariate analysis of variance (MANOVA)** and **permutational multivariate analysis of variance (PERMANOVA)**. **Multivariate analysis of variance (MANOVA)** is an extension of ANOVA with multiple response variables. The underlying theory and linear algebra is very similar to ANOVA, and so many of the same assumptions apply (just in many dimensions instead of one). For that reason, MANOVA is often not appropriate for real biological data without careful experimental design and exploratory data analysis to confirm that the test’s assumptions are met.
 
 ### PERMANOVA {#sec-mtest-group-perm}
 
-### MRPP {#sec-mtest-group-mrpp}
+**Permutational analysis of variance (PERMANOVA)** is a nonparametric version of MANOVA [@anderson2001]. It is nonparametric because it uses permutation of group membership to determine statistical significance instead of calculating an *F* statistic based on probability theory. The most common R function for PERMANOVA is `adonis2()` from the `vegan` package.
+
+#### Example with NEON data
+
+Let's revisit the NEON small mammal measurement data. We analyzed this dataset previously in @sec-ord-pca-example. Download the [individual measurement dataset](../datasets/data-neon-ind-meas.csv) and the [taxonomic dataset](../datasets/data-neon-taxa.csv) and put them in your working directory.
+
+```{r}
+#| include: false
+tax <- read.csv("../datasets/data-neon-taxa.csv")
+ind <- read.csv("../datasets/data-neon-ind-meas.csv")
+
+```
+
+```{r}
+#| eval: false
+tax <- read.csv("data-neon-taxa.csv")
+ind <- read.csv("data-neon-ind-meas.csv")
+```
+
+Let's use PERMANOVA to test for a difference between three genera of morphologically similar mice: *Peromyscus*, *Onychomys*, *Reithrodontomys*, and *Mus*. The first three are North American species in family Cricetidae, while *Mus* is a Eurasian genus in family Muridae. We ordinated their morphology using the standard measurements (total length, tail length, hindfoot length, and ear length) in @
 
 ## Analyzing dissimilarity {#sec-mtest-dis}
 
 ### Mantel tests {#sec-mtest-dis-mantel}
+
