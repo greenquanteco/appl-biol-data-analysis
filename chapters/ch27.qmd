@@ -1291,18 +1291,45 @@ cor(d3, d4)
 
 The example we just stepped through illustrates why we use NMDS: dimension reduction without dissimilarity distortion. 
 
+### Why use NMDS? {#sec-ord-nmds-why}
+
+Now that we understand the goal of NMDS--representing dissimilarities between samples in reduced dimensions--it's worth asking "Why?" The choice of ordination method, like the choice of statistical tests, can have important consequences in an analysis.
+
+NMDS is particularly useful for multivariate datasets containing many variables, especially when observations share relatively few characteristics or when the data contain many zeros. For example, community ecology datasets often contain many species that occur at only a few sites, resulting in sparse matrices with relatively few shared species between sites. In these situations, dissimilarity measures such as Sørensen can be useful because they emphasize shared occurrences without treating joint absences as evidence of similarity. NMDS then represents the dissimilarities among observations in a small number of dimensions, attempting to preserve their *rank ordering* rather than their exact numerical values.
+
+This flexibility makes NMDS useful for exploring complex multivariate patterns that may not be adequately represented by linear relationships. However, datasets containing many pairs of maximally dissimilar observations can be challenging because the ordination has relatively little information about their relative positions.
+
+@mccune2002analysis note that one advantage of NMDS is that it handles data that are nonnormal, discontinuous, or "otherwise questionable scales". This is because of the focus on the *rank order* of the dissimilarity matrix rather than its actual values. Maintaining rank order rather than magnitude makes variables on very diffrent scales or with few values more comparable. They also note that NMDS not only avoids the assumption of linear relationships among variables, it can linearize many relationships because of its reliance on rank order statistics. 
+
+That is not to say that NMDS is without disadvantages. One major issue with NMDS is that its reliance on Monte Carlo (random sampling) methods for optimization can cause it to fail to find the best (global) solution. Another feature which can be a disadvantage is that the axes have no direct mathematical relationship with the variables in the dataset. 
+
 ### Details of the algorithm {#sec-ord-nmds-details}
 
+NMDS works by iteratively searching for a configuration of samples that faithfully represents the rank order of the distance matrix of a dataset in a reduced dimensional space. This is a completely different approach than [PCA](#sec-ord-un-pca-what), which achieves dimension reduction by finding eigenvectors in the dataset that capture the variation more efficiently than the original dataset (i.e., it [rotates the dataset](#fig-ord-basicidea)).
 
-Coming soon!
+NMDS works with the $n\times n$ distance matrix calculated from an $n\times p$-dimensional data matrix, where $n$ is the number of observations and $p$ is the number of variables. It tries to represent the samples in a $k$-dimensional space, where $k<p$. The configuration in $k$ dimensions is optimized to minimize **stress**, which is a measure of how much the distance matrix in $k$ dimensions distorts the distance matrix in $p$ dimensions. The distortion measured by stress is a departure from monotonicity. That is, how much the rank order of the dissimilarity matrix changes.
 
-### Example using NEON data {#sec-ord-nmds-neon}
+The basic algorithm for NMDS is as follows.
 
-Coming soon!
+1. Calculate the distance matrix $\mathbf{\Delta}$ in the original $p$-dimensional space.
+1. Assign sample units to a (usually random) starting configuration in the reduced $k$-dimensional space.
+1. Calculate $\mathbf{D}_k$, the Euclidean distance matrix of the samples in the *k*-space.
+1. Rank the elements of $\mathbf{\Delta}$, and then put the elements of $\mathbf{D}_k$ in the same order as $\mathbf{\Delta}$. 
+1. Calculate vector $\hat{\mathbf{D}}_k$, which is a copy of $\mathbf{D}_k$ that replaces elements which break monotonicity. For example, $d_5$ should be a distance that falls between $d_4$ and $d_6$. But, if $d_5<d_4$ or $d_5>d_6$, $d_5$ will be adjusted to become $\hat{d}_5$, which *is* between $d_4$ and $d_6$. The total amount of adjustment needed to adjust every $d_{i}$ to $\hat{d}_{i}$ is used to calculate stress. 
+1. The positions of the samples in $k$-space is adjusted according to an algorithm that seeks a lower stress value. 
+1. This process is repeated until the stress stops improving.
+
+Because the starting configurations and the re-configurations involve random number sampling ("Monte Carlo methods"), most NMDS software tries several random starts to avoid the possibility of begin trapped in a local solution that is not as optimal as the true global solution. 
+
+![text](../images/ord-nmds-optima.jpg){#fig-ord-nmds-optima fig-alt="text."}
+
+You should also set the random number seed, so your analysis results are reproducible. Remember, the NMDS axes are arbitrary, so even though you might repeat the analysis and get two solutions with the same stress value, one of them might be rotated from the other...meaning that you have to re-write your plot code!
+
+### NMDS example using NEON data {#sec-ord-nmds-neon}
 
 #### Data import and preparation {#sec-ord-nmds-neon-data}
 
-For an example PCA analysis, let's revisit the small mammal measurement data from @sec-clust-kmeans-example. Download the [site-level capture dataset](../datasets/data-neon-captures-site.csv), the [site metadata](../datasets/data-neon-metadata-site.csv), and the [taxonomic dataset](../datasets/data-neon-taxa.csv) and put them in your working directory.
+For an example NMDS analysis, let's revisit the small mammal capture data from @sec-clust-kmeans-example. Download the [site-level capture dataset](../datasets/data-neon-captures-site.csv), the [site metadata](../datasets/data-neon-metadata-site.csv), and the [taxonomic dataset](../datasets/data-neon-taxa.csv) and put them in your working directory.
 
 ```{r}
 #| include: false
@@ -1318,38 +1345,280 @@ cap <- read.csv("data-neon-captures-site.csv")
 met <- read.csv("data-neon-metadata-site.csv")
 ```
 
-We are going to use NMDS to explore variation in small mammal diversity between sites First we need to organize the data. 
+We are going to use NMDS to explore variation in small mammal diversity between sites. First we need to organize the data. We are going to convert the capture numbers in `cap` to presence-absence: 1 for presence, 0 for absence. We will assume that detection at a site at any point indicates presence, and non-detection indicates absence. We will avoid analyzing capture numbers because capture count is a function of sampling effort and trap success as much as it reflects actual presence or abundance.
 
 ```{r}
-# convert capture numbers to presence absence
 pa <- cap
+
+# fix some columns and set rownames
 pa$X <- NULL
 rownames(pa) <- pa$site
 pa$site <- NULL
 
+# convert capture numbers to presence absence
 pa[pa>0] <- 1
-hist(colSums(pa))
 ```
+
+Now let's check the dataset. We want to screen for potential problems. Chief among these are (1) species present at no sites or 1 site; and (2) sites with no species.
+
+```{r}
+# shows that one species is not present at
+# any site. Delete this species because it 
+# carries no information.
+table(colSums(pa)==0)
+
+# leaves 133 species
+pa <- pa[,-which(colSums(pa)==0)]
+```
+
+Now check for sites with no species.
+
+```{r}
+# all 46 sites have >=1 species, 
+# so no worries here
+table(rowSums(pa)==0)
+```
+
+Having one site with no species present might not be a problem, but having more than one would [complicate the distance calculations](#sec-diss-zeros).
+
+Now that we have eliminated the obvious problems, let's explore the distribution of species occurrences and species richnesses.
+
+```{r}
+#| fig-width: 10
+#| fig-height: 5
+#| label: fig-nmds-neon1
+#| fig-cap: "text."
+#| fig-alt: "text."
+
+
+# shows that most species are present at very
+# few sites. Most sites have around 5-15 species,
+# but there is a lot of variablity. 
+par(mfrow=c(1,2))
+hist(colSums(pa), main="Sites per species")
+hist(rowSums(pa), main="Species per site")
+```
+
+The left panel in @fig-nmds-neon1 tell us that the species presence-absence matrix `pa` is quite sparse: most species occur in at <5 sites. This supports the decision to analyze-presence absence rather than abundance because differences between sites are likely to be driven by differences in composition rather than differences in abundance. The right panel in @fig-nmds-neon1 suggests that analyzing composition rather than species richness would be more informative because species richness doesn't vary very between sites.
+
+The left panel in @fig-nmds-neon1 also suggests the use of the Bray-Curtis (Sørensen) dissimilarity measure rather than the Euclidean distance metric. Sørensen dissimilarity is appropriate for presence–absence data because it emphasizes shared occurrences while ignoring joint absences, which provide little evidence of ecological similarity. NMDS then represents these compositional differences in a small number of dimensions without assuming that dissimilarities must correspond linearly to distances in the ordination. However, datasets with many pairs of sites sharing no species can be challenging because those pairs all have the maximum Sørensen dissimilarity.
+
+It is worth noting that the sparsity of the data is a strong argument for the Sørensen dissimilarity, but not an argument for using NMDS over another distance-based ordination method like [PCoA](#sec-ord-pcoa}). The arguments in favor of NMDS are its rank-based representation of potentially nonlinear relationships and lack of assumptions about linearity.
 
 #### Fit the NMDS {#sec-ord-nmds-neon-fit}
 
-The `vegan` function for NMDS is `metaMDS()`. We will use the default dissimilarity, Bray-Curtis.
+The `vegan` function for NMDS is `metaMDS()`. We will use the default dissimilarity, Bray-Curtis, which for binary data is the same as the Sørensen dissimilarity. We will accept the other default arguments in `metaMDS()` too.
 
 ```{r}
 library(vegan)
 
 set.seed(12)
-n1 <- metaMDS(pa)
+n1 <- metaMDS(pa, distance="bray", k=2)
 ```
 
+```{r}
+n1
+```
+
+The solution has a stress value of about 0.12, which is good but not great. By convention, a stress between 0.1 and 0.2 indicates a usable but imperfect representation of the original dissimilarities. Stress less than 0.1 is preferable, and stress greater than 0.2 means that an ordination is suspect. If you get a stress value greater than 0.2, you can try more random starts, dropping variables with too many 0s or extreme values, or sites with data issues. Or, try another ordination technique.
 
 #### Inspect and plot {#sec-ord-nmds-neon-plot}
 
-Coming soon!
+With a stress of about 0.12, we can interpret broad gradients and groups of sites, but should avoid drawing conclusions about small differences between individual samples.
+
+Let's visualize the ordination by extracting the NMDS axis scores and plotting them. The process is similar to what we did for PCA. However, we are not going to extract species scores, because unlike in PCA the axes are not linear combinations of the underlying variables (or any kind of function, for that matter). Instead, we will use function `envfit()`, which finds a vector showing the strongest linear association between a variable and the site coordinates in NMDS space.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-nmds-neon2
+#| fig-cap: "text."
+#| fig-alt: "text."
+
+# scaling doesn't matter as much
+# as it did for PCA, so just use 
+# type 1
+xy <- scores(n1, display="sites", scaling=1)
+
+# fit the species vectors
+e1 <- envfit(n1, pa)
+sp <- e1$vectors$arrows
+
+# show only species with significant
+# associations with the NMDS space
+sp <- sp[e1$vectors$pvals < 0.05,]
+
+par(mar=c(5,5,1,1))
+plot(xy[,1], xy[,2], pch=19, cex=1.3,
+     xlab="NMDS axis 1", ylab="NMDS axis 2")
+segments(0, 0, sp[,1], sp[,2], col="red")
+text(sp[,1], sp[,2], rownames(sp),
+     col="red", cex=0.7)
+```
+
+The species names in the biplot are a little hard to read, but we can zoom in if we need with the `xlim` and `ylim` arguments.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-nmds-neon3
+#| fig-cap: "text."
+#| fig-alt: "text."
+
+par(mar=c(5,5,1,1))
+plot(xy[,1], xy[,2], pch=19, cex=1.3,
+     xlab="NMDS axis 1", ylab="NMDS axis 2",
+     xlim=c(-0.5, 0.5), ylim=c(0.9, 1.05))
+segments(0, 0, sp[,1], sp[,2], col="red")
+text(sp[,1], sp[,2], rownames(sp),
+     col="red", cex=0.7)
+```
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-nmds-neon4
+#| fig-cap: "text."
+#| fig-alt: "text."
+
+par(mar=c(5,5,1,1))
+plot(xy[,1], xy[,2], pch=19, cex=1.3,
+     xlab="NMDS axis 1", ylab="NMDS axis 2",
+     xlim=c(-0.25, 1), ylim=c(-1, -0.5))
+segments(0, 0, sp[,1], sp[,2], col="red")
+text(sp[,1], sp[,2], rownames(sp),
+     col="red", cex=0.7)
+```
+
+@fig-nmds-neon2 suggests that sites form a gradient between two groups of species that tend to co-occur. At high values of NMDS axis 2, we have `Perman`, `Perboy`, `Dipord`, `Reimeg`, `Onyleu`, `Sortro`, `Tammin`, `Tamdou`, and others. Those are Deer Mouse (*Peromyscus maniculatus*), Brush Mouse (*P. boylii*), Ord's Kangaroo Rat (*Dipodomys ordii*), Western Harvest Mouse (*Reithrodontomys megalotis*), Northern Grasshopper Mouse (*Onychomys leucogaster*), Trowbridge's Shrew (*Sorex trowbridgii*), Least Chipmunk (*Tamias minimus*), and Douglas's Squirrel (*Tamiasciurus douglasii*). At lower values of NMDS axis 2, we have `Tamstr`, `Ochnut`, `Perleu`, `Pergos`, `Perpol`, `Orypal`, `Blacar`, `Podflo`, `Neoflo`, and `Sighis` These are Eastern Chipmunk (*Tamias striatus*), Golden Mouse (*Ochrotomys nuttalli*), White-footed Mouse (*Peromyscus leucopus*), Cotton Mouse (*P. gossypinus*), Oldfield Mouse (*P. polionotus*), Marsh Rice Rat (*Oryzomys palustris*), Southern Short-tailed Shrew (*Blarina carolinensis*), Florida Mouse (*Podomys floridanus*), Eastern Woodrat (*Neotoma floridana*), and Hispid Cotton Rat (*Sigmodon hispidus*).
+
+Those two clusters of species suggest that NMDS axis 2 might be an east-west gradient. Let's find out.
 
 #### Fitting environmental variables {#sec-ord-nmds-neon-envfit}
 
-Coming soon!
+We can fit environmental variables to NMDS solutions just like we can species. Let's use the site metadata in `met`. The rows of `met` are in the same order as `pa`, so we don't need to merge. For convenience, we can make a new data frame `env` that has just the columns we need.
+
+```{r}
+env.cols <- c("lat", "lon", "elev",
+              "precip", "temp", "npp",
+              "seas.pre", "seas.temp")
+env <- met[,env.cols]
+
+# fit the vectors
+e2 <- envfit(n1, env)
+en <- e2$vectors$arrows
+en <- en[e2$vectors$pvals < 0.05,]
+```
+
+Now add these to the plot.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-nmds-neon5
+#| fig-cap: "text."
+#| fig-alt: "text."
+
+par(mar=c(5,5,1,1))
+plot(xy[,1], xy[,2], pch=19, cex=1.3,
+     xlab="NMDS axis 1", ylab="NMDS axis 2")
+segments(0, 0, sp[,1], sp[,2], col="#FF000030")
+text(sp[,1], sp[,2], rownames(sp),
+     col="#FF000030", cex=0.7)
+segments(0, 0, en[,1], en[,2], col="blue",
+         lwd=2)
+text(en[,1], en[,2], rownames(en),
+     col="blue", cex=0.7)
+```
+
+Our suspicion about NMDS axis 2 representing a longitudinal gradient wasn't far off: `lon` points to the lower right, indicating that lower longitudes (east) are that direction. The vectors for elevation (`elev`) and seasonality of precipitation `seas.pre` seem mroe aligned with the gradient we proposed. 
+
+Another interesting pattern is that the vectors for latitude and temperature point in nearly opposite directions. This makes sense: higher latitudes experience colder temperatures. The species associated with higher latitudes are `Tamhud`, `Micpen`, `Micoec`, `Sorugy`, `Sorcin`, `Sortun`, `Myorut`, `Uropar`, `Dicgro`, `Lemtri`, and `Micmiu`. These are American Red Squirrel (*Tamiasciurus hudsonicus*), Meadow Vole (*Microtus pennsylvanicus*), Tundra Vole (*M. oeconomus*), Barren-ground Shrew (*Sorex ugyunak*), Masked Shrew (*S. cinereus*), Tundra Shrew (*S. tundrensis*), Northern Red-backed Vole (*Myodes rutilus*), Arctic Ground Squirrel (*Urocitellus parryii*), Northern Collared Lemming (*Dicrostonyx groenlandicus*), Nearctic Brown Lemming (*Lemmus trimucronatus*), and Singing Vole (*Microtus miurus*). So, the association between latitude and these species makes sense.
+
+Another option for visualizing how environmental variables may relate to your ordination solution is to fit a *surface*. This is a better way to visualize nonlinear and nonmonotonic patterns.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 8
+#| label: fig-nmds-neon6
+#| fig-cap: "text."
+#| fig-alt: "text."
+
+par(mar=c(5,5,1,1))
+plot(xy[,1], xy[,2], pch=19, cex=1.3,
+     xlab="NMDS axis 1", ylab="NMDS axis 2")
+segments(0, 0, sp[,1], sp[,2], col="#FF000030")
+text(sp[,1], sp[,2], rownames(sp),
+     col="#FF000030", cex=0.7)
+ordisurf(n1, env$temp, add=TRUE, col="blue")
+
+```
+
+In this case, @fig-nmds-neon6 shows a clear gradient of increasing temperature from left to right. Some variables, like elevation, are more complicated:
+
+```{r}
+#| fig-width: 8
+#| fig-height: 8
+#| label: fig-nmds-neon7
+#| fig-cap: "text."
+#| fig-alt: "text."
+
+par(mar=c(5,5,1,1))
+plot(xy[,1], xy[,2], pch=19, cex=1.3,
+     xlab="NMDS axis 1", ylab="NMDS axis 2")
+segments(0, 0, sp[,1], sp[,2], col="#FF000030")
+text(sp[,1], sp[,2], rownames(sp),
+     col="#FF000030", cex=0.7)
+ordisurf(n1, env$seas.temp, add=TRUE, col="blue")
+
+```
+
+We can also fit factors using `envfit()` and show them with `ordiellipse()`:
+
+```{r}
+#| fig-width: 8
+#| fig-height: 8
+#| label: fig-nmds-neon8
+#| fig-cap: "text."
+#| fig-alt: "text."
+
+e3 <- envfit(n1, met$habitat)
+hab <- e3$factors$centroids
+cols <- hcl.colors(nrow(hab), "Dark 3")
+
+par(mar=c(5,5,1,1))
+plot(xy[,1], xy[,2], pch=19, cex=1.3,
+     xlab="NMDS axis 1", ylab="NMDS axis 2")
+text(hab[,1], hab[,2], rownames(hab),
+     col=cols, xpd=NA)
+```
+
+#### Dimensionality in NMDS {#sec-ord-nmds-neon-envfit}
+
+In the previous example, we decided to fit a two-dimensional solution. However, we could have tried a three or four or more dimensional solution. The choice of how many dimensions to use for your NMDS solution depends on a balance of (1) minimizing stress; while (2) keeping the figure interpretable. We can assess how stress changes with dimensionality with a stress plot, or Sheppard plot. The strategy is similar to how we assessed how many clusters were appropriate in [*K*-means clustering](): obtain a fit with different values for *k*, and plot how the stress changes with each additional dimension in the solution.
+
+```{r}
+set.seed(123)
+
+K <- 1:8
+klist <- vector("list", length=length(K))
+for(i in 1:length(K)){
+    klist[[i]] <- metaMDS(pa, k=K[i])
+}
+```
+
+Now extract the stress values for each NMDS fit and plot them against dimensionality.
+
+```{r}
+stress <- sapply(klist, function(x){x$stress})
+par(mar=c(5,5,1,1))
+plot(K, stress, type="l", lwd=3,
+     xlab="NMDS dimensions (k)",
+     ylab="Stress",
+     ylim=c(0, max(stress)))
+```
+
+There is a large drop in stress from 1 to 2 dimensions, and a smaller drop from 2 to 3, and the gains in stress taper off after that. This plot suggests that 2 is sufficient, although in a real investigation you might want to at least explore the 3-dimensional solution.
 
 ## Redundancy analysis (RA) {#sec-ord-ra}
 
