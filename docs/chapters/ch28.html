@@ -26,7 +26,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -77,6 +131,35 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -443,13 +526,18 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#sec-mtest-group" id="toc-sec-mtest-group" class="nav-link active" data-scroll-target="#sec-mtest-group"><span class="header-section-number">28.1</span> Comparing groups</a>
   <ul>
-  <li><a href="#sec-mtest-group-man" id="toc-sec-mtest-group-man" class="nav-link" data-scroll-target="#sec-mtest-group-man"><span class="header-section-number">28.1.1</span> MANOVA</a></li>
-  <li><a href="#sec-mtest-group-perm" id="toc-sec-mtest-group-perm" class="nav-link" data-scroll-target="#sec-mtest-group-perm"><span class="header-section-number">28.1.2</span> PERMANOVA</a></li>
-  <li><a href="#sec-mtest-group-mrpp" id="toc-sec-mtest-group-mrpp" class="nav-link" data-scroll-target="#sec-mtest-group-mrpp"><span class="header-section-number">28.1.3</span> MRPP</a></li>
+  <li><a href="#sec-mtest-group-perm" id="toc-sec-mtest-group-perm" class="nav-link" data-scroll-target="#sec-mtest-group-perm"><span class="header-section-number">28.1.1</span> PERMANOVA</a>
+  <ul class="collapse">
+  <li><a href="#sec-mtest-group-perm-permtest" id="toc-sec-mtest-group-perm-permtest" class="nav-link" data-scroll-target="#sec-mtest-group-perm-permtest"><span class="header-section-number">28.1.1.1</span> Permutation tests</a></li>
+  <li><a href="#sec-mtest-group-perm-example" id="toc-sec-mtest-group-perm-example" class="nav-link" data-scroll-target="#sec-mtest-group-perm-example"><span class="header-section-number">28.1.1.2</span> Example with NEON data</a></li>
+  </ul></li>
+  <li><a href="#sec-mtest-group-anosim" id="toc-sec-mtest-group-anosim" class="nav-link" data-scroll-target="#sec-mtest-group-anosim"><span class="header-section-number">28.1.2</span> ANOSIM</a></li>
   </ul></li>
   <li><a href="#sec-mtest-dis" id="toc-sec-mtest-dis" class="nav-link" data-scroll-target="#sec-mtest-dis"><span class="header-section-number">28.2</span> Analyzing dissimilarity</a>
   <ul>
   <li><a href="#sec-mtest-dis-mantel" id="toc-sec-mtest-dis-mantel" class="nav-link" data-scroll-target="#sec-mtest-dis-mantel"><span class="header-section-number">28.2.1</span> Mantel tests</a></li>
+  <li><a href="#sec-mtest-dis-partial" id="toc-sec-mtest-dis-partial" class="nav-link" data-scroll-target="#sec-mtest-dis-partial"><span class="header-section-number">28.2.2</span> Partial Mantel tests</a></li>
+  <li><a href="#sec-mtest-dis-mrm" id="toc-sec-mtest-dis-mrm" class="nav-link" data-scroll-target="#sec-mtest-dis-mrm"><span class="header-section-number">28.2.3</span> Multiple regression on distance matrices (MRM)</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch28.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -476,25 +564,644 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Anything is permuted.</p>
+<p>So far we have explored two categories of multivariate analysis methods: <a href="ch26.html">clustering</a> and <a href="ch27.html">ordination</a>. These techniques are mainly for data exploration and visualization. But there are also methods for testing multivariate hypotheses that feel like extensions of univariate tests we have already seen.</p>
+<p>Many multivariate hypothesis tests address the same kinds of scientific questions as familiar univariate tests. The main difference is that they operate on multiple response variables or on matrices of pairwise distances rather than a single response variable. The methods in this table are <em>conceptually</em> analogous, but they are not necessarily mathematically equivalent or based on the same statistical assumptions.</p>
+<div id="tbl-multivariate-analogues" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-multivariate-analogues-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;28.1: Conceptual analogies between familiar univariate statistical methods and multivariate hypothesis-testing methods. These methods address similar scientific questions but are not necessarily mathematically equivalent or based on the same assumptions.
+</figcaption>
+<div aria-describedby="tbl-multivariate-analogues-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Univariate method</th>
+<th>Univariate question</th>
+<th>Multivariate analogue</th>
+<th>Multivariate question</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>t-test</td>
+<td>Do two groups differ in their means?</td>
+<td>Hotelling’s <span class="math inline">\(T^2\)</span></td>
+<td>Do two groups differ in their multivariate means?</td>
+</tr>
+<tr class="even">
+<td>ANOVA</td>
+<td>Do groups differ in their means?</td>
+<td>MANOVA / PERMANOVA</td>
+<td>Do groups differ in their multivariate means or composition?</td>
+</tr>
+<tr class="odd">
+<td>Kruskal–Wallis test</td>
+<td>Do groups differ in their distributions, as assessed using ranks?</td>
+<td>ANOSIM</td>
+<td>Are distances between groups generally greater than distances within groups?</td>
+</tr>
+<tr class="even">
+<td>Levene’s test</td>
+<td>Do groups differ in their variances?</td>
+<td>PERMDISP (<code>betadisper</code>)</td>
+<td>Do groups differ in their multivariate dispersions?</td>
+</tr>
+<tr class="odd">
+<td>Pearson correlation</td>
+<td>Are two continuous variables correlated?</td>
+<td>Mantel test</td>
+<td>Are two distance matrices correlated?</td>
+</tr>
+<tr class="even">
+<td>Partial correlation</td>
+<td>Are two variables correlated after accounting for a third?</td>
+<td>Partial Mantel test</td>
+<td>Are two distance matrices correlated after accounting for a third distance matrix?</td>
+</tr>
+<tr class="odd">
+<td>Multiple linear regression</td>
+<td>How does a response depend on multiple predictors?</td>
+<td>MRM</td>
+<td>How does pairwise dissimilarity depend on multiple predictor distance matrices?</td>
+</tr>
+<tr class="even">
+<td>Multiple linear regression</td>
+<td>How does a response depend on several predictors?</td>
+<td>RDA / dbRDA</td>
+<td>How does multivariate composition depend on environmental or other predictors?</td>
+</tr>
+<tr class="odd">
+<td>ANCOVA / factorial ANOVA</td>
+<td>How do multiple predictors and their interactions affect a response?</td>
+<td>PERMANOVA with multiple predictors</td>
+<td>How do multiple predictors and their interactions explain multivariate differences?</td>
+</tr>
+<tr class="even">
+<td>Linear mixed-effects model</td>
+<td>How does a response depend on predictors while accounting for grouped observations?</td>
+<td>MLPE</td>
+<td>How do pairwise dissimilarities depend on predictors while accounting for shared samples or populations?</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
 <section id="sec-mtest-group" class="level2" data-number="28.1">
 <h2 data-number="28.1" class="anchored" data-anchor-id="sec-mtest-group"><span class="header-section-number">28.1</span> Comparing groups</h2>
-<section id="sec-mtest-group-man" class="level3" data-number="28.1.1">
-<h3 data-number="28.1.1" class="anchored" data-anchor-id="sec-mtest-group-man"><span class="header-section-number">28.1.1</span> MANOVA</h3>
+<p>We can test for differences between groups in multivariate using analogues of ANOVA: <strong>multivariate analysis of variance (MANOVA)</strong> and <strong>permutational multivariate analysis of variance (PERMANOVA)</strong>. <strong>Multivariate analysis of variance (MANOVA)</strong> is an extension of ANOVA with multiple response variables. The underlying theory and linear algebra is very similar to ANOVA, and so many of the same assumptions apply (just in many dimensions instead of one). For that reason, MANOVA is often not appropriate for real biological data without careful experimental design and exploratory data analysis to confirm that the test’s assumptions are met.</p>
+<section id="sec-mtest-group-perm" class="level3" data-number="28.1.1">
+<h3 data-number="28.1.1" class="anchored" data-anchor-id="sec-mtest-group-perm"><span class="header-section-number">28.1.1</span> PERMANOVA</h3>
+<p><strong>Permutational analysis of variance (PERMANOVA)</strong> is a nonparametric version of MANOVA <span class="citation" data-cites="anderson2001">(<a href="#ref-anderson2001" role="doc-biblioref">Anderson 2001</a>)</span>. It is nonparametric because it uses random shuffling, or permutation, of group membership to determine statistical significance instead of calculating an <em>F</em> statistic based on probability theory. The most common R function for PERMANOVA is <code>adonis2()</code> from the <code>vegan</code> package.</p>
+<section id="sec-mtest-group-perm-permtest" class="level4" data-number="28.1.1.1">
+<h4 data-number="28.1.1.1" class="anchored" data-anchor-id="sec-mtest-group-perm-permtest"><span class="header-section-number">28.1.1.1</span> Permutation tests</h4>
+<p>A <strong>permutation test</strong> is one that assesses statistical significance using random shuffling, or <strong>permutation</strong>, of the data. The idea is that if some response variable depends on group membership, then shuffling the observations so that group memberships randomly change should break that dependence. Consider <a href="#fig-permute1" class="quarto-xref">Figure&nbsp;<span>28.1</span></a> below. Group A in grey tends to have smaller values. A <em>t</em>-test confirms this (<em>t</em>=-5.69, 34.22 d.f., <em>P</em> &lt; 0.01).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-permute1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bar plot showing observations arranged from lowest to highest values of a response variable, ranging from approximately 4.3 to 7.0. Gray bars represent group A and white bars represent group B. Group A observations are concentrated toward the lower values, while group B observations are concentrated toward the higher values, with some overlap in the middle. The observed t-statistic, −5.69, is displayed above the bars.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-permute1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;28.1: Original dataset for illustrating a permutation-based t-test. Observations from groups A (gray) and B (white) are arranged in ascending order of the response variable. The observed t-statistic is −5.69, indicating that the mean of group A is substantially lower than that of group B. This statistic will be compared with the distribution of t-statistics generated by randomly permuting group labels.
+</figcaption>
+<div aria-describedby="fig-permute1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch28_files/figure-html/fig-permute1-1.png" class="img-fluid figure-img" alt="Bar plot showing observations arranged from lowest to highest values of a response variable, ranging from approximately 4.3 to 7.0. Gray bars represent group A and white bars represent group B. Group A observations are concentrated toward the lower values, while group B observations are concentrated toward the higher values, with some overlap in the middle. The observed t-statistic, −5.69, is displayed above the bars." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>But look what happens to the test statistic <em>t</em> if we permute the group memberships (<a href="#fig-permute2" class="quarto-xref">Figure&nbsp;<span>28.2</span></a>). Recall that <em>t</em> summarizes the difference in group means. So, a <em>t</em> with a smaller absolute value means that the group means are less different than they were originally.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-permute2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bar plot showing the same observations as the original dataset, arranged in ascending order from approximately 4.3 to 7.0. Gray bars represent group A and white bars represent group B, but the group labels have been randomly reassigned. Both groups are distributed throughout the range of observed values, unlike the original arrangement. The recalculated t-statistic, 0.04, is displayed above the bars.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-permute2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;28.2: One permutation of the group labels in the permutation-based t-test. The observed values remain unchanged and in ascending order, but the assignments to groups A (gray) and B (white) have been randomly shuffled. The resulting t-statistic is 0.04, indicating almost no difference between the group means. Repeating this process generates a null distribution of t-statistics against which the original statistic can be compared.
+</figcaption>
+<div aria-describedby="fig-permute2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch28_files/figure-html/fig-permute2-1.png" class="img-fluid figure-img" alt="Bar plot showing the same observations as the original dataset, arranged in ascending order from approximately 4.3 to 7.0. Gray bars represent group A and white bars represent group B, but the group labels have been randomly reassigned. Both groups are distributed throughout the range of observed values, unlike the original arrangement. The recalculated t-statistic, 0.04, is displayed above the bars." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>After permutation, the summary of the difference in group means is much smaller (0.04). Let’s repeat this a bunch of times:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-permute3" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Eight bar plots arranged in four rows and two columns. Each plot shows the same observations in ascending order, with gray bars representing group A and white bars representing group B. The group assignments differ among panels, producing t-statistics of 1.66, 0.04, −0.40, 0.49, 0, −0.67, −0.40, and 0.40. In every panel, gray and white bars are interspersed throughout the range of values.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-permute3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;28.3: Eight additional permutations of the group labels in the permutation-based t-test. Each panel shows the same observations arranged in ascending order, with group labels randomly reassigned and the t-statistic recalculated. The resulting t-statistics range from −0.67 to 1.66, all substantially closer to zero than the observed statistic of −5.69. Repeating this procedure many times produces the null distribution used to calculate a permutation p-value.
+</figcaption>
+<div aria-describedby="fig-permute3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch28_files/figure-html/fig-permute3-1.png" class="img-fluid figure-img" alt="Eight bar plots arranged in four rows and two columns. Each plot shows the same observations in ascending order, with gray bars representing group A and white bars representing group B. The group assignments differ among panels, producing t-statistics of 1.66, 0.04, −0.40, 0.49, 0, −0.67, −0.40, and 0.40. In every panel, gray and white bars are interspersed throughout the range of values." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>We can obtain a permutation test by repeating this process many times and comparing the test statistic in the original dataset to the distribution of test statistics in the permuted datasets.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-permute4" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Histogram of 1,000 permuted t-statistics forming an approximately bell-shaped distribution centered near zero, with values ranging from about −3.5 to 3.5. A red vertical line at −5.69 marks the t-statistic calculated from the original data, far to the left of the permutation distribution. None of the permuted statistics are as extreme as the observed statistic.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-permute4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;28.4: Null distribution of t-statistics generated from 1,000 random permutations of group labels. The histogram shows the distribution of t-statistics expected under the null hypothesis of no difference between groups, centered near zero. The red vertical line marks the observed t-statistic of −5.69, which falls well outside the range of permuted values. This provides strong evidence against the null hypothesis.
+</figcaption>
+<div aria-describedby="fig-permute4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch28_files/figure-html/fig-permute4-1.png" class="img-fluid figure-img" alt="Histogram of 1,000 permuted t-statistics forming an approximately bell-shaped distribution centered near zero, with values ranging from about −3.5 to 3.5. A red vertical line at −5.69 marks the t-statistic calculated from the original data, far to the left of the permutation distribution. None of the permuted statistics are as extreme as the observed statistic." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>The distribution of <em>t</em> statistics of the permuted datasets tells us what <em>t</em> values we could expect if there was no difference in mean value between groups A and B. In other words, it is the distribution of the test statistic under the null hypothesis. But unlike in a traditional <em>t</em>-test where we define the reference distribution from the number of degrees of freedom in the dataset–i.e., we make assumptions about the distribution of <em>t</em>–in this permutation test we let the dataset define the distribution of <em>t</em>. In this test, none of the permuted <em>t</em> are as extreme as the original <em>t</em>, so the <em>P</em>-value is “&lt;0.001” (because <em>P</em> can never be 0).</p>
+<p>The basic idea behind PERMANOVA is the same as this permutational <em>t</em>-test we just performed, only with a multivariate distance matrix rather than differences in menas.</p>
 </section>
-<section id="sec-mtest-group-perm" class="level3" data-number="28.1.2">
-<h3 data-number="28.1.2" class="anchored" data-anchor-id="sec-mtest-group-perm"><span class="header-section-number">28.1.2</span> PERMANOVA</h3>
+<section id="sec-mtest-group-perm-example" class="level4" data-number="28.1.1.2">
+<h4 data-number="28.1.1.2" class="anchored" data-anchor-id="sec-mtest-group-perm-example"><span class="header-section-number">28.1.1.2</span> Example with NEON data</h4>
+<p>Let’s revisit the NEON small mammal measurement data. We analyzed this dataset previously in <a href="ch27.html#sec-ord-pca-example" class="quarto-xref"><span>Section 27.2.3</span></a>. Download the <a href="../datasets/data-neon-ind-meas.csv">individual measurement dataset</a> and the <a href="../datasets/data-neon-taxa.csv">taxonomic dataset</a> and put them in your working directory.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>tax <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-taxa.csv"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-ind-meas.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Let’s use PERMANOVA to test for a difference between four genera of morphologically similar mice: <em>Peromyscus</em>, <em>Onychomys</em>, <em>Reithrodontomys</em>, and <em>Mus</em>. The first three are North American species in family Cricetidae, while <em>Mus</em> is a Eurasian genus in family Muridae. We ordinated their morphology using the standard measurements (total length, tail length, hindfoot length, and ear length) using PCA in <a href="ch27.html#sec-ord-pca-example" class="quarto-xref"><span>Section 27.2.3</span></a>. First, filter the data to those species, and to only those individuals who are not missing any measurements. We will not adjust for size, because differences in size are a meaningful part of the variation between these species.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>use.genera <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Mus"</span>, <span class="st">"Onychomys"</span>,</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Peromyscus"</span>, <span class="st">"Reithrodontomys"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>use.abb <span class="ot">&lt;-</span> tax<span class="sc">$</span>abb[tax<span class="sc">$</span>genus <span class="sc">%in%</span> use.genera]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> ind[ind<span class="sc">$</span>abb <span class="sc">%in%</span> use.abb,]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>use.cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"abb"</span>, <span class="st">"totalLength"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>              <span class="st">"tailLength"</span>, <span class="st">"hindfootLength"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>              <span class="st">"earLength"</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> dx[,use.cols]</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># only want individuals with no missing measurements</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> dx[<span class="fu">complete.cases</span>(dx),]</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># identify genera</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>genus <span class="ot">&lt;-</span> tax<span class="sc">$</span>genus[<span class="fu">match</span>(dx<span class="sc">$</span>abb, tax<span class="sc">$</span>abb)]</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># add some colors and shapes</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">hcl.colors</span>(<span class="fu">length</span>(use.genera), <span class="at">palette=</span><span class="st">"Dark 3"</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>pchs <span class="ot">&lt;-</span> <span class="dv">15</span><span class="sc">:</span><span class="dv">18</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(cols) <span class="ot">&lt;-</span> use.genera</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pchs) <span class="ot">&lt;-</span> use.genera</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>color <span class="ot">&lt;-</span> cols[dx<span class="sc">$</span>genus]</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>dx<span class="sc">$</span>pch <span class="ot">&lt;-</span> pchs[dx<span class="sc">$</span>genus]</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co"># don't do this in a real research project:</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co"># cut down the dataset to randomly select at</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co"># at least 100 mice in each genus</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co"># permanova takes way too long with &gt;5000 samples</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1776</span>)</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>subset.list <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"list"</span>, <span class="at">length=</span><span class="dv">4</span>)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>){</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    irows <span class="ot">&lt;-</span> <span class="fu">which</span>(dx<span class="sc">$</span>genus <span class="sc">==</span> use.genera[i])</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    keep.rows <span class="ot">&lt;-</span> <span class="fu">sample</span>(irows, <span class="dv">100</span>, <span class="at">replace=</span><span class="cn">FALSE</span>)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    subset.list[[i]] <span class="ot">&lt;-</span> dx[keep.rows,]</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, subset.list)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Let’s visualize the data first. We can use PCA as we did in <a href="ch27.html#sec-ord-pca-example" class="quarto-xref"><span>Section 27.2.3</span></a>. We will need to standardize the data before PCA. We will also use the standardized data in the PERMANOVA.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>meas.cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"totalLength"</span>, <span class="st">"tailLength"</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>               <span class="st">"hindfootLength"</span>, <span class="st">"earLength"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>ymatrix <span class="ot">&lt;-</span> dx[,meas.cols]</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>ymatrix.sc <span class="ot">&lt;-</span> <span class="fu">scale</span>(ymatrix)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">pca</span>(ymatrix.sc)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(p1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+pca(X = ymatrix.sc) 
+
+Partitioning of variance:
+              Inertia Proportion
+Total               4          1
+Unconstrained       4          1
+
+Eigenvalues, and their contribution to the variance 
+
+Importance of components:
+                         PC1    PC2     PC3     PC4
+Eigenvalue            2.4097 1.0547 0.32766 0.20794
+Proportion Explained  0.6024 0.2637 0.08191 0.05198
+Cumulative Proportion 0.6024 0.8661 0.94802 1.00000</code></pre>
+</div>
+</div>
+<p>Extract the scores and build the plot:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>xy <span class="ot">&lt;-</span> <span class="fu">scores</span>(p1, <span class="at">display=</span><span class="st">"sites"</span>, <span class="at">choices=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">scaling=</span><span class="dv">1</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy[,<span class="dv">1</span>], xy[,<span class="dv">2</span>], </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (61.5$)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (27.4%)"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span>dx<span class="sc">$</span>pch, <span class="at">col=</span>dx<span class="sc">$</span>col)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend=</span>use.genera,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pchs, <span class="at">col=</span>cols, <span class="at">cex=</span><span class="fl">1.2</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">text.font=</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-permanova1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Scatterplot of the first two principal components of morphological measurements, with PC1 explaining approximately 61.5% of variation and PC2 explaining 27.4%. Peromyscus specimens, shown as teal triangles, cluster primarily on the left. Onychomys specimens, shown as olive circles, cluster in the upper center. Mus specimens, shown as pink squares, and Reithrodontomys specimens, shown as purple diamonds, overlap extensively in the lower-right portion. Some specimens occur outside their genus's main cluster.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-permanova1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;28.5: Principal component analysis (PCA) of standardized morphological measurements from 400 specimens representing four rodent genera. Points represent individual specimens, with colors and symbols indicating genus. The first two principal components explain approximately 89% of the total morphological variation. Peromyscus is primarily separated from the other genera along PC1, while Onychomys is separated along PC2. Mus and Reithrodontomys overlap considerably in this two-dimensional representation.
+</figcaption>
+<div aria-describedby="fig-permanova1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch28_files/figure-html/fig-permanova1-1.png" class="img-fluid figure-img" alt="Scatterplot of the first two principal components of morphological measurements, with PC1 explaining approximately 61.5% of variation and PC2 explaining 27.4%. Peromyscus specimens, shown as teal triangles, cluster primarily on the left. Onychomys specimens, shown as olive circles, cluster in the upper center. Mus specimens, shown as pink squares, and Reithrodontomys specimens, shown as purple diamonds, overlap extensively in the lower-right portion. Some specimens occur outside their genus's main cluster." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>The PCA suggests that <em>Peromyscus</em> and <em>Onychomys</em> are morphologically distinct from <em>Reithrodontomys</em> and <em>Mus</em>, and that <em>Reithrodontomys</em> and <em>Mus</em> are not morphologically distinct from each other. We can test whether these visual interpretations are supported by the data with PERMANOVA. But first, we need to check for homogeneity of multivariate variance between the groups. This is one of the assumptions of PERMANOVA. The most common method is called a <strong>beta dispersion test</strong> and is available in <code>vegan</code> as <code>betadisper()</code>. It tests whether the groups have the same within-group variance, measured as mean distance to centroid.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">vegdist</span>(ymatrix.sc, <span class="at">method=</span><span class="st">"euclidean"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>beta.disp.test <span class="ot">&lt;-</span> <span class="fu">betadisper</span>(d, dx<span class="sc">$</span>genus)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">permutest</span>(beta.disp.test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Permutation test for homogeneity of multivariate dispersions
+Permutation: free
+Number of permutations: 999
+
+Response: Distances
+           Df  Sum Sq Mean Sq      F N.Perm Pr(&gt;F)   
+Groups      3   7.387 2.46229 5.6949    999  0.003 **
+Residuals 396 171.216 0.43236                        
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>The test was significant, which is evidence that some of the genera differ in their within group dispersion. We can inspect the dispersions by looking at the <code>betadisper()</code> object.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>beta.disp.test</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Homogeneity of multivariate dispersions
+
+Call: betadisper(d = d, group = dx$genus)
+
+No. of Positive Eigenvalues: 4
+No. of Negative Eigenvalues: 0
+
+Average distance to median:
+            Mus       Onychomys      Peromyscus Reithrodontomys 
+         0.9892          1.0064          1.3302          1.1001 
+
+Eigenvalues for PCoA axes:
+ PCoA1  PCoA2  PCoA3  PCoA4 
+961.46 420.84 130.74  82.97 </code></pre>
+</div>
+</div>
+<p>The important part of this output is the <code>Average distance to median</code>. <em>Peromyscus</em> has the largest within-group dispersion, and <em>Mus</em> the least. <em>Reithrodontomys</em> has the second most, and <em>Onychomys</em> slightly less. This makes biological sense: our dataset includes 13 species of <em>Peromyscus</em>, 4 of <em>Reithrodontomys</em>, 3 of <em>Onychomys</em>, and 1 of <em>Mus</em>. You can check this with <code>table(substr(use.abb, 1, 3))</code>.</p>
+<p>The beta dispersion test tells us that we are measuring two sources of morphological variation within each genus: variation among species and variation among individuals within species. A genus represented by 13 species has more opportunities to encompass substantial morphological diversity than one represented by a single species, although species richness alone doesn’t guarantee greater dispersion. The take home here is that PERMANOVA and the multivariate dispersion test need to be interpreted together.</p>
+<p>The <code>vegan</code> function for PERMANOVA is <code>adonis2()</code>. We will use it on the scaled version of the measurement dataset, the same as we used for the beta dispersion test.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">999</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">adonis2</span>(ymatrix.sc <span class="sc">~</span> genus, <span class="at">data=</span>dx,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">method=</span><span class="st">"euclidean"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>mod1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Permutation test for adonis under reduced model
+Permutation: free
+Number of permutations: 999
+
+adonis2(formula = ymatrix.sc ~ genus, data = dx, method = "euclidean")
+          Df SumOfSqs      R2      F Pr(&gt;F)    
+Model      3   934.24 0.58537 186.35  0.001 ***
+Residual 396   661.76 0.41463                  
+Total    399  1596.00 1.00000                  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Here are the important parts of the output:</p>
+<ul>
+<li>Pseudo-<span class="math inline">\(F_{3,396}=186.4, p = 0.001\)</span>. This means that there were statistically significant morphological differences among the four genera.</li>
+<li><span class="math inline">\(R^2=0.59\)</span> means that genus explains about 59% of the variation in morphology in the samples.</li>
+<li>Residual <span class="math inline">\(R^2=0.41\)</span> means that about 41% of the variation unexplained.</li>
+</ul>
+<p>This PERMANOVA result is substantial, while the dispersion test demonstrates that the genera differ in their morphological variability. The differences in within-genus dispersion are biologically plausible because the genera contain different numbers of species.</p>
+<p>The PERMANOVA we just did was an <strong>omnibus test</strong>, just as the initial test with <code>aov()</code> is for ANOVA (<a href="ch15.html#sec-groups-more-anova-1way" class="quarto-xref"><span>Section 15.5.1.1</span></a>). For ANOVA, we then use a post hoc Tukey test to check for significant pairwise differences. For PERMANOVA, the usual post hoc test is a series of pairwise PERMANOVAs. We can fit these in a loop.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1701</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define pairwise combinations</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>combos <span class="ot">&lt;-</span> <span class="fu">combn</span>(use.genera, <span class="dv">2</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>ncombos <span class="ot">&lt;-</span> <span class="fu">ncol</span>(combos)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># data frame to catch results</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">genus1=</span>combos[<span class="dv">1</span>,],</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">genus2=</span>combos[<span class="dv">2</span>,],</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Fstat=</span><span class="cn">NA</span>,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">R2=</span><span class="cn">NA</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">p=</span><span class="cn">NA</span>)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co"># run pairwise combinations in a loop</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>ncombos){</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    use.rows <span class="ot">&lt;-</span> dx<span class="sc">$</span>genus <span class="sc">%in%</span> combos[,i]</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    idata <span class="ot">&lt;-</span> ymatrix.sc[use.rows,]</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    igenus <span class="ot">&lt;-</span> dx[use.rows,]</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    imod <span class="ot">&lt;-</span> <span class="fu">adonis2</span>(idata<span class="sc">~</span>genus, <span class="at">data=</span>igenus,</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>                    <span class="at">method=</span><span class="st">"euclidean"</span>)</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    res<span class="sc">$</span>Fstat[i] <span class="ot">&lt;-</span> imod<span class="sc">$</span>F[<span class="dv">1</span>]</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    res<span class="sc">$</span>R2[i] <span class="ot">&lt;-</span> imod<span class="sc">$</span>R2[<span class="dv">1</span>]</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    res<span class="sc">$</span>p[i] <span class="ot">&lt;-</span> imod<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>]</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>res</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      genus1          genus2      Fstat         R2     p
+1        Mus       Onychomys 194.050391 0.49496288 0.001
+2        Mus      Peromyscus 249.969637 0.55800576 0.001
+3        Mus Reithrodontomys   5.392538 0.02651296 0.001
+4  Onychomys      Peromyscus 234.424137 0.54211622 0.001
+5  Onychomys Reithrodontomys 150.989668 0.43264796 0.001
+6 Peromyscus Reithrodontomys 232.377973 0.53993928 0.001</code></pre>
+</div>
+</div>
+<p>All of the pairwise tests use 1 and 198 degrees of freedom for their pseudo-<em>F</em> statistics. Before we interpret these <em>P</em>-values, we need to apply a correction for multiple comparisions. This will control the family-wise error rate. We will use a Holm correction.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>p.adj <span class="ot">&lt;-</span> <span class="fu">p.adjust</span>(res<span class="sc">$</span>p, <span class="at">method=</span><span class="st">"holm"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>res</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      genus1          genus2      Fstat         R2     p p.adj
+1        Mus       Onychomys 194.050391 0.49496288 0.001 0.006
+2        Mus      Peromyscus 249.969637 0.55800576 0.001 0.006
+3        Mus Reithrodontomys   5.392538 0.02651296 0.001 0.006
+4  Onychomys      Peromyscus 234.424137 0.54211622 0.001 0.006
+5  Onychomys Reithrodontomys 150.989668 0.43264796 0.001 0.006
+6 Peromyscus Reithrodontomys 232.377973 0.53993928 0.001 0.006</code></pre>
+</div>
+</div>
+<p>The adjusted <em>P</em>-values confirm our initial suspicion based on <a href="#fig-permanova1" class="quarto-xref">Figure&nbsp;<span>28.5</span></a>: that the genera differ from each other morphological. However, the difference between <em>Reithrodontomys</em> and <em>Mus</em> was much smaller than the differences between the other genera, as shown by the much smaller <span class="math inline">\(R^2\)</span> for that comparison. Let’s add some ellipses to the PCA for better visualization:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get centroids</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>centx <span class="ot">&lt;-</span> <span class="fu">tapply</span>(xy[,<span class="dv">1</span>], dx<span class="sc">$</span>genus, mean)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>centy <span class="ot">&lt;-</span> <span class="fu">tapply</span>(xy[,<span class="dv">2</span>], dx<span class="sc">$</span>genus, mean)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy[,<span class="dv">1</span>], xy[,<span class="dv">2</span>], </span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"PC1 (61.5%)"</span>, <span class="at">ylab=</span><span class="st">"PC2 (27.4%)"</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch=</span>dx<span class="sc">$</span>pch, <span class="at">col=</span>dx<span class="sc">$</span>col)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ordiellipse</span>(xy, dx<span class="sc">$</span>genus, <span class="co">#kind="se",</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">draw=</span><span class="st">"polygon"</span>, <span class="at">col=</span>cols)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(centx, centy, use.genera, <span class="at">font=</span><span class="dv">4</span>, <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend=</span>use.genera,</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span>pchs, <span class="at">col=</span>cols, <span class="at">cex=</span><span class="fl">1.2</span>,</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">bty=</span><span class="st">"n"</span>, <span class="at">text.font=</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-permanova2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Scatterplot of PC1 (61.5% of variation) against PC2 (27.4%) for four rodent genera, with colored points and shaded ellipses. Peromyscus, shown as teal triangles, has a diagonally oriented ellipse on the left. Onychomys, shown as olive circles, has a smaller ellipse in the upper center. Mus, shown as pink squares, and Reithrodontomys, shown as purple diamonds, have strongly overlapping ellipses in the lower right. Individual observations extend beyond all four ellipses.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-permanova2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;28.6: Principal component analysis (PCA) of standardized morphological measurements from 400 specimens representing four rodent genera, with ellipses illustrating within-genus variation in ordination space. The first two principal components explain 88.9% of total morphological variation. Peromyscus and Onychomys occupy relatively distinct regions, whereas the ellipses for Mus and Reithrodontomys overlap extensively. The ellipses illustrate differences in group locations and dispersions relevant to interpreting PERMANOVA results.
+</figcaption>
+<div aria-describedby="fig-permanova2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch28_files/figure-html/fig-permanova2-1.png" class="img-fluid figure-img" alt="Scatterplot of PC1 (61.5% of variation) against PC2 (27.4%) for four rodent genera, with colored points and shaded ellipses. Peromyscus, shown as teal triangles, has a diagonally oriented ellipse on the left. Onychomys, shown as olive circles, has a smaller ellipse in the upper center. Mus, shown as pink squares, and Reithrodontomys, shown as purple diamonds, have strongly overlapping ellipses in the lower right. Individual observations extend beyond all four ellipses." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
 </section>
-<section id="sec-mtest-group-mrpp" class="level3" data-number="28.1.3">
-<h3 data-number="28.1.3" class="anchored" data-anchor-id="sec-mtest-group-mrpp"><span class="header-section-number">28.1.3</span> MRPP</h3>
+</section>
+<section id="sec-mtest-group-anosim" class="level3" data-number="28.1.2">
+<h3 data-number="28.1.2" class="anchored" data-anchor-id="sec-mtest-group-anosim"><span class="header-section-number">28.1.2</span> ANOSIM</h3>
+<p>Analysis of similarities (ANOSIM) is a permutation-based test that, like PERMANOVA, evaluates differences in multivariate composition among predefined groups. Rather than partitioning variation among and within groups, ANOSIM compares the ranks of pairwise distances within groups to those between groups. Its test statistic, (R), ranges from −1 to +1, with positive values indicating that observations from different groups tend to be more dissimilar than observations within the same group. ANOSIM can be particularly sensitive to differences in multivariate dispersion, so significant results do not necessarily indicate differences in group locations.</p>
+<p><em>Example coming soon!</em></p>
 </section>
 </section>
 <section id="sec-mtest-dis" class="level2" data-number="28.2">
 <h2 data-number="28.2" class="anchored" data-anchor-id="sec-mtest-dis"><span class="header-section-number">28.2</span> Analyzing dissimilarity</h2>
+<p>PERMANOVA is a way to compare groups of observations in a multivariate space. Another way of understanding multivariate patterns is to explore relationships between distance matrices. Consider <a href="#fig-mantel01" class="quarto-xref">Figure&nbsp;<span>28.7</span></a> below. It shows how dissimilarity between samples in terms of one set of variables is related to dissimilarity in terms of another. In this example, sites that are more dissimilar in terms of their soil chemistry are also more dissimilar in terms of their plant communities. Each point on the figure represents a <em>pair</em> of observations, not a single observations.</p>
+<p>When we test for a <em>correlation</em> between distance metrics, we perform a <strong>Mantel test</strong>. There are also regression approaches for dissimilarities such as ANOSIM and <strong>multiple regression on distance matrices (MRM)</strong> and <strong>maximum likelihood population effects (MLPE)</strong>.</p>
+<div id="fig-mantel01" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-cap="Mantel test illustrating the relationship between soil dissimilarity and plant community dissimilarity. Each point represents a pairwise comparison between sampling sites, with soil distance on the horizontal axis and plant community distance on the vertical axis. The strong positive Mantel correlation (r = 0.863, p < 0.01) indicates that sites with more dissimilar soils tend to have more dissimilar plant communities.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-mantel01-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;28.7: Scatterplot showing a strong positive relationship between pairwise soil dissimilarity and plant community dissimilarity. Thousands of open circles form an upward-trending cloud, with both axes ranging approximately from 0 to 5. Red and blue arrows indicate increasing and decreasing dissimilarity, respectively. The Mantel correlation is 0.863, with p less than 0.01.
+</figcaption>
+<div aria-describedby="fig-mantel01-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/mult-mantel02.jpg" class="img-fluid figure-img" data-fig-cap="Mantel test illustrating the relationship between soil dissimilarity and plant community dissimilarity. Each point represents a pairwise comparison between sampling sites, with soil distance on the horizontal axis and plant community distance on the vertical axis. The strong positive Mantel correlation (r = 0.863, p < 0.01) indicates that sites with more dissimilar soils tend to have more dissimilar plant communities.">
+</div>
+</figure>
+</div>
 <section id="sec-mtest-dis-mantel" class="level3" data-number="28.2.1">
 <h3 data-number="28.2.1" class="anchored" data-anchor-id="sec-mtest-dis-mantel"><span class="header-section-number">28.2.1</span> Mantel tests</h3>
+<p>For an example Mantel test, let’s revisit the small mammal capture data from <a href="ch26.html#sec-clust-kmeans-example" class="quarto-xref"><span>Section 26.2.2</span></a> and <a href="ch27.html#sec-ord-nmds-neon" class="quarto-xref"><span>Section 27.5.4</span></a>. Download the <a href="../datasets/data-neon-captures-site.csv">site-level capture dataset</a>, the <a href="../datasets/data-neon-metadata-site.csv">site metadata</a>, and the <a href="../datasets/data-neon-taxa.csv">taxonomic dataset</a> and put them in your working directory.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>tax <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-taxa.csv"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>cap <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-captures-site.csv"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>met <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-metadata-site.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>As before, convert the capture numbers to a binary presence-absence, and remove a species that is present at no sites.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pa <span class="ot">&lt;-</span> cap</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># fix some columns and set rownames</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>pa<span class="sc">$</span>X <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(pa) <span class="ot">&lt;-</span> pa<span class="sc">$</span>site</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>pa<span class="sc">$</span>site <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co"># convert capture numbers to presence absence</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>pa[pa<span class="sc">&gt;</span><span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co"># leaves 133 species</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>pa <span class="ot">&lt;-</span> pa[,<span class="sc">-</span><span class="fu">which</span>(<span class="fu">colSums</span>(pa)<span class="sc">==</span><span class="dv">0</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We will compare dissimilarity in terms of small mammal species composition with geographic distance. Notice that we cannot calculate geographic distance using raw latitude and longitude because that would ignore the curvature of the Earth. We will use package <code>terra</code> to calculate distances across the famously non-flat Earth’s surface.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> met[,<span class="fu">c</span>(<span class="st">"lat"</span>, <span class="st">"lon"</span>)]</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># convert coordinates to spatial points (WGS84)</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>sites <span class="ot">&lt;-</span> <span class="fu">vect</span>(coords, <span class="at">geom=</span><span class="fu">c</span>(<span class="st">"lon"</span>, <span class="st">"lat"</span>), <span class="at">crs=</span><span class="st">"EPSG:4326"</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate geographic distance matrix in meters</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>geo.dist <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">distance</span>(sites)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co"># convert to km</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>geo.dist <span class="ot">&lt;-</span> <span class="fu">as.dist</span>(geo.dist <span class="sc">/</span> <span class="dv">1000</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now we can calculate the Sørensen distance matrix using the species presences in <code>pa</code> and run the Mantel test.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>mamm.dist <span class="ot">&lt;-</span> <span class="fu">vegdist</span>(pa)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mantel</span>(geo.dist, mamm.dist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Mantel statistic based on Pearson's product-moment correlation 
+
+Call:
+mantel(xdis = geo.dist, ydis = mamm.dist) 
+
+Mantel statistic r: 0.599 
+      Significance: 0.001 
+
+Upper quantiles of permutations (null model):
+   90%    95%  97.5%    99% 
+0.0826 0.0999 0.1198 0.1425 
+Permutation: free
+Number of permutations: 999</code></pre>
+</div>
+</div>
+<p>The Mantel <em>r</em> is 0.599, which is a moderately strong correlation. We can visualize this by plotting the distance matrices.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(geo.dist, mamm.dist,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"Geographic distance (km)"</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Small mammal dissimilarity (unitless)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-mantel02" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Scatterplot of pairwise geographic distance, ranging from 0 to approximately 8,000 km, against mammal community dissimilarity, ranging from 0 to 1. Open circles show an increasing trend, with nearby sites exhibiting dissimilarities across nearly the full range. At greater geographic distances, most pairs have high dissimilarity, and many points form a horizontal band at 1, indicating completely different species compositions.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-mantel02-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;28.8: Relationship between geographic distance and mammal community dissimilarity among sampling sites. Each point represents a pair of sites, with geographic distance in kilometers on the horizontal axis and community dissimilarity on the vertical axis. Community dissimilarity generally increases with geographic distance, although considerable variation occurs among nearby sites. Many pairs have a dissimilarity of 1, indicating no species shared between them.
+</figcaption>
+<div aria-describedby="fig-mantel02-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch28_files/figure-html/fig-mantel02-1.png" class="img-fluid figure-img" alt="Scatterplot of pairwise geographic distance, ranging from 0 to approximately 8,000 km, against mammal community dissimilarity, ranging from 0 to 1. Open circles show an increasing trend, with nearby sites exhibiting dissimilarities across nearly the full range. At greater geographic distances, most pairs have high dissimilarity, and many points form a horizontal band at 1, indicating completely different species compositions." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>Just as in <a href="ch27.html#fig-nmds-stressplot" class="quarto-xref">Figure&nbsp;<span>27.29</span></a>, many of the pairs are made of sites that share no species and thus have the maximal Sørensen dissimilarity of 1. This explains the stripe of points along the top of the plot. The shape of the plot suggests that the nonlinear rank-based Mantel test may be more appropriate.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mantel</span>(geo.dist, mamm.dist, <span class="at">method=</span><span class="st">"spearman"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Mantel statistic based on Spearman's rank correlation rho 
+
+Call:
+mantel(xdis = geo.dist, ydis = mamm.dist, method = "spearman") 
+
+Mantel statistic r: 0.6805 
+      Significance: 0.001 
+
+Upper quantiles of permutations (null model):
+   90%    95%  97.5%    99% 
+0.0806 0.1107 0.1410 0.1666 
+Permutation: free
+Number of permutations: 999</code></pre>
+</div>
+</div>
+<p>The rank-based Mantel <span class="math inline">\(\rho\)</span> is greater than the linear Mantel <em>r</em>.</p>
+</section>
+<section id="sec-mtest-dis-partial" class="level3" data-number="28.2.2">
+<h3 data-number="28.2.2" class="anchored" data-anchor-id="sec-mtest-dis-partial"><span class="header-section-number">28.2.2</span> Partial Mantel tests</h3>
+<p>A <strong>partial Mantel test</strong> extends the Mantel test</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select environmental variables</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>env <span class="ot">&lt;-</span> met[, <span class="fu">c</span>(<span class="st">"elev"</span>, <span class="st">"precip"</span>, <span class="st">"temp"</span>, <span class="st">"npp"</span>,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>               <span class="st">"seas.pre"</span>, <span class="st">"seas.temp"</span>)]</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardize and calculate environmental distances</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>env.dist <span class="ot">&lt;-</span> <span class="fu">dist</span>(<span class="fu">scale</span>(env))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The initial Mantel test tested whether sites that are geographically farther apart are more dissimilar in terms of their mammal species composition. This <em>partial</em> Mantel test will test whether sites that are more environmentally different are more dissimilar in terms of species composition after accounting for geographic distance.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mantel.partial</span>(mamm.dist, env.dist, geo.dist, </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">method=</span><span class="st">"pearson"</span>, <span class="at">permutations=</span><span class="dv">999</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Partial Mantel statistic based on Pearson's product-moment correlation 
+
+Call:
+mantel.partial(xdis = mamm.dist, ydis = env.dist, zdis = geo.dist,      method = "pearson", permutations = 999) 
+
+Mantel statistic r: 0.5004 
+      Significance: 0.001 
+
+Upper quantiles of permutations (null model):
+   90%    95%  97.5%    99% 
+0.0725 0.0912 0.1090 0.1307 
+Permutation: free
+Number of permutations: 999</code></pre>
+</div>
+</div>
+<p>In <code>vegan::mantel.partial()</code>, the first two arguments are the distance matrices whose correlation you’re testing, and the third is the distance matrix you’re controlling for. In our example, we tested whether dissimilarity in terms of mammal community composition is correlated with dissimilarity in terms of environmental variables, after accounting for geographic distance. If we reverse the second and third arguments, we get a different test:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mantel.partial</span>(mamm.dist, geo.dist, env.dist, </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">method=</span><span class="st">"pearson"</span>, <span class="at">permutations=</span><span class="dv">999</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Partial Mantel statistic based on Pearson's product-moment correlation 
+
+Call:
+mantel.partial(xdis = mamm.dist, ydis = geo.dist, zdis = env.dist,      method = "pearson", permutations = 999) 
+
+Mantel statistic r: 0.2522 
+      Significance: 0.001 
+
+Upper quantiles of permutations (null model):
+   90%    95%  97.5%    99% 
+0.0764 0.1028 0.1218 0.1439 
+Permutation: free
+Number of permutations: 999</code></pre>
+</div>
+</div>
+<p>The second test looks for correlations between mammal community composition and geographic distance, after accounting for environmental differences. Notice that the Mantel <em>r</em> statistic is much smaller.</p>
+<p>We can plot the partial correlation just as we can an ordinary Mantel correlation.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>man02 <span class="ot">&lt;-</span> <span class="fu">mantel.partial</span>(mamm.dist,</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>                        env.dist,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>                        geo.dist)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract pairwise distances</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(mamm.dist)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(env.dist)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(geo.dist)</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove the linear association with geographic distance</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>m.res <span class="ot">&lt;-</span> <span class="fu">resid</span>(<span class="fu">lm</span>(m <span class="sc">~</span> g))</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>e.res <span class="ot">&lt;-</span> <span class="fu">resid</span>(<span class="fu">lm</span>(e <span class="sc">~</span> g))</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the partial relationship</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(e.res, m.res,</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">1</span>,</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Environmental dissimilarity (adjusted for geography)"</span>,</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Mammal dissimilarity (adjusted for geography)"</span>)</span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">lm</span>(m.res <span class="sc">~</span> e.res), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-mantel-partial" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Scatterplot of residual environmental dissimilarity on the horizontal axis and residual mammal community dissimilarity on the vertical axis, after adjusting both for geographic distance. Open circles form a broad cloud with a positive trend. A red regression line slopes upward from left to right. Environmental residuals range approximately from −2.5 to 3.0, and mammal dissimilarity residuals range from −0.65 to 0.3.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-mantel-partial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;28.9: Partial Mantel relationship between mammal community dissimilarity and environmental dissimilarity after accounting for geographic distance. Each point represents a pair of sampling sites, with both dissimilarity measures adjusted for their linear relationships with geographic distance. The red regression line illustrates the positive partial correlation, suggesting that environmentally dissimilar sites tend to have more dissimilar mammal communities even after accounting for geographic separation.
+</figcaption>
+<div aria-describedby="fig-mantel-partial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch28_files/figure-html/fig-mantel-partial-1.png" class="img-fluid figure-img" alt="Scatterplot of residual environmental dissimilarity on the horizontal axis and residual mammal community dissimilarity on the vertical axis, after adjusting both for geographic distance. Open circles form a broad cloud with a positive trend. A red regression line slopes upward from left to right. Environmental residuals range approximately from −2.5 to 3.0, and mammal dissimilarity residuals range from −0.65 to 0.3." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>It is important to note that partial Mantel tests can have unreliable Type I error rates with spatially autocorrelated data, so the significant results here warrant caution. In this case, dissimilarity in environmental characteristics and dissimilarity of mammal community composition are likely both spatially autocorrelated. For formal inference about environmental effects on community composition after accounting for space, distance-based redundancy analysis (dbRDA) with spatial predictors is often a better-supported alternative.</p>
+</section>
+<section id="sec-mtest-dis-mrm" class="level3" data-number="28.2.3">
+<h3 data-number="28.2.3" class="anchored" data-anchor-id="sec-mtest-dis-mrm"><span class="header-section-number">28.2.3</span> Multiple regression on distance matrices (MRM)</h3>
+<p>The Mantel test is useful for testing associations between distance matrices, but it does not explicitly model how dissimilarities between samples depend on other variables. Just as regression extends correlation by modeling the relationship between variables, other methods extend the analysis of distance matrices by treating pairwise dissimilarities as response variables. One such technique is multiple regression on distance matrices (MRM), which models the relationship between a response distance matrix and one or more predictor distance matrices. Like Mantel tests, MRM uses permutations to test statistical significance because pairwise distances are not independent observations.</p>
+<p>Example coming soon!</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-anderson2001" class="csl-entry" role="listitem">
+Anderson MJ. 2001. <a href="https://doi.org/10.1111/j.1442-9993.2001.01070.pp.x">A new method for non-parametric multivariate analysis of variance</a>. Austral Ecology 26(1):32–46.
+</div>
+</div>
 </section>
 </section>
 

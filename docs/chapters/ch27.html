@@ -552,18 +552,20 @@ window.Quarto = {
   <li><a href="#sec-ord-nmds" id="toc-sec-ord-nmds" class="nav-link" data-scroll-target="#sec-ord-nmds"><span class="header-section-number">27.5</span> Nonmetric multidimensional scaling (NMDS)</a>
   <ul>
   <li><a href="#sec-ord-nmds-def" id="toc-sec-ord-nmds-def" class="nav-link" data-scroll-target="#sec-ord-nmds-def"><span class="header-section-number">27.5.1</span> Definition and illustration</a></li>
-  <li><a href="#sec-ord-nmds-neon" id="toc-sec-ord-nmds-neon" class="nav-link" data-scroll-target="#sec-ord-nmds-neon"><span class="header-section-number">27.5.2</span> Example using NEON data</a>
+  <li><a href="#sec-ord-nmds-why" id="toc-sec-ord-nmds-why" class="nav-link" data-scroll-target="#sec-ord-nmds-why"><span class="header-section-number">27.5.2</span> Why use NMDS?</a></li>
+  <li><a href="#sec-ord-nmds-details" id="toc-sec-ord-nmds-details" class="nav-link" data-scroll-target="#sec-ord-nmds-details"><span class="header-section-number">27.5.3</span> Details of the algorithm</a></li>
+  <li><a href="#sec-ord-nmds-neon" id="toc-sec-ord-nmds-neon" class="nav-link" data-scroll-target="#sec-ord-nmds-neon"><span class="header-section-number">27.5.4</span> NMDS example using NEON data</a>
   <ul class="collapse">
-  <li><a href="#sec-ord-nmds-neon-data" id="toc-sec-ord-nmds-neon-data" class="nav-link" data-scroll-target="#sec-ord-nmds-neon-data"><span class="header-section-number">27.5.2.1</span> Data import and preparation</a></li>
-  <li><a href="#sec-ord-nmds-neon-fit" id="toc-sec-ord-nmds-neon-fit" class="nav-link" data-scroll-target="#sec-ord-nmds-neon-fit"><span class="header-section-number">27.5.2.2</span> Fit the NMDS</a></li>
-  <li><a href="#sec-ord-nmds-neon-plot" id="toc-sec-ord-nmds-neon-plot" class="nav-link" data-scroll-target="#sec-ord-nmds-neon-plot"><span class="header-section-number">27.5.2.3</span> Inspect and plot</a></li>
-  <li><a href="#sec-ord-nmds-neon-envfit" id="toc-sec-ord-nmds-neon-envfit" class="nav-link" data-scroll-target="#sec-ord-nmds-neon-envfit"><span class="header-section-number">27.5.2.4</span> Fitting environmental variables</a></li>
+  <li><a href="#sec-ord-nmds-neon-data" id="toc-sec-ord-nmds-neon-data" class="nav-link" data-scroll-target="#sec-ord-nmds-neon-data"><span class="header-section-number">27.5.4.1</span> Data import and preparation</a></li>
+  <li><a href="#sec-ord-nmds-neon-fit" id="toc-sec-ord-nmds-neon-fit" class="nav-link" data-scroll-target="#sec-ord-nmds-neon-fit"><span class="header-section-number">27.5.4.2</span> Fit the NMDS</a></li>
+  <li><a href="#sec-ord-nmds-neon-plot" id="toc-sec-ord-nmds-neon-plot" class="nav-link" data-scroll-target="#sec-ord-nmds-neon-plot"><span class="header-section-number">27.5.4.3</span> Inspect and plot</a></li>
+  <li><a href="#sec-ord-nmds-neon-envfit" id="toc-sec-ord-nmds-neon-envfit" class="nav-link" data-scroll-target="#sec-ord-nmds-neon-envfit"><span class="header-section-number">27.5.4.4</span> Fitting environmental variables</a></li>
+  <li><a href="#sec-ord-nmds-neon-dims" id="toc-sec-ord-nmds-neon-dims" class="nav-link" data-scroll-target="#sec-ord-nmds-neon-dims"><span class="header-section-number">27.5.4.5</span> Dimensionality in NMDS</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#sec-ord-ra" id="toc-sec-ord-ra" class="nav-link" data-scroll-target="#sec-ord-ra"><span class="header-section-number">27.6</span> Redundancy analysis (RA)</a></li>
   <li><a href="#sec-ord-cca" id="toc-sec-ord-cca" class="nav-link" data-scroll-target="#sec-ord-cca"><span class="header-section-number">27.7</span> Canonical correspondence analysis (CCA)</a></li>
-  <li><a href="#sec-ord-dbrda" id="toc-sec-ord-dbrda" class="nav-link" data-scroll-target="#sec-ord-dbrda"><span class="header-section-number">27.8</span> Distance-based RDA (dbRDA)</a></li>
-  <li><a href="#sec-ord-lda" id="toc-sec-ord-lda" class="nav-link" data-scroll-target="#sec-ord-lda"><span class="header-section-number">27.9</span> Linear discriminant analysis</a></li>
+  <li><a href="#sec-ord-lda" id="toc-sec-ord-lda" class="nav-link" data-scroll-target="#sec-ord-lda"><span class="header-section-number">27.8</span> Linear discriminant analysis</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/edit/main/chapters/ch27.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/greenquanteco/appl-biol-data-analysis/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -1777,47 +1779,124 @@ distances and original 3d distance matrix</code></pre>
 <pre><code>[1] 0.880239</code></pre>
 </div>
 </div>
-<p>The example we just stepped through illustrates why we use NMDS: dimension reduction without dissimilarity distortion. ### Details of the algorithm {#sec-ord-nmds-details}</p>
-<p>Coming soon!</p>
+<p>The example we just stepped through illustrates why we use NMDS: dimension reduction without dissimilarity distortion.</p>
 </section>
-<section id="sec-ord-nmds-neon" class="level3" data-number="27.5.2">
-<h3 data-number="27.5.2" class="anchored" data-anchor-id="sec-ord-nmds-neon"><span class="header-section-number">27.5.2</span> Example using NEON data</h3>
-<p>Coming soon!</p>
-<section id="sec-ord-nmds-neon-data" class="level4" data-number="27.5.2.1">
-<h4 data-number="27.5.2.1" class="anchored" data-anchor-id="sec-ord-nmds-neon-data"><span class="header-section-number">27.5.2.1</span> Data import and preparation</h4>
-<p>For an example PCA analysis, let’s revisit the small mammal measurement data from <a href="ch26.html#sec-clust-kmeans-example" class="quarto-xref"><span>Section 26.2.2</span></a>. Download the <a href="../datasets/data-neon-captures-site.csv">site-level capture dataset</a>, the <a href="../datasets/data-neon-metadata-site.csv">site metadata</a>, and the <a href="../datasets/data-neon-taxa.csv">taxonomic dataset</a> and put them in your working directory.</p>
+<section id="sec-ord-nmds-why" class="level3" data-number="27.5.2">
+<h3 data-number="27.5.2" class="anchored" data-anchor-id="sec-ord-nmds-why"><span class="header-section-number">27.5.2</span> Why use NMDS?</h3>
+<p>Now that we understand the goal of NMDS–representing dissimilarities between samples in reduced dimensions–it’s worth asking “Why?” The choice of ordination method, like the choice of statistical tests, can have important consequences in an analysis.</p>
+<p>NMDS is particularly useful for multivariate datasets containing many variables, especially when observations share relatively few characteristics or when the data contain many zeros. For example, community ecology datasets often contain many species that occur at only a few sites, resulting in sparse matrices with relatively few shared species between sites. In these situations, dissimilarity measures such as Sørensen can be useful because they emphasize shared occurrences without treating joint absences as evidence of similarity. NMDS then represents the dissimilarities among observations in a small number of dimensions, attempting to preserve their <em>rank ordering</em> rather than their exact numerical values.</p>
+<p>This flexibility makes NMDS useful for exploring complex multivariate patterns that may not be adequately represented by linear relationships. However, datasets containing many pairs of maximally dissimilar observations can be challenging because the ordination has relatively little information about their relative positions.</p>
+<p><span class="citation" data-cites="mccune2002analysis">McCune <em>et al.</em> (<a href="#ref-mccune2002analysis" role="doc-biblioref">2002</a>)</span> note that one advantage of NMDS is that it handles data that are nonnormal, discontinuous, or “otherwise questionable scales”. This is because of the focus on the <em>rank order</em> of the dissimilarity matrix rather than its actual values. Maintaining rank order rather than magnitude makes variables on very diffrent scales or with few values more comparable. They also note that NMDS not only avoids the assumption of linear relationships among variables, it can linearize many relationships because of its reliance on rank order statistics.</p>
+<p>That is not to say that NMDS is without disadvantages. One major issue with NMDS is that its reliance on Monte Carlo (random sampling) methods for optimization can cause it to fail to find the best (global) solution. Another feature which can be a disadvantage is that the axes have no direct mathematical relationship with the variables in the dataset.</p>
+</section>
+<section id="sec-ord-nmds-details" class="level3" data-number="27.5.3">
+<h3 data-number="27.5.3" class="anchored" data-anchor-id="sec-ord-nmds-details"><span class="header-section-number">27.5.3</span> Details of the algorithm</h3>
+<p>NMDS works by iteratively searching for a configuration of samples that faithfully represents the rank order of the distance matrix of a dataset in a reduced dimensional space. This is a completely different approach than <a href="#sec-ord-un-pca-what">PCA</a>, which achieves dimension reduction by finding eigenvectors in the dataset that capture the variation more efficiently than the original dataset (i.e., it <a href="#fig-ord-basicidea">rotates the dataset</a>).</p>
+<p>NMDS works with the <span class="math inline">\(n\times n\)</span> distance matrix calculated from an <span class="math inline">\(n\times p\)</span>-dimensional data matrix, where <span class="math inline">\(n\)</span> is the number of observations and <span class="math inline">\(p\)</span> is the number of variables. It tries to represent the samples in a <span class="math inline">\(k\)</span>-dimensional space, where <span class="math inline">\(k&lt;p\)</span>. The configuration in <span class="math inline">\(k\)</span> dimensions is optimized to minimize <strong>stress</strong>, which is a measure of how much the distance matrix in <span class="math inline">\(k\)</span> dimensions distorts the distance matrix in <span class="math inline">\(p\)</span> dimensions. The distortion measured by stress is a departure from monotonicity. That is, how much the rank order of the dissimilarity matrix changes.</p>
+<p>The basic algorithm for NMDS is as follows.</p>
+<ol type="1">
+<li>Calculate the distance matrix <span class="math inline">\(\mathbf{\Delta}\)</span> in the original <span class="math inline">\(p\)</span>-dimensional space.</li>
+<li>Assign sample units to a (usually random) starting configuration in the reduced <span class="math inline">\(k\)</span>-dimensional space.</li>
+<li>Calculate <span class="math inline">\(\mathbf{D}_k\)</span>, the Euclidean distance matrix of the samples in the <em>k</em>-space.</li>
+<li>Rank the elements of <span class="math inline">\(\mathbf{\Delta}\)</span>, and then put the elements of <span class="math inline">\(\mathbf{D}_k\)</span> in the same order as <span class="math inline">\(\mathbf{\Delta}\)</span>.</li>
+<li>Calculate vector <span class="math inline">\(\hat{\mathbf{D}}_k\)</span>, which is a copy of <span class="math inline">\(\mathbf{D}_k\)</span> that replaces elements which break monotonicity. For example, <span class="math inline">\(d_5\)</span> should be a distance that falls between <span class="math inline">\(d_4\)</span> and <span class="math inline">\(d_6\)</span>. But, if <span class="math inline">\(d_5&lt;d_4\)</span> or <span class="math inline">\(d_5&gt;d_6\)</span>, <span class="math inline">\(d_5\)</span> will be adjusted to become <span class="math inline">\(\hat{d}_5\)</span>, which <em>is</em> between <span class="math inline">\(d_4\)</span> and <span class="math inline">\(d_6\)</span>. The total amount of adjustment needed to adjust every <span class="math inline">\(d_{i}\)</span> to <span class="math inline">\(\hat{d}_{i}\)</span> is used to calculate stress.</li>
+<li>The positions of the samples in <span class="math inline">\(k\)</span>-space is adjusted according to an algorithm that seeks a lower stress value.</li>
+<li>This process is repeated until the stress stops improving.</li>
+</ol>
+<p>Because the starting configurations and the re-configurations involve random number sampling (“Monte Carlo methods”), most NMDS software tries several random starts to avoid the possibility of begin trapped in a local solution that is not as optimal as the true global solution.</p>
+<div id="fig-ord-nmds-optima" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-ord-nmds-optima-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.27: text
+</figcaption>
+<div aria-describedby="fig-ord-nmds-optima-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/ord-nmds-optima.jpg" class="img-fluid figure-img" alt="text.">
+</div>
+</figure>
+</div>
+<p>You should also set the random number seed, so your analysis results are reproducible. Remember, the NMDS axes are arbitrary, so even though you might repeat the analysis and get two solutions with the same stress value, one of them might be rotated from the other…meaning that you have to re-write your plot code!</p>
+</section>
+<section id="sec-ord-nmds-neon" class="level3" data-number="27.5.4">
+<h3 data-number="27.5.4" class="anchored" data-anchor-id="sec-ord-nmds-neon"><span class="header-section-number">27.5.4</span> NMDS example using NEON data</h3>
+<section id="sec-ord-nmds-neon-data" class="level4" data-number="27.5.4.1">
+<h4 data-number="27.5.4.1" class="anchored" data-anchor-id="sec-ord-nmds-neon-data"><span class="header-section-number">27.5.4.1</span> Data import and preparation</h4>
+<p>For an example NMDS analysis, let’s revisit the small mammal capture data from <a href="ch26.html#sec-clust-kmeans-example" class="quarto-xref"><span>Section 26.2.2</span></a>. Download the <a href="../datasets/data-neon-captures-site.csv">site-level capture dataset</a>, the <a href="../datasets/data-neon-metadata-site.csv">site metadata</a>, and the <a href="../datasets/data-neon-taxa.csv">taxonomic dataset</a> and put them in your working directory.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>tax <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-taxa.csv"</span>)</span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>cap <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-captures-site.csv"</span>)</span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>met <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data-neon-metadata-site.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>We are going to use NMDS to explore variation in small mammal diversity between sites First we need to organize the data.</p>
+<p>We are going to use NMDS to explore variation in small mammal diversity between sites. First we need to organize the data. We are going to convert the capture numbers in <code>cap</code> to presence-absence: 1 for presence, 0 for absence. We will assume that detection at a site at any point indicates presence, and non-detection indicates absence. We will avoid analyzing capture numbers because capture count is a function of sampling effort and trap success as much as it reflects actual presence or abundance.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert capture numbers to presence absence</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>pa <span class="ot">&lt;-</span> cap</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>pa<span class="sc">$</span>X <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(pa) <span class="ot">&lt;-</span> pa<span class="sc">$</span>site</span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>pa<span class="sc">$</span>site <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>pa[pa<span class="sc">&gt;</span><span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">colSums</span>(pa))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>pa <span class="ot">&lt;-</span> cap</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co"># fix some columns and set rownames</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>pa<span class="sc">$</span>X <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(pa) <span class="ot">&lt;-</span> pa<span class="sc">$</span>site</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>pa<span class="sc">$</span>site <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="co"># convert capture numbers to presence absence</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>pa[pa<span class="sc">&gt;</span><span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now let’s check the dataset. We want to screen for potential problems. Chief among these are (1) species present at no sites or 1 site; and (2) sites with no species.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># shows that one species is not present at</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co"># any site. Delete this species because it </span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="co"># carries no information.</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">colSums</span>(pa)<span class="sc">==</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+FALSE  TRUE 
+  133     1 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># leaves 133 species</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>pa <span class="ot">&lt;-</span> pa[,<span class="sc">-</span><span class="fu">which</span>(<span class="fu">colSums</span>(pa)<span class="sc">==</span><span class="dv">0</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now check for sites with no species.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># all 46 sites have &gt;=1 species, </span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="co"># so no worries here</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">rowSums</span>(pa)<span class="sc">==</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+FALSE 
+   46 </code></pre>
+</div>
+</div>
+<p>Having one site with no species present might not be a problem, but having more than one would <a href="ch25.html#sec-diss-zeros">complicate the distance calculations</a>.</p>
+<p>Now that we have eliminated the obvious problems, let’s explore the distribution of species occurrences and species richnesses.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># shows that most species are present at very</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="co"># few sites. Most sites have around 5-15 species,</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="co"># but there is a lot of variability. </span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">colSums</span>(pa), <span class="at">main=</span><span class="st">"Sites per species"</span>)</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">rowSums</span>(pa), <span class="at">main=</span><span class="st">"Species per site"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="ch27_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+<div id="fig-nmds-neon1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-nmds-neon1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.28: text.
+</figcaption>
+<div aria-describedby="fig-nmds-neon1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-nmds-neon1-1.png" class="img-fluid figure-img" alt="text." width="960">
+</div>
 </figure>
 </div>
 </div>
 </div>
+<p>The left panel in <a href="#fig-nmds-neon1" class="quarto-xref">Figure&nbsp;<span>27.28</span></a> tell us that the species presence-absence matrix <code>pa</code> is quite sparse: most species occur in at &lt;5 sites. This supports the decision to analyze-presence absence rather than abundance because differences between sites are likely to be driven by differences in composition rather than differences in abundance. The right panel in <a href="#fig-nmds-neon1" class="quarto-xref">Figure&nbsp;<span>27.28</span></a> suggests that analyzing composition rather than species richness would be more informative because species richness doesn’t vary very between sites.</p>
+<p>The left panel in <a href="#fig-nmds-neon1" class="quarto-xref">Figure&nbsp;<span>27.28</span></a> also suggests the use of the Bray-Curtis (Sørensen) dissimilarity measure rather than the Euclidean distance metric. Sørensen dissimilarity is appropriate for presence–absence data because it emphasizes shared occurrences while ignoring joint absences, which provide little evidence of ecological similarity. NMDS then represents these compositional differences in a small number of dimensions without assuming that dissimilarities must correspond linearly to distances in the ordination. However, datasets with many pairs of sites sharing no species can be challenging because those pairs all have the maximum Sørensen dissimilarity.</p>
+<p>It is worth noting that the sparsity of the data is a strong argument for the Sørensen dissimilarity, but not an argument for using NMDS over another distance-based ordination method like <a href="#sec-ord-pcoa%7D">PCoA</a>. The arguments in favor of NMDS are its rank-based representation of potentially nonlinear relationships and lack of assumptions about linearity.</p>
 </section>
-<section id="sec-ord-nmds-neon-fit" class="level4" data-number="27.5.2.2">
-<h4 data-number="27.5.2.2" class="anchored" data-anchor-id="sec-ord-nmds-neon-fit"><span class="header-section-number">27.5.2.2</span> Fit the NMDS</h4>
-<p>The <code>vegan</code> function for NMDS is <code>metaMDS()</code>. We will use the default dissimilarity, Bray-Curtis.</p>
+<section id="sec-ord-nmds-neon-fit" class="level4" data-number="27.5.4.2">
+<h4 data-number="27.5.4.2" class="anchored" data-anchor-id="sec-ord-nmds-neon-fit"><span class="header-section-number">27.5.4.2</span> Fit the NMDS</h4>
+<p>The <code>vegan</code> function for NMDS is <code>metaMDS()</code>. We will use the default dissimilarity, Bray-Curtis, which for binary data is the same as the Sørensen dissimilarity. We will accept the other default arguments in <code>metaMDS()</code> too.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12</span>)</span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> <span class="fu">metaMDS</span>(pa)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12</span>)</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> <span class="fu">metaMDS</span>(pa, <span class="at">distance=</span><span class="st">"bray"</span>, <span class="at">k=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Run 0 stress 0.1157083 
 Run 1 stress 0.1157084 
@@ -1868,14 +1947,580 @@ Run 20 stress 0.1524464
 *** Best solution repeated 5 times</code></pre>
 </div>
 </div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>n1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+metaMDS(comm = pa, distance = "bray", k = 2) 
+
+global Multidimensional Scaling using monoMDS
+
+Data:     pa 
+Distance: bray 
+
+Dimensions: 2 
+Stress:     0.1157082 
+Stress type 1, weak ties
+Best solution was repeated 5 times in 20 tries
+The best solution was from try 14 (random start)
+Scaling: centring, PC rotation, halfchange scaling 
+Species: expanded scores based on 'pa' </code></pre>
+</div>
+</div>
+<p>The solution has a stress value of about 0.12, which is good but not great. By convention, a stress between 0.1 and 0.2 indicates a usable but imperfect representation of the original dissimilarities. Stress less than 0.1 is preferable, and stress greater than 0.2 means that an ordination is suspect. If you get a stress value greater than 0.2, you can try more random starts, dropping variables with too many 0s or extreme values, or sites with data issues. Or, try another ordination technique.</p>
+<p>One important diagnostic for our NMDS fit is called <strong>stress plot</strong> or <strong>Shepard plot</strong>. This is a figure that shows how the distance matrix in the ordination solution compares to the distance matrix in the original space. This plot should show a very tight correlation between the two distance matrices. This correlation does not have to be linear. Remember, NMDS preserves the <em>rank order</em> of the distance matrix, not the actual values. <a href="#fig-nmds-stressplot" class="quarto-xref">Figure&nbsp;<span>27.29</span></a> below shows a pretty good correlation, but a big clump of points where the observed dissimilarity is 1. This is unavoidable in this dataset, because about a quarter of the pairs of sites share no species in common and thus have the maximum Sørensen dissimilarity of 1 (check with <code>length(which(vegdist(pa)==1))</code>).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">stressplot</span>(n1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-nmds-stressplot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-nmds-stressplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.29: text.
+</figcaption>
+<div aria-describedby="fig-nmds-stressplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-nmds-stressplot-1.png" class="img-fluid figure-img" alt="text." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
 </section>
-<section id="sec-ord-nmds-neon-plot" class="level4" data-number="27.5.2.3">
-<h4 data-number="27.5.2.3" class="anchored" data-anchor-id="sec-ord-nmds-neon-plot"><span class="header-section-number">27.5.2.3</span> Inspect and plot</h4>
-<p>Coming soon!</p>
+<section id="sec-ord-nmds-neon-plot" class="level4" data-number="27.5.4.3">
+<h4 data-number="27.5.4.3" class="anchored" data-anchor-id="sec-ord-nmds-neon-plot"><span class="header-section-number">27.5.4.3</span> Inspect and plot</h4>
+<p>With a stress of about 0.12, we can interpret broad gradients and groups of sites, but should avoid drawing conclusions about small differences between individual samples.</p>
+<p>Let’s visualize the ordination by extracting the NMDS axis scores and plotting them. The process is similar to what we did for PCA. However, we are not going to extract species scores, because unlike in PCA the axes are not linear combinations of the underlying variables (or any kind of function, for that matter). Instead, we will use function <code>envfit()</code>, which finds a vector showing the strongest linear association between a variable and the site coordinates in NMDS space.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># scaling doesn't matter as much</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="co"># as it did for PCA, so just use </span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="co"># type 1</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>xy <span class="ot">&lt;-</span> <span class="fu">scores</span>(n1, <span class="at">display=</span><span class="st">"sites"</span>, <span class="at">scaling=</span><span class="dv">1</span>)</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a><span class="co"># fit the species vectors</span></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>e1 <span class="ot">&lt;-</span> <span class="fu">envfit</span>(n1, pa)</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>sp <span class="ot">&lt;-</span> e1<span class="sc">$</span>vectors<span class="sc">$</span>arrows</span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a><span class="co"># show only species with significant</span></span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a><span class="co"># associations with the NMDS space</span></span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a>sp <span class="ot">&lt;-</span> sp[e1<span class="sc">$</span>vectors<span class="sc">$</span>pvals <span class="sc">&lt;</span> <span class="fl">0.05</span>,]</span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy[,<span class="dv">1</span>], xy[,<span class="dv">2</span>], <span class="at">pch=</span><span class="dv">19</span>, <span class="at">cex=</span><span class="fl">1.3</span>,</span>
+<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"NMDS axis 1"</span>, <span class="at">ylab=</span><span class="st">"NMDS axis 2"</span>)</span>
+<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, sp[,<span class="dv">1</span>], sp[,<span class="dv">2</span>], <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb57-18"><a href="#cb57-18" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(sp[,<span class="dv">1</span>], sp[,<span class="dv">2</span>], <span class="fu">rownames</span>(sp),</span>
+<span id="cb57-19"><a href="#cb57-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span><span class="st">"red"</span>, <span class="at">cex=</span><span class="fl">0.7</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-nmds-neon2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-nmds-neon2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.30: text.
+</figcaption>
+<div aria-describedby="fig-nmds-neon2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-nmds-neon2-1.png" class="img-fluid figure-img" alt="text." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>The species names in the biplot are a little hard to read, but we can zoom in if we need with the <code>xlim</code> and <code>ylim</code> arguments.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy[,<span class="dv">1</span>], xy[,<span class="dv">2</span>], <span class="at">pch=</span><span class="dv">19</span>, <span class="at">cex=</span><span class="fl">1.3</span>,</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"NMDS axis 1"</span>, <span class="at">ylab=</span><span class="st">"NMDS axis 2"</span>,</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="fl">0.9</span>, <span class="fl">1.05</span>))</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, sp[,<span class="dv">1</span>], sp[,<span class="dv">2</span>], <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(sp[,<span class="dv">1</span>], sp[,<span class="dv">2</span>], <span class="fu">rownames</span>(sp),</span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span><span class="st">"red"</span>, <span class="at">cex=</span><span class="fl">0.7</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-nmds-neon3" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-nmds-neon3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.31: text.
+</figcaption>
+<div aria-describedby="fig-nmds-neon3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-nmds-neon3-1.png" class="img-fluid figure-img" alt="text." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy[,<span class="dv">1</span>], xy[,<span class="dv">2</span>], <span class="at">pch=</span><span class="dv">19</span>, <span class="at">cex=</span><span class="fl">1.3</span>,</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"NMDS axis 1"</span>, <span class="at">ylab=</span><span class="st">"NMDS axis 2"</span>,</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.25</span>, <span class="dv">1</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="fl">0.5</span>))</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, sp[,<span class="dv">1</span>], sp[,<span class="dv">2</span>], <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(sp[,<span class="dv">1</span>], sp[,<span class="dv">2</span>], <span class="fu">rownames</span>(sp),</span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span><span class="st">"red"</span>, <span class="at">cex=</span><span class="fl">0.7</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-nmds-neon4" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-nmds-neon4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.32: text.
+</figcaption>
+<div aria-describedby="fig-nmds-neon4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-nmds-neon4-1.png" class="img-fluid figure-img" alt="text." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-nmds-neon2" class="quarto-xref">Figure&nbsp;<span>27.30</span></a> suggests that sites form a gradient between two groups of species that tend to co-occur. At high values of NMDS axis 2, we have <code>Perman</code>, <code>Perboy</code>, <code>Dipord</code>, <code>Reimeg</code>, <code>Onyleu</code>, <code>Sortro</code>, <code>Tammin</code>, <code>Tamdou</code>, and others. Those are Deer Mouse (<em>Peromyscus maniculatus</em>), Brush Mouse (<em>P. boylii</em>), Ord’s Kangaroo Rat (<em>Dipodomys ordii</em>), Western Harvest Mouse (<em>Reithrodontomys megalotis</em>), Northern Grasshopper Mouse (<em>Onychomys leucogaster</em>), Trowbridge’s Shrew (<em>Sorex trowbridgii</em>), Least Chipmunk (<em>Tamias minimus</em>), and Douglas’s Squirrel (<em>Tamiasciurus douglasii</em>). At lower values of NMDS axis 2, we have <code>Tamstr</code>, <code>Ochnut</code>, <code>Perleu</code>, <code>Pergos</code>, <code>Perpol</code>, <code>Orypal</code>, <code>Blacar</code>, <code>Podflo</code>, <code>Neoflo</code>, and <code>Sighis</code> These are Eastern Chipmunk (<em>Tamias striatus</em>), Golden Mouse (<em>Ochrotomys nuttalli</em>), White-footed Mouse (<em>Peromyscus leucopus</em>), Cotton Mouse (<em>P. gossypinus</em>), Oldfield Mouse (<em>P. polionotus</em>), Marsh Rice Rat (<em>Oryzomys palustris</em>), Southern Short-tailed Shrew (<em>Blarina carolinensis</em>), Florida Mouse (<em>Podomys floridanus</em>), Eastern Woodrat (<em>Neotoma floridana</em>), and Hispid Cotton Rat (<em>Sigmodon hispidus</em>).</p>
+<p>Those two clusters of species suggest that NMDS axis 2 might be an east-west gradient. Let’s find out.</p>
 </section>
-<section id="sec-ord-nmds-neon-envfit" class="level4" data-number="27.5.2.4">
-<h4 data-number="27.5.2.4" class="anchored" data-anchor-id="sec-ord-nmds-neon-envfit"><span class="header-section-number">27.5.2.4</span> Fitting environmental variables</h4>
-<p>Coming soon!</p>
+<section id="sec-ord-nmds-neon-envfit" class="level4" data-number="27.5.4.4">
+<h4 data-number="27.5.4.4" class="anchored" data-anchor-id="sec-ord-nmds-neon-envfit"><span class="header-section-number">27.5.4.4</span> Fitting environmental variables</h4>
+<p>We can fit environmental variables to NMDS solutions just like we can species. Let’s use the site metadata in <code>met</code>. The rows of <code>met</code> are in the same order as <code>pa</code>, so we don’t need to merge. For convenience, we can make a new data frame <code>env</code> that has just the columns we need.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>env.cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"lat"</span>, <span class="st">"lon"</span>, <span class="st">"elev"</span>,</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>              <span class="st">"precip"</span>, <span class="st">"temp"</span>, <span class="st">"npp"</span>,</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>              <span class="st">"seas.pre"</span>, <span class="st">"seas.temp"</span>)</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>env <span class="ot">&lt;-</span> met[,env.cols]</span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a><span class="co"># fit the vectors</span></span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a>e2 <span class="ot">&lt;-</span> <span class="fu">envfit</span>(n1, env)</span>
+<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a>en <span class="ot">&lt;-</span> e2<span class="sc">$</span>vectors<span class="sc">$</span>arrows</span>
+<span id="cb60-9"><a href="#cb60-9" aria-hidden="true" tabindex="-1"></a>en <span class="ot">&lt;-</span> en[e2<span class="sc">$</span>vectors<span class="sc">$</span>pvals <span class="sc">&lt;</span> <span class="fl">0.05</span>,]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now add these to the plot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy[,<span class="dv">1</span>], xy[,<span class="dv">2</span>], <span class="at">pch=</span><span class="dv">19</span>, <span class="at">cex=</span><span class="fl">1.3</span>,</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"NMDS axis 1"</span>, <span class="at">ylab=</span><span class="st">"NMDS axis 2"</span>)</span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, sp[,<span class="dv">1</span>], sp[,<span class="dv">2</span>], <span class="at">col=</span><span class="st">"#FF000030"</span>)</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(sp[,<span class="dv">1</span>], sp[,<span class="dv">2</span>], <span class="fu">rownames</span>(sp),</span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span><span class="st">"#FF000030"</span>, <span class="at">cex=</span><span class="fl">0.7</span>)</span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, en[,<span class="dv">1</span>], en[,<span class="dv">2</span>], <span class="at">col=</span><span class="st">"blue"</span>,</span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(en[,<span class="dv">1</span>], en[,<span class="dv">2</span>], <span class="fu">rownames</span>(en),</span>
+<span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">cex=</span><span class="fl">0.7</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-nmds-neon5" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-nmds-neon5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.33: text.
+</figcaption>
+<div aria-describedby="fig-nmds-neon5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-nmds-neon5-1.png" class="img-fluid figure-img" alt="text." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>Our suspicion about NMDS axis 2 representing a longitudinal gradient wasn’t far off: <code>lon</code> points to the lower right, indicating that lower longitudes (east) are that direction. The vectors for elevation (<code>elev</code>) and seasonality of precipitation <code>seas.pre</code> seem mroe aligned with the gradient we proposed.</p>
+<p>Another interesting pattern is that the vectors for latitude and temperature point in nearly opposite directions. This makes sense: higher latitudes experience colder temperatures. The species associated with higher latitudes are <code>Tamhud</code>, <code>Micpen</code>, <code>Micoec</code>, <code>Sorugy</code>, <code>Sorcin</code>, <code>Sortun</code>, <code>Myorut</code>, <code>Uropar</code>, <code>Dicgro</code>, <code>Lemtri</code>, and <code>Micmiu</code>. These are American Red Squirrel (<em>Tamiasciurus hudsonicus</em>), Meadow Vole (<em>Microtus pennsylvanicus</em>), Tundra Vole (<em>M. oeconomus</em>), Barren-ground Shrew (<em>Sorex ugyunak</em>), Masked Shrew (<em>S. cinereus</em>), Tundra Shrew (<em>S. tundrensis</em>), Northern Red-backed Vole (<em>Myodes rutilus</em>), Arctic Ground Squirrel (<em>Urocitellus parryii</em>), Northern Collared Lemming (<em>Dicrostonyx groenlandicus</em>), Nearctic Brown Lemming (<em>Lemmus trimucronatus</em>), and Singing Vole (<em>Microtus miurus</em>). So, the association between latitude and these species makes sense.</p>
+<p>Another option for visualizing how environmental variables may relate to your ordination solution is to fit a <em>surface</em>. This is a better way to visualize nonlinear and nonmonotonic patterns.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy[,<span class="dv">1</span>], xy[,<span class="dv">2</span>], <span class="at">pch=</span><span class="dv">19</span>, <span class="at">cex=</span><span class="fl">1.3</span>,</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"NMDS axis 1"</span>, <span class="at">ylab=</span><span class="st">"NMDS axis 2"</span>)</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, sp[,<span class="dv">1</span>], sp[,<span class="dv">2</span>], <span class="at">col=</span><span class="st">"#FF000030"</span>)</span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(sp[,<span class="dv">1</span>], sp[,<span class="dv">2</span>], <span class="fu">rownames</span>(sp),</span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span><span class="st">"#FF000030"</span>, <span class="at">cex=</span><span class="fl">0.7</span>)</span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ordisurf</span>(n1, env<span class="sc">$</span>temp, <span class="at">add=</span><span class="cn">TRUE</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Family: gaussian 
+Link function: identity 
+
+Formula:
+y ~ s(x1, x2, k = 10, bs = "tp", fx = FALSE)
+
+Estimated degrees of freedom:
+8.35  total = 9.35 
+
+REML score: 105.8698     </code></pre>
+</div>
+<div class="cell-output-display">
+<div id="fig-nmds-neon6" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-nmds-neon6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.34: text.
+</figcaption>
+<div aria-describedby="fig-nmds-neon6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-nmds-neon6-1.png" class="img-fluid figure-img" alt="text." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>In this case, <a href="#fig-nmds-neon6" class="quarto-xref">Figure&nbsp;<span>27.34</span></a> shows a clear gradient of increasing temperature from left to right. Some variables, like elevation, are more complicated:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy[,<span class="dv">1</span>], xy[,<span class="dv">2</span>], <span class="at">pch=</span><span class="dv">19</span>, <span class="at">cex=</span><span class="fl">1.3</span>,</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"NMDS axis 1"</span>, <span class="at">ylab=</span><span class="st">"NMDS axis 2"</span>)</span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="dv">0</span>, <span class="dv">0</span>, sp[,<span class="dv">1</span>], sp[,<span class="dv">2</span>], <span class="at">col=</span><span class="st">"#FF000030"</span>)</span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(sp[,<span class="dv">1</span>], sp[,<span class="dv">2</span>], <span class="fu">rownames</span>(sp),</span>
+<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span><span class="st">"#FF000030"</span>, <span class="at">cex=</span><span class="fl">0.7</span>)</span>
+<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ordisurf</span>(n1, env<span class="sc">$</span>seas.temp, <span class="at">add=</span><span class="cn">TRUE</span>, <span class="at">col=</span><span class="st">"blue"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Family: gaussian 
+Link function: identity 
+
+Formula:
+y ~ s(x1, x2, k = 10, bs = "tp", fx = FALSE)
+
+Estimated degrees of freedom:
+8.52  total = 9.52 
+
+REML score: 283.944     </code></pre>
+</div>
+<div class="cell-output-display">
+<div id="fig-nmds-neon7" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-nmds-neon7-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.35: text.
+</figcaption>
+<div aria-describedby="fig-nmds-neon7-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-nmds-neon7-1.png" class="img-fluid figure-img" alt="text." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>We can also fit factors using <code>envfit()</code> and show them with <code>ordiellipse()</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>e3 <span class="ot">&lt;-</span> <span class="fu">envfit</span>(n1, met<span class="sc">$</span>habitat)</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>hab <span class="ot">&lt;-</span> e3<span class="sc">$</span>factors<span class="sc">$</span>centroids</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">hcl.colors</span>(<span class="fu">nrow</span>(hab), <span class="st">"Dark 3"</span>)</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xy[,<span class="dv">1</span>], xy[,<span class="dv">2</span>], <span class="at">pch=</span><span class="dv">19</span>, <span class="at">cex=</span><span class="fl">1.3</span>,</span>
+<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"NMDS axis 1"</span>, <span class="at">ylab=</span><span class="st">"NMDS axis 2"</span>)</span>
+<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(hab[,<span class="dv">1</span>], hab[,<span class="dv">2</span>], <span class="fu">rownames</span>(hab),</span>
+<span id="cb66-9"><a href="#cb66-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span>cols, <span class="at">xpd=</span><span class="cn">NA</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-nmds-neon8" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-nmds-neon8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.36: text.
+</figcaption>
+<div aria-describedby="fig-nmds-neon8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-nmds-neon8-1.png" class="img-fluid figure-img" alt="text." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-ord-nmds-neon-dims" class="level4" data-number="27.5.4.5">
+<h4 data-number="27.5.4.5" class="anchored" data-anchor-id="sec-ord-nmds-neon-dims"><span class="header-section-number">27.5.4.5</span> Dimensionality in NMDS</h4>
+<p>In the previous example, we decided to fit a two-dimensional solution. However, we could have tried a three or four or more dimensional solution. The choice of how many dimensions to use for your NMDS solution depends on a balance of (1) minimizing stress; while (2) keeping the figure interpretable. We can assess how stress changes by plotting the stress of solutions with different numbers of dimenions. The strategy is similar to how we assessed how many clusters were appropriate in <a href="#fig-kmeans-wss-plot"><em>K</em>-means clustering</a>: obtain a fit with different values for <em>k</em>, and plot how the stress changes with each additional dimension in the solution.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>klist <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"list"</span>, <span class="at">length=</span><span class="fu">length</span>(K))</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(K)){</span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>    klist[[i]] <span class="ot">&lt;-</span> <span class="fu">metaMDS</span>(pa, <span class="at">k=</span>K[i])</span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Run 0 stress 0.228575 
+Run 1 stress 0.262067 
+Run 2 stress 0.2315957 
+Run 3 stress 0.2281544 
+... New best solution
+... Procrustes: rmse 0.03306487  max resid 0.1176156 
+Run 4 stress 0.2480115 
+Run 5 stress 0.228049 
+... New best solution
+... Procrustes: rmse 0.03660245  max resid 0.1492753 
+Run 6 stress 0.2274487 
+... New best solution
+... Procrustes: rmse 0.006039331  max resid 0.01876672 
+Run 7 stress 0.2274344 
+... New best solution
+... Procrustes: rmse 0.03556711  max resid 0.1541928 
+Run 8 stress 0.2364162 
+Run 9 stress 0.2423608 
+Run 10 stress 0.2270764 
+... New best solution
+... Procrustes: rmse 0.02583723  max resid 0.1318518 
+Run 11 stress 0.2391517 
+Run 12 stress 0.2314673 
+Run 13 stress 0.26895 
+Run 14 stress 0.2286854 
+Run 15 stress 0.267928 
+Run 16 stress 0.2700468 
+Run 17 stress 0.2537889 
+Run 18 stress 0.2384427 
+Run 19 stress 0.2375385 
+Run 20 stress 0.2283212 
+*** Best solution was not repeated -- monoMDS stopping criteria:
+    17: stress ratio &gt; sratmax
+     3: scale factor of the gradient &lt; sfgrmin
+Run 0 stress 0.1157083 
+Run 1 stress 0.1157085 
+... Procrustes: rmse 8.583335e-05  max resid 0.0004912752 
+... Similar to previous best
+Run 2 stress 0.1160278 
+... Procrustes: rmse 0.004716377  max resid 0.02336246 
+Run 3 stress 0.1157086 
+... Procrustes: rmse 0.0001717128  max resid 0.001003597 
+... Similar to previous best
+Run 4 stress 0.1616957 
+Run 5 stress 0.1621137 
+Run 6 stress 0.1786179 
+Run 7 stress 0.1157084 
+... Procrustes: rmse 6.139407e-05  max resid 0.000352906 
+... Similar to previous best
+Run 8 stress 0.1205347 
+Run 9 stress 0.1519212 
+Run 10 stress 0.1160277 
+... Procrustes: rmse 0.004713843  max resid 0.0233734 
+Run 11 stress 0.1620321 
+Run 12 stress 0.1157085 
+... Procrustes: rmse 0.0001077177  max resid 0.0006285929 
+... Similar to previous best
+Run 13 stress 0.1157086 
+... Procrustes: rmse 0.0001353592  max resid 0.0007914416 
+... Similar to previous best
+Run 14 stress 0.1157084 
+... Procrustes: rmse 0.0004689439  max resid 0.002739212 
+... Similar to previous best
+Run 15 stress 0.1523092 
+Run 16 stress 0.1157085 
+... Procrustes: rmse 9.503249e-05  max resid 0.0005396638 
+... Similar to previous best
+Run 17 stress 0.1160275 
+... Procrustes: rmse 0.004642874  max resid 0.02385903 
+Run 18 stress 0.1157083 
+... New best solution
+... Procrustes: rmse 0.0004163497  max resid 0.002433842 
+... Similar to previous best
+Run 19 stress 0.115709 
+... Procrustes: rmse 0.0007016256  max resid 0.004102115 
+... Similar to previous best
+Run 20 stress 0.1205346 
+*** Best solution repeated 2 times
+Run 0 stress 0.0763375 
+Run 1 stress 0.07775061 
+Run 2 stress 0.07633781 
+... Procrustes: rmse 0.001068704  max resid 0.003996407 
+... Similar to previous best
+Run 3 stress 0.07707051 
+Run 4 stress 0.07775058 
+Run 5 stress 0.07775028 
+Run 6 stress 0.07465728 
+... New best solution
+... Procrustes: rmse 0.06885868  max resid 0.2747804 
+Run 7 stress 0.08233752 
+Run 8 stress 0.08688661 
+Run 9 stress 0.07633759 
+Run 10 stress 0.08188602 
+Run 11 stress 0.07717132 
+Run 12 stress 0.07465716 
+... New best solution
+... Procrustes: rmse 0.0004760633  max resid 0.00264286 
+... Similar to previous best
+Run 13 stress 0.07633821 
+Run 14 stress 0.07717172 
+Run 15 stress 0.07465766 
+... Procrustes: rmse 0.0002627313  max resid 0.001525966 
+... Similar to previous best
+Run 16 stress 0.08688675 
+Run 17 stress 0.07775058 
+Run 18 stress 0.076338 
+Run 19 stress 0.07633738 
+Run 20 stress 0.07465752 
+... Procrustes: rmse 0.0003595795  max resid 0.002105949 
+... Similar to previous best
+*** Best solution repeated 3 times
+Run 0 stress 0.05707645 
+Run 1 stress 0.0557893 
+... New best solution
+... Procrustes: rmse 0.07022627  max resid 0.2176782 
+Run 2 stress 0.06243419 
+Run 3 stress 0.05611113 
+... Procrustes: rmse 0.06956331  max resid 0.1407431 
+Run 4 stress 0.0580254 
+Run 5 stress 0.0564849 
+Run 6 stress 0.05578526 
+... New best solution
+... Procrustes: rmse 0.002733131  max resid 0.01266276 
+Run 7 stress 0.05578505 
+... New best solution
+... Procrustes: rmse 0.0002121204  max resid 0.0007407448 
+... Similar to previous best
+Run 8 stress 0.05692241 
+Run 9 stress 0.05691066 
+Run 10 stress 0.05704814 
+Run 11 stress 0.05730222 
+Run 12 stress 0.05615029 
+... Procrustes: rmse 0.06344066  max resid 0.1503602 
+Run 13 stress 0.05635141 
+Run 14 stress 0.0569116 
+Run 15 stress 0.05692897 
+Run 16 stress 0.05653585 
+Run 17 stress 0.05819276 
+Run 18 stress 0.05729507 
+Run 19 stress 0.05691417 
+Run 20 stress 0.05629475 
+*** Best solution repeated 1 times
+Run 0 stress 0.04260606 
+Run 1 stress 0.0417477 
+... New best solution
+... Procrustes: rmse 0.05277545  max resid 0.157099 
+Run 2 stress 0.0425403 
+Run 3 stress 0.04131872 
+... New best solution
+... Procrustes: rmse 0.03419711  max resid 0.09887441 
+Run 4 stress 0.04182947 
+Run 5 stress 0.04180297 
+... Procrustes: rmse 0.03492129  max resid 0.09960313 
+Run 6 stress 0.04174045 
+... Procrustes: rmse 0.03409862  max resid 0.09749863 
+Run 7 stress 0.04309811 
+Run 8 stress 0.04213449 
+Run 9 stress 0.04124068 
+... New best solution
+... Procrustes: rmse 0.01650439  max resid 0.03808153 
+Run 10 stress 0.0420423 
+Run 11 stress 0.04128973 
+... Procrustes: rmse 0.03603476  max resid 0.07775525 
+Run 12 stress 0.04136642 
+... Procrustes: rmse 0.00966828  max resid 0.02268173 
+Run 13 stress 0.04229565 
+Run 14 stress 0.04135214 
+... Procrustes: rmse 0.007044621  max resid 0.02398355 
+Run 15 stress 0.0412051 
+... New best solution
+... Procrustes: rmse 0.034451  max resid 0.08290545 
+Run 16 stress 0.04115615 
+... New best solution
+... Procrustes: rmse 0.01111334  max resid 0.04020626 
+Run 17 stress 0.041188 
+... Procrustes: rmse 0.00477375  max resid 0.01914514 
+Run 18 stress 0.0411462 
+... New best solution
+... Procrustes: rmse 0.009622325  max resid 0.04233931 
+Run 19 stress 0.04254125 
+Run 20 stress 0.04631473 
+*** Best solution was not repeated -- monoMDS stopping criteria:
+    20: no. of iterations &gt;= maxit
+Run 0 stress 0.03247862 
+Run 1 stress 0.03162475 
+... New best solution
+... Procrustes: rmse 0.02155085  max resid 0.08697802 
+Run 2 stress 0.03270739 
+Run 3 stress 0.03182441 
+... Procrustes: rmse 0.02589717  max resid 0.1017713 
+Run 4 stress 0.03295316 
+Run 5 stress 0.03357546 
+Run 6 stress 0.03168637 
+... Procrustes: rmse 0.01104631  max resid 0.04886106 
+Run 7 stress 0.03348667 
+Run 8 stress 0.03333902 
+Run 9 stress 0.03288648 
+Run 10 stress 0.03278475 
+Run 11 stress 0.032732 
+Run 12 stress 0.03193441 
+... Procrustes: rmse 0.0320945  max resid 0.09020574 
+Run 13 stress 0.03442658 
+Run 14 stress 0.03275383 
+Run 15 stress 0.03301454 
+Run 16 stress 0.03196447 
+... Procrustes: rmse 0.02484452  max resid 0.09698914 
+Run 17 stress 0.03165316 
+... Procrustes: rmse 0.01545227  max resid 0.05904591 
+Run 18 stress 0.03196718 
+... Procrustes: rmse 0.03697085  max resid 0.1235515 
+Run 19 stress 0.03296006 
+Run 20 stress 0.03165424 
+... Procrustes: rmse 0.01361733  max resid 0.05106838 
+*** Best solution was not repeated -- monoMDS stopping criteria:
+    20: no. of iterations &gt;= maxit
+Run 0 stress 0.0264502 
+Run 1 stress 0.02623508 
+... New best solution
+... Procrustes: rmse 0.06242094  max resid 0.1640684 
+Run 2 stress 0.02733809 
+Run 3 stress 0.02642284 
+... Procrustes: rmse 0.03836021  max resid 0.1130397 
+Run 4 stress 0.02667466 
+... Procrustes: rmse 0.04019661  max resid 0.09232111 
+Run 5 stress 0.02785315 
+Run 6 stress 0.02588081 
+... New best solution
+... Procrustes: rmse 0.03435392  max resid 0.09821793 
+Run 7 stress 0.02611752 
+... Procrustes: rmse 0.03644499  max resid 0.1073028 
+Run 8 stress 0.02672231 
+Run 9 stress 0.02549468 
+... New best solution
+... Procrustes: rmse 0.02970474  max resid 0.07268084 
+Run 10 stress 0.02630052 
+Run 11 stress 0.02565997 
+... Procrustes: rmse 0.02828194  max resid 0.07399177 
+Run 12 stress 0.02589466 
+... Procrustes: rmse 0.04976083  max resid 0.1288868 
+Run 13 stress 0.02651663 
+Run 14 stress 0.02691703 
+Run 15 stress 0.02743753 
+Run 16 stress 0.0281878 
+Run 17 stress 0.02655447 
+Run 18 stress 0.02579754 
+... Procrustes: rmse 0.02829488  max resid 0.09045371 
+Run 19 stress 0.02635704 
+Run 20 stress 0.02671691 
+*** Best solution was not repeated -- monoMDS stopping criteria:
+    20: no. of iterations &gt;= maxit
+Run 0 stress 0.02173106 
+Run 1 stress 0.02095776 
+... New best solution
+... Procrustes: rmse 0.04068823  max resid 0.1559548 
+Run 2 stress 0.02191766 
+Run 3 stress 0.02128473 
+... Procrustes: rmse 0.02815982  max resid 0.07953337 
+Run 4 stress 0.02121923 
+... Procrustes: rmse 0.02842373  max resid 0.0997992 
+Run 5 stress 0.02157925 
+Run 6 stress 0.0228222 
+Run 7 stress 0.02107951 
+... Procrustes: rmse 0.04464611  max resid 0.1093655 
+Run 8 stress 0.0232875 
+Run 9 stress 0.02281427 
+Run 10 stress 0.02298109 
+Run 11 stress 0.02224492 
+Run 12 stress 0.02270626 
+Run 13 stress 0.02164192 
+Run 14 stress 0.02243158 
+Run 15 stress 0.02229288 
+Run 16 stress 0.02118067 
+... Procrustes: rmse 0.05039432  max resid 0.1416435 
+Run 17 stress 0.02247889 
+Run 18 stress 0.02202836 
+Run 19 stress 0.02221069 
+Run 20 stress 0.02235273 
+*** Best solution was not repeated -- monoMDS stopping criteria:
+    20: no. of iterations &gt;= maxit</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>stress <span class="ot">&lt;-</span> <span class="fu">sapply</span>(klist, <span class="cf">function</span>(x){x<span class="sc">$</span>stress})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now extract the stress values for each NMDS fit and plot them against dimensionality.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(K, stress, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lwd=</span><span class="dv">3</span>,</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"NMDS dimensions (k)"</span>,</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Stress"</span>,</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(stress)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-nmds-neon9" class="quarto-float quarto-figure quarto-figure-center anchored" alt="text.">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-nmds-neon9-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27.37: text.
+</figcaption>
+<div aria-describedby="fig-nmds-neon9-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ch27_files/figure-html/fig-nmds-neon9-1.png" class="img-fluid figure-img" alt="text." width="768">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>There is a large drop in stress from 1 to 2 dimensions, and a smaller drop from 2 to 3, and the gains in stress taper off after that. This plot suggests that 2 is sufficient, although in a real investigation you might want to at least explore the 3-dimensional solution.</p>
 </section>
 </section>
 </section>
@@ -1887,18 +2532,17 @@ Run 20 stress 0.1524464
 <h2 data-number="27.7" class="anchored" data-anchor-id="sec-ord-cca"><span class="header-section-number">27.7</span> Canonical correspondence analysis (CCA)</h2>
 <p>Coming soon!</p>
 </section>
-<section id="sec-ord-dbrda" class="level2" data-number="27.8">
-<h2 data-number="27.8" class="anchored" data-anchor-id="sec-ord-dbrda"><span class="header-section-number">27.8</span> Distance-based RDA (dbRDA)</h2>
-<p>Coming soon!</p>
-</section>
-<section id="sec-ord-lda" class="level2" data-number="27.9">
-<h2 data-number="27.9" class="anchored" data-anchor-id="sec-ord-lda"><span class="header-section-number">27.9</span> Linear discriminant analysis</h2>
+<section id="sec-ord-lda" class="level2" data-number="27.8">
+<h2 data-number="27.8" class="anchored" data-anchor-id="sec-ord-lda"><span class="header-section-number">27.8</span> Linear discriminant analysis</h2>
 <p>Coming soon!</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-legendre2012numerical" class="csl-entry" role="listitem">
 Legendre P, Legendre L. 2012. Numerical ecology. Amsterdam: Elsevier.
+</div>
+<div id="ref-mccune2002analysis" class="csl-entry" role="listitem">
+McCune B, Grace JB, Urban DL. 2002. Analysis of ecological communities. MjM software design, Gleneden Beach, Oregon, USA.
 </div>
 </div>
 </section>

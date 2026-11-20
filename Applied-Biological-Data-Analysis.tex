@@ -273,7 +273,7 @@
 
 \title{Applied Biological Data Analysis}
 \author{Nick Green}
-\date{November 15, 2026}
+\date{November 20, 2026}
 \begin{document}
 \maketitle
 
@@ -37354,19 +37354,136 @@ distances and original 3d distance matrix
 \end{verbatim}
 
 The example we just stepped through illustrates why we use NMDS:
-dimension reduction without dissimilarity distortion. \#\#\# Details of
-the algorithm \{\#sec-ord-nmds-details\}
+dimension reduction without dissimilarity distortion.
 
-Coming soon!
+\subsection{Why use NMDS?}\label{sec-ord-nmds-why}
 
-\subsection{Example using NEON data}\label{sec-ord-nmds-neon}
+Now that we understand the goal of NMDS--representing dissimilarities
+between samples in reduced dimensions--it's worth asking ``Why?'' The
+choice of ordination method, like the choice of statistical tests, can
+have important consequences in an analysis.
 
-Coming soon!
+NMDS is particularly useful for multivariate datasets containing many
+variables, especially when observations share relatively few
+characteristics or when the data contain many zeros. For example,
+community ecology datasets often contain many species that occur at only
+a few sites, resulting in sparse matrices with relatively few shared
+species between sites. In these situations, dissimilarity measures such
+as Sørensen can be useful because they emphasize shared occurrences
+without treating joint absences as evidence of similarity. NMDS then
+represents the dissimilarities among observations in a small number of
+dimensions, attempting to preserve their \emph{rank ordering} rather
+than their exact numerical values.
+
+This flexibility makes NMDS useful for exploring complex multivariate
+patterns that may not be adequately represented by linear relationships.
+However, datasets containing many pairs of maximally dissimilar
+observations can be challenging because the ordination has relatively
+little information about their relative positions.
+
+McCune \emph{et al.} (2002) note that one advantage of NMDS is that it
+handles data that are nonnormal, discontinuous, or ``otherwise
+questionable scales''. This is because of the focus on the \emph{rank
+order} of the dissimilarity matrix rather than its actual values.
+Maintaining rank order rather than magnitude makes variables on very
+diffrent scales or with few values more comparable. They also note that
+NMDS not only avoids the assumption of linear relationships among
+variables, it can linearize many relationships because of its reliance
+on rank order statistics.
+
+That is not to say that NMDS is without disadvantages. One major issue
+with NMDS is that its reliance on Monte Carlo (random sampling) methods
+for optimization can cause it to fail to find the best (global)
+solution. Another feature which can be a disadvantage is that the axes
+have no direct mathematical relationship with the variables in the
+dataset.
+
+\subsection{Details of the algorithm}\label{sec-ord-nmds-details}
+
+NMDS works by iteratively searching for a configuration of samples that
+faithfully represents the rank order of the distance matrix of a dataset
+in a reduced dimensional space. This is a completely different approach
+than \hyperref[sec-ord-un-pca-what]{PCA}, which achieves dimension
+reduction by finding eigenvectors in the dataset that capture the
+variation more efficiently than the original dataset (i.e., it
+\hyperref[fig-ord-basicidea]{rotates the dataset}).
+
+NMDS works with the \(n\times n\) distance matrix calculated from an
+\(n\times p\)-dimensional data matrix, where \(n\) is the number of
+observations and \(p\) is the number of variables. It tries to represent
+the samples in a \(k\)-dimensional space, where \(k<p\). The
+configuration in \(k\) dimensions is optimized to minimize
+\textbf{stress}, which is a measure of how much the distance matrix in
+\(k\) dimensions distorts the distance matrix in \(p\) dimensions. The
+distortion measured by stress is a departure from monotonicity. That is,
+how much the rank order of the dissimilarity matrix changes.
+
+The basic algorithm for NMDS is as follows.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Calculate the distance matrix \(\mathbf{\Delta}\) in the original
+  \(p\)-dimensional space.
+\item
+  Assign sample units to a (usually random) starting configuration in
+  the reduced \(k\)-dimensional space.
+\item
+  Calculate \(\mathbf{D}_k\), the Euclidean distance matrix of the
+  samples in the \emph{k}-space.
+\item
+  Rank the elements of \(\mathbf{\Delta}\), and then put the elements of
+  \(\mathbf{D}_k\) in the same order as \(\mathbf{\Delta}\).
+\item
+  Calculate vector \(\hat{\mathbf{D}}_k\), which is a copy of
+  \(\mathbf{D}_k\) that replaces elements which break monotonicity. For
+  example, \(d_5\) should be a distance that falls between \(d_4\) and
+  \(d_6\). But, if \(d_5<d_4\) or \(d_5>d_6\), \(d_5\) will be adjusted
+  to become \(\hat{d}_5\), which \emph{is} between \(d_4\) and \(d_6\).
+  The total amount of adjustment needed to adjust every \(d_{i}\) to
+  \(\hat{d}_{i}\) is used to calculate stress.
+\item
+  The positions of the samples in \(k\)-space is adjusted according to
+  an algorithm that seeks a lower stress value.
+\item
+  This process is repeated until the stress stops improving.
+\end{enumerate}
+
+Because the starting configurations and the re-configurations involve
+random number sampling (``Monte Carlo methods''), most NMDS software
+tries several random starts to avoid the possibility of begin trapped in
+a local solution that is not as optimal as the true global solution.
+
+\begin{figure}
+
+\caption{\label{fig-local-optimum}Conceptual illustration of an
+optimization algorithm becoming trapped in a local optimum. A black
+curve represents an objective function with two valleys. Blue points and
+red arrows show the algorithm exploring solutions near the shallower
+valley on the left without escaping to the deeper valley on the right,
+which represents the global optimum.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/ord-nmds-optima.jpg}}
+
+}
+
+\end{figure}%
+
+You should also set the random number seed, so your analysis results are
+reproducible. Remember, the NMDS axes are arbitrary, so even though you
+might repeat the analysis and get two solutions with the same stress
+value, one of them might be rotated from the other\ldots meaning that
+you have to re-write your plot code!
+
+\subsection{NMDS example using NEON data}\label{sec-ord-nmds-neon}
 
 \subsubsection{Data import and
 preparation}\label{sec-ord-nmds-neon-data}
 
-For an example PCA analysis, let's revisit the small mammal measurement
+For an example NMDS analysis, let's revisit the small mammal capture
 data from Section~\ref{sec-clust-kmeans-example}. Download the
 \href{../datasets/data-neon-captures-site.csv}{site-level capture
 dataset}, the \href{../datasets/data-neon-metadata-site.csv}{site
@@ -37382,34 +37499,146 @@ dataset} and put them in your working directory.
 \end{Shaded}
 
 We are going to use NMDS to explore variation in small mammal diversity
-between sites First we need to organize the data.
+between sites. First we need to organize the data. We are going to
+convert the capture numbers in \texttt{cap} to presence-absence: 1 for
+presence, 0 for absence. We will assume that detection at a site at any
+point indicates presence, and non-detection indicates absence. We will
+avoid analyzing capture numbers because capture count is a function of
+sampling effort and trap success as much as it reflects actual presence
+or abundance.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# convert capture numbers to presence absence}
 \NormalTok{pa }\OtherTok{\textless{}{-}}\NormalTok{ cap}
+
+\CommentTok{\# fix some columns and set rownames}
 \NormalTok{pa}\SpecialCharTok{$}\NormalTok{X }\OtherTok{\textless{}{-}} \ConstantTok{NULL}
 \FunctionTok{rownames}\NormalTok{(pa) }\OtherTok{\textless{}{-}}\NormalTok{ pa}\SpecialCharTok{$}\NormalTok{site}
 \NormalTok{pa}\SpecialCharTok{$}\NormalTok{site }\OtherTok{\textless{}{-}} \ConstantTok{NULL}
 
+\CommentTok{\# convert capture numbers to presence absence}
 \NormalTok{pa[pa}\SpecialCharTok{\textgreater{}}\DecValTok{0}\NormalTok{] }\OtherTok{\textless{}{-}} \DecValTok{1}
-\FunctionTok{hist}\NormalTok{(}\FunctionTok{colSums}\NormalTok{(pa))}
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{chapters/ch27_files/figure-pdf/unnamed-chunk-22-1.pdf}}
+Now let's check the dataset. We want to screen for potential problems.
+Chief among these are (1) species present at no sites or 1 site; and (2)
+sites with no species.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# shows that one species is not present at}
+\CommentTok{\# any site. Delete this species because it }
+\CommentTok{\# carries no information.}
+\FunctionTok{table}\NormalTok{(}\FunctionTok{colSums}\NormalTok{(pa)}\SpecialCharTok{==}\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+FALSE  TRUE 
+  133     1 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# leaves 133 species}
+\NormalTok{pa }\OtherTok{\textless{}{-}}\NormalTok{ pa[,}\SpecialCharTok{{-}}\FunctionTok{which}\NormalTok{(}\FunctionTok{colSums}\NormalTok{(pa)}\SpecialCharTok{==}\DecValTok{0}\NormalTok{)]}
+\end{Highlighting}
+\end{Shaded}
+
+Now check for sites with no species.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# all 46 sites have \textgreater{}=1 species, }
+\CommentTok{\# so no worries here}
+\FunctionTok{table}\NormalTok{(}\FunctionTok{rowSums}\NormalTok{(pa)}\SpecialCharTok{==}\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+FALSE 
+   46 
+\end{verbatim}
+
+Having one site with no species present might not be a problem, but
+having more than one would \hyperref[sec-diss-zeros]{complicate the
+distance calculations}.
+
+Now that we have eliminated the obvious problems, let's explore the
+distribution of species occurrences and species richnesses.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# shows that most species are present at very}
+\CommentTok{\# few sites. Most sites have around 5{-}15 species,}
+\CommentTok{\# but there is a lot of variability. }
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\FunctionTok{hist}\NormalTok{(}\FunctionTok{colSums}\NormalTok{(pa), }\AttributeTok{main=}\StringTok{"Sites per species"}\NormalTok{)}
+\FunctionTok{hist}\NormalTok{(}\FunctionTok{rowSums}\NormalTok{(pa), }\AttributeTok{main=}\StringTok{"Species per site"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-nmds-neon1}Frequency distributions of species
+occupancy and site richness in a presence--absence dataset. Left: number
+of sites occupied by each species (column sums of the presence--absence
+matrix). Right: number of species recorded at each site (row sums). Most
+species occur at relatively few sites, whereas species richness is more
+evenly distributed among sites.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two histograms showing species occupancy and site richness. The left histogram shows that most species occur at fewer than five sites, with a long tail extending to approximately 35 sites. The right histogram shows that most sites contain between 5 and 15 species, with a few containing more than 20.}]{chapters/ch27_files/figure-pdf/fig-nmds-neon1-1.pdf}}
+
+}
+
+\end{figure}%
+
+The left panel in Figure~\ref{fig-nmds-neon1} tell us that the species
+presence-absence matrix \texttt{pa} is quite sparse: most species occur
+in at \textless5 sites. This supports the decision to analyze-presence
+absence rather than abundance because differences between sites are
+likely to be driven by differences in composition rather than
+differences in abundance. The right panel in Figure~\ref{fig-nmds-neon1}
+suggests that analyzing composition rather than species richness would
+be more informative because species richness doesn't vary very between
+sites.
+
+The left panel in Figure~\ref{fig-nmds-neon1} also suggests the use of
+the Bray-Curtis (Sørensen) dissimilarity measure rather than the
+Euclidean distance metric. Sørensen dissimilarity is appropriate for
+presence--absence data because it emphasizes shared occurrences while
+ignoring joint absences, which provide little evidence of ecological
+similarity. NMDS then represents these compositional differences in a
+small number of dimensions without assuming that dissimilarities must
+correspond linearly to distances in the ordination. However, datasets
+with many pairs of sites sharing no species can be challenging because
+those pairs all have the maximum Sørensen dissimilarity.
+
+It is worth noting that the sparsity of the data is a strong argument
+for the Sørensen dissimilarity, but not an argument for using NMDS over
+another distance-based ordination method like
+\hyperref[sec-ord-pcoaux5cux257D]{PCoA}. The arguments in favor of NMDS
+are its rank-based representation of potentially nonlinear relationships
+and lack of assumptions about linearity.
 
 \subsubsection{Fit the NMDS}\label{sec-ord-nmds-neon-fit}
 
 The \texttt{vegan} function for NMDS is \texttt{metaMDS()}. We will use
-the default dissimilarity, Bray-Curtis.
+the default dissimilarity, Bray-Curtis, which for binary data is the
+same as the Sørensen dissimilarity. We will accept the other default
+arguments in \texttt{metaMDS()} too.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(vegan)}
 
 \FunctionTok{set.seed}\NormalTok{(}\DecValTok{12}\NormalTok{)}
-\NormalTok{n1 }\OtherTok{\textless{}{-}} \FunctionTok{metaMDS}\NormalTok{(pa)}
+\NormalTok{n1 }\OtherTok{\textless{}{-}} \FunctionTok{metaMDS}\NormalTok{(pa, }\AttributeTok{distance=}\StringTok{"bray"}\NormalTok{, }\AttributeTok{k=}\DecValTok{2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -37463,14 +37692,776 @@ Run 20 stress 0.1524464
 *** Best solution repeated 5 times
 \end{verbatim}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{n1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+metaMDS(comm = pa, distance = "bray", k = 2) 
+
+global Multidimensional Scaling using monoMDS
+
+Data:     pa 
+Distance: bray 
+
+Dimensions: 2 
+Stress:     0.1157082 
+Stress type 1, weak ties
+Best solution was repeated 5 times in 20 tries
+The best solution was from try 14 (random start)
+Scaling: centring, PC rotation, halfchange scaling 
+Species: expanded scores based on 'pa' 
+\end{verbatim}
+
+The solution has a stress value of about 0.12, which is good but not
+great. By convention, a stress between 0.1 and 0.2 indicates a usable
+but imperfect representation of the original dissimilarities. Stress
+less than 0.1 is preferable, and stress greater than 0.2 means that an
+ordination is suspect. If you get a stress value greater than 0.2, you
+can try more random starts, dropping variables with too many 0s or
+extreme values, or sites with data issues. Or, try another ordination
+technique.
+
+One important diagnostic for our NMDS fit is called \textbf{stress plot}
+or \textbf{Shepard plot}. This is a figure that shows how the distance
+matrix in the ordination solution compares to the distance matrix in the
+original space. This plot should show a very tight correlation between
+the two distance matrices. This correlation does not have to be linear.
+Remember, NMDS preserves the \emph{rank order} of the distance matrix,
+not the actual values. Figure~\ref{fig-nmds-stressplot} below shows a
+pretty good correlation, but a big clump of points where the observed
+dissimilarity is 1. This is unavoidable in this dataset, because about a
+quarter of the pairs of sites share no species in common and thus have
+the maximum Sørensen dissimilarity of 1 (check with
+\texttt{length(which(vegdist(pa)==1))}).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{stressplot}\NormalTok{(n1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-nmds-stressplot}Shepard plot evaluating the fit of a
+nonmetric multidimensional scaling (NMDS) ordination. Observed
+dissimilarities are plotted against distances between points in the
+ordination. The red line shows the monotonic relationship fitted by
+NMDS. The high nonmetric R-squared (0.987) indicates that the ordination
+preserves the rank ordering of observed dissimilarities well.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Scatterplot of observed dissimilarity (horizontal axis, 0 to 1) against ordination distance (vertical axis, 0 to approximately 5.5). Blue open circles generally increase with observed dissimilarity, following a red stepped monotonic curve. Many observations are concentrated near dissimilarity 1.0, where ordination distances vary considerably. Nonmetric R-squared is 0.987 and linear R-squared is 0.941.}]{chapters/ch27_files/figure-pdf/fig-nmds-stressplot-1.pdf}}
+
+}
+
+\end{figure}%
+
 \subsubsection{Inspect and plot}\label{sec-ord-nmds-neon-plot}
 
-Coming soon!
+With a stress of about 0.12, we can interpret broad gradients and groups
+of sites, but should avoid drawing conclusions about small differences
+between individual samples.
+
+Let's visualize the ordination by extracting the NMDS axis scores and
+plotting them. The process is similar to what we did for PCA. However,
+we are not going to extract species scores, because unlike in PCA the
+axes are not linear combinations of the underlying variables (or any
+kind of function, for that matter). Instead, we will use function
+\texttt{envfit()}, which finds a vector showing the strongest linear
+association between a variable and the site coordinates in NMDS space.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# scaling doesn\textquotesingle{}t matter as much}
+\CommentTok{\# as it did for PCA, so just use }
+\CommentTok{\# type 1}
+\NormalTok{xy }\OtherTok{\textless{}{-}} \FunctionTok{scores}\NormalTok{(n1, }\AttributeTok{display=}\StringTok{"sites"}\NormalTok{, }\AttributeTok{scaling=}\DecValTok{1}\NormalTok{)}
+
+\CommentTok{\# fit the species vectors}
+\NormalTok{e1 }\OtherTok{\textless{}{-}} \FunctionTok{envfit}\NormalTok{(n1, pa)}
+\NormalTok{sp }\OtherTok{\textless{}{-}}\NormalTok{ e1}\SpecialCharTok{$}\NormalTok{vectors}\SpecialCharTok{$}\NormalTok{arrows}
+
+\CommentTok{\# show only species with significant}
+\CommentTok{\# associations with the NMDS space}
+\NormalTok{sp }\OtherTok{\textless{}{-}}\NormalTok{ sp[e1}\SpecialCharTok{$}\NormalTok{vectors}\SpecialCharTok{$}\NormalTok{pvals }\SpecialCharTok{\textless{}} \FloatTok{0.05}\NormalTok{,]}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{2}\NormalTok{], }\AttributeTok{pch=}\DecValTok{19}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.3}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"NMDS axis 1"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"NMDS axis 2"}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, sp[,}\DecValTok{1}\NormalTok{], sp[,}\DecValTok{2}\NormalTok{], }\AttributeTok{col=}\StringTok{"red"}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sp[,}\DecValTok{1}\NormalTok{], sp[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(sp),}
+     \AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{cex=}\FloatTok{0.7}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-nmds-neon2}NMDS ordination of mammal communities
+across sampling sites, with species scores overlaid as red vectors.
+Black points represent sites, and red vectors indicate the directions of
+increasing association with individual species. Species with similar
+distributions across sites tend to have vectors pointing in similar
+directions.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two-dimensional NMDS ordination with black points representing sampling sites and red vectors representing mammal species. Sites are scattered across both axes. Most species vectors cluster in three directions: upward, lower left, and lower right. A few species have distinct vectors, including Musmus pointing right and Tamstr pointing nearly straight downward. Species labels overlap extensively near the ends of the vectors.}]{chapters/ch27_files/figure-pdf/fig-nmds-neon2-1.pdf}}
+
+}
+
+\end{figure}%
+
+The species names in the biplot are a little hard to read, but we can
+zoom in if we need with the \texttt{xlim} and \texttt{ylim} arguments.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{2}\NormalTok{], }\AttributeTok{pch=}\DecValTok{19}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.3}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"NMDS axis 1"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"NMDS axis 2"}\NormalTok{,}
+     \AttributeTok{xlim=}\FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.5}\NormalTok{, }\FloatTok{0.5}\NormalTok{), }\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.9}\NormalTok{, }\FloatTok{1.05}\NormalTok{))}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, sp[,}\DecValTok{1}\NormalTok{], sp[,}\DecValTok{2}\NormalTok{], }\AttributeTok{col=}\StringTok{"red"}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sp[,}\DecValTok{1}\NormalTok{], sp[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(sp),}
+     \AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{cex=}\FloatTok{0.7}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-nmds-neon3}Enlarged view of the upper cluster of
+species vectors in the NMDS ordination. Species with vectors pointing in
+similar directions tend to have similar patterns of occurrence across
+sampling sites. The enlarged view reveals differences among species
+whose labels overlap in the full ordination.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Magnified view of the upper portion of the NMDS species-vector plot, showing red vectors and abbreviated species names. Species are distributed along NMDS axis 1 from approximately −0.45 to 0.35, with most vector endpoints between 0.90 and 1.00 on NMDS axis 2. Several species form closely spaced groups, while others, including Perman and Sortro, are more isolated. Some labels remain overlapping.}]{chapters/ch27_files/figure-pdf/fig-nmds-neon3-1.pdf}}
+
+}
+
+\end{figure}%
+
+We can also zoom in on the lower cluster of samples.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{2}\NormalTok{], }\AttributeTok{pch=}\DecValTok{19}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.3}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"NMDS axis 1"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"NMDS axis 2"}\NormalTok{,}
+     \AttributeTok{xlim=}\FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.25}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\SpecialCharTok{{-}}\FloatTok{0.5}\NormalTok{))}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, sp[,}\DecValTok{1}\NormalTok{], sp[,}\DecValTok{2}\NormalTok{], }\AttributeTok{col=}\StringTok{"red"}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sp[,}\DecValTok{1}\NormalTok{], sp[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(sp),}
+     \AttributeTok{col=}\StringTok{"red"}\NormalTok{, }\AttributeTok{cex=}\FloatTok{0.7}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-nmds-neon4}Enlarged view of the lower-right cluster
+of species vectors in the NMDS ordination. Several species have closely
+aligned vectors, indicating similar patterns of occurrence across
+sampling sites. Other species, including Tamstr, Ochnut, and Sighis,
+have more distinct positions within this portion of the ordination.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Magnified view of the lower-right portion of the NMDS species-vector plot, showing red vectors, abbreviated species names, and a few black points representing sampling sites. Species vector endpoints extend from approximately −0.95 to −0.67 on NMDS axis 2. Several species cluster near NMDS axis 1 values of 0.45, while Tamstr lies near zero and Sighis is farther to the right. Several species labels overlap near the center of the cluster.}]{chapters/ch27_files/figure-pdf/fig-nmds-neon4-1.pdf}}
+
+}
+
+\end{figure}%
+
+Figure~\ref{fig-nmds-neon2} suggests that sites form a gradient between
+two groups of species that tend to co-occur. At high values of NMDS axis
+2, we have \texttt{Perman}, \texttt{Perboy}, \texttt{Dipord},
+\texttt{Reimeg}, \texttt{Onyleu}, \texttt{Sortro}, \texttt{Tammin},
+\texttt{Tamdou}, and others. Those are Deer Mouse (\emph{Peromyscus
+maniculatus}), Brush Mouse (\emph{P. boylii}), Ord's Kangaroo Rat
+(\emph{Dipodomys ordii}), Western Harvest Mouse (\emph{Reithrodontomys
+megalotis}), Northern Grasshopper Mouse (\emph{Onychomys leucogaster}),
+Trowbridge's Shrew (\emph{Sorex trowbridgii}), Least Chipmunk
+(\emph{Tamias minimus}), and Douglas's Squirrel (\emph{Tamiasciurus
+douglasii}). At lower values of NMDS axis 2, we have \texttt{Tamstr},
+\texttt{Ochnut}, \texttt{Perleu}, \texttt{Pergos}, \texttt{Perpol},
+\texttt{Orypal}, \texttt{Blacar}, \texttt{Podflo}, \texttt{Neoflo}, and
+\texttt{Sighis} These are Eastern Chipmunk (\emph{Tamias striatus}),
+Golden Mouse (\emph{Ochrotomys nuttalli}), White-footed Mouse
+(\emph{Peromyscus leucopus}), Cotton Mouse (\emph{P. gossypinus}),
+Oldfield Mouse (\emph{P. polionotus}), Marsh Rice Rat (\emph{Oryzomys
+palustris}), Southern Short-tailed Shrew (\emph{Blarina carolinensis}),
+Florida Mouse (\emph{Podomys floridanus}), Eastern Woodrat
+(\emph{Neotoma floridana}), and Hispid Cotton Rat (\emph{Sigmodon
+hispidus}).
+
+Those two clusters of species suggest that NMDS axis 2 might be an
+east-west gradient. Let's find out.
 
 \subsubsection{Fitting environmental
 variables}\label{sec-ord-nmds-neon-envfit}
 
-Coming soon!
+We can fit environmental variables to NMDS solutions just like we can
+species. Let's use the site metadata in \texttt{met}. The rows of
+\texttt{met} are in the same order as \texttt{pa}, so we don't need to
+merge. For convenience, we can make a new data frame \texttt{env} that
+has just the columns we need.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{env.cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"lat"}\NormalTok{, }\StringTok{"lon"}\NormalTok{, }\StringTok{"elev"}\NormalTok{,}
+              \StringTok{"precip"}\NormalTok{, }\StringTok{"temp"}\NormalTok{, }\StringTok{"npp"}\NormalTok{,}
+              \StringTok{"seas.pre"}\NormalTok{, }\StringTok{"seas.temp"}\NormalTok{)}
+\NormalTok{env }\OtherTok{\textless{}{-}}\NormalTok{ met[,env.cols]}
+
+\CommentTok{\# fit the vectors}
+\NormalTok{e2 }\OtherTok{\textless{}{-}} \FunctionTok{envfit}\NormalTok{(n1, env)}
+\NormalTok{en }\OtherTok{\textless{}{-}}\NormalTok{ e2}\SpecialCharTok{$}\NormalTok{vectors}\SpecialCharTok{$}\NormalTok{arrows}
+\NormalTok{en }\OtherTok{\textless{}{-}}\NormalTok{ en[e2}\SpecialCharTok{$}\NormalTok{vectors}\SpecialCharTok{$}\NormalTok{pvals }\SpecialCharTok{\textless{}} \FloatTok{0.05}\NormalTok{,]}
+\end{Highlighting}
+\end{Shaded}
+
+Now add these to the plot.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{2}\NormalTok{], }\AttributeTok{pch=}\DecValTok{19}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.3}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"NMDS axis 1"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"NMDS axis 2"}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, sp[,}\DecValTok{1}\NormalTok{], sp[,}\DecValTok{2}\NormalTok{], }\AttributeTok{col=}\StringTok{"\#FF000030"}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sp[,}\DecValTok{1}\NormalTok{], sp[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(sp),}
+     \AttributeTok{col=}\StringTok{"\#FF000030"}\NormalTok{, }\AttributeTok{cex=}\FloatTok{0.7}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, en[,}\DecValTok{1}\NormalTok{], en[,}\DecValTok{2}\NormalTok{], }\AttributeTok{col=}\StringTok{"blue"}\NormalTok{,}
+         \AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(en[,}\DecValTok{1}\NormalTok{], en[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(en),}
+     \AttributeTok{col=}\StringTok{"blue"}\NormalTok{, }\AttributeTok{cex=}\FloatTok{0.7}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-nmds-neon5}NMDS ordination of mammal communities
+across sampling sites, with species scores and fitted environmental
+vectors. Black points represent sites, pale red vectors represent
+species, and blue vectors indicate the directions of increasing values
+of environmental variables fitted using \texttt{envfit()}. The
+directions of the environmental vectors illustrate associations between
+community composition and environmental gradients.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two-dimensional NMDS ordination with black points representing sampling sites, pale red vectors representing mammal species, and blue vectors representing environmental variables. Elevation and precipitation seasonality point toward the upper left; latitude and temperature seasonality point toward the lower left; temperature points nearly horizontally to the right; and longitude and precipitation point toward the lower right. Species vectors form clusters pointing upward, lower left, and lower right.}]{chapters/ch27_files/figure-pdf/fig-nmds-neon5-1.pdf}}
+
+}
+
+\end{figure}%
+
+Our suspicion about NMDS axis 2 representing a longitudinal gradient
+wasn't far off: \texttt{lon} points to the lower right, indicating that
+lower longitudes (east) are that direction. The vectors for elevation
+(\texttt{elev}) and seasonality of precipitation \texttt{seas.pre} seem
+mroe aligned with the gradient we proposed.
+
+Another interesting pattern is that the vectors for latitude and
+temperature point in nearly opposite directions. This makes sense:
+higher latitudes experience colder temperatures. The species associated
+with higher latitudes are \texttt{Tamhud}, \texttt{Micpen},
+\texttt{Micoec}, \texttt{Sorugy}, \texttt{Sorcin}, \texttt{Sortun},
+\texttt{Myorut}, \texttt{Uropar}, \texttt{Dicgro}, \texttt{Lemtri}, and
+\texttt{Micmiu}. These are American Red Squirrel (\emph{Tamiasciurus
+hudsonicus}), Meadow Vole (\emph{Microtus pennsylvanicus}), Tundra Vole
+(\emph{M. oeconomus}), Barren-ground Shrew (\emph{Sorex ugyunak}),
+Masked Shrew (\emph{S. cinereus}), Tundra Shrew (\emph{S. tundrensis}),
+Northern Red-backed Vole (\emph{Myodes rutilus}), Arctic Ground Squirrel
+(\emph{Urocitellus parryii}), Northern Collared Lemming
+(\emph{Dicrostonyx groenlandicus}), Nearctic Brown Lemming (\emph{Lemmus
+trimucronatus}), and Singing Vole (\emph{Microtus miurus}). So, the
+association between latitude and these species makes sense.
+
+Another option for visualizing how environmental variables may relate to
+your ordination solution is to fit a \emph{surface}. This is a better
+way to visualize nonlinear and nonmonotonic patterns.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{2}\NormalTok{], }\AttributeTok{pch=}\DecValTok{19}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.3}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"NMDS axis 1"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"NMDS axis 2"}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, sp[,}\DecValTok{1}\NormalTok{], sp[,}\DecValTok{2}\NormalTok{], }\AttributeTok{col=}\StringTok{"\#FF000030"}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sp[,}\DecValTok{1}\NormalTok{], sp[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(sp),}
+     \AttributeTok{col=}\StringTok{"\#FF000030"}\NormalTok{, }\AttributeTok{cex=}\FloatTok{0.7}\NormalTok{)}
+\FunctionTok{ordisurf}\NormalTok{(n1, env}\SpecialCharTok{$}\NormalTok{temp, }\AttributeTok{add=}\ConstantTok{TRUE}\NormalTok{, }\AttributeTok{col=}\StringTok{"blue"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Family: gaussian 
+Link function: identity 
+
+Formula:
+y ~ s(x1, x2, k = 10, bs = "tp", fx = FALSE)
+
+Estimated degrees of freedom:
+8.35  total = 9.35 
+
+REML score: 105.8698     
+\end{verbatim}
+
+\begin{figure}[H]
+
+\caption{\label{fig-nmds-neon6}NMDS ordination of mammal communities
+with species scores and a fitted temperature surface. Black points
+represent sampling sites, pale red vectors represent species, and blue
+contour lines show temperature values fitted using \texttt{ordisurf()}.
+The curved contours indicate a nonlinear relationship between
+temperature and community composition, with higher temperatures
+generally associated with sites toward the right side of the
+ordination.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two-dimensional NMDS ordination showing black sampling-site points, pale red species vectors, and blue temperature contours. Contours are labeled from approximately −10 on the far left to 25 on the far right, with temperatures generally increasing from left to right. The contour lines are curved rather than straight, indicating a nonlinear fitted temperature gradient across the ordination.}]{chapters/ch27_files/figure-pdf/fig-nmds-neon6-1.pdf}}
+
+}
+
+\end{figure}%
+
+In this case, Figure~\ref{fig-nmds-neon6} shows a clear gradient of
+increasing temperature from left to right. Some variables, like
+elevation, are more complicated:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{2}\NormalTok{], }\AttributeTok{pch=}\DecValTok{19}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.3}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"NMDS axis 1"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"NMDS axis 2"}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, sp[,}\DecValTok{1}\NormalTok{], sp[,}\DecValTok{2}\NormalTok{], }\AttributeTok{col=}\StringTok{"\#FF000030"}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(sp[,}\DecValTok{1}\NormalTok{], sp[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(sp),}
+     \AttributeTok{col=}\StringTok{"\#FF000030"}\NormalTok{, }\AttributeTok{cex=}\FloatTok{0.7}\NormalTok{)}
+\FunctionTok{ordisurf}\NormalTok{(n1, env}\SpecialCharTok{$}\NormalTok{seas.temp, }\AttributeTok{add=}\ConstantTok{TRUE}\NormalTok{, }\AttributeTok{col=}\StringTok{"blue"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Family: gaussian 
+Link function: identity 
+
+Formula:
+y ~ s(x1, x2, k = 10, bs = "tp", fx = FALSE)
+
+Estimated degrees of freedom:
+8.52  total = 9.52 
+
+REML score: 283.944     
+\end{verbatim}
+
+\begin{figure}[H]
+
+\caption{\label{fig-nmds-neon7}NMDS ordination of mammal communities
+with species scores and a fitted temperature seasonality surface. Black
+points represent sampling sites, pale red vectors represent species, and
+blue contour lines show temperature seasonality fitted using
+\texttt{ordisurf()}. Temperature seasonality is generally highest toward
+the lower-left portion of the ordination and lowest toward the right,
+with curved contours indicating a nonlinear relationship between
+temperature seasonality and community composition.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two-dimensional NMDS ordination showing black sampling-site points, pale red species vectors, and blue contours representing temperature seasonality. Contour values range from approximately 200 on the far right to 1200 in the lower-left portion. The contours curve around a region of relatively high seasonality on the left and lower-left, while lower values occur toward the right side of the plot.}]{chapters/ch27_files/figure-pdf/fig-nmds-neon7-1.pdf}}
+
+}
+
+\end{figure}%
+
+We can also fit factors using \texttt{envfit()} and show them with
+\texttt{ordiellipse()}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{e3 }\OtherTok{\textless{}{-}} \FunctionTok{envfit}\NormalTok{(n1, met}\SpecialCharTok{$}\NormalTok{habitat)}
+\NormalTok{hab }\OtherTok{\textless{}{-}}\NormalTok{ e3}\SpecialCharTok{$}\NormalTok{factors}\SpecialCharTok{$}\NormalTok{centroids}
+\NormalTok{cols }\OtherTok{\textless{}{-}} \FunctionTok{hcl.colors}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(hab), }\StringTok{"Dark 3"}\NormalTok{)}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{2}\NormalTok{], }\AttributeTok{pch=}\DecValTok{19}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.3}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"NMDS axis 1"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"NMDS axis 2"}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(hab[,}\DecValTok{1}\NormalTok{], hab[,}\DecValTok{2}\NormalTok{], }\FunctionTok{rownames}\NormalTok{(hab),}
+     \AttributeTok{col=}\NormalTok{cols, }\AttributeTok{xpd=}\ConstantTok{NA}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-nmds-neon8}NMDS ordination of mammal communities
+with habitat centroids fitted using \texttt{envfit()}. Black points
+represent sampling sites, and colored labels indicate the centroids of
+different habitat types in ordination space. The centroids summarize the
+average positions of sites belonging to each habitat type, illustrating
+associations between habitat classification and community composition.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Two-dimensional NMDS ordination showing black points for sampling sites and colored labels for ten habitat centroids. ShrubScrub and evergreenForest are positioned toward the upper portion of the plot, while woodyWetlands lies toward the lower right. DeciduousForest and mixedForest are close together below the center, and cultivatedCrops and grasslandHerbaceous are above the center. SedgeHerbaceous is isolated at the far lower left.}]{chapters/ch27_files/figure-pdf/fig-nmds-neon8-1.pdf}}
+
+}
+
+\end{figure}%
+
+\subsubsection{Dimensionality in NMDS}\label{sec-ord-nmds-neon-dims}
+
+In the previous example, we decided to fit a two-dimensional solution.
+However, we could have tried a three or four or more dimensional
+solution. The choice of how many dimensions to use for your NMDS
+solution depends on a balance of (1) minimizing stress; while (2)
+keeping the figure interpretable. We can assess how stress changes by
+plotting the stress of solutions with different numbers of dimenions.
+The strategy is similar to how we assessed how many clusters were
+appropriate in \hyperref[fig-kmeans-wss-plot]{\emph{K}-means
+clustering}: obtain a fit with different values for \emph{k}, and plot
+how the stress changes with each additional dimension in the solution.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+
+\NormalTok{K }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{:}\DecValTok{8}
+\NormalTok{klist }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\StringTok{"list"}\NormalTok{, }\AttributeTok{length=}\FunctionTok{length}\NormalTok{(K))}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(K))\{}
+\NormalTok{    klist[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{metaMDS}\NormalTok{(pa, }\AttributeTok{k=}\NormalTok{K[i])}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Run 0 stress 0.228575 
+Run 1 stress 0.262067 
+Run 2 stress 0.2315957 
+Run 3 stress 0.2281544 
+... New best solution
+... Procrustes: rmse 0.03306487  max resid 0.1176156 
+Run 4 stress 0.2480115 
+Run 5 stress 0.228049 
+... New best solution
+... Procrustes: rmse 0.03660245  max resid 0.1492753 
+Run 6 stress 0.2274487 
+... New best solution
+... Procrustes: rmse 0.006039331  max resid 0.01876672 
+Run 7 stress 0.2274344 
+... New best solution
+... Procrustes: rmse 0.03556711  max resid 0.1541928 
+Run 8 stress 0.2364162 
+Run 9 stress 0.2423608 
+Run 10 stress 0.2270764 
+... New best solution
+... Procrustes: rmse 0.02583723  max resid 0.1318518 
+Run 11 stress 0.2391517 
+Run 12 stress 0.2314673 
+Run 13 stress 0.26895 
+Run 14 stress 0.2286854 
+Run 15 stress 0.267928 
+Run 16 stress 0.2700468 
+Run 17 stress 0.2537889 
+Run 18 stress 0.2384427 
+Run 19 stress 0.2375385 
+Run 20 stress 0.2283212 
+*** Best solution was not repeated -- monoMDS stopping criteria:
+    17: stress ratio > sratmax
+     3: scale factor of the gradient < sfgrmin
+Run 0 stress 0.1157083 
+Run 1 stress 0.1157085 
+... Procrustes: rmse 8.583335e-05  max resid 0.0004912752 
+... Similar to previous best
+Run 2 stress 0.1160278 
+... Procrustes: rmse 0.004716377  max resid 0.02336246 
+Run 3 stress 0.1157086 
+... Procrustes: rmse 0.0001717128  max resid 0.001003597 
+... Similar to previous best
+Run 4 stress 0.1616957 
+Run 5 stress 0.1621137 
+Run 6 stress 0.1786179 
+Run 7 stress 0.1157084 
+... Procrustes: rmse 6.139407e-05  max resid 0.000352906 
+... Similar to previous best
+Run 8 stress 0.1205347 
+Run 9 stress 0.1519212 
+Run 10 stress 0.1160277 
+... Procrustes: rmse 0.004713843  max resid 0.0233734 
+Run 11 stress 0.1620321 
+Run 12 stress 0.1157085 
+... Procrustes: rmse 0.0001077177  max resid 0.0006285929 
+... Similar to previous best
+Run 13 stress 0.1157086 
+... Procrustes: rmse 0.0001353592  max resid 0.0007914416 
+... Similar to previous best
+Run 14 stress 0.1157084 
+... Procrustes: rmse 0.0004689439  max resid 0.002739212 
+... Similar to previous best
+Run 15 stress 0.1523092 
+Run 16 stress 0.1157085 
+... Procrustes: rmse 9.503249e-05  max resid 0.0005396638 
+... Similar to previous best
+Run 17 stress 0.1160275 
+... Procrustes: rmse 0.004642874  max resid 0.02385903 
+Run 18 stress 0.1157083 
+... New best solution
+... Procrustes: rmse 0.0004163497  max resid 0.002433842 
+... Similar to previous best
+Run 19 stress 0.115709 
+... Procrustes: rmse 0.0007016256  max resid 0.004102115 
+... Similar to previous best
+Run 20 stress 0.1205346 
+*** Best solution repeated 2 times
+Run 0 stress 0.0763375 
+Run 1 stress 0.07775061 
+Run 2 stress 0.07633781 
+... Procrustes: rmse 0.001068704  max resid 0.003996407 
+... Similar to previous best
+Run 3 stress 0.07707051 
+Run 4 stress 0.07775058 
+Run 5 stress 0.07775028 
+Run 6 stress 0.07465728 
+... New best solution
+... Procrustes: rmse 0.06885868  max resid 0.2747804 
+Run 7 stress 0.08233752 
+Run 8 stress 0.08688661 
+Run 9 stress 0.07633759 
+Run 10 stress 0.08188602 
+Run 11 stress 0.07717132 
+Run 12 stress 0.07465716 
+... New best solution
+... Procrustes: rmse 0.0004760633  max resid 0.00264286 
+... Similar to previous best
+Run 13 stress 0.07633821 
+Run 14 stress 0.07717172 
+Run 15 stress 0.07465766 
+... Procrustes: rmse 0.0002627313  max resid 0.001525966 
+... Similar to previous best
+Run 16 stress 0.08688675 
+Run 17 stress 0.07775058 
+Run 18 stress 0.076338 
+Run 19 stress 0.07633738 
+Run 20 stress 0.07465752 
+... Procrustes: rmse 0.0003595795  max resid 0.002105949 
+... Similar to previous best
+*** Best solution repeated 3 times
+Run 0 stress 0.05707645 
+Run 1 stress 0.0557893 
+... New best solution
+... Procrustes: rmse 0.07022627  max resid 0.2176782 
+Run 2 stress 0.06243419 
+Run 3 stress 0.05611113 
+... Procrustes: rmse 0.06956331  max resid 0.1407431 
+Run 4 stress 0.0580254 
+Run 5 stress 0.0564849 
+Run 6 stress 0.05578526 
+... New best solution
+... Procrustes: rmse 0.002733131  max resid 0.01266276 
+Run 7 stress 0.05578505 
+... New best solution
+... Procrustes: rmse 0.0002121204  max resid 0.0007407448 
+... Similar to previous best
+Run 8 stress 0.05692241 
+Run 9 stress 0.05691066 
+Run 10 stress 0.05704814 
+Run 11 stress 0.05730222 
+Run 12 stress 0.05615029 
+... Procrustes: rmse 0.06344066  max resid 0.1503602 
+Run 13 stress 0.05635141 
+Run 14 stress 0.0569116 
+Run 15 stress 0.05692897 
+Run 16 stress 0.05653585 
+Run 17 stress 0.05819276 
+Run 18 stress 0.05729507 
+Run 19 stress 0.05691417 
+Run 20 stress 0.05629475 
+*** Best solution repeated 1 times
+Run 0 stress 0.04260606 
+Run 1 stress 0.0417477 
+... New best solution
+... Procrustes: rmse 0.05277545  max resid 0.157099 
+Run 2 stress 0.0425403 
+Run 3 stress 0.04131872 
+... New best solution
+... Procrustes: rmse 0.03419711  max resid 0.09887441 
+Run 4 stress 0.04182947 
+Run 5 stress 0.04180297 
+... Procrustes: rmse 0.03492129  max resid 0.09960313 
+Run 6 stress 0.04174045 
+... Procrustes: rmse 0.03409862  max resid 0.09749863 
+Run 7 stress 0.04309811 
+Run 8 stress 0.04213449 
+Run 9 stress 0.04124068 
+... New best solution
+... Procrustes: rmse 0.01650439  max resid 0.03808153 
+Run 10 stress 0.0420423 
+Run 11 stress 0.04128973 
+... Procrustes: rmse 0.03603476  max resid 0.07775525 
+Run 12 stress 0.04136642 
+... Procrustes: rmse 0.00966828  max resid 0.02268173 
+Run 13 stress 0.04229565 
+Run 14 stress 0.04135214 
+... Procrustes: rmse 0.007044621  max resid 0.02398355 
+Run 15 stress 0.0412051 
+... New best solution
+... Procrustes: rmse 0.034451  max resid 0.08290545 
+Run 16 stress 0.04115615 
+... New best solution
+... Procrustes: rmse 0.01111334  max resid 0.04020626 
+Run 17 stress 0.041188 
+... Procrustes: rmse 0.00477375  max resid 0.01914514 
+Run 18 stress 0.0411462 
+... New best solution
+... Procrustes: rmse 0.009622325  max resid 0.04233931 
+Run 19 stress 0.04254125 
+Run 20 stress 0.04631473 
+*** Best solution was not repeated -- monoMDS stopping criteria:
+    20: no. of iterations >= maxit
+Run 0 stress 0.03247862 
+Run 1 stress 0.03162475 
+... New best solution
+... Procrustes: rmse 0.02155085  max resid 0.08697802 
+Run 2 stress 0.03270739 
+Run 3 stress 0.03182441 
+... Procrustes: rmse 0.02589717  max resid 0.1017713 
+Run 4 stress 0.03295316 
+Run 5 stress 0.03357546 
+Run 6 stress 0.03168637 
+... Procrustes: rmse 0.01104631  max resid 0.04886106 
+Run 7 stress 0.03348667 
+Run 8 stress 0.03333902 
+Run 9 stress 0.03288648 
+Run 10 stress 0.03278475 
+Run 11 stress 0.032732 
+Run 12 stress 0.03193441 
+... Procrustes: rmse 0.0320945  max resid 0.09020574 
+Run 13 stress 0.03442658 
+Run 14 stress 0.03275383 
+Run 15 stress 0.03301454 
+Run 16 stress 0.03196447 
+... Procrustes: rmse 0.02484452  max resid 0.09698914 
+Run 17 stress 0.03165316 
+... Procrustes: rmse 0.01545227  max resid 0.05904591 
+Run 18 stress 0.03196718 
+... Procrustes: rmse 0.03697085  max resid 0.1235515 
+Run 19 stress 0.03296006 
+Run 20 stress 0.03165424 
+... Procrustes: rmse 0.01361733  max resid 0.05106838 
+*** Best solution was not repeated -- monoMDS stopping criteria:
+    20: no. of iterations >= maxit
+Run 0 stress 0.0264502 
+Run 1 stress 0.02623508 
+... New best solution
+... Procrustes: rmse 0.06242094  max resid 0.1640684 
+Run 2 stress 0.02733809 
+Run 3 stress 0.02642284 
+... Procrustes: rmse 0.03836021  max resid 0.1130397 
+Run 4 stress 0.02667466 
+... Procrustes: rmse 0.04019661  max resid 0.09232111 
+Run 5 stress 0.02785315 
+Run 6 stress 0.02588081 
+... New best solution
+... Procrustes: rmse 0.03435392  max resid 0.09821793 
+Run 7 stress 0.02611752 
+... Procrustes: rmse 0.03644499  max resid 0.1073028 
+Run 8 stress 0.02672231 
+Run 9 stress 0.02549468 
+... New best solution
+... Procrustes: rmse 0.02970474  max resid 0.07268084 
+Run 10 stress 0.02630052 
+Run 11 stress 0.02565997 
+... Procrustes: rmse 0.02828194  max resid 0.07399177 
+Run 12 stress 0.02589466 
+... Procrustes: rmse 0.04976083  max resid 0.1288868 
+Run 13 stress 0.02651663 
+Run 14 stress 0.02691703 
+Run 15 stress 0.02743753 
+Run 16 stress 0.0281878 
+Run 17 stress 0.02655447 
+Run 18 stress 0.02579754 
+... Procrustes: rmse 0.02829488  max resid 0.09045371 
+Run 19 stress 0.02635704 
+Run 20 stress 0.02671691 
+*** Best solution was not repeated -- monoMDS stopping criteria:
+    20: no. of iterations >= maxit
+Run 0 stress 0.02173106 
+Run 1 stress 0.02095776 
+... New best solution
+... Procrustes: rmse 0.04068823  max resid 0.1559548 
+Run 2 stress 0.02191766 
+Run 3 stress 0.02128473 
+... Procrustes: rmse 0.02815982  max resid 0.07953337 
+Run 4 stress 0.02121923 
+... Procrustes: rmse 0.02842373  max resid 0.0997992 
+Run 5 stress 0.02157925 
+Run 6 stress 0.0228222 
+Run 7 stress 0.02107951 
+... Procrustes: rmse 0.04464611  max resid 0.1093655 
+Run 8 stress 0.0232875 
+Run 9 stress 0.02281427 
+Run 10 stress 0.02298109 
+Run 11 stress 0.02224492 
+Run 12 stress 0.02270626 
+Run 13 stress 0.02164192 
+Run 14 stress 0.02243158 
+Run 15 stress 0.02229288 
+Run 16 stress 0.02118067 
+... Procrustes: rmse 0.05039432  max resid 0.1416435 
+Run 17 stress 0.02247889 
+Run 18 stress 0.02202836 
+Run 19 stress 0.02221069 
+Run 20 stress 0.02235273 
+*** Best solution was not repeated -- monoMDS stopping criteria:
+    20: no. of iterations >= maxit
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{stress }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(klist, }\ControlFlowTok{function}\NormalTok{(x)\{x}\SpecialCharTok{$}\NormalTok{stress\})}
+\end{Highlighting}
+\end{Shaded}
+
+Now extract the stress values for each NMDS fit and plot them against
+dimensionality.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(K, stress, }\AttributeTok{type=}\StringTok{"l"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{,}
+     \AttributeTok{xlab=}\StringTok{"NMDS dimensions (k)"}\NormalTok{,}
+     \AttributeTok{ylab=}\StringTok{"Stress"}\NormalTok{,}
+     \AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FunctionTok{max}\NormalTok{(stress)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-nmds-neon9}Relationship between the number of NMDS
+dimensions and ordination stress. Stress decreases as the number of
+dimensions increases, with the largest improvements occurring between
+one and three dimensions. Additional dimensions continue to improve the
+fit, but with diminishing returns.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Line graph showing NMDS stress as a function of the number of dimensions, from 1 to 8. Stress decreases monotonically from approximately 0.23 with one dimension to 0.12 with two, 0.07 with three, and 0.02 with eight dimensions. The curve declines steeply at first and then gradually flattens.}]{chapters/ch27_files/figure-pdf/fig-nmds-neon9-1.pdf}}
+
+}
+
+\end{figure}%
+
+There is a large drop in stress from 1 to 2 dimensions, and a smaller
+drop from 2 to 3, and the gains in stress taper off after that. This
+plot suggests that 2 is sufficient, although in a real investigation you
+might want to at least explore the 3-dimensional solution.
 
 \section{Redundancy analysis (RA)}\label{sec-ord-ra}
 
@@ -37480,29 +38471,972 @@ Coming soon!
 
 Coming soon!
 
-\section{Distance-based RDA (dbRDA)}\label{sec-ord-dbrda}
+\section{Linear discriminant analysis}\label{sec-ord-lda}
 
 Coming soon!
 
-\section{Linear discriminant analysis}\label{sec-ord-lda}
+\section{Distance-based RDA (dbRDA)}\label{sec-ord-dbrda}
 
 Coming soon!
 
 \chapter{Multivariate hypothesis testing}\label{sec-mtest}
 
-Anything is permuted.
+So far we have explored two categories of multivariate analysis methods:
+\hyperref[sec-clust]{clustering} and \hyperref[sec-ord]{ordination}.
+These techniques are mainly for data exploration and visualization. But
+there are also methods for testing multivariate hypotheses that feel
+like extensions of univariate tests we have already seen.
+
+Many multivariate hypothesis tests address the same kinds of scientific
+questions as familiar univariate tests. The main difference is that they
+operate on multiple response variables or on matrices of pairwise
+distances rather than a single response variable. The methods in this
+table are \emph{conceptually} analogous, but they are not necessarily
+mathematically equivalent or based on the same statistical assumptions.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\caption{Conceptual analogies between familiar univariate statistical
+methods and multivariate hypothesis-testing methods. These methods
+address similar scientific questions but are not necessarily
+mathematically equivalent or based on the same
+assumptions.}\label{tbl-multivariate-analogues}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Univariate method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Univariate question
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Multivariate analogue
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Multivariate question
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Univariate method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Univariate question
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Multivariate analogue
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Multivariate question
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+t-test & Do two groups differ in their means? & Hotelling's \(T^2\) & Do
+two groups differ in their multivariate means? \\
+ANOVA & Do groups differ in their means? & MANOVA / PERMANOVA & Do
+groups differ in their multivariate means or composition? \\
+Kruskal--Wallis test & Do groups differ in their distributions, as
+assessed using ranks? & ANOSIM & Are distances between groups generally
+greater than distances within groups? \\
+Levene's test & Do groups differ in their variances? & PERMDISP
+(\texttt{betadisper}) & Do groups differ in their multivariate
+dispersions? \\
+Pearson correlation & Are two continuous variables correlated? & Mantel
+test & Are two distance matrices correlated? \\
+Partial correlation & Are two variables correlated after accounting for
+a third? & Partial Mantel test & Are two distance matrices correlated
+after accounting for a third distance matrix? \\
+Multiple linear regression & How does a response depend on multiple
+predictors? & MRM & How does pairwise dissimilarity depend on multiple
+predictor distance matrices? \\
+Multiple linear regression & How does a response depend on several
+predictors? & RDA / dbRDA & How does multivariate composition depend on
+environmental or other predictors? \\
+ANCOVA / factorial ANOVA & How do multiple predictors and their
+interactions affect a response? & PERMANOVA with multiple predictors &
+How do multiple predictors and their interactions explain multivariate
+differences? \\
+Linear mixed-effects model & How does a response depend on predictors
+while accounting for grouped observations? & MLPE & How do pairwise
+dissimilarities depend on predictors while accounting for shared samples
+or populations? \\
+\end{longtable}
 
 \section{Comparing groups}\label{sec-mtest-group}
 
-\subsection{MANOVA}\label{sec-mtest-group-man}
+We can test for differences between groups in multivariate using
+analogues of ANOVA: \textbf{multivariate analysis of variance (MANOVA)}
+and \textbf{permutational multivariate analysis of variance
+(PERMANOVA)}. \textbf{Multivariate analysis of variance (MANOVA)} is an
+extension of ANOVA with multiple response variables. The underlying
+theory and linear algebra is very similar to ANOVA, and so many of the
+same assumptions apply (just in many dimensions instead of one). For
+that reason, MANOVA is often not appropriate for real biological data
+without careful experimental design and exploratory data analysis to
+confirm that the test's assumptions are met.
 
 \subsection{PERMANOVA}\label{sec-mtest-group-perm}
 
-\subsection{MRPP}\label{sec-mtest-group-mrpp}
+\textbf{Permutational analysis of variance (PERMANOVA)} is a
+nonparametric version of MANOVA (Anderson 2001). It is nonparametric
+because it uses random shuffling, or permutation, of group membership to
+determine statistical significance instead of calculating an \emph{F}
+statistic based on probability theory. The most common R function for
+PERMANOVA is \texttt{adonis2()} from the \texttt{vegan} package.
+
+\subsubsection{Permutation tests}\label{sec-mtest-group-perm-permtest}
+
+A \textbf{permutation test} is one that assesses statistical
+significance using random shuffling, or \textbf{permutation}, of the
+data. The idea is that if some response variable depends on group
+membership, then shuffling the observations so that group memberships
+randomly change should break that dependence. Consider
+Figure~\ref{fig-permute1} below. Group A in grey tends to have smaller
+values. A \emph{t}-test confirms this (\emph{t}=-5.69, 34.22 d.f.,
+\emph{P} \textless{} 0.01).
+
+\begin{figure}
+
+\caption{\label{fig-permute1}Original dataset for illustrating a
+permutation-based t-test. Observations from groups A (gray) and B
+(white) are arranged in ascending order of the response variable. The
+observed t-statistic is −5.69, indicating that the mean of group A is
+substantially lower than that of group B. This statistic will be
+compared with the distribution of t-statistics generated by randomly
+permuting group labels.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Bar plot showing observations arranged from lowest to highest values of a response variable, ranging from approximately 4.3 to 7.0. Gray bars represent group A and white bars represent group B. Group A observations are concentrated toward the lower values, while group B observations are concentrated toward the higher values, with some overlap in the middle. The observed t-statistic, −5.69, is displayed above the bars.}]{chapters/ch28_files/figure-pdf/fig-permute1-1.pdf}}
+
+}
+
+\end{figure}%
+
+But look what happens to the test statistic \emph{t} if we permute the
+group memberships (Figure~\ref{fig-permute2}). Recall that \emph{t}
+summarizes the difference in group means. So, a \emph{t} with a smaller
+absolute value means that the group means are less different than they
+were originally.
+
+\begin{figure}
+
+\caption{\label{fig-permute2}One permutation of the group labels in the
+permutation-based t-test. The observed values remain unchanged and in
+ascending order, but the assignments to groups A (gray) and B (white)
+have been randomly shuffled. The resulting t-statistic is 0.04,
+indicating almost no difference between the group means. Repeating this
+process generates a null distribution of t-statistics against which the
+original statistic can be compared.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Bar plot showing the same observations as the original dataset, arranged in ascending order from approximately 4.3 to 7.0. Gray bars represent group A and white bars represent group B, but the group labels have been randomly reassigned. Both groups are distributed throughout the range of observed values, unlike the original arrangement. The recalculated t-statistic, 0.04, is displayed above the bars.}]{chapters/ch28_files/figure-pdf/fig-permute2-1.pdf}}
+
+}
+
+\end{figure}%
+
+After permutation, the summary of the difference in group means is much
+smaller (0.04). Let's repeat this a bunch of times:
+
+\begin{figure}
+
+\caption{\label{fig-permute3}Eight additional permutations of the group
+labels in the permutation-based t-test. Each panel shows the same
+observations arranged in ascending order, with group labels randomly
+reassigned and the t-statistic recalculated. The resulting t-statistics
+range from −0.67 to 1.66, all substantially closer to zero than the
+observed statistic of −5.69. Repeating this procedure many times
+produces the null distribution used to calculate a permutation p-value.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Eight bar plots arranged in four rows and two columns. Each plot shows the same observations in ascending order, with gray bars representing group A and white bars representing group B. The group assignments differ among panels, producing t-statistics of 1.66, 0.04, −0.40, 0.49, 0, −0.67, −0.40, and 0.40. In every panel, gray and white bars are interspersed throughout the range of values.}]{chapters/ch28_files/figure-pdf/fig-permute3-1.pdf}}
+
+}
+
+\end{figure}%
+
+We can obtain a permutation test by repeating this process many times
+and comparing the test statistic in the original dataset to the
+distribution of test statistics in the permuted datasets.
+
+\begin{figure}
+
+\caption{\label{fig-permute4}Null distribution of t-statistics generated
+from 1,000 random permutations of group labels. The histogram shows the
+distribution of t-statistics expected under the null hypothesis of no
+difference between groups, centered near zero. The red vertical line
+marks the observed t-statistic of −5.69, which falls well outside the
+range of permuted values. This provides strong evidence against the null
+hypothesis.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Histogram of 1,000 permuted t-statistics forming an approximately bell-shaped distribution centered near zero, with values ranging from about −3.5 to 3.5. A red vertical line at −5.69 marks the t-statistic calculated from the original data, far to the left of the permutation distribution. None of the permuted statistics are as extreme as the observed statistic.}]{chapters/ch28_files/figure-pdf/fig-permute4-1.pdf}}
+
+}
+
+\end{figure}%
+
+The distribution of \emph{t} statistics of the permuted datasets tells
+us what \emph{t} values we could expect if there was no difference in
+mean value between groups A and B. In other words, it is the
+distribution of the test statistic under the null hypothesis. But unlike
+in a traditional \emph{t}-test where we define the reference
+distribution from the number of degrees of freedom in the dataset--i.e.,
+we make assumptions about the distribution of \emph{t}--in this
+permutation test we let the dataset define the distribution of \emph{t}.
+In this test, none of the permuted \emph{t} are as extreme as the
+original \emph{t}, so the \emph{P}-value is ``\textless0.001'' (because
+\emph{P} can never be 0).
+
+The basic idea behind PERMANOVA is the same as this permutational
+\emph{t}-test we just performed, only with a multivariate distance
+matrix rather than differences in menas.
+
+\subsubsection{Example with NEON
+data}\label{sec-mtest-group-perm-example}
+
+Let's revisit the NEON small mammal measurement data. We analyzed this
+dataset previously in Section~\ref{sec-ord-pca-example}. Download the
+\href{../datasets/data-neon-ind-meas.csv}{individual measurement
+dataset} and the \href{../datasets/data-neon-taxa.csv}{taxonomic
+dataset} and put them in your working directory.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tax }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data{-}neon{-}taxa.csv"}\NormalTok{)}
+\NormalTok{ind }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data{-}neon{-}ind{-}meas.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Let's use PERMANOVA to test for a difference between four genera of
+morphologically similar mice: \emph{Peromyscus}, \emph{Onychomys},
+\emph{Reithrodontomys}, and \emph{Mus}. The first three are North
+American species in family Cricetidae, while \emph{Mus} is a Eurasian
+genus in family Muridae. We ordinated their morphology using the
+standard measurements (total length, tail length, hindfoot length, and
+ear length) using PCA in Section~\ref{sec-ord-pca-example}. First,
+filter the data to those species, and to only those individuals who are
+not missing any measurements. We will not adjust for size, because
+differences in size are a meaningful part of the variation between these
+species.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{use.genera }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Mus"}\NormalTok{, }\StringTok{"Onychomys"}\NormalTok{,}
+                \StringTok{"Peromyscus"}\NormalTok{, }\StringTok{"Reithrodontomys"}\NormalTok{)}
+\NormalTok{use.abb }\OtherTok{\textless{}{-}}\NormalTok{ tax}\SpecialCharTok{$}\NormalTok{abb[tax}\SpecialCharTok{$}\NormalTok{genus }\SpecialCharTok{\%in\%}\NormalTok{ use.genera]}
+
+\NormalTok{dx }\OtherTok{\textless{}{-}}\NormalTok{ ind[ind}\SpecialCharTok{$}\NormalTok{abb }\SpecialCharTok{\%in\%}\NormalTok{ use.abb,]}
+
+\NormalTok{use.cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"abb"}\NormalTok{, }\StringTok{"totalLength"}\NormalTok{,}
+              \StringTok{"tailLength"}\NormalTok{, }\StringTok{"hindfootLength"}\NormalTok{,}
+              \StringTok{"earLength"}\NormalTok{)}
+\NormalTok{dx }\OtherTok{\textless{}{-}}\NormalTok{ dx[,use.cols]}
+
+\CommentTok{\# only want individuals with no missing measurements}
+\NormalTok{dx }\OtherTok{\textless{}{-}}\NormalTok{ dx[}\FunctionTok{complete.cases}\NormalTok{(dx),]}
+
+\CommentTok{\# identify genera}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{genus }\OtherTok{\textless{}{-}}\NormalTok{ tax}\SpecialCharTok{$}\NormalTok{genus[}\FunctionTok{match}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{abb, tax}\SpecialCharTok{$}\NormalTok{abb)]}
+
+\CommentTok{\# add some colors and shapes}
+\NormalTok{cols }\OtherTok{\textless{}{-}} \FunctionTok{hcl.colors}\NormalTok{(}\FunctionTok{length}\NormalTok{(use.genera), }\AttributeTok{palette=}\StringTok{"Dark 3"}\NormalTok{)}
+\NormalTok{pchs }\OtherTok{\textless{}{-}} \DecValTok{15}\SpecialCharTok{:}\DecValTok{18}
+\FunctionTok{names}\NormalTok{(cols) }\OtherTok{\textless{}{-}}\NormalTok{ use.genera}
+\FunctionTok{names}\NormalTok{(pchs) }\OtherTok{\textless{}{-}}\NormalTok{ use.genera}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{color }\OtherTok{\textless{}{-}}\NormalTok{ cols[dx}\SpecialCharTok{$}\NormalTok{genus]}
+\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch }\OtherTok{\textless{}{-}}\NormalTok{ pchs[dx}\SpecialCharTok{$}\NormalTok{genus]}
+
+\CommentTok{\# don\textquotesingle{}t do this in a real research project:}
+\CommentTok{\# cut down the dataset to randomly select at}
+\CommentTok{\# at least 100 mice in each genus}
+\CommentTok{\# permanova takes way too long with \textgreater{}5000 samples}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{1776}\NormalTok{)}
+\NormalTok{subset.list }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\StringTok{"list"}\NormalTok{, }\AttributeTok{length=}\DecValTok{4}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{)\{}
+\NormalTok{    irows }\OtherTok{\textless{}{-}} \FunctionTok{which}\NormalTok{(dx}\SpecialCharTok{$}\NormalTok{genus }\SpecialCharTok{==}\NormalTok{ use.genera[i])}
+\NormalTok{    keep.rows }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(irows, }\DecValTok{100}\NormalTok{, }\AttributeTok{replace=}\ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{    subset.list[[i]] }\OtherTok{\textless{}{-}}\NormalTok{ dx[keep.rows,]}
+\NormalTok{\}}
+\NormalTok{dx }\OtherTok{\textless{}{-}} \FunctionTok{do.call}\NormalTok{(rbind, subset.list)}
+\end{Highlighting}
+\end{Shaded}
+
+Let's visualize the data first. We can use PCA as we did in
+Section~\ref{sec-ord-pca-example}. We will need to standardize the data
+before PCA. We will also use the standardized data in the PERMANOVA.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(vegan)}
+
+\NormalTok{meas.cols }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"totalLength"}\NormalTok{, }\StringTok{"tailLength"}\NormalTok{,}
+               \StringTok{"hindfootLength"}\NormalTok{, }\StringTok{"earLength"}\NormalTok{)}
+\NormalTok{ymatrix }\OtherTok{\textless{}{-}}\NormalTok{ dx[,meas.cols]}
+\NormalTok{ymatrix.sc }\OtherTok{\textless{}{-}} \FunctionTok{scale}\NormalTok{(ymatrix)}
+
+\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{pca}\NormalTok{(ymatrix.sc)}
+\FunctionTok{summary}\NormalTok{(p1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+pca(X = ymatrix.sc) 
+
+Partitioning of variance:
+              Inertia Proportion
+Total               4          1
+Unconstrained       4          1
+
+Eigenvalues, and their contribution to the variance 
+
+Importance of components:
+                         PC1    PC2     PC3     PC4
+Eigenvalue            2.4097 1.0547 0.32766 0.20794
+Proportion Explained  0.6024 0.2637 0.08191 0.05198
+Cumulative Proportion 0.6024 0.8661 0.94802 1.00000
+\end{verbatim}
+
+Extract the scores and build the plot:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{xy }\OtherTok{\textless{}{-}} \FunctionTok{scores}\NormalTok{(p1, }\AttributeTok{display=}\StringTok{"sites"}\NormalTok{, }\AttributeTok{choices=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{, }\AttributeTok{scaling=}\DecValTok{1}\NormalTok{)}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{2}\NormalTok{], }
+     \AttributeTok{xlab=}\StringTok{"PC1 (61.5$)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (27.4\%)"}\NormalTok{,}
+     \AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{, }\AttributeTok{legend=}\NormalTok{use.genera,}
+       \AttributeTok{pch=}\NormalTok{pchs, }\AttributeTok{col=}\NormalTok{cols, }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{,}
+       \AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{text.font=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-permanova1}Principal component analysis (PCA) of
+standardized morphological measurements from 400 specimens representing
+four rodent genera. Points represent individual specimens, with colors
+and symbols indicating genus. The first two principal components explain
+approximately 89\% of the total morphological variation. Peromyscus is
+primarily separated from the other genera along PC1, while Onychomys is
+separated along PC2. Mus and Reithrodontomys overlap considerably in
+this two-dimensional representation.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Scatterplot of the first two principal components of morphological measurements, with PC1 explaining approximately 61.5\% of variation and PC2 explaining 27.4\%. Peromyscus specimens, shown as teal triangles, cluster primarily on the left. Onychomys specimens, shown as olive circles, cluster in the upper center. Mus specimens, shown as pink squares, and Reithrodontomys specimens, shown as purple diamonds, overlap extensively in the lower-right portion. Some specimens occur outside their genus\textquotesingle s main cluster.}]{chapters/ch28_files/figure-pdf/fig-permanova1-1.pdf}}
+
+}
+
+\end{figure}%
+
+The PCA suggests that \emph{Peromyscus} and \emph{Onychomys} are
+morphologically distinct from \emph{Reithrodontomys} and \emph{Mus}, and
+that \emph{Reithrodontomys} and \emph{Mus} are not morphologically
+distinct from each other. We can test whether these visual
+interpretations are supported by the data with PERMANOVA. But first, we
+need to check for homogeneity of multivariate variance between the
+groups. This is one of the assumptions of PERMANOVA. The most common
+method is called a \textbf{beta dispersion test} and is available in
+\texttt{vegan} as \texttt{betadisper()}. It tests whether the groups
+have the same within-group variance, measured as mean distance to
+centroid.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d }\OtherTok{\textless{}{-}} \FunctionTok{vegdist}\NormalTok{(ymatrix.sc, }\AttributeTok{method=}\StringTok{"euclidean"}\NormalTok{)}
+\NormalTok{beta.disp.test }\OtherTok{\textless{}{-}} \FunctionTok{betadisper}\NormalTok{(d, dx}\SpecialCharTok{$}\NormalTok{genus)}
+\FunctionTok{permutest}\NormalTok{(beta.disp.test)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Permutation test for homogeneity of multivariate dispersions
+Permutation: free
+Number of permutations: 999
+
+Response: Distances
+           Df  Sum Sq Mean Sq      F N.Perm Pr(>F)   
+Groups      3   7.387 2.46229 5.6949    999  0.003 **
+Residuals 396 171.216 0.43236                        
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+The test was significant, which is evidence that some of the genera
+differ in their within group dispersion. We can inspect the dispersions
+by looking at the \texttt{betadisper()} object.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{beta.disp.test}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+    Homogeneity of multivariate dispersions
+
+Call: betadisper(d = d, group = dx$genus)
+
+No. of Positive Eigenvalues: 4
+No. of Negative Eigenvalues: 0
+
+Average distance to median:
+            Mus       Onychomys      Peromyscus Reithrodontomys 
+         0.9892          1.0064          1.3302          1.1001 
+
+Eigenvalues for PCoA axes:
+ PCoA1  PCoA2  PCoA3  PCoA4 
+961.46 420.84 130.74  82.97 
+\end{verbatim}
+
+The important part of this output is the
+\texttt{Average\ distance\ to\ median}. \emph{Peromyscus} has the
+largest within-group dispersion, and \emph{Mus} the least.
+\emph{Reithrodontomys} has the second most, and \emph{Onychomys}
+slightly less. This makes biological sense: our dataset includes 13
+species of \emph{Peromyscus}, 4 of \emph{Reithrodontomys}, 3 of
+\emph{Onychomys}, and 1 of \emph{Mus}. You can check this with
+\texttt{table(substr(use.abb,\ 1,\ 3))}.
+
+The beta dispersion test tells us that we are measuring two sources of
+morphological variation within each genus: variation among species and
+variation among individuals within species. A genus represented by 13
+species has more opportunities to encompass substantial morphological
+diversity than one represented by a single species, although species
+richness alone doesn't guarantee greater dispersion. The take home here
+is that PERMANOVA and the multivariate dispersion test need to be
+interpreted together.
+
+The \texttt{vegan} function for PERMANOVA is \texttt{adonis2()}. We will
+use it on the scaled version of the measurement dataset, the same as we
+used for the beta dispersion test.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{999}\NormalTok{)}
+\NormalTok{mod1 }\OtherTok{\textless{}{-}} \FunctionTok{adonis2}\NormalTok{(ymatrix.sc }\SpecialCharTok{\textasciitilde{}}\NormalTok{ genus, }\AttributeTok{data=}\NormalTok{dx,}
+                \AttributeTok{method=}\StringTok{"euclidean"}\NormalTok{)}
+\NormalTok{mod1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Permutation test for adonis under reduced model
+Permutation: free
+Number of permutations: 999
+
+adonis2(formula = ymatrix.sc ~ genus, data = dx, method = "euclidean")
+          Df SumOfSqs      R2      F Pr(>F)    
+Model      3   934.24 0.58537 186.35  0.001 ***
+Residual 396   661.76 0.41463                  
+Total    399  1596.00 1.00000                  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+Here are the important parts of the output:
+
+\begin{itemize}
+\tightlist
+\item
+  Pseudo-\(F_{3,396}=186.4, p = 0.001\). This means that there were
+  statistically significant morphological differences among the four
+  genera.
+\item
+  \(R^2=0.59\) means that genus explains about 59\% of the variation in
+  morphology in the samples.
+\item
+  Residual \(R^2=0.41\) means that about 41\% of the variation
+  unexplained.
+\end{itemize}
+
+This PERMANOVA result is substantial, while the dispersion test
+demonstrates that the genera differ in their morphological variability.
+The differences in within-genus dispersion are biologically plausible
+because the genera contain different numbers of species.
+
+The PERMANOVA we just did was an \textbf{omnibus test}, just as the
+initial test with \texttt{aov()} is for ANOVA
+(Section~\ref{sec-groups-more-anova-1way}). For ANOVA, we then use a
+post hoc Tukey test to check for significant pairwise differences. For
+PERMANOVA, the usual post hoc test is a series of pairwise PERMANOVAs.
+We can fit these in a loop.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{1701}\NormalTok{)}
+
+\CommentTok{\# define pairwise combinations}
+\NormalTok{combos }\OtherTok{\textless{}{-}} \FunctionTok{combn}\NormalTok{(use.genera, }\DecValTok{2}\NormalTok{)}
+\NormalTok{ncombos }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(combos)}
+
+\CommentTok{\# data frame to catch results}
+\NormalTok{res }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+    \AttributeTok{genus1=}\NormalTok{combos[}\DecValTok{1}\NormalTok{,],}
+    \AttributeTok{genus2=}\NormalTok{combos[}\DecValTok{2}\NormalTok{,],}
+    \AttributeTok{Fstat=}\ConstantTok{NA}\NormalTok{,}
+    \AttributeTok{R2=}\ConstantTok{NA}\NormalTok{,}
+    \AttributeTok{p=}\ConstantTok{NA}\NormalTok{)}
+
+\CommentTok{\# run pairwise combinations in a loop}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{ncombos)\{}
+\NormalTok{    use.rows }\OtherTok{\textless{}{-}}\NormalTok{ dx}\SpecialCharTok{$}\NormalTok{genus }\SpecialCharTok{\%in\%}\NormalTok{ combos[,i]}
+\NormalTok{    idata }\OtherTok{\textless{}{-}}\NormalTok{ ymatrix.sc[use.rows,]}
+\NormalTok{    igenus }\OtherTok{\textless{}{-}}\NormalTok{ dx[use.rows,]}
+\NormalTok{    imod }\OtherTok{\textless{}{-}} \FunctionTok{adonis2}\NormalTok{(idata}\SpecialCharTok{\textasciitilde{}}\NormalTok{genus, }\AttributeTok{data=}\NormalTok{igenus,}
+                    \AttributeTok{method=}\StringTok{"euclidean"}\NormalTok{)}
+\NormalTok{    res}\SpecialCharTok{$}\NormalTok{Fstat[i] }\OtherTok{\textless{}{-}}\NormalTok{ imod}\SpecialCharTok{$}\NormalTok{F[}\DecValTok{1}\NormalTok{]}
+\NormalTok{    res}\SpecialCharTok{$}\NormalTok{R2[i] }\OtherTok{\textless{}{-}}\NormalTok{ imod}\SpecialCharTok{$}\NormalTok{R2[}\DecValTok{1}\NormalTok{]}
+\NormalTok{    res}\SpecialCharTok{$}\NormalTok{p[i] }\OtherTok{\textless{}{-}}\NormalTok{ imod}\SpecialCharTok{$}\StringTok{\textasciigrave{}}\AttributeTok{Pr(\textgreater{}F)}\StringTok{\textasciigrave{}}\NormalTok{[}\DecValTok{1}\NormalTok{]}
+\NormalTok{\}}
+\NormalTok{res}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+      genus1          genus2      Fstat         R2     p
+1        Mus       Onychomys 194.050391 0.49496288 0.001
+2        Mus      Peromyscus 249.969637 0.55800576 0.001
+3        Mus Reithrodontomys   5.392538 0.02651296 0.001
+4  Onychomys      Peromyscus 234.424137 0.54211622 0.001
+5  Onychomys Reithrodontomys 150.989668 0.43264796 0.001
+6 Peromyscus Reithrodontomys 232.377973 0.53993928 0.001
+\end{verbatim}
+
+All of the pairwise tests use 1 and 198 degrees of freedom for their
+pseudo-\emph{F} statistics. Before we interpret these \emph{P}-values,
+we need to apply a correction for multiple comparisions. This will
+control the family-wise error rate. We will use a Holm correction.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{res}\SpecialCharTok{$}\NormalTok{p.adj }\OtherTok{\textless{}{-}} \FunctionTok{p.adjust}\NormalTok{(res}\SpecialCharTok{$}\NormalTok{p, }\AttributeTok{method=}\StringTok{"holm"}\NormalTok{)}
+\NormalTok{res}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+      genus1          genus2      Fstat         R2     p p.adj
+1        Mus       Onychomys 194.050391 0.49496288 0.001 0.006
+2        Mus      Peromyscus 249.969637 0.55800576 0.001 0.006
+3        Mus Reithrodontomys   5.392538 0.02651296 0.001 0.006
+4  Onychomys      Peromyscus 234.424137 0.54211622 0.001 0.006
+5  Onychomys Reithrodontomys 150.989668 0.43264796 0.001 0.006
+6 Peromyscus Reithrodontomys 232.377973 0.53993928 0.001 0.006
+\end{verbatim}
+
+The adjusted \emph{P}-values confirm our initial suspicion based on
+Figure~\ref{fig-permanova1}: that the genera differ from each other
+morphological. However, the difference between \emph{Reithrodontomys}
+and \emph{Mus} was much smaller than the differences between the other
+genera, as shown by the much smaller \(R^2\) for that comparison. Let's
+add some ellipses to the PCA for better visualization:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# get centroids}
+\NormalTok{centx }\OtherTok{\textless{}{-}} \FunctionTok{tapply}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], dx}\SpecialCharTok{$}\NormalTok{genus, mean)}
+\NormalTok{centy }\OtherTok{\textless{}{-}} \FunctionTok{tapply}\NormalTok{(xy[,}\DecValTok{2}\NormalTok{], dx}\SpecialCharTok{$}\NormalTok{genus, mean)}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(xy[,}\DecValTok{1}\NormalTok{], xy[,}\DecValTok{2}\NormalTok{], }
+     \AttributeTok{xlab=}\StringTok{"PC1 (61.5\%)"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"PC2 (27.4\%)"}\NormalTok{,}
+     \AttributeTok{pch=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{pch, }\AttributeTok{col=}\NormalTok{dx}\SpecialCharTok{$}\NormalTok{col)}
+\FunctionTok{ordiellipse}\NormalTok{(xy, dx}\SpecialCharTok{$}\NormalTok{genus, }\CommentTok{\#kind="se",}
+            \AttributeTok{draw=}\StringTok{"polygon"}\NormalTok{, }\AttributeTok{col=}\NormalTok{cols)}
+\FunctionTok{text}\NormalTok{(centx, centy, use.genera, }\AttributeTok{font=}\DecValTok{4}\NormalTok{, }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{, }\AttributeTok{legend=}\NormalTok{use.genera,}
+       \AttributeTok{pch=}\NormalTok{pchs, }\AttributeTok{col=}\NormalTok{cols, }\AttributeTok{cex=}\FloatTok{1.2}\NormalTok{,}
+       \AttributeTok{bty=}\StringTok{"n"}\NormalTok{, }\AttributeTok{text.font=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-permanova2}Principal component analysis (PCA) of
+standardized morphological measurements from 400 specimens representing
+four rodent genera, with ellipses illustrating within-genus variation in
+ordination space. The first two principal components explain 88.9\% of
+total morphological variation. Peromyscus and Onychomys occupy
+relatively distinct regions, whereas the ellipses for Mus and
+Reithrodontomys overlap extensively. The ellipses illustrate differences
+in group locations and dispersions relevant to interpreting PERMANOVA
+results.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Scatterplot of PC1 (61.5\% of variation) against PC2 (27.4\%) for four rodent genera, with colored points and shaded ellipses. Peromyscus, shown as teal triangles, has a diagonally oriented ellipse on the left. Onychomys, shown as olive circles, has a smaller ellipse in the upper center. Mus, shown as pink squares, and Reithrodontomys, shown as purple diamonds, have strongly overlapping ellipses in the lower right. Individual observations extend beyond all four ellipses.}]{chapters/ch28_files/figure-pdf/fig-permanova2-1.pdf}}
+
+}
+
+\end{figure}%
+
+\subsection{ANOSIM}\label{sec-mtest-group-anosim}
+
+Analysis of similarities (ANOSIM) is a permutation-based test that, like
+PERMANOVA, evaluates differences in multivariate composition among
+predefined groups. Rather than partitioning variation among and within
+groups, ANOSIM compares the ranks of pairwise distances within groups to
+those between groups. Its test statistic, (R), ranges from −1 to +1,
+with positive values indicating that observations from different groups
+tend to be more dissimilar than observations within the same group.
+ANOSIM can be particularly sensitive to differences in multivariate
+dispersion, so significant results do not necessarily indicate
+differences in group locations.
+
+\emph{Example coming soon!}
 
 \section{Analyzing dissimilarity}\label{sec-mtest-dis}
 
+PERMANOVA is a way to compare groups of observations in a multivariate
+space. Another way of understanding multivariate patterns is to explore
+relationships between distance matrices. Consider
+Figure~\ref{fig-mantel01} below. It shows how dissimilarity between
+samples in terms of one set of variables is related to dissimilarity in
+terms of another. In this example, sites that are more dissimilar in
+terms of their soil chemistry are also more dissimilar in terms of their
+plant communities. Each point on the figure represents a \emph{pair} of
+observations, not a single observations.
+
+When we test for a \emph{correlation} between distance metrics, we
+perform a \textbf{Mantel test}. There are also regression approaches for
+dissimilarities such as ANOSIM and \textbf{multiple regression on
+distance matrices (MRM)} and \textbf{maximum likelihood population
+effects (MLPE)}.
+
+\begin{figure}
+
+\caption{\label{fig-mantel01}Scatterplot showing a strong positive
+relationship between pairwise soil dissimilarity and plant community
+dissimilarity. Thousands of open circles form an upward-trending cloud,
+with both axes ranging approximately from 0 to 5. Red and blue arrows
+indicate increasing and decreasing dissimilarity, respectively. The
+Mantel correlation is 0.863, with p less than 0.01.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{chapters/../images/mult-mantel02.jpg}}
+
+}
+
+\end{figure}%
+
 \subsection{Mantel tests}\label{sec-mtest-dis-mantel}
+
+For an example Mantel test, let's revisit the small mammal capture data
+from Section~\ref{sec-clust-kmeans-example} and
+Section~\ref{sec-ord-nmds-neon}. Download the
+\href{../datasets/data-neon-captures-site.csv}{site-level capture
+dataset}, the \href{../datasets/data-neon-metadata-site.csv}{site
+metadata}, and the \href{../datasets/data-neon-taxa.csv}{taxonomic
+dataset} and put them in your working directory.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tax }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data{-}neon{-}taxa.csv"}\NormalTok{)}
+\NormalTok{cap }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data{-}neon{-}captures{-}site.csv"}\NormalTok{)}
+\NormalTok{met }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data{-}neon{-}metadata{-}site.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+As before, convert the capture numbers to a binary presence-absence, and
+remove a species that is present at no sites.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pa }\OtherTok{\textless{}{-}}\NormalTok{ cap}
+
+\CommentTok{\# fix some columns and set rownames}
+\NormalTok{pa}\SpecialCharTok{$}\NormalTok{X }\OtherTok{\textless{}{-}} \ConstantTok{NULL}
+\FunctionTok{rownames}\NormalTok{(pa) }\OtherTok{\textless{}{-}}\NormalTok{ pa}\SpecialCharTok{$}\NormalTok{site}
+\NormalTok{pa}\SpecialCharTok{$}\NormalTok{site }\OtherTok{\textless{}{-}} \ConstantTok{NULL}
+
+\CommentTok{\# convert capture numbers to presence absence}
+\NormalTok{pa[pa}\SpecialCharTok{\textgreater{}}\DecValTok{0}\NormalTok{] }\OtherTok{\textless{}{-}} \DecValTok{1}
+
+\CommentTok{\# leaves 133 species}
+\NormalTok{pa }\OtherTok{\textless{}{-}}\NormalTok{ pa[,}\SpecialCharTok{{-}}\FunctionTok{which}\NormalTok{(}\FunctionTok{colSums}\NormalTok{(pa)}\SpecialCharTok{==}\DecValTok{0}\NormalTok{)]}
+\end{Highlighting}
+\end{Shaded}
+
+We will compare dissimilarity in terms of small mammal species
+composition with geographic distance. Notice that we cannot calculate
+geographic distance using raw latitude and longitude because that would
+ignore the curvature of the Earth. We will use package \texttt{terra} to
+calculate distances across the famously non-flat Earth's surface.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(terra)}
+\NormalTok{coords }\OtherTok{\textless{}{-}}\NormalTok{ met[,}\FunctionTok{c}\NormalTok{(}\StringTok{"lat"}\NormalTok{, }\StringTok{"lon"}\NormalTok{)]}
+
+\CommentTok{\# convert coordinates to spatial points (WGS84)}
+\NormalTok{sites }\OtherTok{\textless{}{-}} \FunctionTok{vect}\NormalTok{(coords, }\AttributeTok{geom=}\FunctionTok{c}\NormalTok{(}\StringTok{"lon"}\NormalTok{, }\StringTok{"lat"}\NormalTok{), }\AttributeTok{crs=}\StringTok{"EPSG:4326"}\NormalTok{)}
+
+\CommentTok{\# calculate geographic distance matrix in meters}
+\NormalTok{geo.dist }\OtherTok{\textless{}{-}}\NormalTok{ terra}\SpecialCharTok{::}\FunctionTok{distance}\NormalTok{(sites)}
+
+\CommentTok{\# convert to km}
+\NormalTok{geo.dist }\OtherTok{\textless{}{-}} \FunctionTok{as.dist}\NormalTok{(geo.dist }\SpecialCharTok{/} \DecValTok{1000}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Now we can calculate the Sørensen distance matrix using the species
+presences in \texttt{pa} and run the Mantel test.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mamm.dist }\OtherTok{\textless{}{-}} \FunctionTok{vegdist}\NormalTok{(pa)}
+
+\FunctionTok{mantel}\NormalTok{(geo.dist, mamm.dist)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Mantel statistic based on Pearson's product-moment correlation 
+
+Call:
+mantel(xdis = geo.dist, ydis = mamm.dist) 
+
+Mantel statistic r: 0.599 
+      Significance: 0.001 
+
+Upper quantiles of permutations (null model):
+   90%    95%  97.5%    99% 
+0.0826 0.0999 0.1198 0.1425 
+Permutation: free
+Number of permutations: 999
+\end{verbatim}
+
+The Mantel \emph{r} is 0.599, which is a moderately strong correlation.
+We can visualize this by plotting the distance matrices.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(geo.dist, mamm.dist,}
+     \AttributeTok{xlab=}\StringTok{"Geographic distance (km)"}\NormalTok{,}
+     \AttributeTok{ylab=}\StringTok{"Small mammal dissimilarity (unitless)"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-mantel02}Relationship between geographic distance
+and mammal community dissimilarity among sampling sites. Each point
+represents a pair of sites, with geographic distance in kilometers on
+the horizontal axis and community dissimilarity on the vertical axis.
+Community dissimilarity generally increases with geographic distance,
+although considerable variation occurs among nearby sites. Many pairs
+have a dissimilarity of 1, indicating no species shared between them.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Scatterplot of pairwise geographic distance, ranging from 0 to approximately 8,000 km, against mammal community dissimilarity, ranging from 0 to 1. Open circles show an increasing trend, with nearby sites exhibiting dissimilarities across nearly the full range. At greater geographic distances, most pairs have high dissimilarity, and many points form a horizontal band at 1, indicating completely different species compositions.}]{chapters/ch28_files/figure-pdf/fig-mantel02-1.pdf}}
+
+}
+
+\end{figure}%
+
+Just as in Figure~\ref{fig-nmds-stressplot}, many of the pairs are made
+of sites that share no species and thus have the maximal Sørensen
+dissimilarity of 1. This explains the stripe of points along the top of
+the plot. The shape of the plot suggests that the nonlinear rank-based
+Mantel test may be more appropriate.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mantel}\NormalTok{(geo.dist, mamm.dist, }\AttributeTok{method=}\StringTok{"spearman"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Mantel statistic based on Spearman's rank correlation rho 
+
+Call:
+mantel(xdis = geo.dist, ydis = mamm.dist, method = "spearman") 
+
+Mantel statistic r: 0.6805 
+      Significance: 0.001 
+
+Upper quantiles of permutations (null model):
+   90%    95%  97.5%    99% 
+0.0806 0.1107 0.1410 0.1666 
+Permutation: free
+Number of permutations: 999
+\end{verbatim}
+
+The rank-based Mantel \(\rho\) is greater than the linear Mantel
+\emph{r}.
+
+\subsection{Partial Mantel tests}\label{sec-mtest-dis-partial}
+
+A \textbf{partial Mantel test} extends the Mantel test
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Select environmental variables}
+\NormalTok{env }\OtherTok{\textless{}{-}}\NormalTok{ met[, }\FunctionTok{c}\NormalTok{(}\StringTok{"elev"}\NormalTok{, }\StringTok{"precip"}\NormalTok{, }\StringTok{"temp"}\NormalTok{, }\StringTok{"npp"}\NormalTok{,}
+               \StringTok{"seas.pre"}\NormalTok{, }\StringTok{"seas.temp"}\NormalTok{)]}
+
+\CommentTok{\# Standardize and calculate environmental distances}
+\NormalTok{env.dist }\OtherTok{\textless{}{-}} \FunctionTok{dist}\NormalTok{(}\FunctionTok{scale}\NormalTok{(env))}
+\end{Highlighting}
+\end{Shaded}
+
+The initial Mantel test tested whether sites that are geographically
+farther apart are more dissimilar in terms of their mammal species
+composition. This \emph{partial} Mantel test will test whether sites
+that are more environmentally different are more dissimilar in terms of
+species composition after accounting for geographic distance.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\FunctionTok{mantel.partial}\NormalTok{(mamm.dist, env.dist, geo.dist, }
+               \AttributeTok{method=}\StringTok{"pearson"}\NormalTok{, }\AttributeTok{permutations=}\DecValTok{999}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Partial Mantel statistic based on Pearson's product-moment correlation 
+
+Call:
+mantel.partial(xdis = mamm.dist, ydis = env.dist, zdis = geo.dist,      method = "pearson", permutations = 999) 
+
+Mantel statistic r: 0.5004 
+      Significance: 0.001 
+
+Upper quantiles of permutations (null model):
+   90%    95%  97.5%    99% 
+0.0725 0.0912 0.1090 0.1307 
+Permutation: free
+Number of permutations: 999
+\end{verbatim}
+
+In \texttt{vegan::mantel.partial()}, the first two arguments are the
+distance matrices whose correlation you're testing, and the third is the
+distance matrix you're controlling for. In our example, we tested
+whether dissimilarity in terms of mammal community composition is
+correlated with dissimilarity in terms of environmental variables, after
+accounting for geographic distance. If we reverse the second and third
+arguments, we get a different test:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\FunctionTok{mantel.partial}\NormalTok{(mamm.dist, geo.dist, env.dist, }
+               \AttributeTok{method=}\StringTok{"pearson"}\NormalTok{, }\AttributeTok{permutations=}\DecValTok{999}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Partial Mantel statistic based on Pearson's product-moment correlation 
+
+Call:
+mantel.partial(xdis = mamm.dist, ydis = geo.dist, zdis = env.dist,      method = "pearson", permutations = 999) 
+
+Mantel statistic r: 0.2522 
+      Significance: 0.001 
+
+Upper quantiles of permutations (null model):
+   90%    95%  97.5%    99% 
+0.0764 0.1028 0.1218 0.1439 
+Permutation: free
+Number of permutations: 999
+\end{verbatim}
+
+The second test looks for correlations between mammal community
+composition and geographic distance, after accounting for environmental
+differences. Notice that the Mantel \emph{r} statistic is much smaller.
+
+We can plot the partial correlation just as we can an ordinary Mantel
+correlation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{man02 }\OtherTok{\textless{}{-}} \FunctionTok{mantel.partial}\NormalTok{(mamm.dist,}
+\NormalTok{                        env.dist,}
+\NormalTok{                        geo.dist)}
+
+\CommentTok{\# Extract pairwise distances}
+\NormalTok{m }\OtherTok{\textless{}{-}} \FunctionTok{as.vector}\NormalTok{(mamm.dist)}
+\NormalTok{e }\OtherTok{\textless{}{-}} \FunctionTok{as.vector}\NormalTok{(env.dist)}
+\NormalTok{g }\OtherTok{\textless{}{-}} \FunctionTok{as.vector}\NormalTok{(geo.dist)}
+
+\CommentTok{\# Remove the linear association with geographic distance}
+\NormalTok{m.res }\OtherTok{\textless{}{-}} \FunctionTok{resid}\NormalTok{(}\FunctionTok{lm}\NormalTok{(m }\SpecialCharTok{\textasciitilde{}}\NormalTok{ g))}
+\NormalTok{e.res }\OtherTok{\textless{}{-}} \FunctionTok{resid}\NormalTok{(}\FunctionTok{lm}\NormalTok{(e }\SpecialCharTok{\textasciitilde{}}\NormalTok{ g))}
+
+\CommentTok{\# Plot the partial relationship}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(e.res, m.res,}
+     \AttributeTok{pch =} \DecValTok{1}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"Environmental dissimilarity (adjusted for geography)"}\NormalTok{,}
+     \AttributeTok{ylab =} \StringTok{"Mammal dissimilarity (adjusted for geography)"}\NormalTok{)}
+
+\FunctionTok{abline}\NormalTok{(}\FunctionTok{lm}\NormalTok{(m.res }\SpecialCharTok{\textasciitilde{}}\NormalTok{ e.res), }\AttributeTok{col =} \StringTok{"red"}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\caption{\label{fig-mantel-partial}Partial Mantel relationship between
+mammal community dissimilarity and environmental dissimilarity after
+accounting for geographic distance. Each point represents a pair of
+sampling sites, with both dissimilarity measures adjusted for their
+linear relationships with geographic distance. The red regression line
+illustrates the positive partial correlation, suggesting that
+environmentally dissimilar sites tend to have more dissimilar mammal
+communities even after accounting for geographic separation.}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio,alt={Scatterplot of residual environmental dissimilarity on the horizontal axis and residual mammal community dissimilarity on the vertical axis, after adjusting both for geographic distance. Open circles form a broad cloud with a positive trend. A red regression line slopes upward from left to right. Environmental residuals range approximately from −2.5 to 3.0, and mammal dissimilarity residuals range from −0.65 to 0.3.}]{chapters/ch28_files/figure-pdf/fig-mantel-partial-1.pdf}}
+
+}
+
+\end{figure}%
+
+It is important to note that partial Mantel tests can have unreliable
+Type I error rates with spatially autocorrelated data, so the
+significant results here warrant caution. In this case, dissimilarity in
+environmental characteristics and dissimilarity of mammal community
+composition are likely both spatially autocorrelated. For formal
+inference about environmental effects on community composition after
+accounting for space, distance-based redundancy analysis (dbRDA) with
+spatial predictors is often a better-supported alternative.
+
+\subsection{Multiple regression on distance matrices
+(MRM)}\label{sec-mtest-dis-mrm}
+
+The Mantel test is useful for testing associations between distance
+matrices, but it does not explicitly model how dissimilarities between
+samples depend on other variables. Just as regression extends
+correlation by modeling the relationship between variables, other
+methods extend the analysis of distance matrices by treating pairwise
+dissimilarities as response variables. One such technique is multiple
+regression on distance matrices (MRM), which models the relationship
+between a response distance matrix and one or more predictor distance
+matrices. Like Mantel tests, MRM uses permutations to test statistical
+significance because pairwise distances are not independent
+observations.
+
+Example coming soon!
 
 \part{Alternatives to \emph{p}-values: information-theoretic and
 Bayesian methods}
@@ -38357,6 +40291,12 @@ data}\label{clean-up-individual-measurement-data}
 
 \protect\phantomsection\label{refs}
 \begin{CSLReferences}{1}{1}
+\bibitem[\citeproctext]{ref-anderson2001}
+Anderson MJ. 2001.
+\href{https://doi.org/10.1111/j.1442-9993.2001.01070.pp.x}{A new method
+for non-parametric multivariate analysis of variance}. Austral Ecology
+26(1):32--46.
+
 \bibitem[\citeproctext]{ref-bolker2008ecological}
 Bolker BM. 2008. Ecological models and data in {R}. Princeton, New
 Jersey, USA: Princeton University Press.

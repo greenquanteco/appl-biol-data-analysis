@@ -1321,7 +1321,8 @@ The basic algorithm for NMDS is as follows.
 
 Because the starting configurations and the re-configurations involve random number sampling ("Monte Carlo methods"), most NMDS software tries several random starts to avoid the possibility of begin trapped in a local solution that is not as optimal as the true global solution. 
 
-![text](../images/ord-nmds-optima.jpg){#fig-ord-nmds-optima fig-alt="text."}
+![Conceptual illustration of an optimization algorithm becoming trapped in a local optimum. A black curve represents an objective function with two valleys. Blue points and red arrows show the algorithm exploring solutions near the shallower valley on the left without escaping to the deeper valley on the right, which represents the global optimum.](../images/ord-nmds-optima.jpg){#fig-local-optimum fig-cap="Local versus global optima in numerical optimization. An optimization algorithm may repeatedly explore solutions near a local optimum without discovering the global optimum, which represents the best solution across the entire parameter space."}
+
 
 You should also set the random number seed, so your analysis results are reproducible. Remember, the NMDS axes are arbitrary, so even though you might repeat the analysis and get two solutions with the same stress value, one of them might be rotated from the other...meaning that you have to re-write your plot code!
 
@@ -1387,13 +1388,13 @@ Now that we have eliminated the obvious problems, let's explore the distribution
 #| fig-width: 10
 #| fig-height: 5
 #| label: fig-nmds-neon1
-#| fig-cap: "text."
-#| fig-alt: "text."
+#| fig-cap: "Frequency distributions of species occupancy and site richness in a presence–absence dataset. Left: number of sites occupied by each species (column sums of the presence–absence matrix). Right: number of species recorded at each site (row sums). Most species occur at relatively few sites, whereas species richness is more evenly distributed among sites."
+#| fig-alt: "Two histograms showing species occupancy and site richness. The left histogram shows that most species occur at fewer than five sites, with a long tail extending to approximately 35 sites. The right histogram shows that most sites contain between 5 and 15 species, with a few containing more than 20."
 
 
 # shows that most species are present at very
 # few sites. Most sites have around 5-15 species,
-# but there is a lot of variablity. 
+# but there is a lot of variability. 
 par(mfrow=c(1,2))
 hist(colSums(pa), main="Sites per species")
 hist(rowSums(pa), main="Species per site")
@@ -1422,6 +1423,20 @@ n1
 
 The solution has a stress value of about 0.12, which is good but not great. By convention, a stress between 0.1 and 0.2 indicates a usable but imperfect representation of the original dissimilarities. Stress less than 0.1 is preferable, and stress greater than 0.2 means that an ordination is suspect. If you get a stress value greater than 0.2, you can try more random starts, dropping variables with too many 0s or extreme values, or sites with data issues. Or, try another ordination technique.
 
+One important diagnostic for our NMDS fit is called  **stress plot** or **Shepard plot**. This is a figure that shows how the distance matrix in the ordination solution compares to the distance matrix in the original space. This plot should show a very tight correlation between the two distance matrices. This correlation does not have to be linear. Remember, NMDS preserves the *rank order* of the distance matrix, not the actual values. @fig-nmds-stressplot below shows a pretty good correlation, but a big clump of points where the observed dissimilarity is 1. This is unavoidable in this dataset, because about a quarter of the pairs of sites share no species in common and thus have the maximum Sørensen dissimilarity of 1 (check with `length(which(vegdist(pa)==1))`).
+
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-nmds-stressplot
+#| fig-cap: "Shepard plot evaluating the fit of a nonmetric multidimensional scaling (NMDS) ordination. Observed dissimilarities are plotted against distances between points in the ordination. The red line shows the monotonic relationship fitted by NMDS. The high nonmetric R-squared (0.987) indicates that the ordination preserves the rank ordering of observed dissimilarities well."
+#| fig-alt: "Scatterplot of observed dissimilarity (horizontal axis, 0 to 1) against ordination distance (vertical axis, 0 to approximately 5.5). Blue open circles generally increase with observed dissimilarity, following a red stepped monotonic curve. Many observations are concentrated near dissimilarity 1.0, where ordination distances vary considerably. Nonmetric R-squared is 0.987 and linear R-squared is 0.941."
+
+par(mar=c(5,5,1,1))
+stressplot(n1)
+```
+
 #### Inspect and plot {#sec-ord-nmds-neon-plot}
 
 With a stress of about 0.12, we can interpret broad gradients and groups of sites, but should avoid drawing conclusions about small differences between individual samples.
@@ -1432,8 +1447,8 @@ Let's visualize the ordination by extracting the NMDS axis scores and plotting t
 #| fig-width: 8
 #| fig-height: 6
 #| label: fig-nmds-neon2
-#| fig-cap: "text."
-#| fig-alt: "text."
+#| fig-cap: "NMDS ordination of mammal communities across sampling sites, with species scores overlaid as red vectors. Black points represent sites, and red vectors indicate the directions of increasing association with individual species. Species with similar distributions across sites tend to have vectors pointing in similar directions."
+#| fig-alt: "Two-dimensional NMDS ordination with black points representing sampling sites and red vectors representing mammal species. Sites are scattered across both axes. Most species vectors cluster in three directions: upward, lower left, and lower right. A few species have distinct vectors, including Musmus pointing right and Tamstr pointing nearly straight downward. Species labels overlap extensively near the ends of the vectors."
 
 # scaling doesn't matter as much
 # as it did for PCA, so just use 
@@ -1462,8 +1477,8 @@ The species names in the biplot are a little hard to read, but we can zoom in if
 #| fig-width: 8
 #| fig-height: 6
 #| label: fig-nmds-neon3
-#| fig-cap: "text."
-#| fig-alt: "text."
+#| fig-cap: "Enlarged view of the upper cluster of species vectors in the NMDS ordination. Species with vectors pointing in similar directions tend to have similar patterns of occurrence across sampling sites. The enlarged view reveals differences among species whose labels overlap in the full ordination."
+#| fig-alt: "Magnified view of the upper portion of the NMDS species-vector plot, showing red vectors and abbreviated species names. Species are distributed along NMDS axis 1 from approximately −0.45 to 0.35, with most vector endpoints between 0.90 and 1.00 on NMDS axis 2. Several species form closely spaced groups, while others, including Perman and Sortro, are more isolated. Some labels remain overlapping."
 
 par(mar=c(5,5,1,1))
 plot(xy[,1], xy[,2], pch=19, cex=1.3,
@@ -1474,12 +1489,14 @@ text(sp[,1], sp[,2], rownames(sp),
      col="red", cex=0.7)
 ```
 
+We can also zoom in on the lower cluster of samples.
+
 ```{r}
 #| fig-width: 8
 #| fig-height: 6
 #| label: fig-nmds-neon4
-#| fig-cap: "text."
-#| fig-alt: "text."
+#| fig-cap: "Enlarged view of the lower-right cluster of species vectors in the NMDS ordination. Several species have closely aligned vectors, indicating similar patterns of occurrence across sampling sites. Other species, including Tamstr, Ochnut, and Sighis, have more distinct positions within this portion of the ordination."
+#| fig-alt: "Magnified view of the lower-right portion of the NMDS species-vector plot, showing red vectors, abbreviated species names, and a few black points representing sampling sites. Species vector endpoints extend from approximately −0.95 to −0.67 on NMDS axis 2. Several species cluster near NMDS axis 1 values of 0.45, while Tamstr lies near zero and Sighis is farther to the right. Several species labels overlap near the center of the cluster."
 
 par(mar=c(5,5,1,1))
 plot(xy[,1], xy[,2], pch=19, cex=1.3,
@@ -1516,8 +1533,8 @@ Now add these to the plot.
 #| fig-width: 8
 #| fig-height: 6
 #| label: fig-nmds-neon5
-#| fig-cap: "text."
-#| fig-alt: "text."
+#| fig-cap: "NMDS ordination of mammal communities across sampling sites, with species scores and fitted environmental vectors. Black points represent sites, pale red vectors represent species, and blue vectors indicate the directions of increasing values of environmental variables fitted using `envfit()`. The directions of the environmental vectors illustrate associations between community composition and environmental gradients."
+#| fig-alt: "Two-dimensional NMDS ordination with black points representing sampling sites, pale red vectors representing mammal species, and blue vectors representing environmental variables. Elevation and precipitation seasonality point toward the upper left; latitude and temperature seasonality point toward the lower left; temperature points nearly horizontally to the right; and longitude and precipitation point toward the lower right. Species vectors form clusters pointing upward, lower left, and lower right."
 
 par(mar=c(5,5,1,1))
 plot(xy[,1], xy[,2], pch=19, cex=1.3,
@@ -1541,8 +1558,8 @@ Another option for visualizing how environmental variables may relate to your or
 #| fig-width: 8
 #| fig-height: 8
 #| label: fig-nmds-neon6
-#| fig-cap: "text."
-#| fig-alt: "text."
+#| fig-cap: "NMDS ordination of mammal communities with species scores and a fitted temperature surface. Black points represent sampling sites, pale red vectors represent species, and blue contour lines show temperature values fitted using `ordisurf()`. The curved contours indicate a nonlinear relationship between temperature and community composition, with higher temperatures generally associated with sites toward the right side of the ordination."
+#| fig-alt: "Two-dimensional NMDS ordination showing black sampling-site points, pale red species vectors, and blue temperature contours. Contours are labeled from approximately −10 on the far left to 25 on the far right, with temperatures generally increasing from left to right. The contour lines are curved rather than straight, indicating a nonlinear fitted temperature gradient across the ordination."
 
 par(mar=c(5,5,1,1))
 plot(xy[,1], xy[,2], pch=19, cex=1.3,
@@ -1560,8 +1577,8 @@ In this case, @fig-nmds-neon6 shows a clear gradient of increasing temperature f
 #| fig-width: 8
 #| fig-height: 8
 #| label: fig-nmds-neon7
-#| fig-cap: "text."
-#| fig-alt: "text."
+#| fig-cap: "NMDS ordination of mammal communities with species scores and a fitted temperature seasonality surface. Black points represent sampling sites, pale red vectors represent species, and blue contour lines show temperature seasonality fitted using `ordisurf()`. Temperature seasonality is generally highest toward the lower-left portion of the ordination and lowest toward the right, with curved contours indicating a nonlinear relationship between temperature seasonality and community composition."
+#| fig-alt: "Two-dimensional NMDS ordination showing black sampling-site points, pale red species vectors, and blue contours representing temperature seasonality. Contour values range from approximately 200 on the far right to 1200 in the lower-left portion. The contours curve around a region of relatively high seasonality on the left and lower-left, while lower values occur toward the right side of the plot."
 
 par(mar=c(5,5,1,1))
 plot(xy[,1], xy[,2], pch=19, cex=1.3,
@@ -1579,8 +1596,8 @@ We can also fit factors using `envfit()` and show them with `ordiellipse()`:
 #| fig-width: 8
 #| fig-height: 8
 #| label: fig-nmds-neon8
-#| fig-cap: "text."
-#| fig-alt: "text."
+#| fig-cap: "NMDS ordination of mammal communities with habitat centroids fitted using `envfit()`. Black points represent sampling sites, and colored labels indicate the centroids of different habitat types in ordination space. The centroids summarize the average positions of sites belonging to each habitat type, illustrating associations between habitat classification and community composition."
+#| fig-alt: "Two-dimensional NMDS ordination showing black points for sampling sites and colored labels for ten habitat centroids. ShrubScrub and evergreenForest are positioned toward the upper portion of the plot, while woodyWetlands lies toward the lower right. DeciduousForest and mixedForest are close together below the center, and cultivatedCrops and grasslandHerbaceous are above the center. SedgeHerbaceous is isolated at the far lower left."
 
 e3 <- envfit(n1, met$habitat)
 hab <- e3$factors$centroids
@@ -1593,9 +1610,9 @@ text(hab[,1], hab[,2], rownames(hab),
      col=cols, xpd=NA)
 ```
 
-#### Dimensionality in NMDS {#sec-ord-nmds-neon-envfit}
+#### Dimensionality in NMDS {#sec-ord-nmds-neon-dims}
 
-In the previous example, we decided to fit a two-dimensional solution. However, we could have tried a three or four or more dimensional solution. The choice of how many dimensions to use for your NMDS solution depends on a balance of (1) minimizing stress; while (2) keeping the figure interpretable. We can assess how stress changes with dimensionality with a stress plot, or Sheppard plot. The strategy is similar to how we assessed how many clusters were appropriate in [*K*-means clustering](): obtain a fit with different values for *k*, and plot how the stress changes with each additional dimension in the solution.
+In the previous example, we decided to fit a two-dimensional solution. However, we could have tried a three or four or more dimensional solution. The choice of how many dimensions to use for your NMDS solution depends on a balance of (1) minimizing stress; while (2) keeping the figure interpretable. We can assess how stress changes by plotting the stress of solutions with different numbers of dimenions. The strategy is similar to how we assessed how many clusters were appropriate in [*K*-means clustering](#fig-kmeans-wss-plot): obtain a fit with different values for *k*, and plot how the stress changes with each additional dimension in the solution.
 
 ```{r}
 set.seed(123)
@@ -1605,12 +1622,19 @@ klist <- vector("list", length=length(K))
 for(i in 1:length(K)){
     klist[[i]] <- metaMDS(pa, k=K[i])
 }
+stress <- sapply(klist, function(x){x$stress})
 ```
 
 Now extract the stress values for each NMDS fit and plot them against dimensionality.
 
 ```{r}
-stress <- sapply(klist, function(x){x$stress})
+#| fig-width: 8
+#| fig-height: 6
+#| label: fig-nmds-neon9
+#| fig-cap: "Relationship between the number of NMDS dimensions and ordination stress. Stress decreases as the number of dimensions increases, with the largest improvements occurring between one and three dimensions. Additional dimensions continue to improve the fit, but with diminishing returns."
+#| fig-alt: "Line graph showing NMDS stress as a function of the number of dimensions, from 1 to 8. Stress decreases monotonically from approximately 0.23 with one dimension to 0.12 with two, 0.07 with three, and 0.02 with eight dimensions. The curve declines steeply at first and then gradually flattens."
+
+
 par(mar=c(5,5,1,1))
 plot(K, stress, type="l", lwd=3,
      xlab="NMDS dimensions (k)",
@@ -1628,11 +1652,10 @@ Coming soon!
 
 Coming soon!
 
-## Distance-based RDA (dbRDA) {#sec-ord-dbrda}
-
-Coming soon!
-
 ## Linear discriminant analysis {#sec-ord-lda}
 
 Coming soon!
 
+## Distance-based RDA (dbRDA) {#sec-ord-dbrda}
+
+Coming soon!
